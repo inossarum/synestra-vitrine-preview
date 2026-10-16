@@ -17,7 +17,6 @@
       background: #08151e;
       --ink: #08151e;
       --surface: #102633;
-      --surface-raised: #142d39;
       --line: #2b4c5a;
       --text: #ecf6f7;
       --muted: #bfd3da;
@@ -262,11 +261,9 @@
       margin: 0;
       padding: 0;
       list-style: none;
-      counter-reset: step;
     }
     .step-card {
       padding: 1.25rem;
-      counter-increment: step;
     }
     .step-number {
       display: inline-block;
@@ -428,6 +425,9 @@
     }
     .site-footer p { margin: 0; }
 
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
     @media (max-width: 920px) {
       .steps { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .steps li:last-child { grid-column: span 2; }
