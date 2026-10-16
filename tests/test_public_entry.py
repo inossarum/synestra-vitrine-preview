@@ -80,5 +80,9 @@ class PublicEntryTests(unittest.TestCase):
         self.assertIn("phase pilote", HTML.lower())
 
 
+    def test_unqualified_security_claim_is_not_published(self):
+        self.assertNotIn("la connexion à l'espace privé est sécurisée", HTML.lower())
+        self.assertIn("l'accès au portail et le parcours de connexion sont encore en cours de qualification", HTML.lower())
+
 if __name__ == "__main__":
     unittest.main()
