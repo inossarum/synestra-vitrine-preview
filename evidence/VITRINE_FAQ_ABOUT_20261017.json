@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "evidence_id": "SYNESTRA_VITRINE_FAQ_ABOUT_20261017",
+  "date_utc": "2026-10-17",
+  "mission": "Public Synestra showcase: clarify pilot scope and answer visitor questions",
+  "repository": "inossarum/synestra-vitrine-preview",
+  "branch": "feat/vitrine-public-presentation-20261016",
+  "pull_request": "https://github.com/inossarum/synestra-vitrine-preview/pull/3",
+  "change_commits": [
+    "067e9405ba40968ea972306623f10560dc749091",
+    "ab795e282935b4f7ba0db84a7c6e282715807c62",
+    "244f332c08764bb674d49223cbfe11e21e82804f"
+  ],
+  "files": {
+    "index.html": {
+      "blob_sha": "75cba52a9e78d40a35c6bd9cfc747e7694d72192"
+    },
+    "tests/site_contract.test.mjs": {
+      "blob_sha": "1419d93aef8c8c6bd37d6773d0867add3f39f254"
+    },
+    "README.md": {
+      "blob_sha": "bc724d2bfe4de3aeca4bff3ad7102fff5a8307bb"
+    }
+  },
+  "scope": {
+    "delivered": [
+      "about section",
+      "five no-JavaScript FAQ expanders",
+      "navigation additions",
+      "responsive/focus treatment",
+      "repository static test suite",
+      "review instructions"
+    ],
+    "exclusions": [
+      "production deployment",
+      "web app modification",
+      "Supervisor runtime",
+      "Cloudflare IAM or portal changes",
+      "secrets",
+      "external assets"
+    ]
+  },
+  "verification": {
+    "html_precommit_static_js": {
+      "status": "PASS",
+      "checks": 13
+    },
+    "html_independent_refetch_static_js": {
+      "status": "PASS",
+      "checks": 14
+    },
+    "file_persisted_test_suite": {
+      "status": "PASS",
+      "method": "GitHub read-back; Node syntax/execution not yet proven"
+    },
+    "node_test_execution": {
+      "status": "PENDING",
+      "reason": "No Git clone/network access in current execution environment; test file committed but not executed on a real local checkout"
+    },
+    "browser_visual_keyboard_mobile": {
+      "status": "PENDING"
+    },
+    "client_portal_live_e2e": {
+      "status": "PENDING"
+    },
+    "ci": {
+      "status": "PENDING",
+      "reason": "No verified CI run for current branch"
+    },
+    "production": {
+      "status": "NOT_DEPLOYED"
+    }
+  },
+  "safety": {
+    "scripts_added": false,
+    "external_assets_added": false,
+    "forms_added": false,
+    "preview_robots": "noindex,nofollow",
+    "billing": "FREE_ONLY",
+    "protected_branches_untouched": true,
+    "pilot_capabilities_claimed_as_verified": false
+  },
+  "studio_preflight": {
+    "AGENTS_md_blob": "ac6d7aaf92e711ab6eba4e02b94559ec7f27890f",
+    "immutable_manifest_blob": "602ca6b604a3bc89862366187230ebae8e4046d8",
+    "L0_core_blob": "cdfd624dd8c6b6a2918ca031849ab7141ab6afde",
+    "Memory_V1_manifest_blob": "bc43f64a6633c8c95e9434baa75ee1fb2dcf924c",
+    "SAL_manifest_blob": "5baa69b31e0fcac25ce78909680404f11d171be0",
+    "Central_Skills_catalog_blob": "2e25e4b05bac2e131df5a183e4ca81f7702eb385",
+    "relevant_skills": [
+      "ui-ux@1.0.0",
+      "reuse-first@1.0.0",
+      "test-driven-development@1.0.0",
+      "code-review@1.0.0"
+    ],
+    "hooks_status": "UNKNOWN",
+    "overall": "LIMITED",
+    "reason": "Immutable and selected Memory/SAL/Skills sources read; hook inventory and operational checkpoint freshness not completely verified"
+  },
+  "status": "PARTIAL",
+  "human_gate": "Publishing the website/merging into main requires explicit authorization; no such action attempted",
+  "exact_recovery": "Fetch PR #3 HEAD and blobs; run `node --test tests/site_contract.test.mjs` on an isolated clean checkout; execute keyboard/mobile/browser and portal checks, record real Evidence. Keep branch DRAFT until authorized."
+}
