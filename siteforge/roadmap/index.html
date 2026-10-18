@@ -4,14 +4,14 @@
 <meta name="robots" content="noindex,nofollow">
 <meta http-equiv="Content-Security-Policy" content="default-src &#39;none&#39;; style-src &#39;unsafe-inline&#39;; base-uri &#39;none&#39;; form-action &#39;none&#39;">
 <title>Feuille de route — Synestra SiteForge</title>
-<meta name="description" content="Du cahier des charges à une page web vérifiable">
+<meta name="description" content="Le web prend forme. À chaque étape, une preuve.">
 <link rel="canonical" href="https://inossarum.github.io/synestra-vitrine-preview/siteforge/roadmap/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Feuille de route — Synestra SiteForge">
-<meta property="og:description" content="Du cahier des charges à une page web vérifiable">
+<meta property="og:description" content="Le web prend forme. À chaque étape, une preuve.">
 <meta property="og:url" content="https://inossarum.github.io/synestra-vitrine-preview/siteforge/roadmap/">
 <meta name="twitter:card" content="summary">
-<style>:root{color-scheme:light;--accent:#234a87;--ink:#182334;--paper:#fff;--muted:#f2f5f8;--sf-radius:.25rem;--sf-font:Georgia, serif}
+<style>:root{color-scheme:light;--accent:#234a87;--ink:#182334;--paper:#fff;--muted:#f2f5f8;--sf-radius:.9rem;--sf-font:system-ui, sans-serif}
 *{box-sizing:border-box}
 body{margin:0;font:1rem/1.6 var(--sf-font);color:var(--ink);background:var(--paper)}
 .skip{position:absolute;left:-9999px;top:0;background:#fff;padding:1rem}
@@ -29,14 +29,63 @@ h1,h2{line-height:1.2;max-width:28ch}
 p{max-width:65ch}
 .action{display:inline-block;background:var(--accent);color:#fff;padding:.65rem 1rem;border-radius:.4rem}
 footer{border-top:1px solid #dce3ea;padding:2rem 0}
-@media(max-width:40rem){.top{align-items:flex-start;flex-direction:column}nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}main{padding:1rem 0}}</style></head><body>
+@media(max-width:40rem){.top{align-items:flex-start;flex-direction:column}nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}main{padding:1rem 0}}
+
+.sf-designed{min-height:100vh;isolation:isolate}
+.sf-designed:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none}
+.sf-designed .wrap{width:min(78rem,calc(100% - 3rem))}
+.sf-designed header{z-index:3;position:relative}
+.sf-designed .top{min-height:5.5rem}
+.sf-designed header strong{font-size:1.2rem;letter-spacing:.035em}
+.sf-designed nav a{text-decoration:none;font-weight:650;padding:.65rem .85rem;border-radius:99px;transition:background .25s ease,color .25s ease,transform .25s ease}
+.sf-designed nav a:hover{transform:translateY(-2px)}
+.sf-designed nav a[aria-current=page]{text-decoration:none}
+.sf-designed main{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:clamp(1rem,2vw,1.4rem);padding:clamp(2rem,5vw,5rem) 0 5rem}
+.sf-designed .panel{grid-column:span 6;position:relative;overflow:hidden;min-height:16rem;padding:clamp(1.5rem,4vw,3rem);transition:transform .28s ease,box-shadow .28s ease,border-color .28s ease}
+.sf-designed .panel:hover,.sf-designed .panel:focus-within{transform:translateY(-4px)}
+.sf-designed .panel:first-child{grid-column:1/-1;min-height:clamp(25rem,40vw,34rem);display:flex;flex-direction:column;justify-content:center;padding:clamp(2rem,6vw,5rem)}
+.sf-designed .panel h1{font-size:clamp(2.6rem,6.7vw,5.8rem);line-height:1.04;letter-spacing:-.065em;max-width:18ch;margin:1.1rem 0}
+.sf-designed .panel h2{font-size:clamp(1.7rem,3vw,2.45rem);letter-spacing:-.04em}
+.sf-designed .panel p{font-size:1.09rem;line-height:1.75;max-width:58ch}
+.sf-designed .sf-kicker{font-size:.75rem;letter-spacing:.16em;text-transform:uppercase;font-weight:800;display:inline-flex;align-items:center;gap:.75rem;align-self:flex-start}
+.sf-designed .sf-kicker:before{content:"";width:.55rem;height:.55rem;border-radius:100%;background:currentColor;box-shadow:0 0 12px currentColor}
+.sf-designed .action{align-self:flex-start;text-decoration:none;font-weight:800;padding:.9rem 1.25rem;border-radius:.85rem;transition:transform .2s ease,box-shadow .2s ease}
+.sf-designed .action:hover{transform:translateY(-3px)}
+.sf-designed .sf-reveal{margin-top:1.5rem;width:min(40rem,100%);font-size:.95rem;position:relative}
+.sf-designed .sf-reveal summary{cursor:pointer;display:inline-flex;align-items:center;gap:.7rem;font-weight:750;padding:.75rem 1rem;border-radius:99px;border:1px solid currentColor}
+.sf-designed .sf-reveal summary:after{content:"+";font-size:1.25rem;line-height:1}
+.sf-designed .sf-reveal[open] summary:after{content:"−"}
+.sf-designed .sf-reveal p{font-size:1rem;padding:.2rem .3rem}
+.sf-designed a:focus-visible,.sf-designed summary:focus-visible{outline:3px solid var(--sf-focus-visible);outline-offset:4px}
+@media(max-width:48rem){.sf-designed .wrap{width:calc(100% - 2rem)}.sf-designed main{grid-template-columns:minmax(0,1fr);padding:1.25rem 0 3rem}.sf-designed .panel,.sf-designed .panel:first-child{grid-column:1;min-height:0}.sf-designed .panel:first-child{min-height:25rem}.sf-designed .panel h1{font-size:clamp(2.25rem,10vw,3.8rem)}.sf-designed nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}}
+@media(prefers-reduced-motion:reduce){.sf-designed *,.sf-designed *:before,.sf-designed *:after{animation:none!important;transition:none!important;transform:none!important;scroll-behavior:auto!important}}
+
+
+.sf-aurora{color-scheme:dark;--ink:#e8f7f4;--paper:#071823;--muted:#102b3a;--sf-focus-visible:#ffdc83;background:#071823;color:#ecf8f6;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+.sf-aurora:before{background:radial-gradient(ellipse 45% 28% at 79% 12%,#14af8f45,transparent 85%),radial-gradient(ellipse 53% 55% at 12% 59%,#4779ed24,transparent 83%),linear-gradient(155deg,#081723,#101b34 72%,#071823)}
+.sf-aurora header{background:#071824eb;border-bottom:1px solid #75a5ad40;backdrop-filter:blur(18px)}
+.sf-aurora header strong{background:linear-gradient(90deg,#c6fdeb,#7dd8ff);background-clip:text;color:transparent}
+.sf-aurora nav a{color:#c2dfdd}.sf-aurora nav a:hover,.sf-aurora nav a[aria-current=page]{background:#a2e9d124;color:#e9fff7}
+.sf-aurora .panel{border:1px solid #6aabb944;border-radius:1.6rem;background:linear-gradient(145deg,#183545f5,#0e2135e8);box-shadow:0 20px 45px #020b1340}
+.sf-aurora .panel:hover,.sf-aurora .panel:focus-within{border-color:#83f2d988;box-shadow:0 25px 65px #030a1490,0 0 30px #76e8ce17}
+.sf-aurora .panel:first-child{background:radial-gradient(ellipse 65% 80% at 92% 30%,#247b8c6b,transparent 78%),linear-gradient(135deg,#173847,#0d2237 74%);border-color:#82eed16b}
+.sf-aurora .panel:first-child:after{content:"";position:absolute;z-index:0;pointer-events:none;width:min(27vw,20rem);aspect-ratio:1;right:-3%;top:12%;border-radius:42% 58% 57% 43%;background:radial-gradient(circle at 36% 28%,#b6fff3bb,transparent 29%),conic-gradient(from 25deg,#48aabf90,#75e8ccbb,#4665b077,#48aabf90);filter:drop-shadow(0 0 34px #6dfbd45a);opacity:.78;animation:sf-orbit 9s ease-in-out infinite alternate}
+.sf-aurora .panel:first-child>*{position:relative;z-index:1}
+.sf-aurora .panel h1{background:linear-gradient(112deg,#fff 22%,#9cf2e7 70%,#a0b7fd);background-clip:text;color:transparent}
+.sf-aurora .panel p{color:#c4dee1}.sf-aurora .sf-kicker{color:#80f2ca}
+.sf-aurora .action{background:#8ef6d8;color:#061f20;box-shadow:0 12px 32px #51efd83c}.sf-aurora .action:hover{box-shadow:0 16px 45px #51efd868}
+.sf-aurora .sf-reveal{color:#d1f5eb}.sf-aurora .sf-reveal summary{border-color:#76dcb9a6;background:#3a7c7554}
+.sf-aurora footer{background:transparent;border-color:#80bfb92c;color:#b1cbca}
+@keyframes sf-orbit{0%{transform:translate(0,0) rotate(-12deg);border-radius:42% 58% 57% 43%}100%{transform:translate(-1rem,1rem) rotate(14deg);border-radius:58% 42% 44% 56%}}
+@media(max-width:48rem){.sf-aurora .panel:first-child:after{width:10rem;right:-2rem;top:-2rem;opacity:.38}}
+</style><style>.sf-demo-bar{position:relative;z-index:4;background:#061c28;color:#dcf6f1;box-shadow:0 6px 25px #00101624}.sf-demo-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.8rem;padding:.8rem 0}.sf-demo-label{font-weight:800;font-size:.76rem;letter-spacing:.1em;text-transform:uppercase}.sf-demo-bar nav{display:flex;gap:.5rem;flex-wrap:wrap;width:auto}.sf-demo-bar nav a,.sf-demo-back{font-weight:750;color:#dbf7f0;text-decoration:none;padding:.45rem .8rem;border-radius:99px;font-size:.86rem}.sf-demo-bar nav a:hover,.sf-demo-bar nav a.chosen{background:#86f1d7;color:#042323}.sf-demo-bar a:focus-visible{outline:3px solid #ffd67c;outline-offset:3px}.sf-demo-back{border:1px solid #83a9af}@media(max-width:48rem){.sf-demo-row{align-items:flex-start}.sf-demo-bar nav{display:flex;gap:.2rem}.sf-demo-back{display:none}}</style></head><body class="sf-designed sf-aurora">
 <a class="skip" href="#main">Aller au contenu</a>
 <header><div class="wrap top"><strong>Synestra SiteForge</strong>
 <nav aria-label="Navigation principale"><a href="/synestra-vitrine-preview/siteforge/">Accueil</a>
 <a href="/synestra-vitrine-preview/siteforge/projects/">Projets</a>
 <a href="/synestra-vitrine-preview/siteforge/roadmap/" aria-current="page">Feuille de route</a>
-<a href="/synestra-vitrine-preview/siteforge/contact/">Contact</a></nav></div></header>
-<main id="main" class="wrap"><section id="intro" class="panel"><h1>La qualité précède la publication</h1><p>Une génération de page ne constitue pas à elle seule un site professionnel livré et validé.</p></section>
-<section id="milestones" class="panel"><h2>Étapes prévues</h2><p>Les contrôles comprennent la structure HTML, les liens, les refus de sécurité et les essais Chrome mobile et ordinateur. L’accessibilité complète et la publication cliente restent à qualifier.</p></section></main>
+<a href="/synestra-vitrine-preview/siteforge/contact/">Contact</a></nav></div></header><aside class="sf-demo-bar" aria-label="Choisir une direction artistique"><div class="wrap sf-demo-row"><span class="sf-demo-label">Votre direction artistique</span><nav aria-label="Styles SiteForge"><a href="/synestra-vitrine-preview/siteforge/" class="chosen" aria-label="Style Aurora sélectionné">Aurora</a><a href="/synestra-vitrine-preview/siteforge/atelier/" class="">Atelier</a><a href="/synestra-vitrine-preview/siteforge/mono/" class="">Mono</a></nav><a class="sf-demo-back" href="/synestra-vitrine-preview/siteforge/">Voir la démo principale</a></div></aside>
+<main id="main" class="wrap"><section id="intro" class="panel"><span class="sf-kicker">SiteForge / Création web</span><h1>Un beau site doit aussi être fiable.</h1><p>Le style est appliqué sans sacrifier la structure sémantique, la navigation au clavier ou le contrôle des contenus.</p></section>
+<section id="milestones" class="panel"><h2>Étapes prévues</h2><p>Tests automatiques, captures Chrome mobile et ordinateur, validation des liens et vérifications d’accessibilité accompagnent chaque évolution.</p></section></main>
 <footer><div class="wrap">Synestra SiteForge — Textes à valider avant publication</div></footer>
 </body></html>

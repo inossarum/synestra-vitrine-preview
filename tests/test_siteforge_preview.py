@@ -62,13 +62,43 @@ class SiteForgePreviewTests(unittest.TestCase):
     def test_copy_discloses_preview_and_no_automatic_permission(self):
         home = PATHS["/"].read_text(encoding="utf-8")
         contact = PATHS["/contact"].read_text(encoding="utf-8")
-        self.assertIn("Cette démonstration est statique", home)
+        self.assertIn("démonstration statique", home)
         self.assertIn("ne collecte aucune donnée personnelle", contact)
         for p in PATHS.values():
             html = p.read_text(encoding="utf-8")
             self.assertNotIn("remoteActionAuthorized", html)
             self.assertNotIn("ACCESS_JWKS", html)
             self.assertNotIn("Bearer ", html)
+
+    def test_three_modern_styles_and_native_disclosure(self):
+        base = ROOT / "siteforge"
+        for style, folder in (("aurora", ""), ("atelier", "atelier"), ("mono", "mono")):
+            pages_root = base / folder
+            for route in ("", "projects", "roadmap", "contact"):
+                file = pages_root / route / "index.html"
+                with self.subTest(style=style, route=route):
+                    self.assertTrue(file.is_file())
+                    html = file.read_text(encoding="utf-8")
+                    self.assertIn('class="sf-designed sf-' + style + '"', html)
+                    self.assertIn('prefers-reduced-motion:reduce', html)
+                    self.assertIn('noindex,nofollow', html)
+                    self.assertIn('Styles SiteForge', html)
+                    self.assertIn('href="' + PREFIX + '"', html)
+                    self.assertIn('href="' + PREFIX + 'atelier/"', html)
+                    self.assertIn('href="' + PREFIX + 'mono/"', html)
+                    self.assertNotIn("<script", html.lower())
+                    self.assertNotIn("<iframe", html.lower())
+                    self.assertNotIn("<form", html.lower())
+                    self.assertNotIn("Contenu d'exemple à personnaliser", html)
+                    if not route:
+                        self.assertIn('class="sf-reveal"', html)
+                        self.assertIn('<summary>Découvrir les étapes</summary>', html)
+                    expected_root = PREFIX if not folder else PREFIX + folder + "/"
+                    parser = PageParser()
+                    parser.feed(html)
+                    self.assertEqual(parser.h1_count, 1)
+                    for name in ("projects", "roadmap", "contact"):
+                        self.assertIn(expected_root + name + "/", parser.links)
 
 
 if __name__ == "__main__":
