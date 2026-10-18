@@ -176,6 +176,34 @@
     },
     "published_chatgpt_remote_mcp": {
       "status": "NOT_DEPLOYED"
+    },
+    "clean_checkout": {
+      "status": "PASS",
+      "source": "GitHub PR branch exactly pinned",
+      "git_head": "ed327a7a831146f5e25406fda55a1fdb20132e60",
+      "platform": "Inos-Cerebros Windows, Node v24.19.0, real headless Chrome",
+      "node_tests": {
+        "passed": 38,
+        "total": 38,
+        "failed": 0,
+        "exit_code": 0
+      },
+      "browser": {
+        "mobile": "PASS_390",
+        "desktop": "PASS_1440",
+        "keyboard": "PASS",
+        "accessibility_tree": "PASS",
+        "observed_external_requests": 0,
+        "exit_code": 0
+      },
+      "real_capture_to_local_mcp": {
+        "status": "PASS",
+        "viewports": 2,
+        "tool_calls": 3,
+        "exit_code": 0
+      },
+      "no_deployment": true,
+      "caveat": "CDP_PROFILE_CLEANUP_PENDING EPERM persists"
     }
   },
   "policy": {
@@ -200,5 +228,6 @@
       "PORTAL_E2E_PENDING",
       "PUBLIC_DEPLOYMENT_HUMAN_GATE"
     ]
-  }
+  },
+  "final_head_before_evidence_addendum": "ed327a7a831146f5e25406fda55a1fdb20132e60"
 }
