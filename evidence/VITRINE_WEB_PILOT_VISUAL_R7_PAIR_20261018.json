@@ -53,7 +53,57 @@
       "interactive_map_pass": true,
       "cleanup": "PENDING_EPERRM"
     },
-    "clean_git_post_publish": "PENDING"
+    "clean_git_post_publish": "PENDING",
+    "clean_git_published": {
+      "status": "PASS",
+      "source_head": "c7592e1ce44e8ff35392251f01deaaabc43931da",
+      "node_tests": {
+        "passed": 82,
+        "total": 82,
+        "failed": 0
+      },
+      "real_chrome": {
+        "status": "PASS",
+        "modified_tiles": {
+          "mobile": 24,
+          "desktop": 5
+        },
+        "restored_tiles": {
+          "mobile": 0,
+          "desktop": 0
+        },
+        "html_restored_blob": "7e485223af98a1281a91b4cb75fe66d31734f8a6",
+        "no_pixel_perfect_claim": true
+      },
+      "local_evidence": {
+        "mobile": {
+          "report_bytes": 4199,
+          "manifest_bytes": 362,
+          "sha256": "cf5c77f34588cb4d77ff4a458dffbc18acbca62b82bfa871284df3af22a9fd1b"
+        },
+        "desktop": {
+          "report_bytes": 1915,
+          "manifest_bytes": 362,
+          "sha256": "c4d25dbf4e888645a2b2cd5498c30451f82cd52bd35cf9365ca6d7095a2d77e1"
+        }
+      },
+      "paired_webapp_browser": {
+        "status": "PASS",
+        "consumer_repo": "inossarum/studio-virtuel",
+        "consumer_head": "ed6b8124e437282b2dbbb1b9021a959c42fb36dd",
+        "mobile": "PASS",
+        "desktop": "PASS",
+        "digest_match": "PASS",
+        "tampered_digest_rejection": "PASS",
+        "restoration": "PASS",
+        "keyboard": "PASS",
+        "provenance": "UNVERIFIED"
+      },
+      "ephemeral_qa_listener": "4187_STOPPED_VERIFIED",
+      "cleanup": "CDP_PROFILE_CLEANUP_PENDING_EPERRM",
+      "raw_reports_committed": false,
+      "source_attested": false
+    }
   },
   "security": {
     "manifest_is_signature": false,
@@ -66,6 +116,6 @@
     "no_bridge_grant": true,
     "no_remote_mcp_deployment": true
   },
-  "status": "PARTIAL",
-  "next": "Publish R7 on preview PR #3 as DRAFT using CAS after HEAD check; clean clone code commit and rerun 82 tests+Chrome and exact generated pair SHA. Cross-check WebApp PR #198 QA uses real manifest; commit QA script only on its own isolated DRAFT branch after clean test. Keep private temp files out of Git."
+  "status": "PARTIAL_LOCAL_E2E_COMPLETE",
+  "next": "R7 producer and genuine WebApp consumer E2E PASS from clean source heads. Remaining separate gate: trusted issuer/authenticated Evidence provider; no signature claim or remote MCP deployment. Keep DRAFT. Do not repeat PASS unchanged."
 }
