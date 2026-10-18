@@ -48,7 +48,7 @@ class SiteForgePreviewTests(unittest.TestCase):
                 self.assertIn("Content-Security-Policy", html)
                 self.assertNotIn("Contenu d'exemple à personnaliser", html)
                 self.assertFalse({tag for tag, _ in parsed.tags} & {"script", "iframe", "form"})
-                self.assertTrue(all(link.startswith(PREFIX) or link in ("#main", "#method") for link in parsed.links))
+                self.assertTrue(all(link.startswith(PREFIX) or link in ("#main", "#method", "#explorer") for link in parsed.links))
                 self.assertIn(PREFIX, parsed.links)
                 for child in ("/projects", "/roadmap", "/contact"):
                     self.assertIn(PREFIX + child.lstrip("/") + "/", parsed.links)
@@ -62,7 +62,7 @@ class SiteForgePreviewTests(unittest.TestCase):
     def test_copy_discloses_preview_and_no_automatic_permission(self):
         home = PATHS["/"].read_text(encoding="utf-8")
         contact = PATHS["/contact"].read_text(encoding="utf-8")
-        self.assertIn("démonstration statique", home)
+        self.assertIn("UNE DÉMO GÉNÉRÉE", home)
         self.assertIn("ne collecte aucune donnée personnelle", contact)
         for p in PATHS.values():
             html = p.read_text(encoding="utf-8")
@@ -72,7 +72,7 @@ class SiteForgePreviewTests(unittest.TestCase):
 
     def test_three_modern_styles_and_native_disclosure(self):
         base = ROOT / "siteforge"
-        for style, folder in (("signature", ""), ("aurora", "aurora"), ("atelier", "atelier"), ("mono", "mono")):
+        for style, folder in (("prism", ""), ("signature", "signature"), ("aurora", "aurora"), ("atelier", "atelier"), ("mono", "mono")):
             pages_root = base / folder
             for route in ("", "projects", "roadmap", "contact"):
                 file = pages_root / route / "index.html"
@@ -84,6 +84,7 @@ class SiteForgePreviewTests(unittest.TestCase):
                     self.assertIn('noindex,nofollow', html)
                     self.assertIn('Styles SiteForge', html)
                     self.assertIn('href="' + PREFIX + '"', html)
+                    self.assertIn('href="' + PREFIX + 'signature/"', html)
                     self.assertIn('href="' + PREFIX + 'aurora/"', html)
                     self.assertIn('href="' + PREFIX + 'atelier/"', html)
                     self.assertIn('href="' + PREFIX + 'mono/"', html)
@@ -91,9 +92,15 @@ class SiteForgePreviewTests(unittest.TestCase):
                     self.assertNotIn("<iframe", html.lower())
                     self.assertNotIn("<form", html.lower())
                     self.assertNotIn("Contenu d'exemple à personnaliser", html)
-                    if not route and style != "signature":
+                    if not route and style not in ("signature", "prism"):
                         self.assertIn('class="sf-reveal"', html)
                         self.assertIn('<summary>Découvrir les étapes</summary>', html)
+                    if not route and style == "prism":
+                        self.assertIn('class="pr-hero"', html)
+                        self.assertIn('class="pr-control"', html)
+                        self.assertIn('class="pr-manifesto"', html)
+                        self.assertIn('class="pr-disclosure"', html)
+                        self.assertEqual(html.count('type="radio"'), 3)
                     if not route and style == "signature":
                         self.assertIn('class="sg-hero"', html)
                         self.assertIn('class="sg-app"', html)
