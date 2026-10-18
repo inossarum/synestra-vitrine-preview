@@ -1,11 +1,14 @@
 /** Visual R3 real site boundary test: Chrome -> PNG -> derived tile data -> MCP.
  * Only edits/restores HTML inside an isolated QA checkout. Never deploys.
  */
-import {readFileSync,writeFileSync,copyFileSync} from 'node:fs';
+import {readFileSync,writeFileSync,mkdtempSync} from 'node:fs';
+import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {spawnSync} from 'node:child_process';
 import assert from 'node:assert/strict';
 import {fingerprintPng,compareVisualFingerprints} from '../tools/visual_fingerprint.mjs';
+import {createLocalVisualEvidencePair} from '../tools/visual_evidence_pair.mjs';
+import {createHash} from 'node:crypto';
 const root=process.cwd(),html=join(root,'index.html');
 const baseline=readFileSync(html);const original=baseline.toString('utf8');
 const anchor='--mint: #a7e7ca;',replacement='--mint: #ff0055;';
@@ -41,6 +44,11 @@ try{
 }
 assert.deepEqual(readFileSync(html),baseline,'SOURCE_NOT_RESTORED');
 restored=runChrome('RESTORED');
+const head=spawnSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8',timeout:5000});
+assert.equal(head.status,0,'PINNED_GIT_HEAD_UNAVAILABLE');
+const sourceCommit=head.stdout.trim();
+assert.match(sourceCommit,/^[a-f0-9]{40}$/);
+const bundleDir=mkdtempSync(join(tmpdir(),'synestra-web-pilot-evidence-pair-'));
 const results={schema:'synestra.web-pilot.visual-site-e2e.v1',
   scope:'ISOLATED_LOCAL_CHROME',sourceRestored:true,qualityProven:false,viewports:{}};
 for(const name of ['mobile','desktop']){
@@ -51,6 +59,17 @@ for(const name of ['mobile','desktop']){
  assert.equal(detected.qualityProven,false);
  if(recovery.status==='REJECTED')throw Error('RESTORE_COMPARE_REJECTED '+name);
  assert.equal(recovery.prominentTileCount,0,'PROMINENT_VISUAL_CHANGE_AFTER_RESTORE '+name);
+ const pair=createLocalVisualEvidencePair({
+   repository:'inossarum/synestra-vitrine-preview',commit:sourceCommit,
+   comparison:detected,recovery
+ });
+ const reportFile=join(bundleDir,'visual-review-'+name+'.json');
+ const manifestFile=join(bundleDir,'visual-review-'+name+'.sha256-manifest.json');
+ writeFileSync(reportFile,pair.reportJson,'utf8');
+ writeFileSync(manifestFile,pair.manifestJson,'utf8');
+ assert.equal(createHash('sha256').update(readFileSync(reportFile)).digest('hex'),
+   JSON.parse(readFileSync(manifestFile,'utf8')).reportSha256);
+ assert.equal(JSON.parse(pair.reportJson).source.provenance,'UNVERIFIED');
  results.viewports[name]={
   viewport:before[name].viewport,changedTiles:detected.changedTileCount,
   prominentTiles:detected.prominentTileCount,
@@ -62,3 +81,4 @@ for(const name of ['mobile','desktop']){
  };
 }
 console.log('VISUAL_SITE_REAL_E2E='+JSON.stringify(results));
+console.log('VISUAL_EVIDENCE_PAIR_OUTPUT='+bundleDir);

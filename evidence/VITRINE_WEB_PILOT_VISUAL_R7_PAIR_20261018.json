@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "id": "VITRINE_WEB_PILOT_VISUAL_R7_PAIR_20261018",
+  "date": "2026-10-18",
+  "repo": "inossarum/synestra-vitrine-preview",
+  "branch": "feat/vitrine-public-presentation-20261016",
+  "base_checkout_sha": "12d7e2f91d73c7f696cb2fc845be340fd2c48a67",
+  "source_blobs": {
+    "tools/visual_evidence_pair.mjs": "4bd4eb728e0fc2202291b002363d338c2a626f87",
+    "tests/visual_evidence_pair.test.mjs": "dab56d2a5deecb3ce4dd39f77f86ac7f88398647",
+    "tests/visual_site_e2e.mjs": "f2c59cbf4c49a12e2ef33a955c560ab1052f64c8"
+  },
+  "tests": {
+    "unit": {
+      "status": "PASS",
+      "passed": 82,
+      "total": 82,
+      "failed": 0
+    },
+    "failure_first": {
+      "status": "RED_TO_GREEN",
+      "initial": "81/82, ../repo wrongly accepted",
+      "fix": "reject traversal-like repository components",
+      "final": "82/82"
+    },
+    "real_chrome": {
+      "status": "PASS",
+      "mobile_changes": 24,
+      "desktop_changes": 5,
+      "source_original_blob": "7e485223af98a1281a91b4cb75fe66d31734f8a6",
+      "mobile_restored_tiles_this_run": 0,
+      "desktop_restored_tiles_this_run": 0,
+      "render_variability_earlier": "2 subtle mobile previously observed"
+    },
+    "files_local_only": {
+      "mobile": {
+        "report_size": 4199,
+        "manifest_size": 362,
+        "sha256": "835e9013eabe44d019baed7ddba386ae203af807368f12d61770c51a1a22a321"
+      },
+      "desktop": {
+        "report_size": 1915,
+        "manifest_size": 362,
+        "sha256": "ba724bd262ebd98d178943d8ebc452300f9ae8ce6869e4873d523942624f4622"
+      }
+    },
+    "real_producer_to_webapp_browser": {
+      "status": "PASS",
+      "actual_r3_report_and_producer_manifest": true,
+      "digest_match": true,
+      "bad_digest_refused": true,
+      "provenance_remains_unverified": true,
+      "interactive_map_pass": true,
+      "cleanup": "PENDING_EPERRM"
+    },
+    "clean_git_post_publish": "PENDING"
+  },
+  "security": {
+    "manifest_is_signature": false,
+    "author_authenticated": false,
+    "provenance": "UNVERIFIED",
+    "attestation": "NONE",
+    "no_customer_bytes_in_git": true,
+    "free_only": true,
+    "main_untouched": true,
+    "no_bridge_grant": true,
+    "no_remote_mcp_deployment": true
+  },
+  "status": "PARTIAL",
+  "next": "Publish R7 on preview PR #3 as DRAFT using CAS after HEAD check; clean clone code commit and rerun 82 tests+Chrome and exact generated pair SHA. Cross-check WebApp PR #198 QA uses real manifest; commit QA script only on its own isolated DRAFT branch after clean test. Keep private temp files out of Git."
+}

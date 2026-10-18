@@ -81,3 +81,22 @@ Source officielle : https://chromedevtools.github.io/devtools-protocol/tot/Perfo
 - Le nettoyage de profils Chrome peut encore émettre \`CDP_PROFILE_CLEANUP_PENDING EPERM\`; grâce aux profils uniques les essais successifs fonctionnent, mais cleanup complet PENDING. Portail client, lecteur d'écran, review indépendante, connecteur distant et déploiement PENDING.
 
 Evidence : \`evidence/VITRINE_WEB_PILOT_VISUAL_R3_20261018.json\`. Aucun fichier de capture brute ni dossier local personnel n'est ajouté à Git.
+
+## R7 — Export couplé Visual Gate → Web App (18/10/2026)
+
+Le collecteur Chrome/R3 réutilisé dans `tests/visual_site_e2e.mjs` produit désormais, pour chaque viewport mobile/bureau, **deux fichiers locaux associés** :
+
+- `visual-review-<viewport>.json` : enveloppe `synestra.web-pilot.visual-review.v1` contenant les résultats originaux du comparateur MCP pour modification et restauration ;
+- `visual-review-<viewport>.sha256-manifest.json` : manifeste `synestra.web-pilot.visual-evidence-digest.v1`, avec SHA-256 des **octets exacts** du fichier JSON ci-dessus.
+
+Le module portable `tools/visual_evidence_pair.mjs` assemble le couple sans accès disque, shell, réseau ni dépendance tierce. Le script de test autorisé écrit les sorties uniquement dans un **répertoire temporaire Windows**, jamais dans Git. L'empreinte lie deux fichiers ; elle **n'atteste pas l'auteur ni la provenance**, qui restent `UNVERIFIED` et `attestation=NONE`. Le SHA du checkout est enregistré comme **contexte déclaré**, pas comme preuve d'origine authentifiée.
+
+Validation initiale dans un clone isolé du commit `12d7e2f91d73c7f696cb2fc845be340fd2c48a67` avec trois fichiers nouveaux/édités : **82/82 tests Node PASS** (dont 11 nouveaux tests d'export et de refus). Le premier test a exposé une validation insuffisante de `../repo` (81/82), corrigée avant l'E2E.
+
+**Chrome réel** sur la vitrine, mobile 390 et desktop 1440 : CSS volontairement modifié, 24/5 zones détectées, fichier source restauré au blob `7e485223af98a1281a91b4cb75fe66d31734f8a6`. Deux rapports et deux manifestes produits ; SHA-256 des fichiers comparés à leur manifeste PASS. Sur cette exécution, 0 zone résiduelle ; ne pas inférer la reproductibilité pixel-par-pixel puisque des variations mobiles subtiles ont été observées sur d'autres runs.
+
+**E2E véritable navigateur Chrome → producteurs locaux R7 → Web App React R6** : import du rapport mobile et **du manifeste réellement produit**, état `INTEGRITY_MATCH` avec origine `UNVERIFIED` PASS, modification volontaire de l'empreinte et refus `INTEGRITY_MISMATCH` PASS, grille/filtre/clavier/restauration/refus JSON invalides PASS. Aucun réseau hors loopback, aucun nouveau backend ou IAM.
+
+Tests finalisés sur la branche Git après publication : à confirmer dans une extraction propre du commit R7, les tests locaux précédents ne sont pas encore cette vérification. Aucun rapport réel, PNG, chemin de client, clé privée ou token commité.
+
+Evidence durable : `evidence/VITRINE_WEB_PILOT_VISUAL_R7_PAIR_20261018.json`.
