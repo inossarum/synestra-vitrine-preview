@@ -4,18 +4,21 @@
  */
 import readline from 'node:readline';
 import {inspectCapture,compareCaptures} from './web_pilot_core.mjs';
+import {inspectLabMetrics,compareLabMetrics} from './web_pilot_lab.mjs';
 let initialized=false;
 const transport='2025-06-18';
 const maxBytes=65536;
 const tool=(name,field,description)=>{
- const schema=field==='capture'?
-  {type:'object',additionalProperties:false,required:['capture'],properties:{capture:{type:'object'}}}:
+ const schema=(field==='capture'||field==='lab')?
+  {type:'object',additionalProperties:false,required:[field],properties:{[field]:{type:'object'}}}:
   {type:'object',additionalProperties:false,required:['before','after'],properties:{before:{type:'object'},after:{type:'object'}}};
  return {name,description,inputSchema:schema,annotations:{readOnlyHint:true,destructiveHint:false,openWorldHint:false,idempotentHint:true}};
 };
 const tools=[
  tool('synestra_web_inspect_capture','capture','Audit an already-supplied, untrusted website capture. Cannot access host or certify WCAG.'),
- tool('synestra_web_compare_captures','pair','Compare two already-supplied captures at identical viewport; no automatic site changes.')
+ tool('synestra_web_compare_captures','pair','Compare two already-supplied captures at identical viewport; no automatic site changes.'),
+ tool('synestra_web_inspect_lab_performance','lab','Inspect supplied Chrome CDP lab runtime counters. NOT field LCP/INP/CLS.'),
+ tool('synestra_web_compare_lab_performance','pair','Compare supplied same-viewport lab counters, no automatic optimization.')
 ];
 const error=(id,code,message)=>({jsonrpc:'2.0',id,error:{code,message}});
 const ok=(id,result)=>({jsonrpc:'2.0',id,result});
@@ -28,7 +31,7 @@ function handle(msg) {
  if(typeof msg.method!=='string')return error(id,-32600,'Invalid Method');
  if(msg.method==='initialize'&&id!==null){
   initialized=true;
-  return ok(id,{protocolVersion:transport,capabilities:{tools:{}},serverInfo:{name:'synestra-web-pilot-local',version:'0.1.0'}});
+  return ok(id,{protocolVersion:transport,capabilities:{tools:{}},serverInfo:{name:'synestra-web-pilot-local',version:'0.2.0'}});
  }
  if(msg.method==='notifications/initialized'&&id===null)return null;
  if(id===null)return null;
@@ -43,6 +46,10 @@ function handle(msg) {
   result=inspectCapture(p.arguments.capture);
  else if(p.name==='synestra_web_compare_captures'&&exact(p.arguments,['before','after']))
   result=compareCaptures(p.arguments.before,p.arguments.after);
+ else if(p.name==='synestra_web_inspect_lab_performance'&&exact(p.arguments,['lab']))
+  result=inspectLabMetrics(p.arguments.lab);
+ else if(p.name==='synestra_web_compare_lab_performance'&&exact(p.arguments,['before','after']))
+  result=compareLabMetrics(p.arguments.before,p.arguments.after);
  else return error(id,-32602,'Unknown tool or arguments');
  return ok(id,{content:[{type:'text',text:JSON.stringify(result)}],structuredContent:result,isError:result.status==='REJECTED'});
 }

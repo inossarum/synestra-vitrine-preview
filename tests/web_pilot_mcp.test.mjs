@@ -2,6 +2,7 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {spawnSync} from 'node:child_process';
 import {CAPTURE_SCHEMA} from '../tools/web_pilot_core.mjs';
+import {LAB_SCHEMA} from '../tools/web_pilot_lab.mjs';
 const sample=()=>({
  schema:CAPTURE_SCHEMA,viewport:{width:390,height:844},
  ids:['contenu'],sections:['contenu'],headings:[{level:1,text:'Synestra'}],
@@ -19,10 +20,10 @@ function talk(messages){
  assert.equal(p.status,0,'stdio failed: '+p.stderr);
  return p.stdout.split(/\r?\n/).filter(Boolean).map(JSON.parse);
 }
-test('handshake MCP, catalogue deux outils non destructifs',()=>{
+test('handshake MCP, catalogue quatre outils non destructifs',()=>{
  const r=talk([init(),msg(2,'tools/list')]);
  assert.equal(r[0].result.protocolVersion,'2025-06-18');
- assert.equal(r[1].result.tools.length,2);
+ assert.equal(r[1].result.tools.length,4);
  assert.ok(r[1].result.tools.every(t=>t.annotations.readOnlyHint===true));
 });
 test('appel réel outil analyse snapshot renvoie advisory',()=>{
@@ -71,4 +72,41 @@ test('payload trop volumineux est refusé',()=>{
 test('un ID invalide est refusé',()=>{
  const r=talk([init(),{jsonrpc:'2.0',id:{bad:true},method:'tools/list'}]);
  assert.equal(r[1].error.code,-32600);
+});
+
+
+const labSample=()=>({schema:LAB_SCHEMA,viewport:{width:390,height:844},
+ sampleWindow:'POST_NAVIGATION_QA_OBSERVATION',timeDomain:'timeTicks',
+ metrics:{nodes:100,jsHeapUsedBytes:200000,layoutCountObserved:3,
+ recalcStyleCountObserved:2,taskDurationMsObserved:10,layoutDurationMsObserved:3,scriptDurationMsObserved:1}});
+test('MCP analyses vrais champs lab et reste advisory',()=>{
+ const r=talk([init(),msg(2,'tools/call',{name:'synestra_web_inspect_lab_performance',
+ arguments:{lab:labSample()}})]);
+ assert.equal(r[1].result.structuredContent.status,'ADVISORY_LAB_OBSERVATION');
+ assert.equal(r[1].result.structuredContent.fieldCoreWebVitalsProven,false);
+});
+test('MCP compare lab même viewport sans auto tune',()=>{
+ const before=labSample(),after=labSample();after.metrics.nodes=130;
+ const r=talk([init(),msg(2,'tools/call',{name:'synestra_web_compare_lab_performance',
+ arguments:{before,after}})]);
+ assert.equal(r[1].result.structuredContent.deltas.nodes,30);
+ assert.equal(r[1].result.structuredContent.autoTuneAuthorized,false);
+});
+test('MCP lab refuse champs supplémentaires contenant commande',()=>{
+ const r=talk([init(),msg(2,'tools/call',{name:'synestra_web_inspect_lab_performance',
+ arguments:{lab:labSample(),command:'whoami'}})]);
+ assert.equal(r[1].error.code,-32602);
+});
+test('MCP rejette fausse revendication field CWV',()=>{
+ const bad=labSample();bad.fieldCoreWebVitalsProven=true;
+ const r=talk([init(),msg(2,'tools/call',{name:'synestra_web_inspect_lab_performance',
+ arguments:{lab:bad}})]);
+ assert.equal(r[1].result.structuredContent.status,'REJECTED');
+ assert.equal(r[1].result.isError,true);
+});
+test('MCP compare refuse deux tailles de viewport',()=>{
+ const before=labSample(),after=labSample();after.viewport.width=1440;
+ const r=talk([init(),msg(2,'tools/call',{name:'synestra_web_compare_lab_performance',
+ arguments:{before,after}})]);
+ assert.equal(r[1].result.structuredContent.reason,'LAB_CONTEXT_MISMATCH');
 });

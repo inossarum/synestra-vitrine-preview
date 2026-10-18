@@ -51,3 +51,19 @@ Le dernier script fait de véritables appels JSON-RPC à un processus enfant MCP
 ## Provenance et reprise
 
 PR vitrine #3, `inossarum/synestra-vitrine-preview`. Evidence `evidence/VITRINE_WEB_PILOT_MCP_REAL_E2E_20261018.json`. Vérifier HEAD/SHA, puis exécuter tests Node + vrai Chrome + échange local MCP, documenter toute nouvelle limitation avant promotion de code réutilisable dans Synestra Studio.
+
+## V2 — Observations de performance en laboratoire (18/10/2026)
+
+Deux nouvelles fonctions *consultatives* sont disponibles dans le MCP local, en plus de l'audit structurel :
+- `synestra_web_inspect_lab_performance({lab})` — valide un relevé CDP typé `synestra.web-pilot.lab-metrics.v1`, borné et sans champ d'auto-validation.
+- `synestra_web_compare_lab_performance({before,after})` — compare deux relevés de même viewport et même fenêtre d'observation ; retourne **AFTER_MINUS_BEFORE**, sans conclure à une amélioration.
+
+Le collecteur `tools/web_pilot_lab.mjs` lit `Performance.getMetrics` de Chrome avec `timeDomain=timeTicks` après un rechargement et les contrôles de la page. Les valeurs directes observées (`nodes`, `jsHeapUsedBytes`, compteurs layout/styles et durées tâches/styles/scripts) **ne sont pas des durées normalisées par chargement**. Chrome peut réinitialiser les compteurs lors de la navigation : ne **jamais** soustraire une mesure effectuée avant le rechargement d'une autre effectuée après. Toute métrique non fournie demeure `null`/`PENDING_LAB_METRICS`.
+
+Un premier essai réel avec soustraction trans-navigation a effectivement produit des compteurs négatifs/inconnus, *sans faux PASS* ; le correctif de collecte directe a ensuite produit deux observations complètes (`ADVISORY_LAB_OBSERVATION`) avec tests à jour. Ce résultat ne fournit **aucun score Core Web Vitals terrain**, notamment ni LCP, ni INP, ni CLS au 75e percentile : ces métriques doivent faire l'objet de sources RUM/CrUX adaptées.
+
+L'essai Chrome local sur la vitrine a affiché : mobile 390 px, 1 048 nœuds, 808 524 octets de heap JS, TaskDuration observée 38,706 ms ; bureau 1440 px, 1 572 nœuds, 1 060 080 octets, TaskDuration observée 42,245 ms. **Ce ne sont que deux échantillons** non représentatifs et non comparables entre formats.
+
+Tests de développement sur Inos-Cerebros/Windows Node 24.19 : `node --test tests/*.test.mjs` **60/60 PASS**, puis `node tests/browser_cdp_qa.mjs` et `node tests/web_pilot_real_capture_qa.mjs` **PASS**, six appels MCP réels dont deux relevés lab et une comparaison identique. Chrome profile cleanup `EPERM` reste PENDING. Pas de mise en production, serveur MCP distant, changement d'autorisations, service tiers payant ou accès Bridge.
+
+Source officielle : https://chromedevtools.github.io/devtools-protocol/tot/Performance/ ; limites CWV : https://web.dev/articles/defining-core-web-vitals-thresholds/ . Evidence durable : `evidence/VITRINE_WEB_PILOT_LAB_V2_20261018.json`.

@@ -4,6 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { inspectCapture, CAPTURE_SCHEMA } from '../tools/web_pilot_core.mjs';
+import { fromCdpMetrics, inspectLabMetrics } from '../tools/web_pilot_lab.mjs';
 const root = process.cwd();
 const chrome = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
 const profile = mkdtempSync(join(tmpdir(),'synestra-vitrine-cdp-'));
@@ -50,6 +51,7 @@ try {
   });
   await call('Page.enable');
   await call('Network.enable');
+  await call('Performance.enable',{timeDomain:'timeTicks'});
   for(const view of [{name:'mobile',width:390,height:844,mobile:true},{name:'desktop',width:1440,height:900,mobile:false}]){
     await call('Emulation.setDeviceMetricsOverride',{width:view.width,height:view.height,deviceScaleFactor:1,mobile:view.mobile});
     await call('Page.reload',{ignoreCache:true});
@@ -100,10 +102,15 @@ try {
     capture.externalRequests=outOfScopeRequests.length;
     const audit=inspectCapture(capture);
     if(audit.status==='REJECTED')throw Error('WEB_PILOT_CAPTURE_REJECTED '+view.name);
+    const labAfter=(await call('Performance.getMetrics')).metrics;
+    const lab=fromCdpMetrics({width:view.width,height:view.height},labAfter);
+    const labAudit=inspectLabMetrics(lab);
+    if(labAudit.status==='REJECTED')throw Error('LAB_CAPTURE_REJECTED '+view.name);
+    console.log('LAB_PILOT_'+view.name.toUpperCase()+'='+labAudit.status+' '+JSON.stringify({metrics:lab.metrics,missing:labAudit.missing,fieldCWV:false}));
     const pilotFile=join(root,'web-pilot-'+view.name+'.json');
     writeFileSync(pilotFile,JSON.stringify({
       schema:'synestra.web-pilot.audit.v1',origin:'LOCAL_HTML_UNVERIFIED',viewport:view.name,
-      capture,audit
+      capture,audit,lab,labAudit
     },null,2)+'\n');
     console.log('WEB_PILOT_'+view.name.toUpperCase()+'='+audit.status+' '+JSON.stringify({
       issues:audit.issues,summary:audit.summary,report:pilotFile
