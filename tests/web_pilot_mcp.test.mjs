@@ -20,10 +20,10 @@ function talk(messages){
  assert.equal(p.status,0,'stdio failed: '+p.stderr);
  return p.stdout.split(/\r?\n/).filter(Boolean).map(JSON.parse);
 }
-test('handshake MCP, catalogue quatre outils non destructifs',()=>{
+test('handshake MCP, catalogue six outils non destructifs',()=>{
  const r=talk([init(),msg(2,'tools/list')]);
  assert.equal(r[0].result.protocolVersion,'2025-06-18');
- assert.equal(r[1].result.tools.length,4);
+ assert.equal(r[1].result.tools.length,6);
  assert.ok(r[1].result.tools.every(t=>t.annotations.readOnlyHint===true));
 });
 test('appel réel outil analyse snapshot renvoie advisory',()=>{
