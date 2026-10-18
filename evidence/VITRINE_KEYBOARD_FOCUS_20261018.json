@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "evidence_id": "SYNESTRA_VITRINE_KEYBOARD_FOCUS_20261018",
+  "date_utc": "2026-10-18",
+  "repository": "inossarum/synestra-vitrine-preview",
+  "branch": "feat/vitrine-public-presentation-20261016",
+  "pull_request": "https://github.com/inossarum/synestra-vitrine-preview/pull/3",
+  "prior_head": "4ae903db72ac1bbda8022498f1032eceb9cbff6a",
+  "source_git_blobs": {
+    "index.html": "7e485223af98a1281a91b4cb75fe66d31734f8a6",
+    "tests/site_contract.test.mjs": "aa65654e020d317e88537d2aa72c671d45261047",
+    "tests/browser_cdp_qa.mjs": "325f6f2b9cea8254aed5c9d23d74aabb8fd0328b"
+  },
+  "intent": "Focus navigation keyboard QA without affecting the client portal, Bridge or production",
+  "new_delta": [
+    "main#contenu gains tabindex=-1 for skip link focus after Enter",
+    "two new static Node contract tests for skip-link focus target and native FAQ semantics",
+    "existing CDP browser QA adds keyboard Enter/Space verification on mobile and desktop, preserving screenshots before keyboard scrolling",
+    "README and durable evidence updated, no app JavaScript or external dependency"
+  ],
+  "test_evidence": {
+    "failure_first_before_change": {
+      "status": "RED_OBSERVED",
+      "source_sha": "75cba52a9e78d40a35c6bd9cfc747e7694d72192",
+      "contract_checks": 6,
+      "passing": 5,
+      "failing": 1,
+      "failure": "FOCUS_TARGET_MISSING_TABINDEX_MINUS_ONE"
+    },
+    "post_change_static_source": {
+      "status": "PASS",
+      "checks": 19,
+      "passing": 19,
+      "failing": 0,
+      "method": "Source assertions on fetched exact GitHub blob contents via isolated V8 JS"
+    },
+    "javascript_body_parse": {
+      "status": "PASS",
+      "method": "V8 Function syntactic parse after removing import declarations and replacing import.meta.url sentinel, not actual Node test execution"
+    },
+    "node_test_against_this_head": {
+      "status": "PENDING",
+      "reason": "No local checkout of the exact full preview HTML available to Node in this tool session"
+    },
+    "chrome_keyboard_against_this_head": {
+      "status": "PENDING",
+      "reason": "Headless Chromium in the isolated Linux runner opened chrome-error://chromewebdata/ for a local fixture; this is an environment/fixture failure and not production page evidence"
+    },
+    "earlier_head_browser": {
+      "status": "PASS_PREVIOUS_REVISION_ONLY",
+      "source": "evidence/VITRINE_FAQ_ABOUT_20261017.json",
+      "note": "Mobile/desktop viewport and click FAQ qualified on prior HEAD, not this HEAD"
+    },
+    "screen_reader": {
+      "status": "PENDING"
+    },
+    "client_portal_live": {
+      "status": "PENDING"
+    },
+    "production": {
+      "status": "NOT_DEPLOYED"
+    }
+  },
+  "security": {
+    "preview_noindex": true,
+    "csp_preserved": true,
+    "form_or_script_added": false,
+    "credentials_or_keys_used": false,
+    "remote_pc_changed": false,
+    "billing": "FREE_ONLY"
+  },
+  "canonical_skills": [
+    {
+      "id": "web-accessibility-engineering",
+      "version": "1.0.0",
+      "blob": "172c442525351804e89e7b273346f03df34bdd89"
+    },
+    {
+      "id": "semantic-web-implementation",
+      "version": "1.0.0",
+      "blob": "291c352444cb44b3b1f2eb7e5a25f72bffb39ec0"
+    },
+    {
+      "id": "failure-first",
+      "version": "1.0.0",
+      "blob": "373c5f508b3ef91d1ffc1fc5afec7007a643d590"
+    },
+    {
+      "id": "test-driven-development",
+      "version": "1.0.0",
+      "blob": "accb4772b83a96b308b8ee07897abf0fb777c9a8"
+    },
+    {
+      "id": "security-review",
+      "version": "1.0.0",
+      "blob": "3aa9f9295981911dcd7e1c46b713878ac458efd3"
+    },
+    {
+      "id": "reasoning-evidence",
+      "version": "1.0.0",
+      "blob": "b1d95e26cddce504adcbb0ba69d7c4ca36990836"
+    }
+  ],
+  "governance": {
+    "studio_main_sha": "2b7e34181d95365a6d833dcf6102f235f65253c1",
+    "catalog_sha": "2e25e4b05bac2e131df5a183e4ca81f7702eb385",
+    "central_skills_version": "1.13.0",
+    "memory_sha": "bc43f64a6633c8c95e9434baa75ee1fb2dcf924c",
+    "immutable_l0_sha": "cdfd624dd8c6b6a2918ca031849ab7141ab6afde",
+    "immutable_commercial_sha": "288beb2964fb674c974e6f5953eb846070d52a5d"
+  },
+  "checkpoint": {
+    "state": "PARTIAL",
+    "blockers": [
+      "NEW_HEAD_CHROME_KEYBOARD_E2E_PENDING",
+      "SCREEN_READER_PENDING",
+      "REAL_CLIENT_PORTAL_E2E_PENDING",
+      "CI_PENDING",
+      "PUBLICATION_HUMAN_GATE"
+    ],
+    "next": "From exact current PR #3 SHA, on isolated Windows clone run node --test tests/site_contract.test.mjs then node tests/browser_cdp_qa.mjs using installed Chrome; preserve screenshots and keyboard outputs; verify with real screen reader/manual keyboard and portal auth; no main merge or production publication without owner approval."
+  }
+}

@@ -50,6 +50,28 @@ try {
     const target=join(root,'cdp-'+view.name+'.png');
     writeFileSync(target,Buffer.from(shot.data,'base64'));
     console.log('BROWSER_'+view.name.toUpperCase()+'=PASS '+JSON.stringify(m)+' screenshot='+target);
+    // Native keyboard interaction: enter through the skip link and FAQ summary.
+    const focusResult=await call('Runtime.evaluate',{expression:"(() => {const m=document.querySelector('main#contenu');const s=document.querySelector('a.skip[href=\"#contenu\"]');if(!m||m.tabIndex!==-1||!s)return false;s.focus();return document.activeElement===s && getComputedStyle(s).left!=='-9999px';})()",returnByValue:true});
+    if(focusResult.result.value!==true)throw Error('SKIP_FOCUS_FAIL '+view.name);
+    const pressKey=async(key,code,virtualKey)=>{
+      const args={key,code,windowsVirtualKeyCode:virtualKey,nativeVirtualKeyCode:virtualKey};
+      await call('Input.dispatchKeyEvent',{type:'keyDown',...args});
+      await call('Input.dispatchKeyEvent',{type:'keyUp',...args});
+    };
+    await pressKey('Enter','Enter',13);
+    const focused=await call('Runtime.evaluate',{expression:"document.activeElement?.id==='contenu'",returnByValue:true});
+    if(focused.result.value!==true)throw Error('SKIP_ENTER_TARGET_FAIL '+view.name);
+    for(const [keyName,keyCode,virtualKey] of [['Enter','Enter',13],[' ','Space',32]]){
+      const start=await call('Runtime.evaluate',{expression:"(() => {const item=document.querySelector('#questions details');item.open=false;item.querySelector('summary').focus();return document.activeElement===item.querySelector('summary')})()",returnByValue:true});
+      if(start.result.value!==true)throw Error('FAQ_KEYBOARD_FOCUS_FAIL '+view.name);
+      await pressKey(keyName,keyCode,virtualKey);
+      const opened=await call('Runtime.evaluate',{expression:"document.querySelector('#questions details').open",returnByValue:true});
+      if(opened.result.value!==true)throw Error('FAQ_KEYBOARD_OPEN_FAIL '+view.name+' '+keyCode);
+      await pressKey(keyName,keyCode,virtualKey);
+      const closed=await call('Runtime.evaluate',{expression:"!document.querySelector('#questions details').open",returnByValue:true});
+      if(closed.result.value!==true)throw Error('FAQ_KEYBOARD_CLOSE_FAIL '+view.name+' '+keyCode);
+    }
+    console.log('KEYBOARD_'+view.name.toUpperCase()+'=PASS');
   }
   console.log('BROWSER_REAL_VIEWPORT_QA_PASS');
 } finally {

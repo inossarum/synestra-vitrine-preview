@@ -55,3 +55,17 @@ test('navigation vers les réponses et la présentation du studio', () => {
   assert.match(html, /<a href="#questions">Questions<\/a>/);
   assert.match(html, /<a href="#a-propos">À propos<\/a>/);
 });
+
+test('le lien d’évitement peut déplacer le focus vers le contenu', () => {
+  assert.match(html, /<a class="skip" href="#contenu">Aller au contenu<\/a>/);
+  assert.match(html, /<main id="contenu" tabindex="-1">/);
+  assert.match(html, /\.skip:focus\s*\{\s*left:\s*1rem/);
+  assert.match(html, /a:focus-visible,\s*button:focus-visible/);
+});
+
+test('toutes les FAQ restent accessibles avec la sémantique native', () => {
+  assert.equal(count('<details class="faq-item">'), 5);
+  assert.equal(count('<summary>'), 5);
+  assert.doesNotMatch(html, /<summary[^>]*tabindex/);
+  assert.doesNotMatch(html, /<script\b/i);
+});
