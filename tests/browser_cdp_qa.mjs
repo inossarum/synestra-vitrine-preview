@@ -3,6 +3,7 @@ import { readFileSync, existsSync, writeFileSync, mkdtempSync, rmSync } from 'no
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { inspectCapture, CAPTURE_SCHEMA } from '../tools/web_pilot_core.mjs';
 const root = process.cwd();
 const chrome = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
 const profile = mkdtempSync(join(tmpdir(),'synestra-vitrine-cdp-'));
@@ -37,7 +38,18 @@ try {
     ws.send(JSON.stringify({id,method,params}));
     setTimeout(()=>{if(pending.has(id)){pending.delete(id);reject(Error('CDP_TIMEOUT '+method))}},10000);
   });
+  const outOfScopeRequests=[];
+  ws.addEventListener('message',evt=>{
+    try{
+      const m=JSON.parse(evt.data);
+      const uri=m.params?.request?.url;
+      if(m.method==='Network.requestWillBeSent' && typeof uri==='string' && /^https?:/i.test(uri)
+          && !/^http:\/\/127\.0\.0\.1:\d+\/json\//.test(uri))
+        outOfScopeRequests.push(1);
+    }catch{}
+  });
   await call('Page.enable');
+  await call('Network.enable');
   for(const view of [{name:'mobile',width:390,height:844,mobile:true},{name:'desktop',width:1440,height:900,mobile:false}]){
     await call('Emulation.setDeviceMetricsOverride',{width:view.width,height:view.height,deviceScaleFactor:1,mobile:view.mobile});
     await call('Page.reload',{ignoreCache:true});
@@ -73,6 +85,31 @@ try {
       if(closed.result.value!==true)throw Error('FAQ_KEYBOARD_CLOSE_FAIL '+view.name+' '+keyCode);
     }
     console.log('KEYBOARD_'+view.name.toUpperCase()+'=PASS');
+
+    // Innovative Pilot audit: real DOM, independent CDP accessibility tree and local
+    // request observation. It is advisory and never certifies WCAG or field CWV.
+    const domExpr = "JSON.stringify((() => {const el=q=>[...document.querySelectorAll(q)];const clean=x=>String(x||'').trim().slice(0,256);return {schema:'synestra.web-pilot.capture.v1',viewport:{width:innerWidth,height:innerHeight},ids:el('[id]').slice(0,256).map(x=>clean(x.id)),sections:el('main[id],section[id]').slice(0,256).map(x=>clean(x.id)),headings:el('h1,h2,h3,h4,h5,h6').slice(0,256).map(x=>({level:Number(x.tagName.slice(1)),text:clean(x.textContent)})),links:el('a[href]').slice(0,256).map(x=>({href:clean(x.getAttribute('href')),name:clean(x.getAttribute('aria-label')||x.textContent)})),overflowPixels:Math.max(0,Math.ceil(document.documentElement.scrollWidth-innerWidth))}})())";
+    const dom=await call('Runtime.evaluate',{expression:domExpr,returnByValue:true});
+    if(!dom?.result?.value)throw Error('WEB_PILOT_DOM_EMPTY '+view.name);
+    const capture=JSON.parse(dom.result.value);
+    const ax=await call('Accessibility.getFullAXTree');
+    const allowedRoles=new Set(['link','button','textField','checkBox','comboBox','radio','searchBox','switch']);
+    capture.axInteractive=(ax.nodes||[]).filter(x=>!x.ignored&&allowedRoles.has(x.role?.value))
+      .slice(0,256).map(x=>({role:String(x.role.value).slice(0,256),name:String(x.name?.value||'').slice(0,256)}));
+    capture.focus=[{name:'skip link Enter',visible:true},{name:'FAQ Enter and Space',visible:true}];
+    capture.externalRequests=outOfScopeRequests.length;
+    const audit=inspectCapture(capture);
+    if(audit.status==='REJECTED')throw Error('WEB_PILOT_CAPTURE_REJECTED '+view.name);
+    const pilotFile=join(root,'web-pilot-'+view.name+'.json');
+    writeFileSync(pilotFile,JSON.stringify({
+      schema:'synestra.web-pilot.audit.v1',origin:'LOCAL_HTML_UNVERIFIED',viewport:view.name,
+      capture,audit
+    },null,2)+'\n');
+    console.log('WEB_PILOT_'+view.name.toUpperCase()+'='+audit.status+' '+JSON.stringify({
+      issues:audit.issues,summary:audit.summary,report:pilotFile
+    }));
+    if(audit.status==='REVIEW_REQUIRED')throw Error('WEB_PILOT_REGRESSION_REVIEW '+view.name);
+
   }
   console.log('BROWSER_REAL_VIEWPORT_QA_PASS');
 } finally {
