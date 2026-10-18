@@ -59,6 +59,16 @@
     },
     "production": {
       "status": "NOT_DEPLOYED"
+    },
+    "exact_contract_callbacks_in_memory": {
+      "status": "PASS",
+      "tests": 10,
+      "passed": 10,
+      "failed": 0,
+      "source_sha": "7e485223af98a1281a91b4cb75fe66d31734f8a6",
+      "contract_sha": "aa65654e020d317e88537d2aa72c671d45261047",
+      "method": "All 10 original synchronous node:test callback bodies executed against the actual GitHub HTML string via isolated V8 JavaScript with assert.equal/ok/match/doesNotMatch shims; no Node module/runtime or DOM/browser",
+      "limitation": "Does not qualify Node test harness, focus navigation in browser or assistive technology"
     }
   },
   "security": {
@@ -118,6 +128,6 @@
       "CI_PENDING",
       "PUBLICATION_HUMAN_GATE"
     ],
-    "next": "From exact current PR #3 SHA, on isolated Windows clone run node --test tests/site_contract.test.mjs then node tests/browser_cdp_qa.mjs using installed Chrome; preserve screenshots and keyboard outputs; verify with real screen reader/manual keyboard and portal auth; no main merge or production publication without owner approval."
+    "next": "Recheck Git HEAD and preserve callback 10/10 PASS. On isolated Windows Chrome clone run actual node --test tests/site_contract.test.mjs and node tests/browser_cdp_qa.mjs; record keyboard Enter/Space PASS/FAIL at 390 and 1440 px, screen-reader/manual focus and portal E2E; no merge/deploy without owner release gate."
   }
 }
