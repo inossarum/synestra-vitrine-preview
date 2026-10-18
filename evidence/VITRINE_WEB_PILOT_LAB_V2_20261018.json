@@ -100,6 +100,44 @@
   },
   "checkpoint": {
     "state": "PARTIAL",
-    "next": "Confirm exact HEAD and blobs, run full Node+real Chrome+MCP from clean clone; sync only portable Lab tool, tests and MCP stdio to separate central PR #193 with CAS; keep both draft, no Site/Cloudflare runtime access."
+    "next": "Source HEAD 4a18ab4 clean clone 60/60+Chrome+6 local MCP calls PASS. Central PR #193 clean sparse 49/49 PASS at acaab34a; continued in central 6635b49. Runtime MCP binding, field CWV and independent visual/reader review PENDING. No deployment."
+  },
+  "clean_checkout": {
+    "source_head": "4a18ab41e3caa82c8679ac038d4c31abbcaff6d9",
+    "checkout": "fresh, isolated C: Windows clone",
+    "status": "PASS",
+    "node": {
+      "passed": 60,
+      "total": 60,
+      "failed": 0,
+      "exit_code": 0
+    },
+    "chrome": {
+      "mobile": "PASS",
+      "desktop": "PASS",
+      "faq_keyboard": "PASS",
+      "exit_code": 0
+    },
+    "real_mcp": {
+      "status": "PASS",
+      "calls": 6,
+      "exit_code": 0
+    },
+    "actual_lab_sample_descriptive": {
+      "mobile": {
+        "nodes": 1048,
+        "jsHeapUsedBytes": 808524,
+        "taskDurationMsObserved": 38.932,
+        "status": "ADVISORY_LAB_OBSERVATION"
+      },
+      "desktop": {
+        "nodes": 1572,
+        "jsHeapUsedBytes": 1060080,
+        "taskDurationMsObserved": 30.384,
+        "status": "ADVISORY_LAB_OBSERVATION"
+      }
+    },
+    "limitation": "Single lab samples, not field CWV, changes between runs do not imply optimization",
+    "cleanup": "CDP_PROFILE_CLEANUP_PENDING_EPERRM"
   }
 }
