@@ -67,3 +67,17 @@ L'essai Chrome local sur la vitrine a affiché : mobile 390 px, 1 048 nœuds, 80
 Tests de développement sur Inos-Cerebros/Windows Node 24.19 : `node --test tests/*.test.mjs` **60/60 PASS**, puis `node tests/browser_cdp_qa.mjs` et `node tests/web_pilot_real_capture_qa.mjs` **PASS**, six appels MCP réels dont deux relevés lab et une comparaison identique. Chrome profile cleanup `EPERM` reste PENDING. Pas de mise en production, serveur MCP distant, changement d'autorisations, service tiers payant ou accès Bridge.
 
 Source officielle : https://chromedevtools.github.io/devtools-protocol/tot/Performance/ ; limites CWV : https://web.dev/articles/defining-core-web-vitals-thresholds/ . Evidence durable : `evidence/VITRINE_WEB_PILOT_LAB_V2_20261018.json`.
+
+## R3 — Visual Gate intégré, captures Chrome sur vitrine réelle (18/10/2026)
+
+**Réutilisation R3** : \`tools/visual_fingerprint.mjs\` est un port légèrement adapté du prototype local archivé (la version portée **n'a pas le même blob SHA** que l'archive originale), puis testé sur le vrai site via le Chrome déjà autorisé. Les deux outils visuels sont **intégrés au serveur MCP local existant**, soit **six** outils read-only ; aucun nouveau serveur, privilège ou accès fichier MCP. Les arguments contiennent uniquement des empreintes dérivées (grille 16 × 12, moyennes RGB, hashes de tuiles), jamais des PNG ni chemins du PC.
+
+- \`synestra_web_inspect_visual_fingerprint({visual})\` inspecte un rapport dérivé strict.
+- \`synestra_web_compare_visual_fingerprints({before,after})\` compare deux vues strictement à la même résolution physique.
+- Exécution locale explicite de \`node tests/visual_site_e2e.mjs\` sur **clone isolé uniquement** : capture baseline Chrome 390/1440, changement d'un jeton CSS de couleur, seconde capture, restauration du HTML dans un \`finally\`, troisième capture, deux appels MCP par viewport. Le script modifie **seulement** le \`index.html\` de la copie isolée ; il n'effectue aucune publication ou mutation du Studio actif.
+- Validation initiale du clone Git exact : **71/71 tests Node PASS**. Navigateur réel : changement volontaire observé sur 24 tuiles mobiles et de 5 à 7 tuiles bureau suivant le passage. Récupération : HTML restauré au blob \`7e485223af98a1281a91b4cb75fe66d31734f8a6\`, **0 tuile PROMINENTE restante sur mobile/bureau** ; 2 tuiles SUBTLE restent différentes entre captures mobiles malgré réduction des animations et attente des polices. Ces différences ne sont pas masquées : retour au pixel identique NON PROUVÉ.
+- Le prototype synthétique précédent passe **34/34 tests** après extraction propre. Le composant Studio central équivalent passe **60/60 tests** de contrat/MCP sur un sparse checkout Windows. Les pixels varient selon la capture ; aucune appréciation automatique de conformité ou de défaut esthétique.
+- **Rappel sécurité** : rapports dérivés potentiellement sensibles, ne pas les publier pour un client sans permission ; les outils MCP locaux n'ont aucun lecteur de PNG, navigateur, shell ni réseau ; \`visual_site_e2e\` n'est pas un outil MCP.
+- Le nettoyage de profils Chrome peut encore émettre \`CDP_PROFILE_CLEANUP_PENDING EPERM\`; grâce aux profils uniques les essais successifs fonctionnent, mais cleanup complet PENDING. Portail client, lecteur d'écran, review indépendante, connecteur distant et déploiement PENDING.
+
+Evidence : \`evidence/VITRINE_WEB_PILOT_VISUAL_R3_20261018.json\`. Aucun fichier de capture brute ni dossier local personnel n'est ajouté à Git.

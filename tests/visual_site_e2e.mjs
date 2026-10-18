@@ -50,10 +50,13 @@ for(const name of ['mobile','desktop']){
  assert.ok(detected.changedTileCount>0);
  assert.equal(detected.qualityProven,false);
  if(recovery.status==='REJECTED')throw Error('RESTORE_COMPARE_REJECTED '+name);
+ assert.equal(recovery.prominentTileCount,0,'PROMINENT_VISUAL_CHANGE_AFTER_RESTORE '+name);
  results.viewports[name]={
   viewport:before[name].viewport,changedTiles:detected.changedTileCount,
   prominentTiles:detected.prominentTileCount,
   restoredDiffTiles:recovery.changedTileCount,
+  restoredProminentTiles:recovery.prominentTileCount,
+  restoredSubtleTiles:recovery.subtleTileCount,
   restoredStatus:recovery.status,
   defectsProven:false
  };
