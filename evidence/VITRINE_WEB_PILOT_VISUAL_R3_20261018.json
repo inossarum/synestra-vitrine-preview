@@ -110,6 +110,57 @@
       "CHROME_PROFILE_CLEANUP_PENDING",
       "REAL_PORTAL_AUTH_E2E_PENDING"
     ],
-    "next": "Verify final PR SHA and source blobs. Review security/visual repeatability without hiding subtle diffs. Central PR #193 must remain DRAFT, no merge or remote MCP authorization without separate gates. No need to repeat 71/71 or 60/60 on unchanged code."
+    "next": "Code and real E2E proven from Git head b2d561aa. No need to rerun these PASS if sources unchanged. Central portable PR #193 60/60 PASS at 198ab053. Remaining: reviewer, cleanup and authorized remote MCP binding, with no merge or deployment implied."
+  },
+  "final_clean_checkout": {
+    "status": "PASS_WITH_SUBTLE_MOBILE_RENDER_VARIATION",
+    "source_ref": "b2d561aa2346a273e9bb8b787493565d1fe6cc98",
+    "method": "New Windows checkout of Git-published source; unit tests then real Chrome + derived visual fingerprint through existing MCP tools; no local patches",
+    "node_tests": {
+      "total": 71,
+      "passed": 71,
+      "failed": 0,
+      "exit_code": 0
+    },
+    "chrome_real": {
+      "passes": 3,
+      "viewport_css": [
+        [
+          390,
+          844
+        ],
+        [
+          1440,
+          900
+        ]
+      ],
+      "color_change_tiles": {
+        "mobile": 24,
+        "desktop": 5
+      },
+      "color_change_prominent_tiles": {
+        "mobile": 22,
+        "desktop": 4
+      },
+      "restored_tiles": {
+        "mobile": 2,
+        "desktop": 0
+      },
+      "restored_subtle_tiles": {
+        "mobile": 2,
+        "desktop": 0
+      },
+      "restored_prominent_tiles": {
+        "mobile": 0,
+        "desktop": 0
+      },
+      "original_html_blob": "7e485223af98a1281a91b4cb75fe66d31734f8a6",
+      "process_exit_code": 0
+    },
+    "limitations": [
+      "Mobile subtle two tiles are observed and not hidden or called pixel-equal",
+      "Not a WCAG/visual reviewer or field Core Web Vitals qualification",
+      "No remote ChatGPT MCP registration"
+    ]
   }
 }
