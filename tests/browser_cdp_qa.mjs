@@ -1,10 +1,11 @@
 import { spawn } from 'node:child_process';
-import { readFileSync, existsSync, writeFileSync } from 'node:fs';
+import { readFileSync, existsSync, writeFileSync, mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 const root = process.cwd();
 const chrome = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
-const profile = join(root,'chrome-cdp-isolated');
+const profile = mkdtempSync(join(tmpdir(),'synestra-vitrine-cdp-'));
 const url = pathToFileURL(join(root,'index.html')).href;
 const args = ['--headless=new','--disable-gpu','--disable-extensions','--disable-background-networking','--no-first-run','--no-default-browser-check','--remote-debugging-address=127.0.0.1','--remote-debugging-port=0','--user-data-dir='+profile,url];
 const child = spawn(chrome,args,{stdio:'ignore',windowsHide:true});
@@ -55,7 +56,7 @@ try {
     if(focusResult.result.value!==true)throw Error('SKIP_FOCUS_FAIL '+view.name);
     const pressKey=async(key,code,virtualKey)=>{
       const args={key,code,windowsVirtualKeyCode:virtualKey,nativeVirtualKeyCode:virtualKey};
-      await call('Input.dispatchKeyEvent',{type:'keyDown',...args});
+      await call('Input.dispatchKeyEvent',{type:'keyDown',text:key==='Enter'?String.fromCharCode(13):' ',unmodifiedText:key==='Enter'?String.fromCharCode(13):' ',...args});
       await call('Input.dispatchKeyEvent',{type:'keyUp',...args});
     };
     await pressKey('Enter','Enter',13);
@@ -77,4 +78,5 @@ try {
 } finally {
   try{ws?.close()}catch{}
   child.kill();
+  try{rmSync(profile,{recursive:true,force:true,maxRetries:3,retryDelay:150})}catch(error){console.log('CDP_PROFILE_CLEANUP_PENDING '+(error?.code || 'UNKNOWN'))}
 }

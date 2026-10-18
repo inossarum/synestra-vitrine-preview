@@ -69,3 +69,12 @@ test('toutes les FAQ restent accessibles avec la sémantique native', () => {
   assert.doesNotMatch(html, /<summary[^>]*tabindex/);
   assert.doesNotMatch(html, /<script\b/i);
 });
+
+test('le script CDP évite les profils périmés et transmet les touches complètes', () => {
+  const browser = readFileSync(new URL('./browser_cdp_qa.mjs', import.meta.url), 'utf8');
+  assert.match(browser, /mkdtempSync\(join\(tmpdir\(\),'synestra-vitrine-cdp-'\)\)/);
+  assert.match(browser, /text:key==='Enter'\?String\.fromCharCode\(13\):' '/);
+  assert.match(browser, /unmodifiedText:key==='Enter'\?String\.fromCharCode\(13\):' '/);
+  assert.match(browser, /FAQ_KEYBOARD_OPEN_FAIL/);
+  assert.match(browser, /SKIP_ENTER_TARGET_FAIL/);
+});
