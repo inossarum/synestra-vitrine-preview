@@ -48,7 +48,7 @@ class SiteForgePreviewTests(unittest.TestCase):
                 self.assertIn("Content-Security-Policy", html)
                 self.assertNotIn("Contenu d'exemple à personnaliser", html)
                 self.assertFalse({tag for tag, _ in parsed.tags} & {"script", "iframe", "form"})
-                self.assertTrue(all(link.startswith(PREFIX) or link == "#main" for link in parsed.links))
+                self.assertTrue(all(link.startswith(PREFIX) or link in ("#main", "#method") for link in parsed.links))
                 self.assertIn(PREFIX, parsed.links)
                 for child in ("/projects", "/roadmap", "/contact"):
                     self.assertIn(PREFIX + child.lstrip("/") + "/", parsed.links)
@@ -72,7 +72,7 @@ class SiteForgePreviewTests(unittest.TestCase):
 
     def test_three_modern_styles_and_native_disclosure(self):
         base = ROOT / "siteforge"
-        for style, folder in (("aurora", ""), ("atelier", "atelier"), ("mono", "mono")):
+        for style, folder in (("signature", ""), ("aurora", "aurora"), ("atelier", "atelier"), ("mono", "mono")):
             pages_root = base / folder
             for route in ("", "projects", "roadmap", "contact"):
                 file = pages_root / route / "index.html"
@@ -84,15 +84,22 @@ class SiteForgePreviewTests(unittest.TestCase):
                     self.assertIn('noindex,nofollow', html)
                     self.assertIn('Styles SiteForge', html)
                     self.assertIn('href="' + PREFIX + '"', html)
+                    self.assertIn('href="' + PREFIX + 'aurora/"', html)
                     self.assertIn('href="' + PREFIX + 'atelier/"', html)
                     self.assertIn('href="' + PREFIX + 'mono/"', html)
                     self.assertNotIn("<script", html.lower())
                     self.assertNotIn("<iframe", html.lower())
                     self.assertNotIn("<form", html.lower())
                     self.assertNotIn("Contenu d'exemple à personnaliser", html)
-                    if not route:
+                    if not route and style != "signature":
                         self.assertIn('class="sf-reveal"', html)
                         self.assertIn('<summary>Découvrir les étapes</summary>', html)
+                    if not route and style == "signature":
+                        self.assertIn('class="sg-hero"', html)
+                        self.assertIn('class="sg-app"', html)
+                        self.assertIn('class="sg-capabilities"', html)
+                        self.assertIn('class="sg-disclosure"', html)
+                        self.assertIn('Maquette', html)
                     expected_root = PREFIX if not folder else PREFIX + folder + "/"
                     parser = PageParser()
                     parser.feed(html)
