@@ -70,6 +70,29 @@ class SiteForgePreviewTests(unittest.TestCase):
             self.assertNotIn("ACCESS_JWKS", html)
             self.assertNotIn("Bearer ", html)
 
+    def test_open_form_instrument_is_public_preview_only(self):
+        home = (ROOT / "siteforge" / "index.html").read_text(encoding="utf-8")
+        self.assertIn('id="sf-form-promo-title"', home)
+        self.assertIn('href="' + PREFIX + 'lab/"', home)
+        lab = ROOT / "siteforge" / "lab"
+        html = (lab / "index.html").read_text(encoding="utf-8")
+        self.assertIn("<h1>OPEN", html)
+        self.assertIn("script-src 'self'", html)
+        self.assertIn("connect-src 'none'", html)
+        self.assertIn('content="noindex,nofollow"', html)
+        self.assertIn('src="./siteforge_art_lab_runtime.mjs"', html)
+        self.assertIn('id="export-svg"', html)
+        self.assertIn('id="art-stage"', html)
+        self.assertNotIn("googletagmanager", html)
+        self.assertNotIn("ACCESS_JWKS", html)
+        self.assertNotIn("remoteActionAuthorized", html)
+        for name in ("siteforge_form_engine.mjs", "siteforge_art_lab_runtime.mjs"):
+            source = (lab / name).read_text(encoding="utf-8")
+            self.assertTrue(source)
+            self.assertNotIn("https://", source)
+            self.assertNotIn("fetch(", source)
+        self.assertIn("export function composeArt", (lab / "siteforge_form_engine.mjs").read_text(encoding="utf-8"))
+
     def test_three_modern_styles_and_native_disclosure(self):
         base = ROOT / "siteforge"
         for style, folder in (("prism", ""), ("signature", "signature"), ("aurora", "aurora"), ("atelier", "atelier"), ("mono", "mono")):
