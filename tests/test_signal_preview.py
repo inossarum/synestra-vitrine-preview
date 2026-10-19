@@ -42,6 +42,25 @@ class SignalPreviewTests(unittest.TestCase):
         for token in ("requestAnimationFrame", "cancelAnimationFrame", "reduced.matches", "if(!running)render"):
             self.assertIn(token, js)
 
+    def test_signal_r13_orbital_navigator_and_adaptive_rendering(self):
+        html = (ROOT / "index.html").read_text(encoding="utf-8")
+        js = (ROOT / "signal.js").read_text(encoding="utf-8")
+        css = (ROOT / "signal.css").read_text(encoding="utf-8")
+        self.assertEqual(html.count('class="signal-node'), 3)
+        self.assertIn('role="group" aria-label="Faire varier la scène générative"', html)
+        self.assertIn('id="share-mode" href="?mode=explorer"', html)
+        self.assertIn("URLSearchParams(window.location.search)", js)
+        self.assertIn("Object.hasOwn(modes,initial)", js)
+        for snippet in ("IntersectionObserver", "visibilitychange", "30:1000/45", "canvas.dataset.animating", "ArrowRight"):
+            # The frame-budget formula uses 1000/30 : 1000/45.
+            if snippet == "30:1000/45":
+                self.assertIn("1000/30:1000/45", js)
+            else:
+                self.assertIn(snippet, js)
+        self.assertIn("@media(max-width:36rem)", css)
+        self.assertIn(".signal-rail", css)
+        self.assertIn("prefers-reduced-motion:reduce", css)
+
 
 if __name__ == "__main__":
     unittest.main()

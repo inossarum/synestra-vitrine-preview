@@ -127,3 +127,37 @@ button{font:inherit;cursor:pointer}
 @media(prefers-reduced-motion:reduce){
 html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important;transform:none!important}
 }
+
+/* R13 SIGNAL NAVIGATOR — orbital scene is directly selectable and keyboard-operable. */
+.signal-rail{position:absolute;z-index:4;top:23%;right:clamp(1rem,4.3vw,5rem);width:11.5rem;display:flex;flex-direction:column;gap:.55rem;align-items:flex-end}
+.rail-heading{font-size:.56rem;font-weight:900;letter-spacing:.23em;color:#cad8e3a0;text-align:right;padding:.3rem .2rem .8rem}
+.signal-node{position:relative;min-height:3.25rem;width:100%;display:flex;align-items:center;gap:.72rem;padding:.7rem .86rem;background:linear-gradient(104deg,#0c1520b8,#17233680);border:1px solid #b7e7e72d;border-left:2px solid transparent;color:#d3e0e5;font-size:.73rem;letter-spacing:.1em;font-weight:850;text-align:left;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:border-color .25s,color .25s,background .25s,transform .25s}
+.signal-node .node-no{font-size:.55rem;color:#adb8cd93}
+.signal-node .node-orb{margin-left:auto;width:7px;height:7px;border-radius:50%;background:#b6c4d358;box-shadow:0 0 0 4px #93d3df0e}
+.signal-node:is(:hover,.active){border-color:var(--mode-accent);color:#fff;background:#1b263acb;transform:translateX(-4px)}
+.signal-node.active .node-orb{background:var(--mode-accent);box-shadow:0 0 17px 2px var(--mode-accent)}
+.signal-node:focus-visible{outline:3px solid #ffda8c;outline-offset:4px}
+@media(max-width:52rem){
+.signal-rail{top:auto;bottom:1.3rem;right:1.2rem;left:1.2rem;width:auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.5rem}
+.rail-heading{display:none}
+.signal-node{min-height:2.8rem;padding:.64rem .5rem;font-size:.68rem;gap:.4rem;justify-content:center}
+.signal-node .node-no{font-size:.5rem}
+.signal-node .node-orb{margin-left:.15rem;width:5px;height:5px}
+.signal-node:is(:hover,.active){transform:none}
+.hero-inner{padding-bottom:5.6rem}
+}
+@media(max-width:36rem){
+.hero{min-height:840px}
+.hero-inner{padding-bottom:6.5rem}
+.signal-rail{bottom:1.1rem;left:1rem;right:1rem}
+.signal-node{font-size:.64rem;padding:.66rem .35rem;letter-spacing:.02em}
+.signal-node .node-no{display:none}
+.hero-footer{padding-top:2.5rem}
+}
+@media(prefers-reduced-motion:reduce){.signal-node{transition:none!important;transform:none!important}}
+
+/* R13 human-shareable scene state, without trackers or stored profiles. */
+.mode-link{border-bottom:1px solid #a5b8cf7e;padding:.65rem 0;color:#d1e1e6;text-decoration:none;white-space:nowrap;font-size:.56rem;letter-spacing:.1em;font-weight:850}
+.mode-link:hover{color:var(--mode-accent);border-color:var(--mode-accent)}
+.mode-link:focus-visible{outline:3px solid #ffda8c;outline-offset:4px}
+@media(max-width:36rem){.mode-link{font-size:.52rem}}

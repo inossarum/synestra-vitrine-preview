@@ -12,13 +12,14 @@ const modes={
  comparer:{primary:"#ffb38b",secondary:"#ff7192",tertiary:"#ffffff",kind:1,label:"PILOTER"},
  verifier:{primary:"#8cf1e6",secondary:"#cad1ff",tertiary:"#ffffff",kind:2,label:"PROUVER"}
 };
-let intent="explorer",running=!reduced.matches,raf=0,frame=0,hoverX=0,hoverY=0,w=1,h=1,dpr=1;
-const selectors=[...document.querySelectorAll(".mode-choice")];
+let intent="explorer",running=false,requestedMotion=!reduced.matches,visible=true,raf=0,frame=0,lastPaint=0,hoverX=0,hoverY=0,w=1,h=1,dpr=1;
+const selectors=[...document.querySelectorAll(".mode-choice,.signal-node")];
 const sections=[...document.querySelectorAll(".signal-panel")];
 const label=document.getElementById("mode-label");
 const status=document.getElementById("experience-status");
 const pause=document.getElementById("motion-toggle");
 const digits=document.getElementById("frame-digits");
+const share=document.getElementById("share-mode");
 const change=(next)=>{
  if(!Object.hasOwn(modes,next)||!data.journeys.some(j=>j.intent===next))return false;
  intent=next;
@@ -31,6 +32,7 @@ const change=(next)=>{
  });
  sections.forEach(s=>s.hidden=s.dataset.intent!==intent);
  label.textContent=theme.label;
+ if(share){share.href="?mode="+intent;share.setAttribute("aria-label","Ouvrir le lien vers le mode "+theme.label)}
  status.textContent="Parcours "+theme.label+". "+data.journeys.find(j=>j.intent===intent).items.length+" informations fictives, sources non attestées.";
  if(!running)render(performance.now());
  return true;
@@ -119,19 +121,43 @@ function render(now){
  ctx.fillText("∞  SYSTEM / LIVE",Math.min(w-130,cx+rx*.55),Math.min(h-24,cy+rx*.82));
  if(digits)digits.textContent=String(Math.floor((running?now:frame)/1000)%9999).padStart(4,"0");
 }
-function loop(now){if(!running)return;frame=now;render(now);raf=requestAnimationFrame(loop)}
+function loop(now){
+ if(!running)return;
+ const budget=window.innerWidth<=600?1000/30:1000/45;
+ if(now-lastPaint>=budget){lastPaint=now;frame=now;render(now)}
+ raf=requestAnimationFrame(loop);
+}
 function setMotion(shouldRun){
  if(!ctx)return;
- running=shouldRun&&!reduced.matches;
+ requestedMotion=shouldRun;
+ running=requestedMotion&&!reduced.matches&&visible&&!document.hidden;
  cancelAnimationFrame(raf);
- pause.textContent=running?"PAUSE MOTION":"PLAY MOTION";
- pause.setAttribute("aria-pressed",String(!running));
- if(running)raf=requestAnimationFrame(loop);
+ pause.textContent=running?"PAUSE MOTION":reduced.matches?"MOTION RÉDUITE":requestedMotion?"MOTION EN VEILLE":"PLAY MOTION";
+ pause.setAttribute("aria-pressed",String(!requestedMotion||reduced.matches));
+ canvas.dataset.animating=String(running);
+ if(running){lastPaint=0;raf=requestAnimationFrame(loop)}
  else render(frame);
 }
 selectors.forEach(b=>b.addEventListener("click",()=>change(b.dataset.intent)));
-pause?.addEventListener("click",()=>setMotion(!running));
-reduced.addEventListener("change",e=>setMotion(!e.matches));
+document.querySelector(".signal-rail")?.addEventListener("keydown",e=>{
+ if(!["ArrowDown","ArrowUp","ArrowRight","ArrowLeft","Home","End"].includes(e.key))return;
+ const buttons=[...document.querySelectorAll(".signal-node")];
+ const current=buttons.indexOf(document.activeElement);
+ if(current<0)return;
+ e.preventDefault();
+ const next=e.key==="Home"?0:e.key==="End"?buttons.length-1:
+  (current+((e.key==="ArrowDown"||e.key==="ArrowRight")?1:-1)+buttons.length)%buttons.length;
+ buttons[next].focus();change(buttons[next].dataset.intent);
+});
+pause?.addEventListener("click",()=>setMotion(!requestedMotion));
+reduced.addEventListener("change",()=>setMotion(requestedMotion));
+document.addEventListener("visibilitychange",()=>setMotion(requestedMotion));
+if("IntersectionObserver" in window){
+ new IntersectionObserver(entries=>{
+  visible=entries[0].isIntersecting;
+  setMotion(requestedMotion);
+ },{threshold:.03}).observe(canvas);
+}
 canvas?.addEventListener("pointermove",e=>{
  const r=canvas.getBoundingClientRect();
  hoverX=((e.clientX-r.left)/r.width-.5)*1.1;
@@ -140,5 +166,6 @@ canvas?.addEventListener("pointermove",e=>{
 });
 canvas?.addEventListener("pointerleave",()=>{hoverX=hoverY=0;if(!running)render(frame)});
 window.addEventListener("resize",resize);
-resize();change("explorer");setMotion(!reduced.matches);
+const initial=new URLSearchParams(window.location.search).get("mode");
+resize();change(Object.hasOwn(modes,initial)?initial:"explorer");setMotion(!reduced.matches);
 })();
