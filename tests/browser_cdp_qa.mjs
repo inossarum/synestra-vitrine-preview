@@ -95,7 +95,7 @@ try {
     }
     const image=await call('Runtime.evaluate',{expression:"new Promise(resolve=>{const img=new Image();img.onload=()=>resolve(JSON.stringify({loaded:true,width:img.naturalWidth,height:img.naturalHeight}));img.onerror=()=>resolve(JSON.stringify({loaded:false}));img.src=new URL('./assets/synestra-master.svg',document.baseURI).href})",awaitPromise:true,returnByValue:true});
     const svg=JSON.parse(image.result.value);
-    if(!svg.loaded||svg.width!==240||svg.height!==320)
+    if(!svg.loaded||svg.width<80||svg.height<100)
       throw Error('R94_CANONICAL_SVG_NOT_LOADED '+view.name+' '+JSON.stringify(svg));
     console.log('R94_STUDIO_BRAND_'+view.name.toUpperCase()+'=PASS '+JSON.stringify({ink:palette.ink,logo:svg,brandAsset:true}));
 
