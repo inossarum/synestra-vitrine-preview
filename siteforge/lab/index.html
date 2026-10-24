@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Synestra — OPEN FORM / Atelier génératif SiteForge</title>
+<meta name="description" content="Un véritable instrument graphique interactif pour créer des identités visuelles reproductibles. Gratuit, local et sans collecte de données.">
+<meta name="robots" content="noindex,nofollow">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'; connect-src 'none'; object-src 'none'; frame-src 'none'">
+<style>
+:root{color-scheme:dark;font-family:Arial,Helvetica,sans-serif;background:#0d1019;color:#f8f7f3}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;overflow-x:clip}
+a{color:inherit}button,input,select{font:inherit}button{cursor:pointer}
+:focus-visible{outline:3px solid #ffda77;outline-offset:5px}
+.skip{position:absolute;left:-9999px;top:0;background:#fff;color:#000;padding:1rem;z-index:99}
+.skip:focus{left:1rem}.shell{width:min(1520px,calc(100% - 7vw));margin-inline:auto}
+.top{display:flex;align-items:center;justify-content:space-between;gap:2rem;padding:1.4rem 0;border-bottom:1px solid #ffffff29}
+.brand{text-decoration:none;font-size:1.04rem;font-weight:950;letter-spacing:-.05em;display:flex;align-items:center;gap:.6rem}
+.brand i{font-style:normal;font-size:1.9rem;color:#d9f588}
+.top nav{display:flex;gap:2rem;align-items:center;font-size:.78rem;font-weight:750}
+.top nav a{text-decoration:none;border-bottom:1px solid transparent;padding-bottom:.35rem}
+.top nav a:hover{border-color:#d9f588}
+.top nav a:last-child{background:#ecedeb;color:#191e20;padding:.85rem 1rem;border-radius:99px}
+.pretitle,.label{font-size:.7rem;font-weight:850;letter-spacing:.18em;text-transform:uppercase}
+.pretitle{color:#c4fb9a;display:flex;gap:1.2rem;align-items:center}.dot{width:.55rem;height:.55rem;border-radius:50%;background:#d8ff90;box-shadow:0 0 15px #d8ff90}
+.intro{padding:6rem 0 4rem;display:grid;grid-template-columns:1.35fr .65fr;gap:3rem;align-items:end}
+.intro h1{font-size:clamp(5rem,11vw,12rem);font-weight:950;line-height:.8;letter-spacing:-.12em;margin:1.8rem 0 0;text-transform:uppercase}
+.intro h1 em{font-weight:400;font-family:Georgia,serif;letter-spacing:-.085em;color:#c7b7ff}
+.intro-right{padding-bottom:1rem}.intro-right p{max-width:33ch;color:#aab3c0;font-size:1.08rem;line-height:1.8}
+.intro-right span{display:inline-block;margin-top:1rem;color:#d8ff90;font-size:.65rem;font-weight:850;letter-spacing:.14em}
+.folio{display:flex;gap:1rem;align-items:center;justify-content:space-between;padding:1.5rem 0;border-top:1px solid #ffffff35;border-bottom:1px solid #ffffff35;font-size:.69rem;font-weight:800;letter-spacing:.14em}
+.folio b{font-size:1.3rem;font-weight:400;color:#d8ff90}
+.workspace{padding:3rem 0 7rem}
+.workbench{border:1px solid #717b9250;display:grid;grid-template-columns:minmax(0,1fr) 19.5rem;min-height:44rem;background:#151b2b;box-shadow:0 50px 110px #0008}
+.canvas-panel{min-width:0;position:relative;display:flex;flex-direction:column;overflow:hidden}
+.canvas-head{display:flex;justify-content:space-between;gap:1rem;padding:1.2rem 1.6rem;border-bottom:1px solid #ffffff24;font-size:.67rem;font-weight:850;letter-spacing:.14em}
+.pulse{display:inline-block;width:.45rem;height:.45rem;border-radius:50%;background:#c7ff93;margin-right:.55rem}
+.canvas-visual{flex:1;min-height:34rem;display:grid;place-items:center;padding:3.2rem 2rem;isolation:isolate;position:relative;background:radial-gradient(circle at 50% 50%,#2d344b 0%,#111828 74%)}
+.canvas-visual::before{content:"";pointer-events:none;position:absolute;inset:0;opacity:.32;background-image:linear-gradient(#ffffff0b 1px,transparent 1px),linear-gradient(90deg,#ffffff0b 1px,transparent 1px);background-size:36px 36px}
+#poster{width:min(100%,36rem);aspect-ratio:1/1;position:relative;background:var(--poster-bg,#1e2345);border:10px solid #ffffff0f;box-shadow:0 45px 70px #0009;overflow:hidden;transition:background .25s ease,transform .5s ease}
+#poster:hover{transform:rotate(-1deg) scale(1.018)}
+#art-stage{display:block;width:100%;height:100%;overflow:visible}
+.poster-type{position:absolute;inset:auto 4% 4% 4%;display:flex;align-items:end;justify-content:space-between;pointer-events:none;gap:.8rem;color:#fff}
+.poster-type strong{font-size:clamp(1.4rem,2.6vw,2.75rem);font-weight:950;line-height:.95;letter-spacing:-.08em;max-width:70%;overflow-wrap:anywhere}
+.poster-type span{font-size:.59rem;letter-spacing:.13em;font-weight:900;text-align:right}
+.canvas-footer{padding:1.25rem 1.6rem;display:flex;justify-content:space-between;gap:1rem;border-top:1px solid #ffffff24;color:#bac4cd;font-size:.62rem;letter-spacing:.12em}
+.console{background:#eceae2;color:#1b2528;padding:1.6rem;display:flex;flex-direction:column}
+.console-top{display:flex;justify-content:space-between;border-bottom:1px solid #30353450;padding-bottom:1.2rem;gap:.6rem;font-weight:900}
+.console-top span{font-size:.72rem}.console-top b{font-size:.65rem;color:#6d7675}
+.console form{display:flex;flex-direction:column;gap:1.6rem;padding:2rem 0}
+.field{display:flex;flex-direction:column;gap:.7rem}
+.field label{font-size:.73rem;font-weight:850;letter-spacing:.08em;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center}
+.field output{color:#ba5142;font-size:.87rem}
+select{border:1px solid #3c505156;background:transparent;border-radius:0;padding:.85rem .65rem;min-height:2.8rem;color:#1a252a;font-weight:800}
+input[type=range]{width:100%;accent-color:#ee6e55;cursor:pointer;min-height:2rem}
+.control-actions{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+.control-actions button{border:1px solid #1b2a2d;padding:.8rem .5rem;font-size:.77rem;font-weight:900;background:transparent;color:#182629;min-height:3rem}
+.control-actions #new-form{grid-column:1/-1;background:#1b2b30;color:#f9faf6;font-size:.87rem}
+.control-actions button:hover{background:#ffd9a4;color:#202627}
+.console-foot{margin-top:auto;border-top:1px solid #1a262948;padding-top:1.2rem;font-size:.7rem;line-height:1.6;color:#4a5a60}
+.console-foot strong{font-size:1.2rem;color:#1a2527;display:block;letter-spacing:-.04em}
+.console-foot code{display:block;overflow:auto;white-space:pre-wrap;word-break:break-all;padding:.65rem;border:1px solid #a3a9a2;margin-top:1rem;max-height:8rem;font-size:.63rem}
+#recipe-output:focus{outline:2px solid #1a2629}
+#engine-status{min-height:3rem;display:block;font-size:.7rem;margin:1rem 0;color:#343f42;line-height:1.6}
+.statement{padding:5rem 0 8rem;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;border-top:1px solid #ffffff35}
+.statement h2{font-size:clamp(3rem,6vw,7rem);letter-spacing:-.085em;line-height:1;margin:0}
+.statement h2 em{color:#e97d66;font-family:Georgia,serif;font-weight:400}
+.statement p{font-size:1.14rem;line-height:1.85;color:#b2bdc5;max-width:42ch}
+.statement ul{list-style:none;margin:2rem 0;padding:0;font-size:.8rem;font-weight:800}
+.statement li{padding:1rem 0;border-top:1px solid #ffffff29;display:flex;justify-content:space-between;gap:1rem}
+.statement li span{color:#c7ff93}
+.footer{background:#ccff93;color:#131c1f;padding:4rem 0}
+.footer-inner{display:flex;justify-content:space-between;align-items:end;gap:2rem}
+.footer b{font-size:clamp(3rem,6.5vw,8rem);letter-spacing:-.1em;line-height:.88}
+.footer p{max-width:30ch;font-size:.75rem;line-height:1.7}
+.statement h2{opacity:1}/* Readability is preserved without scroll-dependent text opacity. */
+@media(max-width:72rem){.workbench{grid-template-columns:minmax(0,1fr) 16rem}.intro{grid-template-columns:1fr .65fr}.canvas-visual{padding:2.5rem 1rem}}
+@media(max-width:54rem){.intro{grid-template-columns:1fr;gap:1rem;padding:4rem 0 3rem}.intro h1{font-size:clamp(4.5rem,15vw,8rem)}.workbench{grid-template-columns:1fr}.console form{display:grid;grid-template-columns:1fr 1fr}.control-actions{grid-column:1/-1}.console-foot{margin-top:0}.canvas-visual{min-height:25rem}.statement{grid-template-columns:1fr}}
+@media(max-width:36rem){.shell{width:calc(100% - 2rem)}.top{flex-wrap:wrap}.top nav{gap:1rem;font-size:.65rem}.intro h1{font-size:clamp(4.15rem,15vw,6.4rem)}.folio{font-size:.48rem;gap:.4rem}.folio b{font-size:.8rem}.workspace{padding:1rem 0 4rem}.workbench{min-height:0}.canvas-head{padding:1rem;font-size:.5rem}.canvas-visual{padding:1rem;min-height:20rem}.poster-type strong{font-size:1.5rem}.canvas-footer{padding:1rem;font-size:.48rem}.console form{display:flex}.console{padding:1.2rem}.statement{padding:3rem 0}.statement h2{font-size:3.8rem}.footer-inner{flex-direction:column;align-items:start}.footer b{font-size:4rem}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important;transform:none!important;animation-timeline:none!important}}
+</style>
+<script type="module" src="./siteforge_art_lab_runtime.mjs"></script>
+</head><body><a class="skip" href="#main">Aller à l’atelier</a>
+<header class="shell top"><a class="brand" href="../"><i aria-hidden="true">✳</i> SYNESTRA / SITEFORGE</a>
+<nav aria-label="Navigation"><a href="#instrument">L’instrument</a><a href="#principes">Principes</a><a href="../">Retour à la vitrine ↗</a></nav></header>
+<main id="main">
+<div class="shell intro"><div><div class="pretitle"><span class="dot" aria-hidden="true"></span> VISUAL SYSTEM / 001 <span aria-hidden="true">↗</span></div>
+<h1>OPEN<br><em>FORM.</em></h1></div>
+<div class="intro-right"><span class="label">ATELIER GRAPHIQUE / SYNESTRA</span>
+<p>Et si chaque site possédait son propre langage visuel ? Composez une identité, manipulez ses paramètres et obtenez une création unique — générée directement dans votre navigateur.</p>
+<span>UN MOTEUR. DES COMPOSITIONS INFINIMENT VARIABLES.</span></div></div>
+<div class="shell folio" aria-hidden="true"><span>00 / CONCEVOIR</span><b>✳</b><span>01 / MODULER</span><b>✳</b><span>02 / RÉPÉTER</span><b>✳</b><span>03 / PARTAGER</span></div>
+<section class="shell workspace" id="instrument" aria-label="Instrument de création visuelle">
+<div class="workbench">
+<div class="canvas-panel">
+<div class="canvas-head"><span><span class="pulse" aria-hidden="true"></span> LIVE GENERATIVE CANVAS / SYNESTRA</span><span>STUDY <span id="variant">0041</span> — FR</span></div>
+<div class="canvas-visual"><figure id="poster" style="--poster-bg:#1e2345;margin:0" aria-label="Visuel vectoriel de la composition actuelle">
+<svg id="art-stage" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Composition vectorielle générative"><rect x="0" y="0" width="1000" height="1000" fill="#1e2345"/><circle cx="628.798" cy="565.111" r="75.119" fill="none" stroke="#f9e961" stroke-width="4.165" opacity="0.933"/><circle cx="654.64" cy="578.271" r="104.384" fill="#8a76ff" stroke="#8a76ff" stroke-width="2.23" opacity="0.869"/><circle cx="633.006" cy="652.456" r="62.263" fill="#8a76ff" stroke="#8a76ff" stroke-width="5.827" opacity="0.733"/><circle cx="675.272" cy="650.959" r="57.361" fill="#f9e961" stroke="#f9e961" stroke-width="5.238" opacity="0.689"/><circle cx="653.886" cy="709.965" r="77.404" fill="none" stroke="#bfffe5" stroke-width="3.523" opacity="0.618"/><circle cx="545.076" cy="637.1" r="60.288" fill="#bfffe5" stroke="#bfffe5" stroke-width="5.404" opacity="0.631"/><circle cx="561.979" cy="661.859" r="86.284" fill="#8a76ff" stroke="#8a76ff" stroke-width="3.993" opacity="0.891"/><circle cx="513.192" cy="701.889" r="90.263" fill="#8a76ff" stroke="#8a76ff" stroke-width="4.217" opacity="0.631"/><circle cx="472.604" cy="729.692" r="90.138" fill="none" stroke="#f9e961" stroke-width="3.057" opacity="0.945"/><circle cx="352.234" cy="714.317" r="55.144" fill="#bfffe5" stroke="#bfffe5" stroke-width="2.937" opacity="0.55"/><circle cx="409.986" cy="612.809" r="51.622" fill="#f9e961" stroke="#f9e961" stroke-width="2.505" opacity="0.728"/><circle cx="346.384" cy="580.262" r="94.046" fill="#8a76ff" stroke="#8a76ff" stroke-width="5.318" opacity="0.593"/><circle cx="339.574" cy="623.275" r="79.135" fill="none" stroke="#fb7d63" stroke-width="5.648" opacity="0.819"/><circle cx="268.842" cy="508.66" r="58.895" fill="#f9e961" stroke="#f9e961" stroke-width="3.17" opacity="0.823"/><circle cx="245.522" cy="554.841" r="57.228" fill="#fb7d63" stroke="#fb7d63" stroke-width="4.519" opacity="0.674"/><circle cx="355.92" cy="508.315" r="107.944" fill="#8a76ff" stroke="#8a76ff" stroke-width="4.912" opacity="0.615"/><circle cx="331.584" cy="459.061" r="82.759" fill="none" stroke="#8a76ff" stroke-width="5.303" opacity="0.862"/><circle cx="328.572" cy="392.548" r="102.104" fill="#bfffe5" stroke="#bfffe5" stroke-width="5.731" opacity="0.673"/><circle cx="324.146" cy="349.719" r="42.944" fill="#fb7d63" stroke="#fb7d63" stroke-width="4.439" opacity="0.665"/><circle cx="345.956" cy="290.15" r="58.873" fill="#f9e961" stroke="#f9e961" stroke-width="4.197" opacity="0.632"/><circle cx="417.847" cy="381.344" r="100.081" fill="none" stroke="#8a76ff" stroke-width="2.142" opacity="0.989"/><circle cx="452.168" cy="333.411" r="101.748" fill="#fb7d63" stroke="#fb7d63" stroke-width="3.918" opacity="0.878"/><circle cx="447.273" cy="304.671" r="54.377" fill="#8a76ff" stroke="#8a76ff" stroke-width="5.834" opacity="0.996"/><circle cx="486.814" cy="269.056" r="45.105" fill="#f9e961" stroke="#f9e961" stroke-width="3.953" opacity="0.923"/><circle cx="543.033" cy="243.261" r="73.095" fill="none" stroke="#fb7d63" stroke-width="3.496" opacity="0.645"/><circle cx="544.567" cy="362.734" r="62.222" fill="#f9e961" stroke="#f9e961" stroke-width="5.833" opacity="0.701"/><circle cx="633.567" cy="389.548" r="84.487" fill="#f9e961" stroke="#f9e961" stroke-width="5.511" opacity="0.823"/><circle cx="627.458" cy="342.877" r="46.155" fill="#fb7d63" stroke="#fb7d63" stroke-width="5.26" opacity="0.961"/><circle cx="726.019" cy="450.762" r="49.179" fill="none" stroke="#f9e961" stroke-width="2.819" opacity="0.842"/><circle cx="739.959" cy="399.073" r="105.259" fill="#fb7d63" stroke="#fb7d63" stroke-width="2.072" opacity="0.743"/><circle cx="636.473" cy="453.061" r="38.989" fill="#f9e961" stroke="#f9e961" stroke-width="2.379" opacity="0.703"/><circle cx="670.362" cy="531.887" r="74.872" fill="#fb7d63" stroke="#fb7d63" stroke-width="4.316" opacity="0.889"/><circle cx="682.905" cy="586.483" r="83.667" fill="none" stroke="#bfffe5" stroke-width="4.345" opacity="0.554"/></svg>
+<figcaption class="poster-type"><strong id="art-name">ORBITAL / FORMS</strong><span>SYNESTRA<br>OPEN FORM<br>© 2026</span></figcaption>
+</figure></div>
+<div class="canvas-footer"><span>FORM LANGUAGE ENGINE · V1</span><span>VECTORS / ZERO EXTERNAL ASSETS</span></div></div>
+<aside class="console" aria-label="Réglages de la composition"><div class="console-top"><span>CONTROL / DECK</span><b>R9.01</b></div>
+<form id="controls">
+<div class="field"><label for="mode">Structure</label><select id="mode">
+<option value="orbit">01 / Orbital</option><option value="weave">02 / Entrelacs</option><option value="glyph">03 / Glyphes</option></select></div>
+<div class="field"><label for="palette">Collection chromatique</label><select id="palette">
+<option value="electric">Electric / Nocturne</option><option value="cobalt">Cobalt / Signal</option><option value="ceramic">Ceramic / Solar</option></select></div>
+<div class="field"><label for="energy">Énergie <output id="energy-value" for="energy">64</output></label><input type="range" min="0" max="100" value="64" id="energy"></div>
+<div class="field"><label for="complexity">Complexité <output id="complexity-value" for="complexity">5</output></label><input type="range" min="1" max="8" value="5" id="complexity"></div>
+<div class="control-actions"><button id="new-form" type="button">↗ Nouvelle variation</button>
+<button id="reset-form" type="button">Réinitialiser</button><button id="copy-recipe" type="button">Sélectionner la recette</button><button id="export-svg" type="button">Exporter SVG ↓</button></div>
+</form>
+<div class="console-foot"><strong>Chaque forme a une règle.</strong>
+La même recette produit exactement le même résultat. Aucun compte, aucun serveur, aucune donnée envoyée.
+<code id="recipe-output" tabindex="0" aria-label="Recette JSON actuelle">Recette en préparation...</code>
+<p id="engine-status" role="status" aria-live="polite">Instrument chargé. Les commandes s'activent en local.</p>
+<noscript>Le premier visuel reste visible sans JavaScript. Activez JavaScript pour modifier les paramètres.</noscript>
+</div></aside></div>
+</section>
+<section class="shell statement" id="principes" aria-labelledby="principes-title">
+<h2 id="principes-title">PAS UN<br><em>TEMPLATE.</em><br>UN LANGAGE.</h2>
+<div><p>Le futur de SiteForge ne consiste pas à reproduire mille pages génériques. Il consiste à générer des systèmes visuels cohérents, distinctifs et vérifiables, capables d'évoluer avec chaque projet.</p>
+<ul><li>01 / GÉOMÉTRIE PARAMÉTRIQUE <span>✓</span></li><li>02 / RECETTES REPRODUCTIBLES <span>✓</span></li><li>03 / GESTES NATIFS ET ACCESSIBLES <span>✓</span></li><li>04 / AUCUN SERVICE PAYANT <span>✓</span></li></ul></div></section>
+</main>
+<footer class="footer"><div class="shell footer-inner"><b>MAKE<br>IT YOURS.</b><p>Concept R9 — création locale et publique. Cet atelier ne représente pas un service client connecté. Les outils MCP et la Web App privée restent distincts et soumis à leurs propres validations.</p></div></footer>
+</body></html>
