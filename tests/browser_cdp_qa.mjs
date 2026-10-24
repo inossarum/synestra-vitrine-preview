@@ -99,6 +99,23 @@ try {
       throw Error('R94_CANONICAL_SVG_NOT_LOADED '+view.name+' '+JSON.stringify(svg));
     console.log('R94_STUDIO_BRAND_'+view.name.toUpperCase()+'=PASS '+JSON.stringify({ink:palette.ink,logo:svg,brandAsset:true}));
 
+    // R95: actual browser CSS visual animation, provenance-safe typography and
+    // behavior when reduced-motion is requested (no screenshot-as-approval).
+    const kinetic=await call('Runtime.evaluate',{expression:"JSON.stringify((()=>{const get=(s,p)=>getComputedStyle(document.querySelector(s),p||null);return {radarMotion:get(\".system-stage\",\"::after\").animationName,trackMotion:get(\".connect-track\").animationName,nodeMotion:get(\".system-node\",\"::after\").animationName,coreLabel:get(\".system-core\",\"::after\").content,brandDisplay:get(\".brand-symbol\").display,coreSymbolDisplay:get(\".core-sigil\").display}})())",returnByValue:true});
+    const k=JSON.parse(kinetic.result.value);
+    if(k.radarMotion!=='cin-radar'||k.trackMotion!=='cin-connect'||
+      k.nodeMotion!=='cin-glint'||k.brandDisplay!=='none'||
+      k.coreSymbolDisplay!=='none'||!k.coreLabel.includes('STUDIO')) {
+      throw Error('R95_STUDIO_KINETIC_RENDER_FAIL '+view.name+' '+JSON.stringify(k));
+    }
+    await call('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'reduce'}]});
+    const pauseProof=await call('Runtime.evaluate',{expression:"JSON.stringify({radar:getComputedStyle(document.querySelector(\".system-stage\"),\"::after\").animationName,track:getComputedStyle(document.querySelector(\".connect-track\")).animationName})",returnByValue:true});
+    const pr=JSON.parse(pauseProof.result.value);
+    if(pr.radar!=='none'||pr.track!=='none')throw Error('R95_KINETIC_REDUCED_MOTION_FAIL '+view.name+' '+JSON.stringify(pr));
+    await call('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'no-preference'}]});
+    console.log('R95_VISUAL_KINETIC_'+view.name.toUpperCase()+'=PASS '+JSON.stringify(k));
+
+
 
     const open=await call('Runtime.evaluate',{expression:"(() => {let d=document.querySelector('#questions details');let was=d.open; d.querySelector('summary').click();let opened=d.open; d.querySelector('summary').click();return !was&&opened&&!d.open;})()",returnByValue:true});
     if(open.result.value!==true)throw Error('FAQ_INTERACTION_FAIL '+view.name);
