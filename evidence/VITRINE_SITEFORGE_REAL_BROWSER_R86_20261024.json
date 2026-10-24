@@ -1,0 +1,162 @@
+{
+  "schema": "synestra.vitrine.r86.real-browser-evidence.v1",
+  "evidence_id": "VITRINE_SITEFORGE_REAL_BROWSER_R86_20261024",
+  "mission_id": "SYN_VITRINE_SITEFORGE_SHOWCASE_20261024",
+  "owner": "Inos",
+  "date": "2026-10-24",
+  "source": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_VITRINE_SITEFORGE_SHOWCASE_20261024",
+    "code_head": "018ce0a7620dc15caf05a74f6772f3620a4ee76e",
+    "vitrine_index_blob": "c354a8b5b2a89e494f9a061b6cb7f28b68e2aa01",
+    "siteforge_index_blob": "b67811bf23f04d147645144fcf735c017db0be79",
+    "test_checkout": "ISOLATED_OWNER_PC_GIT_COPY",
+    "worktree_clean_after": true,
+    "original_dirty_worktree_untouched": true
+  },
+  "gates": {
+    "source_gate": "PASS_FOR_R85_SOURCE_AND_LOCAL_E2E;LIMITED_FOR_RELEASE",
+    "bridge_binding": "PAIRED_SOFTWARE_KEY",
+    "bridge_remote_tools_execution": "TRUE_VERIFIED_PC_COMMANDS",
+    "native_enrollment_and_consent": "NOT_ATTESTED",
+    "owner_lease_original_worktree": "UNKNOWN_NOT_MUTATED",
+    "hooks": "UNKNOWN"
+  },
+  "recovery": {
+    "first_local_checkout": "FAIL_MISSING_BLOBS_23",
+    "cause": "Git commit object present locally but 23 blobs absent from original test object's store",
+    "bounded_fix": "Git fetch --refetch from original public GitHub branch; git restore --worktree --source=immutable-R85-SHA applied only to newly owned test copy",
+    "result": "PASS_GIT_HEAD_EXACT_CLEAN_MISSING_0",
+    "requests": [
+      "8b5c55a0-8494-40e8-a891-40266bfa790b",
+      "d41dbef7-beff-4eb8-80b0-393d96f10206",
+      "c4fff5b1-8459-4d9c-b1b6-e8ce3a0626f4"
+    ]
+  },
+  "tests": {
+    "node": {
+      "cmd": "node --test tests/*.test.mjs",
+      "passed": 87,
+      "failed": 0,
+      "exit": 0
+    },
+    "python": {
+      "cmd": "py -3 -m unittest discover -s tests -p test_siteforge_preview.py -v",
+      "passed": 5,
+      "failed": 0,
+      "exit": 0
+    },
+    "http": {
+      "origin": "http://127.0.0.1:4190",
+      "scope": "PRIVATE_LOOPBACK_INOS_CEREBROS_ONLY",
+      "routes_sampled": 10,
+      "status_200": 10,
+      "old_hardcoded_prefix_status": 404,
+      "head_and_served_blob_verified": true,
+      "public_deployment": false
+    },
+    "chrome_vitrine": {
+      "method": "REAL_CHROME_HEADLESS_CDP_ON_OWNER_WINDOWS_PC",
+      "viewports": [
+        "390x844",
+        "1440x900"
+      ],
+      "qa": "PASS",
+      "horizontal_overflow": 0,
+      "keyboard": "PASS",
+      "faq_interactions": "PASS",
+      "external_requests": 0,
+      "preview_test_origin": "file:// for existing baseline test"
+    },
+    "web_pilot": {
+      "mcp_local_tool_calls": 6,
+      "status": "ADVISORY_NO_FLAGS",
+      "cwv_field_proven": false,
+      "reader_screen_full_wcag_certification": false
+    },
+    "visual_gate": {
+      "exit": 0,
+      "source_restored": true,
+      "code_blob_after": "c354a8b5b2a89e494f9a061b6cb7f28b68e2aa01",
+      "mobile_changed_tiles": 26,
+      "mobile_restored_diff_tiles": 0,
+      "desktop_changed_tiles": 5,
+      "desktop_restored_diff_tiles": 0,
+      "qa": "PASS_EXACT_TEST_COPY"
+    },
+    "chrome_http_siteforge": {
+      "method": "REAL_CHROME_HEADLESS_CDP_TO_LOCAL_HTTP_PREVIEW",
+      "routes_per_viewport": 22,
+      "views_total": 44,
+      "viewports": [
+        "390x844",
+        "1440x900"
+      ],
+      "script_exit": 0,
+      "loading_complete": true,
+      "siteforge_to_projects_click": "PASS",
+      "h1_and_aria_current": "PASS",
+      "horizontal_overflow": "NONE_OBSERVED",
+      "external_requests": 0,
+      "chrome_profile_cleanup": "PASS"
+    },
+    "screenshot_model_inspection": {
+      "status": "PASS_ABOVE_FOLD_ONLY",
+      "real_pixel_frames_received": 4,
+      "provenance": "REAL_CHROME_CDP_JPEG_OWNER_PC",
+      "findings": [
+        "Vitrine mobile: readable hero, wrapping navigation, clear CTAs, no material overlap observed",
+        "Vitrine desktop: readable primary flow with spacious right hero area",
+        "SiteForge mobile: navigation/style controls wrap without clipping, typography and CTA readable",
+        "SiteForge desktop: editorial split hero and graphic composition visible; menu and style chips remain aligned"
+      ],
+      "limitations": [
+        "Below-the-fold pages not fully visually inspected",
+        "No independent WCAG 2.2 AA or field Core Web Vitals certification",
+        "Pixel source is local Chrome software preview, not deployed public website"
+      ]
+    },
+    "visual_cache": {
+      "policy": "R-VISUAL-002",
+      "frames_transferred_and_inspected": 4,
+      "frame_sha256": {
+        "mobile_vitrine": "3406e14dfb6ed8f1292380448f39d00e182afd164bb29571a2c1fb5d103d09b8",
+        "desktop_vitrine": "b3a9bdc80fb1afa8973cf855f52db4a06c5f30fde2335393c5519c06bbc291f1",
+        "mobile_siteforge": "08906ed174a7a3029b98b8f715fc6183d741bc2d0030e8488cfd635aecc79339",
+        "desktop_siteforge": "aba900332879c63743ee9fa52ac373412fd05deb36e42bc25130f0d267e6b4a6"
+      },
+      "raw_frames_committed": false,
+      "owned_media_and_capture_cache_cleanup": "PASS",
+      "test_copy_git_dirty_after_cleanup": 0,
+      "preview_directory_retained_for_user_review": true
+    }
+  },
+  "tools": {
+    "connect_mcp": "mcp__Synestra_Connect__synestra_pc_start_process + read_process_output + write_file + list_directory",
+    "github": "mcp__GitHub__fetch_file/fetch/get_pr_info",
+    "selected_receipts": [
+      "4cf9b62b-8279-47fc-9f14-8070ae5f30bd",
+      "e9077946-6971-4079-a567-ae4bfac71569",
+      "ffcdac96-1a8b-4282-95ef-86a6d2cc52e5",
+      "af371e50-d659-4d06-a0f9-452bdac4a6f1",
+      "a3a70ae0-f353-429b-ad9e-4c7aba7eb278",
+      "51db9f9b-427e-4dc9-bd5b-8d93f2ebaaa7",
+      "0d72f95c-a337-4245-8848-c7ef54e9419e",
+      "e62dd94a-2f37-4735-97a9-f3de6c8e1126"
+    ]
+  },
+  "unresolved": [
+    "Canonical SiteForge HTML link generator identity and owner not yet verified for future regenerations",
+    "Canonical and og:url still point to GitHub Pages until host established by parallel Cloudflare workstream",
+    "Preview is local-only and availability depends on owner PC preview process",
+    "PR #3 remains DRAFT at old head; main and production unchanged",
+    "Target-host public E2E, integration/rollback and approvals are not done"
+  ],
+  "outcome": {
+    "r85_code_qa": "PASS",
+    "r85_private_preview": "PASS_WHILE_RUNNING",
+    "r85_visual_above_fold": "PASS_OBSERVED",
+    "whole_mission": "PARTIAL",
+    "function_report": "PARTIAL"
+  }
+}
