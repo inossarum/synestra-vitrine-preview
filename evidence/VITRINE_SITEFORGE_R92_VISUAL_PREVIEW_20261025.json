@@ -49,7 +49,21 @@
       "This externally cached third-party renderer is not official Synestra hosting; possible security confirmation and availability risks",
       "HTTP 200 and HTML size check are not independent browser screenshot inspection",
       "Never enter credentials in this preview or treat third-party origin as private portal"
-    ]
+    ],
+    "route_sample": {
+      "source": "Synestra Connect Bridge GET PowerShell to pinned public preview URL",
+      "request_id": "3c614f03-56ec-42b5-9979-c41bbef9cbf2",
+      "http_status_all": 200,
+      "tested_routes": [
+        "/siteforge/",
+        "/siteforge/signature/",
+        "/siteforge/signature/index.html",
+        "/siteforge/aurora/index.html",
+        "/siteforge/atelier/index.html"
+      ],
+      "html_verified_all": true,
+      "note": "Directory navigation for demo and style pages verified on raw.githack.com; not full browser E2E"
+    }
   },
   "testing": {
     "owner_machine": "Windows, Chrome headless CDP, Node v24.19.0, exact Git HEAD",
