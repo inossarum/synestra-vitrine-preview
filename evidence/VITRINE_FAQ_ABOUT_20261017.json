@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "evidence_id": "SYNESTRA_VITRINE_FAQ_ABOUT_20261017",
+  "date_utc": "2026-10-17",
+  "mission": "Public Synestra showcase: clarify pilot scope and answer visitor questions",
+  "repository": "inossarum/synestra-vitrine-preview",
+  "branch": "feat/vitrine-public-presentation-20261016",
+  "pull_request": "https://github.com/inossarum/synestra-vitrine-preview/pull/3",
+  "change_commits": [
+    "067e9405ba40968ea972306623f10560dc749091",
+    "ab795e282935b4f7ba0db84a7c6e282715807c62",
+    "244f332c08764bb674d49223cbfe11e21e82804f",
+    "eaa0155e06339f8318428d6d3c68f794e0fe08cb"
+  ],
+  "files": {
+    "index.html": {
+      "blob_sha": "75cba52a9e78d40a35c6bd9cfc747e7694d72192"
+    },
+    "tests/site_contract.test.mjs": {
+      "blob_sha": "1419d93aef8c8c6bd37d6773d0867add3f39f254"
+    },
+    "README.md": {
+      "blob_sha": "bc724d2bfe4de3aeca4bff3ad7102fff5a8307bb"
+    },
+    "tests/browser_cdp_qa.mjs": {
+      "blob_sha": "a37d8a42393ab0cc72b9716d93600024adf740d6"
+    }
+  },
+  "scope": {
+    "delivered": [
+      "about section",
+      "five no-JavaScript FAQ expanders",
+      "navigation additions",
+      "responsive/focus treatment",
+      "repository static test suite",
+      "review instructions"
+    ],
+    "exclusions": [
+      "production deployment",
+      "web app modification",
+      "Supervisor runtime",
+      "Cloudflare IAM or portal changes",
+      "secrets",
+      "external assets"
+    ]
+  },
+  "verification": {
+    "html_precommit_static_js": {
+      "status": "PASS",
+      "checks": 13
+    },
+    "html_independent_refetch_static_js": {
+      "status": "PASS",
+      "checks": 14
+    },
+    "file_persisted_test_suite": {
+      "status": "PASS",
+      "method": "Source committed and reproducibly executed in isolated checkout with Node + Chrome headless"
+    },
+    "node_test_execution": {
+      "status": "PASS",
+      "environment": "Isolated fresh clone on authorized Windows Inos-Cerebros; Node.js v24.19.0",
+      "head_sha": "eaa0155e06339f8318428d6d3c68f794e0fe08cb",
+      "tests_run": 8,
+      "tests_pass": 8,
+      "tests_fail": 0,
+      "git_diff_check": "PASS",
+      "exit_code": 0
+    },
+    "browser_visual_keyboard_mobile": {
+      "status": "PARTIAL",
+      "evidence": "Mobile and desktop first-viewport screenshots inspected; no horizontal overflow. Native FAQ click verified in Chrome.",
+      "remaining": "Whole-page manual visual audit and real keyboard/screenreader walk-through not yet performed"
+    },
+    "client_portal_live_e2e": {
+      "status": "PENDING"
+    },
+    "ci": {
+      "status": "PENDING",
+      "reason": "No CI run exists for the current PR head; locally executed tests do not imply CI"
+    },
+    "production": {
+      "status": "NOT_DEPLOYED"
+    },
+    "browser_real_viewport_qa": {
+      "status": "PASS",
+      "environment": "Chrome headless on isolated Windows clone, CDP via 127.0.0.1 transient port",
+      "reproducible_script": "tests/browser_cdp_qa.mjs",
+      "head_sha": "eaa0155e06339f8318428d6d3c68f794e0fe08cb",
+      "viewport_mobile": {
+        "width": 390,
+        "rootScrollWidth": 390,
+        "bodyScrollWidth": 390,
+        "faqCount": 5,
+        "screenshot_sha256": "5b8d85cf12cb41b2add2673f49f7c1634fd773bf188ce5fa2ca20d0f15851f57",
+        "screenshot_bytes": 149371
+      },
+      "viewport_desktop": {
+        "width": 1440,
+        "rootScrollWidth": 1425,
+        "bodyScrollWidth": 1425,
+        "faqCount": 5,
+        "screenshot_sha256": "522314579e8c25f6b3d367b881ae2bcffd002e4799cbd1886ec4441eb9a0ede3",
+        "screenshot_bytes": 313401
+      },
+      "faq_native_expansion_collapse": "PASS",
+      "full_process_exit_code": 0
+    }
+  },
+  "safety": {
+    "scripts_added": false,
+    "external_assets_added": false,
+    "forms_added": false,
+    "preview_robots": "noindex,nofollow",
+    "billing": "FREE_ONLY",
+    "protected_branches_untouched": true,
+    "pilot_capabilities_claimed_as_verified": false
+  },
+  "studio_preflight": {
+    "AGENTS_md_blob": "ac6d7aaf92e711ab6eba4e02b94559ec7f27890f",
+    "immutable_manifest_blob": "602ca6b604a3bc89862366187230ebae8e4046d8",
+    "L0_core_blob": "cdfd624dd8c6b6a2918ca031849ab7141ab6afde",
+    "Memory_V1_manifest_blob": "bc43f64a6633c8c95e9434baa75ee1fb2dcf924c",
+    "SAL_manifest_blob": "5baa69b31e0fcac25ce78909680404f11d171be0",
+    "Central_Skills_catalog_blob": "2e25e4b05bac2e131df5a183e4ca81f7702eb385",
+    "relevant_skills": [
+      "ui-ux@1.0.0",
+      "reuse-first@1.0.0",
+      "test-driven-development@1.0.0",
+      "code-review@1.0.0"
+    ],
+    "hooks_status": "UNKNOWN",
+    "overall": "LIMITED",
+    "reason": "Immutable and selected Memory/SAL/Skills sources read; hook inventory and operational checkpoint freshness not completely verified"
+  },
+  "status": "PARTIAL",
+  "human_gate": "Publishing the website/merging into main requires explicit authorization; no such action attempted",
+  "exact_recovery": "From PR #3, read exact latest HEAD and evidence JSON; on isolated clean checkout run `node --test tests/site_contract.test.mjs`, and on Windows with Chrome run `node tests/browser_cdp_qa.mjs`; then complete full-page visual, keyboard/screen-reader and portal E2E checks. Publication/merge remains HUMAN_GATE.",
+  "observations": [
+    {
+      "id": "QA_CMD_QUOTING",
+      "status": "RESOLVED",
+      "detail": "First nested PowerShell invocation failed parse before mutation; direct PowerShell invocation succeeded."
+    },
+    {
+      "id": "QA_CHROME_STDERR",
+      "status": "RESOLVED",
+      "detail": "CLI screenshot stderr was incorrectly classified as PowerShell exception; verified responsive behavior using Chrome DevTools mobile emulation instead."
+    }
+  ]
+}

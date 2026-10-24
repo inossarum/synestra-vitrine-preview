@@ -1,0 +1,139 @@
+{
+  "schema": "synestra.vitrine.r92.preview-release-gate.v1",
+  "evidence_id": "VITRINE_SITEFORGE_R92_VISUAL_PREVIEW_20261025",
+  "mission_id": "SYN_VITRINE_SITEFORGE_SHOWCASE_20261024",
+  "created_at": "2026-10-24T22:32:15.765Z",
+  "owner": "Inos",
+  "authorization_scope": "User authorized R91 successor-PR preparation and visualization link; NO immediate merge/public deploy",
+  "source": {
+    "repository": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_VITRINE_SITEFORGE_R91_PREVIEW_20261024",
+    "pr": 5,
+    "base_branch": "main",
+    "code_documentation_head_at_test": "d984258d27f4e43ba6623f2face057365c008248",
+    "canonical_html_blobs": {
+      "root": "c354a8b5b2a89e494f9a061b6cb7f28b68e2aa01",
+      "siteforge": "b67811bf23f04d147645144fcf735c017db0be79"
+    },
+    "original_pr3": 3,
+    "studio_pr309": 309
+  },
+  "preview": {
+    "mode": "THIRD_PARTY_CACHE_PROXY_OF_ALREADY_PUBLIC_GITHUB_REPO_NOT_OFFICIAL_DEPLOYMENT",
+    "service": "https://raw.githack.com",
+    "pinned_commit": "d984258d27f4e43ba6623f2face057365c008248",
+    "urls": {
+      "vitrine": "https://raw.githack.com/inossarum/synestra-vitrine-preview/d984258d27f4e43ba6623f2face057365c008248/index.html",
+      "siteforge": "https://raw.githack.com/inossarum/synestra-vitrine-preview/d984258d27f4e43ba6623f2face057365c008248/siteforge/index.html"
+    },
+    "observed_retrieval": {
+      "source": "Owner PC Synestra Connect Bridge, PowerShell Invoke-WebRequest GET",
+      "request_id": "dbd8e8c8-88b2-4bf9-b2d6-0d25fead05d6",
+      "vitrine": {
+        "http_status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "characters": 29849,
+        "html": true
+      },
+      "siteforge": {
+        "http_status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "characters": 36880,
+        "html": true
+      },
+      "github_pages_prior_existing_preview": "https://inossarum.github.io/synestra-vitrine-preview/siteforge/",
+      "github_pages_existing_content_characters": 37322,
+      "github_pages_is_r91": false
+    },
+    "limits": [
+      "This externally cached third-party renderer is not official Synestra hosting; possible security confirmation and availability risks",
+      "HTTP 200 and HTML size check are not independent browser screenshot inspection",
+      "Never enter credentials in this preview or treat third-party origin as private portal"
+    ],
+    "route_sample": {
+      "source": "Synestra Connect Bridge GET PowerShell to pinned public preview URL",
+      "request_id": "3c614f03-56ec-42b5-9979-c41bbef9cbf2",
+      "http_status_all": 200,
+      "tested_routes": [
+        "/siteforge/",
+        "/siteforge/signature/",
+        "/siteforge/signature/index.html",
+        "/siteforge/aurora/index.html",
+        "/siteforge/atelier/index.html"
+      ],
+      "html_verified_all": true,
+      "note": "Directory navigation for demo and style pages verified on raw.githack.com; not full browser E2E"
+    }
+  },
+  "testing": {
+    "owner_machine": "Windows, Chrome headless CDP, Node v24.19.0, exact Git HEAD",
+    "git_head_checked": "d984258d27f4e43ba6623f2face057365c008248",
+    "start_request": "d1d143c2-8e81-4540-a7a4-068f10338acc",
+    "completion_request": "b9134cb2-959a-479e-9fa7-463b858b780d",
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "chrome": "PASS",
+      "overflow_pixels": 0,
+      "faq_items": 5,
+      "keyboard": "PASS",
+      "web_pilot": "ADVISORY_NO_FLAGS",
+      "external_requests": 0,
+      "screenshot_bytes": 150297,
+      "screenshot_sha256": "13a3621c4b987ed35f016024b8fb26caf5c970ce70b2e246d7230791a2f3f04b"
+    },
+    "desktop": {
+      "width": 1440,
+      "height": 900,
+      "chrome": "PASS",
+      "overflow_pixels": 0,
+      "faq_items": 5,
+      "keyboard": "PASS",
+      "web_pilot": "ADVISORY_NO_FLAGS",
+      "external_requests": 0,
+      "screenshot_bytes": 264503,
+      "screenshot_sha256": "dd6aef3be1303bdc55b11fa9b9645782497d955b49a764a38a16b35bb003b4ef"
+    },
+    "web_pilot_mcp": {
+      "status": "PASS",
+      "tool_calls": 6,
+      "field_cwv_proven": false
+    },
+    "prior_contract_suite": {
+      "node": "87/87 PASS",
+      "python": "15/15 PASS"
+    },
+    "quality_limits": [
+      "Direct visual/aesthetic inspection by model NOT_ATTESTED (Bridge binary media delivery unavailable)",
+      "CDP audit not WCAG or field Core Web Vitals certification",
+      "Chrome test executed file:// local exact HEAD; full browser test over third-party proxy/public origin NOT_RUN",
+      "Original Studio owner/lease and merge authorization not verified"
+    ]
+  },
+  "cleanup": {
+    "files_purged": [
+      "cdp-mobile.png",
+      "cdp-desktop.png",
+      "web-pilot-mobile.json",
+      "web-pilot-desktop.json"
+    ],
+    "purged_file_count": 4,
+    "worktree_status_count": 0,
+    "owned_recent_chrome_processes_running": 0,
+    "verification_request": "84ac2a99-94d7-4a93-9148-7c857afa62d7",
+    "preexisting_headless_chrome_processes_running": 40,
+    "old_sessions_created": "2026-10-24 18:47–18:52 owner-PC local time",
+    "preexisting_sessions_killed": false,
+    "why": "Do not kill potentially leased browser sessions from prior agents without confirmed owner/lease"
+  },
+  "release": {
+    "pr_status": "DRAFT",
+    "main_unchanged": true,
+    "cloudflare_unchanged": true,
+    "github_pages_unchanged": true,
+    "visual_model_direct": "PENDING",
+    "human_gate": "REQUIRED_BEFORE_MERGE_AND_PUBLIC_DEPLOYMENT",
+    "no_dc_used": true
+  },
+  "function_report": "PARTIAL"
+}

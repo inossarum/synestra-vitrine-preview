@@ -1,0 +1,206 @@
+{
+  "schema_version": 1,
+  "evidence_id": "SYNESTRA_VITRINE_MCP_SKILLS_BROWSER_QA_20261018",
+  "date_utc": "2026-10-18",
+  "mission": "Audit relevant MCP tools / Central Skills before continuing private site-preview QA",
+  "repository": "inossarum/synestra-vitrine-preview",
+  "branch": "feat/vitrine-public-presentation-20261016",
+  "before_head": "f5185c07100eae1128e769149288156445ba854b",
+  "after_head": "RECONCILE_FROM_PR_AFTER_COMMIT",
+  "scope": "ISOLATED_PREVIEW_WINDOWS_QA",
+  "mcp_inventory": {
+    "github": {
+      "status": "AVAILABLE_USED",
+      "capabilities": [
+        "read refs/sha",
+        "create git blobs/trees/commits",
+        "compare-and-swap ref",
+        "draft PR metadata"
+      ]
+    },
+    "synestra_connect": {
+      "status": "PASS_READ_ONLY",
+      "source": "GIT_PINNED_STAGING_SNAPSHOT",
+      "freshness": "CACHED_SHA_VERIFIED",
+      "count": 5,
+      "includes": [
+        "api-contract-web-integration@1.0.0",
+        "e2e-testing@1.0.0",
+        "security-review@1.0.0"
+      ]
+    },
+    "synestra_studio": {
+      "status": "AVAILABLE_NOT_USED_FOR_OS_QA",
+      "capabilities": [
+        "bounded source reading",
+        "maintenance branch patching",
+        "bounded owner file requests requiring local consent"
+      ]
+    },
+    "desktop_commander": {
+      "status": "USED_OWNER_AUTHORIZED_WINDOWS_QA",
+      "device": "INOS-CEREBROS",
+      "allowed_drive_letters": [
+        "C",
+        "I"
+      ],
+      "forbidden_drive_letters": [
+        "D"
+      ],
+      "node": "24.19.0",
+      "git": "2.55.0.windows.5",
+      "chrome_installed": true,
+      "isolated_temp_checkout": true
+    },
+    "missing_for_isolated_vitrine_qa": [],
+    "new_mcp_tools_developed": 0,
+    "new_mcp_tool_publications": 0
+  },
+  "skills": {
+    "source": "04_KNOWLEDGE/CENTRAL_SKILLS/catalog.json",
+    "library_version": "1.13.0",
+    "catalog_git_blob_sha": "2e25e4b05bac2e131df5a183e4ca81f7702eb385",
+    "consulted_used": [
+      {
+        "id": "web-accessibility-engineering",
+        "version": "1.0.0",
+        "git_blob_sha": "172c442525351804e89e7b273346f03df34bdd89"
+      },
+      {
+        "id": "semantic-web-implementation",
+        "version": "1.0.0",
+        "git_blob_sha": "291c352444cb44b3b1f2eb7e5a25f72bffb39ec0"
+      },
+      {
+        "id": "e2e-testing",
+        "version": "1.0.0",
+        "git_blob_sha": "3fcb7196816ed91c4773ec8004a508b7e288a015"
+      },
+      {
+        "id": "failure-first",
+        "version": "1.0.0",
+        "git_blob_sha": "373c5f508b3ef91d1ffc1fc5afec7007a643d590"
+      },
+      {
+        "id": "test-driven-development",
+        "version": "1.0.0",
+        "git_blob_sha": "accb4772b83a96b308b8ee07897abf0fb777c9a8"
+      },
+      {
+        "id": "security-review",
+        "version": "1.0.0",
+        "git_blob_sha": "3aa9f9295981911dcd7e1c46b713878ac458efd3"
+      },
+      {
+        "id": "reasoning-evidence",
+        "version": "1.0.0",
+        "git_blob_sha": "b1d95e26cddce504adcbb0ba69d7c4ca36990836"
+      }
+    ],
+    "validation": "SOURCE_SHA_VERIFIED;_REAL_BROWSER_AND_NODE_TESTS_PASS"
+  },
+  "source_blobs": {
+    "index.html": "7e485223af98a1281a91b4cb75fe66d31734f8a6",
+    "tests/site_contract.test.mjs": "f42ce4435a6786926784cf215dff3365b9383c06",
+    "tests/browser_cdp_qa.mjs": "8eeb9eefb05aa2e23cf211e6989da819480b3f95"
+  },
+  "verification": {
+    "source_integrity": {
+      "status": "PASS",
+      "method": "git hash-object in independent C: temporary checkout equals GitHub create_blob SHA for both changed JS files"
+    },
+    "baseline_original_contract": {
+      "status": "PASS",
+      "tests": 10,
+      "failed": 0,
+      "platform": "Windows Node 24.19.0"
+    },
+    "failing_browser_pre_fix": {
+      "status": "FAIL_OBSERVED",
+      "reason": "FAQ_KEYBOARD_OPEN_FAIL mobile Enter",
+      "platform": "Chrome headless 390px",
+      "exit_code": 1
+    },
+    "second_launch_pre_fix": {
+      "status": "FAIL_OBSERVED",
+      "reason": "Stale DevToolsActivePort / ECONNREFUSED",
+      "exit_code": 1
+    },
+    "post_fix_node": {
+      "status": "PASS",
+      "tests": 11,
+      "passed": 11,
+      "failed": 0,
+      "exit_code": 0
+    },
+    "post_fix_syntax": {
+      "status": "PASS",
+      "test": "node --check tests/browser_cdp_qa.mjs"
+    },
+    "post_fix_browser_first": {
+      "status": "PASS",
+      "mobile_width": 390,
+      "desktop_width": 1440,
+      "faq_count": 5,
+      "keyboard": [
+        "skip link Enter",
+        "FAQ Enter open/close",
+        "FAQ Space open/close"
+      ],
+      "viewport_no_overflow": true,
+      "exit_code": 0
+    },
+    "post_fix_browser_second": {
+      "status": "PASS",
+      "mobile_width": 390,
+      "desktop_width": 1440,
+      "faq_count": 5,
+      "keyboard": [
+        "skip link Enter",
+        "FAQ Enter open/close",
+        "FAQ Space open/close"
+      ],
+      "viewport_no_overflow": true,
+      "exit_code": 0
+    },
+    "chrome_profile_cleanup": {
+      "status": "PENDING",
+      "reason": "Transient Chrome files may remain locked by Windows at immediate cleanup (EPERM), unique profile prevents stale-run reuse"
+    },
+    "independent_screen_reader": {
+      "status": "PENDING"
+    },
+    "public_portal_authenticated_e2e": {
+      "status": "PENDING"
+    },
+    "continuous_integration": {
+      "status": "PENDING"
+    },
+    "production_deployment": {
+      "status": "NOT_EXECUTED"
+    }
+  },
+  "invariants": {
+    "bridge_or_studio_runtime_modified": false,
+    "public_branch_merged": false,
+    "preview_main_modified": false,
+    "site_production_deployed": false,
+    "payments_or_secrets": false,
+    "new_os_capabilities_granted": false,
+    "site_js_or_external_dependencies_added": false,
+    "FREE_ONLY": true,
+    "no_user_disk_D_access": true
+  },
+  "checkpoint": {
+    "state": "PARTIAL",
+    "blockers": [
+      "WINDOWS_CHROME_PROFILE_CLEANUP_EPENDING",
+      "REAL_SCREEN_READER_PENDING",
+      "REAL_CLIENT_PORTAL_AUTH_E2E_PENDING",
+      "CI_PENDING",
+      "MERGE_AND_DEPLOY_HUMAN_GATE"
+    ],
+    "exact_recovery": "Verify PR #3 draft HEAD and code blobs, rerun Node 11/11 and Chrome 2 viewports with fresh unique profiles only when code changes. Next: screen reader and keyboard whole-page, portal authorized read-only E2E. Do not deploy without owner gate.",
+    "next": "Reconcile source and evidence in PR, then inspect current portal readiness without authentication bypass, qualify independent screen reader if available, keep draft until approval."
+  }
+}

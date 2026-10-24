@@ -8,53 +8,1121 @@
   <meta name="referrer" content="no-referrer">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
   <title>Synestra — Studio numérique et automatisation métier</title>
-  <meta name="description" content="Synestra accompagne les petites entreprises avec des projets numériques et d'automatisation conçus selon leurs besoins.">
+  <meta name="description" content="Synestra aide les artisans, indépendants et petites entreprises à clarifier leurs besoins numériques et à préparer des projets adaptés à leur activité.">
   <style>
-    :root{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#ecf6f7;background:#08151e}
-    *{box-sizing:border-box}body{margin:0}a{color:inherit}
-    .skip{position:absolute;left:-9999px}.skip:focus{left:1rem;top:1rem;background:#b7efda;color:#061d1a;padding:1rem;z-index:3}
-    header,main,footer{width:min(1080px,calc(100% - 3rem));margin-inline:auto}
-    header{display:flex;justify-content:space-between;align-items:center;padding:1.25rem 0;border-bottom:1px solid #2a4654;gap:1rem}
-    .brand{display:flex;align-items:center;gap:.75rem;text-decoration:none;letter-spacing:.13em;font-weight:800}
-    .symbol{display:grid;place-items:center;background:linear-gradient(145deg,#b5f4d9,#69b9bb);color:#093c3e;width:2.9rem;height:2.9rem;border-radius:1rem;font-size:1.8rem}
-    .brand small{font-size:.65rem;letter-spacing:.2em;display:block;color:#9cbac4}
-    nav{display:flex;align-items:center;gap:1rem}nav a{font-size:.89rem;color:#bfd7dc;text-decoration:none}nav .login{background:#a7e7ca;color:#08251f;font-weight:700;padding:.7rem 1rem;border-radius:.65rem;white-space:nowrap}nav a:hover,nav a:focus-visible{outline:2px solid #e1ffed;outline-offset:3px}
-    main{padding:5.2rem 0 3rem}.eyebrow{display:inline-block;border:1px solid #50786f;color:#b7efd7;border-radius:3rem;padding:.55rem 1rem;letter-spacing:.13em;font-size:.73rem;font-weight:700;text-transform:uppercase}
-    h1{font-size:clamp(2.6rem,7.5vw,5rem);line-height:1.07;letter-spacing:-.05em;max-width:850px;margin:1.65rem 0}
-    h2{font-size:1.55rem}.lead{font-size:clamp(1.1rem,2vw,1.35rem);line-height:1.7;color:#bcd2da;max-width:680px}
-    .actions{display:flex;flex-wrap:wrap;gap:1rem;margin-top:2.25rem}
-    .action{display:inline-flex;align-items:center;justify-content:center;padding:1rem 1.5rem;border-radius:.75rem;font-weight:700;text-decoration:none;border:1px solid #4b7076}
-    .action.primary{background:#a7e7ca;color:#08251f;border-color:#a7e7ca}.action:hover,.action:focus-visible{outline:2px solid #e1ffed;outline-offset:3px}
-    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin:4.25rem 0}
-    .tile{border:1px solid #2b4c5a;background:#102633;border-radius:1rem;padding:1.6rem;line-height:1.65}
-    .tile p{color:#b6d2d9}.tile h2{margin:0}
-    .note{color:#a5c8c7;font-size:.9rem;line-height:1.65;max-width:760px}
-    footer{color:#8baeb9;border-top:1px solid #2a4654;padding:1.5rem 0 3rem;font-size:.85rem}
-    @media(max-width:720px){.grid{grid-template-columns:1fr}header,main,footer{width:min(100% - 2rem,1080px)}main{padding-top:3rem}nav a{font-size:.8rem}nav a[href="#approche"]{display:none}nav .login{padding:.65rem .75rem}}
+    :root {
+      color-scheme: dark;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      color: #ecf6f7;
+      background: #08151e;
+      --ink: #08151e;
+      --surface: #102633;
+      --line: #2b4c5a;
+      --text: #ecf6f7;
+      --muted: #bfd3da;
+      --quiet: #a7c1c8;
+      --mint: #a7e7ca;
+      --mint-dark: #08251f;
+      --teal: #69b9bb;
+      --content: 1120px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-width: 320px;
+      margin: 0;
+      background:
+        radial-gradient(ellipse at 86% 0%, rgba(105,185,187,.11), transparent 30rem),
+        var(--ink);
+      color: var(--text);
+    }
+    a { color: inherit; }
+    a:focus-visible, button:focus-visible {
+      outline: 3px solid #e1ffed;
+      outline-offset: 4px;
+      border-radius: .25rem;
+    }
+    .skip {
+      position: absolute;
+      left: -9999px;
+      top: 1rem;
+      z-index: 5;
+      padding: .85rem 1rem;
+      background: var(--mint);
+      color: var(--mint-dark);
+      font-weight: 700;
+    }
+    .skip:focus { left: 1rem; }
+
+    .container {
+      width: min(var(--content), calc(100% - 3rem));
+      margin-inline: auto;
+    }
+    .site-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      padding: 1.2rem 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: .75rem;
+      color: var(--text);
+      font-weight: 800;
+      letter-spacing: .13em;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .brand-symbol {
+      display: grid;
+      width: 2.75rem;
+      height: 2.75rem;
+      place-items: center;
+      border-radius: .9rem;
+      background: linear-gradient(145deg, #b5f4d9, var(--teal));
+      color: #093c3e;
+      font-size: 1.65rem;
+    }
+    .brand small {
+      display: block;
+      margin-top: .15rem;
+      color: var(--quiet);
+      font-size: .62rem;
+      letter-spacing: .2em;
+    }
+    .site-nav {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    .site-nav a {
+      color: var(--muted);
+      font-size: .9rem;
+      text-decoration: none;
+    }
+    .site-nav a:not(.nav-cta):hover { color: var(--text); }
+    .site-nav .nav-cta {
+      padding: .7rem 1rem;
+      border-radius: .65rem;
+      background: var(--mint);
+      color: var(--mint-dark);
+      font-weight: 750;
+      white-space: nowrap;
+    }
+
+    main { overflow: clip; }
+    .hero {
+      padding: clamp(4rem, 9vw, 7.5rem) 0 5.25rem;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .55rem;
+      padding: .5rem .85rem;
+      border: 1px solid #50786f;
+      border-radius: 999px;
+      color: #b7efd7;
+      font-size: .76rem;
+      font-weight: 750;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before {
+      width: .48rem;
+      height: .48rem;
+      border-radius: 50%;
+      background: var(--mint);
+      content: "";
+    }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      max-width: 900px;
+      margin: 1.6rem 0 1.35rem;
+      font-size: clamp(2.8rem, 7vw, 5.8rem);
+      line-height: 1.02;
+      letter-spacing: -.055em;
+    }
+    .hero-lead {
+      max-width: 720px;
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: clamp(1.13rem, 2.3vw, 1.4rem);
+      line-height: 1.7;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .85rem;
+      margin-top: 2rem;
+    }
+    .button {
+      display: inline-flex;
+      min-height: 3.2rem;
+      align-items: center;
+      justify-content: center;
+      gap: .55rem;
+      padding: .9rem 1.25rem;
+      border: 1px solid #4b7076;
+      border-radius: .7rem;
+      font-weight: 750;
+      text-decoration: none;
+    }
+    .button-primary {
+      border-color: var(--mint);
+      background: var(--mint);
+      color: var(--mint-dark);
+    }
+    .button:hover { border-color: #d8ffed; }
+    .pilot-caption {
+      max-width: 680px;
+      margin: 1rem 0 0;
+      color: var(--quiet);
+      font-size: .9rem;
+      line-height: 1.6;
+    }
+
+    .section {
+      padding: 4.6rem 0;
+      border-top: 1px solid rgba(43,76,90,.72);
+    }
+    .section-heading {
+      max-width: 760px;
+      margin-bottom: 2rem;
+    }
+    .section-kicker {
+      margin-bottom: .75rem;
+      color: #a8e4d0;
+      font-size: .76rem;
+      font-weight: 750;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    h2 {
+      margin-bottom: .8rem;
+      font-size: clamp(2rem, 4.5vw, 3.2rem);
+      line-height: 1.12;
+      letter-spacing: -.035em;
+    }
+    .section-intro {
+      max-width: 700px;
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 1.08rem;
+      line-height: 1.7;
+    }
+
+    .examples-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+    .example-card, .step-card, .proof-card, .trust-card {
+      border: 1px solid var(--line);
+      border-radius: 1rem;
+      background: linear-gradient(155deg, rgba(20,45,57,.96), rgba(16,38,51,.92));
+    }
+    .example-card {
+      min-height: 100%;
+      padding: 1.45rem;
+    }
+    .card-label {
+      margin-bottom: 1rem;
+      color: #a8e4d0;
+      font-size: .74rem;
+      font-weight: 750;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+    .example-card h3 {
+      margin-bottom: .75rem;
+      font-size: 1.25rem;
+      line-height: 1.35;
+    }
+    .example-card p:last-child {
+      margin-bottom: 0;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+    .disclosure {
+      margin: 1.15rem 0 0;
+      color: var(--quiet);
+      font-size: .9rem;
+      line-height: 1.6;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: .8rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .step-card {
+      padding: 1.25rem;
+    }
+    .step-number {
+      display: inline-block;
+      margin-bottom: 1.25rem;
+      color: #a8e4d0;
+      font-size: .82rem;
+      font-weight: 800;
+      letter-spacing: .1em;
+    }
+    .step-card h3 {
+      margin-bottom: .55rem;
+      font-size: 1.15rem;
+    }
+    .step-card p {
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: .94rem;
+      line-height: 1.65;
+    }
+    .process-note {
+      margin: 1.25rem 0 0;
+      padding: 1rem 1.15rem;
+      border-left: 3px solid var(--teal);
+      background: rgba(16,38,51,.72);
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .difference-grid {
+      display: grid;
+      grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+      gap: 2rem;
+      align-items: start;
+    }
+    .difference-panel {
+      padding: 1.6rem;
+      border: 1px solid var(--line);
+      border-radius: 1rem;
+      background: var(--surface);
+    }
+    .difference-panel h3 {
+      margin-bottom: .7rem;
+      font-size: 1.2rem;
+    }
+    .difference-panel p {
+      margin-bottom: 0;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+    .principles {
+      display: grid;
+      gap: .8rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .principles li {
+      display: flex;
+      gap: .75rem;
+      align-items: flex-start;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .principles li::before {
+      flex: 0 0 .55rem;
+      width: .55rem;
+      height: .55rem;
+      margin-top: .45rem;
+      border-radius: 50%;
+      background: var(--mint);
+      content: "";
+    }
+
+    .proof-card {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 1rem;
+      align-items: start;
+      padding: 1.5rem;
+    }
+    .proof-mark {
+      display: grid;
+      width: 2.7rem;
+      height: 2.7rem;
+      place-items: center;
+      border: 1px solid #50786f;
+      border-radius: .8rem;
+      color: var(--mint);
+      font-size: 1.2rem;
+    }
+    .proof-card h3 {
+      margin: .1rem 0 .55rem;
+      font-size: 1.15rem;
+    }
+    .proof-card p {
+      max-width: 760px;
+      margin-bottom: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .trust-layout {
+      display: grid;
+      grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+      gap: 1rem;
+      align-items: stretch;
+    }
+    .trust-card { padding: 1.5rem; }
+    .trust-card h3 {
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+    .trust-list {
+      display: grid;
+      gap: .8rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .trust-list li {
+      padding-top: .8rem;
+      border-top: 1px solid rgba(43,76,90,.8);
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .trust-note {
+      margin: 1rem 0 0;
+      color: var(--quiet);
+      font-size: .92rem;
+      line-height: 1.65;
+    }
+
+    .about-panel { display: grid; grid-template-columns: 1.2fr .8fr; gap: 1.5rem; padding: clamp(1.35rem,3vw,2.25rem); border: 1px solid var(--line); border-radius: 1rem; background: var(--surface); }
+    .about-panel p { margin: 0; color: var(--muted); line-height: 1.75; }
+    .about-note { padding: 1.15rem; border-left: 3px solid var(--teal); background: rgba(8,21,30,.45); }
+    .about-note strong { display: block; margin-bottom: .5rem; color: var(--text); }
+    .faq-list { display: grid; gap: .8rem; }
+    .faq-item { border: 1px solid var(--line); border-radius: .85rem; background: var(--surface); }
+    .faq-item summary { padding: 1.15rem 1.35rem; font-weight: 700; line-height: 1.55; cursor: pointer; }
+    .faq-item summary:focus-visible { outline: 3px solid var(--mint); outline-offset: 3px; }
+    .faq-item[open] summary { border-bottom: 1px solid var(--line); }
+    .faq-item p { margin: 0; padding: 1rem 1.35rem 1.35rem; color: var(--muted); line-height: 1.7; }
+
+    .final-cta { padding: 4.6rem 0 5.5rem; }
+    .cta-panel {
+      padding: clamp(1.5rem, 5vw, 3.25rem);
+      border: 1px solid #527b77;
+      border-radius: 1.25rem;
+      background:
+        radial-gradient(ellipse at 100% 0%, rgba(105,185,187,.15), transparent 24rem),
+        var(--surface);
+    }
+    .cta-panel h2 { max-width: 720px; }
+    .cta-panel p {
+      max-width: 680px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+    .cta-panel .button { margin-top: .25rem; }
+
+    .site-footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: .7rem 1.5rem;
+      padding: 1.4rem 0 2.5rem;
+      border-top: 1px solid var(--line);
+      color: var(--quiet);
+      font-size: .86rem;
+    }
+    .site-footer p { margin: 0; }
+
+
+    /* SiteForge: demonstrative art direction, CSS-only and intentionally static. */
+    .siteforge-showcase {
+      display: grid;
+      grid-template-columns: minmax(0,.85fr) minmax(0,1.15fr);
+      gap: clamp(1.25rem,4vw,3rem);
+      align-items: center;
+      padding: clamp(1.4rem,3vw,2.5rem);
+      border: 1px solid #3d706f;
+      border-radius: 1.3rem;
+      background: radial-gradient(ellipse at 100% 0%,rgba(105,185,187,.17),transparent 23rem),linear-gradient(130deg,#112b39,#091d28);
+      box-shadow: inset 0 1px rgba(236,246,247,.07);
+    }
+    .siteforge-copy { min-width: 0; }
+    .siteforge-copy h3 { margin: .4rem 0 1rem; font-size: clamp(1.5rem,3vw,2.3rem); line-height: 1.16; letter-spacing: -.035em; }
+    .siteforge-copy > p:not(.section-kicker) { color: var(--muted); line-height: 1.7; }
+    .siteforge-points { display: grid; gap: .65rem; list-style: none; margin: 1.2rem 0 1.6rem; padding: 0; }
+    .siteforge-points li { padding-left: 1.4rem; position: relative; color: var(--muted); line-height: 1.55; }
+    .siteforge-points li::before { position: absolute; left: 0; top: .56rem; width: .48rem; height: .48rem; background: var(--mint); border-radius: 50%; content: ""; }
+    .siteforge-copy .pilot-caption { font-size: .82rem; margin-top: .85rem; }
+    .siteforge-preview { min-width: 0; overflow: hidden; background: #f1f5f8; color: #18314b; border: 1px solid #91aabc; border-radius: .9rem; box-shadow: 0 1.25rem 3.4rem rgba(0,0,0,.24); }
+    .siteforge-preview-bar { display: flex; align-items: center; gap: .4rem; padding: .78rem 1rem; background: #e1e9ef; border-bottom: 1px solid #bdd0dd; }
+    .siteforge-preview-dot { width: .48rem; height: .48rem; background: #7798af; border-radius: 50%; }
+    .siteforge-preview-bar span:last-child { margin-left: auto; font-size: .68rem; font-weight: 800; letter-spacing: .12em; color: #3a627c; }
+    .siteforge-preview-body { padding: clamp(1.3rem,3vw,2.6rem); }
+    .siteforge-preview-label { display: inline-flex; padding: .4rem .65rem; background: #dcecf1; color: #245476; border-radius: 999px; font-size: .69rem; font-weight: 800; letter-spacing: .08em; }
+    .siteforge-preview-body h4 { max-width: 23rem; margin: 1.1rem 0 .85rem; color: #152e49; font-size: clamp(1.55rem,3vw,2.4rem); letter-spacing: -.045em; line-height: 1.1; }
+    .siteforge-preview-body > p { margin-bottom: 1.4rem; max-width: 24rem; color: #4a6379; font-size: .9rem; line-height: 1.65; }
+    .siteforge-preview-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; }
+    .siteforge-preview-tile { padding: 1rem; border: 1px solid #c1d5e2; border-radius: .65rem; background: #fff; font-size: .8rem; font-weight: 750; color: #234863; }
+    .siteforge-preview-tile::before { display: block; width: 1.3rem; height: .2rem; margin-bottom: .7rem; border-radius: 4px; background: #5d93a8; content: ""; }
+    @media (max-width: 840px) {
+      .siteforge-showcase { grid-template-columns: minmax(0,1fr); }
+    }
+    @media (max-width: 440px) {
+      .siteforge-preview-body { padding: 1.15rem; }
+      .siteforge-preview-tiles { grid-template-columns: minmax(0,1fr); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+    @media (max-width: 920px) {
+      .steps { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .steps li:last-child { grid-column: span 2; }
+    }
+    @media (max-width: 720px) {
+      .container { width: min(var(--content), calc(100% - 2rem)); }
+      .site-header { flex-wrap: wrap; }
+      .site-nav {
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: .8rem 1rem;
+      }
+      .site-nav a { font-size: .84rem; }
+      .site-nav .nav-cta { padding: .65rem .8rem; }
+      .hero { padding: 3.6rem 0 3.8rem; }
+      .section { padding: 3.5rem 0; }
+      .examples-grid, .difference-grid, .trust-layout, .about-panel { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .steps li:last-child { grid-column: auto; }
+      .step-card { padding: 1.15rem; }
+      .final-cta { padding: 3.5rem 0 4rem; }
+    }
+    @media (max-width: 440px) {
+      .steps { grid-template-columns: 1fr; }
+      .site-nav { justify-content: flex-start; }
+    }
+
+    /* R93 / expressive studio identity: CSS-only, deliberately non-live conceptual visual. */
+    :root {
+      --ink: #070e18; --surface: #111e2b; --line: #345164;
+      --text: #f4f9fe; --muted: #bfd0dc; --quiet: #a5b9cb;
+      --mint: #c4efb8; --mint-dark: #12302b; --teal: #73dec9;
+      --content: 1220px; --violet: #b9b3ff; --gold: #e4d69f;
+    }
+    body {
+      background:
+        radial-gradient(ellipse 51rem 50rem at 85% 7%,rgba(76,116,161,.24),transparent 71%),
+        radial-gradient(ellipse 50rem 49rem at -14% 24%,rgba(32,110,106,.14),transparent 75%),
+        #070e18;
+    }
+    body::before {
+      content: ""; position: absolute; inset: 0 0 auto; height: 950px;
+      pointer-events: none; opacity: .16; z-index: -1;
+      background-image: linear-gradient(rgba(184,219,222,.11) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(184,219,222,.11) 1px, transparent 1px);
+      background-size: 76px 76px;
+      -webkit-mask-image: linear-gradient(#000,transparent 96%);
+      mask-image: linear-gradient(#000,transparent 96%);
+    }
+    .site-header {
+      z-index: 20; position: relative; padding: 1.1rem 0 1.12rem;
+      gap: .85rem; border-bottom-color: rgba(193,229,228,.22);
+    }
+    .brand-symbol {
+      width: 2.55rem; height: 2.55rem; border-radius: .64rem;
+      background: linear-gradient(135deg,#d4f8c9 0%,#71d7c1 100%);
+      box-shadow: 0 6px 28px rgba(114,214,185,.15);
+    }
+    .site-nav { gap: clamp(.6rem,1.4vw,1.1rem); }
+    .site-nav a { font-size: .8rem; }
+    .site-nav .nav-cta {
+      background: #d1f3c2; border-radius: .5rem;
+      padding: .77rem 1rem; transition: transform .25s ease,box-shadow .25s ease;
+    }
+    .site-nav .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 9px 32px rgba(168,240,189,.22); }
+    .hero-v2 {
+      display: grid; grid-template-columns: minmax(0,1.07fr) minmax(0,.93fr);
+      align-items: center; gap: clamp(1.5rem,4vw,4rem);
+      padding: clamp(4.6rem,8vw,7.5rem) 0 clamp(3.5rem,6vw,6rem);
+      min-height: 690px;
+    }
+    .hero-copy { position: relative; z-index: 2; min-width: 0; }
+    .hero-v2 .eyebrow {
+      background: rgba(119,223,196,.075); border-color: rgba(128,221,190,.36);
+      color: #d1f7ce; font-size: .68rem; padding: .48rem .8rem;
+    }
+    .eyebrow-separator { opacity: .45; margin: 0 .05rem; }
+    .hero-topline {
+      display: flex; align-items: center; gap: .5rem; margin: 2rem 0 .15rem;
+      font-size: .77rem; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--quiet); font-weight: 750;
+    }
+    .hero-topline span { color: var(--mint); font-size: 1.1rem; }
+    .hero-v2 h1 { max-width: 700px; margin: .8rem 0 1.5rem; font-size: clamp(3.2rem,5.35vw,5.8rem); line-height: 1.05; letter-spacing: -.073em; }
+    .hero-ink { color: #f4f9fe; }
+    .hero-accent {
+      color: #c1ecc1;
+      background: linear-gradient(110deg,#d1f4be,#83e1d9 75%,#b6bdff);
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero-v2 .hero-lead { max-width: 33rem; font-size: clamp(1.02rem,1.55vw,1.15rem); line-height: 1.78; }
+    .hero-v2 .hero-actions { margin-top: 2.15rem; }
+    .button {
+      transition: transform .27s ease,box-shadow .27s ease,border-color .27s ease,background-color .27s ease;
+    }
+    .button:hover { transform: translateY(-3px); box-shadow: 0 14px 33px rgba(0,0,0,.22); }
+    .hero-v2 .button-primary {
+      background: linear-gradient(110deg,#c7edbb,#a6ead4); border-color: transparent; color: #09201f;
+      box-shadow: 0 12px 34px rgba(134,232,197,.11);
+    }
+    .hero-v2 .pilot-caption { max-width: 33rem; }
+    .hero-index {
+      display: flex; flex-wrap: wrap; gap: 1.25rem;
+      border-top: 1px solid rgba(160,199,204,.20);
+      margin-top: 2.25rem; padding-top: 1.3rem;
+      color: #b0c7ce; font-size: .72rem; text-transform: uppercase;
+      letter-spacing: .085em; font-weight: 750;
+    }
+    .hero-index span { display: inline-flex; align-items: center; gap: .55rem; }
+    .hero-index b { color: #beeec4; font-size: .69rem; }
+    .system-stage {
+      min-width: 0; height: clamp(420px,38vw,548px); overflow: hidden;
+      position: relative; isolation: isolate;
+      border: 1px solid rgba(169,207,214,.27); border-radius: 1.4rem;
+      background:
+        radial-gradient(circle at 50% 47%,rgba(117,223,196,.16),transparent 39%),
+        radial-gradient(circle at 76% 20%,rgba(157,148,235,.16),transparent 38%),
+        linear-gradient(145deg,#172937,#0a131f 77%);
+      box-shadow: 0 40px 95px rgba(1,6,12,.36),inset 0 1px rgba(233,250,253,.11);
+      transform: perspective(1300px) rotateY(-3deg) rotateX(1.5deg);
+    }
+    .system-stage::before {
+      content:""; position:absolute; inset:0; opacity:.26; pointer-events:none;
+      background-image:linear-gradient(rgba(218,247,240,.15) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(218,247,240,.15) 1px,transparent 1px);
+      background-size:36px 36px;
+      -webkit-mask-image:radial-gradient(circle,#000,transparent 80%);
+      mask-image:radial-gradient(circle,#000,transparent 80%);
+    }
+    .stage-glow {
+      position:absolute; width:330px; height:330px; left:50%; top:50%;
+      transform:translate(-50%,-50%); border-radius:50%;
+      background:radial-gradient(circle,rgba(119,224,192,.17),transparent 69%);
+      filter:blur(17px); animation:stage-breathe 7s ease-in-out infinite alternate;
+    }
+    .stage-topline,.stage-footline {
+      display:flex; align-items:center; justify-content:space-between;
+      position:absolute; left:1.3rem; right:1.3rem; z-index:5;
+      font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+      font-size:.61rem; letter-spacing:.1em; color:#97b9c3;
+    }
+    .stage-topline { top:1.4rem; } .stage-footline { bottom:1.3rem; }
+    .stage-flash { color:#bfebbe; animation:stage-blink 2s ease-in-out infinite; }
+    .system-orbit {
+      position:absolute; border:1px solid rgba(180,220,223,.20);
+      border-radius:50%; left:50%; top:49%; transform:translate(-50%,-50%);
+      pointer-events:none;
+    }
+    .orbit-one { width:46%; aspect-ratio:1; border-style:dashed; animation:orbit-spin 52s linear infinite; }
+    .orbit-two { width:71%; aspect-ratio:1; border-color:rgba(154,201,212,.13); animation:orbit-spin 79s linear infinite reverse; }
+    .orbit-three { width:93%; aspect-ratio:1; border-color:rgba(154,201,212,.11); }
+    .system-core {
+      width:144px; height:144px; border-radius:50%; position:absolute;
+      left:50%;top:49%;transform:translate(-50%,-50%);
+      display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:3;
+      background: radial-gradient(circle at 34% 25%,#294d50,#102734 75%);
+      box-shadow: 0 0 0 10px rgba(146,232,194,.045),0 0 0 20px rgba(166,212,207,.04),
+        0 20px 50px rgba(1,6,12,.50),inset 0 0 0 1px rgba(199,252,218,.55);
+    }
+    .system-core i { position:absolute; inset:-10px; border-radius:50%; border:1px solid rgba(190,241,205,.16); }
+    .core-sigil { font-size:4.25rem; line-height:1; font-weight:900; color:#cdf4c5; letter-spacing:-.1em; }
+    .core-caption { color:#d9eee6; letter-spacing:.27em; font-size:.56rem; margin-top:.32rem; font-weight:800; }
+    .system-node {
+      position:absolute;display:flex;align-items:center;gap:.65rem; z-index:4;
+      border:1px solid rgba(170,210,212,.37);border-radius:.8rem;
+      background:rgba(20,37,49,.93); padding:.77rem .89rem;
+      box-shadow:0 17px 34px rgba(3,11,20,.32);
+      animation:node-float 6s ease-in-out infinite;
+    }
+    .system-node span:last-child { display:flex;flex-direction:column;gap:.2rem; }
+    .system-node b { font-size:.67rem;letter-spacing:.1em;color:#f2f9fa; }
+    .system-node small { color:#a5c0c9;font-size:.68rem; }
+    .node-symbol { display:grid;place-items:center;width:2.25rem;height:2.25rem;border-radius:.55rem;font-size:1.55rem; }
+    .node-symbol-forge { background:#bdb5f1;color:#253043; }
+    .node-symbol-connect { background:#b5e7ca;color:#174239; }
+    .node-symbol-bridge { background:#f0dca4;color:#4a3b24; }
+    .node-forge { top:23%;right:3%;animation-delay:-1.8s; }
+    .node-connect { top:61%;right:0%;animation-delay:-4s; }
+    .node-bridge { top:63%;left:2%;animation-delay:-2.7s; }
+    .motion-strip {
+      overflow:hidden; padding:1.05rem 0; background:#c6f2c5;
+      color:#102b2b; border-top:1px solid #e5ffe5; border-bottom:1px solid #defcdb;
+    }
+    .motion-strip-inner { display:flex;align-items:center;gap:2.1rem;width:max-content;animation:strip-slide 34s linear infinite; }
+    .motion-strip-inner span { font-weight:850;letter-spacing:.13em;font-size:.78rem;white-space:nowrap; }
+    .motion-strip-inner b { color:#367a69;font-size:1.12rem; }
+    .product-section { padding-top:clamp(5rem,8vw,8.5rem);padding-bottom:clamp(5rem,8vw,7.5rem); }
+    .section-heading-split { display:grid;grid-template-columns:minmax(0,1.14fr) minmax(0,.8fr);gap:3.5rem;align-items:end;margin-bottom:2.5rem; }
+    .section-heading-split h2 { max-width:750px; font-size:clamp(2.5rem,4.7vw,4.9rem);line-height:1.1;letter-spacing:-.058em; }
+    .section-heading-split .section-intro { max-width:440px;margin:0 0 .4rem;line-height:1.85;color:#b6cbd3; }
+    .soft-gradient { color:#c7eebc; }
+    .product-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.15rem;}
+    .product-card {min-width:0;overflow:hidden;border:1px solid #344958;border-radius:1.2rem;background:linear-gradient(145deg,#132432,#0f1c28);box-shadow:0 24px 55px rgba(0,0,0,.15);transition:transform .35s ease,border-color .35s ease;}
+    .product-card:hover {transform:translateY(-6px);border-color:#81aca7;}
+    .product-card-top {display:flex;justify-content:space-between;gap:1rem;align-items:center;padding:1.15rem 1.35rem;color:#adbfca;font-size:.65rem;letter-spacing:.13em;font-weight:800;}
+    .product-status {border:1px solid #54716f;color:#c6edd7;padding:.44rem .63rem;border-radius:100px;white-space:nowrap;letter-spacing:0;font-size:.68rem;}
+    .product-visual {height:clamp(235px,29vw,355px);margin:0 1.05rem;position:relative;isolation:isolate;overflow:hidden;border:1px solid rgba(224,239,235,.14);border-radius:.8rem;}
+    .bridge-visual {
+      background:radial-gradient(ellipse at 56% 80%,rgba(168,152,224,.3),transparent 66%),linear-gradient(133deg,#343449,#151c32);
+    }
+    .bridge-visual::before,.connect-visual::before {content:"";position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.07) 1px,transparent 1px);background-size:27px 27px;opacity:.33;}
+    .visual-window {position:absolute;top:13%;left:11%;right:9%;bottom:-10%;min-height:208px;border-radius:.9rem .9rem 0 0;overflow:hidden;border:1px solid #718398;background:#131d2b;box-shadow:0 25px 46px rgba(3,7,18,.38);transform:perspective(900px) rotateX(4deg) rotateY(-5deg) rotate(-1deg);transition:transform .55s ease;}
+    .product-card:hover .visual-window {transform:perspective(900px) rotateX(0) rotateY(0) rotate(0);}
+    .visual-window-top {height:42px;background:#233142;border-bottom:1px solid #425669;display:flex;align-items:center;justify-content:space-between;gap:.8rem;padding:0 1rem;color:#bdcdd9;font-size:.63rem;letter-spacing:.12em;font-family:ui-monospace,Consolas,monospace;}
+    .win-dots {display:flex;gap:5px;}.win-dots i {width:7px;height:7px;background:#92a4b6;border-radius:50%;}.win-dots i:first-child {background:#e9b3ad;}
+    .bridge-window-main {display:grid;grid-template-columns:52px minmax(0,1fr);min-height:290px;}
+    .bridge-sidebar {display:flex;flex-direction:column;align-items:center;gap:1rem;background:#1a2838;padding:1rem .6rem;}
+    .side-logo {display:grid;place-items:center;background:#c1edca;color:#1a4045;font-weight:900;font-size:1rem;width:26px;height:26px;border-radius:8px;margin-bottom:.25rem;}
+    .bridge-sidebar i {display:block;width:16px;height:5px;border-radius:9px;background:#637786;}
+    .bridge-content {padding:1.6rem 1.4rem;min-width:0;}
+    .micro-label {font-size:.58rem;letter-spacing:.15em;color:#adcad1;font-weight:800;}
+    .mock-title-line {height:15px;width:52%;background:#d5e9ee;margin:.75rem 0 .5rem;border-radius:5px;opacity:.7;}
+    .mock-line {height:7px;width:78%;background:#536e7e;margin-bottom:1.3rem;border-radius:4px;}
+    .bridge-permission {display:flex;align-items:center;gap:1rem;padding:1rem;border:1px solid #487e79;background:rgba(97,172,158,.15);border-radius:.68rem;}
+    .permission-icon {display:grid;place-items:center;color:#bdf2c4;font-size:1.3rem;}
+    .bridge-permission div {display:flex;flex-direction:column;gap:.25rem;}.bridge-permission b {font-size:.8rem;color:#f4fcf7;}.bridge-permission small {font-size:.69rem;color:#abc7c7;}
+    .permission-indicator {margin-left:auto;color:#c9f7c9;}
+    .bridge-progress {display:flex;gap:7px;margin-top:1.2rem;}.bridge-progress span {height:4px;flex:1;background:#3e5969;border-radius:9px;}.bridge-progress span:first-child {background:#c2efce;}.bridge-progress span:nth-child(2) {background:#91cdb8;}
+    .visual-stamp {position:absolute;bottom:.9rem;right:1rem;z-index:5;color:#e4f2eb;opacity:.78;letter-spacing:.13em;font-size:.53rem;font-weight:850;}
+    .connect-visual {background:radial-gradient(circle at 52% 46%,rgba(130,220,183,.28),transparent 37%),radial-gradient(circle at 30% 70%,rgba(72,123,142,.28),transparent 48%),#122934;}
+    .connect-track {position:absolute;inset:0;}
+    .connect-track::before,.connect-track::after {content:"";position:absolute;width:66%;height:1px;background:linear-gradient(90deg,transparent,#94dbd4,transparent);left:17%;top:50%;opacity:.72;}
+    .connect-track::before {transform:rotate(38deg);}
+    .connect-track::after {transform:rotate(-38deg);}
+    .connect-track span {position:absolute;left:50%;top:50%;width:61%;aspect-ratio:1;border:1px dashed rgba(153,207,192,.30);border-radius:50%;transform:translate(-50%,-50%);}
+    .connect-track span:nth-child(2){width:84%;opacity:.35;}.connect-track span:nth-child(3){width:41%;opacity:.5;}
+    .connect-hub {position:absolute;z-index:4;left:50%;top:47%;transform:translate(-50%,-50%);width:134px;height:134px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid #85bbad;border-radius:50%;background:radial-gradient(circle at 34% 24%,#2e615d,#123c46 72%);box-shadow:0 0 0 9px rgba(127,220,177,.07),0 0 0 18px rgba(127,220,177,.045),0 15px 45px rgba(0,0,0,.27);}
+    .hub-outline {font-size:2.6rem;line-height:1;color:#dcf7d7;}.connect-hub strong {font-size:.73rem;letter-spacing:.13em;color:#effef7;}.connect-hub small {font-size:.54rem;letter-spacing:.12em;color:#b2d4c8;margin-top:.3rem;}
+    .connect-satellite {position:absolute;display:flex;align-items:center;gap:.45rem;padding:.65rem .75rem;background:#1a3b46;border:1px solid #4d8080;border-radius:.55rem;color:#daeeeb;box-shadow:0 13px 27px rgba(0,10,18,.22);font-size:.59rem;letter-spacing:.1em;font-weight:800;animation:node-float 6s ease-in-out infinite;}
+    .connect-satellite b {font-size:1rem;color:#bdebd0;}
+    .satellite-a {top:16%;left:9%;animation-delay:-1.7s;}
+    .satellite-b {top:18%;right:7%;animation-delay:-3.2s;}
+    .satellite-c {bottom:17%;left:7%;animation-delay:-4.1s;}
+    .satellite-d {bottom:20%;right:7%;animation-delay:-2.3s;}
+    .product-card-body {padding:clamp(1.4rem,2.4vw,2.1rem);}
+    .product-heading {display:flex;align-items:center;gap:.8rem;margin-bottom:.95rem;}
+    .product-heading h3 {font-size:clamp(1.5rem,2.5vw,2.2rem);letter-spacing:-.055em;margin:0;}
+    .product-heading h3 em {font-style:normal;color:#bdebd2;}
+    .product-card-connect .product-heading h3 em {color:#b9b3f8;}
+    .product-icon {width:2.35rem;height:2.35rem;border:1px solid #5e8388;border-radius:.55rem;display:grid;place-items:center;color:#c4efc9;}
+    .product-card-body > p {color:#c0d2d9;line-height:1.75;font-size:.95rem;}
+    .product-facts {display:flex;gap:.45rem;flex-wrap:wrap;margin:1.35rem 0;}
+    .product-facts span {border:1px solid #4e6773;border-radius:100px;padding:.43rem .68rem;color:#d3e3e7;font-size:.68rem;letter-spacing:.025em;}
+    .product-card-body .product-caveat {margin:1.3rem 0 0;padding-top:1rem;border-top:1px solid rgba(158,194,201,.19);color:#a6bdc7;font-size:.77rem;line-height:1.65;}
+    .platform-footnote {display:flex;align-items:center;gap:1.15rem;padding:1.5rem 0;margin-top:1.25rem;border-top:1px solid rgba(190,220,220,.2);border-bottom:1px solid rgba(190,220,220,.2);}
+    .footnote-mark {font-size:1.55rem;color:var(--mint);}
+    .platform-footnote p {flex:1;color:#adc5ca;line-height:1.65;margin:0;font-size:.83rem;}
+    .platform-footnote strong {color:#e1f0e7;}
+    .platform-footnote a {font-size:.79rem;color:#c6eed7;white-space:nowrap;text-underline-offset:.3em;}
+    .section {scroll-margin-top:1.5rem;}
+    .section-heading h2 {letter-spacing:-.047em;}
+    .example-card,.difference-panel,.trust-card,.about-panel,.proof-card {background:#132330;border-color:#345261;}
+    .example-card {transition:transform .3s ease,border-color .3s ease;}
+    .example-card:hover {transform:translateY(-5px);border-color:#70a39a;}
+    .siteforge-showcase {border-color:#527c80;background:radial-gradient(ellipse at 75% 20%,rgba(161,147,225,.18),transparent 24rem),linear-gradient(135deg,#1a293b,#0c1e2a);}
+    .siteforge-preview {transition:transform .5s ease,box-shadow .5s ease;transform:perspective(1000px) rotateY(-3deg);}
+    .siteforge-showcase:hover .siteforge-preview {transform:perspective(1000px) rotateY(0) translateY(-5px);box-shadow:0 35px 65px rgba(0,0,0,.3);}
+    .faq-item {transition:border-color .22s ease;}.faq-item:hover {border-color:#60998b;}
+    .cta-panel {background:radial-gradient(ellipse at 87% 19%,rgba(148,143,230,.16),transparent 23rem),radial-gradient(ellipse at 0% 100%,rgba(119,223,196,.15),transparent 26rem),#112631;}
+    @keyframes orbit-spin {from{transform:translate(-50%,-50%) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(360deg)}}
+    @keyframes node-float {0%,100%{transform:translateY(0)}50%{transform:translateY(-11px)}}
+    @keyframes stage-breathe {from{opacity:.56;filter:blur(18px)}to{opacity:1;filter:blur(11px)}}
+    @keyframes stage-blink {0%,100%{opacity:1}50%{opacity:.3}}
+    @keyframes strip-slide {from{transform:translateX(0)}to{transform:translateX(-50%)}}
+    @media (max-width: 1100px) {
+      .site-header {flex-wrap:wrap;}
+      .site-nav {flex:1;justify-content:space-between;}
+      .hero-v2 {gap:1.3rem;}
+      .hero-v2 h1 {font-size:clamp(2.85rem,5.1vw,4.8rem);}
+      .node-forge{right:1%;}.node-bridge{left:0;}
+    }
+    @media (max-width: 840px) {
+      .hero-v2 {grid-template-columns:minmax(0,1fr);min-height:auto;padding-top:4rem;}
+      .hero-v2 h1 {font-size:clamp(3.1rem,7.5vw,5rem);}
+      .system-stage {height:460px;transform:none;}
+      .section-heading-split {grid-template-columns:minmax(0,1fr);gap:.5rem;}
+      .section-heading-split .section-intro {max-width:720px;}
+      .product-grid {grid-template-columns:1fr;}
+      .product-visual{height:330px;}
+    }
+    @media (max-width: 720px) {
+      .site-nav {overflow-x:auto;max-width:100%;flex-wrap:nowrap;justify-content:flex-start;white-space:nowrap;padding-bottom:.35rem;scrollbar-width:thin;}
+      .site-nav a {flex:0 0 auto;}
+      .site-nav .nav-cta {padding:.57rem .78rem;}
+      .hero-v2 {padding:3.2rem 0 3.2rem;gap:1.85rem;}
+      .hero-v2 h1 {font-size:clamp(2.8rem,10.5vw,4.45rem);letter-spacing:-.065em;}
+      .hero-topline{font-size:.64rem;letter-spacing:.09em;}
+      .system-stage{height:390px;}
+      .system-core{width:108px;height:108px;}
+      .core-sigil{font-size:3.1rem;}
+      .system-node{gap:.45rem;padding:.6rem;}
+      .system-node b{font-size:.56rem;}.system-node small{font-size:.56rem;}
+      .node-symbol{width:1.7rem;height:1.7rem;font-size:1.2rem;}
+      .node-forge{top:20%;}.node-connect{top:65%;}.node-bridge{top:66%;}
+      .product-section{padding-top:4.1rem;}
+      .section-heading-split h2{font-size:clamp(2.35rem,7.7vw,4rem);}
+      .platform-footnote{flex-wrap:wrap;align-items:flex-start;}.platform-footnote a{margin-left:2.5rem;}
+      .motion-strip-inner{gap:1.5rem;}
+    }
+    @media (max-width: 440px) {
+      .hero-v2 h1 {font-size:clamp(2.7rem,11.1vw,3.6rem);}
+      .hero-index {gap:.65rem;}.hero-index span {font-size:.62rem;}
+      .system-stage {height:345px;}
+      .system-core {width:90px;height:90px;}.core-sigil{font-size:2.55rem;}.core-caption{font-size:.45rem;}
+      .system-node{max-width:120px;}.system-node b{font-size:.53rem;}.system-node small{font-size:.5rem;}
+      .node-symbol{width:1.35rem;height:1.35rem;font-size:1rem;}
+      .node-connect{top:66%;}.node-bridge{top:67%;}
+      .stage-topline,.stage-footline{left:.8rem;right:.8rem;font-size:.48rem;}
+      .visual-window{left:6%;right:6%;}.product-visual{height:260px;}
+      .connect-satellite{font-size:.48rem;padding:.46rem;}.connect-hub{width:100px;height:100px;}
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .motion-strip-inner,.stage-glow,.stage-flash,.system-orbit,.system-node,.connect-satellite {
+        animation:none!important;
+      }
+      .button,.site-nav .nav-cta,.product-card,.visual-window,.siteforge-preview,.example-card,.faq-item {
+        transition:none!important;
+      }
+      .button:hover,.site-nav .nav-cta:hover,.product-card:hover,.example-card:hover {
+        transform:none!important;
+      }
+      .siteforge-preview,.siteforge-showcase:hover .siteforge-preview {transform:none!important;}
+      .visual-window,.product-card:hover .visual-window {transform:none!important;}
+      .system-stage {transform:none!important;}
+    }
   </style>
 </head>
 <body>
   <a class="skip" href="#contenu">Aller au contenu</a>
-  <header>
-    <a class="brand" href="./" aria-label="Accueil Synestra"><span class="symbol" aria-hidden="true">S</span><span>SYNESTRA<small>STUDIO NUMÉRIQUE</small></span></a>
-    <nav aria-label="Navigation principale"><a href="#approche">Notre approche</a><a href="./siteforge/">Démo SiteForge</a><a class="login" href="https://synestra-client-portal.synestra-studio.workers.dev/" rel="noreferrer">Se connecter</a></nav>
+  <header class="container site-header">
+    <a class="brand" href="./" aria-label="Accueil Synestra">
+      <span class="brand-symbol" aria-hidden="true">S</span>
+      <span>SYNESTRA<small>STUDIO NUMÉRIQUE</small></span>
+    </a>
+    <nav class="site-nav" aria-label="Navigation principale">
+      <a href="#approche">Fonctionnement</a>
+      <a href="#exemples">Exemples</a>
+      <a href="#siteforge">SiteForge</a>
+      <a href="#plateforme">Bridge &amp; Connect</a>
+      <a href="#realisations">Réalisations</a>
+      <a href="#questions">Questions</a>
+      <a href="#a-propos">À propos</a>
+      <a class="nav-cta" href="https://synestra-client-portal.synestra-studio.workers.dev/" rel="noreferrer">Se connecter <span aria-hidden="true">↗</span></a>
+    </nav>
   </header>
-  <main id="contenu">
-    <div class="eyebrow">Automatisation et outils numériques</div>
-    <h1>Du besoin métier au projet numérique.</h1>
-    <p class="lead">Synestra aide les artisans, indépendants et petites entreprises à cadrer leurs besoins numériques et à concevoir des automatisations adaptées à leur activité.</p>
-    <div class="actions">
-      <a class="action primary" href="https://synestra-client-portal.synestra-studio.workers.dev/" rel="noreferrer">Accéder à mon espace Synestra <span aria-hidden="true">↗</span></a>
-      <a class="action" href="#approche">Comprendre notre approche</a>
-      <a class="action" href="./siteforge/">Voir une création SiteForge (démo statique)</a>
-    </div>
-    <section class="grid" id="approche" aria-label="Parcours client">
-      <div class="tile"><h2>01 · Exprimer</h2><p>Décrivez votre objectif, votre fonctionnement et vos contraintes.</p></div>
-      <div class="tile"><h2>02 · Étudier</h2><p>La demande est examinée avant toute mission de réalisation.</p></div>
-      <div class="tile"><h2>03 · Suivre</h2><p>Retrouvez les étapes et les informations de votre demande dans votre espace.</p></div>
+
+  <main id="contenu" tabindex="-1">
+    <section class="container hero hero-v2" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <span class="eyebrow">Studio numérique <span class="eyebrow-separator">/</span> Phase pilote</span>
+        <p class="hero-topline">L'atelier des idées qui prennent forme <span aria-hidden="true">✳</span></p>
+        <h1 id="hero-title">Imaginez plus grand.<br><span class="hero-ink">Construisez</span> <span class="hero-accent">autrement.</span></h1>
+        <p class="hero-lead">Synestra rassemble design, création web et outils d’intégration pour transformer un besoin concret en un projet défini, testable et maîtrisé.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#approche">Découvrir la démarche <span aria-hidden="true">↗</span></a>
+          <a class="button" href="https://synestra-client-portal.synestra-studio.workers.dev/" rel="noreferrer">Accéder à l’espace pilote <span aria-hidden="true">↗</span></a>
+        </div>
+        <p class="pilot-caption">Chaque demande est étudiée avant toute mission de réalisation. L’accès au portail et son parcours de connexion sont encore en cours de qualification.</p>
+        <div class="hero-index" aria-label="Les trois axes de Synestra">
+          <span><b>01</b> Imaginer</span><span><b>02</b> Relier</span><span><b>03</b> Vérifier</span>
+        </div>
+      </div>
+      <div class="system-stage" role="img" aria-label="Composition artistique conceptuelle du Studio Synestra : SiteForge, Connect et Bridge gravitant autour d'un noyau commun. Cette illustration n'affiche aucun flux en direct.">
+        <div class="stage-glow" aria-hidden="true"></div>
+        <div class="stage-topline" aria-hidden="true"><span>SY / STUDIO FIELD</span><span>CONCEPT VISUEL — 01</span></div>
+        <div class="system-orbit orbit-one" aria-hidden="true"></div>
+        <div class="system-orbit orbit-two" aria-hidden="true"></div>
+        <div class="system-orbit orbit-three" aria-hidden="true"></div>
+        <div class="system-core" aria-hidden="true"><span class="core-sigil">S</span><span class="core-caption">SYNESTRA</span><i></i></div>
+        <div class="system-node node-forge" aria-hidden="true"><span class="node-symbol node-symbol-forge">✦</span><span><b>SITEFORGE</b><small>Création visuelle</small></span></div>
+        <div class="system-node node-connect" aria-hidden="true"><span class="node-symbol node-symbol-connect">⌘</span><span><b>CONNECT</b><small>Intégrations</small></span></div>
+        <div class="system-node node-bridge" aria-hidden="true"><span class="node-symbol node-symbol-bridge">▣</span><span><b>BRIDGE</b><small>Lien avec le PC</small></span></div>
+        <div class="stage-footline" aria-hidden="true"><span>CREATIVE SYSTEMS <span class="stage-flash">●</span></span><span>APERÇU CONCEPTUEL, NON LIVE</span></div>
+      </div>
     </section>
-    <p class="note">La plateforme Synestra est actuellement en phase pilote. Une demande déposée n'entraîne ni devis automatique, ni engagement de réalisation, ni exécution sans validation. L'accès au portail et le parcours de connexion sont encore en cours de qualification.</p>
+
+    <div class="motion-strip" aria-hidden="true">
+      <div class="motion-strip-inner">
+        <span>DESIGN + ENGINEERING</span><b>✳</b><span>HUMAN IN CONTROL</span><b>✳</b><span>CRAFT + SYSTEMS</span><b>✳</b><span>DESIGN + ENGINEERING</span><b>✳</b><span>HUMAN IN CONTROL</span><b>✳</b><span>CRAFT + SYSTEMS</span><b>✳</b>
+      </div>
+    </div>
+
+    <section class="container section product-section" id="plateforme" aria-labelledby="platform-title">
+      <div class="section-heading section-heading-split">
+        <div>
+          <p class="section-kicker">Une idée, plusieurs savoir-faire</p>
+          <h2 id="platform-title">Un Studio.<br><span class="soft-gradient">Des connexions.</span> De nouvelles possibilités.</h2>
+        </div>
+        <p class="section-intro">SiteForge donne forme aux idées. Connect facilite les échanges avec les outils. Bridge explore un lien contrôlé vers Windows. Trois composants complémentaires, à des niveaux de qualification distincts.</p>
+      </div>
+      <div class="product-grid">
+        <article class="product-card product-card-bridge" id="bridge" aria-labelledby="bridge-title">
+          <div class="product-card-top"><span>01 / LES OUTILS</span><span class="product-status">En qualification</span></div>
+          <div class="product-visual bridge-visual" role="img" aria-label="Maquette graphique conceptuelle d'une fenêtre Bridge et d'une permission locale. Il ne s'agit pas d'une capture de Bridge actif.">
+            <div class="visual-window">
+              <div class="visual-window-top"><span class="win-dots"><i></i><i></i><i></i></span><span>BRIDGE / WORKSPACE</span><span>✳</span></div>
+              <div class="bridge-window-main">
+                <div class="bridge-sidebar"><span class="side-logo">S</span><i></i><i></i><i></i><i></i></div>
+                <div class="bridge-content">
+                  <span class="micro-label">ESPACE LOCAL</span>
+                  <div class="mock-title-line"></div><div class="mock-line"></div>
+                  <div class="bridge-permission"><span class="permission-icon">◆</span><div><b>Autorisation locale</b><small>Consentement nécessaire</small></div><span class="permission-indicator">→</span></div>
+                  <div class="bridge-progress"><span></span><span></span><span></span><span></span><span></span></div>
+                </div>
+              </div>
+            </div>
+            <span class="visual-stamp">CONCEPT / UI</span>
+          </div>
+          <div class="product-card-body">
+            <div class="product-heading"><span class="product-icon">▣</span><h3 id="bridge-title">Synestra <em>Bridge.</em></h3></div>
+            <p>Un lien pensé pour permettre au Studio de dialoguer avec un PC Windows, au moyen d’actions autorisées et d’un consentement local explicite.</p>
+            <div class="product-facts"><span>Windows</span><span>Consentement local</span><span>Contrôles d’accès</span></div>
+            <p class="product-caveat">Appairage, installation et actions distantes : qualification en cours. Cette vue est une illustration, pas une session réelle.</p>
+          </div>
+        </article>
+        <article class="product-card product-card-connect" id="connect" aria-labelledby="connect-title">
+          <div class="product-card-top"><span>02 / LES INTÉGRATIONS</span><span class="product-status">Périmètre pilote</span></div>
+          <div class="product-visual connect-visual" role="img" aria-label="Maquette conceptuelle des échanges entre Synestra Connect, des outils autorisés et la traçabilité des résultats. Aucun état de connexion live n'est représenté.">
+            <div class="connect-track" aria-hidden="true"><span></span><span></span><span></span></div>
+            <div class="connect-hub" aria-hidden="true"><span class="hub-outline"><span class="hub-logo">⌘</span></span><strong>CONNECT</strong><small>HUB CONCEPT</small></div>
+            <span class="connect-satellite satellite-a" aria-hidden="true">SKILLS <b>✦</b></span>
+            <span class="connect-satellite satellite-b" aria-hidden="true">ACCESS <b>◈</b></span>
+            <span class="connect-satellite satellite-c" aria-hidden="true">EVIDENCE <b>▤</b></span>
+            <span class="connect-satellite satellite-d" aria-hidden="true">OUTILS <b>⌁</b></span>
+            <span class="visual-stamp">SCHÉMA / CONCEPT</span>
+          </div>
+          <div class="product-card-body">
+            <div class="product-heading"><span class="product-icon">⌘</span><h3 id="connect-title">Synestra <em>Connect.</em></h3></div>
+            <p>Le point de passage des intégrations : il relie des capacités existantes au Studio dans un cadre authentifié, avec des permissions et des résultats traçables.</p>
+            <div class="product-facts"><span>Accès authentifié</span><span>Central Skills</span><span>Traçabilité</span></div>
+            <p class="product-caveat">Certaines lectures authentifiées ont été testées. La disponibilité dépend de chaque intégration et de son autorisation.</p>
+          </div>
+        </article>
+      </div>
+      <div class="platform-footnote"><span class="footnote-mark">✳</span><p><strong>Ce qui compte : une progression vérifiable.</strong> Ces interfaces sont des représentations créatives, pas des captures du logiciel ni la promesse que toutes les fonctions sont déjà disponibles.</p><a href="#confiance">Notre approche de la confiance <span aria-hidden="true">↗</span></a></div>
+    </section>
+
+        <section class="container section" id="exemples" aria-labelledby="examples-title">
+      <div class="section-heading">
+        <p class="section-kicker">Partir du quotidien</p>
+        <h2 id="examples-title">Un projet commence par une situation concrète.</h2>
+        <p class="section-intro">Les bons outils commencent par les tâches, les contraintes et les décisions de votre activité — pas par une technologie choisie d’avance.</p>
+      </div>
+      <div class="examples-grid">
+        <article class="example-card">
+          <p class="card-label">Exemple de besoin</p>
+          <h3>« Je ressaisis les mêmes informations à plusieurs endroits. »</h3>
+          <p>On peut d’abord décrire où les saisies se répètent, quelles données comptent et quelles vérifications doivent rester humaines.</p>
+        </article>
+        <article class="example-card">
+          <p class="card-label">Exemple de besoin</p>
+          <h3>« Je perds le fil des demandes reçues. »</h3>
+          <p>Le cadrage peut préciser les étapes à suivre, les informations utiles et les moments où une décision est nécessaire.</p>
+        </article>
+        <article class="example-card">
+          <p class="card-label">Exemple de besoin</p>
+          <h3>« J’aimerais automatiser une tâche répétitive. »</h3>
+          <p>Avant d’envisager une automatisation, il faut comprendre les règles, les exceptions et les validations attendues.</p>
+        </article>
+      </div>
+      <p class="disclosure">Exemples de besoins à titre indicatif : ils ne décrivent ni des clients réels ni des résultats garantis.</p>
+    </section>
+
+    <section class="container section" id="approche" aria-labelledby="approach-title">
+      <div class="section-heading">
+        <p class="section-kicker">Une démarche lisible</p>
+        <h2 id="approach-title">Décrire, préparer, construire, vérifier, livrer.</h2>
+        <p class="section-intro">Un fil de travail simple aide à savoir ce qui est étudié, ce qui doit être validé et ce qui sera remis.</p>
+      </div>
+      <ol class="steps">
+        <li class="step-card">
+          <span class="step-number">01</span>
+          <h3>Décrire</h3>
+          <p>Présenter l’objectif, le fonctionnement actuel et les contraintes à respecter.</p>
+        </li>
+        <li class="step-card">
+          <span class="step-number">02</span>
+          <h3>Préparer</h3>
+          <p>Clarifier le périmètre, les critères d’acceptation et les points à valider.</p>
+        </li>
+        <li class="step-card">
+          <span class="step-number">03</span>
+          <h3>Construire</h3>
+          <p>Réaliser le périmètre convenu après validation humaine de la suite.</p>
+        </li>
+        <li class="step-card">
+          <span class="step-number">04</span>
+          <h3>Vérifier</h3>
+          <p>Comparer le résultat aux critères définis et rendre visibles ses limites.</p>
+        </li>
+        <li class="step-card">
+          <span class="step-number">05</span>
+          <h3>Livrer</h3>
+          <p>Remettre une version identifiée avec les informations utiles pour la reprendre.</p>
+        </li>
+      </ol>
+      <p class="process-note">C’est la démarche de référence présentée pendant la phase pilote. Les étapes réellement engagées sont confirmées pour chaque demande, avant de poursuivre.</p>
+    </section>
+
+    <section class="container section" id="difference" aria-labelledby="difference-title">
+      <div class="difference-grid">
+        <div class="section-heading">
+          <p class="section-kicker">Au-delà de la conversation</p>
+          <h2 id="difference-title">Un échange peut clarifier. Un projet doit aussi se vérifier.</h2>
+          <p class="section-intro">Un chatbot peut aider à explorer une idée. Un projet numérique demande un périmètre explicite, des validations et une remise compréhensible.</p>
+        </div>
+        <div class="difference-panel">
+          <h3>Ce que la démarche cherche à rendre clair</h3>
+          <ul class="principles">
+            <li>Le besoin traité et les contraintes prises en compte.</li>
+            <li>Les décisions qui nécessitent votre validation.</li>
+            <li>Les critères utilisés pour vérifier le résultat.</li>
+            <li>Ce qui est remis, et ce qui reste à faire le cas échéant.</li>
+          </ul>
+          <p class="trust-note">Pendant la phase pilote, les possibilités et les prochaines étapes sont précisées au cas par cas.</p>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="container section" id="siteforge" aria-labelledby="siteforge-title">
+      <div class="section-heading">
+        <p class="section-kicker">Voir un prototype concret</p>
+        <h2 id="siteforge-title">SiteForge : une démonstration à explorer.</h2>
+        <p class="section-intro">Un aperçu public du travail de présentation web, distinct d’un projet client terminé ou d’une prestation disponible.</p>
+      </div>
+      <div class="siteforge-showcase">
+        <div class="siteforge-copy">
+          <p class="section-kicker">Démo SiteForge · phase pilote</p>
+          <h3>Du contenu à une page lisible et structurée.</h3>
+          <p>Explorez une page de démonstration pour observer une hiérarchie visuelle, la composition et un parcours de lecture. Elle ne réalise aucune opération sur votre compte.</p>
+          <ul class="siteforge-points">
+            <li>Une présentation organisée autour des besoins.</li>
+            <li>Une page consultable sans inscription.</li>
+            <li>Un exemple visuel, sans résultat client revendiqué.</li>
+          </ul>
+          <a class="button button-primary" href="./siteforge/" aria-label="Explorer la démonstration SiteForge sur ce site">Explorer SiteForge <span aria-hidden="true">↗</span></a>
+          <p class="pilot-caption">La démonstration est accessible sur le même site que cette vitrine lorsque les deux pages sont publiées ensemble. L’illustration ci-contre est une composition CSS indicative, pas une capture certifiée du prototype.</p>
+        </div>
+        <div class="siteforge-preview" role="img" aria-label="Illustration conceptuelle non interactive d’une page de démonstration web, sans données client">
+          <div class="siteforge-preview-bar"><span class="siteforge-preview-dot"></span><span class="siteforge-preview-dot"></span><span class="siteforge-preview-dot"></span><span>APERÇU CONCEPTUEL</span></div>
+          <div class="siteforge-preview-body">
+            <span class="siteforge-preview-label">DE L’IDÉE AU PROTOTYPE</span>
+            <h4>Le web prend forme.</h4>
+            <p>Un espace clair pour présenter l’essentiel, guider la lecture et rendre chaque étape compréhensible.</p>
+            <div class="siteforge-preview-tiles"><div class="siteforge-preview-tile">Clarté du message</div><div class="siteforge-preview-tile">Parcours lisible</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container section" id="realisations" aria-labelledby="work-title">
+      <div class="section-heading">
+        <p class="section-kicker">Réalisations</p>
+        <h2 id="work-title">Des preuves avant des promesses.</h2>
+      </div>
+      <div class="proof-card">
+        <span class="proof-mark" aria-hidden="true">✓</span>
+        <div>
+          <h3>La vitrine ne présente pas encore de réalisation client vérifiée.</h3>
+          <p>Cette vitrine ne présente que des travaux réels dont le résultat a été vérifié et dont la publication est autorisée. Les exemples ci-dessus servent uniquement à illustrer des besoins possibles.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="container section" id="confiance" aria-labelledby="trust-title">
+      <div class="section-heading">
+        <p class="section-kicker">Confiance et périmètre</p>
+        <h2 id="trust-title">La phase pilote, en toute transparence.</h2>
+        <p class="section-intro">Synestra avance avec un périmètre explicite et une validation humaine avant toute réalisation.</p>
+      </div>
+      <div class="trust-layout">
+        <div class="trust-card">
+          <h3>Ce qu’une demande ne signifie pas</h3>
+          <ul class="trust-list">
+            <li>Pas de devis automatique.</li>
+            <li>Pas d’engagement de réalisation au dépôt d’une demande.</li>
+            <li>Pas d’exécution sans validation.</li>
+          </ul>
+        </div>
+        <div class="trust-card">
+          <h3>Ce qui reste en qualification</h3>
+          <p class="section-intro">L’accès au portail client et le parcours de connexion sont encore en cours de qualification.</p>
+          <p class="trust-note">Les étapes disponibles sont expliquées avant toute suite donnée à une demande.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="container section" id="a-propos" aria-labelledby="about-title">
+      <div class="section-heading">
+        <p class="section-kicker">À propos</p>
+        <h2 id="about-title">Un studio numérique, une démarche vérifiable.</h2>
+      </div>
+      <div class="about-panel">
+        <p>Synestra développe une approche pour passer d’un besoin métier à un projet numérique défini et vérifiable. Le point de départ est votre activité : comprendre ce qui prend du temps, ce qui doit rester sous contrôle humain et ce qu’un outil pourrait réellement améliorer.</p>
+        <div class="about-note">
+          <strong>Situation actuelle : phase pilote</strong>
+          <p>Les capacités et le parcours client sont encore en qualification. La présentation du site ne constitue ni une offre de réalisation immédiate ni une garantie de résultat.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="container section" id="questions" aria-labelledby="questions-title">
+      <div class="section-heading">
+        <p class="section-kicker">Questions fréquentes</p>
+        <h2 id="questions-title">Avant de commencer, les réponses essentielles.</h2>
+        <p class="section-intro">La phase pilote est présentée sans promesses de fonctionnalités non vérifiées.</p>
+      </div>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>À qui s’adresse Synestra ?</summary>
+          <p>Aux artisans, indépendants et petites entreprises qui souhaitent clarifier un besoin numérique, organiser un processus ou étudier une automatisation adaptée à leur activité.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Faut-il savoir programmer pour présenter son besoin ?</summary>
+          <p>Non. Il suffit de pouvoir décrire une situation concrète, ce qui pose problème et ce que vous aimeriez améliorer. Les contraintes et les validations sont ensuite à préciser.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Déposer une demande déclenche-t-il une réalisation ?</summary>
+          <p>Non. Une demande doit d’abord être étudiée. Le périmètre, les conditions et les décisions nécessitant une validation humaine sont précisés avant tout engagement.</p>
+        </details>
+        <details class="faq-item">
+          <summary>L’espace client est-il entièrement opérationnel ?</summary>
+          <p>Pas encore : l’accès au portail et le parcours de connexion sont en cours de qualification. Leur présence sur cette page ne prouve pas que toutes les fonctions client sont disponibles.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Où consulter des réalisations clients vérifiées ?</summary>
+          <p>La vitrine n’en présente pas encore. Des réalisations ne seront montrées qu’après vérification du résultat et autorisation de leur publication.</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="container final-cta" id="acces-pilote" aria-labelledby="cta-title">
+      <div class="cta-panel">
+        <p class="section-kicker">Espace pilote</p>
+        <h2 id="cta-title">Vous avez un besoin à clarifier ?</h2>
+        <p>Vous pouvez consulter l’espace Synestra. L’accès et la connexion sont encore en qualification ; une demande n’entraîne pas automatiquement une réalisation.</p>
+        <a class="button button-primary" href="https://synestra-client-portal.synestra-studio.workers.dev/" rel="noreferrer">Accéder à l’espace pilote <span aria-hidden="true">↗</span></a>
+      </div>
+    </section>
   </main>
-  <footer>© 2026 Synestra · Studio numérique · Phase pilote</footer>
+
+  <footer class="container site-footer">
+    <p>© 2026 Synestra · Studio numérique</p>
+    <p>Phase pilote · Informations communiquées avec prudence</p>
+  </footer>
 </body>
 </html>

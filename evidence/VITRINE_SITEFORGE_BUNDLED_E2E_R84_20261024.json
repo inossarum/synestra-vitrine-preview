@@ -1,0 +1,127 @@
+{
+  "schema": "synestra.vitrine.test_evidence.r84.v1",
+  "evidence_id": "SYN_VITRINE_SITEFORGE_BUNDLED_E2E_R84_20261024",
+  "mission_id": "SYN_VITRINE_SITEFORGE_SHOWCASE_20261024",
+  "date": "2026-10-24",
+  "owner": "Inos",
+  "source_branch": "task/SYN_VITRINE_SITEFORGE_SHOWCASE_20261024",
+  "qualified_commit": "f27cd61fb828bb10a0fa7d8aec90faebceb4e073",
+  "source": {
+    "index_blob": "c354a8b5b2a89e494f9a061b6cb7f28b68e2aa01",
+    "siteforge_index_blob": "3d4884a271e5b520d21be47de5ba5fe9d47bedfe",
+    "siteforge_test_blob": "bc4d8ad86aef67e17c913e7be7fc6b33325e7d51",
+    "siteforge_origin_main": "1eb9f9acc1d7091d42077f30d3159483057a02a6",
+    "copied_unchanged_siteforge_files": 23,
+    "exact_commit_changed_paths": 25,
+    "pr3_head_unchanged": "78cdb83825478948e9557aae01f4eb0ad562cf60"
+  },
+  "execution": {
+    "test_checkout": "C:\\Users\\nicol\\AppData\\Local\\Temp\\synestra_vitrine_r84_final_checkout_20261024",
+    "node": {
+      "status": "PASS",
+      "passed": 87,
+      "failed": 0,
+      "exit": 0
+    },
+    "siteforge_python": {
+      "status": "PASS",
+      "passed": 5,
+      "failed": 0,
+      "exit": 0
+    },
+    "chrome": {
+      "mobile": {
+        "viewport": [
+          390,
+          844
+        ],
+        "status": "PASS",
+        "overflowPixels": 0,
+        "externalRequests": 0,
+        "keyboard": "PASS",
+        "faq": 5
+      },
+      "desktop": {
+        "viewport": [
+          1440,
+          900
+        ],
+        "status": "PASS",
+        "overflowPixels": 0,
+        "externalRequests": 0,
+        "keyboard": "PASS",
+        "faq": 5
+      },
+      "cleanup": "PENDING_EPERRM",
+      "qa_result": "BROWSER_REAL_VIEWPORT_QA_PASS"
+    },
+    "mcp_local": {
+      "status": "PASS",
+      "viewports": [
+        390,
+        1440
+      ],
+      "tool_calls": 6,
+      "fieldCoreWebVitalsProven": false
+    },
+    "visual": {
+      "status": "OBSERVED_OUTPUT_AND_CLEAN_SOURCE",
+      "sourceRestored": true,
+      "sourceShaMatches": true,
+      "modifiedTilesMobile": 26,
+      "prominentChangedMobile": 21,
+      "restoredProminentMobile": 0,
+      "restoredSubtleMobile": 2,
+      "modifiedTilesDesktop": 5,
+      "restoredTilesDesktop": 0,
+      "exit_code": "NOT_RECONFIRMED_VIA_CONNECT",
+      "defectsProven": false
+    },
+    "preview": {
+      "scope": "Inos-Cerebros localhost only",
+      "url": "http://127.0.0.1:4189/",
+      "siteforge": "http://127.0.0.1:4189/siteforge/",
+      "homeHttp": 200,
+      "siteforgeHttp": 200,
+      "htmlBytesMatchedSource": true,
+      "siteforgeShaVerified": true,
+      "publicDeployment": false
+    },
+    "repository_checkout": {
+      "head": "f27cd61fb828bb10a0fa7d8aec90faebceb4e073",
+      "trackedDiffFiles": 0
+    }
+  },
+  "route_policy": {
+    "from_now_on": "Synestra Connect -> Bridge for all new PC operations. DC fallback only by explicit request or separate justified permission, not automatic on QUEUED.",
+    "after_user_directive_dc_calls": 0,
+    "bridge": {
+      "binding": "PAIRED",
+      "presence": "not verified by presence alone",
+      "executionAuthorizedFlag": false,
+      "actual_pc_command": "DONE",
+      "softwareKeyAttestation": "SOFTWARE_KEY",
+      "verified_operation": "870c1e49-98ff-4818-9858-457e7ef15d08",
+      "result": "HEAD, Visual Gate log, 0 tracked changes, preview HTTP 200 on both routes"
+    },
+    "caution": "Bridge session PID registry is not the same as an externally launched tool PID; 'No session found' does not prove PC command failure.",
+    "historical_stall": "queue state is not final status; use get_operation before retry"
+  },
+  "boundaries": {
+    "no_main_merge": true,
+    "no_cloudflare_deploy": true,
+    "no_change_to_parallel_studio_webapp": true,
+    "no_paid_build": true,
+    "no_public_exposure": true,
+    "no_passwords": true
+  },
+  "remaining": [
+    "Browser/CDP temp profile cleanup reports EPERM intermittently; cannot claim clean teardown.",
+    "Visual exact-head process exit 0 not re-observed with Connect, though output and clean restored HTML were verified.",
+    "No public/cloud HTTP E2E; preview is localhost only.",
+    "PR3 original DRAFT unchanged; main integration and host cutover not authorized."
+  ],
+  "source_gate": "LIMITED_RUNTIME",
+  "hooks_status": "UNKNOWN",
+  "function_report": "PARTIAL_GLOBAL_MISSION"
+}

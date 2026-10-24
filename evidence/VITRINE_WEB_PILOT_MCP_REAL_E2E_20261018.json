@@ -1,0 +1,233 @@
+{
+  "schema_version": 1,
+  "evidence_id": "SYNESTRA_WEB_PILOT_MCP_REAL_E2E_20261018",
+  "timestamp_date": "2026-10-18",
+  "mission": "Build reusable advisory web development pilot tools and test on Synestra public-preview website",
+  "repository": "inossarum/synestra-vitrine-preview",
+  "branch": "feat/vitrine-public-presentation-20261016",
+  "prior_head": "5c335549e6547d86c9015fbf3f40048bf6fb9301",
+  "final_head": "READ_BACK_FROM_PR_AFTER_GIT_COMMIT",
+  "sources": {
+    "tools/web_pilot_core.mjs": "abe793c99cc806ae60607dddc795c314207eeafb",
+    "tools/web_pilot_mcp_stdio.mjs": "88137365a598299eb392ed278210c50e762cbb48",
+    "tests/web_pilot.test.mjs": "249ed02742f439f69b6422f7089ec1fb56443437",
+    "tests/web_pilot_mcp.test.mjs": "b3d294ea096f229c0f57c6ce5d0deeb10d617ded",
+    "tests/web_pilot_real_capture_qa.mjs": "8fc120267795c30595de3278d771a414a9b648c7",
+    "tests/browser_cdp_qa.mjs": "6036659005b72673911fe6bb4eb7cd5aa1113428",
+    "tools/README.md": "572e2d39cb890012970a590a75e47516fd1ce6e1"
+  },
+  "research": [
+    {
+      "topic": "Chrome Accessibility.getFullAXTree",
+      "url": "https://chromedevtools.github.io/devtools-protocol/tot/Accessibility/"
+    },
+    {
+      "topic": "Chrome DOMSnapshot reference",
+      "url": "https://chromedevtools.github.io/devtools-protocol/tot/DOMSnapshot/"
+    },
+    {
+      "topic": "Chrome Performance.getMetrics reference",
+      "url": "https://chromedevtools.github.io/devtools-protocol/tot/Performance/"
+    },
+    {
+      "topic": "WCAG 2.2",
+      "url": "https://www.w3.org/TR/wcag/"
+    }
+  ],
+  "mcp_surface": {
+    "mcp_transport": "local stdio JSON-RPC protocol 2025-06-18",
+    "tools": [
+      {
+        "name": "synestra_web_inspect_capture",
+        "mode": "ADVISORY_READ_ONLY",
+        "arguments": [
+          "capture"
+        ]
+      },
+      {
+        "name": "synestra_web_compare_captures",
+        "mode": "ADVISORY_READ_ONLY",
+        "arguments": [
+          "before",
+          "after"
+        ]
+      }
+    ],
+    "authenticated_remote_chatgpt_connector": "NOT_CONNECTED",
+    "bridge_pc_access": "NONE",
+    "filesystem_or_browser_methods": "NONE",
+    "network_listener": "NONE",
+    "runtime_deployment": "NONE"
+  },
+  "skills_consulted_used": [
+    {
+      "id": "web-accessibility-engineering",
+      "version": "1.0.0",
+      "git_sha": "172c442525351804e89e7b273346f03df34bdd89"
+    },
+    {
+      "id": "core-web-vitals-engineering",
+      "version": "1.0.0",
+      "git_sha": "a62b2463617fd3878a5835e1d7f546fc1ce29eed"
+    },
+    {
+      "id": "e2e-testing",
+      "version": "1.0.0",
+      "git_sha": "3fcb7196816ed91c4773ec8004a508b7e288a015"
+    },
+    {
+      "id": "test-driven-development",
+      "version": "1.0.0",
+      "git_sha": "accb4772b83a96b308b8ee07897abf0fb777c9a8"
+    },
+    {
+      "id": "security-review",
+      "version": "1.0.0",
+      "git_sha": "3aa9f9295981911dcd7e1c46b713878ac458efd3"
+    },
+    {
+      "id": "web-component-architecture",
+      "version": "1.0.0",
+      "git_sha": "f7bd56b58064628db6d0736d126374e2cfa0d500"
+    }
+  ],
+  "verification": {
+    "platform": "Authorized Inos-Cerebros Windows, Node 24.19.0 and real Chrome headless, isolated temporary checkout on allowed C: volume",
+    "isolation": {
+      "git_base_sha": "5c335549e6547d86c9015fbf3f40048bf6fb9301",
+      "live_runtime_modified": false,
+      "preview_main_modified": false,
+      "files_under_D_accessed": false
+    },
+    "unit_suite": {
+      "status": "PASS",
+      "tests_total": 38,
+      "tests_passed": 38,
+      "tests_failed": 0,
+      "scope": "11 existing vitrine contract tests +16 web audit/diff tests +11 real local MCP stdio protocol tests"
+    },
+    "browser_e2e": {
+      "status": "PASS",
+      "mobile": {
+        "width": 390,
+        "height": 844,
+        "sections": 9,
+        "headings": 21,
+        "links": 11,
+        "ax_interactive": 11,
+        "external_requests_observed": 0,
+        "overflow_pixels": 0,
+        "advisory_status": "ADVISORY_NO_FLAGS"
+      },
+      "desktop": {
+        "width": 1440,
+        "height": 900,
+        "sections": 9,
+        "headings": 21,
+        "links": 11,
+        "ax_interactive": 11,
+        "external_requests_observed": 0,
+        "overflow_pixels": 0,
+        "advisory_status": "ADVISORY_NO_FLAGS"
+      },
+      "real_keyboard": "PASS",
+      "real_faq": "PASS"
+    },
+    "real_browser_to_mcp": {
+      "status": "PASS",
+      "real_chrome_captures": 2,
+      "local_mcp_tool_calls": 3,
+      "analyze_mobile": "ADVISORY_NO_FLAGS",
+      "analyze_desktop": "ADVISORY_NO_FLAGS",
+      "same_viewport_compare": "ADVISORY_DIFF",
+      "quality_proven": false
+    },
+    "failure_first": {
+      "status": "PASS",
+      "test": "In isolated checkout mutate href #approche to #MISSING_QA_ANCHOR",
+      "browser_exit_code": 1,
+      "observed": "WEB_PILOT_REGRESSION_REVIEW mobile",
+      "result": "Expected fail-closed regression gate"
+    },
+    "recovery": {
+      "status": "PASS",
+      "restored_html_blob": "7e485223af98a1281a91b4cb75fe66d31734f8a6",
+      "real_chrome_retest": "PASS",
+      "real_mcp_retest": "PASS",
+      "process_exit_code": 0
+    },
+    "residual_profile_cleanup": {
+      "status": "PENDING",
+      "reason": "Chrome transient profiles may return EPERM while handles are open; unique per-run profiles prevent stale port reuse but do not guarantee deletion"
+    },
+    "wcag_reader_review": {
+      "status": "PENDING",
+      "reason": "Automated rules and real keyboard subset do not certify WCAG AA"
+    },
+    "core_web_vitals_field": {
+      "status": "NOT_TESTED",
+      "reason": "No field/RUM evidence or Lighthouse/LCP/INP/CLS qualification"
+    },
+    "real_portal_authenticated_e2e": {
+      "status": "PENDING"
+    },
+    "browser_live_site_deployment": {
+      "status": "NOT_TESTED"
+    },
+    "published_chatgpt_remote_mcp": {
+      "status": "NOT_DEPLOYED"
+    },
+    "clean_checkout": {
+      "status": "PASS",
+      "source": "GitHub PR branch exactly pinned",
+      "git_head": "ed327a7a831146f5e25406fda55a1fdb20132e60",
+      "platform": "Inos-Cerebros Windows, Node v24.19.0, real headless Chrome",
+      "node_tests": {
+        "passed": 38,
+        "total": 38,
+        "failed": 0,
+        "exit_code": 0
+      },
+      "browser": {
+        "mobile": "PASS_390",
+        "desktop": "PASS_1440",
+        "keyboard": "PASS",
+        "accessibility_tree": "PASS",
+        "observed_external_requests": 0,
+        "exit_code": 0
+      },
+      "real_capture_to_local_mcp": {
+        "status": "PASS",
+        "viewports": 2,
+        "tool_calls": 3,
+        "exit_code": 0
+      },
+      "no_deployment": true,
+      "caveat": "CDP_PROFILE_CLEANUP_PENDING EPERM persists"
+    }
+  },
+  "policy": {
+    "free_only": true,
+    "main_untouched": true,
+    "private_bridge_untouched": true,
+    "no_secrets": true,
+    "no_customer_data": true,
+    "no_billable_cloud_calls": true,
+    "no_remote_deployment": true,
+    "no_new_identity_permissions": true,
+    "pr_draft": true
+  },
+  "checkpoint": {
+    "state": "PARTIAL",
+    "goal": "Make Synestra Web Pilot reusable after native, security and integration review",
+    "next": "Verify PR #3 final HEAD and Git blobs. Do not duplicate existing PASS. Qualify profile cleanup lifecycle, manual assistive tech, true portal e2e and field web-vitals separately. Promote reviewed web tools to central Studio only through an isolated integration branch and authorized MCP publication, not by directly publishing this local stdio server.",
+    "blockers": [
+      "REMOTE_CHATGPT_MCP_NOT_REGISTERED",
+      "CHROME_PROFILE_CLEANUP_PENDING",
+      "ASSISTIVE_TECH_REVIEW_PENDING",
+      "PORTAL_E2E_PENDING",
+      "PUBLIC_DEPLOYMENT_HUMAN_GATE"
+    ]
+  },
+  "final_head_before_evidence_addendum": "ed327a7a831146f5e25406fda55a1fdb20132e60"
+}
