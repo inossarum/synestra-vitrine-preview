@@ -23,7 +23,7 @@ test('R93 sépare maquettes conceptuelles et état réel des produits', () => {
   assert.match(html, /certaines lectures authentifiées ont été testées/i);
   assert.match(html, /consentement local explicite/);
   assert.match(html, /aucun flux en direct/i);
-  assert.match(html, /ne s’agit pas d’une capture de Bridge actif/i);
+  assert.match(html, /il ne s['’]agit pas d['’]une capture de Bridge actif/i);
   assert.doesNotMatch(html, /connexion Bridge garantie|toutes les fonctions sont disponibles|100 % opérationnel/i);
 });
 
