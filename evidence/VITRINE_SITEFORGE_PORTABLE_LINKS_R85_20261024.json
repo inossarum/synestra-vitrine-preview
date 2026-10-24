@@ -1,0 +1,94 @@
+{
+  "schema": "synestra.vitrine.r85.evidence.v1",
+  "evidence_id": "VITRINE_SITEFORGE_PORTABLE_LINKS_R85_20261024",
+  "mission_id": "SYN_VITRINE_SITEFORGE_SHOWCASE_20261024",
+  "date": "2026-10-24",
+  "owner": "Inos",
+  "head_at_source_qa": "4d40ceee9ef9020f641630c60d0ad1bef96e14c6",
+  "branch": "task/SYN_VITRINE_SITEFORGE_SHOWCASE_20261024",
+  "baseline": "08511f59e90c7303f96b29d7cad290dc722d6e3e",
+  "source_gate": "LIMITED_RUNTIME",
+  "authority": {
+    "rules": "inossarum/studio-virtuel:AGENTS.md@8fa0088e63a9c7df1aef8b1652c0ba6aba836b04",
+    "web_decision": "00_DIRECTION/DECISIONS_2026-10-06_SYNESTRA_WEB_PLATFORM_MASTER_REQUIREMENTS_V1.md@b1a70c73951ca1356c77ee12e3bc945d6e633fb8",
+    "sal": "SAL-STUDIO-GITHUB-FIRST-DURABLE-AUTHORING-V1@2bbf6256d90514b16ca2e5519f25e085c057b6f1",
+    "web_pilot": "tools/README.md@5f19de1e5a4f310cc4792490086aaa64f442ced4",
+    "skills": [
+      "ui-ux@1.0.0#0a362a0938401674166c7a8b871192fbde602c1a",
+      "web-accessibility-engineering@1.0.0#172c442525351804e89e7b273346f03df34bdd89",
+      "browser-compatibility-progressive-enhancement@1.0.0#715ca40f6c98104983fc7bddaac017f94a776c81"
+    ],
+    "memory_manifest": "00_DIRECTION/MEMORY_CORPUS_V1.json@bc43f64a6633c8c95e9434baa75ee1fb2dcf924c"
+  },
+  "root_cause": {
+    "previous_real_live_route": "http://127.0.0.1:4189/siteforge/projects/",
+    "status": 200,
+    "broken_published_html_href": "/synestra-vitrine-preview/siteforge/projects/",
+    "local_response": 404,
+    "found_pages_with_hardcoded_nav": 20,
+    "total_siteforge_html": 21
+  },
+  "delta": {
+    "source_commit": "4d40ceee9ef9020f641630c60d0ad1bef96e14c6",
+    "files_changed": 20,
+    "rewritten_links": 210,
+    "method": "relative links from exact static SiteForge file directory; no new JS, worker, identity, router or copy of component",
+    "blobs_verified_against_windows_git_hash_object": 20,
+    "git_compare": "exactly 20 paths under siteforge/; no main nor PR3 mutation",
+    "test_commit": "8239e6b0b8d84aba76f50b0bc6de4449de87dfaf",
+    "test_blob": "635687b683422452e0d84e0356cd88b1dae0aa9c",
+    "docs_commit": "c7e9ee251ebf748b11f061db0f622dd76a0ae766"
+  },
+  "verification": {
+    "red": {
+      "result": "FAILURE_FIRST_REPRODUCED",
+      "python_test_failures": 25,
+      "bridge_request_id": "5c980382-d959-40ce-965e-ecee1ba59b48"
+    },
+    "green": {
+      "result": "PASS_LOCAL_DIRTY_TEST_WORKTREE",
+      "python_passed": 5,
+      "python_exit": 0,
+      "bridge_request_id": "7d6a3c97-28a7-43e6-a1ee-35631fa27b39",
+      "git_blob_validation": "20 of 20 local Git blob SHA matched GitHub-created blob SHA"
+    },
+    "remote": {
+      "github_branch_commit": "4d40ceee9ef9020f641630c60d0ad1bef96e14c6",
+      "changed_html_count": 20,
+      "static_unique_pages_checked": 20,
+      "internal_relative_routes_checked": "PORTABLE_STATIC_RESOLUTION_ONLY",
+      "broken_internal_targets": 0
+    },
+    "chrome_r85": "NOT_RUN",
+    "visual_inspection_r85": "NOT_RUN",
+    "node_r85": "NOT_RUN",
+    "http_r85": "NOT_RUN",
+    "public_cutover": "NOT_RUN"
+  },
+  "connect": {
+    "preferred": true,
+    "software_key_attestation_only": true,
+    "bridge_pc_requests_initially_done": true,
+    "terminal_blocked_request": "5f9e0a2b-a258-43d3-9a5a-0fd6a15110f8",
+    "terminal_state": "BLOCKED",
+    "dc_fallback": "NOT_USED",
+    "no_policy_bypass": true
+  },
+  "outstanding": [
+    "On R85 SHA execute Node/Chrome actual mobile and desktop, visual screenshot inspection, route clicks, screenshot compare and negative tests before claiming visual gate PASS.",
+    "Cross-origin canonical and og:url metadata still point to GitHub Pages; correct only when final cloud domain is decided and cutover authorized.",
+    "Local R84 HTTP preview does not prove R85 deployment.",
+    "Chrome profile cleanup EPERM historical pending.",
+    "Dedicated local R85 test worktree has staged files; no cleanup claim while Bridge blocked."
+  ],
+  "limits": {
+    "no_cloudflare_build": true,
+    "no_cloudflare_deploy": true,
+    "no_main_push": true,
+    "no_pr3_mutation": true,
+    "no_security_change": true,
+    "no_paid_action": true
+  },
+  "function_report": "PARTIAL",
+  "hooks_status": "UNKNOWN"
+}
