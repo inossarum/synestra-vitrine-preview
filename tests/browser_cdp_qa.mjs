@@ -71,6 +71,18 @@ try {
     const metrics=await call('Runtime.evaluate',{expression:"JSON.stringify({width:innerWidth,rootScrollWidth:document.documentElement.scrollWidth,bodyScrollWidth:document.body.scrollWidth,ready:document.readyState,faq:document.querySelectorAll('#questions details').length})",returnByValue:true});
     const m=JSON.parse(metrics.result.value);
     if(m.width!==view.width||m.rootScrollWidth>view.width+1||m.bodyScrollWidth>view.width+1||m.faq!==5||m.ready!=='complete')throw Error('VIEWPORT_FAIL '+view.name+' '+JSON.stringify(m));
+
+    // R93: verify real CSS motion control and Bridge/Connect presence in the DOM.
+    const ux=await call('Runtime.evaluate',{expression:"JSON.stringify((()=>{const stage=document.querySelector('.system-stage');const product=document.querySelector('#plateforme');const bridge=document.querySelector('#bridge');const connect=document.querySelector('#connect');const strip=document.querySelector('.motion-strip-inner');const bb=stage?.getBoundingClientRect();return {stage:!!stage,product:!!product,bridge:!!bridge,connect:!!connect,strip:!!strip,visible:!!bb&&bb.width>100&&bb.left>=-1&&bb.right<=innerWidth+1,animation:strip?getComputedStyle(strip).animationName:null}})())",returnByValue:true});
+    const u=JSON.parse(ux.result.value);
+    if(!u.stage||!u.product||!u.bridge||!u.connect||!u.strip||!u.visible||u.animation!=='strip-slide')throw Error('R93_PRODUCT_STAGE_FAIL '+view.name+' '+JSON.stringify(u));
+    await call('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'reduce'}]});
+    const reduced=await call('Runtime.evaluate',{expression:"JSON.stringify({strip:getComputedStyle(document.querySelector('.motion-strip-inner')).animationName,node:getComputedStyle(document.querySelector('.system-node')).animationName,ring:getComputedStyle(document.querySelector('.orbit-one')).animationName})",returnByValue:true});
+    const a=JSON.parse(reduced.result.value);
+    if(a.strip!=='none'||a.node!=='none'||a.ring!=='none')throw Error('R93_REDUCED_MOTION_FAIL '+view.name+' '+JSON.stringify(a));
+    await call('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'no-preference'}]});
+    console.log('R93_STAGE_AND_REDUCED_MOTION_'+view.name.toUpperCase()+'=PASS '+JSON.stringify(u));
+
     const open=await call('Runtime.evaluate',{expression:"(() => {let d=document.querySelector('#questions details');let was=d.open; d.querySelector('summary').click();let opened=d.open; d.querySelector('summary').click();return !was&&opened&&!d.open;})()",returnByValue:true});
     if(open.result.value!==true)throw Error('FAQ_INTERACTION_FAIL '+view.name);
     const shot=await call('Page.captureScreenshot',{format:'png',fromSurface:true,captureBeyondViewport:false});
