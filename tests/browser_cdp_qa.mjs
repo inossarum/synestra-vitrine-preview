@@ -13,6 +13,7 @@ const args = ['--headless=new','--disable-gpu','--disable-extensions','--disable
 const child = spawn(chrome,args,{stdio:'ignore',windowsHide:true});
 const sleep = ms => new Promise(r=>setTimeout(r,ms));
 let ws;
+let closeBrowser=async()=>{};
 try {
   const portPath=join(profile,'DevToolsActivePort');
   for(let i=0;i<60&&!existsSync(portPath);i++)await sleep(150);
@@ -49,6 +50,7 @@ try {
     ws.send(JSON.stringify({id,method,params}));
     setTimeout(()=>{if(pending.has(id)){pending.delete(id);reject(Error('CDP_TIMEOUT '+method))}},10000);
   });
+  closeBrowser=()=>call('Browser.close');
   const outOfScopeRequests=[];
   ws.addEventListener('message',evt=>{
     try{
@@ -130,7 +132,13 @@ try {
   }
   console.log('BROWSER_REAL_VIEWPORT_QA_PASS');
 } finally {
+  // Close this test-owned Chrome instance before removing its temporary profile.
+  // CDP may disconnect before acknowledging Browser.close; never hang teardown.
+  try{await Promise.race([closeBrowser(),sleep(900)])}catch{}
   try{ws?.close()}catch{}
-  child.kill();
-  try{rmSync(profile,{recursive:true,force:true,maxRetries:3,retryDelay:150})}catch(error){console.log('CDP_PROFILE_CLEANUP_PENDING '+(error?.code || 'UNKNOWN'))}
+  if(child.exitCode===null)try{child.kill()}catch{}
+  if(child.exitCode===null)await Promise.race([
+    new Promise(resolve=>child.once('exit',resolve)),sleep(1800)
+  ]);
+  try{rmSync(profile,{recursive:true,force:true,maxRetries:8,retryDelay:200})}catch(error){console.log('CDP_PROFILE_CLEANUP_PENDING '+(error?.code || 'UNKNOWN'))}
 }
