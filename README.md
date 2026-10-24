@@ -39,3 +39,38 @@ Depuis une copie temporaire et indépendante sur **disque C: uniquement**, sourc
 - Un écran lecteur d'écran réel, la connexion au portail client, CI et publication ne sont **pas** qualifiés par ces tests. Site prévisualisation `noindex`, CSP, zéro nouveau script HTML ou formulaire. Les screenshots restent des artefacts temporaires de QA, sans publication automatique.
 
 Evidence et checkpoint : `evidence/VITRINE_MCP_SKILLS_BROWSER_QA_20261018.json`.
+
+
+## R81 — Présentation SiteForge dans la vitrine (24/10/2026)
+
+Mission : `SYN_VITRINE_SITEFORGE_SHOWCASE_20261024`. Branche indépendante :
+`task/SYN_VITRINE_SITEFORGE_SHOWCASE_20261024`, dérivée du HEAD vérifié de PR #3
+`78cdb83825478948e9557aae01f4eb0ad562cf60`. Cette branche **n'est pas**
+une mise à jour de `main` ni un déploiement Cloudflare.
+
+- La section `#siteforge` relie la vitrine aux travaux de démonstration déjà présents
+  sur `main:siteforge/index.html` (Git blob `3d4884a271e5b520d21be47de5ba5fe9d47bedfe`).
+- L'illustration HTML/CSS porte la mention « aperçu conceptuel » : elle ne prétend
+  pas être une capture réelle, une réalisation client, un audit WCAG ou une
+  exécution autonome du Studio.
+- Aucun script, formulaire, élément `img`, ressource tierce, cookie, outil MCP,
+  nouveau Worker, service payant ou changement d'identité ajouté.
+- Procédures réutilisées : SAL `GITHUB-FIRST-DURABLE-AUTHORING-V1`,
+  outils Web Pilot / Visual Gate source de PR #3, Central Skills
+  `ui-ux@1.0.0`, `web-accessibility-engineering@1.0.0` et
+  `browser-compatibility-progressive-enhancement@1.0.0` (consultatifs).
+- Préflight : PR #3 reste DRAFT, en avance de 22 et en retard de 8 commits
+  par rapport à `main` lors de la reprise. Ne pas fusionner à l'aveugle.
+- Vérifications effectuées : 20 contrôles statiques de la source Git relue,
+  20 PASS, 0 échec ; **Node/Chrome E2E NOT_RUN** car la requête Bridge
+  `326b2790-2400-4859-993c-ae988888f535` est `QUEUED` au dernier contrôle.
+  Les résultats historiques des outils Web Pilot ne sont pas réattribués à R81.
+- La route publique GitHub Pages `/siteforge/` est référencée par le code source
+  existant ; sa disponibilité HTTP au 24/10/2026 n'est **pas** revalidée.
+- Evidence détaillée : `evidence/VITRINE_SITEFORGE_SHOWCASE_R81_20261024.json`.
+
+Pour qualifier le delta avant intégration : checkout Git isolé au SHA de R81,
+`node --test tests/*.test.mjs`, `node tests/browser_cdp_qa.mjs`, puis
+`node tests/web_pilot_real_capture_qa.mjs` et les cas Visual Gate appropriés.
+Recueillir les sorties réelles, contrôler les screenshots mobile/desktop et
+la parité de l'adresse SiteForge. Ne pas promouvoir sans tests ni gate d'owner.
