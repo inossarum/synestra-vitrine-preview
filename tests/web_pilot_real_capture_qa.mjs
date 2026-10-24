@@ -36,7 +36,8 @@ const results=child.stdout.trim().split(/\r?\n/).map(JSON.parse);
 assert.equal(results.length,8);
 assert.deepEqual(results[1].result.tools.map(x=>x.name),[
  'synestra_web_inspect_capture','synestra_web_compare_captures',
- 'synestra_web_inspect_lab_performance','synestra_web_compare_lab_performance'
+ 'synestra_web_inspect_lab_performance','synestra_web_compare_lab_performance',
+ 'synestra_web_inspect_visual_fingerprint','synestra_web_compare_visual_fingerprints'
 ]);
 for(const item of [results[2],results[3]]){
  assert.equal(item.result.structuredContent.status,'ADVISORY_NO_FLAGS');
