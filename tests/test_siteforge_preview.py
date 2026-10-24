@@ -2,9 +2,18 @@
 import unittest
 from html.parser import HTMLParser
 from pathlib import Path
+import posixpath
 
 ROOT = Path(__file__).resolve().parents[1]
-PREFIX = "/synestra-vitrine-preview/siteforge/"
+PREFIX = "/synestra-vitrine-preview/siteforge/"  # Canonical metadata on pre-cutover GitHub Pages
+
+
+def portable_link(page: Path, target: Path) -> str:
+    """Return relative directory URL, preserving navigation across hosting prefixes."""
+    start = page.parent.relative_to(ROOT / "siteforge").as_posix()
+    dest = target.parent.relative_to(ROOT / "siteforge").as_posix()
+    relative = posixpath.relpath(dest, start=start)
+    return "./" if relative == "." else (relative + "/" if relative.startswith("..") else "./" + relative + "/")
 PATHS = {
     "/": ROOT / "siteforge" / "index.html",
     "/projects": ROOT / "siteforge" / "projects" / "index.html",
@@ -48,10 +57,10 @@ class SiteForgePreviewTests(unittest.TestCase):
                 self.assertIn("Content-Security-Policy", html)
                 self.assertNotIn("Contenu d'exemple à personnaliser", html)
                 self.assertFalse({tag for tag, _ in parsed.tags} & {"script", "iframe", "form"})
-                self.assertTrue(all(link.startswith(PREFIX) or link in ("#main", "#method", "#explorer") for link in parsed.links))
-                self.assertIn(PREFIX, parsed.links)
+                self.assertTrue(all(link.startswith(("./", "../", "#")) for link in parsed.links))
+                self.assertIn(portable_link(path, ROOT / "siteforge" / "index.html"), parsed.links)
                 for child in ("/projects", "/roadmap", "/contact"):
-                    self.assertIn(PREFIX + child.lstrip("/") + "/", parsed.links)
+                    self.assertIn(portable_link(path, ROOT / "siteforge" / child.lstrip("/") / "index.html"), parsed.links)
                 expected = ("https://inossarum.github.io" + PREFIX +
                             (route.lstrip("/") + "/" if route != "/" else ""))
                 self.assertIn('rel="canonical" href="' + expected + '"', html)
@@ -73,7 +82,7 @@ class SiteForgePreviewTests(unittest.TestCase):
     def test_open_form_instrument_is_public_preview_only(self):
         home = (ROOT / "siteforge" / "index.html").read_text(encoding="utf-8")
         self.assertIn('id="sf-form-promo-title"', home)
-        self.assertIn('href="' + PREFIX + 'lab/"', home)
+        self.assertIn('href="./lab/"', home)
         lab = ROOT / "siteforge" / "lab"
         html = (lab / "index.html").read_text(encoding="utf-8")
         self.assertIn("<h1>OPEN", html)
@@ -106,11 +115,11 @@ class SiteForgePreviewTests(unittest.TestCase):
                     self.assertIn('prefers-reduced-motion:reduce', html)
                     self.assertIn('noindex,nofollow', html)
                     self.assertIn('Styles SiteForge', html)
-                    self.assertIn('href="' + PREFIX + '"', html)
-                    self.assertIn('href="' + PREFIX + 'signature/"', html)
-                    self.assertIn('href="' + PREFIX + 'aurora/"', html)
-                    self.assertIn('href="' + PREFIX + 'atelier/"', html)
-                    self.assertIn('href="' + PREFIX + 'mono/"', html)
+                    self.assertIn('href="' + portable_link(file, base / "index.html") + '"', html)
+                    self.assertIn('href="' + portable_link(file, base / "signature" / "index.html") + '"', html)
+                    self.assertIn('href="' + portable_link(file, base / "aurora" / "index.html") + '"', html)
+                    self.assertIn('href="' + portable_link(file, base / "atelier" / "index.html") + '"', html)
+                    self.assertIn('href="' + portable_link(file, base / "mono" / "index.html") + '"', html)
                     self.assertNotIn("<script", html.lower())
                     self.assertNotIn("<iframe", html.lower())
                     self.assertNotIn("<form", html.lower())
@@ -130,12 +139,12 @@ class SiteForgePreviewTests(unittest.TestCase):
                         self.assertIn('class="sg-capabilities"', html)
                         self.assertIn('class="sg-disclosure"', html)
                         self.assertIn('Maquette', html)
-                    expected_root = PREFIX if not folder else PREFIX + folder + "/"
+                    expected_root = base / folder
                     parser = PageParser()
                     parser.feed(html)
                     self.assertEqual(parser.h1_count, 1)
                     for name in ("projects", "roadmap", "contact"):
-                        self.assertIn(expected_root + name + "/", parser.links)
+                        self.assertIn(portable_link(file, expected_root / name / "index.html"), parser.links)
 
 
 if __name__ == "__main__":
