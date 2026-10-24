@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "evidence_id": "SYNESTRA_WEB_PILOT_VISUAL_R3_20261018",
+  "date": "2026-10-18",
+  "repository": "inossarum/synestra-vitrine-preview",
+  "branch": "feat/vitrine-public-presentation-20261016",
+  "pr": 3,
+  "before_head": "924012fc1012a3c3b73fb4664ec0a0cfd2215fde",
+  "source_blobs": {
+    "tools/visual_fingerprint.mjs": "a00a18c608bb3a3d5ec3073c7908b228ae367655",
+    "tools/web_pilot_mcp_stdio.mjs": "667f0ac49f6ab6aedb5c91dbdf4c7ace72ced0a2",
+    "tests/visual_gate.test.mjs": "45dacd95ce3d51940aa810d59fe63410cffe5c2f",
+    "tests/web_pilot_mcp.test.mjs": "2509772058c14664e335dffaded8cc5da942ed68",
+    "tests/visual_site_e2e.mjs": "08a84e52419b2cf79d79737911970f90324db78c"
+  },
+  "archived_original": {
+    "archive_sha256": "6df6256e99213dfbaf0aa8e8fcd0fae2d968ec82cd2432c8a6ac4a847a8ce8cd",
+    "clean_local_test": "PASS_34_OF_34",
+    "source_original_blob": "3d721237f82e07f2cdb3e9f4145b6a3d9ece8e0f",
+    "source_port_not_byte_identical": true
+  },
+  "checks": {
+    "preview_head_before_local_test": "e3d3a34095736c207f4d7e6b45b76e2b9410ee25",
+    "preview_git_clone": {
+      "status": "PASS",
+      "node_tests_pass": 71,
+      "node_tests_total": 71,
+      "win_node": "24.19.0"
+    },
+    "mcp_inventory": {
+      "status": "PASS",
+      "tools": 6,
+      "read_only": true,
+      "denied_shell_commands": true,
+      "denied_extra_path": true
+    },
+    "browser_native": {
+      "status": "PASS_WITH_MINOR_RENDER_VARIATION",
+      "chrome": "HEADLESS_WIN_LOCAL",
+      "viewports": [
+        {
+          "width": 390,
+          "height": 844
+        },
+        {
+          "width": 1440,
+          "height": 900
+        }
+      ],
+      "test": "CSS color injection into cloned HTML, actual browser screenshots and derived fingerprint calls to existing MCP server",
+      "runs": 3,
+      "real_site": true,
+      "changed_tiles_latest": {
+        "mobile": 24,
+        "desktop": 7
+      },
+      "changed_prominent_latest": {
+        "mobile": 22,
+        "desktop": 3
+      },
+      "restored_tiles_latest": {
+        "mobile": 2,
+        "desktop": 0
+      },
+      "restored_subtle_latest": {
+        "mobile": 2,
+        "desktop": 0
+      },
+      "restored_prominent_latest": {
+        "mobile": 0,
+        "desktop": 0
+      },
+      "document_restored_git_blob": "7e485223af98a1281a91b4cb75fe66d31734f8a6",
+      "exit_code": 0,
+      "limitations": [
+        "Nonzero mobile subtle tile changes between nominal captures",
+        "Rendering variability; no pixel-perfect restored claim",
+        "CSS injection only within isolated checkout"
+      ]
+    },
+    "central_clean": {
+      "status": "PASS",
+      "tests": 60,
+      "total": 60,
+      "head": "198ab05305c34fef5feaf1c92e1bb2b6e743b37d",
+      "browser_native": false
+    }
+  },
+  "governance": {
+    "free_only": true,
+    "site_main_untouched": true,
+    "studio_main_untouched": true,
+    "bridge_untouched": true,
+    "pc_allowed_volumes": [
+      "C",
+      "I"
+    ],
+    "no_D_drive_access": true,
+    "remote_mcp_not_registered": true,
+    "not_merged": true,
+    "not_deployed": true,
+    "raw_customer_images_uploaded": false
+  },
+  "checkpoint": {
+    "state": "PARTIAL",
+    "blockers": [
+      "REMOTE_MCP_AUTHENTICATED_REGISTRATION_GATE",
+      "INDEPENDENT_VISUAL_REVIEW_PENDING",
+      "MOBILE_SUBTLE_RENDER_VARIATION",
+      "CHROME_PROFILE_CLEANUP_PENDING",
+      "REAL_PORTAL_AUTH_E2E_PENDING"
+    ],
+    "next": "Code and real E2E proven from Git head b2d561aa. No need to rerun these PASS if sources unchanged. Central portable PR #193 60/60 PASS at 198ab053. Remaining: reviewer, cleanup and authorized remote MCP binding, with no merge or deployment implied."
+  },
+  "final_clean_checkout": {
+    "status": "PASS_WITH_SUBTLE_MOBILE_RENDER_VARIATION",
+    "source_ref": "b2d561aa2346a273e9bb8b787493565d1fe6cc98",
+    "method": "New Windows checkout of Git-published source; unit tests then real Chrome + derived visual fingerprint through existing MCP tools; no local patches",
+    "node_tests": {
+      "total": 71,
+      "passed": 71,
+      "failed": 0,
+      "exit_code": 0
+    },
+    "chrome_real": {
+      "passes": 3,
+      "viewport_css": [
+        [
+          390,
+          844
+        ],
+        [
+          1440,
+          900
+        ]
+      ],
+      "color_change_tiles": {
+        "mobile": 24,
+        "desktop": 5
+      },
+      "color_change_prominent_tiles": {
+        "mobile": 22,
+        "desktop": 4
+      },
+      "restored_tiles": {
+        "mobile": 2,
+        "desktop": 0
+      },
+      "restored_subtle_tiles": {
+        "mobile": 2,
+        "desktop": 0
+      },
+      "restored_prominent_tiles": {
+        "mobile": 0,
+        "desktop": 0
+      },
+      "original_html_blob": "7e485223af98a1281a91b4cb75fe66d31734f8a6",
+      "process_exit_code": 0
+    },
+    "limitations": [
+      "Mobile subtle two tiles are observed and not hidden or called pixel-equal",
+      "Not a WCAG/visual reviewer or field Core Web Vitals qualification",
+      "No remote ChatGPT MCP registration"
+    ]
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "evidence_id": "VITRINE_SITEFORGE_SHOWCASE_R81_20261024",
+  "mission_id": "SYN_VITRINE_SITEFORGE_SHOWCASE_20261024",
+  "date": "2026-10-24",
+  "owner": "Inos (produit); ChatGPT isolated GitHub source-authoring",
+  "objective": "Continue Synestra public showcase site by integrating existing SiteForge demo and using current Web Pilot / Visual Gate methods; preserve Cloudflare cutover and existing branches.",
+  "source_gate": "LIMITED_RUNTIME",
+  "function_report": "PARTIAL",
+  "source_authority": {
+    "rules": [
+      {
+        "path": "inossarum/studio-virtuel:AGENTS.md",
+        "git_blob": "ac6d7aaf92e711ab6eba4e02b94559ec7f27890f"
+      },
+      {
+        "path": "00_DIRECTION/IMMUTABLE_RULES/05_CORE__L0_ABSOLUTE_RULES.md",
+        "git_blob": "cdfd624dd8c6b6a2918ca031849ab7141ab6afde"
+      }
+    ],
+    "memory_manifest": {
+      "path": "00_DIRECTION/MEMORY_CORPUS_V1.json",
+      "git_blob": "bc43f64a6633c8c95e9434baa75ee1fb2dcf924c",
+      "selected_docs": [
+        "00_DIRECTION/DECISIONS_2026-10-06_SYNESTRA_WEB_PLATFORM_MASTER_REQUIREMENTS_V1.md@b1a70c73951ca1356c77ee12e3bc945d6e633fb8",
+        "00_DIRECTION/DECISIONS_2026-10-06_GITHUB_FIRST_DURABLE_AUTHORING.md@9bb44b3c8cb71cfc762b934f60e69052ce57c79a",
+        "00_DIRECTION/DECISIONS_2026-09-04_CHAT_STUDIO_VISUAL_DIRECTION.md@ff6f5cfa61404e3e6739c5ecbb855f189b36cf5e"
+      ]
+    },
+    "sal": "SAL-STUDIO-GITHUB-FIRST-DURABLE-AUTHORING-V1@2bbf6256d90514b16ca2e5519f25e085c057b6f1",
+    "central_skills": [
+      "ui-ux@1.0.0#0a362a0938401674166c7a8b871192fbde602c1a",
+      "web-accessibility-engineering@1.0.0#172c442525351804e89e7b273346f03df34bdd89",
+      "browser-compatibility-progressive-enhancement@1.0.0#715ca40f6c98104983fc7bddaac017f94a776c81"
+    ],
+    "previous_evidence": "evidence/VITRINE_WEB_PILOT_VISUAL_R7_PAIR_20261018.json@dbe97e0b3568556b715de3f508ed7831ead5ebb3",
+    "active_siteforge": "main:siteforge/index.html@3d4884a271e5b520d21be47de5ba5fe9d47bedfe"
+  },
+  "refs": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "new_branch": "task/SYN_VITRINE_SITEFORGE_SHOWCASE_20261024",
+    "pr3_url": "https://github.com/inossarum/synestra-vitrine-preview/pull/3",
+    "base_pr3_head": "78cdb83825478948e9557aae01f4eb0ad562cf60",
+    "base_index_blob": "7e485223af98a1281a91b4cb75fe66d31734f8a6",
+    "source_html_commit": "07896b1dab3ddc9bd71f40b7b47cb417c1243397",
+    "source_html_blob": "1d9ad4a6bd89edc68400e118b2f24583ccbbb48a",
+    "source_contract_commit": "bbe4a7ce34bd61cb129ef12debfac313af276572",
+    "source_contract_blob": "4f10fbebd0b57dc0f032c8a1bbd0a8f661bd9e1b",
+    "readme_commit": "b1f763834e82d1f4708f1a4d4e906616a12cb758",
+    "readme_blob": "6334e7500707b00669b5f916358a19249ce791ed",
+    "upstream_diff_at_preflight": "PR3 22 commits ahead / 8 behind main; not safe to merge blindly"
+  },
+  "changes": [
+    "index.html: new accessible responsive SiteForge showcase, six content tags existing unaffected, explicit non-client-demo disclosures, concept preview rendered purely CSS.",
+    "index.html: added #siteforge nav anchor and known GitHub Pages SiteForge demo link.",
+    "tests/site_contract.test.mjs: three scoped static contract cases added (source-only, not executed in Node).",
+    "README.md: preflight, source-only status and exact test commands."
+  ],
+  "tests": {
+    "source_static_check_engine": "Tool JS V8 over exact GitHub fetched blobs; not Node or browser",
+    "static_checks_run": 20,
+    "static_pass": 20,
+    "static_fail": 0,
+    "checked": "unique ids, all internal anchors exist, SiteForge nav/section/heading/href/ARIA, illustrative disclosure, no new JS/media/forms, noindex, CSP, one H1, native FAQ count, focus CSS, responsive breakpoints, legacy section ids, 3 test cases created",
+    "node_unit_suite": "NOT_RUN",
+    "chrome_real": "NOT_RUN",
+    "visual_gate_real": "NOT_RUN",
+    "siteforge_live_http": "NOT_VERIFIED",
+    "rollback_runtime": "NOT_APPLICABLE (no runtime changed)",
+    "existing_web_pilot_82_82": "HISTORICAL_PASS_ONLY (not replayed on this branch)"
+  },
+  "bridge": {
+    "status": "PAIRED with execution_authorized=false according to Synestra Connect",
+    "attempt_request_id": "326b2790-2400-4859-993c-ae988888f535",
+    "last_status": "QUEUED",
+    "pc_probe_execution": "NOT_VERIFIED",
+    "alternate_bypass": "NONE"
+  },
+  "decisions": {
+    "approach": "Extend existing PR3 SiteForge integration in isolated reversible branch, preserving main GitHub Pages demo and the cloud migration workstream.",
+    "alternatives_rejected": "No new MCP/broker/SiteForge service; no direct main or PR3 write; no copied new SiteForge frontend; no external illustration or JS-heavy feature; no Cloudflare build.",
+    "risks": "PR3 behind main; review/rebase required before integration; current relative Web URL stays public GitHub Pages preview and may need approved rebind for Cloudflare custom host; browser contrast/overflow, keyboard and CDN availability not yet qualified.",
+    "rollback": "Drop isolated branch after verified owner approval; no changes made to live site, main, protected IAM or Cloudflare Workers."
+  },
+  "safety": {
+    "free_only": true,
+    "cloudflare_builds": 0,
+    "cloudflare_deployments": 0,
+    "cloudflare_observability_queries": 0,
+    "no_site_main_write": true,
+    "no_pr3_branch_edit": true,
+    "no_studio_cutover_branch_edit": true,
+    "no_bridge_permission_mutation": true,
+    "no_secret_or_acl_mutation": true,
+    "no_runtime_production_claim": true,
+    "no_fake_client_proof": true,
+    "no_worktree_rewrite": true
+  },
+  "next": "When Bridge or another explicitly authorized test executor can run, take clean checkout pinned to R81 HEAD; run all native Node tests, actual Chrome mobile 390/desktop 1440, Web Pilot MCP replay, Visual Gate; record exact results, verify no new outbound requests and public SiteForge destination before PR3 controlled integration. No blind merge/deploy."
+}

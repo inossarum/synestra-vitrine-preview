@@ -1,0 +1,143 @@
+{
+  "schema_version": 1,
+  "id": "SYNESTRA_WEB_PILOT_LAB_V2_20261018",
+  "date": "2026-10-18",
+  "project": "Synestra Studio Web Pilot",
+  "repo": "inossarum/synestra-vitrine-preview",
+  "branch": "feat/vitrine-public-presentation-20261016",
+  "prior_head": "0677dc90fd061bdada622e3a3154de61da28d199",
+  "sources": {
+    "tools/web_pilot_lab.mjs": "822f92fb2b2e0ada78ab4691c97bed5bcfc62eda",
+    "tests/web_pilot_lab.test.mjs": "d0144b9a65594ba4c29dfd88f2726bb5cf789797",
+    "tools/web_pilot_mcp_stdio.mjs": "b5df07365c1563acd152b81b6e593ff535f433e7",
+    "tests/web_pilot_mcp.test.mjs": "f988755b25c2cff093dc38f6a3e2b311ecfbd5a8",
+    "tests/browser_cdp_qa.mjs": "584021d7042b7846f3a3247e79a1d923e53f7567",
+    "tests/web_pilot_real_capture_qa.mjs": "fa5fee42bec33fb2a1ab4de228bcf9cbe420dcec",
+    "tools/README.md": "42f17459271edcecaf01b39c0301238ae88b19c7"
+  },
+  "skills": [
+    "core-web-vitals-engineering@1.0.0:a62b2463617fd3878a5835e1d7f546fc1ce29eed",
+    "performance@1.0.0:e2c425bc52492f59dd6a8db36dc743661daa3df0",
+    "failure-first@1.0.0:373c5f508b3ef91d1ffc1fc5afec7007a643d590",
+    "test-driven-development@1.0.0:accb4772b83a96b308b8ee07897abf0fb777c9a8",
+    "security-review@1.0.0:3aa9f9295981911dcd7e1c46b713878ac458efd3",
+    "e2e-testing@1.0.0:3fcb7196816ed91c4773ec8004a508b7e288a015",
+    "reasoning-evidence@1.0.0:b1d95e26cddce504adcbb0ba69d7c4ca36990836"
+  ],
+  "method": {
+    "contract": "synestra.web-pilot.lab-metrics.v1",
+    "domain": "Chrome CDP Performance.getMetrics timeTicks",
+    "sample_window": "POST_NAVIGATION_QA_OBSERVATION",
+    "comparable": "Identical viewport dimensions and sampleWindow/timeDomain required",
+    "claim": "ADVISORY ONLY, no field CWV, no quality pass, no auto-tune"
+  },
+  "red_or_limitation": {
+    "actual": "Subtracting CDP counters pre-navigation from post-navigation yielded NULL/unknown and PENDING_LAB_METRICS due to counter reset, never false zero or performance pass",
+    "resolution": "Read post-navigation CDP counters as observations; do not describe as per-load deltas"
+  },
+  "tests": {
+    "windows_node": "24.19.0",
+    "total": 60,
+    "passed": 60,
+    "failed": 0,
+    "exit_code": 0,
+    "lab_new": 17,
+    "mcp_new": 5,
+    "chrome_mobile": "PASS",
+    "chrome_desktop": "PASS",
+    "real_mcp_tool_calls": 6,
+    "real_browser_to_mcp": "PASS"
+  },
+  "real_observations": {
+    "mobile": {
+      "viewport": [
+        390,
+        844
+      ],
+      "nodes": 1048,
+      "js_heap_bytes": 808524,
+      "layout_count_observed": 9,
+      "recalc_style_observed": 14,
+      "task_duration_ms_observed": 38.706,
+      "layout_duration_ms_observed": 3.308,
+      "script_duration_ms_observed": 0,
+      "unknown": [],
+      "status": "ADVISORY_LAB_OBSERVATION"
+    },
+    "desktop": {
+      "viewport": [
+        1440,
+        900
+      ],
+      "nodes": 1572,
+      "js_heap_bytes": 1060080,
+      "layout_count_observed": 9,
+      "recalc_style_observed": 18,
+      "task_duration_ms_observed": 42.245,
+      "layout_duration_ms_observed": 2.965,
+      "script_duration_ms_observed": 0,
+      "unknown": [],
+      "status": "ADVISORY_LAB_OBSERVATION"
+    }
+  },
+  "limits": {
+    "samples_per_viewport": 1,
+    "repeatability": "NOT_PROVEN",
+    "field_core_web_vitals": "NOT_TESTED",
+    "wcag_certification": "NOT_CLAIMED",
+    "independent_provenance": "PENDING",
+    "remote_chatgpt_mcp": "NOT_CONNECTED",
+    "chrome_profile_cleanup": "PENDING_EPERRM",
+    "production": "NOT_DEPLOYED"
+  },
+  "governance": {
+    "main_unchanged": true,
+    "pr_draft": true,
+    "free_only": true,
+    "owner_pc_modified_only_isolated_qa_clone": true,
+    "d_drive_forbidden": true,
+    "new_remote_powers": false
+  },
+  "checkpoint": {
+    "state": "PARTIAL",
+    "next": "Source HEAD 4a18ab4 clean clone 60/60+Chrome+6 local MCP calls PASS. Central PR #193 clean sparse 49/49 PASS at acaab34a; continued in central 6635b49. Runtime MCP binding, field CWV and independent visual/reader review PENDING. No deployment."
+  },
+  "clean_checkout": {
+    "source_head": "4a18ab41e3caa82c8679ac038d4c31abbcaff6d9",
+    "checkout": "fresh, isolated C: Windows clone",
+    "status": "PASS",
+    "node": {
+      "passed": 60,
+      "total": 60,
+      "failed": 0,
+      "exit_code": 0
+    },
+    "chrome": {
+      "mobile": "PASS",
+      "desktop": "PASS",
+      "faq_keyboard": "PASS",
+      "exit_code": 0
+    },
+    "real_mcp": {
+      "status": "PASS",
+      "calls": 6,
+      "exit_code": 0
+    },
+    "actual_lab_sample_descriptive": {
+      "mobile": {
+        "nodes": 1048,
+        "jsHeapUsedBytes": 808524,
+        "taskDurationMsObserved": 38.932,
+        "status": "ADVISORY_LAB_OBSERVATION"
+      },
+      "desktop": {
+        "nodes": 1572,
+        "jsHeapUsedBytes": 1060080,
+        "taskDurationMsObserved": 30.384,
+        "status": "ADVISORY_LAB_OBSERVATION"
+      }
+    },
+    "limitation": "Single lab samples, not field CWV, changes between runs do not imply optimization",
+    "cleanup": "CDP_PROFILE_CLEANUP_PENDING_EPERRM"
+  }
+}

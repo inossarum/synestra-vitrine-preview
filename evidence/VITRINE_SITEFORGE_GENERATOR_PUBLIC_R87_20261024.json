@@ -1,0 +1,54 @@
+{
+  "schema": "synestra.vitrine.r87.generator-public-baseline.v1",
+  "mission_id": "SYN_VITRINE_SITEFORGE_SHOWCASE_20261024",
+  "date": "2026-10-24",
+  "current_code_ref": "018ce0a7620dc15caf05a74f6772f3620a4ee76e",
+  "r86_evidence_ref": "evidence/VITRINE_SITEFORGE_REAL_BROWSER_R86_20261024.json@059039ac17fbcbe3a8e544b9912491f7e6111133",
+  "generator": {
+    "repo": "inossarum/studio-virtuel",
+    "pr": 211,
+    "head": "ee7b61a644a1b608f8dd2e5ff3a111376e04b2dc",
+    "path": "cloud/synestra-mcp-staging/scripts/build_siteforge_vitrine_preview.mjs",
+    "blob_sha": "128e0d1abec83aecc157cc86161e722b7e4abce6",
+    "line": 14,
+    "code_observed": "const sitePath=\"/synestra-vitrine-preview/siteforge/\";",
+    "risk": "GENERATION_CAN_REINTRODUCE_ABSOLUTE_PREFIX",
+    "reproduction": "SOURCE_CODE_READ_ONLY_NOT_REGENERATED",
+    "owner_lease": "UNKNOWN_NO_MUTATION"
+  },
+  "public_baseline": {
+    "origin": "https://inossarum.github.io/synestra-vitrine-preview/",
+    "observed_from": "INOS_CEREBROS_OWNER_PC",
+    "checked_at_utc": "2026-10-24T19:45:42Z",
+    "method": "OWNER_PC_INVOKE_WEBREQUEST_READ_ONLY",
+    "results": [
+      {
+        "path": "/",
+        "status": 200,
+        "content_length_chars": 5405
+      },
+      {
+        "path": "/siteforge/",
+        "status": 200,
+        "content_length_chars": 37322
+      },
+      {
+        "path": "/siteforge/lab/",
+        "status": 200,
+        "content_length_chars": 17527
+      }
+    ],
+    "runtime_request_id": "f4be8131-c407-4d35-9bb8-fc533c307590",
+    "deployed_source_sha": "NOT_VERIFIED",
+    "r85_r86_published": false
+  },
+  "pr3": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "number": 3,
+    "head": "78cdb83825478948e9557aae01f4eb0ad562cf60",
+    "state": "OPEN_DRAFT"
+  },
+  "decision": "KEEP_GENERATOR_PR211_UNTOUCHED_UNTIL_OWNER_LEASE_AND_CROSS_WORKSTREAM_INTEGRATION; DO_NOT_CONFLATE_LIVE_PUBLIC_BASELINE_WITH_R85_LOCAL_PREVIEW",
+  "next": "Qualify generator output regression and fix on owned isolated branch only after verifying PR211 owner/lease and integration authority, then repeat SiteForge regeneration E2E. Release of R85/R86 requires an explicit publication approval and rollback.",
+  "function_report": "PARTIAL"
+}

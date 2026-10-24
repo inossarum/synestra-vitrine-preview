@@ -1,0 +1,109 @@
+{
+  "schema": "synestra.vitrine.evidence.r82.v1",
+  "id": "VITRINE_SITEFORGE_ROUTE_R82_20261024",
+  "mission_id": "SYN_VITRINE_SITEFORGE_SHOWCASE_20261024",
+  "observed_date": "2026-10-24",
+  "objective": "Continue existing Synestra vitrine source and protect migration portability using proven Web Pilot and SiteForge without touching Cloudflare runtime.",
+  "source_gate": "LIMITED_RUNTIME",
+  "owner": "Inos; R81-R82 dedicated branch isolated; other workstream on Studio Cloudflare cutover unchanged",
+  "repo": "inossarum/synestra-vitrine-preview",
+  "branch": "task/SYN_VITRINE_SITEFORGE_SHOWCASE_20261024",
+  "source": {
+    "r81_last_evidence": "evidence/VITRINE_SITEFORGE_SHOWCASE_R81_20261024.json@bd22ccc679472607255db84f0bcf4d736316bc0d",
+    "original_pr3_head": "78cdb83825478948e9557aae01f4eb0ad562cf60",
+    "pr3_head_rechecked": "78cdb83825478948e9557aae01f4eb0ad562cf60",
+    "rules": "studio-virtuel:AGENTS.md@ac6d7aaf92e711ab6eba4e02b94559ec7f27890f",
+    "l0": "studio-virtuel:00_DIRECTION/IMMUTABLE_RULES/05_CORE__L0_ABSOLUTE_RULES.md@cdfd624dd8c6b6a2918ca031849ab7141ab6afde",
+    "memory_manifest": "studio-virtuel:00_DIRECTION/MEMORY_CORPUS_V1.json@bc43f64a6633c8c95e9434baa75ee1fb2dcf924c",
+    "memory_docs": [
+      "00_DIRECTION/DECISIONS_2026-10-06_SYNESTRA_WEB_PLATFORM_MASTER_REQUIREMENTS_V1.md@b1a70c73951ca1356c77ee12e3bc945d6e633fb8",
+      "00_DIRECTION/DECISIONS_2026-10-06_GITHUB_FIRST_DURABLE_AUTHORING.md@9bb44b3c8cb71cfc762b934f60e69052ce57c79a",
+      "04_KNOWLEDGE/ERRORS/ERR-STUDIO-20261002-109__POWERSHELL__EVIDENCE__FALSE_PASS_PROVENANCE.md@2bd538cc11074b8d4fee595d0ddcd092a37072ee"
+    ],
+    "sal": "SAL-STUDIO-GITHUB-FIRST-DURABLE-AUTHORING-V1@2bbf6256d90514b16ca2e5519f25e085c057b6f1",
+    "skills": [
+      "ui-ux@1.0.0#0a362a0938401674166c7a8b871192fbde602c1a",
+      "web-accessibility-engineering@1.0.0#172c442525351804e89e7b273346f03df34bdd89",
+      "browser-compatibility-progressive-enhancement@1.0.0#715ca40f6c98104983fc7bddaac017f94a776c81"
+    ]
+  },
+  "code": {
+    "tests_red_commit": "efc2c0442a7a9fafe93d6ad3b2a10cbbb1758f3a",
+    "fix_relative_and_login_commit": "a1193dfcef8a24f2a6a57441276d7b4e2582960e",
+    "fix_accessible_label_commit": "5ad4aa4e116b22fcf3ab2462dbd7ee06ac93a7b8",
+    "label_test_commit": "dcd02ca4404fd5ee398bfba5fa7e2df879f7a4f5",
+    "html_blob": "52fa85bead6fc3db82628164fc41eb2cf14abd39",
+    "tests_blob": "ffe28d8676e9304a94346303b19525aa0d19aca4",
+    "changed_paths": [
+      "index.html",
+      "tests/site_contract.test.mjs"
+    ],
+    "features": [
+      "SiteForge link now ./siteforge/; no forced GitHub Pages cross-domain navigation after custom domain move",
+      "Accessible label says 'sur ce site' rather than obsolete GitHub Pages preview",
+      "Header CTA says Se connecter, retaining pilot/disclosure and real external portal link",
+      "No JavaScript, forms, images, tracking, IAM or new servers"
+    ]
+  },
+  "verification": {
+    "red_static_probe": {
+      "status": "OBSERVED_RED",
+      "checks": 4,
+      "failed": 4,
+      "note": "Before fix, portable relative URL, no absolute Pages URL, explicit login, and conditional same-origin disclosure were absent. This was a V8 static source check, NOT Node test execution."
+    },
+    "green_static_probe": {
+      "status": "PASS",
+      "checks": 28,
+      "passed": 28,
+      "failed": 0,
+      "environment": "Pure JS V8 over GitHub-returned blobs",
+      "html_blob": "52fa85bead6fc3db82628164fc41eb2cf14abd39",
+      "tests_blob": "ffe28d8676e9304a94346303b19525aa0d19aca4"
+    },
+    "tests_written": {
+      "status": "SOURCE_ONLY",
+      "added": 2,
+      "modified": 1,
+      "covering": "Header login; portable relative URL on project path and at root host, host-independent accessible label, preexisting pilot caution"
+    },
+    "node_runtime": "NOT_RUN",
+    "browser_390_1440": "NOT_RUN",
+    "web_pilot_cdp": "NOT_RUN",
+    "siteforge_live_http": "UNVERIFIED_BY_WEB (open failed, not evidence of HTTP 404)",
+    "asset_in_R81_branch": "ABSENT_FROM_PR3_BASE: siteforge/ is present in newer main only, needs controlled integration/deployment together",
+    "recovery_or_rollback": "SOURCE_BRANCH_ONLY; no deployed runtime to roll back",
+    "branch_vs_pr3": "8 task commits ahead of original PR3 head at comparison",
+    "main_vs_merge_base": {
+      "commits": 8,
+      "main_changed_index_html": true,
+      "main_siteforge_assets_present": true,
+      "other": "signal preview files and tests; verify integration scope before merge"
+    },
+    "bridge": {
+      "old_request": "326b2790-2400-4859-993c-ae988888f535",
+      "new_request": "2fa6ca02-55f1-4746-b35e-9017b9a280d1",
+      "last_state": "QUEUED",
+      "execution_authorized": false,
+      "run_result": "NOT_PROVEN"
+    },
+    "app_root": "No cloud custom hostname or build verified."
+  },
+  "decision": {
+    "why": "Use existing SiteForge public asset, keep marketing domain-local and restore visible consumer sign-in without claiming identity ready.",
+    "rejected": "New MCP server or proxy, Cloudflare Worker deploy, blindly merging main into PR3, running unknown third-party code or bypassing denied tool, claiming Chrome E2E."
+  },
+  "boundary": {
+    "no_main_mutation": true,
+    "no_pr3_mutation": true,
+    "no_worker_or_access_mutation": true,
+    "no_cloudflare_build": true,
+    "no_observability_api_query": true,
+    "no_bridge_grant_change": true,
+    "no_fake_runtime_pass": true,
+    "free_only": true
+  },
+  "next": "Perform exact-HEAD native Node + real Chrome/Web Pilot tests on authorized executor; integrate with main-only siteforge/ asset after owner/lease/HEAD verification and compare overlapping index.html; verify preview route HTTP and signed-in flow separately; no production cutover implied.",
+  "function_report": "PARTIAL_SOURCE_DELTA_VERIFIED",
+  "hooks_status": "UNKNOWN"
+}
