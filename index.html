@@ -436,6 +436,44 @@
     }
     .site-footer p { margin: 0; }
 
+
+    /* SiteForge: demonstrative art direction, CSS-only and intentionally static. */
+    .siteforge-showcase {
+      display: grid;
+      grid-template-columns: minmax(0,.85fr) minmax(0,1.15fr);
+      gap: clamp(1.25rem,4vw,3rem);
+      align-items: center;
+      padding: clamp(1.4rem,3vw,2.5rem);
+      border: 1px solid #3d706f;
+      border-radius: 1.3rem;
+      background: radial-gradient(ellipse at 100% 0%,rgba(105,185,187,.17),transparent 23rem),linear-gradient(130deg,#112b39,#091d28);
+      box-shadow: inset 0 1px rgba(236,246,247,.07);
+    }
+    .siteforge-copy { min-width: 0; }
+    .siteforge-copy h3 { margin: .4rem 0 1rem; font-size: clamp(1.5rem,3vw,2.3rem); line-height: 1.16; letter-spacing: -.035em; }
+    .siteforge-copy > p:not(.section-kicker) { color: var(--muted); line-height: 1.7; }
+    .siteforge-points { display: grid; gap: .65rem; list-style: none; margin: 1.2rem 0 1.6rem; padding: 0; }
+    .siteforge-points li { padding-left: 1.4rem; position: relative; color: var(--muted); line-height: 1.55; }
+    .siteforge-points li::before { position: absolute; left: 0; top: .56rem; width: .48rem; height: .48rem; background: var(--mint); border-radius: 50%; content: ""; }
+    .siteforge-copy .pilot-caption { font-size: .82rem; margin-top: .85rem; }
+    .siteforge-preview { min-width: 0; overflow: hidden; background: #f1f5f8; color: #18314b; border: 1px solid #91aabc; border-radius: .9rem; box-shadow: 0 1.25rem 3.4rem rgba(0,0,0,.24); }
+    .siteforge-preview-bar { display: flex; align-items: center; gap: .4rem; padding: .78rem 1rem; background: #e1e9ef; border-bottom: 1px solid #bdd0dd; }
+    .siteforge-preview-dot { width: .48rem; height: .48rem; background: #7798af; border-radius: 50%; }
+    .siteforge-preview-bar span:last-child { margin-left: auto; font-size: .68rem; font-weight: 800; letter-spacing: .12em; color: #3a627c; }
+    .siteforge-preview-body { padding: clamp(1.3rem,3vw,2.6rem); }
+    .siteforge-preview-label { display: inline-flex; padding: .4rem .65rem; background: #dcecf1; color: #245476; border-radius: 999px; font-size: .69rem; font-weight: 800; letter-spacing: .08em; }
+    .siteforge-preview-body h4 { max-width: 23rem; margin: 1.1rem 0 .85rem; color: #152e49; font-size: clamp(1.55rem,3vw,2.4rem); letter-spacing: -.045em; line-height: 1.1; }
+    .siteforge-preview-body > p { margin-bottom: 1.4rem; max-width: 24rem; color: #4a6379; font-size: .9rem; line-height: 1.65; }
+    .siteforge-preview-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; }
+    .siteforge-preview-tile { padding: 1rem; border: 1px solid #c1d5e2; border-radius: .65rem; background: #fff; font-size: .8rem; font-weight: 750; color: #234863; }
+    .siteforge-preview-tile::before { display: block; width: 1.3rem; height: .2rem; margin-bottom: .7rem; border-radius: 4px; background: #5d93a8; content: ""; }
+    @media (max-width: 840px) {
+      .siteforge-showcase { grid-template-columns: minmax(0,1fr); }
+    }
+    @media (max-width: 440px) {
+      .siteforge-preview-body { padding: 1.15rem; }
+      .siteforge-preview-tiles { grid-template-columns: minmax(0,1fr); }
+    }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
     }
@@ -478,6 +516,7 @@
     <nav class="site-nav" aria-label="Navigation principale">
       <a href="#approche">Fonctionnement</a>
       <a href="#exemples">Exemples</a>
+      <a href="#siteforge">SiteForge</a>
       <a href="#realisations">Réalisations</a>
       <a href="#questions">Questions</a>
       <a href="#a-propos">À propos</a>
@@ -575,6 +614,38 @@
             <li>Ce qui est remis, et ce qui reste à faire le cas échéant.</li>
           </ul>
           <p class="trust-note">Pendant la phase pilote, les possibilités et les prochaines étapes sont précisées au cas par cas.</p>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="container section" id="siteforge" aria-labelledby="siteforge-title">
+      <div class="section-heading">
+        <p class="section-kicker">Voir un prototype concret</p>
+        <h2 id="siteforge-title">SiteForge : une démonstration à explorer.</h2>
+        <p class="section-intro">Un aperçu public du travail de présentation web, distinct d’un projet client terminé ou d’une prestation disponible.</p>
+      </div>
+      <div class="siteforge-showcase">
+        <div class="siteforge-copy">
+          <p class="section-kicker">Démo statique · phase pilote</p>
+          <h3>Du contenu à une page lisible et structurée.</h3>
+          <p>Explorez une page de démonstration pour observer une hiérarchie visuelle, la composition et un parcours de lecture. Elle ne réalise aucune opération sur votre compte.</p>
+          <ul class="siteforge-points">
+            <li>Une présentation organisée autour des besoins.</li>
+            <li>Une page consultable sans inscription.</li>
+            <li>Un exemple visuel, sans résultat client revendiqué.</li>
+          </ul>
+          <a class="button button-primary" href="https://inossarum.github.io/synestra-vitrine-preview/siteforge/" rel="noreferrer" aria-label="Explorer la démonstration SiteForge sur la prévisualisation publique">Explorer SiteForge <span aria-hidden="true">↗</span></a>
+          <p class="pilot-caption">La démonstration s’ouvre sur GitHub Pages. L’illustration ci-contre est une composition CSS indicative, pas une capture certifiée du prototype.</p>
+        </div>
+        <div class="siteforge-preview" role="img" aria-label="Illustration conceptuelle non interactive d’une page de démonstration web, sans données client">
+          <div class="siteforge-preview-bar"><span class="siteforge-preview-dot"></span><span class="siteforge-preview-dot"></span><span class="siteforge-preview-dot"></span><span>APERÇU CONCEPTUEL</span></div>
+          <div class="siteforge-preview-body">
+            <span class="siteforge-preview-label">DE L’IDÉE AU PROTOTYPE</span>
+            <h4>Le web prend forme.</h4>
+            <p>Un espace clair pour présenter l’essentiel, guider la lecture et rendre chaque étape compréhensible.</p>
+            <div class="siteforge-preview-tiles"><div class="siteforge-preview-tile">Clarté du message</div><div class="siteforge-preview-tile">Parcours lisible</div></div>
+          </div>
         </div>
       </div>
     </section>
