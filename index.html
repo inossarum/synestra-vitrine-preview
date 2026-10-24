@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex,nofollow">
   <meta name="color-scheme" content="dark">
   <meta name="referrer" content="no-referrer">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
   <title>Synestra — Studio numérique et automatisation métier</title>
   <meta name="description" content="Synestra aide les artisans, indépendants et petites entreprises à clarifier leurs besoins numériques et à préparer des projets adaptés à leur activité.">
   <style>
@@ -802,6 +802,189 @@
       .siteforge-preview,.siteforge-showcase:hover .siteforge-preview {transform:none!important;}
       .visual-window,.product-card:hover .visual-window {transform:none!important;}
       .system-stage {transform:none!important;}
+    }
+
+    /* R94 / STUDIO_CANONICAL_BRAND — source: studio_web/src/styles.css
+       @main blob 682057335247b129ad890e9f0acfc68228575c5f,
+       emblem: studio_web/src/assets/synestra-master.svg
+       @main blob 15e5120d52f922bc87f8702fa89c33c02e3e5a7f.
+       The Studio UI is the source of truth; marketing motion is a derivative. */
+    :root {
+      color-scheme: dark;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --ink: #060b12;
+      --surface: #141f2c;
+      --line: #354253;
+      --text: #e7edf5;
+      --muted: #aebdcb;
+      --quiet: #95a6b8;
+      --mint: #83dced;
+      --mint-dark: #07111b;
+      --teal: #00bfff;
+      --violet: #bc79c6;
+      --gold: #ffd28c;
+      --content: 1220px;
+    }
+    html { background:#060b12; }
+    body {
+      color: #e7edf5;
+      background:
+        radial-gradient(ellipse at 5% 8%, rgb(191 40 177 / 9%), transparent 34rem),
+        radial-gradient(ellipse at 92% 0%, rgb(28 164 207 / 13%), transparent 38rem),
+        linear-gradient(145deg,#060b12,#0b1420 54%,#080e17);
+    }
+    body::before {
+      opacity:.19;
+      background-image:linear-gradient(rgba(160,213,231,.13) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(160,213,231,.13) 1px,transparent 1px);
+    }
+    a:focus-visible,button:focus-visible { outline-color:#a5edff; }
+    .brand-symbol {
+      width:3.5rem; height:4.05rem; flex:0 0 3.5rem;
+      font-size:0; border-radius:0; box-shadow:none;
+      background:transparent url("./assets/synestra-master.svg") center / contain no-repeat;
+    }
+    .brand { letter-spacing:.115em; color:#edf2f7; }
+    .brand small { color:#95a6b8; }
+    .site-header {
+      border-bottom:1px solid transparent;
+      border-image:linear-gradient(90deg,#7b8796,#334355 58%,rgb(44 199 233 / 35%)) 1;
+    }
+    .site-nav a { color:#b3c0ce; }
+    .site-nav a:not(.nav-cta):hover { color:#9de8f6; }
+    .site-nav .nav-cta {
+      background:linear-gradient(135deg,#d9e2eb,#91dcec);
+      color:#07111b; border:1px solid #b8dbe5;
+      box-shadow:0 11px 32px rgb(25 143 182 / 13%);
+    }
+    .eyebrow,.hero-v2 .eyebrow {
+      color:#9ae6f3; border-color:#3c788d;
+      background:rgb(30 142 181 / 9%);
+    }
+    .eyebrow::before { background:#00bfff; box-shadow:0 0 12px rgb(44 199 233 / 50%); }
+    .hero-topline { color:#95a6b8; }
+    .hero-topline span { color:#83dced; }
+    .hero-accent {
+      color:#b9d9ef;
+      background:linear-gradient(105deg,#f9fdff 2%,#b9d9ef 32%,#6ff3ff 62%,#0075ef 100%);
+      -webkit-background-clip:text; background-clip:text;
+      -webkit-text-fill-color:transparent;
+    }
+    .hero-v2 .hero-lead { color:#b2c0cf; }
+    .hero-v2 .button-primary,.button-primary {
+      color:#07111b; border:1px solid #b8dbe5;
+      background:linear-gradient(135deg,#d9e2eb,#91dcec);
+      box-shadow:0 12px 28px rgb(21 149 186 / 13%);
+    }
+    .hero-index b { color:#83dced; }
+    .hero-index { color:#95a6b8; border-top-color:#334355; }
+    .system-stage {
+      border-color:#40576a;
+      background:
+        radial-gradient(ellipse at 18% 82%,rgb(191 40 177 / 13%),transparent 50%),
+        radial-gradient(ellipse at 78% 13%,rgb(28 164 207 / 20%),transparent 46%),
+        linear-gradient(145deg,#141f2c,#060b12 86%);
+      box-shadow:0 34px 80px rgb(0 0 0 / 36%),inset 0 1px rgb(221 233 244 / 8%);
+    }
+    .stage-glow { background:radial-gradient(circle,rgb(0 191 255 / 24%),transparent 68%); }
+    .system-stage::before {
+      background-image:linear-gradient(rgba(164,204,223,.16) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(164,204,223,.16) 1px,transparent 1px);
+    }
+    .system-core {
+      background:radial-gradient(circle at 34% 20%,#223a54,#07101d 77%);
+      box-shadow:0 0 0 10px rgb(0 191 255 / 5%),0 0 0 20px rgb(73 158 224 / 4%),
+        0 20px 50px rgb(0 0 0 / 44%),inset 0 0 0 1px #5a99bc;
+    }
+    .system-core i { border-color:rgb(0 191 255 / 24%); }
+    .core-sigil {
+      display:block;width:5.5rem;height:7rem; flex:none;
+      font-size:0;letter-spacing:0;
+      background:transparent url("./assets/synestra-master.svg") center / contain no-repeat;
+      filter:drop-shadow(0 0 15px rgb(25 198 255 / 15%));
+    }
+    .core-caption { color:#e8f3fa; }
+    .system-orbit { border-color:rgb(102 180 226 / 17%); }
+    .system-node {
+      background:rgb(11 23 38 / 94%);border-color:#48617a;
+      box-shadow:0 17px 38px rgb(0 0 0 / 29%);
+    }
+    .system-node small,.stage-topline,.stage-footline { color:#9fb6c8; }
+    .node-symbol-forge { background:linear-gradient(135deg,#dde5f0,#b8b9ed);color:#1c2745; }
+    .node-symbol-connect { background:linear-gradient(135deg,#bdefff,#53cbe8);color:#08314c; }
+    .node-symbol-bridge { background:linear-gradient(135deg,#e6eaf4,#9db4d4);color:#1b3351; }
+    .stage-flash { color:#00bfff; }
+    .motion-strip {
+      background:linear-gradient(100deg,#09192a,#112a42 45%,#0c2033 78%,#09192a);
+      color:#d2e8f4; border-top-color:#2e536e; border-bottom-color:#2e536e;
+      box-shadow:inset 0 1px rgb(153 213 244 / 9%);
+    }
+    .motion-strip-inner b { color:#39c9f1; }
+    .section-kicker,.soft-gradient,.footnote-mark { color:#83dced; }
+    .section-heading h2,.section-heading-split h2 { color:#e7edf5; }
+    .product-card {
+      background:linear-gradient(155deg,rgb(20 31 44 / 96%),rgb(11 19 29 / 96%));
+      border-color:#354253; box-shadow:inset 0 1px rgb(221 233 244 / 5%),0 1rem 2.6rem rgb(0 0 0 / 19%);
+    }
+    .product-card:hover {border-color:#438eaa;}
+    .product-status { border-color:#8b6129; color:#ffd28c; background:rgb(217 139 33 / 13%); }
+    .product-card-top { color:#a9bacc; }
+    .bridge-visual {
+      background:radial-gradient(ellipse at 60% 80%,rgb(28 164 207 / 22%),transparent 66%),
+        linear-gradient(135deg,#22334b,#0b1727);
+    }
+    .connect-visual {
+      background:radial-gradient(circle at 52% 46%,rgb(0 191 255 / 20%),transparent 37%),
+        radial-gradient(circle at 28% 70%,rgb(191 40 177 / 12%),transparent 47%),#0b1928;
+    }
+    .visual-window {background:#0b1420;border-color:#5b768e;}
+    .visual-window-top {background:#152538;border-bottom-color:#3b5874;}
+    .bridge-sidebar {background:#111d2e;}
+    .side-logo {
+      background:transparent url("./assets/synestra-master.svg") center / contain no-repeat;
+      color:transparent;font-size:0;border-radius:0;
+    }
+    .bridge-permission {background:rgb(28 164 207 / 12%);border-color:#376980;}
+    .permission-icon,.permission-indicator {color:#83dced;}
+    .bridge-progress span:first-child {background:#83dced;}
+    .bridge-progress span:nth-child(2) {background:#398ab4;}
+    .connect-track::before,.connect-track::after {
+      background:linear-gradient(90deg,transparent,#44b8df,transparent);
+    }
+    .connect-hub {
+      background:radial-gradient(circle at 34% 24%,#286a8e,#0c233a 74%);
+      border-color:#4b9dc7; box-shadow:0 0 0 9px rgb(28 164 207 / 9%),0 0 0 18px rgb(28 164 207 / 5%),0 15px 45px rgb(0 0 0 / 27%);
+    }
+    .hub-logo,.connect-hub strong {color:#c4efff;}
+    .connect-satellite {background:#102b40;border-color:#3c7596;}
+    .connect-satellite b {color:#83dced;}
+    .product-card-body .product-heading h3 em,.product-card-connect .product-heading h3 em {color:#91dcec;}
+    .product-icon {border-color:#497a97;color:#91dcec;}
+    .product-facts span {border-color:#3c5a70;color:#ccdeec;}
+    .platform-footnote {border-top-color:#31475a;border-bottom-color:#31475a;}
+    .platform-footnote a {color:#91dcec;}
+    .example-card,.difference-panel,.trust-card,.about-panel,.proof-card,.faq-item {
+      background:linear-gradient(155deg,rgb(20 31 44 / 96%),rgb(11 19 29 / 96%));
+      border-color:#354253;
+    }
+    .example-card:hover,.faq-item:hover {border-color:#3c788d;}
+    .siteforge-showcase {
+      background:radial-gradient(ellipse at 74% 20%,rgb(191 40 177 / 14%),transparent 25rem),
+        linear-gradient(145deg,#15283c,#091624);
+      border-color:#3c788d;
+    }
+    .siteforge-points li::before,.principles li::before {background:#83dced;}
+    .siteforge-preview {border-color:#829bb9;}
+    .cta-panel {
+      border-color:#405f79;
+      background:radial-gradient(ellipse at 89% 15%,rgb(191 40 177 / 11%),transparent 22rem),
+        radial-gradient(ellipse at 0% 100%,rgb(28 164 207 / 15%),transparent 26rem),#0c1c2d;
+    }
+    .faq-item summary:focus-visible {outline-color:#a5edff;}
+    @media (max-width:440px) {
+      .brand-symbol {width:3.1rem;height:3.5rem;flex-basis:3.1rem;}
+      .core-sigil {width:3.8rem;height:5.15rem;}
+      .system-core {width:95px;height:95px;}
     }
   </style>
 </head>
