@@ -78,3 +78,28 @@ test('le script CDP évite les profils périmés et transmet les touches complè
   assert.match(browser, /FAQ_KEYBOARD_OPEN_FAIL/);
   assert.match(browser, /SKIP_ENTER_TARGET_FAIL/);
 });
+
+
+test('SiteForge est une rubrique accessible, reliee a la demonstration publique existante', () => {
+  assert.match(html, /id="siteforge" aria-labelledby="siteforge-title"/);
+  assert.match(html, /<h2 id="siteforge-title">SiteForge : une démonstration à explorer\.<\/h2>/);
+  assert.match(html, /<a href="#siteforge">SiteForge<\/a>/);
+  assert.match(html, /https:\/\/inossarum\.github\.io\/synestra-vitrine-preview\/siteforge\//);
+  assert.match(html, /aria-label="Explorer la démonstration SiteForge sur la prévisualisation publique"/);
+  assert.match(html, /role="img" aria-label="Illustration conceptuelle non interactive/);
+});
+
+test('SiteForge ne presente pas la maquette comme un client livre ou un E2E certifie', () => {
+  assert.match(html, /Un aperçu public du travail de présentation web, distinct d’un projet client terminé/);
+  assert.match(html, /composition CSS indicative, pas une capture certifiée du prototype/);
+  assert.match(html, /sans résultat client revendiqué/);
+  assert.doesNotMatch(html, /<script\b|<iframe\b|<img\b|<form\b/i);
+});
+
+test('SiteForge conserve le responsive, le clavier et aucun chargement de ressource tierce', () => {
+  assert.match(html, /\.siteforge-showcase\s*\{\s*display: grid/);
+  assert.match(html, /@media \(max-width: 840px\)/);
+  assert.match(html, /\.siteforge-preview-tiles\s*\{\s*grid-template-columns: minmax\(0,1fr\)/);
+  assert.match(html, /a:focus-visible, button:focus-visible/);
+  assert.match(html, /default-src 'none'; style-src 'unsafe-inline'/);
+});
