@@ -86,7 +86,7 @@ test('SiteForge est une rubrique accessible, reliee a la demonstration publique 
   assert.match(html, /<a href="#siteforge">SiteForge<\/a>/);
   assert.match(html, /href="\.\/siteforge\/"/);
   assert.doesNotMatch(html, /href="https:\/\/inossarum\.github\.io\/synestra-vitrine-preview\/siteforge\/"/);
-  assert.match(html, /aria-label="Explorer la démonstration SiteForge sur la prévisualisation publique"/);
+  assert.match(html, /aria-label="Explorer la démonstration SiteForge sur ce site"/);
   assert.match(html, /role="img" aria-label="Illustration conceptuelle non interactive/);
 });
 
