@@ -17,7 +17,17 @@ try {
   const portPath=join(profile,'DevToolsActivePort');
   for(let i=0;i<60&&!existsSync(portPath);i++)await sleep(150);
   if(!existsSync(portPath))throw Error('DEVTOOLS_START_TIMEOUT');
-  const port=Number(readFileSync(portPath,'utf8').trim().split(/\r?\n/)[0]);
+  // On Windows Chrome may briefly hold DevToolsActivePort with a sharing lock.
+  // Retry only transient file-sharing failures; do not hide other I/O errors.
+  let portText;
+  for(let attempt=0;attempt<20;attempt++){
+    try {portText=readFileSync(portPath,'utf8');break}
+    catch(error){
+      if(!['EBUSY','EPERM'].includes(error?.code)||attempt===19)throw error;
+      await sleep(100);
+    }
+  }
+  const port=Number(portText.trim().split(/\r?\n/)[0]);
   if(!Number.isInteger(port)||port<1)throw Error('INVALID_DEBUG_PORT');
   const targets=await (await fetch('http://127.0.0.1:'+port+'/json/list')).json();
   const page=targets.find(x=>x.type==='page'&&x.webSocketDebuggerUrl);
