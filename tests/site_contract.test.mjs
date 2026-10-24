@@ -84,7 +84,8 @@ test('SiteForge est une rubrique accessible, reliee a la demonstration publique 
   assert.match(html, /id="siteforge" aria-labelledby="siteforge-title"/);
   assert.match(html, /<h2 id="siteforge-title">SiteForge : une démonstration à explorer\.<\/h2>/);
   assert.match(html, /<a href="#siteforge">SiteForge<\/a>/);
-  assert.match(html, /https:\/\/inossarum\.github\.io\/synestra-vitrine-preview\/siteforge\//);
+  assert.match(html, /href="\.\/siteforge\/"/);
+  assert.doesNotMatch(html, /href="https:\/\/inossarum\.github\.io\/synestra-vitrine-preview\/siteforge\/"/);
   assert.match(html, /aria-label="Explorer la démonstration SiteForge sur la prévisualisation publique"/);
   assert.match(html, /role="img" aria-label="Illustration conceptuelle non interactive/);
 });
@@ -102,4 +103,19 @@ test('SiteForge conserve le responsive, le clavier et aucun chargement de ressou
   assert.match(html, /\.siteforge-preview-tiles\s*\{\s*grid-template-columns: minmax\(0,1fr\)/);
   assert.match(html, /a:focus-visible, button:focus-visible/);
   assert.match(html, /default-src 'none'; style-src 'unsafe-inline'/);
+});
+
+test('la navigation publique garde une connexion visible, sans authentification locale', () => {
+  assert.match(html, /<a class="nav-cta" href="https:\/\/synestra-client-portal\.synestra-studio\.workers\.dev\/" rel="noreferrer">Se connecter <span/);
+  assert.match(html, /L’accès au portail et son parcours de connexion sont encore en cours de qualification/);
+  assert.doesNotMatch(html, /<form\b|<script\b/i);
+});
+
+test('le parcours SiteForge reste sur l’origine de la vitrine, quelle que soit son adresse', () => {
+  assert.match(html, /href="\.\/siteforge\/"/);
+  assert.equal(new URL('./siteforge/', 'https://inossarum.github.io/synestra-vitrine-preview/').href,
+    'https://inossarum.github.io/synestra-vitrine-preview/siteforge/');
+  assert.equal(new URL('./siteforge/', 'https://synestra.example/').href, 'https://synestra.example/siteforge/');
+  assert.doesNotMatch(html, /href="https:\/\/inossarum\.github\.io\/synestra-vitrine-preview\/siteforge\/"/);
+  assert.match(html, /La démonstration est accessible sur le même site que cette vitrine/);
 });
