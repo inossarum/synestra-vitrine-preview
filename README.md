@@ -74,3 +74,30 @@ Pour qualifier le delta avant intégration : checkout Git isolé au SHA de R81,
 `node tests/web_pilot_real_capture_qa.mjs` et les cas Visual Gate appropriés.
 Recueillir les sorties réelles, contrôler les screenshots mobile/desktop et
 la parité de l'adresse SiteForge. Ne pas promouvoir sans tests ni gate d'owner.
+
+
+## R82 — Liaison SiteForge portable et « Se connecter » (24/10/2026)
+
+Branche dédiée conservée ; aucun changement direct sur `main` ou PR #3.
+L'affichage SiteForge R81 est préservé. Le lien de démonstration utilise
+`./siteforge/` afin de rester sur l'origine de la vitrine quand les deux
+pages sont publiées ensemble. La navigation principale indique maintenant
+**Se connecter** vers le portail existant, toujours en phase pilote.
+Aucun login natif ni nouvelle route de Cloudflare n'a été introduit.
+
+- **Failure-first source (V8, non Node)** : 4/4 vérifications ciblées étaient
+  manquantes avant correction.
+- **Statique sur blobs relus** : 28/28 PASS après correction.
+- **Node, Chrome/CDP, Visual Gate et URL HTTP déployée** : NON EXÉCUTÉS /
+  NON VÉRIFIÉE. La commande Bridge est restée `QUEUED`.
+- **Intégration** : les fichiers `siteforge/` se trouvent sur `main`,
+  absent du parent PR #3, lequel est 8 commits en retard. Une preview
+  provenant uniquement de cette branche ne dispose pas encore forcément de
+  l'asset. Ne déclarer le lien fonctionnel que lorsque les deux pages sont
+  dans la même livraison et que le clic est vérifié dans un navigateur réel.
+- Evidence : `evidence/VITRINE_SITEFORGE_ROUTE_R82_20261024.json`.
+- Reasoning : `reasoning/VITRINE_SITEFORGE_ROUTE_R82_20261024.md`.
+
+Les procédures `SAL-STUDIO-GITHUB-FIRST-DURABLE-AUTHORING-V1`, Memory V1
+et Central Skills UX/accessibilité ont été réutilisées. La source publiable
+reste `CUTOVER_GATE=HOLD` jusqu'aux E2E et au contrôle du propriétaire.
