@@ -83,6 +83,23 @@ try {
     await call('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'no-preference'}]});
     console.log('R93_STAGE_AND_REDUCED_MOTION_'+view.name.toUpperCase()+'=PASS '+JSON.stringify(u));
 
+    // R94: check the actual visual identity in computed Chrome CSS and the real
+    // canonical SVG decode, not merely a text claim or a synthetic brand sample.
+    const identity=await call('Runtime.evaluate',{expression:"JSON.stringify((()=>{const vars=getComputedStyle(document.documentElement);const brand=getComputedStyle(document.querySelector('.brand-symbol'));const core=getComputedStyle(document.querySelector('.core-sigil'));const strip=getComputedStyle(document.querySelector('.motion-strip'));return {ink:vars.getPropertyValue('--ink').trim(),family:vars.fontFamily,brandImage:brand.backgroundImage,coreImage:core.backgroundImage,stripGradient:strip.backgroundImage}})())",returnByValue:true});
+    const palette=JSON.parse(identity.result.value);
+    if(palette.ink!=='#060b12'||!palette.family.includes('Inter')||
+      !palette.brandImage.includes('synestra-master.svg')||
+      !palette.coreImage.includes('synestra-master.svg')||
+      !palette.stripGradient.includes('rgb(9, 25, 42)')) {
+      throw Error('R94_STUDIO_BRAND_COMPUTED_STYLE_FAIL '+view.name+' '+JSON.stringify(palette));
+    }
+    const image=await call('Runtime.evaluate',{expression:"new Promise(resolve=>{const img=new Image();img.onload=()=>resolve(JSON.stringify({loaded:true,width:img.naturalWidth,height:img.naturalHeight}));img.onerror=()=>resolve(JSON.stringify({loaded:false}));img.src=new URL('./assets/synestra-master.svg',document.baseURI).href})",awaitPromise:true,returnByValue:true});
+    const svg=JSON.parse(image.result.value);
+    if(!svg.loaded||svg.width!==240||svg.height!==320)
+      throw Error('R94_CANONICAL_SVG_NOT_LOADED '+view.name+' '+JSON.stringify(svg));
+    console.log('R94_STUDIO_BRAND_'+view.name.toUpperCase()+'=PASS '+JSON.stringify({ink:palette.ink,logo:svg,brandAsset:true}));
+
+
     const open=await call('Runtime.evaluate',{expression:"(() => {let d=document.querySelector('#questions details');let was=d.open; d.querySelector('summary').click();let opened=d.open; d.querySelector('summary').click();return !was&&opened&&!d.open;})()",returnByValue:true});
     if(open.result.value!==true)throw Error('FAQ_INTERACTION_FAIL '+view.name);
     const shot=await call('Page.captureScreenshot',{format:'png',fromSurface:true,captureBeyondViewport:false});
