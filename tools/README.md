@@ -100,3 +100,61 @@ Validation initiale dans un clone isolé du commit `12d7e2f91d73c7f696cb2fc845be
 Tests finalisés sur la branche Git après publication : à confirmer dans une extraction propre du commit R7, les tests locaux précédents ne sont pas encore cette vérification. Aucun rapport réel, PNG, chemin de client, clé privée ou token commité.
 
 Evidence durable : `evidence/VITRINE_WEB_PILOT_VISUAL_R7_PAIR_20261018.json`.
+
+
+## R85 — Application de la procédure Studio de création Web (24/10/2026)
+
+La référence de conception du **site public** reste
+`inossarum/studio-virtuel:00_DIRECTION/DECISIONS_2026-10-06_SYNESTRA_WEB_PLATFORM_MASTER_REQUIREMENTS_V1.md`
+(SHA Git `b1a70c73951ca1356c77ee12e3bc945d6e633fb8`) :
+promesses prouvées seulement, pas de faux clients ni de connexion simulée,
+site public distinct de la Web App, de son identité et du Supervisor.
+
+**Ordre de travail du Studio pour une modification de site :**
+
+1. **SOURCE GATE** — relire les règles, Memory V1, décisions, SAL, dernier
+   HEAD exact, worktree, propriétaire/lease et Evidence antérieures.
+2. **REUSE FIRST / SiteForge** — réutiliser les pages, composants et le langage
+   graphique existants ; valider le contenu, l'identité visuelle et le
+   responsive, sans créer de deuxième moteur ni inventer une réalisation client.
+3. **FAILURE FIRST** — reproduire le défaut sur la source exacte, avec
+   contrat de refus ou test négatif; corriger uniquement le delta nécessaire.
+4. **LIVE CHROME / WEB PILOT** — ouvrir *la version modifiée* à 390 px et
+   1440 px ; observer réellement la navigation, le clavier, l'overflow,
+   les ancres, l'AX tree et les requêtes. Les captures et métriques ne sont
+   pas une preuve automatique de qualité esthétique ou une certification WCAG.
+5. **VISUAL GATE** — capture baseline → modification → capture → comparaison
+   dérivée → rollback/contrôle du blob restauré. Deux pixels différents ne
+   prouvent pas un défaut ; examiner le rendu et les écarts notables.
+6. **EVIDENCE / REASONING** — journaliser HEAD, résultats Node/Chrome/E2E,
+   risques, limitations, rollback et décisions, puis relire les blobs
+   persistés. `QUEUED`, commit et CI ne sont jamais assimilés à DONE.
+7. **PUBLICATION CONTRÔLÉE** — ne fournir une URL comme preview réelle
+   qu'après réponse HTTP sur la version exacte. Merge/main, Access/DNS,
+   Cloudflare et publication publique restent distincts et nécessitent
+   un gate explicite. Conserver les limites FREE_ONLY.
+
+**Politique PC** : Synestra Connect → Bridge en priorité, par
+`request_id` puis `synestra_bridge_get_operation` ; ne pas contourner
+`BLOCKED` ou `POLICY_DENIED` via Desktop Commander. Celui-ci reste
+un secours soumis à décision explicite du propriétaire.
+
+**Incident R85 (source)** : `siteforge/` provenait de GitHub Pages avec
+210 liens racine `/synestra-vitrine-preview/siteforge/`. Sur la
+prévisualisation de racine `127.0.0.1:4189`, la cible d'un tel lien répond
+404 ; la cible `/siteforge/projects/` répond 200. Test Python
+failure-first : 25 échecs, puis 5/5 PASS après conversion bornée des
+210 liens en relatifs sur 20 pages. Commit source
+`4d40ceee9ef9020f641630c60d0ad1bef96e14c6` sur branche
+`task/SYN_VITRINE_SITEFORGE_SHOWCASE_20261024`. Vérification statique
+des cibles relatives sur les 20 pages : 0 cible interne absente.
+
+**Gate runtime R85** : Chrome/CDP, inspection du rendu réel, E2E HTTP
+de chaque lien sur le *nouveau commit* restent `NOT_RUN` car Connect a
+retourné `BLOCKED`. Les PASS Chrome R84 valent pour le HEAD R84, non R85.
+Les URLs `rel=canonical` et `og:url` liées à GitHub Pages ne sont pas
+migrées : définir le domaine final et corriger ces métadonnées lors du
+cutover autorisé, pas en inventant un nouvel hôte.
+
+Ce chapitre s'ajoute aux instructions existantes : il ne publie pas les
+outils MCP locaux sur Synestra Connect et n'autorise aucun déploiement.
