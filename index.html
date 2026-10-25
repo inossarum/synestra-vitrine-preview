@@ -1102,13 +1102,134 @@
       .product-card:hover,.visual-window,.product-card:hover .visual-window {transition:none!important;transform:none!important}
     }
 
+
+    /* R96 — Official Synestra Studio V1 brand, owner approved, source SHA256
+       c83dc24f18df338c359e9da4c58913e29c54bafa94357734e70820125e01b9bd.
+       Web derivative AVIF below is downsampled from that exact alpha PNG. */
+    :root { --brand-violet:#8a58ec;--brand-indigo:#302076;--brand-blue:#008bff;
+      --brand-cyan:#00c4f1;--brand-green:#20dba9;--brand-silver:#e9f0f7; }
+    body {
+      background:radial-gradient(ellipse 41rem 34rem at 83% 7%,rgba(28,67,166,.15),transparent 70%),
+        radial-gradient(ellipse 36rem 39rem at -15% 24%,rgba(106,64,207,.12),transparent 74%),
+        radial-gradient(ellipse 32rem 36rem at 104% 59%,rgba(0,137,136,.09),transparent 79%),
+        linear-gradient(145deg,#060b12,#0a1124 53%,#07101c);
+    }
+    .brand {display:inline-flex;align-items:center;gap:.8rem;}
+    .brand-mark {position:relative;display:block;flex:0 0 53px;width:53px;height:55px;overflow:hidden;isolation:isolate;}
+    .brand-mark img {position:absolute;width:75px;height:75px;max-width:none;top:-3px;left:-11px;
+      object-fit:contain;transform:translateZ(0);}
+    .site-header {border-image:linear-gradient(90deg,rgba(135,86,235,.64),#334355 50%,rgba(0,201,220,.50)) 1;}
+    .hero-v2 {position:relative;isolation:isolate;}
+    .hero-v2 .hero-topline span {color:var(--brand-green);}
+    .hero-accent {background:linear-gradient(108deg,#e7ecf5 0%,#a69bff 29%,#7d52e1 47%,#53c4f3 76%,#62e0c5 100%);
+      -webkit-background-clip:text;background-clip:text;background-size:220% 100%;color:transparent;}
+    .hero-v2 .eyebrow {border-color:rgba(140,108,241,.40);background:rgba(109,78,189,.08);color:#c7b8fc;}
+    .hero-v2 .button-primary,.button-primary {background:linear-gradient(120deg,#dce6f2,#a9c7ef 50%,#a0f0df);
+      color:#09101f;border-color:#c1c9e5;}
+    .button-primary:hover {box-shadow:0 14px 34px rgba(98,97,232,.23);}
+    .hero-index b {color:#a9a1fa;}
+    .system-stage {
+      background:radial-gradient(ellipse at 35% 60%,rgba(105,56,190,.17),transparent 42%),
+        radial-gradient(ellipse at 82% 20%,rgba(7,150,221,.16),transparent 40%),
+        linear-gradient(144deg,#14203b,#070e1b 79%);
+      border-color:rgba(120,153,213,.41);
+    }
+    .system-stage::after {background:conic-gradient(from 150deg at 50% 49%,
+      transparent 0deg,rgba(123,73,238,.12) 9deg,rgba(0,204,242,.07) 18deg,transparent 29deg,transparent 360deg);}
+    .system-core {overflow:visible;background:radial-gradient(circle at 32% 23%,#1a2b4e,#091120 76%);
+      border-radius:50%;border:1px solid rgba(178,163,242,.32);
+      box-shadow:0 0 0 10px rgba(110,97,205,.035),inset 0 0 25px rgba(0,106,192,.08);}
+    .system-core::before,.system-core::after {display:none!important;}
+    .official-hero-logo {
+      position:relative;z-index:3;display:block;width:202px;height:202px;max-width:none;flex:none;
+      object-fit:contain;transform:translate3d(0,0,0);
+      animation:logo-buoyancy 8s ease-in-out infinite alternate;
+      filter:none;
+    }
+    .system-core .core-caption {display:none;}
+    .system-orbit {border-color:rgba(117,163,226,.19);}
+    .orbit-one {border-color:rgba(158,113,244,.33);}
+    .orbit-two {border-color:rgba(53,195,230,.25);}
+    .orbit-marker {position:absolute;left:50%;top:49%;z-index:2;width:7px;height:7px;pointer-events:none;
+      border-radius:50%;background:#6ce1d4;box-shadow:0 0 9px rgba(108,225,212,.33);}
+    .marker-a {animation:marker-a-spin 26s linear infinite;}
+    .marker-b {width:5px;height:5px;background:#a898f9;animation:marker-b-spin 34s linear infinite reverse;}
+    .stage-pulse-line {position:absolute;left:13%;right:13%;height:1px;top:49%;opacity:.25;pointer-events:none;
+      background:linear-gradient(90deg,transparent,#7560d8,#62dde2,transparent);
+      animation:line-breathe 9s ease-in-out infinite alternate;}
+    .system-node {border-color:rgba(135,164,222,.35);}
+    .node-forge {border-top-color:#8a58ec;}
+    .node-connect {border-top-color:#16c4dc;}
+    .node-bridge {border-top-color:#29bfa2;}
+    .node-symbol-forge {background:linear-gradient(135deg,#d1c3ff,#7468d7);}
+    .node-symbol-connect {background:linear-gradient(135deg,#e1f7ff,#5bbde4);}
+    .node-symbol-bridge {background:linear-gradient(135deg,#a3e8d8,#7ea9d4);}
+    .motion-strip {background:linear-gradient(95deg,#180e32,#0e213e 38%,#0b2633 75%,#1b1138);}
+    .motion-strip-inner b {color:var(--brand-green);}
+    .product-card {transform-style:preserve-3d;}
+    .product-card:hover,.product-card:focus-within {border-color:#6975bc;box-shadow:0 30px 67px rgba(2,8,30,.35);}
+    .product-card-bridge::before {background:linear-gradient(90deg,transparent,#40cfb1,transparent);}
+    .product-card-connect::before {background:linear-gradient(90deg,transparent,#986fe8,transparent);}
+    .bridge-visual {background:radial-gradient(ellipse at 60% 80%,rgba(57,164,200,.19),transparent 60%),
+      radial-gradient(ellipse at 20% 16%,rgba(110,65,211,.14),transparent 40%),linear-gradient(135deg,#1d2641,#091629);}
+    .connect-visual {background:radial-gradient(circle at 52% 46%,rgba(58,127,240,.18),transparent 45%),
+      radial-gradient(circle at 24% 75%,rgba(141,75,224,.19),transparent 54%),#0d192e;}
+    .connect-hub {border-color:#8c7ada;background:radial-gradient(circle at 30% 25%,#303d7a,#10294a 78%);
+      box-shadow:0 0 0 10px rgba(139,78,220,.055),0 0 0 18px rgba(0,192,232,.035),0 18px 40px rgba(0,0,0,.33);}
+    .connect-satellite {border-color:#55588d;}
+    .product-heading h3 em,.product-card-connect .product-heading h3 em {color:#b09bf4;}
+    .product-card-bridge .product-heading h3 em {color:#6fe0cc;}
+    .studio-workflow {display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:1.3rem;
+      margin-top:1.65rem;padding:1.15rem 1.4rem;border:1px solid rgba(115,142,198,.23);
+      background:linear-gradient(110deg,rgba(37,24,74,.28),rgba(8,34,61,.48),rgba(13,58,52,.28));border-radius:1rem;}
+    .workflow-step {display:flex;align-items:center;gap:.55rem;color:#e3e9f4;font-size:.84rem;font-weight:760;}
+    .workflow-step b {font:.67rem/1 ui-monospace,Consolas,monospace;color:#b2a1f2;}
+    .workflow-step small {margin-left:auto;color:#97aabd;font-size:.67rem;font-weight:500;letter-spacing:.03em;}
+    .workflow-arrow {color:#75dccc;animation:workflow-pulse 2.7s ease-in-out infinite;}
+    .workflow-arrow:nth-of-type(4) {animation-delay:-1.25s;}
+    .siteforge-showcase {border-color:#59518f;background:radial-gradient(ellipse at 75% 20%,rgba(118,77,216,.18),transparent 24rem),
+      linear-gradient(135deg,#1a2343,#0a1a2b);}
+    .siteforge-showcase:hover .siteforge-preview {transform:perspective(1000px) rotateY(0) rotateX(1deg) translateY(-7px);}
+    .site-nav a:not(.nav-cta) {text-underline-offset:.4em;}
+    .site-nav a:not(.nav-cta):hover {color:#bca9ff;}
+    @keyframes logo-buoyancy {0%{transform:translate3d(0,2px,0)}100%{transform:translate3d(0,-9px,0)}}
+    @keyframes marker-a-spin {from{transform:rotate(0deg) translateX(145px) rotate(0deg)}
+      to{transform:rotate(360deg) translateX(145px) rotate(-360deg)}}
+    @keyframes marker-b-spin {from{transform:rotate(0deg) translateX(97px) rotate(0deg)}
+      to{transform:rotate(360deg) translateX(97px) rotate(-360deg)}}
+    @keyframes line-breathe {from{opacity:.07;transform:scaleX(.84)}to{opacity:.42;transform:scaleX(1)}}
+    @keyframes workflow-pulse {0%,100%{opacity:.55;transform:translateX(0)}50%{opacity:1;transform:translateX(4px)}}
+    @media (max-width:840px) {
+      .system-core {width:155px;height:155px;}
+      .official-hero-logo {width:190px;height:190px;}
+      .studio-workflow{gap:.8rem;}
+    }
+    @media (max-width:720px) {
+      .system-core{width:130px;height:130px;}
+      .official-hero-logo{width:166px;height:166px;}
+      .studio-workflow{grid-template-columns:1fr;gap:.65rem;}
+      .workflow-step small{margin-left:0;}
+      .workflow-arrow{transform:rotate(90deg);justify-self:start;margin-left:1rem;}
+      .workflow-arrow:nth-of-type(4){animation-delay:-1.25s;}
+    }
+    @media (max-width:440px) {
+      .system-core{width:115px;height:115px;}
+      .official-hero-logo{width:140px;height:140px;}
+      .brand-mark{flex-basis:44px;width:44px;height:45px;}
+      .brand-mark img{width:64px;height:64px;left:-10px;top:-3px;}
+    }
+    @media (prefers-reduced-motion:reduce) {
+      .official-hero-logo,.orbit-marker,.stage-pulse-line,.workflow-arrow{animation:none!important;}
+      .workflow-arrow{transform:none!important;}
+      .siteforge-showcase:hover .siteforge-preview{transform:none!important;}
+    }
   </style>
 </head>
 <body>
   <a class="skip" href="#contenu">Aller au contenu</a>
   <header class="container site-header">
     <a class="brand" href="./" aria-label="Accueil Synestra">
-      <span class="brand-symbol" aria-hidden="true">S</span>
+      <span class="brand-mark" aria-hidden="true"><img src="./assets/synestra-studio-official-v1.avif" width="120" height="120" alt="" decoding="async"></span>
       <span>SYNESTRA<small>STUDIO NUMÉRIQUE</small></span>
     </a>
     <nav class="site-nav" aria-label="Navigation principale">
@@ -1142,13 +1263,13 @@
       <div class="system-stage" role="img" aria-label="Composition artistique conceptuelle du Studio Synestra : SiteForge, Connect et Bridge gravitant autour d'un noyau commun. Cette illustration n'affiche aucun flux en direct.">
         <div class="stage-glow" aria-hidden="true"></div>
         <span class="stage-corner corner-one" aria-hidden="true"></span><span class="stage-corner corner-two" aria-hidden="true"></span>
-        <div class="stage-crosshair" aria-hidden="true"></div>
+        <div class="stage-crosshair" aria-hidden="true"></div><div class="stage-pulse-line" aria-hidden="true"></div>
         <div class="stage-telemetry" aria-hidden="true"><span>STUDIO / VISUAL SYSTEMS</span><span>BUILD · CONNECT · REVIEW</span></div>
         <div class="stage-topline" aria-hidden="true"><span>SY / STUDIO FIELD</span><span>CONCEPT VISUEL — 01</span></div>
         <div class="system-orbit orbit-one" aria-hidden="true"></div>
         <div class="system-orbit orbit-two" aria-hidden="true"></div>
-        <div class="system-orbit orbit-three" aria-hidden="true"></div>
-        <div class="system-core" aria-hidden="true"><span class="core-sigil">S</span><span class="core-caption">SYNESTRA</span><i></i></div>
+        <div class="system-orbit orbit-three" aria-hidden="true"></div><span class="orbit-marker marker-a" aria-hidden="true"></span><span class="orbit-marker marker-b" aria-hidden="true"></span>
+        <div class="system-core" aria-hidden="true"><img class="official-hero-logo" src="./assets/synestra-studio-official-v1.avif" width="480" height="480" alt="" decoding="async"><span class="core-caption">SYNESTRA STUDIO</span><i></i></div>
         <div class="system-node node-forge" aria-hidden="true"><span class="node-symbol node-symbol-forge">✦</span><span><b>SITEFORGE</b><small>Création visuelle</small></span></div>
         <div class="system-node node-connect" aria-hidden="true"><span class="node-symbol node-symbol-connect">⌘</span><span><b>CONNECT</b><small>Intégrations</small></span></div>
         <div class="system-node node-bridge" aria-hidden="true"><span class="node-symbol node-symbol-bridge">▣</span><span><b>BRIDGE</b><small>Lien avec le PC</small></span></div>
@@ -1214,6 +1335,7 @@
           </div>
         </article>
       </div>
+      <div class="studio-workflow" role="group" aria-label="Parcours conceptuel Synestra : créer, connecter et contrôler"><span class="workflow-step"><b>01</b> Création <small>SiteForge</small></span><span class="workflow-arrow" aria-hidden="true">→</span><span class="workflow-step"><b>02</b> Connexion <small>Connect</small></span><span class="workflow-arrow" aria-hidden="true">→</span><span class="workflow-step"><b>03</b> Contrôle <small>Bridge</small></span></div>
       <div class="platform-footnote"><span class="footnote-mark">✳</span><p><strong>Ce qui compte : une progression vérifiable.</strong> Ces interfaces sont des représentations créatives, pas des captures du logiciel ni la promesse que toutes les fonctions sont déjà disponibles.</p><a href="#confiance">Notre approche de la confiance <span aria-hidden="true">↗</span></a></div>
     </section>
 
