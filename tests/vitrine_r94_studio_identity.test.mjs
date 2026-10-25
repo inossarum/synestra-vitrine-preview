@@ -7,7 +7,7 @@ const html=readFileSync(new URL('../index.html',import.meta.url),'utf8');
 const logo=readFileSync(new URL('../assets/synestra-master.svg',import.meta.url));
 const blobSha=createHash('sha1').update('blob '+logo.length+'\0').update(logo).digest('hex');
 
-test('R94 conserve l'ancien vecteur de la Web App pour provenance, sans le déclarer officiel actuel',()=>{
+test('R94 conserve le vecteur historique de la Web App pour provenance, sans le déclarer officiel actuel',()=>{
   assert.equal(blobSha,'15e5120d52f922bc87f8702fa89c33c02e3e5a7f');
   assert.match(logo.toString('utf8'),/viewBox="0 0 240 320"/);
   assert.match(html,/background:transparent url\("\.\/assets\/synestra-master\.svg"\)/);
