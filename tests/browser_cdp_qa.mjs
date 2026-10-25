@@ -84,11 +84,12 @@ try {
     console.log('R93_STAGE_AND_REDUCED_MOTION_'+view.name.toUpperCase()+'=PASS '+JSON.stringify(u));
 
     // R96: check the actual owner-approved logo bytes decoded by Chrome.
-    const identity=await call('Runtime.evaluate',{expression:"JSON.stringify((()=>{const vars=getComputedStyle(document.documentElement);const mark=document.querySelector('.brand-mark img');const hero=document.querySelector('.official-hero-logo');return {ink:vars.getPropertyValue('--ink').trim(),violet:vars.getPropertyValue('--brand-violet').trim(),family:vars.fontFamily,markLoaded:!!mark&&mark.complete&&mark.naturalWidth===400,heroLoaded:!!hero&&hero.complete&&hero.naturalWidth===400,markShown:!!mark&&getComputedStyle(mark).display!=='none',heroShown:!!hero&&getComputedStyle(hero).display!=='none',sameSource:!!mark&&!!hero&&mark.currentSrc===hero.currentSrc,src:hero?.currentSrc||''}})())",returnByValue:true});
+    const identity=await call('Runtime.evaluate',{expression:"JSON.stringify((()=>{const vars=getComputedStyle(document.documentElement);const brand=document.querySelector('.brand-name');const hero=document.querySelector('.official-hero-logo');const hr=hero?.getBoundingClientRect();const core=hero?.parentElement;return {ink:vars.getPropertyValue('--ink').trim(),violet:vars.getPropertyValue('--brand-violet').trim(),family:vars.fontFamily,brandText:brand?.textContent?.trim()||'',headerImgs:document.querySelectorAll('header.site-header img').length,heroLoaded:!!hero&&hero.complete&&hero.naturalWidth===400,heroShown:!!hero&&getComputedStyle(hero).display!=='none',filter:hero?getComputedStyle(hero).filter:'',animation:hero?getComputedStyle(hero).animationName:'',objectFit:hero?getComputedStyle(hero).objectFit:'',parentOverflow:core?getComputedStyle(core).overflow:'',fits:!!hr&&hr.width>50&&hr.right<=innerWidth+1,src:hero?.currentSrc||''}})())",returnByValue:true});
     const palette=JSON.parse(identity.result.value);
     if(palette.ink!=='#060b12'||palette.violet!=='#8a58ec'||!palette.family.includes('Inter')||
-      !palette.markLoaded||!palette.heroLoaded||!palette.markShown||!palette.heroShown||
-      !palette.sameSource||!palette.src.endsWith('assets/synestra-studio-official-v1.avif')) {
+      !palette.brandText.includes('SYNESTRA')||palette.headerImgs!==0||!palette.heroLoaded||!palette.heroShown||
+      !palette.filter.includes('brightness(0.72) saturate(0.58)')||palette.animation!=='none'||palette.objectFit!=='contain'||palette.parentOverflow!=='visible'||!palette.fits||
+      !palette.src.endsWith('assets/synestra-studio-official-v1.avif')) {
       throw Error('R96_OFFICIAL_LOGO_NOT_DISPLAYED '+view.name+' '+JSON.stringify(palette));
     }
     console.log('R96_OFFICIAL_LOGO_'+view.name.toUpperCase()+'=PASS '+JSON.stringify(palette));
@@ -96,7 +97,7 @@ try {
     // R95/R96: animated composition remains active, but freezes on request.
     const kinetic=await call('Runtime.evaluate',{expression:"JSON.stringify((()=>{const get=(s,p)=>getComputedStyle(document.querySelector(s),p||null);return {radar:get('.system-stage','::after').animationName,track:get('.connect-track').animationName,node:get('.system-node','::after').animationName,logo:get('.official-hero-logo').animationName,workflow:get('.workflow-arrow').animationName}})())",returnByValue:true});
     const k=JSON.parse(kinetic.result.value);
-    if(k.radar!=='cin-radar'||k.track!=='cin-connect'||k.node!=='cin-glint'||k.logo!=='logo-buoyancy'||k.workflow!=='workflow-pulse')
+    if(k.radar!=='cin-radar'||k.track!=='cin-connect'||k.node!=='cin-glint'||k.logo!=='none'||k.workflow!=='workflow-pulse')
       throw Error('R96_CINEMATIC_COMPOSITION_FAIL '+view.name+' '+JSON.stringify(k));
     await call('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'reduce'}]});
     const pauseProof=await call('Runtime.evaluate',{expression:"JSON.stringify({radar:getComputedStyle(document.querySelector('.system-stage'),'::after').animationName,track:getComputedStyle(document.querySelector('.connect-track')).animationName,logo:getComputedStyle(document.querySelector('.official-hero-logo')).animationName,arrow:getComputedStyle(document.querySelector('.workflow-arrow')).animationName})",returnByValue:true});
