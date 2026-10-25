@@ -1285,13 +1285,24 @@
     @media (prefers-reduced-motion:reduce) {
       .official-hero-logo,.stage-pulse-line {animation:none!important;transition:none!important;}
     }
+
+    /* R99 — Header art using owner-approved studio-lettering reference.
+       Repaired Y artwork is source-based; no invented font family.
+       Asset WebP has transparency; title and S are one nonduplicated image. */
+    .brand {display:inline-flex;align-items:center;flex:0 0 auto;max-width:100%;}
+    .brand-banner-r99 {display:block;width:clamp(180px,23vw,286px);height:auto;max-height:64px;
+      max-width:100%;object-fit:contain;object-position:left center;filter:none;box-shadow:none;}
+    .brand-banner-r99:hover {transform:none;}
+    @media(max-width:840px){.brand-banner-r99{width:205px;max-height:50px;}}
+    @media(max-width:440px){.brand-banner-r99{width:176px;max-height:40px;}}
+    @media(prefers-reduced-motion:reduce){.brand-banner-r99{animation:none!important;transition:none!important;}}
   </style>
 </head>
 <body>
   <a class="skip" href="#contenu">Aller au contenu</a>
   <header class="container site-header">
     <a class="brand" href="./" aria-label="Accueil Synestra">
-      <span class="brand-name">SYNESTRA<small>STUDIO NUMÉRIQUE</small></span>
+      <img class="brand-banner-r99" src="./assets/synestra-studio-header-y-r99.webp" width="785" height="168" alt="Synestra Studio numérique" decoding="async">
     </a>
     <nav class="site-nav" aria-label="Navigation principale">
       <a href="#approche">Fonctionnement</a>
