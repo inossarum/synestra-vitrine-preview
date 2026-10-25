@@ -7,7 +7,8 @@ const html=readFileSync(new URL('../index.html',import.meta.url),'utf8');
 test('R98 failure-first: header uses one legible wordmark and no cropped oversized image',()=>{
   const header=html.match(/<header class="container site-header">([\s\S]*?)<\/header>/)?.[1]||'';
   assert.match(header,/<img class="brand-banner-r99" src="\.\/assets\/synestra-studio-header-y-r99\.webp"/);
-  assert.equal((header.match(/<img\\b/g)||[]).length,1);\n  assert.doesNotMatch(header,/<span class="brand-mark"|class="brand-name"/);
+  assert.equal((header.match(/<img /g)||[]).length,1);
+  assert.doesNotMatch(header,/<span class="brand-mark"|class="brand-name"/);
 });
 
 test('R98: official logo retained fully in stage, no animated flash or forced cropping',()=>{
