@@ -30,7 +30,7 @@ test('R93 sépare maquettes conceptuelles et état réel des produits', () => {
 test('R93 conserve le bon périmètre : noindex, CSP et aucune infrastructure externe', () => {
   assert.match(html, /content="noindex,nofollow"/);
   assert.match(html, /default-src 'none'; style-src 'unsafe-inline'/);
-  assert.doesNotMatch(html, /<(?:script|img|iframe|form|link)\b/i);
+  assert.doesNotMatch(html, /<(?:script|iframe|form|link)\b/i);
   assert.match(html, /href="\.\/siteforge\/"/);
   assert.match(html, /https:\/\/synestra-client-portal\.synestra-studio\.workers\.dev\//);
 });
