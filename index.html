@@ -1225,14 +1225,73 @@
       .official-hero-logo,.orbit-marker,.stage-pulse-line,.workflow-arrow,.studio-workflow{transition:none!important;}
       .official-hero-logo,.orbit-marker,.stage-pulse-line{transform:none!important;}
     }
+
+    /* R98_STUDIO_BRAND_RESTRAINT
+       User screenshot: header cropped the approved square wordmark and the hero
+       logo dominated a deliberately restrained navy/cyan/steel interface.
+       Keep the owner-approved asset unchanged; adjust its presentation only.
+       The header is an accessible typographic signature (no cropped image).
+       The complete original-brand derivative remains visible in the stage. */
+    .brand { gap:0; text-decoration:none; }
+    .brand-name {
+      display:flex;flex-direction:column;align-items:flex-start;
+      font-weight:840;font-size:1.02rem;letter-spacing:.145em;line-height:1.2;
+      color:#e7edf5;text-shadow:none;
+    }
+    .brand-name small {
+      font-size:.55rem;font-weight:700;letter-spacing:.19em;
+      line-height:1.55;color:#9aaabc;text-shadow:none;
+    }
+    .site-header::after {animation:none!important;opacity:.34;}
+    .hero-accent {animation:none!important;}
+    .system-core {
+      width:182px;height:182px;
+      background:rgba(7,14,27,.82);
+      border:1px solid rgba(128,150,189,.34);
+      box-shadow:none!important;
+      overflow:visible;
+    }
+    .system-core::before,.system-core::after {display:none!important;}
+    .official-hero-logo {
+      display:block;width:166px;height:166px;
+      max-width:100%;aspect-ratio:1/1;object-fit:contain;
+      filter:brightness(.72) saturate(.58);
+      opacity:.91;
+      animation:none!important;
+      box-shadow:none!important;
+      background:transparent;
+    }
+    .stage-glow {opacity:.24;}
+    .stage-pulse-line {opacity:.16;animation:none!important;}
+    .system-stage::after {opacity:.4;}
+    .node-symbol-forge,.node-symbol-connect,.node-symbol-bridge {box-shadow:none;}
+    .system-node {box-shadow:0 12px 29px rgba(0,8,19,.23);}
+    .system-node::after {opacity:.1;}
+    .orbit-one::before,.orbit-two::before {box-shadow:none;}
+    .marker-a,.marker-b {box-shadow:none;}
+    @media (max-width:840px) {
+      .system-core {width:150px;height:150px;}
+      .official-hero-logo {width:137px;height:137px;}
+    }
+    @media (max-width:720px) {
+      .system-core {width:128px;height:128px;}
+      .official-hero-logo {width:116px;height:116px;}
+    }
+    @media (max-width:440px) {
+      .system-core {width:112px;height:112px;}
+      .official-hero-logo {width:102px;height:102px;}
+      .brand-name {font-size:.94rem;}
+    }
+    @media (prefers-reduced-motion:reduce) {
+      .official-hero-logo,.stage-pulse-line {animation:none!important;transition:none!important;}
+    }
   </style>
 </head>
 <body>
   <a class="skip" href="#contenu">Aller au contenu</a>
   <header class="container site-header">
     <a class="brand" href="./" aria-label="Accueil Synestra">
-      <span class="brand-mark" aria-hidden="true"><img src="./assets/synestra-studio-official-v1.avif" width="120" height="120" alt="" decoding="async"></span>
-      <span>SYNESTRA<small>STUDIO NUMÉRIQUE</small></span>
+      <span class="brand-name">SYNESTRA<small>STUDIO NUMÉRIQUE</small></span>
     </a>
     <nav class="site-nav" aria-label="Navigation principale">
       <a href="#approche">Fonctionnement</a>
