@@ -1,0 +1,58 @@
+{
+  "schema": "synestra.vitrine.r89.visual-gallery-evidence.v1",
+  "date": "2026-10-25",
+  "mission_id": "SYN_VITRINE_SITEFORGE_SHOWCASE_20261024",
+  "owner": "Inos",
+  "objective": "Améliorer la découverte visuelle des démos SiteForge de la vitrine sans altérer les démos ou le portail; garder des liens de consultation directs.",
+  "source_gate": "LIMITED_RUNTIME",
+  "owner_lease": "ISOLATED_BRANCH_CREATED_FROM_VERIFIED_HEAD",
+  "billing_policy": "FREE_ONLY",
+  "source_baseline": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_VITRINE_SITEFORGE_SHOWCASE_20261024",
+    "commit_sha": "ecf3c59d6497ea015bf117799804c92a2e5251e8",
+    "index_blob_sha": "c354a8b5b2a89e494f9a061b6cb7f28b68e2aa01",
+    "preceding_checkpoint": "evidence/VITRINE_SITEFORGE_GENERATOR_PUBLIC_R87_20261024.json"
+  },
+  "new_branch": "task/SYN_VITRINE_R89_VISUAL_GALLERY_20261025",
+  "delta": {
+    "index_blob_sha": "f8b0df136ee5b77b38bc16483fc03f3eca5feea8",
+    "test_blob_sha": "28208c72673b4238edd02276d176bbac190c96ba",
+    "files": [
+      "index.html",
+      "tests/siteforge_gallery.test.mjs"
+    ],
+    "visual": "CSS-only 3-card demo gallery linking Prism, Open Form and Signature using existing style tokens",
+    "links": [
+      "./siteforge/index.html",
+      "./siteforge/lab/index.html",
+      "./siteforge/signature/index.html"
+    ],
+    "source_destinations": "3/3 GitHub files VERIFIED"
+  },
+  "tests": {
+    "static_git_source_invariants": "14/14 PASS",
+    "exact_html_destinations": "3/3 VERIFIED",
+    "node_suite": "NOT_RUN: OWNER_KEY_PC_TOOL_QUEUED execution_authorized=false",
+    "real_chrome_390_1440": "NOT_RUN",
+    "web_pilot_visual_gate": "NOT_RUN",
+    "public_https": "NOT_DEPLOYED_NOT_CHECKED",
+    "original_website_published": "NOT_MODIFIED"
+  },
+  "invariants": [
+    "No font candidate installed; no original approved typeface overwritten",
+    "No JavaScript, external images, form, iframe, third-party calls, IAM or backend",
+    "Other original sections and footer preserved",
+    "Native anchor links and descriptive aria-labels; responsive 3→1 columns; reduced motion",
+    "Visual illustrations explicitly conceptual; no implication of live private service"
+  ],
+  "blocked": {
+    "source": "Synestra Connect software-key Bridge PC start process",
+    "state": "QUEUED",
+    "execution_authorized": false,
+    "action": "No retry, no Desktop Commander fallback, no implicit deployment or CI PASS"
+  },
+  "rollback": "Revert new R89 branch 2-file delta; main/public repo, PR3, Cloudflare Worker and existing pages unchanged.",
+  "next": "Once owner authorized PC operations return DONE/PASS, run node --test tests/site_contract.test.mjs tests/siteforge_gallery.test.mjs, browser_cdp_qa.mjs 390/1440, Web Pilot/Visual Gate; review actual screenshots and accessibility, then consider preview-only publication with explicit gate.",
+  "function_report": "PARTIAL"
+}
