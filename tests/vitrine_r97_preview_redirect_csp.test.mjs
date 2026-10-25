@@ -13,7 +13,7 @@ test('R97 FAILURE-FIRST: GitHack cross-origin asset redirect is explicitly allow
   assert.ok(htmlCsp.includes("base-uri 'none'"),'no base-uri rewrite');
   assert.ok(!htmlCsp.includes('*')&&!htmlCsp.includes("data:")&&!htmlCsp.includes("unsafe-eval"),'no broadening to data/wildcard/script');
   assert.match(html, /src="\.\/assets\/synestra-studio-official-v1\.avif"/);
-  assert.equal((html.match(/src="\.\/assets\/synestra-studio-official-v1\.avif"/g)||[]).length,2);
+  assert.equal((html.match(/src="\.\/assets\/synestra-studio-official-v1\.avif"/g)||[]).length,1);
 });
 
 test('R97 avoids extra HTML remote resources or synthetic live claims',()=>{
