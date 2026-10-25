@@ -13,8 +13,9 @@ test('R96 logo approuvé, dérivé exact du PNG canonique, asset local SHA-véri
   assert.equal(hash,'511d1454953ebca11b4547036960d4aa9613eb294d03268a2b2e2cf9ab89bb8c');
   assert.equal(logo.length,20508);
   assert.match(logo.toString('latin1',0,18),/ftypavif/);
-  assert.equal([...html.matchAll(/src="\.\/assets\/synestra-studio-official-v1\.avif"/g)].length,2);
-  assert.match(html,/<span class="brand-mark" aria-hidden="true"><img/);
+  assert.equal([...html.matchAll(/src="\.\/assets\/synestra-studio-official-v1\.avif"/g)].length,1);
+  assert.match(html,/<span class="brand-name">SYNESTRA<small>STUDIO NUMÉRIQUE<\/small><\/span>/);
+  assert.doesNotMatch(html,/<span class="brand-mark"/);
   assert.match(html,/<img class="official-hero-logo"/);
   assert.doesNotMatch(html,/src="[^"]+synestra-master\.svg"/i);
 });
