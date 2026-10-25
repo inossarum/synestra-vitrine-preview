@@ -83,39 +83,27 @@ try {
     await call('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'no-preference'}]});
     console.log('R93_STAGE_AND_REDUCED_MOTION_'+view.name.toUpperCase()+'=PASS '+JSON.stringify(u));
 
-    // R94: check the actual visual identity in computed Chrome CSS and the real
-    // canonical SVG decode, not merely a text claim or a synthetic brand sample.
-    const identity=await call('Runtime.evaluate',{expression:"JSON.stringify((()=>{const vars=getComputedStyle(document.documentElement);const brand=getComputedStyle(document.querySelector('.brand-symbol'));const core=getComputedStyle(document.querySelector('.core-sigil'));const strip=getComputedStyle(document.querySelector('.motion-strip'));return {ink:vars.getPropertyValue('--ink').trim(),family:vars.fontFamily,brandImage:brand.backgroundImage,coreImage:core.backgroundImage,stripGradient:strip.backgroundImage}})())",returnByValue:true});
+    // R96: check the actual owner-approved logo bytes decoded by Chrome.
+    const identity=await call('Runtime.evaluate',{expression:"JSON.stringify((()=>{const vars=getComputedStyle(document.documentElement);const mark=document.querySelector('.brand-mark img');const hero=document.querySelector('.official-hero-logo');return {ink:vars.getPropertyValue('--ink').trim(),violet:vars.getPropertyValue('--brand-violet').trim(),family:vars.fontFamily,markLoaded:!!mark&&mark.complete&&mark.naturalWidth===400,heroLoaded:!!hero&&hero.complete&&hero.naturalWidth===400,markShown:!!mark&&getComputedStyle(mark).display!=='none',heroShown:!!hero&&getComputedStyle(hero).display!=='none',sameSource:!!mark&&!!hero&&mark.currentSrc===hero.currentSrc,src:hero?.currentSrc||''}})())",returnByValue:true});
     const palette=JSON.parse(identity.result.value);
-    if(palette.ink!=='#060b12'||!palette.family.includes('Inter')||
-      !palette.brandImage.includes('synestra-master.svg')||
-      !palette.coreImage.includes('synestra-master.svg')||
-      !palette.stripGradient.includes('rgb(9, 25, 42)')) {
-      throw Error('R94_STUDIO_BRAND_COMPUTED_STYLE_FAIL '+view.name+' '+JSON.stringify(palette));
+    if(palette.ink!=='#060b12'||palette.violet!=='#8a58ec'||!palette.family.includes('Inter')||
+      !palette.markLoaded||!palette.heroLoaded||!palette.markShown||!palette.heroShown||
+      !palette.sameSource||!palette.src.endsWith('assets/synestra-studio-official-v1.avif')) {
+      throw Error('R96_OFFICIAL_LOGO_NOT_DISPLAYED '+view.name+' '+JSON.stringify(palette));
     }
-    const image=await call('Runtime.evaluate',{expression:"new Promise(resolve=>{const img=new Image();img.onload=()=>resolve(JSON.stringify({loaded:true,width:img.naturalWidth,height:img.naturalHeight}));img.onerror=()=>resolve(JSON.stringify({loaded:false}));img.src=new URL('./assets/synestra-master.svg',document.baseURI).href})",awaitPromise:true,returnByValue:true});
-    const svg=JSON.parse(image.result.value);
-    if(!svg.loaded||svg.width<80||svg.height<100)
-      throw Error('R94_CANONICAL_SVG_NOT_LOADED '+view.name+' '+JSON.stringify(svg));
-    console.log('R94_STUDIO_BRAND_'+view.name.toUpperCase()+'=PASS '+JSON.stringify({ink:palette.ink,logo:svg,brandAsset:true}));
+    console.log('R96_OFFICIAL_LOGO_'+view.name.toUpperCase()+'=PASS '+JSON.stringify(palette));
 
-    // R95: actual browser CSS visual animation, provenance-safe typography and
-    // behavior when reduced-motion is requested (no screenshot-as-approval).
-    const kinetic=await call('Runtime.evaluate',{expression:"JSON.stringify((()=>{const get=(s,p)=>getComputedStyle(document.querySelector(s),p||null);return {radarMotion:get(\".system-stage\",\"::after\").animationName,trackMotion:get(\".connect-track\").animationName,nodeMotion:get(\".system-node\",\"::after\").animationName,coreLabel:get(\".system-core\",\"::after\").content,brandDisplay:get(\".brand-symbol\").display,coreSymbolDisplay:get(\".core-sigil\").display}})())",returnByValue:true});
+    // R95/R96: animated composition remains active, but freezes on request.
+    const kinetic=await call('Runtime.evaluate',{expression:"JSON.stringify((()=>{const get=(s,p)=>getComputedStyle(document.querySelector(s),p||null);return {radar:get('.system-stage','::after').animationName,track:get('.connect-track').animationName,node:get('.system-node','::after').animationName,logo:get('.official-hero-logo').animationName,workflow:get('.workflow-arrow').animationName}})())",returnByValue:true});
     const k=JSON.parse(kinetic.result.value);
-    if(k.radarMotion!=='cin-radar'||k.trackMotion!=='cin-connect'||
-      k.nodeMotion!=='cin-glint'||k.brandDisplay!=='none'||
-      k.coreSymbolDisplay!=='none'||!k.coreLabel.includes('STUDIO')) {
-      throw Error('R95_STUDIO_KINETIC_RENDER_FAIL '+view.name+' '+JSON.stringify(k));
-    }
+    if(k.radar!=='cin-radar'||k.track!=='cin-connect'||k.node!=='cin-glint'||k.logo!=='logo-buoyancy'||k.workflow!=='workflow-pulse')
+      throw Error('R96_CINEMATIC_COMPOSITION_FAIL '+view.name+' '+JSON.stringify(k));
     await call('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'reduce'}]});
-    const pauseProof=await call('Runtime.evaluate',{expression:"JSON.stringify({radar:getComputedStyle(document.querySelector(\".system-stage\"),\"::after\").animationName,track:getComputedStyle(document.querySelector(\".connect-track\")).animationName})",returnByValue:true});
+    const pauseProof=await call('Runtime.evaluate',{expression:"JSON.stringify({radar:getComputedStyle(document.querySelector('.system-stage'),'::after').animationName,track:getComputedStyle(document.querySelector('.connect-track')).animationName,logo:getComputedStyle(document.querySelector('.official-hero-logo')).animationName,arrow:getComputedStyle(document.querySelector('.workflow-arrow')).animationName})",returnByValue:true});
     const pr=JSON.parse(pauseProof.result.value);
-    if(pr.radar!=='none'||pr.track!=='none')throw Error('R95_KINETIC_REDUCED_MOTION_FAIL '+view.name+' '+JSON.stringify(pr));
+    if(Object.values(pr).some(x=>x!=='none'))throw Error('R96_REDUCED_MOTION_FAIL '+view.name+' '+JSON.stringify(pr));
     await call('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'no-preference'}]});
-    console.log('R95_VISUAL_KINETIC_'+view.name.toUpperCase()+'=PASS '+JSON.stringify(k));
-
-
+    console.log('R96_KINETIC_AND_REDUCED_MOTION_'+view.name.toUpperCase()+'=PASS '+JSON.stringify(k));
 
     const open=await call('Runtime.evaluate',{expression:"(() => {let d=document.querySelector('#questions details');let was=d.open; d.querySelector('summary').click();let opened=d.open; d.querySelector('summary').click();return !was&&opened&&!d.open;})()",returnByValue:true});
     if(open.result.value!==true)throw Error('FAQ_INTERACTION_FAIL '+view.name);
