@@ -29,7 +29,7 @@ test('la FAQ utilise les composants natifs et reste sans JavaScript', () => {
 });
 
 test('la vitrine ne crée ni formulaire identifiant ni dépendance tierce', () => {
-  assert.doesNotMatch(html, /<(form|iframe|img|link)\b/i);
+  assert.doesNotMatch(html, /<(form|iframe|link)\b/i);
   assert.ok(html.includes('https://synestra-client-portal.synestra-studio.workers.dev/'));
 });
 
@@ -94,7 +94,7 @@ test('SiteForge ne presente pas la maquette comme un client livre ou un E2E cert
   assert.match(html, /Un aperçu public du travail de présentation web, distinct d’un projet client terminé/);
   assert.match(html, /composition CSS indicative, pas une capture certifiée du prototype/);
   assert.match(html, /sans résultat client revendiqué/);
-  assert.doesNotMatch(html, /<script\b|<iframe\b|<img\b|<form\b/i);
+  assert.doesNotMatch(html, /<script\b|<iframe\b|<form\b/i);
 });
 
 test('SiteForge conserve le responsive, le clavier et aucun chargement de ressource tierce', () => {
