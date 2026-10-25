@@ -7,7 +7,7 @@ const html=readFileSync(new URL('../index.html',import.meta.url),'utf8');
 const src=readFileSync(new URL('../assets/synestra-studio-header-y-r99.webp',import.meta.url));
 test('R99: header displays source-matched corrected geometric Y banner and no duplicate text',()=>{
   assert.equal(src.length,46950);
-  assert.equal(createHash('sha1').update('blob '+src.length+'\\0').update(src).digest('hex'),'a3e1d5de3ebc4b9735387358ddca67b3d4f31243');
+  assert.equal(createHash('sha1').update(Buffer.concat([Buffer.from('blob '+src.length), Buffer.from([0]), src])).digest('hex'),'a3e1d5de3ebc4b9735387358ddca67b3d4f31243');
   assert.match(html,/<img class="brand-banner-r99" src="\.\/assets\/synestra-studio-header-y-r99\.webp"/);
   assert.doesNotMatch(html,/<span class="brand-name">SYNESTRA/);
   assert.match(html,/aria-label="Accueil Synestra"/);
