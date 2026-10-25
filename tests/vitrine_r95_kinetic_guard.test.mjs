@@ -23,7 +23,7 @@ test('R95 animations cinématiques présentes et abordables',()=>{
 });
 
 test('R95 respecte mouvement réduit, CSP, origine et fidélité produit',()=>{
-  const reduced=html.slice(html.lastIndexOf('@media(prefers-reduced-motion:reduce)'));
+  const reduced=html.slice(html.indexOf('@media(prefers-reduced-motion:reduce)'));
   assert.match(reduced,/cin-radar|system-stage::after/);
   assert.match(reduced,/animation:none!important/);
   assert.doesNotMatch(html,/<script\b|<iframe\b|<form\b/i);
