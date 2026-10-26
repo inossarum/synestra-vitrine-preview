@@ -1,0 +1,60 @@
+{
+  "schema": "synestra.visual-preview-evidence.v1",
+  "mission_id": "SYN_VITRINE_CORE_RESTORE_R121_20261026",
+  "owner": "Synestra Vitrine Preview PR #5",
+  "date_utc": "2026-10-26",
+  "user_evidence": "Actual iPhone screenshot showed R120 SVG fallback, simplistic smooth gradient orb, flat metallic rings and four short straight centre sparks; user rejected the appearance",
+  "outcome": "RESTORE_DEPLOYED_PREVIEW_VISUAL_BROWSER_PENDING",
+  "repo": "inossarum/synestra-vitrine-preview",
+  "branch": "task/SYN_VITRINE_SITEFORGE_R91_PREVIEW_20261024",
+  "code_sha": "1f5264fcd58c1327e415d4bffc468babd0c7f56a",
+  "code_tree_sha": "ab0eb71b4ecde7dcf465efd41d4e0025d670a4d1",
+  "baseline_restored": {
+    "commit": "b602b60755bd31e3645045116ef2f0946c48c712",
+    "shader_blob_sha": "d78d7222a95fd080a408bba2237dd3b9dda05bd7",
+    "plasma_animated": true,
+    "discharge_count": 8,
+    "metal_ring_count": 0,
+    "original_subtle_orbit_count": 1
+  },
+  "svg_fallback": {
+    "eight_bolts_radiating_from_nucleus": true,
+    "radial_emitter": true,
+    "low_frequency_subtle_pulse": true,
+    "disabled_animation_for_reduced_motion": true
+  },
+  "cloudflare_preview": {
+    "project": "synestra-vitrine-preview",
+    "deployment_id": "e7b565f0-3b1f-48cc-b996-419a46d4b9e1",
+    "url": "https://e7b565f0.synestra-vitrine-preview.pages.dev/",
+    "status": "success",
+    "environment": "preview",
+    "deployed_sha": "1f5264fcd58c1327e415d4bffc468babd0c7f56a"
+  },
+  "tests": {
+    "provider": "Cloudflare Pages build",
+    "count": 47,
+    "pass": 47,
+    "fail": 0,
+    "static_export": "PASS",
+    "files": 38,
+    "real_browser_iphone": "PENDING",
+    "webgl_gpu_runtime": "PENDING",
+    "external_http_validation": "UNAVAILABLE_IN_CURRENT_ENVIRONMENT"
+  },
+  "safety": {
+    "billing": "FREE_ONLY",
+    "no_main_mutation": true,
+    "pr_draft": true,
+    "source_gate": "LIMITED",
+    "hooks": "NOT_APPLICABLE",
+    "function_report": "PARTIAL"
+  },
+  "exclusions": [
+    "Image-generation stills are conceptual only and never count as WebGL acceptance evidence",
+    "Prior R119 remains recoverable by commit ca3f2401edf624a4bd284777ff20ed32b0cb1716 but includes flat rings",
+    "Do not claim real 3D product from screenshots of conceptual prototypes"
+  ],
+  "first_next_action": "Inspect the published Preview on the same iPhone: if SVG shows, determine if prefers-reduced-motion, WebGL unavailable or shader compile failed; never infer exact cause from an SVG screenshot alone",
+  "rollback": "Return to pre-restore SHA f2bf4dde6f8c405c9f087ef5fa755e34391a0a78 only by a reviewed non-destructive revert; never force-update main"
+}
