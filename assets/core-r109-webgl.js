@@ -126,7 +126,7 @@ float r111Arc(vec2 p,float index,float seconds) {
   float across=dot(p,vec2(-dir.y,dir.x));
   float branchSeed=hash3(vec3(cell,9.21,index));
   float jitter=sin(along*36.+seed*20.)*.022+sin(along*91.+branchSeed*21.)*.010;
-  float growingTip=mix(.06,.675,smoothstep(.04,.46,phase));
+  float growingTip=mix(.06,.515,smoothstep(.04,.46,phase));
   float body=smoothstep(.012,.06,along)*(1.-smoothstep(growingTip-.06,growingTip,along));
   float filament=exp(-abs(across-jitter)*92.)+.26*exp(-abs(across-jitter)*21.);
   float forkOrigin=growingTip*.46;
@@ -137,22 +137,24 @@ float r111Arc(vec2 p,float index,float seconds) {
   return awake*envelope*(body*filament+fork+front);
 }
 
-// R118: three inclined brushed-metal gimbals, independent radii and spin rates.
+// R119: each of the three inclined gyros rotates around its own fixed 3D axis.
+// Rodrigues rotations preserve the normal, producing stable front/back occlusion.
 vec4 metalGyro(vec2 p,float seconds,float slot,out float zpos) {
  float speed=slot<1.5?6.283185/13.:(slot<2.5?-6.283185/17.:6.283185/20.);
  float phase=slot<1.5?-.64:(slot<2.5?1.24:2.37);
  float spin=seconds*speed+phase;
- float xy=slot<1.5?.65:(slot<2.5?.59:.71);
- float zz=slot<1.5?.75:(slot<2.5?.81:.70);
- vec3 plane=normalize(vec3(xy*cos(spin),xy*sin(spin),zz));
+ vec3 axis=normalize(slot<1.5?vec3(.90,.10,.42):(slot<2.5?vec3(-.45,.82,.35):vec3(.60,-.75,.29)));
+ vec3 baseNormal=normalize(slot<1.5?vec3(.86,.22,.46):(slot<2.5?vec3(-.58,.71,.42):vec3(.72,-.62,.33)));
+ vec3 plane=normalize(baseNormal*cos(spin)+cross(axis,baseNormal)*sin(spin)
+                       +axis*dot(axis,baseNormal)*(1.-cos(spin)));
  zpos=-(p.x*plane.x+p.y*plane.y)/plane.z;
  float nominal=slot<1.5?.87:(slot<2.5?.97:1.08);
  float edge=abs(length(vec3(p,zpos))-nominal);
- float tubeIn=slot<1.5?.0165:(slot<2.5?.0155:.0147);
- float tubeOut=slot<1.5?.038:(slot<2.5?.036:.034);
+ float tubeIn=slot<1.5?.029:(slot<2.5?.027:.024);
+ float tubeOut=slot<1.5?.064:(slot<2.5?.061:.059);
  float body=1.-smoothstep(tubeIn,tubeOut,edge);
- float bevel=(1.-smoothstep(tubeOut*.79,tubeOut*1.37,edge))*.17;
- float opacity=clamp(body*.88+bevel,0.,.97);
+ float bevel=(1.-smoothstep(tubeOut*.83,tubeOut*1.31,edge))*.15;
+ float opacity=clamp(body*.89+bevel,0.,.98);
  float brush=.5+.5*sin(atan(p.y,p.x)*37.+seconds*speed*3.2);
  float sheen=clamp(.34+.35*pow(brush,6.),0.,1.);
  vec3 darkMetal=slot<1.5?vec3(.20,.27,.34):(slot<2.5?vec3(.23,.28,.33):vec3(.22,.25,.29));
@@ -173,7 +175,7 @@ void main(){
  vec2 p=(uv-.5)*2.;
  p.x*=resolution.x/max(resolution.y,1.);
  p.y+=.08;
- float radius=.69;
+ float radius=.53;
  float d=length(p);
  float t=time*.28;
  float metalDepthA=0.,metalDepthB=0.,metalDepthC=0.;
@@ -241,6 +243,8 @@ void main(){
  base=mix(base,metalA.rgb,frontA);
  base=mix(base,metalB.rgb,frontB);
  base=mix(base,metalC.rgb,frontC);
+ // Foreground metal stays visible at the sphere rim rather than fading with shell alpha.
+ alpha=clamp(alpha+max(max(frontA,frontB),frontC)*(1.-alpha),0.,1.);
  gl_FragColor=vec4(clamp(base,0.,1.),alpha);
 }`;
 

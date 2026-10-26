@@ -120,7 +120,7 @@ test('R110: native-verified dimensional plasma shader, restrained orbit and boun
  assert.ok(fragment,'R110 shader fragment absent');
  let hash=2166136261;
  for(const ch of fragment)hash=Math.imul(hash ^ ch.charCodeAt(0),16777619)>>>0;
- assert.equal(hash.toString(16),'2b871361','GLSL source fingerprint changed after R117 depth-composited metallic gimbals');
+ assert.equal(hash.toString(16),'607c1a5d','GLSL source fingerprint changed after R117 depth-composited metallic gimbals');
  for(const term of ['noise3','turn3','metalGyro','sphereFrontZ']){
   assert.ok(fragment.includes(term),term);
  }
@@ -201,7 +201,7 @@ test('R115: electrical radial propagation faster without extra flash frequency o
  const tick=String.fromCharCode(96);
  const fragment=script.split('const fragment = '+tick)[1]?.split(tick+';')[0]||'';
  assert.ok(fragment.includes('float cycleTime=1.12;'));
- assert.ok(fragment.includes('float growingTip=mix(.06,.675,smoothstep(.04,.46,phase));'));
+ assert.ok(fragment.includes('float growingTip=mix(.06,.515,smoothstep(.04,.46,phase));'));
  assert.equal(fragment.split('=r111Arc(p,').length-1,8);
  assert.ok(fragment.indexOf('if(d>radius)')<fragment.indexOf('float arcA='));
  assert.ok(script.includes('clock - lastFrame < 32'));
@@ -287,11 +287,11 @@ test('R117: WebGL metal gimbals solve 3D projection and depth-sort against illum
 test('R118: three thicker metallic gyros, 13/17/20s independent spin, fallback safety',()=>{
  const svg=home.split('<svg class="core-r108-art"')[1]?.split('</svg>')[0]||'';
  assert.equal((svg.match(/<ellipse/g)||[]).length,3);
- for(const thickness of ['5.8','3.9','3.6'])assert.ok(svg.includes('stroke-width="'+thickness+'"'),thickness);
+ for(const thickness of ['9.0','6.4','6.0'])assert.ok(svg.includes('stroke-width="'+thickness+'"'),thickness);
  for(const name of ['core-r117-metal-a','core-r117-metal-b','core-r118-metal-c'])
    assert.equal(svg.split('class="'+name+'"').length-1,2,name);
  for(const animation of ['r118-gyro-a 13s','r118-gyro-b 17s','r118-gyro-c 20s'])assert.ok(home.includes(animation),animation);
- assert.ok(home.includes('.core-r118-metal-c{transform:rotate(-61deg)}'));
+ assert.ok(home.includes('.core-r118-metal-c{transform:rotate3d(.60,-.75,.29,-61deg)}'));
  const source=read('assets/core-r109-webgl.js');
  const tick=String.fromCharCode(96);
  const fragment=source.split('const fragment = '+tick)[1]?.split(tick+';')[0]||'';
@@ -302,4 +302,38 @@ test('R118: three thicker metallic gyros, 13/17/20s independent spin, fallback s
  assert.ok(source.includes('if (reduceMotion.matches) return;'));
  assert.ok(home.includes('scale(.49)'));
  assert.doesNotMatch(source,/XMLHttpRequest|WebSocket|sendBeacon|setInterval\(/);
+});
+
+test('R119: ring axes separate and foreground metal crosses reduced Core silhouette',()=>{
+ const source=read('assets/core-r109-webgl.js');
+ const tick=String.fromCharCode(96);
+ const frag=source.split('const fragment = '+tick)[1]?.split(tick+';')[0]||'';
+ assert.ok(frag.includes('float radius=.53;'));
+ assert.match(home,/<circle class="core-r108-heart" cx="320" cy="189" r="66"/);
+ const axes=[[.90,.10,.42],[-.45,.82,.35],[.60,-.75,.29]];
+ const normals=[[.86,.22,.46],[-.58,.71,.42],[.72,-.62,.33]];
+ const radii=[.87,.97,1.08];
+ const norm=v=>v.map(x=>x/Math.hypot(...v));
+ const dot=(a,b)=>a.reduce((sum,x,i)=>sum+x*b[i],0);
+ const cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+ for(let i=0;i<3;i++){
+   let a=norm(axes[i]),n=norm(normals[i]),k=cross(a,n),d=dot(a,n),minZ=1,maxZ=-1;
+   for(let deg=0;deg<360;deg+=5){
+     const angle=deg*Math.PI/180;
+     const z=n[2]*Math.cos(angle)+k[2]*Math.sin(angle)+a[2]*d*(1-Math.cos(angle));
+     minZ=Math.min(minZ,z);maxZ=Math.max(maxZ,z);
+   }
+   assert.ok(minZ>.10,'non-singular plane '+i);
+   assert.ok(maxZ*radii[i]<.53,'projected metal crosses sphere every rotation: '+i);
+ }
+ for(const id of ['r118-gyro-a','r118-gyro-b','r118-gyro-c'])assert.ok(home.includes('@keyframes '+id)&&home.includes('rotate3d('));
+ for(const thick of ['9.0','6.4','6.0'])assert.ok(home.includes('stroke-width="'+thick+'"'),thick);
+ for(const thick of ['.064','.061','.059'])assert.ok(frag.includes(thick),thick);
+ assert.ok(frag.includes('cross(axis,baseNormal)*sin(spin)'));
+ assert.ok(frag.includes('alpha=clamp(alpha+max(max(frontA,frontB),frontC)*(1.-alpha),0.,1.);'));
+ assert.equal(frag.split('=metalGyro(p,time,').length-1,3);
+ assert.equal(frag.split('if(z').length-1,3);
+ assert.equal(frag.split('=r111Arc(p,').length-1,8);
+ assert.ok(home.includes('scale(.49)'));
+ assert.ok(source.includes('clock - lastFrame < 32'));
 });
