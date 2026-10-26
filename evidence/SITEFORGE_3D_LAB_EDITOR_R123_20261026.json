@@ -1,0 +1,60 @@
+{
+  "schema": "synestra.siteforge.3d-lab-r123-evidence.v1",
+  "decision_id": "DEC-SITEFORGE-3D-LAB-001",
+  "mission_id": "SYN_SITEFORGE_3D_LAB_CAPABILITY_20261026",
+  "date_utc": "2026-10-26",
+  "user_decision": "Keep and develop the 3D lab as reusable SiteForge web-creation capability",
+  "repository": "inossarum/synestra-vitrine-preview",
+  "branch": "task/SYN_VITRINE_SITEFORGE_R91_PREVIEW_20261024",
+  "code_sha": "5de53989dfc693fd70c8b85d2601e20a47af564c",
+  "deploy": {
+    "provider": "Cloudflare Pages",
+    "environment": "preview",
+    "project": "synestra-vitrine-preview",
+    "id": "92a95fc5-9215-4edc-a1c6-a1d6c4d8267c",
+    "url": "https://92a95fc5.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+    "stage": "deploy",
+    "status": "success",
+    "source_sha": "5de53989dfc693fd70c8b85d2601e20a47af564c"
+  },
+  "files": [
+    "assets/core-r122-gyro.js",
+    "assets/siteforge-3d-editor.js",
+    "siteforge/core-3d-lab/index.html",
+    "tests/vitrine_r104_products_core.test.mjs"
+  ],
+  "features": [
+    "three real polygonal bevelled ring meshes",
+    "bounded material/width/depth/speed/yaw/pitch controls",
+    "pause and reset",
+    "explicit WebGL status and reduced-motion fallback",
+    "bounded local preset JSON import and export"
+  ],
+  "validation": {
+    "node_tests": 49,
+    "passes": 49,
+    "failures": 0,
+    "static_export": "PASS",
+    "files": 41,
+    "source_readback": "GitHub verified before docs",
+    "homepage_blob_unchanged": "43810b6eaa878c523eb06d97542d791543765d55",
+    "gpu_browser": "PENDING",
+    "pixel_visual_quality": "PENDING",
+    "direct_http": "UNAVAILABLE_IN_CURRENT_CONTAINER_DNS",
+    "central_memory": "MANQUANTE"
+  },
+  "guard": {
+    "billing": "FREE_ONLY",
+    "production": "UNTOUCHED",
+    "main": "UNTOUCHED",
+    "pr": 5,
+    "pr_draft": true,
+    "source_gate": "LIMITED",
+    "visual_gate": "PENDING",
+    "function_report": "PARTIAL"
+  },
+  "rollback": {
+    "previous_documented_sha": "b8af0d92d2c5bf60b0387b321216b5cdf528ccaa",
+    "mode": "non-destructive revert on preview branch after HEAD/lease recheck"
+  }
+}
