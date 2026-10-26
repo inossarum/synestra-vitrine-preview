@@ -13,7 +13,7 @@ test('R105: multi-axis Core is purely conceptual and accessible',()=>{
  assert.match(home,/prefers-reduced-motion:reduce/);
  assert.match(home,/class="brand-banner-r99" src="\.\/assets\/synestra-studio-header-y-r99.webp"/);
  assert.match(home,/class="nav-explore"/);
- assert.match(home,/class="r105-orientation"/);
+ assert.match(home,/class="container r105-orientation"/);
  assert.match(home,/Aucun état ou flux informatique en temps réel/);
 });
 
