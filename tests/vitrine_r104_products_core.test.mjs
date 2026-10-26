@@ -279,7 +279,7 @@ test('R122: isolated 3D gyroscope lab has real polygonal cross-sections, sphere 
  assert.ok(js.includes("!scene.hasAttribute('data-core-ready')"),'Graceful WebGL fallback');
  assert.equal((js.match(/major:/g)||[]).length,3,'Exactly three independent real rings');
  assert.ok(!/\bfetch\s*\(|XMLHttpRequest|WebSocket|sendBeacon|new Function/.test(js));
- assert.match(lab,/Core R122 — Laboratoire 3D isolé/);
+ assert.match(lab,/SiteForge — Atelier 3D/);
  assert.match(lab,/script src="\.\.\/\.\.\/assets\/core-r109-webgl\.js" defer/);
  assert.match(lab,/script src="\.\.\/\.\.\/assets\/core-r122-gyro\.js" defer/);
  assert.match(lab,/meta name="robots" content="noindex,nofollow"/);
