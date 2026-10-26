@@ -1,4 +1,4 @@
-/* Synestra SiteForge 3D Lab V1 — local scene editor, bounded JSON presets.
+/* Synestra SiteForge 3D Lab R126 — local scene editor, bounded JSON presets.
  * No external service, cookies, hidden persistence, arbitrary JS or uploads.
  */
 (()=>{
@@ -6,7 +6,8 @@
 const form=document.getElementById('sf3d-controls');
 const api=window.SynestraSiteForge3D;
 if(!form||!api)return;
-const names=['width','depth','speed','yaw','pitch','material','roughness','warmth','exposure'];
+const names=["width","depth","speed","yaw","pitch","roughness","warmth","exposure","anisotropy","imperfection","scratches","edgeWear","pulseCount","energySpeed","amplitude","thickness","turbulence","chaos","glow","density","coreIntensity","material","energyType","pulseType","primaryColor","secondaryColor","pulseColor","glowColor"];
+const enums=new Set(["material","energyType","pulseType","primaryColor","secondaryColor","pulseColor","glowColor"]);
 const fields=Object.fromEntries(names.map(name=>[name,form.elements.namedItem(name)]));
 const valueNode=name=>document.getElementById('sf3d-out-'+name);
 const status=document.getElementById('sf3d-editor-status');
@@ -26,7 +27,7 @@ const sync=config=>{
 sync(api.snapshot().config);
 const update=()=>{
  const data={};
- for(const name of names)if(fields[name])data[name]=name==='material'?fields[name].value:Number(fields[name].value);
+ for(const name of names)if(fields[name])data[name]=enums.has(name)?fields[name].value:Number(fields[name].value);
  const result=api.configure(data);sync(result.config);say('Réglages appliqués dans la scène.');};
 form.addEventListener('input',event=>{if(event.target?.name&&names.includes(event.target.name))update();});
 form.addEventListener('change',event=>{if(event.target?.name&&names.includes(event.target.name))update();});

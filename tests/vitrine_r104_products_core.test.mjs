@@ -375,3 +375,37 @@ test('R125: rings complete visible 360-degree gimbal flips; microfacet steel sha
  assert.ok(!home.includes('core-r122-gyro.js'),'Public home remains unchanged');
  assert.doesNotMatch(mesh,/\bfetch\s*\(|XMLHttpRequest|WebSocket|sendBeacon/);
 });
+
+test('R126: energy preset has 8 types, 6 pulse modes, 4 safe hex colours, and bounded numeric controls',async()=>{
+ const {Script,runInNewContext}=await import('node:vm');
+ const mesh=read('assets/core-r122-gyro.js'),editor=read('assets/siteforge-3d-editor.js'),lab=read('siteforge/core-3d-lab/index.html');
+ assert.doesNotThrow(()=>new Script(mesh));assert.doesNotThrow(()=>new Script(editor));
+ const status={textContent:'',setAttribute(){},getAttribute(){return ''}};
+ const scene={querySelector(){return {getContext(){return null}}}};
+ const document={querySelector:()=>scene,getElementById:()=>status};
+ const window={matchMedia:()=>({matches:false})};
+ runInNewContext(mesh,{document,window,matchMedia:window.matchMedia,console});
+ const api=window.SynestraSiteForge3D;
+ assert.ok(api,'Configuration must exist even without WebGL');
+ for(const n of ['anisotropy','imperfection','scratches','edgeWear','energyType','pulseType','primaryColor','secondaryColor','pulseColor','glowColor','pulseCount','energySpeed','amplitude','thickness','turbulence','chaos','glow','density','coreIntensity'])assert.ok(lab.includes('name="'+n+'"'),n);
+ for(const v of ['plasma','electric','arc','vortex','nebula','flame','crystalline','quantum','radial','spiral','branching','wave','burst','orbiting'])assert.ok(lab.includes('value="'+v+'"'),v);
+ const values=api.configure({pulseCount:200,coreIntensity:200,energySpeed:-20,anisotropy:-5,energyType:'quantum',pulseType:'orbiting',primaryColor:'#AA00EF',glowColor:'javascript:alert(1)',unknown:'reject'}).config;
+ assert.equal(values.pulseCount,16);assert.equal(values.coreIntensity,3);assert.equal(values.energySpeed,0);assert.equal(values.anisotropy,0);
+ assert.equal(values.energyType,'quantum');assert.equal(values.pulseType,'orbiting');assert.equal(values.primaryColor,'#aa00ef');
+ assert.equal(values.glowColor,'#54caff');assert.ok(!('unknown' in values));
+ const invalid=api.configure({energyType:'other',pulseType:'other',primaryColor:'red',pulseCount:NaN}).config;
+ assert.equal(invalid.energyType,'quantum');assert.equal(invalid.pulseType,'orbiting');assert.equal(invalid.primaryColor,'#aa00ef');assert.equal(invalid.pulseCount,16);
+ const exported=JSON.parse(JSON.stringify(api.snapshot()));
+ assert.equal(exported.schema,'synestra.siteforge.3d-preset.v1');assert.equal(exported.config.pulseCount,16);
+ assert.equal(api.reset().config.energyType,'plasma');
+});
+test('R126: core point emitter drives anisotropic PBR, and energy is rendered before physical depth',()=>{
+ const engine=read('assets/core-r122-gyro.js'),lab=read('siteforge/core-3d-lab/index.html'),editor=read('assets/siteforge-3d-editor.js');
+ for(const term of ['distributionGGXAniso','uAnisotropy','uImperfection','uScratches','uEdgeWear','vWorld','uCoreColor','uCoreIntensity','coreDir=normalize(-vWorld','energyProgram','uPulseCount','uPulseType','uEnergyType','uGlowColor','gl.TRIANGLE_STRIP','gl.colorMask(false,false,false,false)'])
+  assert.ok(engine.includes(term),term);
+ assert.ok(engine.indexOf('if(e){gl.enable(gl.BLEND)')<engine.indexOf('// Invisible sphere populates the depth buffer'),'Emit energy behind metal');
+ assert.ok(engine.includes('for(int i=0;i<16;i++)'),'GPU work must have finite bounds');
+ assert.match(lab,/noindex,nofollow/);assert.match(lab,/prefers-reduced-motion:reduce/);
+ assert.match(lab,/script-src 'self'/);assert.doesNotMatch(engine+editor,/\\bfetch\\s*\\(|XMLHttpRequest|WebSocket|sendBeacon|eval\\s*\\(/);
+ assert.ok(!read('index.html').includes('siteforge-3d-editor.js'),'Main homepage stays independent');
+});
