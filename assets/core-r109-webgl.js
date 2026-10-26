@@ -8,6 +8,7 @@
   const canvas = scene?.querySelector('.core-r109-canvas');
   if (!scene || !canvas) return;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (reduceMotion.matches) return; // Static SVG fallback; do not initialise WebGL.
   const gl = canvas.getContext('webgl', {
     alpha: true, antialias: false, depth: false, stencil: false,
     premultipliedAlpha: false, preserveDrawingBuffer: false,
@@ -151,7 +152,10 @@ void main() {
   };
   const draw = (clock) => {
     frame = 0;
-    if (!active || !size()) return;
+    if (!active || reduceMotion.matches || !size()) {
+      if (reduceMotion.matches) scene.removeAttribute('data-core-ready');
+      return;
+    }
     const still = reduceMotion.matches;
     if (!still && last) elapsed += Math.min((clock-last)/1000, .05);
     last=clock;
@@ -166,6 +170,7 @@ void main() {
     if (visible && document.visibilityState === 'visible' && !still) frame=requestAnimationFrame(draw);
   };
   const request = () => {
+    if (reduceMotion.matches) { scene.removeAttribute('data-core-ready'); return; }
     if (!active || frame || document.visibilityState !== 'visible' || !visible) return;
     frame=requestAnimationFrame(draw);
   };
