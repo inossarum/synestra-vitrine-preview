@@ -6,7 +6,7 @@ const home=read('index.html');
 const css=read('assets/product-pages.css');
 const pages=Object.fromEntries(['connect','bridge','offres'].map(n=>[n,read(n+'/index.html')]));
 test('R108: one clean energy Core keeps three product links and the R99 brand',()=>{
- assert.match(home,/class="system-stage core-r108-stage"/);
+ assert.match(home,/class="system-stage core-r108-stage core-r109-stage"/);
  assert.match(home,/<svg class="core-r108-art" viewBox="0 0 640 410"/);
  assert.equal((home.match(/id="r108-(?:aura|plasma|arc|halo)"/g)||[]).length,4);
  assert.match(home,/class="core-r108-heart"/);
