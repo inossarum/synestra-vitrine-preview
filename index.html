@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex,nofollow">
   <meta name="color-scheme" content="dark">
   <meta name="referrer" content="no-referrer">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'self' https://raw.githubusercontent.com; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'self' https://raw.githubusercontent.com; script-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
   <title>Synestra — Studio numérique et automatisation métier</title>
   <meta name="description" content="Synestra aide les artisans, indépendants et petites entreprises à clarifier leurs besoins numériques et à préparer des projets adaptés à leur activité.">
   <style>
@@ -1459,6 +1459,15 @@
       .core-r108-links a{min-height:45px;gap:4px;padding:6px 3px}.core-r108-links a span:first-child{display:none}
       .core-r108-links a strong{font-size:12px}.core-r108-note{font-size:10px}}
     @media(prefers-reduced-motion:reduce){.core-r108-heart,.core-r108-orbit{animation:none!important}.core-r108-links a{transition:none!important}}
+
+    /* R109: WebGL 3D depth enhancement. R108 SVG stays as zero-script fallback. */
+    .core-r109-stage{isolation:isolate}
+    .core-r109-canvas{position:absolute;top:0;left:0;z-index:2;display:block;width:100%;height:calc(100% - 58px);
+      opacity:0;pointer-events:none;transition:opacity .5s ease}
+    .core-r109-stage[data-core-ready="true"] .core-r109-canvas{opacity:1}
+    .core-r109-stage .core-r108-art{transition:opacity .35s ease}
+    .core-r109-stage[data-core-ready="true"] .core-r108-art{opacity:0}
+    @media(prefers-reduced-motion:reduce){.core-r109-canvas,.core-r109-stage .core-r108-art{transition:none!important}}
   </style>
 </head>
 <body>
@@ -1504,8 +1513,9 @@
         </div>
       </div>
 
-      <div class="system-stage core-r108-stage" role="group" aria-label="Core Synestra : un noyau d'énergie stylisé, avec trois liens vers les produits. Animation purement illustrative.">
+      <div class="system-stage core-r108-stage core-r109-stage" role="group" aria-label="Core Synestra : un noyau d'énergie stylisé, avec trois liens vers les produits. Animation purement illustrative.">
         <div class="core-r108-top"><span>CORE / SYNESTRA</span><span>ÉNERGIE CONCEPTUELLE</span></div>
+        <canvas class="core-r109-canvas" aria-hidden="true" width="960" height="570"></canvas>
         <svg class="core-r108-art" viewBox="0 0 640 410" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
           <defs>
             <radialGradient id="r108-aura"><stop offset="0" stop-color="#3c92ee" stop-opacity=".29"/><stop offset=".55" stop-color="#4340af" stop-opacity=".10"/><stop offset="1" stop-color="#111a2a" stop-opacity="0"/></radialGradient>
@@ -1832,5 +1842,6 @@
     <p>© 2026 Synestra · Studio numérique</p>
     <p>Phase pilote · Informations communiquées avec prudence</p>
   </footer>
+<script src="./assets/core-r109-webgl.js" defer></script>
 </body>
 </html>
