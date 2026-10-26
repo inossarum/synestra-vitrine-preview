@@ -1,0 +1,74 @@
+{
+  "schema": "synestra.siteforge.3d-lab-r126-evidence.v1",
+  "mission_id": "SYN_SITEFORGE_3D_LAB_R126_AAA_METAL_ENERGY_SYSTEM",
+  "owner": "Synestra SiteForge 3D / PR #5 DRAFT",
+  "date": "2026-10-26",
+  "source": {
+    "repository": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_VITRINE_SITEFORGE_R91_PREVIEW_20261024",
+    "baseline_head": "564e69c2ef493e4f249415698aabc4d00d834da8",
+    "code_head": "4544a3a3e59de0c5aea5e651e4584fa0366317a8",
+    "base_tree": "282c5c6d4d9e28e38243c06b4e760d8e9176c628",
+    "rule_file": "AGENTS.md NOT_FOUND in target preview repo; policy supplied by mission",
+    "r125_evidence_blob": "4d3af554e6832d4a33ca8ebbe5136dc91c5e7ba3",
+    "r125_reasoning_blob": "b79f6deee51065fd989ae450ea0d63be099808e1"
+  },
+  "code_blobs": {
+    "assets/core-r122-gyro.js": "d8498a4bc373a204f8a4988b2808d93e36ed5bea",
+    "assets/siteforge-3d-editor.js": "e0edb33bd55abcb070cc8075d669210b9782ca5e",
+    "siteforge/core-3d-lab/index.html": "f8c23d08f5af57879a2e30e4eab67e920cda5619",
+    "tests/vitrine_r104_products_core.test.mjs": "7b12071892b7131de6f3bda57e2121ed1131c4b3"
+  },
+  "features": {
+    "metal": "Procedural directional GGX anisotropy, finite roughness perturbations, micro-scratches and edge wear on existing 256-segment beveled 3D ring meshes",
+    "central_emitter": "Object-space point emission from core to metallic ring facets; intensity and glow color adjustable",
+    "energy": "WebGL1 lab-only volumetric overlay shader with eight energy modes, six pulse modes, four hex colors; 16-pulse shader-loop ceiling; analytic glow",
+    "import_export": "Existing schema synestra.siteforge.3d-preset.v1 preserved; new bounded fields persisted",
+    "protected": "Homepage R121 untouched; noindex, CSP, reduced-motion, fallback, no external network and no paid assets"
+  },
+  "validation": {
+    "node_tests_total": 53,
+    "node_pass": 53,
+    "node_fail": 0,
+    "source": "Cloudflare Pages build logs for deployment 578b4cce-4900-48fe-b81f-667122e260da",
+    "build": "PASS",
+    "deploy": "PASS",
+    "home_blob": "43810b6eaa878c523eb06d97542d791543765d55",
+    "home_unchanged": true,
+    "shader_gpu_compile": "NOT_VERIFIED",
+    "screenshot_visual": "NOT_VERIFIED",
+    "iphone_performance": "NOT_VERIFIED",
+    "appearance_aaa": "NOT_VERIFIED",
+    "access": "Cloudflare Access redirects unauthenticated URL to login (302); following redirects to login 200 does NOT prove laboratory route returned HTTP 200"
+  },
+  "preview": {
+    "project": "synestra-vitrine-preview",
+    "environment": "preview",
+    "deployment_id": "578b4cce-4900-48fe-b81f-667122e260da",
+    "code_sha": "4544a3a3e59de0c5aea5e651e4584fa0366317a8",
+    "url": "https://578b4cce.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+    "status": "SUCCESS",
+    "access": "AUTH_REQUIRED"
+  },
+  "central_skills": {
+    "id": "generative-3d-texture-pbr",
+    "version": "1.0.0",
+    "git_blob_sha": "44f288ec3e8e3020d0c7e675cebbda4700579b4c",
+    "consulted": true,
+    "applied": "Channel semantics / roughness control / failure-first nonclaims, WebGL-specific procedural approximation; Blender step N/A",
+    "executed_by_supervisor": false
+  },
+  "guards": {
+    "PR_DRAFT": true,
+    "MAIN_UNTOUCHED": true,
+    "FREE_ONLY": true,
+    "EXTERNAL_ASSETS": false
+  },
+  "rollback": "Revert R126 code commits on preview branch after head ownership check; preserve earlier R125 immutable preview b4857d2c.",
+  "report": {
+    "SOURCE_GATE": "LIMITED",
+    "HOOKS_STATUS": "PENDING",
+    "FUNCTION_REPORT": "PARTIAL",
+    "VISUAL_GATE": "PENDING"
+  }
+}
