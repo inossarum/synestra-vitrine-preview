@@ -1304,7 +1304,7 @@
     .siteforge-gallery-intro p { max-width: 34rem; margin: 0; color: var(--muted); font-size: .9rem; line-height: 1.6; }
     .siteforge-gallery-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; padding: 0; margin: 0; list-style: none; }
     .siteforge-gallery-card { display: flex; flex-direction: column; min-width: 0; height: 100%; overflow: hidden; text-decoration: none; background: #101c32; border: 1px solid #3c4f6a; border-radius: 1.05rem; transition: border-color .2s, transform .2s, box-shadow .2s; }
-    .siteforge-gallery-card:hover { transform: translateY(-3px); border-color: var(--cyan); box-shadow: 0 .7rem 2rem rgba(0, 0, 0, .18); }
+    .siteforge-gallery-card:hover { transform: translateY(-3px); border-color: var(--brand-cyan, #00c4f1); box-shadow: 0 .7rem 2rem rgba(0, 0, 0, .18); }
     .siteforge-gallery-card:focus-visible { outline: 3px solid #a7edff; outline-offset: 4px; }
     .siteforge-gallery-visual { position: relative; display: block; height: clamp(7.8rem, 16vw, 11rem); isolation: isolate; overflow: hidden; }
     .siteforge-gallery-visual::before, .siteforge-gallery-visual::after { content: ""; position: absolute; display: block; }
@@ -1318,10 +1318,10 @@
     .siteforge-gallery-visual--signature::before { width: 54%; height: 56%; top: 24%; left: 15%; border-radius: 3rem 4rem 2rem 4rem; background: #224b66; transform: rotate(-19deg); }
     .siteforge-gallery-visual--signature::after { width: 30%; height: 35%; bottom: 10%; right: 13%; border-radius: 55% 15% 55% 25%; background: #7ecde4; }
     .siteforge-gallery-copy { display: flex; flex-direction: column; flex: 1; gap: .45rem; padding: 1.1rem 1.15rem 1.2rem; }
-    .siteforge-gallery-eyebrow { font-size: .69rem; text-transform: uppercase; letter-spacing: .12em; color: var(--cyan); font-weight: 800; }
+    .siteforge-gallery-eyebrow { font-size: .69rem; text-transform: uppercase; letter-spacing: .12em; color: var(--brand-cyan, #00c4f1); font-weight: 800; }
     .siteforge-gallery-title { font-size: 1.18rem; font-weight: 800; letter-spacing: -.025em; color: var(--text); }
     .siteforge-gallery-description { color: var(--muted); line-height: 1.5; font-size: .87rem; }
-    .siteforge-gallery-link { margin-top: auto; padding-top: .55rem; color: var(--cyan); font-size: .83rem; font-weight: 750; }
+    .siteforge-gallery-link { margin-top: auto; padding-top: .55rem; color: var(--brand-cyan, #00c4f1); font-size: .83rem; font-weight: 750; }
     .siteforge-gallery-disclaimer { font-size: .79rem; color: var(--quiet); margin: .9rem 0 0; line-height: 1.5; }
     @media (max-width: 720px) { .siteforge-gallery-list { grid-template-columns: minmax(0, 1fr); } .siteforge-gallery-visual { height: 9.25rem; } }
     @media (prefers-reduced-motion: reduce) { .siteforge-gallery-card { transition: none; } .siteforge-gallery-card:hover { transform: none; } }
