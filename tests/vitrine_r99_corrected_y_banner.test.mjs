@@ -20,5 +20,6 @@ test('R104: official R99 header remains intact while the animated Core contains 
   assert.match(html,/prefers-reduced-motion/);
   assert.match(html,/id="bridge"/);
   assert.match(html,/id="connect"/);
-  assert.doesNotMatch(html,/<script\b|<iframe\b|<form\b/i);
+  assert.deepEqual([...html.matchAll(/<script\b[^>]*>/g)].map(x=>x[0]),['<script src="./assets/core-r109-webgl.js" defer>']);
+  assert.doesNotMatch(html,/<iframe\b|<form\b/i);
 });
