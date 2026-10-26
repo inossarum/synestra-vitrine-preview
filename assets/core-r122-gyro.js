@@ -1,4 +1,4 @@
-/* Synestra R127 — isolated WebGL PBR + energy laboratory. No external imports.
+/* Synestra R128 — isolated WebGL PBR + energy laboratory. No external imports.
  * The live R121 electric sphere remains untouched. Fallback is explicit.
  */
 (()=>{
@@ -8,7 +8,7 @@ const plasma=scene?.querySelector('.core-r109-canvas');
 const canvas=scene?.querySelector('.core-r122-metal-canvas');
 // SiteForge 3D Lab V1: bounded, shareable scene preset; no backend or storage.
 if(!scene||!plasma||!canvas)return;
-const defaults=Object.freeze({pulseNature:'electric',quality:'balanced',spread:.6,depthSpread:1,branching:.4,twist:.5,flicker:.25,pulseLength:1,coreRadius:1,seed:7,width:1,depth:1,speed:1,yaw:0,pitch:0,material:'steel',roughness:.30,warmth:.62,exposure:1,anisotropy:.62,imperfection:.38,scratches:.42,edgeWear:.24,energyType:'plasma',pulseType:'radial',primaryColor:'#1db8ff',secondaryColor:'#6948e5',pulseColor:'#b4f6ff',glowColor:'#54caff',pulseCount:8,energySpeed:1,amplitude:1,thickness:.65,turbulence:.48,chaos:.25,glow:1.1,density:1,coreIntensity:1.35,paused:false});
+const defaults=Object.freeze({pulseNature:'electric',quality:'balanced',spread:.6,depthSpread:1,branching:.4,twist:.5,flicker:.25,pulseLength:1,coreRadius:1,seed:7,width:1,depth:1,speed:1,yaw:0,pitch:0,material:'steel',roughness:.30,warmth:.62,exposure:1,anisotropy:.62,imperfection:.38,scratches:.42,edgeWear:.24,energyType:'electric',pulseType:'branching',primaryColor:'#50deff',secondaryColor:'#a378ff',pulseColor:'#d3f8ff',glowColor:'#c0f5ff',pulseCount:8,energySpeed:1,amplitude:1,thickness:.65,turbulence:.48,chaos:.25,glow:1.1,density:1,coreIntensity:1.35,paused:false});
 const params={...defaults};
 const status=document.getElementById('sf3d-status');
 const report=(message,kind='info')=>{if(status){status.textContent=message;status.setAttribute('data-state',kind);}};
@@ -43,15 +43,17 @@ report('GPU détecté. Initialisation de la géométrie 3D…');
 const vertex="attribute vec3 aPosition,aNormal;\nattribute float aBand;\nuniform mat3 basis;\nuniform vec2 resolution;\nuniform float centerOffset;\nvarying vec3 vN,vLocal,vWorld,vT;\nvarying float vBand;\nvoid main(){\n vec3 w=basis*aPosition;\n vN=normalize(basis*aNormal);\n vLocal=aPosition;vWorld=w;vBand=aBand;\n vT=normalize(basis*vec3(-aPosition.y,aPosition.x,0.));\n gl_Position=vec4(w.x/(resolution.x/max(resolution.y,1.)),w.y-centerOffset,-w.z/1.45,1.);\n}";
 const fragment="#ifdef GL_FRAGMENT_PRECISION_HIGH\nprecision highp float;\n#else\nprecision mediump float;\n#endif\nvarying vec3 vN,vLocal,vWorld,vT;\nvarying float vBand;\nuniform vec3 uTint,uCoreColor;\nuniform float uRoughness,uWarmth,uExposure,uAnisotropy,uImperfection,uScratches,uEdgeWear,uCoreIntensity,uTime;\nconst float PI=3.14159265359;\nfloat sat(float x){return clamp(x,0.,1.);}\nfloat hash(float x){return fract(sin(x*127.1+14.31)*43758.5453);}\nvec3 fresnelSchlick(float theta,vec3 f0){return f0+(1.-f0)*pow(1.-sat(theta),5.);}\nfloat distributionGGX(float ndh,float rough){\n float a=max(.045,rough*rough),a2=a*a,d=ndh*ndh*(a2-1.)+1.;\n return a2/max(PI*d*d,.0001);\n}\nfloat distributionGGXAniso(vec3 n,vec3 h,vec3 t,vec3 b,float rough,float aniso){\n float a=max(.045,rough*rough);\n float ax=max(.035,a/(1.+2.*aniso)),ay=max(.035,a*(1.+2.*aniso));\n float d=pow(abs(dot(h,t)/ax),2.)+pow(abs(dot(h,b)/ay),2.)+pow(abs(dot(n,h)),2.);\n return 1./max(PI*ax*ay*d*d,.0001);\n}\nfloat geometrySmith(float ndv,float ndl,float rough){\n float k=pow(rough+1.,2.)/8.;\n return ndv/max(ndv*(1.-k)+k,.001)*ndl/max(ndl*(1.-k)+k,.001);\n}\nvec3 studioBRDF(vec3 n,vec3 v,vec3 l,vec3 t,vec3 radiance,vec3 f0,float rough){\n vec3 h=normalize(v+l),b=normalize(cross(n,t));\n float nl=sat(dot(n,l)),nv=sat(dot(n,v)),nh=sat(dot(n,h)),hv=sat(dot(h,v));\n float D=mix(distributionGGX(nh,rough),distributionGGXAniso(n,h,t,b,rough,uAnisotropy),uAnisotropy);\n float G=geometrySmith(nv,nl,rough);\n return D*G*fresnelSchlick(hv,f0)*nl/max(4.*nv*nl,.002)*radiance;\n}\nvec3 studioEnvironment(vec3 reflected,float rough,float warmth){\n float soft=.045+rough*.23;\n float cool=exp(-pow((reflected.x+.43)/soft,2.))*smoothstep(-.82,.46,reflected.y);\n float warm=exp(-pow((reflected.x-.55)/(soft*.90),2.))*smoothstep(-.65,.55,-reflected.y);\n float horizon=pow(1.-abs(reflected.y),3.);\n return vec3(.075,.115,.175)+vec3(.48,.72,1.0)*cool*3.0+\n  vec3(1.,.57,.23)*warm*warmth*2.1+\n  vec3(.14,.22,.34)*sat(reflected.y*.85+.24)+vec3(.13,.17,.25)*horizon;\n}\nvec3 tonemapACES(vec3 x){return clamp((x*(2.51*x+.03))/(x*(2.43*x+.59)+.14),0.,1.);}\nvoid main(){\n vec3 n=normalize(vN),v=vec3(0.,0.,1.);\n vec3 t=normalize(vT-n*dot(vT,n));\n float ang=atan(vLocal.y,vLocal.x);\n float brush=sin(ang*1511.+vLocal.z*253.);\n float scratch=step(.988,fract(sin(ang*2321.+vLocal.z*47.)*12345.678));\n float pits=hash(floor(ang*917.)+floor(vLocal.z*219.)*11.);\n float grain=sin(ang*433.+vLocal.z*127.)*sin(ang*271.+vLocal.z*401.);\n float rough=clamp(uRoughness + uImperfection*(grain*.12+(pits-.5)*.14)+uScratches*scratch*.21,.06,1.);\n vec3 f0=clamp(uTint*(.95+grain*uImperfection*.08-scratch*uScratches*.14),0.,.98);\n vec3 L0=normalize(vec3(-.52,.65,.83)),L1=normalize(vec3(.68,-.26,.79));\n vec3 colour=vec3(.022,.034,.05);\n colour+=studioBRDF(n,v,L0,t,vec3(4.4,5.6,7.4),f0,rough);\n colour+=studioBRDF(n,v,L1,t,vec3(5.0,2.7,1.2)*uWarmth,f0,rough);\n // Central point emitter: energy at origin lights actual inner surfaces.\n vec3 coreDir=normalize(-vWorld+vec3(0.,0.,.006));\n float distanceToCore=length(vWorld);\n float corePower=uCoreIntensity*(.86+.14*sin(uTime*2.7));\n vec3 coreRadiance=uCoreColor*corePower*13.0/(.65+distanceToCore*distanceToCore);\n colour+=studioBRDF(n,v,coreDir,t,coreRadiance,f0,rough);\n vec3 reflected=reflect(-v,n);\n float nv=sat(dot(n,v));\n colour+=studioEnvironment(reflected,rough,uWarmth)*fresnelSchlick(nv,f0)*(.89-.19*rough);\n float faceted=.5+.5*cos(vBand*PI*8.);\n colour*=mix(.80,1.08,faceted);\n colour+=uEdgeWear*(1.-faceted)*vec3(.16,.20,.23);\n colour+=vec3(.16,.27,.40)*pow(1.-nv,4.)*.34;\n // Tone-map in linear light, approximate sRGB conversion for display.\n colour=pow(tonemapACES(max(colour,vec3(0.))*uExposure),vec3(1./2.2));\n gl_FragColor=vec4(colour,1.);\n}";
 const energyVertex="attribute vec2 aUv;\nvarying vec2 vUv;\nvoid main(){vUv=aUv;gl_Position=vec4(aUv,0.,1.);}";
-const energyFragment="#ifdef GL_FRAGMENT_PRECISION_HIGH\nprecision highp float;\n#else\nprecision mediump float;\n#endif\nvarying vec2 vUv;\nuniform vec2 uResolution;uniform vec3 uPrimaryColor,uSecondaryColor,uPulseColor,uGlowColor;\nuniform float uTime,uEnergyType,uPulseType,uPulseCount,uEnergySpeed,uAmplitude,uThickness,uTurbulence,uChaos,uGlow,uDensity,uCoreIntensity,uCoreRadius;\nfloat sat(float x){return clamp(x,0.,1.);}\nvoid main(){\n vec2 p=vec2(vUv.x*uResolution.x/max(uResolution.y,1.),vUv.y+.08);\n float r=length(p),tm=uTime*uEnergySpeed,R=.69*clamp(uCoreRadius,.55,1.18);\n float z=sqrt(max(0.,1.-r*r/(R*R+.0001))),phi=atan(p.y,p.x),latitude=atan(z,r/max(R,.01));\n float fluid=sin(phi*8.+latitude*13.-tm*1.6)*sin(phi*13.-r*26.+tm*.86);\n float fold=sin(phi*21.+sin(r*19.-tm)*3.)*sin(latitude*8.-tm);\n float current=pow(abs(sin(phi*6.+r*21.-tm*2.3)),3.);\n float swirl=sin(phi*8.-r*38.-tm*2.4);\n float envelope=sat(.35+.4*fluid+.25*fold);\n if(uEnergyType>.5&&uEnergyType<1.5)envelope=pow(current,2.)*.8+.15;\n if(uEnergyType>1.5&&uEnergyType<2.5)envelope=.18+.68*abs(fold*current);\n if(uEnergyType>2.5&&uEnergyType<3.5)envelope=sat(.34+.49*swirl+.2*fluid);\n if(uEnergyType>3.5&&uEnergyType<4.5)envelope=sat(.25+.32*fluid+.26*sin(phi*4.+tm*.4));\n if(uEnergyType>4.5&&uEnergyType<5.5)envelope=sat(.18+.55*swirl+.24*sin(phi*9.+r*23.-tm*3.));\n if(uEnergyType>5.5&&uEnergyType<6.5)envelope=pow(abs(sin(phi*8.+latitude*14.)),7.)*.69+.13;\n if(uEnergyType>6.5)envelope=sat(.25+.38*fold+.3*current);\n float body=(1.-smoothstep(R*.79,R,r))*(.12+uDensity*.22*envelope);\n float rim=smoothstep(R*.55,R*.92,r)*(1.-smoothstep(R*.96,R,r))*.27;\n float nucleus=exp(-r*r/max(.002,R*R*.018))*uCoreIntensity*3.0;\n float corona=exp(-r*r/max(.014,R*R*.20))*uCoreIntensity*.47;\n float halo=exp(-r*r/max(.05,R*R*1.25))*uGlow*.13;\n float flux=pow(abs(sin(phi*7.+latitude*13.-tm*2.+fluid*2.)),10.)*(1.-smoothstep(R*.36,R*.82,r));\n vec3 volume=mix(uPrimaryColor,uSecondaryColor,sat(.35+.29*fluid+.23*fold));\n vec3 radiance=volume*(body+rim+flux*.22)*(.84+.16*sin(tm*3.7+fluid*4.))+uGlowColor*(nucleus+corona)+uPrimaryColor*halo;\n float alpha=sat(body*.80+rim*.52+nucleus*.87+corona*.76+halo*.52+flux*.16);\n radiance=radiance/(vec3(1.)+radiance*.85);\n gl_FragColor=vec4(pow(max(radiance,vec3(0.)),vec3(1./2.2)),alpha);\n}";
-const depthVertex='attribute vec3 aPosition;uniform vec2 resolution;uniform float centerOffset;void main(){gl_Position=vec4(aPosition.x/(resolution.x/max(resolution.y,1.)),aPosition.y-centerOffset,-aPosition.z/1.45,1.);}';
+const energyFragment=window.SynestraSphere3DShaders?.halo||'';
+const depthVertex='attribute vec3 aPosition;uniform vec2 resolution;uniform float centerOffset;uniform float uRadius;void main(){vec3 p=aPosition*uRadius;gl_Position=vec4(p.x/(resolution.x/max(resolution.y,1.)),p.y-centerOffset,-p.z/1.45,1.);}';
 const depthFragment='precision mediump float;void main(){gl_FragColor=vec4(0.);}';
 const compile=(type,source)=>{const s=gl.createShader(type);if(!s)return null;gl.shaderSource(s,source);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)){console.warn('Synestra R122 WebGL shader unavailable');gl.deleteShader(s);return null;}return s;};
 const link=(v,f)=>{const a=compile(gl.VERTEX_SHADER,v),b=compile(gl.FRAGMENT_SHADER,f);if(!a||!b)return null;const p=gl.createProgram();gl.attachShader(p,a);gl.attachShader(p,b);gl.linkProgram(p);gl.deleteShader(a);gl.deleteShader(b);return gl.getProgramParameter(p,gl.LINK_STATUS)?p:null;};
+const sphereVertex=window.SynestraSphere3DShaders?.vertex||'';
+const sphereFragment=window.SynestraSphere3DShaders?.fragment||'';
 const pulseVertex="attribute vec3 aPosition;attribute vec2 aFadeSeed;\nuniform mat3 uView;uniform vec2 uResolution;varying float vFade,vSeed,vZ;\nvoid main(){\n vec3 xyz=uView*aPosition;\n float perspective=1./(1.+.28*xyz.z);\n gl_Position=vec4(xyz.x*perspective/(uResolution.x/max(uResolution.y,1.)),xyz.y*perspective-.08,-xyz.z/1.45,1.);\n vFade=aFadeSeed.x;vSeed=aFadeSeed.y;vZ=xyz.z;\n}";
 const pulseFragment="precision mediump float;\nvarying float vFade,vSeed,vZ;\nuniform vec3 uPulseColor,uSecondaryColor;\nuniform float uPulseNature,uTime,uFlicker,uPass;\nvoid main(){\n float flicker=mix(1.,.70+.30*sin(uTime*9.+vSeed*7.+vZ*17.),uFlicker);\n vec3 beam=mix(uPulseColor,uSecondaryColor,clamp(.15+.35*sin(vSeed*3.+vZ*5.),0.,1.));\n if(uPulseNature>.5&&uPulseNature<1.5)beam=mix(beam,uPulseColor,.65);\n if(uPulseNature>2.5&&uPulseNature<3.5)beam=mix(beam,vec3(1.),.30);\n if(uPulseNature>5.5&&uPulseNature<6.5)beam=mix(beam,uSecondaryColor,.48);\n float depth=smoothstep(-.8,.8,vZ),intensity=vFade*flicker*mix(.46,1.,depth);\n vec3 c=mix(beam*.65,vec3(1.),uPass*.45);\n gl_FragColor=vec4(c,clamp(intensity*mix(.32,.77,uPass),0.,.88));\n}";
-const metalProgram=link(vertex,fragment),depthProgram=link(depthVertex,depthFragment),energyProgram=link(energyVertex,energyFragment),pulseProgram=link(pulseVertex,pulseFragment);
-if(!metalProgram||!depthProgram||!energyProgram||!pulseProgram){report('Compilation GPU des shaders refusée : aperçu de secours conservé.','error');return;}
+const metalProgram=link(vertex,fragment),depthProgram=link(depthVertex,depthFragment),energyProgram=link(energyVertex,energyFragment),pulseProgram=link(pulseVertex,pulseFragment),sphereProgram=link(sphereVertex,sphereFragment);
+if(!metalProgram||!depthProgram||!energyProgram||!pulseProgram||!sphereProgram){report('Compilation GPU des shaders refusée : aperçu de secours conservé.','error');return;}
 // R125: high-resolution extruded annulus with precision bevels: 256 segments,
 // flat face normals, exposed sidewalls, four chamfers, NOT a tube or screen band.
 const buildRing=(major,w,h)=>{
@@ -65,7 +67,7 @@ const buildRing=(major,w,h)=>{
  return new Float32Array(out);
 };
 const buildSphere=()=>{const out=[],R=.69;const point=(u,v)=>[R*Math.sin(v)*Math.cos(u),R*Math.sin(v)*Math.sin(u),R*Math.cos(v)];
- for(let i=0;i<24;i++){const a=i*Math.PI/24,b=(i+1)*Math.PI/24;for(let j=0;j<48;j++){const c=j*2*Math.PI/48,d=(j+1)*2*Math.PI/48;out.push(...point(c,a),...point(c,b),...point(d,a),...point(d,a),...point(c,b),...point(d,b));}}
+ for(let i=0;i<48;i++){const a=i*Math.PI/48,b=(i+1)*Math.PI/48;for(let j=0;j<96;j++){const c=j*2*Math.PI/96,d=(j+1)*2*Math.PI/96;out.push(...point(c,a),...point(c,b),...point(d,a),...point(d,a),...point(c,b),...point(d,b));}}
  return new Float32Array(out);
 };
 const sphere=buildSphere(),sphereBuffer=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,sphereBuffer);gl.bufferData(gl.ARRAY_BUFFER,sphere,gl.STATIC_DRAW);
@@ -84,7 +86,8 @@ const energyQuad=gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER,energyQuad);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
 const a={pos:gl.getAttribLocation(pulseProgram,'aPosition'),fadeSeed:gl.getAttribLocation(pulseProgram,'aFadeSeed'),view:gl.getUniformLocation(pulseProgram,'uView'),resolution:gl.getUniformLocation(pulseProgram,'uResolution'),color:gl.getUniformLocation(pulseProgram,'uPulseColor'),secondary:gl.getUniformLocation(pulseProgram,'uSecondaryColor'),nature:gl.getUniformLocation(pulseProgram,'uPulseNature'),time:gl.getUniformLocation(pulseProgram,'uTime'),flicker:gl.getUniformLocation(pulseProgram,'uFlicker'),pass:gl.getUniformLocation(pulseProgram,'uPass')};
 const pulseBuffer=gl.createBuffer();
-const d={pos:gl.getAttribLocation(depthProgram,'aPosition'),res:gl.getUniformLocation(depthProgram,'resolution'),offset:gl.getUniformLocation(depthProgram,'centerOffset')};
+const s3={pos:gl.getAttribLocation(sphereProgram,'aPosition'),view:gl.getUniformLocation(sphereProgram,'uView'),resolution:gl.getUniformLocation(sphereProgram,'uResolution'),radius:gl.getUniformLocation(sphereProgram,'uRadius'),primary:gl.getUniformLocation(sphereProgram,'uPrimary'),secondary:gl.getUniformLocation(sphereProgram,'uSecondary'),glow:gl.getUniformLocation(sphereProgram,'uGlowColor'),time:gl.getUniformLocation(sphereProgram,'uTime'),speed:gl.getUniformLocation(sphereProgram,'uSpeed'),density:gl.getUniformLocation(sphereProgram,'uDensity'),intensity:gl.getUniformLocation(sphereProgram,'uIntensity'),turbulence:gl.getUniformLocation(sphereProgram,'uTurbulence'),exposure:gl.getUniformLocation(sphereProgram,'uExposure')};
+const d={pos:gl.getAttribLocation(depthProgram,'aPosition'),res:gl.getUniformLocation(depthProgram,'resolution'),offset:gl.getUniformLocation(depthProgram,'centerOffset'),radius:gl.getUniformLocation(depthProgram,'uRadius')};
 let active=true,visible=false,frame=0,last=0,elapsed=0,ringElapsed=0,drawCount=0,lastFrame=0;
 let cachedWidth=params.width,cachedDepth=params.depth;
 const materials={steel:[.69,.76,.83],graphite:[.34,.40,.47],gold:[.83,.66,.34]};
@@ -118,7 +121,21 @@ const render=clock=>{
     for(const [key,value] of [['primary',params.primaryColor],['secondary',params.secondaryColor],['pulse',params.pulseColor],['glowColor',params.glowColor]])gl.uniform3fv(e[key],new Float32Array(colourValue(value)));
     gl.bindBuffer(gl.ARRAY_BUFFER,energyQuad);gl.enableVertexAttribArray(e.pos);gl.vertexAttribPointer(e.pos,2,gl.FLOAT,false,0,0);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);gl.disableVertexAttribArray(e.pos);gl.disable(gl.BLEND);
   }
-  // True XYZ trails: each user setting regenerates actual spatial triangles.
+  // R128: real 48x96 geodesic sphere. Quad is only the external optical halo.
+  gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);gl.useProgram(sphereProgram);
+  gl.uniformMatrix3fv(s3.view,false,viewBasis());gl.uniform2f(s3.resolution,width,height);
+  gl.uniform1f(s3.radius,params.coreRadius);gl.uniform1f(s3.time,elapsed);
+  gl.uniform1f(s3.speed,params.energySpeed);gl.uniform1f(s3.density,params.density);
+  gl.uniform1f(s3.intensity,params.coreIntensity);gl.uniform1f(s3.turbulence,params.turbulence);
+  gl.uniform1f(s3.exposure,params.exposure);
+  gl.uniform3fv(s3.primary,new Float32Array(colourValue(params.primaryColor)));
+  gl.uniform3fv(s3.secondary,new Float32Array(colourValue(params.secondaryColor)));
+  gl.uniform3fv(s3.glow,new Float32Array(colourValue(params.glowColor)));
+  gl.bindBuffer(gl.ARRAY_BUFFER,sphereBuffer);
+  gl.enableVertexAttribArray(s3.pos);gl.vertexAttribPointer(s3.pos,3,gl.FLOAT,false,0,0);
+  gl.drawArrays(gl.TRIANGLES,0,sphere.length/3);
+  gl.disableVertexAttribArray(s3.pos);gl.disable(gl.BLEND);
+  // R121 electric visual grammar, reconstructed as thin spatial XYZ filaments.
   const arcs=pulseGeometry.build(params,elapsed);
   gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE);gl.useProgram(pulseProgram);
   gl.uniformMatrix3fv(a.view,false,viewBasis());gl.uniform2f(a.resolution,width,height);
@@ -140,7 +157,7 @@ const render=clock=>{
   gl.enable(gl.DEPTH_TEST);gl.depthFunc(gl.LEQUAL);
  // Invisible sphere populates the depth buffer: rear metal is occluded.
  gl.colorMask(false,false,false,false);gl.useProgram(depthProgram);gl.bindBuffer(gl.ARRAY_BUFFER,sphereBuffer);
- gl.enableVertexAttribArray(d.pos);gl.vertexAttribPointer(d.pos,3,gl.FLOAT,false,0,0);gl.uniform2f(d.res,width,height);gl.uniform1f(d.offset,.08);gl.drawArrays(gl.TRIANGLES,0,sphere.length/3);
+ gl.enableVertexAttribArray(d.pos);gl.vertexAttribPointer(d.pos,3,gl.FLOAT,false,0,0);gl.uniform2f(d.res,width,height);gl.uniform1f(d.offset,.08);gl.uniform1f(d.radius,params.coreRadius);gl.drawArrays(gl.TRIANGLES,0,sphere.length/3);
  gl.disableVertexAttribArray(d.pos);gl.colorMask(true,true,true,true);
  gl.useProgram(metalProgram);gl.uniform2f(m.res,width,height);gl.uniform1f(m.offset,.08);gl.uniform3fv(m.tint,new Float32Array(materials[params.material]));gl.uniform1f(m.roughness,params.roughness);gl.uniform1f(m.warmth,params.warmth);gl.uniform1f(m.exposure,params.exposure);gl.uniform1f(m.anisotropy,params.anisotropy);gl.uniform1f(m.imperfection,params.imperfection);gl.uniform1f(m.scratches,params.scratches);gl.uniform1f(m.edgeWear,params.edgeWear);gl.uniform3fv(m.coreColor,new Float32Array(colourValue(params.glowColor)));gl.uniform1f(m.coreIntensity,params.coreIntensity);gl.uniform1f(m.time,elapsed);
  for(const ring of rings){
@@ -158,7 +175,7 @@ const render=clock=>{
  }
  if(!scene.hasAttribute('data-metal-ready'))scene.setAttribute('data-metal-ready','true');
  if(++drawCount%120===0 && gl.getError()!==gl.NO_ERROR){active=false;scene.removeAttribute('data-metal-ready');report('Erreur du rendu WebGL : retour à la sphère seule.','error');return;}
- if(status?.getAttribute('data-state')!=='ready')report('R127 WebGL · noyau volumétrique · arcs XYZ · métal anisotrope.','ready');
+ if(status?.getAttribute('data-state')!=='ready')report('R128 WebGL · vraie sphère électrique 3D · arcs fins XYZ · anneaux métalliques.','ready');
  if(visible&&!document.hidden&&!params.paused)frame=requestAnimationFrame(render);
 };
 const request=()=>{if(!active||frame||!visible||document.hidden||!scene.hasAttribute('data-core-ready'))return;frame=requestAnimationFrame(render);};
