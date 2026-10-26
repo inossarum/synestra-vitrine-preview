@@ -7,11 +7,14 @@ const root=resolve(fileURLToPath(new URL('../',import.meta.url)));
 const output=resolve(root,'dist');
 const checkOnly=process.argv.includes('--check');
 const rootFiles=['index.html','_headers'];
-const rootDirs=['assets','siteforge','signal'];
+const rootDirs=['assets','siteforge','signal','connect','bridge','offres'];
 const extensions={
- assets:new Set(['.avif','.webp','.png','.jpg','.jpeg','.svg']),
+ assets:new Set(['.avif','.webp','.png','.jpg','.jpeg','.svg','.css']),
  siteforge:new Set(['.html','.css','.js','.mjs','.json']),
- signal:new Set(['.html','.css','.js','.mjs','.json'])
+ signal:new Set(['.html','.css','.js','.mjs','.json']),
+ connect:new Set(['.html']),
+ bridge:new Set(['.html']),
+ offres:new Set(['.html'])
 };
 const files=[];
 let totalBytes=0;
@@ -39,7 +42,7 @@ for(const dir of rootDirs){
  scan(abs,dir,dir);
 }
 if(files.length<26||files.length>120||
- !['siteforge/index.html','siteforge/lab/index.html','siteforge/signature/index.html','signal/index.html']
+ !['siteforge/index.html','siteforge/lab/index.html','siteforge/signature/index.html','signal/index.html','connect/index.html','bridge/index.html','offres/index.html','assets/product-pages.css']
  .every(p=>files.some(f=>f.rel.replaceAll('\\','/')===p)))throw Error('STATIC_REQUIRED_ROUTES_MISSING');
 if(!checkOnly){
  if(existsSync(output))throw Error('STATIC_DIST_EXISTS_NO_OVERWRITE');
