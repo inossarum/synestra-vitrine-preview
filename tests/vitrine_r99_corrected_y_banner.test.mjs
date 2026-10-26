@@ -14,7 +14,7 @@ test('R99: header displays source-matched corrected geometric Y banner and no du
   assert.match(html,/\.brand-banner-r99\s*\{[^}]*object-fit:contain/s);
 });
 test('R104: official R99 header remains intact while the animated Core contains no logo',()=>{
-  assert.match(html,/class="system-stage core-r108-stage"/);
+  assert.match(html,/class="system-stage core-r108-stage core-r109-stage"/);
   assert.doesNotMatch(html,/<img class="official-hero-logo"/);
   assert.match(html,/@keyframes core-beat/);
   assert.match(html,/prefers-reduced-motion/);
