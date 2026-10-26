@@ -19,7 +19,7 @@ test('R106: cinematic SVG reactor with three keyboard-reachable ports and reduce
  for(const slug of ['siteforge','connect','bridge']){
   assert.match(home,new RegExp('<a href="\\./'+slug+'/" class="core-r106-link'));
  }
- assert.match(home,/class="core-r106-link[^"]*"[^>]*href=/s);
+ assert.match(home,/<a href="\.\/connect\/" class="core-r106-link link-connect"/);
 });
 
 test('R104: Connect, Bridge and offers are linked from homepage and exist',()=>{
