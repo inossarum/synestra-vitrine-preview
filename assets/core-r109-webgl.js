@@ -137,6 +137,24 @@ float r111Arc(vec2 p,float index,float seconds) {
   return awake*envelope*(body*filament+fork+front);
 }
 
+// R117: orthographic 3D metallic gimbal. Project the tilted ring plane into the ray.
+vec4 metalGyro(vec2 p,float seconds,float slot,out float zpos) {
+ float spin=seconds*(slot<1.5?.24:-.17)+(slot<1.5?-.64:1.24);
+ float xy=slot<1.5?.65:.59;
+ vec3 plane=normalize(vec3(xy*cos(spin),xy*sin(spin),slot<1.5?.75:.81));
+ zpos=-(p.x*plane.x+p.y*plane.y)/plane.z;
+ float nominal=slot<1.5?.87:.97;
+ float edge=abs(length(vec3(p,zpos))-nominal);
+ float body=1.-smoothstep(.012,.027,edge);
+ float bevel=(1.-smoothstep(.022,.038,edge))*.20;
+ float opacity=clamp(body*.86+bevel,0.,.98);
+ float brush=.5+.5*sin(atan(p.y,p.x)*37.+seconds*(slot<1.5?1.5:-1.1));
+ float sheen=clamp(.40+.35*pow(brush,6.),0.,1.);
+ vec3 titanium=mix(vec3(.20,.27,.34),vec3(.66,.74,.79),sheen);
+ titanium+=vec3(.09,.11,.12)*(1.-smoothstep(.009,.029,edge));
+ return vec4(titanium,opacity);
+}
+
 void main(){
  vec2 p=(uv-.5)*2.;
  p.x*=resolution.x/max(resolution.y,1.);
@@ -144,24 +162,28 @@ void main(){
  float radius=.69;
  float d=length(p);
  float t=time*.28;
- float ellipseAngle=-.30;
- float ca=cos(ellipseAngle),sa=sin(ellipseAngle);
- vec2 q=vec2(p.x*ca-p.y*sa,p.x*sa+p.y*ca);
- float oval=length(vec2(q.x/.98,q.y/.31));
- float od=abs(oval-1.);
- float ring=exp(-od*od*4400.);
- float ringBloom=exp(-od*od*480.);
- float ringFront=smoothstep(-.12,.10,q.y);
- float spinPulse=.77+.23*sin(atan(q.y/.31,q.x/.98)*3.-time*.46);
+ float metalDepthA=0.,metalDepthB=0.;
+ vec4 metalA=metalGyro(p,time,1.,metalDepthA);
+ vec4 metalB=metalGyro(p,time,2.,metalDepthB);
  float aura=exp(-pow(d/.88,2.)*3.0);
  vec3 cyan=vec3(.31,.87,1.);
  vec3 lavender=vec3(.64,.47,1.);
  vec3 navy=vec3(.009,.034,.108);
  vec3 backdrop=mix(vec3(.07,.11,.35),vec3(.04,.33,.55),smoothstep(-.8,.8,p.x));
- vec3 ringCol=mix(lavender,cyan,smoothstep(-.42,.6,p.x));
- vec3 outside=backdrop*aura*.07+ringCol*(ring*.34+ringBloom*.025)*spinPulse;
- float outsideA=clamp(aura*.065+ring*.43+ringBloom*.035,0.,.65);
- if(d>radius){ gl_FragColor=vec4(outside,outsideA); return; }
+ vec3 outside=backdrop*aura*.055;
+ float outsideA=clamp(aura*.065,0.,.22);
+ if(d>radius){
+   // Gimbal fragments outside the sphere show both front and back metallic arcs.
+   if(metalDepthA>metalDepthB){
+     outside=mix(outside,metalB.rgb,metalB.a);
+     outside=mix(outside,metalA.rgb,metalA.a);
+   }else{
+     outside=mix(outside,metalA.rgb,metalA.a);
+     outside=mix(outside,metalB.rgb,metalB.a);
+   }
+   outsideA=clamp(outsideA+metalA.a+metalB.a,0.,1.);
+   gl_FragColor=vec4(outside,outsideA);return;
+ }
  vec3 n=vec3(p,sqrt(max(radius*radius-dot(p,p),0.)))/radius;
  n=turn3(n,tilt+vec2(sin(t*.23)*.15,cos(t*.18)*.08));
  float v=noise3(n*3.7+vec3(t*.65,t*.22,-t*.25));
@@ -199,8 +221,17 @@ void main(){
  base+=vec3(.46,.88,1.)*arcF*.91+vec3(.70,.59,1.)*arcG*.87+vec3(.90,.98,1.)*arcH*.89;
  float shellFade=1.-smoothstep(radius*.977,radius,d);
  float alpha=clamp(.96+rim*.04,0.,1.)*shellFade;
- float orbital=ringFront*spinPulse;
- base+=ringCol*(ring*.32+ringBloom*.018)*orbital;
+ // Only sections with z in front of the sphere are composited above the plasma.
+ float sphereFrontZ=sqrt(max(radius*radius-d*d,0.));
+ float frontA=metalA.a*step(sphereFrontZ+.01,metalDepthA);
+ float frontB=metalB.a*step(sphereFrontZ+.01,metalDepthB);
+ if(metalDepthA>metalDepthB){
+   base=mix(base,metalB.rgb,frontB);
+   base=mix(base,metalA.rgb,frontA);
+ }else{
+   base=mix(base,metalA.rgb,frontA);
+   base=mix(base,metalB.rgb,frontB);
+ }
  gl_FragColor=vec4(clamp(base,0.,1.),alpha);
 }`;
 
