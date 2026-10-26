@@ -270,7 +270,7 @@ test('R122: isolated 3D gyroscope lab has real polygonal cross-sections, sphere 
  const {Script}=await import('node:vm');
  assert.doesNotThrow(()=>new Script(js),'Native WebGL lab JavaScript must parse');
  assert.match(js,/const buildRing=\(major,w,h\)=>/);
- assert.match(js,/for\(let j=0;j<144;j\+\+\)/);
+ assert.match(js,/for\(let j=0;j<256;j\+\+\)/);
  assert.ok(js.includes('nr=-dz/len,nz=dr/len'),'Geometry normals point outward');
  assert.ok(js.includes('const buildSphere=()=>')&&js.includes('gl.colorMask(false,false,false,false)'),'Sphere writes depth but not colour');
  assert.ok(js.includes('gl.enable(gl.DEPTH_TEST)')&&js.includes('gl.depthFunc(gl.LEQUAL)'));
@@ -345,4 +345,33 @@ test('R124: image-to-3D visual comparison offers bounded local reference and mat
  const v=api.configure({roughness:-12,warmth:99,exposure:100,hacked:1}).config;
  assert.equal(v.roughness,.06);assert.equal(v.warmth,1);assert.equal(v.exposure,1.7);assert.ok(!('hacked' in v));
  assert.equal(api.reset().config.roughness,.30);
+});
+
+test('R125: rings complete visible 360-degree gimbal flips; microfacet steel shading replaces flat colour',async()=>{
+ const {Script}=await import('node:vm');
+ const mesh=read('assets/core-r122-gyro.js'),lab=read('siteforge/core-3d-lab/index.html');
+ assert.doesNotThrow(()=>new Script(mesh));
+ const normals=[...mesh.matchAll(/axis:\[([^\]]+)\],normal:\[([^\]]+)\]/g)].map(m=>[m[1],m[2]].map(s=>s.split(',').map(Number)));
+ assert.equal(normals.length,3,'3 spinning metal gyros expected');
+ const normalize=a=>a.map(x=>x/Math.hypot(...a));
+ const dot=(a,b)=>a.reduce((sum,x,i)=>sum+x*b[i],0);
+ const cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+ const rotate=(v,k,t)=>v.map((x,i)=>x*Math.cos(t)+cross(k,v)[i]*Math.sin(t)+k[i]*dot(k,v)*(1-Math.cos(t)));
+ for(const [axis,normal] of normals){
+  const a=normalize(axis),n=normalize(normal);
+  assert.ok(Math.abs(dot(a,n))<.025,'Axis must be perpendicular to ring plane, not aligned like R124');
+  const quarter=rotate(n,a,Math.PI/2),half=rotate(n,a,Math.PI),full=rotate(n,a,2*Math.PI);
+  assert.ok(Math.abs(dot(quarter,n))<.08,'Quarter turn must visibly tilt the ring plane');
+  assert.ok(dot(half,n)<-.97,'Half-turn must flip the front and rear');
+  assert.ok(dot(full,n)>.999,'360 degrees must restore original orientation');
+ }
+ for(const period of ['6.283185/13','-6.283185/17','6.283185/20'])assert.ok(mesh.includes(period));
+ for(const term of ['distributionGGX','geometrySmith','fresnelSchlick','studioEnvironment','tonemapACES','gl.getError()'])
+   assert.ok(mesh.includes(term),'Metal shader lacks '+term);
+ assert.match(mesh,/for\(let j=0;j<256;j\+\+\)/);
+ assert.ok(mesh.includes('const bevel=Math.min(w,h)*.22'));
+ assert.ok(mesh.includes('lastFrame&&clock-lastFrame<32'),'Mobile FPS capped');
+ assert.ok(lab.includes('anneaux 360°')&&lab.includes('microfacet GGX'));
+ assert.ok(!home.includes('core-r122-gyro.js'),'Public home remains unchanged');
+ assert.doesNotMatch(mesh,/\bfetch\s*\(|XMLHttpRequest|WebSocket|sendBeacon/);
 });
