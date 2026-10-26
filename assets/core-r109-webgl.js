@@ -33,61 +33,75 @@ varying vec2 uv;
 uniform vec2 resolution;
 uniform vec2 tilt;
 uniform float time;
-float hash(vec3 p) {
-  p = fract(p * .1031);
-  p += dot(p, p.yxz + 33.33);
-  return fract((p.x + p.y) * p.z);
+float hash3(vec3 p) {
+  p=fract(p*.1031);
+  p+=dot(p,p.yzx+33.33);
+  return fract((p.x+p.y)*p.z);
 }
-float noise(vec3 p) {
-  vec3 i = floor(p), f = fract(p);
-  f = f*f*(3.0-2.0*f);
-  return mix(
-    mix(mix(hash(i),hash(i+vec3(1,0,0)),f.x),
-        mix(hash(i+vec3(0,1,0)),hash(i+vec3(1,1,0)),f.x),f.y),
-    mix(mix(hash(i+vec3(0,0,1)),hash(i+vec3(1,0,1)),f.x),
-        mix(hash(i+vec3(0,1,1)),hash(i+vec3(1,1,1)),f.x),f.y),f.z);
+float noise3(vec3 x) {
+  vec3 i=floor(x),f=fract(x);
+  f=f*f*(3.0-2.0*f);
+  return mix(mix(mix(hash3(i),hash3(i+vec3(1,0,0)),f.x),
+                 mix(hash3(i+vec3(0,1,0)),hash3(i+vec3(1,1,0)),f.x),f.y),
+             mix(mix(hash3(i+vec3(0,0,1)),hash3(i+vec3(1,0,1)),f.x),
+                 mix(hash3(i+vec3(0,1,1)),hash3(i+vec3(1,1,1)),f.x),f.y),f.z);
 }
-vec3 moveNormal(vec3 n) {
-  float cx=cos(tilt.x), sx=sin(tilt.x);
-  float cy=cos(tilt.y), sy=sin(tilt.y);
-  n=vec3(cx*n.x+sx*n.z,n.y,-sx*n.x+cx*n.z);
-  return vec3(n.x,cy*n.y-sy*n.z,sy*n.y+cy*n.z);
+vec3 turn3(vec3 n,vec2 t){
+ float a=cos(t.x),b=sin(t.x),c=cos(t.y),d=sin(t.y);
+ vec3 r=vec3(a*n.x+b*n.z,n.y,-b*n.x+a*n.z);
+ return vec3(r.x,c*r.y-d*r.z,d*r.y+c*r.z);
 }
-void main() {
-  vec2 p=(uv-.5)*2.0;
-  p.x *= resolution.x/max(resolution.y,1.0);
-  p.y += .12;
-  float rr=dot(p,p), radius=.60;
-  float dist=length(p);
-  float halo=exp(-12.0*pow(max(dist-radius,0.0),2.0))*exp(-1.8*dist);
-  vec3 haloColor=mix(vec3(.055,.16,.45),vec3(.09,.48,.66),.40+.27*p.y);
-  if(rr >= radius*radius) {
-    float ring=exp(-pow((length(vec2(p.x*.72,p.y*1.35))-.83)*24.0,2.0));
-    float alpha=clamp(halo*.24+ring*.16,0.0,.31);
-    gl_FragColor=vec4(haloColor+vec3(ring*.21),alpha);
-    return;
-  }
-  vec3 n=vec3(p,sqrt(max(radius*radius-rr,0.0)))/radius;
-  n=moveNormal(n);
-  float v=noise(n*4.8+vec3(time*.06,0.0,time*.025));
-  float w=noise(n*10.0+vec3(time*.09,time*.04,0.0));
-  float spiral=sin(atan(n.y,n.x)*4.0+n.z*11.0+v*5.8-time*.33);
-  float energy=pow(max(0.0,spiral*.5+.5),5.0);
-  float glow=pow(1.0-max(n.z,0.0),2.2);
-  float light=max(dot(n,normalize(vec3(-.44,.62,1.0))),0.0);
-  vec3 midnight=vec3(.035,.08,.22);
-  vec3 blue=vec3(.055,.30,.68);
-  vec3 violet=vec3(.25,.13,.54);
-  vec3 aqua=vec3(.37,.89,1.0);
-  vec3 col=mix(midnight,blue,clamp(.25+light*.65+v*.18,0.0,1.0));
-  col=mix(col,violet,smoothstep(.54,.9,v)*.48);
-  col+=aqua*energy*(.23+.49*light);
-  col+=aqua*glow*.54;
-  col+=vec3(.70,.87,1.0)*pow(max(dot(reflect(normalize(vec3(.43,-.68,-1.0)),n),vec3(0,0,1)),0.0),18.0)*.37;
-  col+=vec3(w*.025);
-  float rim=1.0-smoothstep(.86,1.0,dist/radius);
-  float a=clamp(.96+glow*.04,0.0,1.0)*rim;
-  gl_FragColor=vec4(clamp(col,0.0,1.0),a);
+void main(){
+ vec2 p=(uv-.5)*2.;
+ p.x*=resolution.x/max(resolution.y,1.);
+ p.y+=.08;
+ float radius=.69;
+ float d=length(p);
+ float t=time*.28;
+ float ellipseAngle=-.30;
+ float ca=cos(ellipseAngle),sa=sin(ellipseAngle);
+ vec2 q=vec2(p.x*ca-p.y*sa,p.x*sa+p.y*ca);
+ float oval=length(vec2(q.x/.98,q.y/.31));
+ float od=abs(oval-1.);
+ float ring=exp(-od*od*4400.);
+ float ringBloom=exp(-od*od*480.);
+ float ringFront=smoothstep(-.12,.10,q.y);
+ float spinPulse=.77+.23*sin(atan(q.y/.31,q.x/.98)*3.-time*.46);
+ float aura=exp(-pow(d/.94,2.)*2.5);
+ vec3 cyan=vec3(.31,.87,1.);
+ vec3 lavender=vec3(.64,.47,1.);
+ vec3 navy=vec3(.009,.034,.108);
+ vec3 backdrop=mix(vec3(.07,.11,.35),vec3(.04,.33,.55),smoothstep(-.8,.8,p.x));
+ vec3 ringCol=mix(lavender,cyan,smoothstep(-.42,.6,p.x));
+ vec3 outside=backdrop*aura*.13+ringCol*(ring*.63+ringBloom*.065)*spinPulse;
+ float outsideA=clamp(aura*.12+ring*.7+ringBloom*.08,0.,.8);
+ if(d>radius){ gl_FragColor=vec4(outside,outsideA); return; }
+ vec3 n=vec3(p,sqrt(max(radius*radius-dot(p,p),0.)))/radius;
+ n=turn3(n,tilt+vec2(sin(t*.23)*.15,cos(t*.18)*.08));
+ float v=noise3(n*3.7+vec3(t*.65,t*.22,-t*.25));
+ float v2=noise3(n*7.5+vec3(t*.3,-t*.6,t*.47));
+ float angle=atan(n.y,n.x);
+ float filament=sin(angle*5.+n.z*9.5+v*5.0-t*2.0);
+ float currents=pow(max(0.,filament*.5+.5),7.0);
+ float secondary=pow(max(0.,sin(angle*8.0-n.z*11.0+v2*4.+t)*.5+.5),12.);
+ float light=max(dot(n,normalize(vec3(-.45,.58,1.))),0.);
+ float rim=pow(1.-max(n.z,0.),2.2);
+ float soft=clamp(.18+v*.63+light*.55,0.,1.);
+ vec3 base=mix(navy,vec3(.035,.17,.39),soft);
+ base=mix(base,vec3(.15,.09,.38),smoothstep(.52,.88,v)*.37);
+ base+=cyan*currents*(.10+.47*light);
+ base+=lavender*secondary*(.09+.22*v);
+ base+=cyan*rim*.78;
+ float spec=pow(max(dot(reflect(normalize(vec3(.53,-.71,-1.)),n),vec3(0.,0.,1.)),0.),24.);
+ base+=vec3(.88,.96,1.)*spec*.54;
+ base+=vec3(.70,.83,.95)*pow(max(dot(n,normalize(vec3(-.28,.46,1.))),0.),22.)*.20;
+ float topRim=smoothstep(-.2,.8,p.y)*rim;
+ base+=vec3(.09,.22,.35)*topRim;
+ float shellFade=1.-smoothstep(radius*.977,radius,d);
+ float alpha=clamp(.96+rim*.04,0.,1.)*shellFade;
+ float orbital=ringFront*spinPulse;
+ base+=ringCol*(ring*.75+ringBloom*.045)*orbital;
+ gl_FragColor=vec4(clamp(base,0.,1.),alpha);
 }`;
 
   const shader = (type, code) => {
