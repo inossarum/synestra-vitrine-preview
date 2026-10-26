@@ -296,7 +296,7 @@ test('R123: SiteForge 3D lab editor exposes safe reusable presets and editable s
  assert.doesNotThrow(()=>new Script(editor));
  for(const name of ['width','depth','speed','yaw','pitch','material'])assert.ok(lab.includes('name="'+name+'"'),name);
  for(const name of ['sf3d-export','sf3d-import','sf3d-pause','sf3d-reset','sf3d-status'])assert.ok(lab.includes('id="'+name+'"'),name);
- for(const name of ['buildRing(ring.major,ring.w*params.width,ring.h*params.depth)','gl.uniform3fv(m.tint','!params.paused','window.SynestraSiteForge3D=Object.freeze'])assert.ok(mesh.includes(name),name);
+ for(const name of ['buildRing(ring.major,ring.w*params.depth,ring.h*params.width)','gl.uniform3fv(m.tint','!params.paused','window.SynestraSiteForge3D=Object.freeze'])assert.ok(mesh.includes(name),name);
  assert.ok(!/\bfetch\s*\(|XMLHttpRequest|WebSocket|sendBeacon/.test(mesh+editor));
  assert.ok(lab.includes('script src="../../assets/siteforge-3d-editor.js" defer'));
  assert.ok(lab.includes('content="noindex,nofollow"'));
@@ -310,7 +310,7 @@ test('R123: SiteForge 3D lab editor exposes safe reusable presets and editable s
  const api=win.SynestraSiteForge3D;
  assert.ok(api&&api.configure&&api.snapshot&&api.reset);
  const applied=api.configure({width:9,depth:-3,speed:100,yaw:-900,pitch:25,material:'gold',paused:true,unexpected:'anything'}).config;
- assert.equal(applied.width,1.5);assert.equal(applied.depth,.65);assert.equal(applied.speed,3);assert.equal(applied.yaw,-55);
+ assert.equal(applied.width,5);assert.equal(applied.depth,.15);assert.equal(applied.speed,3);assert.equal(applied.yaw,-55);
  assert.equal(applied.material,'gold');assert.equal(applied.paused,true);
  assert.ok(!('unexpected' in applied));
  assert.equal(api.reset().config.width,1);
@@ -404,8 +404,58 @@ test('R126: core point emitter drives anisotropic PBR, and energy is rendered be
  for(const term of ['distributionGGXAniso','uAnisotropy','uImperfection','uScratches','uEdgeWear','vWorld','uCoreColor','uCoreIntensity','coreDir=normalize(-vWorld','energyProgram','uPulseCount','uPulseType','uEnergyType','uGlowColor','gl.TRIANGLE_STRIP','gl.colorMask(false,false,false,false)'])
   assert.ok(engine.includes(term),term);
  assert.ok(engine.indexOf('if(e){gl.enable(gl.BLEND)')<engine.indexOf('// Invisible sphere populates the depth buffer'),'Emit energy behind metal');
- assert.ok(engine.includes('for(int i=0;i<16;i++)'),'GPU work must have finite bounds');
+ assert.ok(engine.includes('const arcs=pulseGeometry.build(params,elapsed)'),'XYZ geometry must update with current preset');
  assert.match(lab,/noindex,nofollow/);assert.match(lab,/prefers-reduced-motion:reduce/);
  assert.match(lab,/script-src 'self'/);for(const forbidden of ['fetch(','XMLHttpRequest','WebSocket','sendBeacon','eval('])assert.ok(!engine.includes(forbidden)&&!editor.includes(forbidden),forbidden);
  assert.ok(!read('index.html').includes('siteforge-3d-editor.js'),'Main homepage stays independent');
+});
+
+test('R127: actual spatial geometry covers XYZ, geometry controls change visible coordinates, and work is bounded',async()=>{
+ const {Script,runInNewContext}=await import('node:vm');
+ const source=read('assets/siteforge-3d-pulse-geometry.js');
+ assert.doesNotThrow(()=>new Script(source));
+ const window={};runInNewContext(source,{window,Math,Float32Array,Array,Object});
+ const geom=window.SynestraPulseGeometry;assert.ok(geom);
+ const base={pulseCount:8,pulseType:'radial',pulseNature:'electric',depthSpread:1,seed:7,amplitude:1,quality:'balanced',energySpeed:1};
+ const original=geom.build(base,2);
+ assert.equal(original.directions.length,8);
+ assert.ok(original.directions.some(v=>v[2]>.15)&&original.directions.some(v=>v[2]<-.15),'3D must include negative and positive Z, not screen-space XY');
+ assert.ok(original.glow.length>0&&original.filaments.length>0);
+ for(const array of [original.glow,original.filaments]){
+  assert.equal(array.length%5,0);
+  assert.ok(Array.from(array).every(Number.isFinite),'GPU vertex attributes must be finite');
+ }
+ const alter=geom.build({...base,pulseType:'spiral',pulseNature:'ribbon',twist:2,spread:2,seed:23},2);
+ assert.notDeepEqual(Array.from(original.glow.slice(0,30)),Array.from(alter.glow.slice(0,30)),'Controls must change 3D vertices');
+ const count=geom.build({...base,pulseCount:16,quality:'high'},2);
+ assert.ok(count.glow.length>original.glow.length,'More pulses must generate more real spatial geometry');
+ const freeze=geom.build({...base,energySpeed:0},2),speedup=geom.build({...base,energySpeed:3},2);
+ assert.notDeepEqual(Array.from(freeze.glow.slice(0,30)),Array.from(speedup.glow.slice(0,30)),'Energy speed acts independently');
+ assert.equal(geom.build({...base,pulseCount:99,quality:'high'},2).directions.length,16,'Max 16: no unbounded game-like load');
+});
+test('R127: swapped, extended ring sliders and independent pulse physics are safe and exportable',async()=>{
+ const {Script,runInNewContext}=await import('node:vm');
+ const engine=read('assets/core-r122-gyro.js'),editor=read('assets/siteforge-3d-editor.js'),lab=read('siteforge/core-3d-lab/index.html');
+ assert.doesNotThrow(()=>new Script(engine));assert.doesNotThrow(()=>new Script(editor));
+ const status={textContent:'',setAttribute(){},getAttribute(){return ''}};
+ const scene={querySelector(){return {getContext(){return null}};}};
+ const document={querySelector:()=>scene,getElementById:()=>status};
+ const window={matchMedia:()=>({matches:false})};
+ runInNewContext(engine,{document,window,matchMedia:window.matchMedia,console});
+ const api=window.SynestraSiteForge3D;
+ const out=api.configure({width:90,depth:-5,pulseNature:'particles',quality:'eco',depthSpread:99,seed:2300,pulseType:'orbiting',turbulence:1.4,unknown:'reject'}).config;
+ assert.equal(out.width,5);assert.equal(out.depth,.15);
+ assert.equal(out.pulseNature,'particles');assert.equal(out.pulseType,'orbiting');assert.equal(out.quality,'eco');
+ assert.equal(out.depthSpread,1);assert.equal(out.seed,999);assert.equal(out.turbulence,1.4);assert.ok(!('unknown' in out));
+ assert.equal(api.snapshot().config.pulseNature,'particles');
+ assert.equal(api.reset().config.pulseNature,'electric');
+ assert.match(engine,/r\.w\*params\.depth,r\.h\*params\.width/);
+ assert.ok(engine.includes('ringElapsed+=dt*params.speed'),'Independent ring vs energy speed');
+ for(const key of ['pulseNature','quality','spread','depthSpread','branching','twist','flicker','pulseLength','coreRadius','seed'])assert.ok(lab.includes('name="'+key+'"'),key);
+ for(const name of ['width','depth'])assert.match(lab,new RegExp('name="'+name+'" min="\\.15" max="5"'));
+ assert.ok(lab.includes('.core-r108-stage[data-metal-ready="true"] .core-r109-canvas{opacity:0}'),'Uneditable legacy arcs must be hidden');
+ assert.ok(lab.includes('siteforge-3d-pulse-geometry.js'));
+ for(const forbidden of ['fetch(','XMLHttpRequest','WebSocket','sendBeacon'])assert.ok(!engine.includes(forbidden)&&!editor.includes(forbidden));
+ assert.ok(!read('index.html').includes('siteforge-3d-pulse-geometry.js'),'Main homepage must remain unchanged');
+ assert.match(lab,/noindex,nofollow/);assert.match(lab,/prefers-reduced-motion:reduce/);
 });
