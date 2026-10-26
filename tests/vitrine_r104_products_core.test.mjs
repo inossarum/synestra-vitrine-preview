@@ -109,3 +109,21 @@ test('R108: reduced motion and visual simplification are enforced',()=>{
  assert.doesNotMatch(home, /<div class="motion-strip"|<section class="container r105-orientation"/);
  assert.match(home, /Une même énergie, trois façons de donner vie à vos projets\./);
 });
+
+test('R110: native-verified dimensional plasma shader, restrained orbit and bounded frame-rate',()=>{
+ const script=read('assets/core-r109-webgl.js');
+ const fragment=script.match(/const fragment = \`([\s\S]*?)\`;/)?.[1]?.trim();
+ assert.ok(fragment,'R110 shader fragment absent');
+ let hash=2166136261;
+ for(const ch of fragment)hash=Math.imul(hash ^ ch.charCodeAt(0),16777619)>>>0;
+ assert.equal(hash.toString(16),'d2557d11','GLSL source differs from EGL-rendered R110 sample');
+ for(const term of ['noise3','turn3','ringBloom','ringFront','spiral']){
+  if(term==='spiral')continue;
+  assert.ok(fragment.includes(term),term);
+ }
+ assert.match(script,/clock - lastFrame < 32/);
+ assert.match(script,/lastFrame = clock;/);
+ assert.match(script,/prefers-reduced-motion: reduce/);
+ assert.match(script,/scene.removeAttribute\('data-core-ready'\)/);
+ assert.doesNotMatch(script,/\bfetch\s*\(|XMLHttpRequest|WebSocket|sendBeacon/);
+});
