@@ -2,7 +2,7 @@
 <html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self' blob:; base-uri 'none'; frame-ancestors 'none'; form-action 'none'">
-<title>Synestra — SiteForge 3D R127 · Métaux physiques et énergie centrale</title>
+<title>Synestra — SiteForge 3D R128 · sphère électrique maillée</title>
 <style>
 :root{color-scheme:dark;font-family:system-ui,Arial,sans-serif;background:#050b17;color:#d4e8fa}
 *{box-sizing:border-box}body{margin:0;padding:24px 14px;background:radial-gradient(ellipse at 50% 20%,#0c1b38,#050b17 65%);min-height:100vh}
@@ -46,7 +46,7 @@ h1{font-size:clamp(1.1rem,3vw,1.65rem);margin:1rem 0 .55rem}p{color:#aec3d8;line
 </style></head><body><main>
 <a href="../../">Retour à SiteForge</a>
 <h1>SiteForge — Atelier 3D</h1>
-<p class="status">R127 · géométrie XYZ et huit natures de décharge · anneaux 360° · microfacet GGX anisotrope, métal imparfait · noyau lumineux et énergie éditable · QA visuelle en attente</p>
+<p class="status">R128 · sphère électrique maillée 3D · huit arcs fins XYZ par défaut · anneaux 360° · microfacet GGX anisotrope, métal imparfait · noyau lumineux et énergie éditable · QA visuelle en attente</p>
 <div class="sf3d-comparison">
  <div class="sf3d-preview-panel">
   <p class="sf3d-preview-caption">Scène 3D construite</p>
@@ -62,7 +62,7 @@ h1{font-size:clamp(1.1rem,3vw,1.65rem);margin:1rem 0 .55rem}p{color:#aec3d8;line
  </figure>
 </div>
 <p class="sf3d-status" id="sf3d-status" role="status" aria-live="polite">Initialisation du moteur graphique…</p>
-<p class="sf3d-status">Le noyau génère des arcs réels en X/Y/Z : nature, couleur, nombre, vitesse et forme sont indépendants. Les trois anneaux font une rotation 360° sur trois axes (13/17/20 s). Métal microfacet GGX anisotrope, défauts procéduraux et éclairage central dépendant du noyau. La lueur est analytique : elle ne constitue pas une certification visuelle AAA.</p>
+<p class="sf3d-status">Le cœur électrique est une sphère à 27 648 triangles ; huit décharges fines se déploient en XYZ avec leur nervosité initiale. Nature, couleur, nombre, vitesse et forme sont indépendants. Les trois anneaux font une rotation 360° sur trois axes (13/17/20 s). Métal microfacet GGX anisotrope, défauts procéduraux et éclairage central dépendant du noyau. La lueur est analytique : elle ne constitue pas une certification visuelle AAA.</p>
 <p class="fallback-note">Si seule la sphère apparaît, l'animation 3D est indisponible ou le mouvement réduit est activé sur cet appareil. Ce laboratoire n'est pas une validation du rendu final.</p>
 
 <section class="sf3d-panel" aria-labelledby="sf3d-panel-title">
@@ -87,7 +87,7 @@ h1{font-size:clamp(1.1rem,3vw,1.65rem);margin:1rem 0 .55rem}p{color:#aec3d8;line
 <label>Usure des chanfreins <output id="sf3d-out-edgeWear" for="sf3d-edgeWear">.24</output><input id="sf3d-edgeWear" type="range" name="edgeWear" min="0" max="1" step=".02" value=".24"></label>
 </div></fieldset>
  <fieldset class="sf3d-subpanel"><legend>Énergie — émission centrale et impulsions</legend><div class="sf3d-subfields">
-<label>Type d'énergie <output id="sf3d-out-energyType">plasma</output><select name="energyType" id="sf3d-energyType"><option value="plasma">Plasma</option><option value="electric">Électricité</option><option value="arc">Arcs</option><option value="vortex">Vortex</option><option value="nebula">Nébuleuse</option><option value="flame">Flamme</option><option value="crystalline">Cristalline</option><option value="quantum">Quantique</option></select></label>
+<label>Type d'énergie <output id="sf3d-out-energyType">electric</output><select name="energyType" id="sf3d-energyType"><option value="plasma">Plasma</option><option value="electric">Électricité</option><option value="arc">Arcs</option><option value="vortex">Vortex</option><option value="nebula">Nébuleuse</option><option value="flame">Flamme</option><option value="crystalline">Cristalline</option><option value="quantum">Quantique</option></select></label>
 
 <label>Nature des décharges <output id="sf3d-out-pulseNature">electric</output>
 <select name="pulseNature" id="sf3d-pulseNature">
@@ -105,11 +105,11 @@ h1{font-size:clamp(1.1rem,3vw,1.65rem);margin:1rem 0 .55rem}p{color:#aec3d8;line
 <label>Taille du cœur <output id="sf3d-out-coreRadius" for="sf3d-coreRadius">1</output><input id="sf3d-coreRadius" type="range" name="coreRadius" min=".55" max="1.18" step=".05" value="1"></label>
 <label>Variation de l’énergie (graine) <output id="sf3d-out-seed" for="sf3d-seed">7</output><input id="sf3d-seed" type="range" name="seed" min="0" max="999" step="1" value="7"></label>
 
-<label>Trajectoire des impulsions <output id="sf3d-out-pulseType">radial</output><select name="pulseType" id="sf3d-pulseType"><option value="radial">Radiale</option><option value="spiral">Spirale</option><option value="branching">Ramifiée</option><option value="wave">Onde</option><option value="burst">Salve</option><option value="orbiting">Orbitale</option></select></label>
-<label>Couleur primaire <output id="sf3d-out-primaryColor">#1db8ff</output><input id="sf3d-primaryColor" type="color" name="primaryColor" value="#1db8ff"></label>
-<label>Couleur secondaire <output id="sf3d-out-secondaryColor">#6948e5</output><input id="sf3d-secondaryColor" type="color" name="secondaryColor" value="#6948e5"></label>
-<label>Couleur des arcs <output id="sf3d-out-pulseColor">#b4f6ff</output><input id="sf3d-pulseColor" type="color" name="pulseColor" value="#b4f6ff"></label>
-<label>Lueur du noyau <output id="sf3d-out-glowColor">#54caff</output><input id="sf3d-glowColor" type="color" name="glowColor" value="#54caff"></label>
+<label>Trajectoire des impulsions <output id="sf3d-out-pulseType">branching</output><select name="pulseType" id="sf3d-pulseType"><option value="radial">Radiale</option><option value="spiral">Spirale</option><option value="branching">Ramifiée</option><option value="wave">Onde</option><option value="burst">Salve</option><option value="orbiting">Orbitale</option></select></label>
+<label>Couleur primaire <output id="sf3d-out-primaryColor">#50deff</output><input id="sf3d-primaryColor" type="color" name="primaryColor" value="#50deff"></label>
+<label>Couleur secondaire <output id="sf3d-out-secondaryColor">#a378ff</output><input id="sf3d-secondaryColor" type="color" name="secondaryColor" value="#a378ff"></label>
+<label>Couleur des arcs <output id="sf3d-out-pulseColor">#d3f8ff</output><input id="sf3d-pulseColor" type="color" name="pulseColor" value="#d3f8ff"></label>
+<label>Lueur du noyau <output id="sf3d-out-glowColor">#c0f5ff</output><input id="sf3d-glowColor" type="color" name="glowColor" value="#c0f5ff"></label>
 <label>Nombre d'impulsions <output id="sf3d-out-pulseCount" for="sf3d-pulseCount">8</output><input id="sf3d-pulseCount" type="range" name="pulseCount" min="1" max="16" step="1" value="8"></label>
 <label>Vitesse énergétique <output id="sf3d-out-energySpeed" for="sf3d-energySpeed">1</output><input id="sf3d-energySpeed" type="range" name="energySpeed" min="0" max="3" step=".1" value="1"></label>
 <label>Amplitude <output id="sf3d-out-amplitude" for="sf3d-amplitude">1</output><input id="sf3d-amplitude" type="range" name="amplitude" min="0" max="2" step=".05" value="1"></label>
@@ -138,6 +138,7 @@ h1{font-size:clamp(1.1rem,3vw,1.65rem);margin:1rem 0 .55rem}p{color:#aec3d8;line
 </section>
 <script src="../../assets/core-r109-webgl.js" defer></script>
 <script src="../../assets/siteforge-3d-pulse-geometry.js" defer></script>
+<script src="../../assets/siteforge-3d-sphere-shaders.js" defer></script>
 <script src="../../assets/core-r122-gyro.js" defer></script>
 <script src="../../assets/siteforge-3d-editor.js" defer></script>
 </main></body></html>

@@ -1,4 +1,4 @@
-/* SiteForge R127 — genuine XYZ pulse geometry, CPU-bounded and local WebGL1.
+/* SiteForge R128 — genuine XYZ pulse geometry, CPU-bounded and local WebGL1.
  * Independent physics and trajectory shapes; no network/assets.
  */
 (()=>{
@@ -19,7 +19,7 @@ const direction=(i,count,zSpread=1,seed=7)=>{
 };
 const build=(p,time)=>{
  const count=clamp(Math.round(p.pulseCount??8),1,16);
- const quality=({eco:14,balanced:26,high:38}[p.quality]||26);
+ const quality=({eco:22,balanced:40,high:64}[p.quality]||40);
  const tm=time*clamp(p.energySpeed??1,0,3);
  const glow=[],filaments=[],endpoints=[];
  const shape=types.indexOf(p.pulseType),nature=natures.indexOf(p.pulseNature);
@@ -43,8 +43,8 @@ const build=(p,time)=>{
    const fade=strength*(.3+.7*Math.sin(Math.PI*j/(points.length+1)));
    const thickness=clamp(p.thickness??.65,.08,3);
    const width=[.8,1.3,.55,2,.48,1.7,.65,1.15][Math.max(0,nature)]||1;
-   emit(glow,points[j-1],points[j],.017*thickness*width,fade*.32,id);
-   emit(filaments,points[j-1],points[j],.0037*thickness*width,fade,id);
+   emit(glow,points[j-1],points[j],.0115*thickness*width,fade*.40,id);
+   emit(filaments,points[j-1],points[j],.0024*thickness*width,fade,id);
   }
  };
  for(let i=0;i<count;i++){
@@ -52,7 +52,10 @@ const build=(p,time)=>{
   const D=direction(i,count,p.depthSpread??1,seed);
   const aux=Math.abs(D[2])>.88?[0,1,0]:[0,0,1];
   const U=norm(cross(D,aux)),V=norm(cross(D,U));
-  const tip=.18+.82*((tm*.22+phase)%1);
+  // R121-inspired 1.12s asynchronous electrical burst envelope, not a 2D mask.
+  const cycle=tm/1.12+i*.37;
+  const electricPhase=cycle-Math.floor(cycle);
+  const tip=nature===0?(.09+.91*Math.min(1,Math.max(0,(electricPhase-.04)/.42))):(.18+.82*((tm*.22+phase)%1));
   const extent=clamp((.67*amplitude*length)*tip,.015,.93);
   const points=[];
   for(let j=0;j<=quality;j++){
@@ -63,13 +66,14 @@ const build=(p,time)=>{
    if(shape===3){u=Math.sin(q*TAU*(1.+twist)+tm*2.)*w*2.2;v=Math.cos(q*TAU*1.3+id)*w*.7;}
    if(shape===4){u=Math.sin(q*TAU*.9+tm*1.8)*w*.9;v=Math.sin(q*TAU*1.7)*w*.75;}
    if(shape===5){const a=q*TAU*(.6+twist)+tm*.75;u=Math.cos(a)*(.11+q*.15)*spread;v=Math.sin(a)*(.11+q*.15)*spread;}
-   const micro=Math.sin(q*(28.+seed*.01)+id*11.+tm*(2.+flicker*4));
+   const micro=nature===0?(Math.sin(q*36.+phase*20.)*.73+Math.sin(q*91.+phase*21.)*.27):Math.sin(q*(28.+seed*.01)+id*11.+tm*(2.+flicker*4));
    const rough=(nature===0||nature===6)?1.5:nature===1?.25:.6;
    u+=micro*w*turbulence*rough+chaos*rnd(j*11.+id)*w;
    v+=Math.sin(q*41.+id*4.-tm*4.)*w*turbulence*rough;
    points.push(add(add(D.map(x=>x*r),U,u),V,v));
   }
-  draw(points,id,1);
+  const electricEnvelope=Math.min(1,Math.max(0,electricPhase/.12))*(1.-Math.min(1,Math.max(0,(electricPhase-.65)/.25)));
+  draw(points,id,nature===0?(.55+.45*electricEnvelope):1);
   endpoints.push(points[points.length-1]);
   if((shape===2||nature===0)&&branch>.03){
    const forks=branch>.65?2:1,segments=Math.max(5,Math.round(quality*.27));

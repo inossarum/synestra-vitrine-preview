@@ -397,7 +397,7 @@ test('R126: energy preset has 8 types, 6 pulse modes, 4 safe hex colours, and bo
  assert.equal(invalid.energyType,'quantum');assert.equal(invalid.pulseType,'orbiting');assert.equal(invalid.primaryColor,'#aa00ef');assert.equal(invalid.pulseCount,16);
  const exported=JSON.parse(JSON.stringify(api.snapshot()));
  assert.equal(exported.schema,'synestra.siteforge.3d-preset.v1');assert.equal(exported.config.pulseCount,16);
- assert.equal(api.reset().config.energyType,'plasma');
+ assert.equal(api.reset().config.energyType,'electric');
 });
 test('R126: core point emitter drives anisotropic PBR, and energy is rendered before physical depth',()=>{
  const engine=read('assets/core-r122-gyro.js'),lab=read('siteforge/core-3d-lab/index.html'),editor=read('assets/siteforge-3d-editor.js');
@@ -458,4 +458,31 @@ test('R127: swapped, extended ring sliders and independent pulse physics are saf
  for(const forbidden of ['fetch(','XMLHttpRequest','WebSocket','sendBeacon'])assert.ok(!engine.includes(forbidden)&&!editor.includes(forbidden));
  assert.ok(!read('index.html').includes('siteforge-3d-pulse-geometry.js'),'Main homepage must remain unchanged');
  assert.match(lab,/noindex,nofollow/);assert.match(lab,/prefers-reduced-motion:reduce/);
+});
+
+test('R128: actual tessellated 3D electric nucleus and slim high-resolution XYZ discharges',async()=>{
+ const {Script,runInNewContext}=await import('node:vm');
+ const engine=read('assets/core-r122-gyro.js'),sphere=read('assets/siteforge-3d-sphere-shaders.js');
+ const trails=read('assets/siteforge-3d-pulse-geometry.js'),html=read('siteforge/core-3d-lab/index.html');
+ assert.doesNotThrow(()=>new Script(sphere));assert.doesNotThrow(()=>new Script(engine));
+ assert.doesNotThrow(()=>new Script(trails));
+ const shaderApi={};runInNewContext(sphere,{window:shaderApi});
+ assert.ok(shaderApi.SynestraSphere3DShaders.vertex.includes('attribute vec3 aPosition'));
+ assert.ok(shaderApi.SynestraSphere3DShaders.vertex.includes('uView*(aPosition*uRadius)'),'Sphere positions rotate in xyz');
+ assert.ok(shaderApi.SynestraSphere3DShaders.fragment.includes('noise3(n*3.7'),'Original R121 noise modulation remapped to actual sphere normals');
+ assert.ok(shaderApi.SynestraSphere3DShaders.halo.includes('NO FLAT')===false,'Halo must be an optical layer only');
+ assert.ok(engine.includes('for(let i=0;i<48;i++')&&engine.includes('for(let j=0;j<96;j++'),'Sphere tessellation 48x96');
+ assert.ok(engine.includes('sphereProgram=link(sphereVertex,sphereFragment)'));
+ assert.ok(engine.includes('gl.drawArrays(gl.TRIANGLES,0,sphere.length/3)'),'Real sphere mesh must render');
+ assert.ok(engine.includes('gl.uniform1f(d.radius,params.coreRadius)'),'Depth occlusion matches 3D core scale');
+ assert.ok(trails.includes('eco:22,balanced:40,high:64'));
+ assert.ok(trails.includes('.0024*thickness*width')&&trails.includes('.0115*thickness*width'),'Fine core and separate optical sheath');
+ assert.ok(trails.includes('tm/1.12+i*.37'),'Original asynchronous electric rhythm is reused in 3D');
+ const sandbox={};runInNewContext(trails,{window:sandbox,Math,Float32Array,Array,Object});
+ const res=sandbox.SynestraPulseGeometry.build({pulseNature:'electric',pulseType:'branching',pulseCount:8,energySpeed:1,quality:'high'},2.1);
+ assert.equal(res.quality,64);
+ assert.ok(res.directions.some(d=>d[2]>.1)&&res.directions.some(d=>d[2]<-.1),'Non-planar charge distribution');
+ assert.ok(html.includes('siteforge-3d-sphere-shaders.js')&&html.indexOf('siteforge-3d-sphere-shaders.js')<html.indexOf('core-r122-gyro.js'));
+ assert.ok(!read('index.html').includes('siteforge-3d-sphere-shaders.js'),'Main page unchanged');
+ assert.match(html,/noindex,nofollow/);assert.match(html,/prefers-reduced-motion:reduce/);
 });
