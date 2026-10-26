@@ -1333,6 +1333,36 @@
     .siteforge-gallery-eyebrow,.siteforge-gallery-link {color:#83dced;}
     .siteforge-gallery-visual--form {background:radial-gradient(circle at 72% 28%,#8a58ec 0,transparent 34%),#141a34;}
     @media (prefers-reduced-motion: reduce) {.siteforge-gallery-visual{transition:none!important;}}
+
+    /* R104 — real CSS energy Core, without any logo in the centre.
+       The approved R99 official brand artwork stays in the header only. */
+    .syn-core-r104{z-index:4;overflow:visible!important;width:170px!important;height:170px!important;display:grid;place-items:center;border-radius:50%;background:transparent!important;border:0!important;box-shadow:none!important;filter:drop-shadow(0 0 30px rgba(20,173,230,.15))}
+    .syn-core-r104::before,.syn-core-r104::after{content:none!important;display:none!important}
+    .syn-core-r104>span{display:block;position:absolute;pointer-events:none;border-radius:50%}
+    .syn-core-r104 .core-outer-halo{width:220px;height:220px;border:1px dashed rgba(121,207,242,.28);background:conic-gradient(from 110deg,transparent 0 24%,rgba(0,196,241,.12) 27%,transparent 31% 67%,rgba(138,88,236,.13) 73%,transparent 78%);animation:core-rotation 32s linear infinite}
+    .syn-core-r104 .core-containment{width:160px;height:160px;border:2px solid transparent;background:linear-gradient(#101c34,#101c34) padding-box,conic-gradient(from 0deg,transparent,#72e5f0,transparent,#a990fb,transparent,#38c6ff) border-box;box-shadow:0 0 25px rgba(31,164,247,.20),inset 0 0 35px rgba(8,56,102,.55);animation:core-rotation 16s linear infinite reverse}
+    .syn-core-r104 .core-containment:before{content:"";position:absolute;inset:11px;border-radius:50%;border:1px dashed rgba(188,208,255,.25);animation:core-rotation 13s linear infinite}
+    .syn-core-r104 .core-dynamo{display:grid!important;place-items:center;width:124px;height:124px;background:conic-gradient(from 25deg,rgba(17,114,227,.10),rgba(127,96,239,.48) 18%,transparent 29%,rgba(66,232,224,.35) 48%,transparent 61%,rgba(93,135,251,.5) 82%,rgba(17,114,227,.10));filter:drop-shadow(0 0 12px rgba(97,199,254,.40));animation:core-rotation 10s linear infinite}
+    .syn-core-r104 .core-dynamo-inner{width:91px;height:91px;border:1px solid rgba(158,224,255,.43);border-radius:50%;background:radial-gradient(circle at 31% 29%,rgba(179,241,255,.46),transparent 13%),radial-gradient(circle,rgba(8,39,85,.90) 22%,rgba(28,113,188,.64) 59%,rgba(69,95,212,.41) 80%,transparent);box-shadow:inset 0 0 35px rgba(10,185,255,.26),0 0 22px rgba(11,145,228,.35)}
+    .syn-core-r104 .core-plasma{width:62px;height:62px;background:radial-gradient(circle at 44% 40%,#efffff 0 5%,#b9f2ff 10%,#60dfff 23%,rgba(43,130,238,.82) 45%,rgba(94,40,202,.57) 63%,transparent 72%);box-shadow:0 0 22px 10px rgba(70,198,254,.27),0 0 55px 21px rgba(75,98,248,.13);animation:core-beat 4.3s ease-in-out infinite}
+    .syn-core-r104 .core-plasma-heart{width:32px;height:32px;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,#f9ffff 4%,#98f4ff 32%,rgba(89,178,250,.06) 75%);filter:blur(3px)}
+    .syn-core-r104 .core-particle{width:7px;height:7px;background:#b5f4ff;box-shadow:0 0 12px #45c4ff,0 0 23px rgba(69,196,255,.37)}
+    .syn-core-r104 .core-particle-a{left:5%;top:24%;animation:core-particle-bob 5s ease-in-out infinite}
+    .syn-core-r104 .core-particle-b{right:5%;bottom:29%;background:#c3a3ff;box-shadow:0 0 13px #9b79ff;animation:core-particle-bob 5.8s -2s ease-in-out infinite}
+    .syn-core-r104 .core-particle-c{left:42%;bottom:0%;width:4px;height:4px;animation:core-particle-bob 6.3s -3.4s ease-in-out infinite}
+    .system-stage .stage-glow{background:radial-gradient(circle,rgba(39,196,255,.27),rgba(104,64,218,.09) 41%,transparent 72%)}
+    .system-stage .orbit-one{border-color:rgba(91,210,244,.34)}
+    .system-stage .orbit-two{border-color:rgba(171,137,240,.22)}
+    .product-deep-link{display:inline-flex;align-items:center;gap:.35rem;width:max-content;max-width:100%;margin-top:.8rem;padding:.38rem 0;color:#8de2ef;font-weight:750;font-size:.83rem;text-decoration:none;border-bottom:1px solid rgba(122,220,246,.37)}
+    .product-deep-link:hover{color:#e4fcff;border-color:#e4fcff}
+    .product-deep-link-subtle{display:flex;color:#bcb5f4}
+    .product-deep-link:focus-visible{outline:3px solid #b3f1ff;outline-offset:4px}
+    @keyframes core-rotation{to{transform:rotate(360deg)}}
+    @keyframes core-beat{0%,100%{transform:scale(.88);opacity:.85;filter:saturate(.9)}50%{transform:scale(1.16);opacity:1;filter:saturate(1.4)}}
+    @keyframes core-particle-bob{0%,100%{transform:translate(0,0);opacity:.45}50%{transform:translate(9px,-15px);opacity:1}}
+    @media(max-width:840px){.syn-core-r104{transform:translate(-50%,-50%) scale(.82)!important}}
+    @media(max-width:440px){.syn-core-r104{transform:translate(-50%,-50%) scale(.64)!important}}
+    @media(prefers-reduced-motion:reduce){.syn-core-r104,.syn-core-r104 *,.syn-core-r104 *:before,.syn-core-r104 *:after{animation:none!important;transition:none!important}.syn-core-r104 .core-plasma{transform:none!important}.syn-core-r104 .core-containment,.syn-core-r104 .core-dynamo{transform:none!important}}
   </style>
 </head>
 <body>
@@ -1345,7 +1375,9 @@
       <a href="#approche">Fonctionnement</a>
       <a href="#exemples">Exemples</a>
       <a href="#siteforge">SiteForge</a>
-      <a href="#plateforme">Bridge &amp; Connect</a>
+      <a href="./connect/">Connect</a>
+      <a href="./bridge/">Bridge</a>
+      <a href="./offres/">Offres</a>
       <a href="#realisations">Réalisations</a>
       <a href="#questions">Questions</a>
       <a href="#a-propos">À propos</a>
@@ -1369,7 +1401,7 @@
           <span><b>01</b> Imaginer</span><span><b>02</b> Relier</span><span><b>03</b> Vérifier</span>
         </div>
       </div>
-      <div class="system-stage" role="img" aria-label="Composition artistique conceptuelle du Studio Synestra : SiteForge, Connect et Bridge gravitant autour d'un noyau commun. Cette illustration n'affiche aucun flux en direct.">
+      <div class="system-stage" role="img" aria-label="Composition conceptuelle animée du Core Synestra : un réacteur d’énergie abstrait au centre des modules SiteForge, Connect et Bridge. Aucun flux en direct.">
         <div class="stage-glow" aria-hidden="true"></div>
         <span class="stage-corner corner-one" aria-hidden="true"></span><span class="stage-corner corner-two" aria-hidden="true"></span>
         <div class="stage-crosshair" aria-hidden="true"></div><div class="stage-pulse-line" aria-hidden="true"></div>
@@ -1378,7 +1410,12 @@
         <div class="system-orbit orbit-one" aria-hidden="true"></div>
         <div class="system-orbit orbit-two" aria-hidden="true"></div>
         <div class="system-orbit orbit-three" aria-hidden="true"></div><span class="orbit-marker marker-a" aria-hidden="true"></span><span class="orbit-marker marker-b" aria-hidden="true"></span>
-        <div class="system-core" aria-hidden="true"><img class="official-hero-logo" src="./assets/synestra-studio-official-v1.avif" width="480" height="480" alt="" decoding="async"><span class="core-caption">SYNESTRA STUDIO</span><i></i></div>
+        <div class="system-core syn-core-r104" aria-hidden="true">
+          <span class="core-outer-halo"></span><span class="core-containment"></span>
+          <span class="core-dynamo"><span class="core-dynamo-inner"></span></span>
+          <span class="core-plasma"><span class="core-plasma-heart"></span></span>
+          <span class="core-particle core-particle-a"></span><span class="core-particle core-particle-b"></span><span class="core-particle core-particle-c"></span>
+        </div>
         <div class="system-node node-forge" aria-hidden="true"><span class="node-symbol node-symbol-forge">✦</span><span><b>SITEFORGE</b><small>Création visuelle</small></span></div>
         <div class="system-node node-connect" aria-hidden="true"><span class="node-symbol node-symbol-connect">⌘</span><span><b>CONNECT</b><small>Intégrations</small></span></div>
         <div class="system-node node-bridge" aria-hidden="true"><span class="node-symbol node-symbol-bridge">▣</span><span><b>BRIDGE</b><small>Lien avec le PC</small></span></div>
@@ -1423,6 +1460,8 @@
             <p>Un lien pensé pour permettre au Studio de dialoguer avec un PC Windows, au moyen d’actions autorisées et d’un consentement local explicite.</p>
             <div class="product-facts"><span>Windows</span><span>Consentement local</span><span>Contrôles d’accès</span></div>
             <p class="product-caveat">Appairage, installation et actions distantes : qualification en cours. Cette vue est une illustration, pas une session réelle.</p>
+            <a class="product-deep-link" href="./bridge/">Comprendre Bridge et son installation <span aria-hidden="true">↗</span></a>
+            <a class="product-deep-link product-deep-link-subtle" href="./offres/#bridge">Consulter les offres Bridge <span aria-hidden="true">→</span></a>
           </div>
         </article>
         <article class="product-card product-card-connect" id="connect" aria-labelledby="connect-title">
@@ -1441,6 +1480,7 @@
             <p>Le point de passage des intégrations : il relie des capacités existantes au Studio dans un cadre authentifié, avec des permissions et des résultats traçables.</p>
             <div class="product-facts"><span>Accès authentifié</span><span>Central Skills</span><span>Traçabilité</span></div>
             <p class="product-caveat">Certaines lectures authentifiées ont été testées. La disponibilité dépend de chaque intégration et de son autorisation.</p>
+            <a class="product-deep-link" href="./connect/">Découvrir Connect en détail <span aria-hidden="true">↗</span></a>
           </div>
         </article>
       </div>
