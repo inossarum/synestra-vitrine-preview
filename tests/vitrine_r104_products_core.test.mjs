@@ -392,7 +392,7 @@ test('R126: energy preset has 8 types, 6 pulse modes, 4 safe hex colours, and bo
  const values=api.configure({pulseCount:200,coreIntensity:200,energySpeed:-20,anisotropy:-5,energyType:'quantum',pulseType:'orbiting',primaryColor:'#AA00EF',glowColor:'javascript:alert(1)',unknown:'reject'}).config;
  assert.equal(values.pulseCount,16);assert.equal(values.coreIntensity,3);assert.equal(values.energySpeed,0);assert.equal(values.anisotropy,0);
  assert.equal(values.energyType,'quantum');assert.equal(values.pulseType,'orbiting');assert.equal(values.primaryColor,'#aa00ef');
- assert.equal(values.glowColor,'#54caff');assert.ok(!('unknown' in values));
+ assert.equal(values.glowColor,'#c0f5ff');assert.ok(!('unknown' in values));
  const invalid=api.configure({energyType:'other',pulseType:'other',primaryColor:'red',pulseCount:NaN}).config;
  assert.equal(invalid.energyType,'quantum');assert.equal(invalid.pulseType,'orbiting');assert.equal(invalid.primaryColor,'#aa00ef');assert.equal(invalid.pulseCount,16);
  const exported=JSON.parse(JSON.stringify(api.snapshot()));
