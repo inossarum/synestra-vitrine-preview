@@ -80,7 +80,7 @@ test('R105: contextual chapter navigation and examples on all product pages',()=
 });
 
 test('R108: the core remains a navigable and accessible grouped scene',()=>{
- const scene=home.split('<div class="system-stage core-r108-stage"')[1]?.split('</section>')[0]||'';
+ const scene=home.split('<div class="system-stage core-r108-stage core-r109-stage"')[1]?.split('</section>')[0]||'';
  assert.match(scene,/aria-label="Core Synestra/);
  assert.match(scene,/aria-label="Explorer Synestra"/);
  assert.equal((scene.match(/<a href="\.\/(?:siteforge|connect|bridge)\/"[ >]/g)||[]).length,3);
