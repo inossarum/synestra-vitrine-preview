@@ -22,9 +22,9 @@ test('une seule rubrique de titre principal et des sections identifiables', () =
 
 test('la FAQ utilise les composants natifs et reste sans JavaScript', () => {
   assert.equal(count('<details class="faq-item">'), 5);
-  assert.equal(count('</details>'), 5);
-  assert.equal(count('<summary>'), 5);
-  assert.equal(count('</summary>'), 5);
+  assert.equal((html.match(/<details class="faq-item">[\\s\\S]*?<\\/details>/g)||[]).length,5);
+  assert.equal((html.match(/<details class="faq-item"><summary>/g)||[]).length,5);
+  assert.equal((html.match(/<details class="faq-item"><summary>[\\s\\S]*?<\\/summary>/g)||[]).length,5);
   assert.doesNotMatch(html, /<script\b/i);
 });
 
@@ -65,7 +65,7 @@ test('le lien d’évitement peut déplacer le focus vers le contenu', () => {
 
 test('toutes les FAQ restent accessibles avec la sémantique native', () => {
   assert.equal(count('<details class="faq-item">'), 5);
-  assert.equal(count('<summary>'), 5);
+  assert.equal((html.match(/<details class="faq-item"><summary>/g)||[]).length,5);
   assert.doesNotMatch(html, /<summary[^>]*tabindex/);
   assert.doesNotMatch(html, /<script\b/i);
 });
@@ -83,7 +83,7 @@ test('le script CDP évite les profils périmés et transmet les touches complè
 test('SiteForge est une rubrique accessible, reliee a la demonstration publique existante', () => {
   assert.match(html, /id="siteforge" aria-labelledby="siteforge-title"/);
   assert.match(html, /<h2 id="siteforge-title">SiteForge : une démonstration à explorer\.<\/h2>/);
-  assert.match(html, /<a href="#siteforge">SiteForge<\/a>/);
+  assert.match(html, /<a href="\.\/siteforge\/">SiteForge<\/a>/);
   assert.match(html, /href="\.\/siteforge\/"/);
   assert.doesNotMatch(html, /href="https:\/\/inossarum\.github\.io\/synestra-vitrine-preview\/siteforge\/"/);
   assert.match(html, /aria-label="Explorer la démonstration SiteForge sur ce site"/);
@@ -106,7 +106,7 @@ test('SiteForge conserve le responsive, le clavier et aucun chargement de ressou
 });
 
 test('la navigation publique garde une connexion visible, sans authentification locale', () => {
-  assert.match(html, /<a class="nav-cta" href="https:\/\/synestra-client-portal\.synestra-studio\.workers\.dev\/" rel="noreferrer">Se connecter <span/);
+  assert.match(html, /<a class="nav-cta" href="https:\/\/synestra-client-portal\.synestra-studio\.workers\.dev\/" rel="noreferrer">Espace pilote <span/);
   assert.match(html, /L’accès au portail et son parcours de connexion sont encore en cours de qualification/);
   assert.doesNotMatch(html, /<form\b|<script\b/i);
 });
