@@ -28,7 +28,9 @@ test('R104: Connect, Bridge and offers are linked from homepage and exist',()=>{
   assert.match(pages[slug],/\.\.\/assets\/synestra-studio-header-y-r99.webp/);
   assert.match(pages[slug],/noindex,nofollow/);
   assert.match(pages[slug],/default-src 'none'; style-src 'self'; img-src 'self'/);
-  assert.doesNotMatch(pages[slug],/<script\b|<iframe\b|<form\b/i);
+  assert.deepEqual([...pages[slug].matchAll(/<script\b[^>]*>/g)].map(m=>m[0]),['<script src="../assets/core-r109-webgl.js" defer>']);
+  assert.match(pages[slug],/script-src 'self'; base-uri 'none'/);
+  assert.doesNotMatch(pages[slug],/<iframe\b|<form\b/i);
  }
  assert.match(home,/href="\.\/offres\/#bridge"/);
 });
@@ -116,7 +118,7 @@ test('R110: native-verified dimensional plasma shader, restrained orbit and boun
  assert.ok(fragment,'R110 shader fragment absent');
  let hash=2166136261;
  for(const ch of fragment)hash=Math.imul(hash ^ ch.charCodeAt(0),16777619)>>>0;
- assert.equal(hash.toString(16),'d2557d11','GLSL source differs from EGL-rendered R110 sample');
+ assert.equal(hash.toString(16),'cd66a4ce','GLSL source fingerprint changed after R111 arc additions');
  for(const term of ['noise3','turn3','ringBloom','ringFront','spiral']){
   if(term==='spiral')continue;
   assert.ok(fragment.includes(term),term);
@@ -126,4 +128,32 @@ test('R110: native-verified dimensional plasma shader, restrained orbit and boun
  assert.match(script,/prefers-reduced-motion: reduce/);
  assert.match(script,/scene.removeAttribute\('data-core-ready'\)/);
  assert.doesNotMatch(script,/\bfetch\s*\(|XMLHttpRequest|WebSocket|sendBeacon/);
+});
+
+test('R111: intermittent electrical arcs remain internal and randomized without strobe events',()=>{
+ const script=read('assets/core-r109-webgl.js');
+ const fragment=script.match(/const fragment = `([\s\S]*?)`;/)?.[1]?.trim()||'';
+ assert.match(fragment,/float r111Arc\(/);
+ assert.match(fragment,/float cell=floor\(seconds\/cycleTime\+index\*\.41\)/);
+ assert.match(fragment,/float seed=hash3\(vec3\(cell,index\*1\.81,11\.3\)\)/);
+ assert.match(fragment,/float attack=smoothstep\(\.04,\.19,phase\)/);
+ assert.match(fragment,/float release=1\.-smoothstep\(\.45,\.78,phase\)/);
+ assert.equal((fragment.match(/float arc[A-C]=r111Arc\(p,/g)||[]).length,3);
+ assert.ok(fragment.indexOf('if(d>radius)') < fragment.indexOf('float arcA='),'No flashes outside the sphere');
+ assert.doesNotMatch(script,/\bfetch\s*\(|XMLHttpRequest|WebSocket|sendBeacon/);
+});
+test('R111: floating site particles share one local script and obey visibility and reduced motion',()=>{
+ const script=read('assets/core-r109-webgl.js');
+ assert.match(script,/const startAmbient = \(\) =>/);
+ assert.match(script,/window.innerWidth < 640 \? 14 : 25/);
+ assert.match(script,/document.body.insertBefore\(field, document.body.firstChild\)/);
+ assert.match(script,/motionPreference.addEventListener\('change', updateAmbient\)/);
+ assert.match(script,/document.addEventListener\('visibilitychange', updateAmbient\)/);
+ assert.ok(script.indexOf('startAmbient();') < script.indexOf('const scene ='));
+ for(const source of [home,css]){
+  assert.match(source,/\.syn-ambient-field\{/);
+  assert.match(source,/@keyframes syn-ambient-float/);
+  assert.match(source,/@media\(prefers-reduced-motion:reduce\)\{\.syn-ambient-field\{display:none!important\}\}/);
+ }
+ assert.deepEqual([...home.matchAll(/<script\b[^>]*>/g)].map(m=>m[0]),['<script src="./assets/core-r109-webgl.js" defer>']);
 });
