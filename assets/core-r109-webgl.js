@@ -4,6 +4,42 @@
  */
 (() => {
   'use strict';
+  // R111 ambient field: bounded decorative DOM, shared by all public pages.
+  // No telemetry, listeners on document activity only, no external dependencies.
+  const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const startAmbient = () => {
+    if (motionPreference.matches || document.querySelector('.syn-ambient-field')) return;
+    const field = document.createElement('div');
+    field.className = 'syn-ambient-field';
+    field.setAttribute('aria-hidden', 'true');
+    const reducedCount = window.innerWidth < 640 ? 14 : 25;
+    for (let i = 0; i < reducedCount; i++) {
+      const particle = document.createElement('i');
+      particle.className = i % 7 === 0 ? 'syn-ambient-glint' : 'syn-ambient-particle';
+      const seed = Math.random();
+      particle.style.setProperty('--px', (3 + Math.random() * 94).toFixed(2) + '%');
+      particle.style.setProperty('--py', (4 + Math.random() * 92).toFixed(2) + '%');
+      particle.style.setProperty('--size', (i % 7 === 0 ? 2.5 : 1.1 + Math.random() * 1.7).toFixed(2) + 'px');
+      particle.style.setProperty('--drift', (10 + Math.random() * 30).toFixed(1) + 'px');
+      particle.style.setProperty('--period', (14 + Math.random() * 23).toFixed(2) + 's');
+      particle.style.setProperty('--offset', (-Math.random() * 28).toFixed(2) + 's');
+      particle.style.setProperty('--alpha', (.18 + seed * .28).toFixed(2));
+      field.appendChild(particle);
+    }
+    document.body.insertBefore(field, document.body.firstChild);
+  };
+  startAmbient();
+  const updateAmbient = () => {
+    if (motionPreference.matches) {
+      document.querySelector('.syn-ambient-field')?.remove();
+      return;
+    }
+    startAmbient();
+    document.documentElement.classList.toggle('syn-ambient-paused', document.visibilityState !== 'visible');
+  };
+  motionPreference.addEventListener('change', updateAmbient);
+  document.addEventListener('visibilitychange', updateAmbient);
+
   const scene = document.querySelector('.core-r108-stage');
   const canvas = scene?.querySelector('.core-r109-canvas');
   if (!scene || !canvas) return;
@@ -51,6 +87,25 @@ vec3 turn3(vec3 n,vec2 t){
  vec3 r=vec3(a*n.x+b*n.z,n.y,-b*n.x+a*n.z);
  return vec3(r.x,c*r.y-d*r.z,d*r.y+c*r.z);
 }
+float r111Arc(vec2 p,float index,float seconds) {
+  float cycleTime=2.05;
+  float cell=floor(seconds/cycleTime+index*.41);
+  float phase=fract(seconds/cycleTime+index*.41);
+  float seed=hash3(vec3(cell,index*1.81,11.3));
+  // Deliberate sparse/random events with soft attack/decay (not strobing).
+  float awake=step(.48,seed);
+  float attack=smoothstep(.04,.19,phase);
+  float release=1.-smoothstep(.45,.78,phase);
+  float angle=6.283185*fract(seed+index*.227);
+  float ca=cos(angle),sa=sin(angle);
+  vec2 q=vec2(ca*p.x-sa*p.y,sa*p.x+ca*p.y);
+  q.y+=(fract(seed*8.3)-.5)*.21;
+  float kink=sin(q.x*32.+seed*19.)*.022+sin(q.x*79.+seed*73.)*.009;
+  float path=abs(q.y-kink);
+  float tips=1.-smoothstep(.22,.38,abs(q.x));
+  float flutter=.83+.17*sin(seconds*8.5+seed*18.);
+  return awake*attack*release*tips*flutter*(exp(-path*112.)+.18*exp(-path*21.));
+}
 void main(){
  vec2 p=(uv-.5)*2.;
  p.x*=resolution.x/max(resolution.y,1.);
@@ -97,6 +152,11 @@ void main(){
  base+=vec3(.70,.83,.95)*pow(max(dot(n,normalize(vec3(-.28,.46,1.))),0.),22.)*.20;
  float topRim=smoothstep(-.2,.8,p.y)*rim;
  base+=vec3(.09,.22,.35)*topRim;
+ float arcA=r111Arc(p,1.,time);
+ float arcB=r111Arc(p,2.,time);
+ float arcC=r111Arc(p,3.,time);
+ // Arcs remain inside the sphere; their position, angle and lifespan vary by epoch.
+ base+=vec3(.73,.94,1.)*arcA*.56+vec3(.42,.62,1.)*arcB*.43+vec3(.63,.90,.95)*arcC*.46;
  float shellFade=1.-smoothstep(radius*.977,radius,d);
  float alpha=clamp(.96+rim*.04,0.,1.)*shellFade;
  float orbital=ringFront*spinPulse;
