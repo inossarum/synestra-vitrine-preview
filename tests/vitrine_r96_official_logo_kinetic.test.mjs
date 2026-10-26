@@ -13,10 +13,10 @@ test('R96 logo approuvé, dérivé exact du PNG canonique, asset local SHA-véri
   assert.equal(hash,'511d1454953ebca11b4547036960d4aa9613eb294d03268a2b2e2cf9ab89bb8c');
   assert.equal(logo.length,20508);
   assert.match(logo.toString('latin1',0,18),/ftypavif/);
-  assert.equal([...html.matchAll(/src="\.\/assets\/synestra-studio-official-v1\.avif"/g)].length,1);
+  assert.equal([...html.matchAll(/src="\.\/assets\/synestra-studio-official-v1\.avif"/g)].length,0);
   assert.match(html,/<img class="brand-banner-r99" src="\.\/assets\/synestra-studio-header-y-r99\.webp"/);
   assert.doesNotMatch(html,/<span class="brand-mark"/);
-  assert.match(html,/<img class="official-hero-logo"/);
+  assert.match(html,/class="system-core syn-core-r104"/);
   assert.doesNotMatch(html,/src="[^"]+synestra-master\.svg"/i);
 });
 
@@ -32,7 +32,7 @@ test('R96 donne plus de vie sans JS ni dépendance externe',()=>{
     assert.ok(html.includes('@keyframes '+a),a);
   assert.match(html,/class="studio-workflow"/);
   assert.match(html,/class="stage-pulse-line"/);
-  assert.match(html,/class="official-hero-logo"/);
+  assert.match(html,/class="system-core syn-core-r104"/);
   assert.match(html,/@media \(prefers-reduced-motion:reduce\)|@media \(prefers-reduced-motion: reduce\)/);
   assert.doesNotMatch(html,/<script\b|<iframe\b|<form\b/i);
   assert.match(html,/content="noindex,nofollow"/);
