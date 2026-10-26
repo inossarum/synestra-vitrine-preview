@@ -48,8 +48,10 @@ const depthVertex='attribute vec3 aPosition;uniform vec2 resolution;uniform floa
 const depthFragment='precision mediump float;void main(){gl_FragColor=vec4(0.);}';
 const compile=(type,source)=>{const s=gl.createShader(type);if(!s)return null;gl.shaderSource(s,source);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)){console.warn('Synestra R122 WebGL shader unavailable');gl.deleteShader(s);return null;}return s;};
 const link=(v,f)=>{const a=compile(gl.VERTEX_SHADER,v),b=compile(gl.FRAGMENT_SHADER,f);if(!a||!b)return null;const p=gl.createProgram();gl.attachShader(p,a);gl.attachShader(p,b);gl.linkProgram(p);gl.deleteShader(a);gl.deleteShader(b);return gl.getProgramParameter(p,gl.LINK_STATUS)?p:null;};
-const metalProgram=link(vertex,fragment),depthProgram=link(depthVertex,depthFragment),energyProgram=link(energyVertex,energyFragment);
-if(!metalProgram||!depthProgram){report('Compilation GPU des shaders refusée : aperçu de secours conservé.','error');return;}
+const pulseVertex="attribute vec3 aPosition;attribute vec2 aFadeSeed;\nuniform mat3 uView;uniform vec2 uResolution;varying float vFade,vSeed,vZ;\nvoid main(){\n vec3 xyz=uView*aPosition;\n float perspective=1./(1.+.28*xyz.z);\n gl_Position=vec4(xyz.x*perspective/(uResolution.x/max(uResolution.y,1.)),xyz.y*perspective-.08,-xyz.z/1.45,1.);\n vFade=aFadeSeed.x;vSeed=aFadeSeed.y;vZ=xyz.z;\n}";
+const pulseFragment="precision mediump float;\nvarying float vFade,vSeed,vZ;\nuniform vec3 uPulseColor,uSecondaryColor;\nuniform float uPulseNature,uTime,uFlicker,uPass;\nvoid main(){\n float flicker=mix(1.,.70+.30*sin(uTime*9.+vSeed*7.+vZ*17.),uFlicker);\n vec3 beam=mix(uPulseColor,uSecondaryColor,clamp(.15+.35*sin(vSeed*3.+vZ*5.),0.,1.));\n if(uPulseNature>.5&&uPulseNature<1.5)beam=mix(beam,uPulseColor,.65);\n if(uPulseNature>2.5&&uPulseNature<3.5)beam=mix(beam,vec3(1.),.30);\n if(uPulseNature>5.5&&uPulseNature<6.5)beam=mix(beam,uSecondaryColor,.48);\n float depth=smoothstep(-.8,.8,vZ),intensity=vFade*flicker*mix(.46,1.,depth);\n vec3 c=mix(beam*.65,vec3(1.),uPass*.45);\n gl_FragColor=vec4(c,clamp(intensity*mix(.32,.77,uPass),0.,.88));\n}";
+const metalProgram=link(vertex,fragment),depthProgram=link(depthVertex,depthFragment),energyProgram=link(energyVertex,energyFragment),pulseProgram=link(pulseVertex,pulseFragment);
+if(!metalProgram||!depthProgram||!energyProgram||!pulseProgram){report('Compilation GPU des shaders refusée : aperçu de secours conservé.','error');return;}
 // R125: high-resolution extruded annulus with precision bevels: 256 segments,
 // flat face normals, exposed sidewalls, four chamfers, NOT a tube or screen band.
 const buildRing=(major,w,h)=>{
@@ -80,10 +82,16 @@ const m={pos:gl.getAttribLocation(metalProgram,'aPosition'),normal:gl.getAttribL
 const e=energyProgram?{pos:gl.getAttribLocation(energyProgram,'aUv'),resolution:gl.getUniformLocation(energyProgram,'uResolution'),time:gl.getUniformLocation(energyProgram,'uTime'),energyType:gl.getUniformLocation(energyProgram,'uEnergyType'),pulseType:gl.getUniformLocation(energyProgram,'uPulseType'),pulseCount:gl.getUniformLocation(energyProgram,'uPulseCount'),energySpeed:gl.getUniformLocation(energyProgram,'uEnergySpeed'),amplitude:gl.getUniformLocation(energyProgram,'uAmplitude'),thickness:gl.getUniformLocation(energyProgram,'uThickness'),turbulence:gl.getUniformLocation(energyProgram,'uTurbulence'),chaos:gl.getUniformLocation(energyProgram,'uChaos'),glow:gl.getUniformLocation(energyProgram,'uGlow'),density:gl.getUniformLocation(energyProgram,'uDensity'),coreIntensity:gl.getUniformLocation(energyProgram,'uCoreIntensity'),primary:gl.getUniformLocation(energyProgram,'uPrimaryColor'),secondary:gl.getUniformLocation(energyProgram,'uSecondaryColor'),pulse:gl.getUniformLocation(energyProgram,'uPulseColor'),glowColor:gl.getUniformLocation(energyProgram,'uGlowColor')}:null;
 const energyQuad=gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER,energyQuad);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+const a={pos:gl.getAttribLocation(pulseProgram,'aPosition'),fadeSeed:gl.getAttribLocation(pulseProgram,'aFadeSeed'),view:gl.getUniformLocation(pulseProgram,'uView'),resolution:gl.getUniformLocation(pulseProgram,'uResolution'),color:gl.getUniformLocation(pulseProgram,'uPulseColor'),secondary:gl.getUniformLocation(pulseProgram,'uSecondaryColor'),nature:gl.getUniformLocation(pulseProgram,'uPulseNature'),time:gl.getUniformLocation(pulseProgram,'uTime'),flicker:gl.getUniformLocation(pulseProgram,'uFlicker'),pass:gl.getUniformLocation(pulseProgram,'uPass')};
+const pulseBuffer=gl.createBuffer();
 const d={pos:gl.getAttribLocation(depthProgram,'aPosition'),res:gl.getUniformLocation(depthProgram,'resolution'),offset:gl.getUniformLocation(depthProgram,'centerOffset')};
 let active=true,visible=false,frame=0,last=0,elapsed=0,ringElapsed=0,drawCount=0,lastFrame=0;
 let cachedWidth=params.width,cachedDepth=params.depth;
 const materials={steel:[.69,.76,.83],graphite:[.34,.40,.47],gold:[.83,.66,.34]};
+const viewXYZ=v=>rotate(rotate(v,[0,1,0],params.yaw*Math.PI/180),[1,0,0],params.pitch*Math.PI/180);
+const viewBasis=()=>new Float32Array([...viewXYZ([1,0,0]),...viewXYZ([0,1,0]),...viewXYZ([0,0,1])]);
+const pulseGeometry=window.SynestraPulseGeometry;
+if(!pulseGeometry){report('Géométrie XYZ indisponible : sphère de secours conservée.','error');return;}
 const remesh=()=>{
  if(cachedWidth===params.width&&cachedDepth===params.depth)return;
  for(const ring of rings){const mesh=buildRing(ring.major,ring.w*params.depth,ring.h*params.width);
@@ -110,6 +118,25 @@ const render=clock=>{
     for(const [key,value] of [['primary',params.primaryColor],['secondary',params.secondaryColor],['pulse',params.pulseColor],['glowColor',params.glowColor]])gl.uniform3fv(e[key],new Float32Array(colourValue(value)));
     gl.bindBuffer(gl.ARRAY_BUFFER,energyQuad);gl.enableVertexAttribArray(e.pos);gl.vertexAttribPointer(e.pos,2,gl.FLOAT,false,0,0);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);gl.disableVertexAttribArray(e.pos);gl.disable(gl.BLEND);
   }
+  // True XYZ trails: each user setting regenerates actual spatial triangles.
+  const arcs=pulseGeometry.build(params,elapsed);
+  gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE);gl.useProgram(pulseProgram);
+  gl.uniformMatrix3fv(a.view,false,viewBasis());gl.uniform2f(a.resolution,width,height);
+  gl.uniform1f(a.time,elapsed);gl.uniform1f(a.nature,pulseNatures.indexOf(params.pulseNature));
+  gl.uniform1f(a.flicker,params.flicker);
+  gl.uniform3fv(a.color,new Float32Array(colourValue(params.pulseColor)));
+  gl.uniform3fv(a.secondary,new Float32Array(colourValue(params.secondaryColor)));
+  gl.bindBuffer(gl.ARRAY_BUFFER,pulseBuffer);
+  for(const [pass,mesh] of [[0,arcs.glow],[1,arcs.filaments]]){
+   gl.bufferData(gl.ARRAY_BUFFER,mesh,gl.DYNAMIC_DRAW);
+   gl.uniform1f(a.pass,pass);
+   gl.enableVertexAttribArray(a.pos);gl.enableVertexAttribArray(a.fadeSeed);
+   gl.vertexAttribPointer(a.pos,3,gl.FLOAT,false,20,0);
+   gl.vertexAttribPointer(a.fadeSeed,2,gl.FLOAT,false,20,12);
+   gl.drawArrays(gl.TRIANGLES,0,mesh.length/5);
+  }
+  gl.disableVertexAttribArray(a.pos);gl.disableVertexAttribArray(a.fadeSeed);
+  gl.disable(gl.BLEND);
   gl.enable(gl.DEPTH_TEST);gl.depthFunc(gl.LEQUAL);
  // Invisible sphere populates the depth buffer: rear metal is occluded.
  gl.colorMask(false,false,false,false);gl.useProgram(depthProgram);gl.bindBuffer(gl.ARRAY_BUFFER,sphereBuffer);
@@ -131,7 +158,7 @@ const render=clock=>{
  }
  if(!scene.hasAttribute('data-metal-ready'))scene.setAttribute('data-metal-ready','true');
  if(++drawCount%120===0 && gl.getError()!==gl.NO_ERROR){active=false;scene.removeAttribute('data-metal-ready');report('Erreur du rendu WebGL : retour à la sphère seule.','error');return;}
- if(status?.getAttribute('data-state')!=='ready')report('R126 WebGL · métal anisotrope · émetteur central · impulsions paramétrables.','ready');
+ if(status?.getAttribute('data-state')!=='ready')report('R127 WebGL · noyau volumétrique · arcs XYZ · métal anisotrope.','ready');
  if(visible&&!document.hidden&&!params.paused)frame=requestAnimationFrame(render);
 };
 const request=()=>{if(!active||frame||!visible||document.hidden||!scene.hasAttribute('data-core-ready'))return;frame=requestAnimationFrame(render);};
