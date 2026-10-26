@@ -1,0 +1,79 @@
+{
+  "schema": "synestra.vitrine.r117.evidence.v1",
+  "evidence_id": "SYN_VITRINE_R117_METALLIC_DEPTH_GYROS_20261026",
+  "date": "2026-10-26",
+  "owner": "Inos",
+  "mission_id": "SYN_VITRINE_SITEFORGE_SHOWCASE_20261024",
+  "objective": "Add two animated brushed-metal gyroscopes with real occlusion front/behind Core sphere, clarify overall aesthetics without adding visual clutter.",
+  "source": {
+    "repository": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_VITRINE_SITEFORGE_R91_PREVIEW_20261024",
+    "pr": 5,
+    "draft": true,
+    "tested_code_sha": "296ed3fd8887502870b03db1299da591039781dc",
+    "parent": "0374a23dfbcb36c1a4b0923c6c2fa54e1047a857",
+    "blobs": {
+      "index.html": "c67f38e26386ea8471a7f67167416398275e2afb",
+      "assets/core-r109-webgl.js": "7f114d09f1777f9efaa8dd64f7e9f1ea63ee6626",
+      "tests/vitrine_r104_products_core.test.mjs": "94ec3a731901eb5259b4161e9bbf9fa7f9168082"
+    }
+  },
+  "architecture": {
+    "webgl": "Single existing WebGL1 fragment shader implements metalGyro(p,time,slot,out zpos); ring plane rotates with opposed rates 0.24/-0.17rad/s. 3D projection zpos=-dot(xy,plane.xy)/plane.z and radial tube fade; outside sphere both metal rings sorted by depth; inside sphere each ring composited above energy/plasma only where its z > sphere front depth. Brushed titanium vs cool silver, no extra WebGL context, RAF or dependencies.",
+    "svg_fallback": "Two elliptical metallic paths rendered behind sphere. Front arcs rendered after sphere with same pair of animations 21s and 28s in opposite direction. Metallic gradients and narrow highlights, no external assets. Reduced-motion retains static layers.",
+    "aesthetics": "Prior R116 glass product satellites and .49 Core scale retained. Flat luminous GLSL ring removed to reduce clutter. 8 stochastic 1.12s center-out electrical channels retained, native WebGL low power, bounded 1.2M backing pixels and 32ms frame guard.",
+    "products": "Only three genuine labeled Connect Bridge SiteForge panels; no unverified icon added"
+  },
+  "test": {
+    "source_pinned": "PASS",
+    "atom_commit": "PASS",
+    "readback_three_sha": "PASS",
+    "cloudflare_node_total": 48,
+    "cloudflare_node_pass": 48,
+    "cloudflare_node_fail": 0,
+    "static_export": "PASS",
+    "static_files": 38,
+    "cloudflare_build": "PASS",
+    "cloudflare_deploy": "PASS",
+    "shader_source_fnv1a32": "5dcc9433",
+    "shader_webgl_native_compile": "NOT_RUN",
+    "browser_http": "UNAVAILABLE_VIA_WEB_TOOL",
+    "real_ios_safari_pixels": "NOT_VERIFIED",
+    "real_gpu_fps": "NOT_RUN"
+  },
+  "deployment": {
+    "provider": "Cloudflare Pages",
+    "project": "synestra-vitrine-preview",
+    "id": "5ec90946-ba19-4cb5-910b-ff5526081695",
+    "url": "https://5ec90946.synestra-vitrine-preview.pages.dev/",
+    "env": "preview",
+    "status": "success",
+    "code_sha": "296ed3fd8887502870b03db1299da591039781dc",
+    "production_deployments_enabled": false,
+    "main_unchanged": true,
+    "rollback_preview_url": "https://10d72a08.synestra-vitrine-preview.pages.dev/"
+  },
+  "policies": {
+    "source_gate": "LIMITED: Memory V1 manifest/documents unavailable in this bounded run; browser QA missing",
+    "free_only": true,
+    "new_provider_spending": false,
+    "no_acl_or_security_mutation": true,
+    "hook_status": "Cloudflare build PASS, Studio UNKNOWN"
+  },
+  "skills": {
+    "consulted": [
+      "ui-ux@1.0.0#0a362a0938401674166c7a8b871192fbde602c1a",
+      "web-accessibility-engineering@1.0.0#172c442525351804e89e7b273346f03df34bdd89",
+      "visual-regression-testing@1.0.0#aa98fffe9149dfcc0e153f0d1b8b91f3c0a6b4ae"
+    ],
+    "applied": [
+      "Retained contrast and product navigation",
+      "Retained motion reductions and SVG fallback",
+      "Added deterministic source assertions and preserved rollback preview"
+    ],
+    "executed_by": "GitHub and Cloudflare authenticated plugins"
+  },
+  "status": "PREVIEW_PUBLISHED_BROWSER_VISUAL_PENDING",
+  "function_report": "PARTIAL",
+  "next": "Open exact Cloudflare R117 preview on iPhone/desktop and visually confirm front/back depth and smooth metallic motion, mobile no capsule overlap. If WebGL shader compile fails, SVG fallback remains; diagnose via browser console before fixing. Do not merge/publish production without approval."
+}
