@@ -1431,6 +1431,44 @@
     @media(max-width:720px){.nav-r105{overflow-x:visible!important;flex-wrap:wrap!important;gap:.5rem .8rem!important}.nav-r105 .nav-cta{margin-left:0}.nav-explore-panel{right:auto;left:0}.r105-orientation-list{grid-template-columns:1fr}.r105-orientation-list>a{min-height:135px;padding:1.15rem}.core-r105-axis-label{top:calc(49% + 119px);font-size:.5rem}.syn-core-r105{scale:1}}
     @media(max-width:440px){.syn-core-r105{scale:1}.core-r105-axis-label{top:calc(49% + 107px)}.core-r105-path{opacity:.42}.nav-r105>a:not(.nav-cta){padding:.34rem .12rem}}
     @media(prefers-reduced-motion:reduce){.syn-core-r105,.syn-core-r105 *, .core-r105-path span{animation:none!important;transition:none!important}.r105-orientation-list>a:hover{transform:none}}
+
+    /* R106 — cinematic high-contrast reactor inspired by spatial art direction,
+       entirely SVG and CSS, with native, actionable module navigation. */
+    .core-r106-stage{position:relative;overflow:hidden;isolation:isolate;height:clamp(445px,42vw,565px);transform:none!important;
+      border-radius:24px;border:1px solid rgba(134,178,229,.32);
+      background:radial-gradient(ellipse 75% 70% at 50% 45%,rgba(27,83,157,.23),transparent 73%),radial-gradient(ellipse 40% 48% at 85% 12%,rgba(114,67,194,.14),transparent),linear-gradient(155deg,#101c33,#060b15 85%);
+      box-shadow:0 40px 95px rgba(0,5,18,.45),inset 0 1px rgba(227,250,255,.11)}
+    .core-r106-stage:before{opacity:.12;background-image:linear-gradient(rgba(180,222,255,.13) 1px,transparent 1px),linear-gradient(90deg,rgba(180,222,255,.13) 1px,transparent 1px);background-size:35px 35px;mask-image:radial-gradient(ellipse at 50% 45%,black,transparent 72%)}
+    .core-r106-stage:after{content:"";pointer-events:none;position:absolute;z-index:5;inset:0;box-shadow:inset 0 -32px 48px rgba(4,9,20,.44);opacity:.68}
+    .core-r106-svg{position:absolute;inset:0;width:100%;height:100%;z-index:1;filter:drop-shadow(0 16px 30px rgba(0,10,30,.42))}
+    .core-r106-svg .core-r106-back{transform-origin:342px 257px;animation:core106-rotation 43s linear infinite}
+    .core-r106-svg .core-r106-front{transform-origin:342px 257px;animation:core106-rotation 54s linear infinite reverse}
+    .core-r106-svg .core-r106-iris{transform-origin:0 0;transform-box:fill-box;animation:core106-rotation 18s linear infinite reverse}
+    .core-r106-svg .core-r106-dial{transform-origin:342px 257px;animation:core106-rotation 35s linear infinite}
+    .core-r106-svg .core-r106-pulse{transform-origin:342px 257px;animation:core106-pulse 3.8s ease-in-out infinite}
+    .core-r106-hud,.core-r106-footer{position:absolute;left:21px;right:21px;z-index:8;pointer-events:none;display:flex;justify-content:space-between;gap:12px;text-transform:uppercase;
+      font:750 9px/1.5 ui-monospace,Consolas,monospace;letter-spacing:.12em;color:#a1b8d1}
+    .core-r106-hud{top:18px}.core-r106-footer{bottom:18px}
+    .core-r106-links{position:absolute;z-index:9;inset:0;pointer-events:none}
+    .core-r106-link{pointer-events:auto;position:absolute;display:flex;flex-direction:column;gap:4px;min-width:123px;padding:12px 15px;
+      border:1px solid #3c5d80;border-left:2px solid #75dfff;border-radius:11px;
+      background:linear-gradient(135deg,rgba(17,34,61,.97),rgba(8,19,35,.95));color:#e9f3ff;text-decoration:none;
+      box-shadow:0 12px 33px rgba(0,5,22,.42),inset 0 1px rgba(215,240,255,.07);transition:transform .24s,border-color .24s,box-shadow .24s}
+    .core-r106-link:hover,.core-r106-link:focus-visible{transform:translateY(-5px);border-color:#96dffb;box-shadow:0 17px 38px rgba(8,57,114,.46)}
+    .core-r106-link:focus-visible{outline:3px solid #c7faff;outline-offset:4px}
+    .core-r106-link small{font:750 9px ui-monospace,monospace;letter-spacing:.09em;color:#a4c8e8}
+    .core-r106-link strong{font-size:16px;font-weight:850}.core-r106-link span{font-size:11px;color:#afd3eb}
+    .core-r106-link span span{color:#7ee3fd}
+    .link-forge{top:18%;left:4%;border-left-color:#af94fd}
+    .link-connect{top:17%;right:3.5%}
+    .link-bridge{bottom:19%;right:3.5%;border-left-color:#7ae7c9}
+    @keyframes core106-rotation{to{transform:rotate(360deg)}}@keyframes core106-pulse{0%,100%{opacity:.73;scale:.86}50%{opacity:1;scale:1.17}}
+    @media(max-width:540px){.core-r106-stage{height:500px}.core-r106-svg{top:13%;left:-15%;width:130%;height:72%}
+      .core-r106-link{padding:9px 10px;min-width:104px}.core-r106-link strong{font-size:13px}.core-r106-link small{font-size:8px}
+      .link-forge{top:13%;left:3%}.link-connect{top:13%;right:3%}.link-bridge{bottom:16%;right:3%}
+      .core-r106-hud,.core-r106-footer{left:14px;right:14px;font-size:8px}
+      .core-r106-footer span:last-child{max-width:54%;text-align:right}}
+    @media(prefers-reduced-motion:reduce){.core-r106-svg *, .core-r106-link{animation:none!important;transition:none!important}.core-r106-link:hover{transform:none!important}}
   </style>
 </head>
 <body>
@@ -1475,31 +1513,69 @@
           <span><b>01</b> Imaginer</span><span><b>02</b> Relier</span><span><b>03</b> Vérifier</span>
         </div>
       </div>
-      <div class="system-stage" role="img" aria-label="Illustration conceptuelle du Core Synestra : chambre énergétique tridimensionnelle, gyroscopes et trois axes lumineux vers SiteForge, Connect et Bridge. Aucun état ou flux informatique en temps réel.">
-        <div class="stage-glow" aria-hidden="true"></div>
-        <span class="stage-corner corner-one" aria-hidden="true"></span><span class="stage-corner corner-two" aria-hidden="true"></span>
-        <div class="stage-crosshair" aria-hidden="true"></div><div class="stage-pulse-line" aria-hidden="true"></div>
-        <div class="stage-telemetry" aria-hidden="true"><span>STUDIO / VISUAL SYSTEMS</span><span>BUILD · CONNECT · REVIEW</span></div>
-        <div class="stage-topline" aria-hidden="true"><span>SY / STUDIO FIELD</span><span>CONCEPT VISUEL — 01</span></div>
-        <div class="system-orbit orbit-one" aria-hidden="true"></div>
-        <div class="system-orbit orbit-two" aria-hidden="true"></div>
-        <div class="system-orbit orbit-three" aria-hidden="true"></div><span class="orbit-marker marker-a" aria-hidden="true"></span><span class="orbit-marker marker-b" aria-hidden="true"></span>
-        <div class="system-core syn-core-r104 syn-core-r105" aria-hidden="true">
-          <span class="core-r105-aura"></span>
-          <span class="core-r105-tick-ring"></span>
-          <span class="core-r105-gyro gyro-a"></span><span class="core-r105-gyro gyro-b"></span><span class="core-r105-gyro gyro-c"></span>
-          <span class="core-r105-carrier carrier-a"></span><span class="core-r105-carrier carrier-b"></span>
-          <span class="core-r105-shell"><span class="core-r105-iris"><span class="core-r105-facet"></span><span class="core-r105-energy"></span></span></span>
-          <span class="core-r105-spark spark-a"></span><span class="core-r105-spark spark-b"></span><span class="core-r105-spark spark-c"></span>
-        </div>
-        <div class="core-r105-path path-forge" aria-hidden="true"><span></span></div>
-        <div class="core-r105-path path-connect" aria-hidden="true"><span></span></div>
-        <div class="core-r105-path path-bridge" aria-hidden="true"><span></span></div>
-        <div class="core-r105-axis-label" aria-hidden="true">CORE / CONCEPTION VISUELLE</div>
-        <div class="system-node node-forge" aria-hidden="true"><span class="node-symbol node-symbol-forge">✦</span><span><b>SITEFORGE</b><small>Création visuelle</small></span></div>
-        <div class="system-node node-connect" aria-hidden="true"><span class="node-symbol node-symbol-connect">⌘</span><span><b>CONNECT</b><small>Intégrations</small></span></div>
-        <div class="system-node node-bridge" aria-hidden="true"><span class="node-symbol node-symbol-bridge">▣</span><span><b>BRIDGE</b><small>Lien avec le PC</small></span></div>
-        <div class="stage-footline" aria-hidden="true"><span>CREATIVE SYSTEMS <span class="stage-flash">●</span></span><span>APERÇU CONCEPTUEL, NON LIVE</span></div>
+
+      <div class="system-stage core-r106-stage" role="group" aria-label="Core Synestra conceptuel avec liens vers SiteForge, Connect et Bridge. Aucun état opérationnel en direct.">
+        <div class="core-r106-hud" aria-hidden="true"><span>SY / STUDIO SYSTEMS</span><span>CORE // 01</span></div>
+        <svg class="core-r106-svg" viewBox="0 0 680 530" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+          <defs>
+            <radialGradient id="r106-aura"><stop stop-color="#2368d8" stop-opacity=".28"/><stop offset=".65" stop-color="#26378f" stop-opacity=".13"/><stop offset="1" stop-color="#071020" stop-opacity="0"/></radialGradient>
+            <radialGradient id="r106-ground"><stop stop-color="#4bdcff" stop-opacity=".35"/><stop offset="1" stop-color="#4bdcff" stop-opacity="0"/></radialGradient>
+            <linearGradient id="r106-metal"><stop stop-color="#c5e2fa"/><stop offset=".16" stop-color="#47668f"/><stop offset=".34" stop-color="#0a1831"/><stop offset=".57" stop-color="#b5d0e8"/><stop offset=".8" stop-color="#233855"/><stop offset="1" stop-color="#d4ecfc"/></linearGradient>
+            <linearGradient id="r106-metal2" x1=".2" y1=".2" x2=".8" y2="1"><stop stop-color="#f3fbff"/><stop offset=".22" stop-color="#425f97"/><stop offset=".52" stop-color="#071329"/><stop offset=".83" stop-color="#557baa"/><stop offset="1" stop-color="#d5e9fb"/></linearGradient>
+            <radialGradient id="r106-plasma" cx=".31" cy=".25"><stop stop-color="#f5ffff"/><stop offset=".16" stop-color="#a7f8ff"/><stop offset=".35" stop-color="#2bccff"/><stop offset=".66" stop-color="#4b61db"/><stop offset="1" stop-color="#110c3a"/></radialGradient>
+            <linearGradient id="r106-iris"><stop stop-color="#b9ffff"/><stop offset=".4" stop-color="#277ae2"/><stop offset=".75" stop-color="#7252cb"/><stop offset="1" stop-color="#eefbff"/></linearGradient>
+            <filter id="r106-blur" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="18"/></filter>
+          </defs>
+          <ellipse cx="342" cy="260" rx="260" ry="240" fill="url(#r106-aura)"/>
+          <g opacity=".28" fill="none" stroke="#507baf"><ellipse cx="342" cy="405" rx="226" ry="29"/><ellipse cx="342" cy="405" rx="174" ry="21" stroke-dasharray="2 9"/><path d="M105 405h480"/></g>
+          <ellipse cx="342" cy="409" rx="178" ry="28" fill="url(#r106-ground)"/>
+          <g class="core-r106-back" fill="none" stroke-linecap="round">
+            <ellipse cx="342" cy="257" rx="187" ry="92" transform="rotate(-34 342 257)" stroke="#0a2445" stroke-width="24"/>
+            <ellipse cx="342" cy="257" rx="187" ry="92" transform="rotate(-34 342 257)" stroke="url(#r106-metal)" stroke-width="13"/>
+            <ellipse cx="342" cy="257" rx="187" ry="92" transform="rotate(-34 342 257)" stroke="#dbf6ff" stroke-width="1.5" opacity=".65"/>
+          </g>
+          <circle cx="342" cy="257" r="137" fill="#07142a" stroke="#274774" stroke-width="25"/>
+          <circle cx="342" cy="257" r="137" fill="none" stroke="url(#r106-metal2)" stroke-width="14"/>
+          <circle cx="342" cy="257" r="124" fill="none" stroke="#94d3fb" stroke-width="1" stroke-dasharray="2 13" opacity=".67"/>
+          <circle cx="342" cy="257" r="109" fill="#0a1832" stroke="#5c85bc" stroke-width="1.3"/>
+          <g class="core-r106-turbine" transform="translate(342 257)">
+            <path d="M-93 -25L-33 -100L9 -74L-47 -7Z" fill="url(#r106-metal2)" stroke="#85b3e9"/>
+            <path d="M-33 -100L51 -83L51 -30L9 -74Z" fill="url(#r106-metal)" stroke="#b1d9f4"/>
+            <path d="M51 -83L104 -25L64 8L51 -30Z" fill="url(#r106-metal2)" stroke="#8aa4da"/>
+            <path d="M104 -25L78 75L28 59L64 8Z" fill="url(#r106-metal)" stroke="#78abe2"/>
+            <path d="M78 75L-8 103L-22 55L28 59Z" fill="url(#r106-metal2)" stroke="#a5c8e8"/>
+            <path d="M-8 103L-87 48L-43 12L-22 55Z" fill="url(#r106-metal)" stroke="#a1c4ec"/>
+            <path d="M-87 48L-93 -25L-47 -7L-43 12Z" fill="url(#r106-metal2)" stroke="#aac8ed"/>
+          </g>
+          <circle cx="342" cy="257" r="91" fill="#37ccff" opacity=".25" filter="url(#r106-blur)"/>
+          <circle cx="342" cy="257" r="76" fill="url(#r106-plasma)" stroke="#d1f8ff" stroke-width="2"/>
+          <g class="core-r106-iris" transform="translate(342 257)" fill="url(#r106-iris)" stroke="#b7ecfa" stroke-width="1" opacity=".84">
+            <path d="M0 -68L52 -42L24 -9L-9 -23Z"/><path d="M52 -42L68 13L29 24L24 -9Z"/>
+            <path d="M68 13L31 59L4 27L29 24Z"/><path d="M31 59L-29 61L-24 22L4 27Z"/>
+            <path d="M-29 61L-65 12L-28 -4L-24 22Z"/><path d="M-65 12L-48 -45L-12 -24L-28 -4Z"/>
+            <path d="M-48 -45L0 -68L-9 -23L-12 -24Z"/>
+          </g>
+          <circle cx="342" cy="257" r="35" fill="#081739" stroke="#dcffff" stroke-width="1.8"/>
+          <circle cx="342" cy="257" r="27" fill="url(#r106-plasma)"/>
+          <circle class="core-r106-pulse" cx="342" cy="257" r="9" fill="#f2ffff"/>
+          <circle cx="342" cy="257" r="81" fill="none" stroke="#9feaff" stroke-width="3" opacity=".55"/>
+          <path d="M262 258A80 80 0 0 1 342 177" stroke="#edffff" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <g class="core-r106-front" fill="none">
+            <ellipse cx="342" cy="257" rx="194" ry="84" transform="rotate(23 342 257)" stroke="#07152c" stroke-width="28"/>
+            <ellipse cx="342" cy="257" rx="194" ry="84" transform="rotate(23 342 257)" stroke="url(#r106-metal2)" stroke-width="15"/>
+            <ellipse cx="342" cy="257" rx="194" ry="84" transform="rotate(23 342 257)" stroke="#b6ebff" stroke-width="1.8" opacity=".67"/>
+          </g>
+          <g class="core-r106-dial" fill="none" stroke="#88ccf9"><circle cx="342" cy="257" r="159" stroke-width="1" stroke-dasharray="2 12" opacity=".35"/><circle cx="342" cy="257" r="173" stroke-width=".8" stroke-dasharray="21 14" opacity=".28"/></g>
+          <g fill="none" stroke-width="2" stroke-linecap="round" opacity=".53"><path d="M192 163L115 112" stroke="#8c8afa"/><path d="M499 156L599 109" stroke="#65ddf5"/><path d="M495 353L592 397" stroke="#65ead5"/></g>
+          <g fill="#b2dcfb" font-family="monospace" font-size="9" letter-spacing="1.9" opacity=".5"><text x="68" y="91">01 / CREATE</text><text x="535" y="87">02 / CONNECT</text><text x="535" y="429">03 / LOCAL</text></g>
+          <g fill="none" stroke="#9ebddd" opacity=".27"><path d="M28 46h20M28 46v20M654 46h-20M654 46v20M28 498h20M28 498v-20M654 498h-20M654 498v-20"/></g>
+        </svg>
+        <nav class="core-r106-links" aria-label="Explorer les composants autour du Core">
+          <a href="./siteforge/" class="core-r106-link link-forge"><small>01 / CRÉATION</small><strong>SiteForge</strong><span>Explorer <span aria-hidden="true">↗</span></span></a>
+          <a href="./connect/" class="core-r106-link link-connect"><small>02 / INTÉGRATION</small><strong>Connect</strong><span>Découvrir <span aria-hidden="true">↗</span></span></a>
+          <a href="./bridge/" class="core-r106-link link-bridge"><small>03 / WINDOWS</small><strong>Bridge</strong><span>Comprendre <span aria-hidden="true">↗</span></span></a>
+        </nav>
+        <div class="core-r106-footer" aria-hidden="true"><span>CORE / SYNESTRA</span><span>VISUALISATION CONCEPTUELLE · NON LIVE</span></div>
       </div>
     </section>
 
