@@ -161,3 +161,7 @@ html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition
 .mode-link:hover{color:var(--mode-accent);border-color:var(--mode-accent)}
 .mode-link:focus-visible{outline:3px solid #ffda8c;outline-offset:4px}
 @media(max-width:36rem){.mode-link{font-size:.52rem}}
+
+/* R110 motion study — no pointer capture, shared animation clock, motion preference respected. */
+.ambient-field{position:fixed;inset:0;width:100vw;height:100vh;z-index:2;pointer-events:none;opacity:.76;mix-blend-mode:screen}
+@media(prefers-reduced-motion:reduce){.ambient-field{display:none}}
