@@ -1,0 +1,70 @@
+{
+  "schema": "synestra.vitrine.r104.preview-evidence.v1",
+  "evidence_id": "VITRINE_R104_PRODUCT_PAGES_ENERGY_CORE_20261026",
+  "mission_id": "SYN_VITRINE_SITEFORGE_SHOWCASE_20261024",
+  "owner": "Inos",
+  "scope": "Preview only; no main merge or production deployment",
+  "source": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_VITRINE_SITEFORGE_R91_PREVIEW_20261024",
+    "validated_head": "4c9444574af7df2dd93651113d503a58a308c7fc",
+    "original_r99_logo_blob": "a3e1d5de3ebc4b9735387358ddca67b3d4f31243",
+    "page_blobs": {
+      "home": "416a6a05c5895c63e2a0f10024988a9ad8c95da1",
+      "css": "8981d7bf293571e775e1fc720b1327b5292215d1",
+      "connect": "25980af1330e5eda178d49f5c979195bb505f297",
+      "bridge": "ff03efccbace8bb9ff6377e9b28a9b952eb06090",
+      "offers": "6d6b42e9329f40e515e90bce2060d8f8371bdca3",
+      "static_export": "b004b4d98b65a0e9d81f4b91382de855b716ee81"
+    }
+  },
+  "design": {
+    "homepage": "logo removed from stage only; pure CSS plasma reactor with containment rings, energy field, particles; logo R99 stays in masthead",
+    "accessibility": "native links/details/summary, skip link, focus-visible, mobile breakpoints, reduced-motion support",
+    "content": "Connect architecture & grants, Bridge Windows and appairage, Offres & download availability",
+    "no_claims": "No live core telemetry, no invented client references, no invented prices or executable links"
+  },
+  "download_gate": {
+    "github_release_count_observed": 0,
+    "public_bridge_binary_verified": false,
+    "primary_offer_route": "/offres/#bridge",
+    "distribution_state": "PENDING_RELEASE"
+  },
+  "cloudflare": {
+    "project": "synestra-vitrine-preview",
+    "deployment_id": "6347e40b-b0c5-47bb-b60b-e4cb3e27c75c",
+    "url": "https://6347e40b.synestra-vitrine-preview.pages.dev",
+    "sha": "4c9444574af7df2dd93651113d503a58a308c7fc",
+    "environment": "preview",
+    "stage": "success",
+    "production_deployments_enabled": false
+  },
+  "tests": {
+    "selected_node_tests": 33,
+    "passed": 33,
+    "failed": 0,
+    "cloudflare_static_export": "PASS",
+    "allowed_static_file_count": 37,
+    "allowlist": [
+      "index.html",
+      "_headers",
+      "assets",
+      "siteforge",
+      "signal",
+      "connect",
+      "bridge",
+      "offres"
+    ],
+    "git_exact_commit_readback": true
+  },
+  "limitations": {
+    "independent_http_get": "NOT_VERIFIED; web.open returned not accessible",
+    "pixel_visual_qa": "PENDING; Cloudflare Browser Rendering not used due FREE_ONLY budget/entitlement unverified",
+    "actual_windows_installer": "NOT_PUBLISHED",
+    "screenreader_e2e": "NOT_RUN",
+    "real_user_acceptance": "PENDING"
+  },
+  "next": "Inspect exact preview on desktop/mobile with authorized browser; check contrast/reflow and interactivity, adjust, then consider signed Bridge release and owner-approved production launch. Existing previous successful preview cfedaf15 is rollback reference.",
+  "status": "PREVIEW_DEPLOYED_TESTED_SOURCE_ONLY_NO_PRODUCTION",
+  "function_report": "PARTIAL"
+}
