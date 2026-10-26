@@ -89,3 +89,27 @@ test('R106: reactor and product ports stay in the same hero stage',()=>{
  assert.equal((scene.match(/class="core-r106-link /g)||[]).length,3);
  assert.doesNotMatch(scene,/<script\\b|<iframe\\b|<form\\b/i);
 });
+
+test('R107: high-energy plasma composition uses original self-hosted SVG assets only',()=>{
+ assert.match(home,/class="core-r107-aurora"/);
+ assert.match(home,/class="core-r107-plasma-filaments"/);
+ assert.match(home,/class="core-r107-discharge"/);
+ assert.match(home,/class="core-r107-particles"/);
+ assert.match(home,/class="core-r107-shockwave"/);
+ assert.match(home,/class="core-r107-flash"/);
+ for(const id of ['r107-electric','r107-violet','r107-reactor-flare','r107-neon-glow','r107-aurora-blur']){
+  assert.equal((home.match(new RegExp('id="'+id+'"','g'))||[]).length,1,id);
+ }
+ for(const keyframe of ['r107-field-spin','r107-electric-crawl','r107-arcs-flicker','r107-spark','r107-shockwave','r107-core-breath']){
+  assert.match(home,new RegExp('@keyframes '+keyframe));
+ }
+ assert.doesNotMatch(home,/<script\\b|<foreignObject\\b|<iframe\\b/i);
+});
+test('R107: fallback rendering remains usable when animations are disabled',()=>{
+ assert.match(home,/@media\\(prefers-reduced-motion:reduce\\)\\{\\.core-r107-aurora/);
+ assert.match(home,/\\.core-r107-discharge\\{opacity:\\.48\\}/);
+ assert.match(home,/VISUALISATION CONCEPTUELLE · NON LIVE/);
+ const scene=home.split('<div class="system-stage core-r106-stage"')[1]?.split('</section>')[0]||'';
+ assert.equal((scene.match(/class="core-r106-link link-/g)||[]).length,3);
+ assert.match(scene,/aria-label="Explorer les composants autour du Core"/);
+});
