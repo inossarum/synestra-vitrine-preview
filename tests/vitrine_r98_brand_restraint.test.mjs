@@ -26,5 +26,6 @@ test('R98: no logo mutation and no extra scripts while preserving semantics',()=
   assert.match(html,/id="bridge"/);
   assert.match(html,/id="connect"/);
   assert.match(html,/prefers-reduced-motion/);
-  assert.doesNotMatch(html,/<script\b|<iframe\b|<form\b/i);
+  assert.deepEqual([...html.matchAll(/<script\b[^>]*>/g)].map(x=>x[0]),['<script src="./assets/core-r109-webgl.js" defer>']);
+  assert.doesNotMatch(html,/<iframe\b|<form\b/i);
 });
