@@ -22,9 +22,9 @@ test('une seule rubrique de titre principal et des sections identifiables', () =
 
 test('la FAQ utilise les composants natifs et reste sans JavaScript', () => {
   assert.equal(count('<details class="faq-item">'), 5);
-  assert.equal((html.match(/<details class="faq-item">[\\s\\S]*?<\\/details>/g)||[]).length,5);
+  assert.equal((html.match(/<details class="faq-item">[\s\S]*?<\/details>/g)||[]).length,5);
   assert.equal((html.match(/<details class="faq-item"><summary>/g)||[]).length,5);
-  assert.equal((html.match(/<details class="faq-item"><summary>[\\s\\S]*?<\\/summary>/g)||[]).length,5);
+  assert.equal((html.match(/<details class="faq-item"><summary>[\s\S]*?<\/summary>/g)||[]).length,5);
   assert.doesNotMatch(html, /<script\b/i);
 });
 
