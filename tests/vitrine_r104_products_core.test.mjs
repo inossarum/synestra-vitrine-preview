@@ -496,3 +496,12 @@ test('R128 visual correction: 3D electric sphere does not double-blend backfaces
  assert.ok(enable>=0&&enable<core&&core<draw&&draw<disable,'Cull rear 3D faces only for nucleus');
  assert.ok(engine.includes('gl.depthFunc(gl.LEQUAL)'),'Metal should still use correct occlusion');
 });
+
+test('R128 count fidelity: mesh consists of 9216 triangles and 27648 vertex positions',()=>{
+ const engine=read('assets/core-r122-gyro.js'),lab=read('siteforge/core-3d-lab/index.html');
+ assert.ok(engine.includes('for(let i=0;i<48;i++'));
+ assert.ok(engine.includes('for(let j=0;j<96;j++'));
+ assert.equal(48*96*2,9216);
+ assert.equal(48*96*6,27648);
+ assert.ok(lab.includes('9 216 triangles (27 648 sommets)'),'The UI must not mistake vertices for triangles');
+});
