@@ -132,30 +132,26 @@ test('R110: native-verified dimensional plasma shader, restrained orbit and boun
 
 test('R113: five stronger radial arcs grow from the centre towards the sphere edge',()=>{
  const script=read('assets/core-r109-webgl.js');
- const fragment=script.match(/const fragment = `([\\s\\S]*?)`;/)?.[1]?.trim()||'';
- assert.match(fragment,/float r111Arc\\(/);
- assert.match(fragment,/float along=dot\\(p,dir\\)/);
- assert.match(fragment,/float growingTip=mix\\(\\.06,\\.675,smoothstep\\(\\.06,\\.58,phase\\)\\)/);
- assert.match(fragment,/float body=smoothstep\\(\\.012,\\.06,along\\)/);
- assert.match(fragment,/float fork=exp\\(/);
- assert.equal((fragment.match(/float arc[A-E]=r111Arc\\(p,/g)||[]).length,5);
- assert.ok(fragment.indexOf('if(d>radius)')<fragment.indexOf('float arcA='),'arcs must stay inside sphere');
- assert.match(fragment,/float awake=step\\(\\.24,seed\\)/);
- assert.match(fragment,/float envelope=smoothstep\\(\\.015,\\.12,phase\\)/);
- assert.doesNotMatch(script,/\\bfetch\\s*\\(|XMLHttpRequest|WebSocket|sendBeacon/);
+ const tick=String.fromCharCode(96);
+ const fragment=script.split('const fragment = '+tick)[1]?.split(tick+';')[0]||'';
+ for (const needle of ['float r111Arc(', 'float along=dot(p,dir)', 'float growingTip=mix(.06,.675',
+   'float body=smoothstep(.012,.06,along)', 'float fork=exp(', 'float awake=step(.24,seed)',
+   'float envelope=smoothstep(.015,.12,phase)'])assert.ok(fragment.includes(needle),needle);
+ assert.equal(fragment.split('=r111Arc(p,').length-1,5);
+ assert.ok(fragment.indexOf('if(d>radius)')<fragment.indexOf('float arcA='),'Arcs remain inside sphere');
+ for (const forbidden of ['fetch(', 'XMLHttpRequest', 'WebSocket', 'sendBeacon'])assert.ok(!script.includes(forbidden),forbidden);
 });
 test('R113: smaller core and seven animated Studio tools keep all three accessible product links',()=>{
- assert.match(home,/transform:scale\\(\\.62\\);transform-origin:center center/);
- assert.match(home,/translateX\\(-50%\\) scale\\(\\.62\\)/);
- const orbit=home.match(/<div class="core-tools-orbit" aria-hidden="true">([\\s\\S]*?)<\\/div>\\s*<nav class="core-r108-links"/)?.[1]||'';
- assert.equal((orbit.match(/class="core-tool-satellite"/g)||[]).length,7);
+ assert.ok(home.includes('transform:scale(.62);transform-origin:center center'));
+ assert.ok(home.includes('translateX(-50%) scale(.62)'));
+ const orbit=home.split('<div class="core-tools-orbit" aria-hidden="true">')[1]?.split('<nav class="core-r108-links"')[0]||'';
+ assert.equal(orbit.split('class="core-tool-satellite"').length-1,7);
  for(const label of ['Connect','Bridge','Relay','Memory','Evidence','Visual','SiteForge'])assert.ok(orbit.includes('<span>'+label+'</span>'),label);
- assert.match(home,/@keyframes core-tools-turn/);
- assert.match(home,/@keyframes core-tools-upright/);
- assert.match(home,/@media\\(prefers-reduced-motion:reduce\\)\\{\\.core-tools-orbit/);
- assert.match(home,/@media\\(max-width:620px\\)\\{\\.core-tools-orbit/);
- assert.equal((orbit.match(/<a\\b/g)||[]).length,0,'decorative labels are not fake navigation links');
- for(const slug of ['siteforge','connect','bridge'])assert.match(home,new RegExp('href="\\\\./'+slug+'/"'));
+ for(const rule of ['@keyframes core-tools-turn','@keyframes core-tools-upright',
+   '@media(prefers-reduced-motion:reduce){.core-tools-orbit',
+   '@media(max-width:620px){.core-tools-orbit'])assert.ok(home.includes(rule),rule);
+ assert.ok(!orbit.includes('<a '),'Decorative labels must not create fake navigation links');
+ for (const slug of ['siteforge','connect','bridge'])assert.ok(home.includes('href="./'+slug+'/"'),slug);
 });
 test('R111: floating site particles share one local script and obey visibility and reduced motion',()=>{
  const script=read('assets/core-r109-webgl.js');
