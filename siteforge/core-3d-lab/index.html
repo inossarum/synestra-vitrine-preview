@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self'; base-uri 'none'; frame-ancestors 'none'; form-action 'none'">
+<title>Synestra — Laboratoire de géométrie 3D R122 (non validé)</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,Arial,sans-serif;background:#050b17;color:#d4e8fa}
+*{box-sizing:border-box}body{margin:0;padding:24px 14px;background:radial-gradient(ellipse at 50% 20%,#0c1b38,#050b17 65%);min-height:100vh}
+main{max-width:1080px;margin:auto}a{color:#9eeaff}a:focus-visible{outline:3px solid white;outline-offset:4px}
+h1{font-size:clamp(1.1rem,3vw,1.65rem);margin:1rem 0 .55rem}p{color:#aec3d8;line-height:1.55;margin:0 0 1rem}
+.status{font:.76rem/1.6 ui-monospace,monospace;color:#b0d9f0;text-transform:uppercase;letter-spacing:.08em}
+.core-r108-stage{position:relative;isolation:isolate;border:1px solid #294261;background:radial-gradient(circle at 50% 48%,#091b36,#040a15 70%);border-radius:20px;overflow:hidden;height:min(68vw,640px);min-height:320px}
+.core-r109-canvas,.core-r122-metal-canvas{position:absolute;inset:0;display:block;width:100%;height:100%;opacity:0;pointer-events:none;transition:opacity .25s linear}
+.core-r108-stage[data-core-ready="true"] .core-r109-canvas{opacity:1}
+.core-r108-stage[data-core-ready="true"][data-metal-ready="true"] .core-r122-metal-canvas{opacity:1}
+.fallback{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none}
+.fallback .orb{width:min(35%,220px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 48% 52%,white 0%,#a4faff 5%,#169dda 17%,#15378f 48%,#081535 75%);box-shadow:0 0 48px #125fbe50;border:1px solid #a8dfff}
+.core-r108-stage[data-core-ready="true"] .fallback{opacity:0}
+.fallback-note{text-align:center;margin:1rem auto;max-width:52rem;font-size:.9rem}
+@media(prefers-reduced-motion:reduce){.core-r109-canvas,.core-r122-metal-canvas{transition:none!important}}
+</style></head><body><main>
+<a href="../../">Retour à SiteForge</a>
+<h1>Core R122 — Laboratoire 3D isolé</h1>
+<p class="status">Prototype technique · ne remplace pas le Core public · qualité visuelle non validée</p>
+<div class="core-r108-stage" role="img" aria-label="Laboratoire expérimental : trois anneaux métalliques tridimensionnels autour d'une sphère électrique.">
+ <div class="fallback"><div class="orb"></div></div>
+ <canvas class="core-r109-canvas" width="1100" height="720" aria-hidden="true"></canvas>
+ <canvas class="core-r122-metal-canvas" width="1100" height="720" aria-hidden="true"></canvas>
+</div>
+<p class="fallback-note">Si seule la sphère apparaît, l'animation 3D est indisponible ou le mouvement réduit est activé sur cet appareil. Ce laboratoire n'est pas une validation du rendu final.</p>
+<script src="../../assets/core-r109-webgl.js" defer></script>
+<script src="../../assets/core-r122-gyro.js" defer></script>
+</main></body></html>
