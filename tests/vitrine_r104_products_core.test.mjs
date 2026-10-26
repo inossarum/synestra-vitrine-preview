@@ -505,3 +505,29 @@ test('R128 count fidelity: mesh consists of 9216 triangles and 27648 vertex posi
  assert.equal(48*96*6,27648);
  assert.ok(lab.includes('9 216 triangles (27 648 sommets)'),'The UI must not mistake vertices for triangles');
 });
+
+test('R129: reference-driven electric nucleus is a second real 3D mesh, not an image billboard', async()=>{
+ const {Script,runInNewContext}=await import('node:vm');
+ const sphere=read('assets/siteforge-3d-sphere-shaders.js');
+ const renderer=read('assets/core-r122-gyro.js');
+ const lab=read('siteforge/core-3d-lab/index.html');
+ assert.doesNotThrow(()=>new Script(sphere));
+ assert.doesNotThrow(()=>new Script(renderer));
+ const window={};runInNewContext(sphere,{window});
+ const sh=window.SynestraSphere3DShaders;
+ assert.ok(sh.fragment.includes('if(uInner>.5)'),'Inner emissive sphere uses a separate 3D surface pass');
+ for(const term of ['noise3(warp*13.4','fresnel','uPrimary','uSecondary','uGlowColor','vec3 n=normalize(vNormal)'])
+   assert.ok(sh.fragment.includes(term),term);
+ assert.ok(sh.vertex.includes('uView*(aPosition*uRadius)'),'Actual XYZ vertex geometry, not a screen-space quad');
+ assert.ok(renderer.includes('gl.uniform1f(s3.radius,params.coreRadius*.14)'),'Emissive centre is smaller spatial sphere');
+ assert.ok(renderer.includes('gl.uniform1f(s3.inner,1)'));
+ assert.ok(renderer.includes('gl.drawArrays(gl.TRIANGLES,0,sphere.length/3)'));
+ assert.ok(renderer.includes('edgeFlash'),'Ring bevel and metal receive bright directional highlights');
+ assert.ok(renderer.includes('gl.enable(gl.CULL_FACE);gl.cullFace(gl.BACK)'),'Back faces remain culled');
+ assert.ok(!lab.includes('data:image/'),'No painted reference used as fake 3D');
+ for(const script of [sphere,renderer])for(const forbidden of ['fetch(','XMLHttpRequest','WebSocket','sendBeacon'])
+   assert.ok(!script.includes(forbidden),'No outside data source: '+forbidden);
+ assert.ok(!read('index.html').includes('siteforge-3d-sphere-shaders.js'),'Homepage must not change');
+ assert.match(lab,/noindex,nofollow/);
+ assert.match(lab,/prefers-reduced-motion:reduce/);
+});
