@@ -5,16 +5,21 @@ const read=(p)=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
 const home=read('index.html');
 const css=read('assets/product-pages.css');
 const pages=Object.fromEntries(['connect','bridge','offres'].map(n=>[n,read(n+'/index.html')]));
-test('R105: multi-axis Core is purely conceptual and accessible',()=>{
- assert.match(home,/class="system-core syn-core-r104 syn-core-r105"/);
+test('R106: cinematic SVG reactor with three keyboard-reachable ports and reduced motion',()=>{
+ assert.match(home,/class="system-stage core-r106-stage"/);
  assert.doesNotMatch(home,/<img class="official-hero-logo"/);
- for(const item of ['core-r105-gyro','core-r105-shell','core-r105-facet','core-r105-energy','r105-gyrA','r105-flux','class="core-r105-path path-forge"','class="core-r105-path path-connect"','class="core-r105-path path-bridge"'])
+ assert.match(home,/<svg class="core-r106-svg" viewBox="0 0 680 530"/);
+ for(const item of ['r106-metal','r106-metal2','r106-plasma','core-r106-iris','core-r106-front','core-r106-back','core-r106-turbine','core-r106-links','core106-rotation'])
   assert.ok(home.includes(item),item);
  assert.match(home,/prefers-reduced-motion:reduce/);
  assert.match(home,/class="brand-banner-r99" src="\.\/assets\/synestra-studio-header-y-r99.webp"/);
  assert.match(home,/class="nav-explore"/);
  assert.match(home,/class="container r105-orientation"/);
- assert.match(home,/Aucun état ou flux informatique en temps réel/);
+ assert.match(home,/VISUALISATION CONCEPTUELLE · NON LIVE/);
+ for(const slug of ['siteforge','connect','bridge']){
+  assert.match(home,new RegExp('<a href="\\./'+slug+'/" class="core-r106-link'));
+ }
+ assert.match(home,/class="core-r106-link[^"]*"[^>]*href=/s);
 });
 
 test('R104: Connect, Bridge and offers are linked from homepage and exist',()=>{
@@ -77,10 +82,10 @@ test('R105: contextual chapter navigation and examples on all product pages',()=
  assert.match(css,/prefers-reduced-motion:reduce/);
 });
 
-test('R105: orbital stage maintains module nodes inside the same visual container',()=>{
- const visual=home.split('<div class="system-stage" role="img"')[1]?.split('<div class="motion-strip"')[0]||'';
- assert.match(visual,/core-r105-axis-label[^>]*>CORE \/ CONCEPTION VISUELLE<\/div>\s*<div class="system-node node-forge"/);
- assert.match(visual,/class="system-node node-connect"/);
- assert.match(visual,/class="system-node node-bridge"/);
- assert.doesNotMatch(visual,/core-r105-axis-label[^>]*>[^<]+<\/div>\s*<\/div>\s*<div class="system-node node-forge"/);
+test('R106: reactor and product ports stay in the same hero stage',()=>{
+ const scene=home.split('<div class="system-stage core-r106-stage"')[1]?.split('</section>')[0]||'';
+ assert.match(scene,/class="core-r106-svg"/);
+ assert.match(scene,/aria-label="Explorer les composants autour du Core"/);
+ assert.equal((scene.match(/class="core-r106-link/g)||[]).length,3);
+ assert.doesNotMatch(scene,/<script\\b|<iframe\\b|<form\\b/i);
 });
