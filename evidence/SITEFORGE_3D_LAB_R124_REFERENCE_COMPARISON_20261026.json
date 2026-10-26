@@ -1,0 +1,59 @@
+{
+  "schema": "synestra.siteforge.3d-lab-r124-evidence.v1",
+  "mission_id": "SYN_SITEFORGE_3D_LAB_REFERENCE_COMPARE_R124_20261026",
+  "owner": "SiteForge 3D / Synestra Vitrine Preview",
+  "decision_ref": "DEC-SITEFORGE-3D-LAB-001",
+  "date_utc": "2026-10-26",
+  "repo": "inossarum/synestra-vitrine-preview",
+  "branch": "task/SYN_VITRINE_SITEFORGE_R91_PREVIEW_20261024",
+  "source": {
+    "code_sha": "1ffcc41fffa4a03505aa272c5aae4e03ac4516f9",
+    "tree_sha": "61aaeb63128c3cd34c64f40ffd6b587234f61951",
+    "home_blob_sha": "43810b6eaa878c523eb06d97542d791543765d55",
+    "lab_blob_sha": "4c3be191017e9d8f761a26c1a3fcc5e38aa291d9",
+    "engine_blob_sha": "182ae9be2bdc6381dbfda7f442e987b8855d6a77",
+    "editor_blob_sha": "04ab814983be683670ba75be60ddc5b3cdd78a53",
+    "tests_blob_sha": "e47ece005554b12c182bb8d189bb5e64e21975c9",
+    "main_mutated": false
+  },
+  "features": {
+    "reference_image": "Upload local PNG/JPEG/WebP <= 8 MB, view alongside native 3D stage; URL.createObjectURL and revokeObjectURL; no network transfer",
+    "material": "Roughness 0.06..1, warm reflection intensity 0..1, exposure 0.6..1.7; native WebGL fragment shader with dual light source",
+    "preset": "Existing schema synestra.siteforge.3d-preset.v1 maintained with added bounded fields",
+    "fallback": "Editor and image comparison remain available if WebGL unavailable; homepage retains original R121 plasma",
+    "diagnostics": "WebGL status and periodic gl.getError check"
+  },
+  "deployment": {
+    "provider": "Cloudflare Pages",
+    "id": "b05c9f96-0f7e-4c5d-a27c-3ee586f785d0",
+    "status": "success",
+    "environment": "preview",
+    "url": "https://b05c9f96.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+    "code_sha": "1ffcc41fffa4a03505aa272c5aae4e03ac4516f9"
+  },
+  "tests": {
+    "node_total": 50,
+    "node_pass": 50,
+    "node_fail": 0,
+    "static_export": "PASS",
+    "static_count": 41,
+    "first_attempt_failure": "Legacy heading test outdated after page rename, corrected in test-only commit; final 50/50 PASS",
+    "imageUploadBrowser": "PENDING",
+    "gpuShaderCompile": "PENDING",
+    "realBrowserPixelComparison": "PENDING",
+    "iosQA": "PENDING",
+    "directHTTPValidation": "NOT_VERIFIED_FROM_CURRENT_CONTAINER_DNS"
+  },
+  "constraints": {
+    "free_only": true,
+    "no_new_mcp": true,
+    "no_main_mutation": true,
+    "retains_core_r121": true,
+    "source_gate": "LIMITED",
+    "visual_gate": "PENDING",
+    "hooks_status": "NOT_APPLICABLE",
+    "function_report": "PARTIAL"
+  },
+  "next": "Open exact Preview on real GPU iPhone/desktop; import the already generated reference photo locally, adjust material, capture 390x844 and 1440x900 with shader and console check. Only after visually reviewed results consider putting 3D effect on homepage.",
+  "rollback": "Revert source-only change to R123 docs SHA 2210c81ebc3ac82f2afdda148b9ac65b8331818c on preview branch using non-destructive reviewed diff."
+}
