@@ -118,7 +118,7 @@ test('R110: native-verified dimensional plasma shader, restrained orbit and boun
  assert.ok(fragment,'R110 shader fragment absent');
  let hash=2166136261;
  for(const ch of fragment)hash=Math.imul(hash ^ ch.charCodeAt(0),16777619)>>>0;
- assert.equal(hash.toString(16),'cd66a4ce','GLSL source fingerprint changed after R111 arc additions');
+ assert.equal(hash.toString(16),'bda133fc','GLSL source fingerprint changed after R113 radial arcs');
  for(const term of ['noise3','turn3','ringBloom','ringFront','spiral']){
   if(term==='spiral')continue;
   assert.ok(fragment.includes(term),term);
@@ -130,17 +130,32 @@ test('R110: native-verified dimensional plasma shader, restrained orbit and boun
  assert.doesNotMatch(script,/\bfetch\s*\(|XMLHttpRequest|WebSocket|sendBeacon/);
 });
 
-test('R111: intermittent electrical arcs remain internal and randomized without strobe events',()=>{
+test('R113: five stronger radial arcs grow from the centre towards the sphere edge',()=>{
  const script=read('assets/core-r109-webgl.js');
- const fragment=script.match(/const fragment = `([\s\S]*?)`;/)?.[1]?.trim()||'';
- assert.match(fragment,/float r111Arc\(/);
- assert.match(fragment,/float cell=floor\(seconds\/cycleTime\+index\*\.41\)/);
- assert.match(fragment,/float seed=hash3\(vec3\(cell,index\*1\.81,11\.3\)\)/);
- assert.match(fragment,/float attack=smoothstep\(\.04,\.19,phase\)/);
- assert.match(fragment,/float release=1\.-smoothstep\(\.45,\.78,phase\)/);
- assert.equal((fragment.match(/float arc[A-C]=r111Arc\(p,/g)||[]).length,3);
- assert.ok(fragment.indexOf('if(d>radius)') < fragment.indexOf('float arcA='),'No flashes outside the sphere');
- assert.doesNotMatch(script,/\bfetch\s*\(|XMLHttpRequest|WebSocket|sendBeacon/);
+ const fragment=script.match(/const fragment = `([\\s\\S]*?)`;/)?.[1]?.trim()||'';
+ assert.match(fragment,/float r111Arc\\(/);
+ assert.match(fragment,/float along=dot\\(p,dir\\)/);
+ assert.match(fragment,/float growingTip=mix\\(\\.06,\\.675,smoothstep\\(\\.06,\\.58,phase\\)\\)/);
+ assert.match(fragment,/float body=smoothstep\\(\\.012,\\.06,along\\)/);
+ assert.match(fragment,/float fork=exp\\(/);
+ assert.equal((fragment.match(/float arc[A-E]=r111Arc\\(p,/g)||[]).length,5);
+ assert.ok(fragment.indexOf('if(d>radius)')<fragment.indexOf('float arcA='),'arcs must stay inside sphere');
+ assert.match(fragment,/float awake=step\\(\\.24,seed\\)/);
+ assert.match(fragment,/float envelope=smoothstep\\(\\.015,\\.12,phase\\)/);
+ assert.doesNotMatch(script,/\\bfetch\\s*\\(|XMLHttpRequest|WebSocket|sendBeacon/);
+});
+test('R113: smaller core and seven animated Studio tools keep all three accessible product links',()=>{
+ assert.match(home,/transform:scale\\(\\.62\\);transform-origin:center center/);
+ assert.match(home,/translateX\\(-50%\\) scale\\(\\.62\\)/);
+ const orbit=home.match(/<div class="core-tools-orbit" aria-hidden="true">([\\s\\S]*?)<\\/div>\\s*<nav class="core-r108-links"/)?.[1]||'';
+ assert.equal((orbit.match(/class="core-tool-satellite"/g)||[]).length,7);
+ for(const label of ['Connect','Bridge','Relay','Memory','Evidence','Visual','SiteForge'])assert.ok(orbit.includes('<span>'+label+'</span>'),label);
+ assert.match(home,/@keyframes core-tools-turn/);
+ assert.match(home,/@keyframes core-tools-upright/);
+ assert.match(home,/@media\\(prefers-reduced-motion:reduce\\)\\{\\.core-tools-orbit/);
+ assert.match(home,/@media\\(max-width:620px\\)\\{\\.core-tools-orbit/);
+ assert.equal((orbit.match(/<a\\b/g)||[]).length,0,'decorative labels are not fake navigation links');
+ for(const slug of ['siteforge','connect','bridge'])assert.match(home,new RegExp('href="\\\\./'+slug+'/"'));
 });
 test('R111: floating site particles share one local script and obey visibility and reduced motion',()=>{
  const script=read('assets/core-r109-webgl.js');

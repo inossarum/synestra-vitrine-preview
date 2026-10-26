@@ -88,24 +88,30 @@ vec3 turn3(vec3 n,vec2 t){
  return vec3(r.x,c*r.y-d*r.z,d*r.y+c*r.z);
 }
 float r111Arc(vec2 p,float index,float seconds) {
-  float cycleTime=2.05;
-  float cell=floor(seconds/cycleTime+index*.41);
-  float phase=fract(seconds/cycleTime+index*.41);
+  // Short asynchronous electrical discharges grow outwards from the nucleus.
+  float cycleTime=1.85;
+  float cell=floor(seconds/cycleTime+index*.37);
+  float phase=fract(seconds/cycleTime+index*.37);
   float seed=hash3(vec3(cell,index*1.81,11.3));
-  // Deliberate sparse/random events with soft attack/decay (not strobing).
-  float awake=step(.48,seed);
-  float attack=smoothstep(.04,.19,phase);
-  float release=1.-smoothstep(.45,.78,phase);
+  float awake=step(.24,seed);
+  float envelope=smoothstep(.015,.12,phase)*(1.-smoothstep(.65,.9,phase));
   float angle=6.283185*fract(seed+index*.227);
-  float ca=cos(angle),sa=sin(angle);
-  vec2 q=vec2(ca*p.x-sa*p.y,sa*p.x+ca*p.y);
-  q.y+=(fract(seed*8.3)-.5)*.21;
-  float kink=sin(q.x*32.+seed*19.)*.022+sin(q.x*79.+seed*73.)*.009;
-  float path=abs(q.y-kink);
-  float tips=1.-smoothstep(.22,.38,abs(q.x));
-  float flutter=.83+.17*sin(seconds*8.5+seed*18.);
-  return awake*attack*release*tips*flutter*(exp(-path*112.)+.18*exp(-path*21.));
+  vec2 dir=vec2(cos(angle),sin(angle));
+  float along=dot(p,dir);
+  float across=dot(p,vec2(-dir.y,dir.x));
+  float branchSeed=hash3(vec3(cell,9.21,index));
+  float jitter=sin(along*36.+seed*20.)*.022+sin(along*91.+branchSeed*21.)*.010;
+  float growingTip=mix(.06,.675,smoothstep(.06,.58,phase));
+  float body=smoothstep(.012,.06,along)*(1.-smoothstep(growingTip-.06,growingTip,along));
+  float filament=exp(-abs(across-jitter)*92.)+.26*exp(-abs(across-jitter)*21.);
+  float forkOrigin=growingTip*.46;
+  float forkOffset=(along-forkOrigin)*(branchSeed-.5)*.57;
+  float forkMask=smoothstep(forkOrigin-.015,forkOrigin+.03,along)*(1.-smoothstep(growingTip-.06,growingTip,along));
+  float fork=exp(-abs(across-jitter-forkOffset)*83.)*forkMask*.56;
+  float front=exp(-pow((along-growingTip)/.046,2.))*exp(-abs(across-jitter)*18.)*.29;
+  return awake*envelope*(body*filament+fork+front);
 }
+
 void main(){
  vec2 p=(uv-.5)*2.;
  p.x*=resolution.x/max(resolution.y,1.);
@@ -155,8 +161,11 @@ void main(){
  float arcA=r111Arc(p,1.,time);
  float arcB=r111Arc(p,2.,time);
  float arcC=r111Arc(p,3.,time);
- // Arcs remain inside the sphere; their position, angle and lifespan vary by epoch.
- base+=vec3(.73,.94,1.)*arcA*.56+vec3(.42,.62,1.)*arcB*.43+vec3(.63,.90,.95)*arcC*.46;
+ float arcD=r111Arc(p,4.,time);
+ float arcE=r111Arc(p,5.,time);
+ // Five independent radial pulses: centre to edge, fading before the sphere boundary.
+ base+=vec3(.78,.96,1.)*arcA*1.12+vec3(.39,.77,1.)*arcB*.91+vec3(.78,.69,1.)*arcC*.88;
+ base+=vec3(.49,.96,.97)*arcD*.92+vec3(.83,.94,1.)*arcE*.84;
  float shellFade=1.-smoothstep(radius*.977,radius,d);
  float alpha=clamp(.96+rim*.04,0.,1.)*shellFade;
  float orbital=ringFront*spinPulse;

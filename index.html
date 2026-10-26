@@ -1440,7 +1440,7 @@
     .core-r108-stage:before,.core-r108-stage:after{content:none!important}
     .core-r108-top{position:absolute;z-index:5;top:21px;left:26px;right:26px;display:flex;justify-content:space-between;gap:14px;
       font:730 10px/1.4 ui-monospace,Consolas,monospace;letter-spacing:.13em;color:#99b3ce}
-    .core-r108-art{position:absolute;left:50%;top:5%;transform:translateX(-50%) scale(.77);transform-origin:center center;width:min(100%,760px);height:350px;overflow:visible}
+    .core-r108-art{position:absolute;left:50%;top:5%;transform:translateX(-50%) scale(.62);transform-origin:center center;width:min(100%,760px);height:350px;overflow:visible}
     .core-r108-heart{transform-origin:320px 189px;animation:r108-breathe 5.8s ease-in-out infinite}
     .core-r108-orbit{animation:r108-current 18s linear infinite}
     .core-r108-links{position:absolute;z-index:6;left:clamp(20px,5vw,64px);right:clamp(20px,5vw,64px);bottom:54px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
@@ -1463,12 +1463,40 @@
     /* R109: WebGL 3D depth enhancement. R108 SVG stays as zero-script fallback. */
     .core-r109-stage{isolation:isolate}
     .core-r109-canvas{position:absolute;top:0;left:0;z-index:2;display:block;width:100%;height:calc(100% - 58px);
-      transform:scale(.77);transform-origin:center center;
+      transform:scale(.62);transform-origin:center center;
       opacity:0;pointer-events:none;transition:opacity .5s ease}
     .core-r109-stage[data-core-ready="true"] .core-r109-canvas{opacity:1}
     .core-r109-stage .core-r108-art{transition:opacity .35s ease}
     .core-r109-stage[data-core-ready="true"] .core-r108-art{opacity:0}
     @media(prefers-reduced-motion:reduce){.core-r109-canvas,.core-r109-stage .core-r108-art{transition:none!important}}
+
+
+    /* R113 — seven conceptual Studio tools orbit the smaller Core; labels remain upright. */
+    .core-tools-orbit{position:absolute;z-index:4;left:50%;top:43%;width:0;height:0;
+      pointer-events:none;--orbit-radius:142px;animation:core-tools-turn 46s linear infinite}
+    .core-tools-orbit:before{content:"";position:absolute;left:0;top:0;width:284px;height:284px;
+      transform:translate(-50%,-50%);border:1px dashed rgba(122,179,236,.15);border-radius:50%;
+      box-shadow:0 0 35px rgba(43,144,205,.09),inset 0 0 24px rgba(43,144,205,.04)}
+    .core-tool-satellite{position:absolute;left:0;top:0;
+      transform:rotate(var(--orbit-angle)) translateX(var(--orbit-radius)) rotate(var(--orbit-reverse))}
+    .core-tool-satellite>span{display:block;white-space:nowrap;transform-origin:center;
+      padding:5px 10px;border:1px solid rgba(113,199,238,.35);border-radius:999px;
+      background:rgba(9,25,46,.91);color:#bddfea;box-shadow:0 0 16px rgba(19,160,230,.13);
+      font:650 10px/1.25 ui-monospace,Consolas,monospace;letter-spacing:.055em;
+      animation:core-tools-upright 46s linear infinite}
+    .core-tool-satellite:nth-child(1){--orbit-angle:0deg;--orbit-reverse:0deg}
+    .core-tool-satellite:nth-child(2){--orbit-angle:51deg;--orbit-reverse:-51deg}
+    .core-tool-satellite:nth-child(3){--orbit-angle:103deg;--orbit-reverse:-103deg}
+    .core-tool-satellite:nth-child(4){--orbit-angle:154deg;--orbit-reverse:-154deg}
+    .core-tool-satellite:nth-child(5){--orbit-angle:206deg;--orbit-reverse:-206deg}
+    .core-tool-satellite:nth-child(6){--orbit-angle:257deg;--orbit-reverse:-257deg}
+    .core-tool-satellite:nth-child(7){--orbit-angle:309deg;--orbit-reverse:-309deg}
+    @keyframes core-tools-turn{to{transform:rotate(360deg)}}
+    @keyframes core-tools-upright{to{transform:rotate(-360deg)}}
+    @media(max-width:620px){.core-tools-orbit{--orbit-radius:108px;top:43%}
+      .core-tools-orbit:before{width:216px;height:216px}
+      .core-tool-satellite>span{font-size:8px;padding:4px 6px;letter-spacing:0}}
+    @media(prefers-reduced-motion:reduce){.core-tools-orbit,.core-tool-satellite>span{animation:none!important}}
 
 /* R111 / ambient field. Decorative only: never captures pointer or scroll events. */
 .syn-ambient-field{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;contain:layout paint;isolation:isolate}
@@ -1558,6 +1586,15 @@ body>header,body>main,body>footer{position:relative;z-index:1}
             <circle cx="470" cy="235" r="2"/><circle cx="253" cy="312" r="1.7"/>
           </g>
         </svg>
+        <div class="core-tools-orbit" aria-hidden="true">
+          <div class="core-tool-satellite"><span>Connect</span></div>
+          <div class="core-tool-satellite"><span>Bridge</span></div>
+          <div class="core-tool-satellite"><span>Relay</span></div>
+          <div class="core-tool-satellite"><span>Memory</span></div>
+          <div class="core-tool-satellite"><span>Evidence</span></div>
+          <div class="core-tool-satellite"><span>Visual</span></div>
+          <div class="core-tool-satellite"><span>SiteForge</span></div>
+        </div>
         <nav class="core-r108-links" aria-label="Explorer Synestra">
           <a href="./siteforge/"><span>Créer</span><strong>SiteForge</strong><span aria-hidden="true">↗</span></a>
           <a href="./connect/"><span>Relier</span><strong>Connect</strong><span aria-hidden="true">↗</span></a>
