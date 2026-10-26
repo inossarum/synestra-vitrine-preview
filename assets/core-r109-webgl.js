@@ -146,6 +146,7 @@ void main(){
   let active = true;
   let frame = 0;
   let last = 0;
+  let lastFrame = 0;
   let elapsed = 0;
   let targetX = 0, targetY = 0, rx = 0, ry = 0;
   const size = () => {
@@ -166,10 +167,16 @@ void main(){
   };
   const draw = (clock) => {
     frame = 0;
-    if (!active || reduceMotion.matches || !size()) {
+    if (!active || reduceMotion.matches) {
       if (reduceMotion.matches) scene.removeAttribute('data-core-ready');
       return;
     }
+    if (lastFrame && clock - lastFrame < 32) {
+      if (visible && document.visibilityState === 'visible') frame=requestAnimationFrame(draw);
+      return;
+    }
+    if (!size()) return;
+    lastFrame = clock;
     const still = reduceMotion.matches;
     if (!still && last) elapsed += Math.min((clock-last)/1000, .05);
     last=clock;
