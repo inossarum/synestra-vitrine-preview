@@ -5,14 +5,18 @@ const read=(p)=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
 const home=read('index.html');
 const css=read('assets/product-pages.css');
 const pages=Object.fromEntries(['connect','bridge','offres'].map(n=>[n,read(n+'/index.html')]));
-test('R104: no central brand image; animated energy Core with reduced-motion escape',()=>{
- assert.match(home,/class="system-core syn-core-r104"/);
+test('R105: multi-axis Core is purely conceptual and accessible',()=>{
+ assert.match(home,/class="system-core syn-core-r104 syn-core-r105"/);
  assert.doesNotMatch(home,/<img class="official-hero-logo"/);
- for(const selector of ['core-dynamo','core-plasma','core-containment','core-particle','@keyframes core-rotation','@keyframes core-beat'])
-  assert.ok(home.includes(selector),selector);
- assert.match(home,/@media\(prefers-reduced-motion:reduce\)\{\.syn-core-r104/);
+ for(const item of ['core-r105-gyro','core-r105-shell','core-r105-facet','core-r105-energy','r105-gyrA','r105-flux','class="core-r105-path path-forge"','class="core-r105-path path-connect"','class="core-r105-path path-bridge"'])
+  assert.ok(home.includes(item),item);
+ assert.match(home,/prefers-reduced-motion:reduce/);
  assert.match(home,/class="brand-banner-r99" src="\.\/assets\/synestra-studio-header-y-r99.webp"/);
+ assert.match(home,/class="nav-explore"/);
+ assert.match(home,/class="r105-orientation"/);
+ assert.match(home,/Aucun état ou flux informatique en temps réel/);
 });
+
 test('R104: Connect, Bridge and offers are linked from homepage and exist',()=>{
  for(const slug of Object.keys(pages)){
   assert.match(home,new RegExp('href="\\./'+slug+'/"'));
@@ -61,4 +65,14 @@ test('R104: Cloudflare static export admits public routes, excludes project inte
  assert.match(build,/assets:new Set\(\['\.avif','\.webp','\.png','\.jpg','\.jpeg','\.svg','\.css'\]\)/);
  assert.doesNotMatch(build,/rootDirs=\[[^\]]*'tests'/);
  assert.doesNotMatch(build,/child_process|execSync|spawn\(/);
+});
+
+test('R105: contextual chapter navigation and examples on all product pages',()=>{
+ for(const html of Object.values(pages)){
+  assert.match(html,/class="product-chapters"/);
+  assert.match(html,/class="product-example"/);
+  assert.match(html,/aria-label="Dans cette page"/);
+ }
+ assert.match(css,/\.product-chapters a:focus-visible/);
+ assert.match(css,/prefers-reduced-motion:reduce/);
 });
