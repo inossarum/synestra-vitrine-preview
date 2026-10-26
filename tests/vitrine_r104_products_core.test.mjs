@@ -5,21 +5,18 @@ const read=(p)=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
 const home=read('index.html');
 const css=read('assets/product-pages.css');
 const pages=Object.fromEntries(['connect','bridge','offres'].map(n=>[n,read(n+'/index.html')]));
-test('R106: cinematic SVG reactor with three keyboard-reachable ports and reduced motion',()=>{
- assert.match(home,/class="system-stage core-r106-stage"/);
- assert.doesNotMatch(home,/<img class="official-hero-logo"/);
- assert.match(home,/<svg class="core-r106-svg" viewBox="0 0 680 530"/);
- for(const item of ['r106-metal','r106-metal2','r106-plasma','core-r106-iris','core-r106-front','core-r106-back','core-r106-turbine','core-r106-links','core106-rotation'])
-  assert.ok(home.includes(item),item);
- assert.match(home,/prefers-reduced-motion:reduce/);
+test('R108: one clean energy Core keeps three product links and the R99 brand',()=>{
+ assert.match(home,/class="system-stage core-r108-stage"/);
+ assert.match(home,/<svg class="core-r108-art" viewBox="0 0 640 410"/);
+ assert.equal((home.match(/id="r108-(?:aura|plasma|arc|halo)"/g)||[]).length,4);
+ assert.match(home,/class="core-r108-heart"/);
+ assert.match(home,/class="core-r108-orbit"/);
  assert.match(home,/class="brand-banner-r99" src="\.\/assets\/synestra-studio-header-y-r99.webp"/);
+ assert.doesNotMatch(home,/<img class="official-hero-logo"/);
+ assert.doesNotMatch(home,/class="core-r107-|class="core-r106-svg"/);
+ assert.doesNotMatch(home,/class="motion-strip"|class="container r105-orientation"/);
+ assert.match(home,/prefers-reduced-motion:reduce/);
  assert.match(home,/class="nav-explore"/);
- assert.match(home,/class="container r105-orientation"/);
- assert.match(home,/VISUALISATION CONCEPTUELLE · NON LIVE/);
- for(const slug of ['siteforge','connect','bridge']){
-  assert.match(home,new RegExp('<a href="\\./'+slug+'/" class="core-r106-link'));
- }
- assert.match(home,/<a href="\.\/connect\/" class="core-r106-link link-connect"/);
 });
 
 test('R104: Connect, Bridge and offers are linked from homepage and exist',()=>{
@@ -82,34 +79,19 @@ test('R105: contextual chapter navigation and examples on all product pages',()=
  assert.match(css,/prefers-reduced-motion:reduce/);
 });
 
-test('R106: reactor and product ports stay in the same hero stage',()=>{
- const scene=home.split('<div class="system-stage core-r106-stage"')[1]?.split('</section>')[0]||'';
- assert.match(scene,/class="core-r106-svg"/);
- assert.match(scene,/aria-label="Explorer les composants autour du Core"/);
- assert.equal((scene.match(/class="core-r106-link /g)||[]).length,3);
- assert.doesNotMatch(scene,/<script\\b|<iframe\\b|<form\\b/i);
+test('R108: the core remains a navigable and accessible grouped scene',()=>{
+ const scene=home.split('<div class="system-stage core-r108-stage"')[1]?.split('</section>')[0]||'';
+ assert.match(scene,/aria-label="Core Synestra/);
+ assert.match(scene,/aria-label="Explorer Synestra"/);
+ assert.equal((scene.match(/<a href="\.\/(?:siteforge|connect|bridge)\/"[ >]/g)||[]).length,3);
+ assert.match(scene,/class="core-r108-note"/);
+ assert.doesNotMatch(scene,/<script\b|<iframe\b|<form\b/i);
 });
-
-test('R107: high-energy plasma composition uses original self-hosted SVG assets only',()=>{
- assert.match(home,/class="core-r107-aurora"/);
- assert.match(home,/class="core-r107-plasma-filaments"/);
- assert.match(home,/class="core-r107-discharge"/);
- assert.match(home,/class="core-r107-particles"/);
- assert.match(home,/class="core-r107-shockwave"/);
- assert.match(home,/class="core-r107-flash"/);
- for(const id of ['r107-electric','r107-violet','r107-reactor-flare','r107-neon-glow','r107-aurora-blur']){
-  assert.equal((home.match(new RegExp('id="'+id+'"','g'))||[]).length,1,id);
- }
- for(const keyframe of ['r107-field-spin','r107-electric-crawl','r107-arcs-flicker','r107-spark','r107-shockwave','r107-core-breath']){
-  assert.match(home,new RegExp('@keyframes '+keyframe));
- }
- assert.doesNotMatch(home,/<script\\b|<foreignObject\\b|<iframe\\b/i);
-});
-test('R107: fallback rendering remains usable when animations are disabled',()=>{
- assert.ok(home.includes('@media(prefers-reduced-motion:reduce){.core-r107-aurora'));
- assert.ok(home.includes('.core-r107-discharge{opacity:.48}'));
- assert.match(home,/VISUALISATION CONCEPTUELLE · NON LIVE/);
- const scene=home.split('<div class="system-stage core-r106-stage"')[1]?.split('</section>')[0]||'';
- assert.equal((scene.match(/class="core-r106-link link-/g)||[]).length,3);
- assert.match(scene,/aria-label="Explorer les composants autour du Core"/);
+test('R108: reduced motion and visual simplification are enforced',()=>{
+ assert.ok(home.includes('@media(prefers-reduced-motion:reduce){.core-r108-heart'));
+ assert.match(home, /@keyframes r108-breathe/);
+ assert.match(home, /@keyframes r108-current/);
+ assert.doesNotMatch(home, /core-r107-discharge|core-r107-particles|core-r107-shockwave/);
+ assert.doesNotMatch(home, /<div class="motion-strip"|<section class="container r105-orientation"/);
+ assert.match(home, /Une même énergie, trois façons de donner vie à vos projets\./);
 });
