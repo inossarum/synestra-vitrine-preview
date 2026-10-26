@@ -1,0 +1,67 @@
+{
+  "schema": "synestra.vitrine.r113.evidence.v1",
+  "evidence_id": "SYN_VITRINE_R113_COMPACT_ORBITAL_RADIAL_20261026",
+  "date": "2026-10-26",
+  "mission_id": "SYN_VITRINE_SITEFORGE_SHOWCASE_20261024",
+  "owner": "Inos",
+  "source": {
+    "repository": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_VITRINE_SITEFORGE_R91_PREVIEW_20261024",
+    "pr": 5,
+    "tested_code_commit": "5cd37181a6b396bed1997c78bc75770e3939cd1b",
+    "base_commit": "f3434f253d8804ebccf5ec384a0471f974b17e76",
+    "blob_sha": {
+      "index.html": "d6bc6ca29ee8fbf7ea18caf6ffb4277b64a39158",
+      "assets/core-r109-webgl.js": "150c34b87c305710a5ad23ef596eced62be4c560",
+      "tests/vitrine_r104_products_core.test.mjs": "050bd9c3f5b7cae36b5444d71f3885195e0dc256"
+    }
+  },
+  "changes": {
+    "core": "SVG fallback and WebGL scaled from .77 to .62 of original, no changes to product navigation",
+    "orbital": "Seven decorative labels Connect, Bridge, Relay, Memory, Evidence, Visual, SiteForge on continuously rotating circular orbit with counterrotated upright chips, mobile radius override and prefers-reduced-motion static fallback",
+    "electric": "Five pseudo-random radial centre-outwards impulses in existing GLSL shader, expanding growingTip .06→.675 within sphere radius .69, branching, brighter bounded output, per-channel stochastic phases; no new animation RAF, no dependencies",
+    "security": "Same CSP, no new scripts, network calls, permissions or deployment scope"
+  },
+  "testing": {
+    "source_readback": "PASS",
+    "atomic_github_commit": "3ff844ae162e5c67170ab98e290e40ce681b15c2",
+    "repair_commit": "5cd37181a6b396bed1997c78bc75770e3939cd1b",
+    "static_preflight_10_checks": "PASS",
+    "cloudflare_build": "PASS",
+    "node_test_count": 41,
+    "node_pass": 41,
+    "node_fail": 0,
+    "static_export": "PASS",
+    "static_file_count": 38,
+    "source_sha_verified": true,
+    "real_browser_http": "UNVERIFIED",
+    "ios_safari_e2e": "NOT_RUN",
+    "visual_pixel_review": "PENDING",
+    "shader_native_gl_validation_of_changed_fragment": "NOT_RUN"
+  },
+  "deployment": {
+    "cloudflare_pages_project": "synestra-vitrine-preview",
+    "id": "14668546-eb48-43eb-899a-bed75df26713",
+    "url": "https://14668546.synestra-vitrine-preview.pages.dev/",
+    "environment": "preview",
+    "stage": "success",
+    "sha": "5cd37181a6b396bed1997c78bc75770e3939cd1b",
+    "production_deployments_enabled": false,
+    "previous_preview_id": "b5ee883f-f888-4957-bae8-6b73069efe75"
+  },
+  "incident": {
+    "failed_preview_id": "9caf600a-0919-48e4-bf7f-a1f424c24fbc",
+    "root_cause": "New regression test regex over-escaped; Node SyntaxError, not rendering failure",
+    "recovery": "Replaced fragile regex assertions with deterministic string-includes assertions; Node V8 parser preflight and Cloudflare tests 41/41 pass",
+    "retry_burst": false
+  },
+  "source_gate": "LIMITED",
+  "hooks": "Cloudflare build PASS, Studio UNKNOWN",
+  "function_report": "PARTIAL",
+  "limits": [
+    "Web tool cannot load Pages preview; no exact visual pixel inspection",
+    "Studio bootstrap returned QUEUED then EXPIRED, not used as authority",
+    "No real iOS Safari / WebGL runtime E2E"
+  ],
+  "next": "Owner review exact Cloudflare preview on mobile/desktop; check dimensions, label collisions, actual radial arc direction, low-motion and GPU; iterate only from observed defect. Do not merge or publish production without approval."
+}
