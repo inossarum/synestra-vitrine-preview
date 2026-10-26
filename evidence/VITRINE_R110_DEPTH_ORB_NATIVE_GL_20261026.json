@@ -1,0 +1,76 @@
+{
+  "schema": "synestra.vitrine.r110.evidence.v1",
+  "id": "SYN_VITRINE_R110_DEPTH_ORB_NATIVE_GL_CLOUD_PREVIEW_20261026",
+  "date": "2026-10-26",
+  "mission_id": "SYN_VITRINE_SITEFORGE_SHOWCASE_20261024",
+  "owner": "Inos",
+  "request": "Improve the R109 Core to a more appealing 3D experience without returning to the overloaded R107 design",
+  "sources": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_VITRINE_SITEFORGE_R91_PREVIEW_20261024",
+    "pr_number": 5,
+    "tested_code_head": "fc4b6ff84fb30fecd83bd5526e856c613988e156",
+    "code_path": "assets/core-r109-webgl.js",
+    "previous_preview": "https://c1734bb8.synestra-vitrine-preview.pages.dev",
+    "visual_direction": "00_DIRECTION/DECISIONS_2026-09-04_CHAT_STUDIO_VISUAL_DIRECTION.md@ff6f5cfa61404e3e6739c5ecbb855f189b36cf5e"
+  },
+  "delta": {
+    "render": "Replaced R109 shader with dimensional spherical cyan/violet plasma, moving internal filaments, one thin inclined orbital ring using front/back occlusion and atmosphere",
+    "interactivity": "Retains restrained pointer parallax and 3 product navigation links",
+    "performance": "Conservative ~30 fps GL draw cap (32ms), existing 800000-pixel cap, 1.5 DPR, low-power preference, scroll/document visibility suspension",
+    "fallback": "R108 SVG is preserved for no WebGL, script disabled, reduced motion and context loss",
+    "scope": "Only the R109 canvas shader/driver and regression test changed. No new backend, extra library, subscription or production mutation."
+  },
+  "tests": {
+    "cloudflare": {
+      "project": "synestra-vitrine-preview",
+      "deployment_id": "268810ee-9976-41f2-a809-43f3ca89b71f",
+      "environment": "preview",
+      "stage": "success",
+      "deployed_sha": "fc4b6ff84fb30fecd83bd5526e856c613988e156",
+      "node_tests": 38,
+      "pass": 38,
+      "fail": 0,
+      "allowlisted_static_files": 38,
+      "production_deployments_enabled": false
+    },
+    "native_GLES": {
+      "state": "VERIFIED",
+      "platform": "EGL 1.5 surfaceless / Mesa OpenGL ES 3.2",
+      "fragment_fingerprint": "FNV1a32 normalized ASCII d2557d11",
+      "fragment_compatibility": "WebGL1 GLSL ES 1.00 source",
+      "compiled": true,
+      "program_linked": true,
+      "draw_triangles": true,
+      "pixel_readback": true,
+      "gl_error": "GL_NO_ERROR",
+      "desktop_png_sha256": "c09683535c6540155c55cfa895eab5e842edfa002feaf1bd7eb3f7e315c76c94",
+      "mobile_shader_png_sha256": "dcf04b10ec31e8b7f28debce7f8b94de88b312a177bf2020f5bab5cafe0cec0e",
+      "desktop_pixels": "760x390",
+      "mobile_pixels": "390x275"
+    },
+    "chromium_browser": {
+      "webgl_available": false,
+      "flags_attempted": [
+        "ANGLE SwiftShader",
+        "SwiftShader",
+        "unsafe SwiftShader",
+        "default"
+      ],
+      "app_runtime_e2e": "NOT_VERIFIED",
+      "reason": "Browser sandbox does not expose WebGL in this environment; separate EGL render is not the same as a full website browser render."
+    }
+  },
+  "rollback": {
+    "preview_url": "https://c1734bb8.synestra-vitrine-preview.pages.dev",
+    "tested_R109_sha": "49ceb23a2b8dbec7f7651e4f8c5d61d7f3e54346",
+    "production_main_mutated": false
+  },
+  "limitations": [
+    "No real end-user browser/GPU verification on published Cloudflare URL",
+    "No complete-page desktop/mobile browser screenshot or Lighthouse measurement",
+    "Native shader PNG snapshots are local QA artifacts, not deployed site assets or persistent Git binary files"
+  ],
+  "next": "Open R110 preview on an authorized WebGL browser/phone, confirm visual composition and smooth motion; compare directly with R109 and adjust only if tested; production remains protected.",
+  "function_report": "PARTIAL"
+}
