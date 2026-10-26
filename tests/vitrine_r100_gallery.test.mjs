@@ -21,7 +21,8 @@ test('R100 provides native accessible links, a heading, and honest disclosure',(
   assert.equal((gallery[1].match(/class="siteforge-gallery-card" href/g)||[]).length,3);
   assert.equal((gallery[1].match(/aria-label="Consulter /g)||[]).length,3);
   assert.match(gallery[0],/ne sont ni des captures d’écran/);
-  assert.ok(!/<script\b/i.test(html),'source should remain scriptless');
+  assert.deepEqual([...html.matchAll(/<script\b[^>]*>/g)].map(x=>x[0]),['<script src="./assets/core-r109-webgl.js" defer>']);
+  assert.doesNotMatch(gallery[0],/<script\b|<iframe\b|<form\b/i);
 });
 test('R100 CSS preserves responsive and reduced-motion controls',()=>{
   assert.match(html,/\.siteforge-gallery-list\s*\{[^}]*grid-template-columns:\s*repeat\(3/);
