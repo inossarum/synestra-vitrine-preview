@@ -1,0 +1,44 @@
+{
+  "schema": "synestra.vitrine.r108.evidence.v1",
+  "mission_id": "SYN_VITRINE_SITEFORGE_SHOWCASE_20261024",
+  "owner": "Inos",
+  "date": "2026-10-26",
+  "request": "Simplifier le Core R107 : trop d'éléments simultanés",
+  "source": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_VITRINE_SITEFORGE_R91_PREVIEW_20261024",
+    "tested_sha": "b655a5aae9ef492334308f186e1e777993bb77ae",
+    "pr": 5,
+    "draft": true
+  },
+  "delta": {
+    "visual": "R108: noyau plasma unique, deux trajectoires orbitales lumineuses, quatre points de brillance discrets, trois liens produits en rangée; plus d'arcs multiples, de chocs, de rotor métallique et de particules surchargées",
+    "ux": "Retrait du bandeau défilant et du second bloc d'orientation à trois cartes, redondants avec les trois liens du Core",
+    "design": "Identité officielle R99 conservée, SVG/CSS local sans JavaScript externe",
+    "size_change_index_chars": -16642
+  },
+  "tests": {
+    "cloudflare_status": "success",
+    "deployment_id": "09878cec-39d1-4ca7-a3c3-09a60a11a48b",
+    "url": "https://09878cec.synestra-vitrine-preview.pages.dev",
+    "env": "preview",
+    "deployed_sha": "b655a5aae9ef492334308f186e1e777993bb77ae",
+    "node_tests": 36,
+    "pass": 36,
+    "fail": 0,
+    "static_file_count": 37,
+    "production_deployments_enabled": false
+  },
+  "rollback": {
+    "previous_deployment_id": "e95dfa9c-715a-41f9-8b5e-f52aeadf1180",
+    "url": "https://e95dfa9c.synestra-vitrine-preview.pages.dev",
+    "main_mutated": false
+  },
+  "limits": {
+    "browser_pixel_review": "NOT_VERIFIED",
+    "mobile_iphone": "NOT_RUN",
+    "independent_http": "NOT_VERIFIED",
+    "screen_reader": "NOT_RUN"
+  },
+  "function_report": "PARTIAL"
+}
