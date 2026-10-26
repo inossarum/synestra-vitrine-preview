@@ -76,3 +76,11 @@ test('R105: contextual chapter navigation and examples on all product pages',()=
  assert.match(css,/\.product-chapters a:focus-visible/);
  assert.match(css,/prefers-reduced-motion:reduce/);
 });
+
+test('R105: orbital stage maintains module nodes inside the same visual container',()=>{
+ const visual=home.split('<div class="system-stage" role="img"')[1]?.split('<div class="motion-strip"')[0]||'';
+ assert.match(visual,/core-r105-axis-label[^>]*>CORE \/ CONCEPTION VISUELLE<\/div>\s*<div class="system-node node-forge"/);
+ assert.match(visual,/class="system-node node-connect"/);
+ assert.match(visual,/class="system-node node-bridge"/);
+ assert.doesNotMatch(visual,/core-r105-axis-label[^>]*>[^<]+<\/div>\s*<\/div>\s*<div class="system-node node-forge"/);
+});
