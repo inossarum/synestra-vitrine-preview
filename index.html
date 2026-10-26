@@ -1443,7 +1443,7 @@
     .core-r108-art{position:absolute;left:50%;top:5%;transform:translateX(-50%) scale(.49);transform-origin:center center;width:min(100%,760px);height:350px;overflow:visible}
     .core-r108-heart{transform-origin:320px 189px;animation:r108-breathe 5.8s ease-in-out infinite}
     .core-r108-orbit{animation:r108-current 18s linear infinite}
-    /* R118: three precision-metal gyroscopes, phase-distinct and accelerated. */
+    /* R120: thinner precision-metal gimbals with 3D WebGL rectangular solids. */
     .core-r117-metal-a,.core-r117-metal-b,.core-r118-metal-c{transform-box:view-box;transform-origin:320px 189px}
     .core-r117-metal-a{animation:r118-gyro-a 13s linear infinite}
     .core-r117-metal-b{animation:r118-gyro-b 17s linear infinite reverse}
@@ -1609,6 +1609,7 @@ body>header,body>main,body>footer{position:relative;z-index:1}
             <radialGradient id="r108-plasma" cx=".34" cy=".25" r=".8"><stop offset="0" stop-color="#ffffff"/><stop offset=".14" stop-color="#c0ffff"/><stop offset=".36" stop-color="#51dfff"/><stop offset=".65" stop-color="#395bce"/><stop offset=".88" stop-color="#53318d"/><stop offset="1" stop-color="#08142e"/></radialGradient>
             <linearGradient id="r108-arc" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a68dff" stop-opacity=".15"/><stop offset=".45" stop-color="#98eaff" stop-opacity=".9"/><stop offset="1" stop-color="#3dd5ed" stop-opacity=".12"/></linearGradient>
             <filter id="r108-halo" x="-75%" y="-75%" width="250%" height="250%"><feGaussianBlur stdDeviation="18"/></filter>
+            <radialGradient id="r120-emitter"><stop offset="0" stop-color="#fff"/><stop offset=".26" stop-color="#e5fdff"/><stop offset=".66" stop-color="#50ceff"/><stop offset="1" stop-color="#3681ff" stop-opacity="0"/></radialGradient>
             <linearGradient id="r117-titanium" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0" stop-color="#34445a"/><stop offset=".24" stop-color="#c5d6e5"/>
               <stop offset=".49" stop-color="#637e91"/><stop offset=".66" stop-color="#e6f1f7"/>
@@ -1626,28 +1627,35 @@ body>header,body>main,body>footer{position:relative;z-index:1}
           <circle cx="320" cy="189" r="177" fill="url(#r108-aura)"/>
           <circle cx="320" cy="189" r="82" fill="#31bdeb" opacity=".18" filter="url(#r108-halo)"/>
           <!-- R117: back halves sit behind the sphere in SVG fallback. -->
-          <g class="core-r117-metal-a" fill="none" stroke="url(#r117-titanium)" stroke-width="9.0">
+          <g class="core-r117-metal-a" fill="none" stroke="url(#r117-titanium)" stroke-width="7.6">
             <ellipse cx="320" cy="189" rx="156" ry="72"/>
           </g>
-          <g class="core-r117-metal-b" fill="none" stroke="url(#r117-platinum)" stroke-width="6.4" opacity=".88">
+          <g class="core-r117-metal-b" fill="none" stroke="url(#r117-platinum)" stroke-width="5.7" opacity=".88">
             <ellipse cx="320" cy="189" rx="139" ry="93"/>
           </g>
-          <g class="core-r118-metal-c" fill="none" stroke="url(#r118-tungsten)" stroke-width="6.0" opacity=".86">
+          <g class="core-r118-metal-c" fill="none" stroke="url(#r118-tungsten)" stroke-width="5.4" opacity=".86">
             <ellipse cx="320" cy="189" rx="166" ry="58"/>
           </g>
           <circle class="core-r108-heart" cx="320" cy="189" r="66" fill="url(#r108-plasma)" stroke="#9beaff" stroke-width="1.25"/>
-          <path d="M279 159C295 140 319 137 335 145" stroke="#f2ffff" stroke-width="3" opacity=".56" fill="none" stroke-linecap="round"/>
+          <path d="M279 159C295 140 319 137 335 145" stroke="#f2ffff" stroke-width="3" opacity=".56" fill="none" stroke-linecap="butt"/>
           <circle cx="296" cy="158" r="10" fill="#f5ffff" opacity=".16" filter="url(#r108-halo)"/>
+          <!-- R120: static accessible fallback with a shared visible origin for its radial lightning. -->
+          <g class="core-r120-emitter" aria-hidden="true">
+            <circle cx="320" cy="189" r="23" fill="#36b7ff" opacity=".5" filter="url(#r108-halo)"/>
+            <path d="M320 189 L336 176 L349 159 L365 156 M320 189 L306 176 L294 174 L285 150 M320 189 L307 201 L299 218 L281 228 M320 189 L341 201 L353 217 L369 219" fill="none" stroke="#8ce6ff" stroke-width="2" stroke-linejoin="bevel" opacity=".85"/>
+            <circle cx="320" cy="189" r="15" fill="url(#r120-emitter)"/>
+            <circle cx="320" cy="189" r="3.6" fill="#fff"/>
+          </g>
           <!-- Front halves are painted AFTER the sphere, so they pass in front. -->
-          <g class="core-r117-metal-a" fill="none" stroke="url(#r117-titanium)" stroke-linecap="round">
-            <path d="M164 189 A156 72 0 0 0 476 189" stroke-width="9.0"/>
+          <g class="core-r117-metal-a" fill="none" stroke="url(#r117-titanium)" stroke-linecap="butt">
+            <path d="M164 189 A156 72 0 0 0 476 189" stroke-width="7.6"/>
             <path d="M164 189 A156 72 0 0 0 476 189" stroke="#ebf5fa" stroke-width=".8" opacity=".36"/>
           </g>
-          <g class="core-r117-metal-b" fill="none" stroke="url(#r117-platinum)" stroke-linecap="round" opacity=".88">
-            <path d="M181 189 A139 93 0 0 0 459 189" stroke-width="6.4"/>
+          <g class="core-r117-metal-b" fill="none" stroke="url(#r117-platinum)" stroke-linecap="butt" opacity=".88">
+            <path d="M181 189 A139 93 0 0 0 459 189" stroke-width="5.7"/>
           </g>
-          <g class="core-r118-metal-c" fill="none" stroke="url(#r118-tungsten)" stroke-linecap="round" opacity=".86">
-            <path d="M154 189 A166 58 0 0 0 486 189" stroke-width="6.0"/>
+          <g class="core-r118-metal-c" fill="none" stroke="url(#r118-tungsten)" stroke-linecap="butt" opacity=".86">
+            <path d="M154 189 A166 58 0 0 0 486 189" stroke-width="5.4"/>
             <path d="M154 189 A166 58 0 0 0 486 189" stroke="#eaf1f7" stroke-width=".6" opacity=".25"/>
           </g>
           <g fill="#c7f7ff" opacity=".76">

@@ -125,9 +125,9 @@ float r111Arc(vec2 p,float index,float seconds) {
   float along=dot(p,dir);
   float across=dot(p,vec2(-dir.y,dir.x));
   float branchSeed=hash3(vec3(cell,9.21,index));
-  float jitter=sin(along*36.+seed*20.)*.022+sin(along*91.+branchSeed*21.)*.010;
-  float growingTip=mix(.06,.515,smoothstep(.04,.46,phase));
-  float body=smoothstep(.012,.06,along)*(1.-smoothstep(growingTip-.06,growingTip,along));
+  float jitter=(sin(along*36.+seed*20.)*.022+sin(along*91.+branchSeed*21.)*.010)*smoothstep(0.,.16,max(along,0.));
+  float growingTip=mix(.045,.515,smoothstep(.04,.46,phase));
+  float body=smoothstep(-.005,.014,along)*(1.-smoothstep(growingTip-.06,growingTip,along));
   float filament=exp(-abs(across-jitter)*92.)+.26*exp(-abs(across-jitter)*21.);
   float forkOrigin=growingTip*.46;
   float forkOffset=(along-forkOrigin)*(branchSeed-.5)*.57;
@@ -137,8 +137,13 @@ float r111Arc(vec2 p,float index,float seconds) {
   return awake*envelope*(body*filament+fork+front);
 }
 
-// R119: each of the three inclined gyros rotates around its own fixed 3D axis.
-// Rodrigues rotations preserve the normal, producing stable front/back occlusion.
+// R120: physical rectangular-section metal rings, not 2D bands or tubes.
+// The ray intersects a bounded signed-distance solid; real depth and face
+// normals control occlusion, lighting and the visible chamfer.
+float sdRectangularRing(vec3 local,float major,float radialHalf,float thickHalf) {
+ vec2 box=abs(vec2(length(local.xy)-major,local.z))-vec2(radialHalf,thickHalf);
+ return length(max(box,vec2(0.)))+min(max(box.x,box.y),0.)-.0045;
+}
 vec4 metalGyro(vec2 p,float seconds,float slot,out float zpos) {
  float speed=slot<1.5?6.283185/13.:(slot<2.5?-6.283185/17.:6.283185/20.);
  float phase=slot<1.5?-.64:(slot<2.5?1.24:2.37);
@@ -147,21 +152,49 @@ vec4 metalGyro(vec2 p,float seconds,float slot,out float zpos) {
  vec3 baseNormal=normalize(slot<1.5?vec3(.86,.22,.46):(slot<2.5?vec3(-.58,.71,.42):vec3(.72,-.62,.33)));
  vec3 plane=normalize(baseNormal*cos(spin)+cross(axis,baseNormal)*sin(spin)
                        +axis*dot(axis,baseNormal)*(1.-cos(spin)));
- zpos=-(p.x*plane.x+p.y*plane.y)/plane.z;
- float nominal=slot<1.5?.87:(slot<2.5?.97:1.08);
- float edge=abs(length(vec3(p,zpos))-nominal);
- float tubeIn=slot<1.5?.029:(slot<2.5?.027:.024);
- float tubeOut=slot<1.5?.064:(slot<2.5?.061:.059);
- float body=1.-smoothstep(tubeIn,tubeOut,edge);
- float bevel=(1.-smoothstep(tubeOut*.83,tubeOut*1.31,edge))*.15;
- float opacity=clamp(body*.89+bevel,0.,.98);
- float brush=.5+.5*sin(atan(p.y,p.x)*37.+seconds*speed*3.2);
- float sheen=clamp(.34+.35*pow(brush,6.),0.,1.);
- vec3 darkMetal=slot<1.5?vec3(.20,.27,.34):(slot<2.5?vec3(.23,.28,.33):vec3(.22,.25,.29));
- vec3 lightMetal=slot<1.5?vec3(.66,.74,.79):(slot<2.5?vec3(.73,.79,.82):vec3(.67,.72,.76));
- vec3 titanium=mix(darkMetal,lightMetal,sheen);
- titanium+=vec3(.07,.08,.09)*(1.-smoothstep(tubeIn*.6,tubeOut,edge));
- return vec4(titanium,opacity);
+ vec3 tangentX=normalize(cross(abs(plane.z)>.91?vec3(0.,1.,0.):vec3(0.,0.,1.),plane));
+ vec3 tangentY=cross(plane,tangentX);
+ float major=slot<1.5?.87:(slot<2.5?.97:1.08);
+ float radialHalf=slot<1.5?.037:(slot<2.5?.036:.034);
+ float thickHalf=slot<1.5?.027:(slot<2.5?.026:.025);
+ float bound=major+radialHalf+thickHalf+.012;
+ zpos=-10.;
+ if(dot(p,p)>bound*bound) return vec4(0.);
+ // Orthographic front-to-back ray, conservatively bounded by a real sphere.
+ float cap=sqrt(max(bound*bound-dot(p,p),0.));
+ float travel=1.30-cap;
+ float rayEnd=1.30+cap;
+ vec3 local=vec3(0.);
+ float signedDistance=1.;
+ bool hit=false;
+ for(int stepIndex=0;stepIndex<44;stepIndex++) {
+  vec3 world=vec3(p,1.30-travel);
+  local=vec3(dot(world,tangentX),dot(world,tangentY),dot(world,plane));
+  signedDistance=sdRectangularRing(local,major,radialHalf,thickHalf);
+  if(signedDistance<.0024){hit=true;zpos=world.z;break;}
+  travel+=max(signedDistance*.92,.003);
+  if(travel>rayEnd) break;
+ }
+ if(!hit)return vec4(0.);
+ // Face/chamfer normal from the actual solid, not a projected ellipse.
+ float e=.005;
+ vec3 nx=vec3(e,0.,0.),ny=vec3(0.,e,0.),nz=vec3(0.,0.,e);
+ vec3 normalLocal=normalize(vec3(
+  sdRectangularRing(local+nx,major,radialHalf,thickHalf)-sdRectangularRing(local-nx,major,radialHalf,thickHalf),
+  sdRectangularRing(local+ny,major,radialHalf,thickHalf)-sdRectangularRing(local-ny,major,radialHalf,thickHalf),
+  sdRectangularRing(local+nz,major,radialHalf,thickHalf)-sdRectangularRing(local-nz,major,radialHalf,thickHalf)));
+ vec3 normal=normalize(tangentX*normalLocal.x+tangentY*normalLocal.y+plane*normalLocal.z);
+ float light=max(dot(normal,normalize(vec3(-.48,.64,.88))),0.);
+ float face=abs(normalLocal.z);
+ float brush=.5+.5*sin(atan(local.y,local.x)*54.+seconds*speed*.22);
+ float sheen=pow(brush,9.)*.18+pow(max(dot(reflect(vec3(.33,-.43,-.84),normal),vec3(0.,0.,1.)),0.),22.)*.36;
+ vec3 darkMetal=slot<1.5?vec3(.19,.25,.32):(slot<2.5?vec3(.22,.27,.32):vec3(.22,.24,.30));
+ vec3 lightMetal=slot<1.5?vec3(.71,.78,.83):(slot<2.5?vec3(.75,.81,.84):vec3(.70,.74,.79));
+ vec3 metal=mix(darkMetal,lightMetal,clamp(.23+.58*light+.16*face,0.,1.));
+ metal+=vec3(.22,.23,.23)*sheen;
+ metal+=vec3(.055,.064,.075)*pow(1.-max(dot(normal,vec3(0.,0.,1.)),0.),3.);
+ float opacity=.97*(1.-smoothstep(.0012,.005,signedDistance));
+ return vec4(clamp(metal,0.,1.),opacity);
 }
 // Three compare/swap passes sort every pixel back to front.
 void orderGyros(inout vec4 m0,inout vec4 m1,inout vec4 m2,
@@ -219,8 +252,7 @@ void main(){
  base+=vec3(.70,.83,.95)*pow(max(dot(n,normalize(vec3(-.28,.46,1.))),0.),22.)*.11;
  float topRim=smoothstep(-.2,.8,p.y)*rim;
  base+=vec3(.09,.22,.35)*topRim;
- float centralSource=exp(-d*d*115.);
- base+=vec3(.72,.93,1.)*centralSource*.31;
+ // R120: emitter is composited after the eight discharges, at their origin.
  float arcA=r111Arc(p,1.,time);
  float arcB=r111Arc(p,2.,time);
  float arcC=r111Arc(p,3.,time);
@@ -230,9 +262,16 @@ void main(){
  float arcG=r111Arc(p,7.,time);
  float arcH=r111Arc(p,8.,time);
  // R114: eight independent centre-to-edge arcs, bounded by sphere mask.
- base+=vec3(.78,.96,1.)*arcA*1.12+vec3(.39,.77,1.)*arcB*.91+vec3(.78,.69,1.)*arcC*.88;
- base+=vec3(.49,.96,.97)*arcD*.92+vec3(.83,.94,1.)*arcE*.84;
- base+=vec3(.46,.88,1.)*arcF*.91+vec3(.70,.59,1.)*arcG*.87+vec3(.90,.98,1.)*arcH*.89;
+ base+=(vec3(.78,.96,1.)*arcA*1.12+vec3(.39,.77,1.)*arcB*.91+vec3(.78,.69,1.)*arcC*.88)*originBoost;
+ base+=(vec3(.49,.96,.97)*arcD*.92+vec3(.83,.94,1.)*arcE*.84)*originBoost;
+ float originBoost=1.+.52*exp(-d*d*95.);
+ base+=(vec3(.46,.88,1.)*arcF*.91+vec3(.70,.59,1.)*arcG*.87+vec3(.90,.98,1.)*arcH*.89)*originBoost;
+ // Compact white-hot nucleus, blue corona and soft non-strobing pulse.
+ float emitterPulse=.91+.09*sin(time*2.1);
+ float emitterCorona=exp(-d*d*145.);
+ float emitterCore=exp(-d*d*1750.);
+ base+=vec3(.21,.58,1.)*emitterCorona*.60*emitterPulse;
+ base+=vec3(.80,.96,1.)*emitterCore*1.3*emitterPulse;
  float shellFade=1.-smoothstep(radius*.977,radius,d);
  float alpha=clamp(.96+rim*.04,0.,1.)*shellFade;
  // Only sections with z in front of the sphere are composited above the plasma.

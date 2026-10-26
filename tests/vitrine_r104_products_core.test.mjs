@@ -120,7 +120,7 @@ test('R110: native-verified dimensional plasma shader, restrained orbit and boun
  assert.ok(fragment,'R110 shader fragment absent');
  let hash=2166136261;
  for(const ch of fragment)hash=Math.imul(hash ^ ch.charCodeAt(0),16777619)>>>0;
- assert.equal(hash.toString(16),'607c1a5d','GLSL source fingerprint changed after R117 depth-composited metallic gimbals');
+ assert.equal(hash.toString(16),'a77cb20a','GLSL source fingerprint changed after R117 depth-composited metallic gimbals');
  for(const term of ['noise3','turn3','metalGyro','sphereFrontZ']){
   assert.ok(fragment.includes(term),term);
  }
@@ -135,8 +135,8 @@ test('R114: eight radial arcs grow from the centre towards the sphere edge',()=>
  const script=read('assets/core-r109-webgl.js');
  const tick=String.fromCharCode(96);
  const fragment=script.split('const fragment = '+tick)[1]?.split(tick+';')[0]||'';
- for (const needle of ['float r111Arc(', 'float along=dot(p,dir)', 'float growingTip=mix(.06,.515',
-   'float body=smoothstep(.012,.06,along)', 'float fork=exp(', 'float awake=step(.24,seed)',
+ for (const needle of ['float r111Arc(', 'float along=dot(p,dir)', 'float growingTip=mix(.045,.515',
+   'float body=smoothstep(-.005,.014,along)', 'float fork=exp(', 'float awake=step(.24,seed)',
    'float envelope=smoothstep(.015,.12,phase)'])assert.ok(fragment.includes(needle),needle);
  assert.equal(fragment.split('=r111Arc(p,').length-1,8);
  assert.ok(fragment.indexOf('if(d>radius)')<fragment.indexOf('float arcA='),'Arcs remain inside sphere');
@@ -201,7 +201,7 @@ test('R115: electrical radial propagation faster without extra flash frequency o
  const tick=String.fromCharCode(96);
  const fragment=script.split('const fragment = '+tick)[1]?.split(tick+';')[0]||'';
  assert.ok(fragment.includes('float cycleTime=1.12;'));
- assert.ok(fragment.includes('float growingTip=mix(.06,.515,smoothstep(.04,.46,phase));'));
+ assert.ok(fragment.includes('float growingTip=mix(.045,.515,smoothstep(.04,.46,phase));'));
  assert.equal(fragment.split('=r111Arc(p,').length-1,8);
  assert.ok(fragment.indexOf('if(d>radius)')<fragment.indexOf('float arcA='));
  assert.ok(script.includes('clock - lastFrame < 32'));
@@ -240,7 +240,7 @@ test('R116: refined single-ring Core respects validated products, reduced motion
  const fragment=src.split('const fragment = '+tick)[1]?.split(tick+';')[0]||'';
  assert.equal(fragment.split('=r111Arc(p,').length-1,8);
  assert.ok(fragment.includes('float cycleTime=1.12;'));
- assert.ok(fragment.includes('float centralSource=exp(-d*d*115.);'));
+ assert.ok(fragment.includes('float emitterCore=exp(-d*d*1750.);'));
  assert.ok(fragment.includes('base+=cyan*currents*(.045+.19*light)'));
  assert.ok(fragment.includes('vec4 metalA=metalGyro(p,time,1.,metalDepthA);'));
  assert.ok(fragment.indexOf('if(d>radius)')<fragment.indexOf('float arcA='));
@@ -267,7 +267,10 @@ test('R117: WebGL metal gimbals solve 3D projection and depth-sort against illum
  const script=read('assets/core-r109-webgl.js');
  const fragment=script.match(/const fragment = \`([\s\S]*?)\`;/)?.[1]?.trim()||'';
  assert.ok(fragment.includes('vec4 metalGyro(vec2 p,float seconds,float slot,out float zpos)'));
- assert.ok(fragment.includes('zpos=-(p.x*plane.x+p.y*plane.y)/plane.z;'));
+ assert.ok(fragment.includes('float sdRectangularRing('));
+ assert.ok(fragment.includes('zpos=world.z;'));
+ assert.ok(!fragment.includes('zpos=-(p.x*plane.x+p.y*plane.y)/plane.z;'));
+ assert.ok(fragment.includes('for(int stepIndex=0;stepIndex<44;stepIndex++)'));
  for(const n of ['1.','2.','3.'])assert.ok(fragment.includes('metalGyro(p,time,'+n),n);
  assert.ok(fragment.includes('float sphereFrontZ=sqrt(max(radius*radius-d*d,0.));'));
  assert.ok(fragment.includes('float frontA=metalA.a*step(sphereFrontZ+.01,metalDepthA);'));
@@ -287,7 +290,7 @@ test('R117: WebGL metal gimbals solve 3D projection and depth-sort against illum
 test('R118: three thicker metallic gyros, 13/17/20s independent spin, fallback safety',()=>{
  const svg=home.split('<svg class="core-r108-art"')[1]?.split('</svg>')[0]||'';
  assert.equal((svg.match(/<ellipse/g)||[]).length,3);
- for(const thickness of ['9.0','6.4','6.0'])assert.ok(svg.includes('stroke-width="'+thickness+'"'),thickness);
+ for(const thickness of ['7.6','5.7','5.4'])assert.ok(svg.includes('stroke-width="'+thickness+'"'),thickness);
  for(const name of ['core-r117-metal-a','core-r117-metal-b','core-r118-metal-c'])
    assert.equal(svg.split('class="'+name+'"').length-1,2,name);
  for(const animation of ['r118-gyro-a 13s','r118-gyro-b 17s','r118-gyro-c 20s'])assert.ok(home.includes(animation),animation);
@@ -327,8 +330,8 @@ test('R119: ring axes separate and foreground metal crosses reduced Core silhoue
    assert.ok(maxZ*radii[i]<.53,'projected metal crosses sphere every rotation: '+i);
  }
  for(const id of ['r118-gyro-a','r118-gyro-b','r118-gyro-c'])assert.ok(home.includes('@keyframes '+id)&&home.includes('rotate3d('));
- for(const thick of ['9.0','6.4','6.0'])assert.ok(home.includes('stroke-width="'+thick+'"'),thick);
- for(const thick of ['.064','.061','.059'])assert.ok(frag.includes(thick),thick);
+ for(const thick of ['7.6','5.7','5.4'])assert.ok(home.includes('stroke-width="'+thick+'"'),thick);
+ for(const thick of ['.037','.036','.034'])assert.ok(frag.includes(thick),thick);
  assert.ok(frag.includes('cross(axis,baseNormal)*sin(spin)'));
  assert.ok(frag.includes('alpha=clamp(alpha+max(max(frontA,frontB),frontC)*(1.-alpha),0.,1.);'));
  assert.equal(frag.split('=metalGyro(p,time,').length-1,3);
@@ -336,4 +339,28 @@ test('R119: ring axes separate and foreground metal crosses reduced Core silhoue
  assert.equal(frag.split('=r111Arc(p,').length-1,8);
  assert.ok(home.includes('scale(.49)'));
  assert.ok(source.includes('clock - lastFrame < 32'));
+});
+
+test('R120: three raymarched bevelled rectangular 3D solids and centre-origin lightning',()=>{
+ const src=read('assets/core-r109-webgl.js');
+ const frag=src.match(/const fragment = \`([\\s\\S]*?)\`;/)?.[1]||'';
+ assert.ok(frag.includes('float sdRectangularRing('),'true ring SDF');
+ assert.ok(frag.includes('vec2 box=abs(vec2(length(local.xy)-major,local.z))-vec2(radialHalf,thickHalf)'),'rectangular non-tubular profile');
+ assert.ok(frag.includes('for(int stepIndex=0;stepIndex<44;stepIndex++)'),'bounded raymarch');
+ assert.ok(frag.includes('float rayEnd=1.30+cap;') && frag.includes('if(travel>rayEnd) break;'),'finite ray bounds');
+ assert.ok(frag.includes('vec3 normalLocal=normalize(') && frag.includes('zpos=world.z;'),'physical face normals and depth');
+ assert.ok(!frag.includes('zpos=-(p.x*plane.x+p.y*plane.y)/plane.z;'),'reject legacy flat band');
+ for(const half of ['.037','.036','.034'])assert.ok(frag.includes(half),half);
+ assert.equal(frag.split('=metalGyro(p,time,').length-1,3);
+ assert.equal(frag.split('=r111Arc(p,').length-1,8);
+ assert.ok(frag.includes('float emitterCore=exp(-d*d*1750.);'));
+ assert.ok(frag.includes('float originBoost=1.+.52*exp(-d*d*95.);'));
+ assert.ok(frag.indexOf('float emitterCore=')>frag.indexOf('float arcH='),'source sits at discharge origin');
+ const svg=home.split('<svg class="core-r108-art"')[1]?.split('</svg>')[0]||'';
+ assert.ok(svg.includes('id="r120-emitter"'));
+ assert.ok(svg.includes('class="core-r120-emitter"'));
+ assert.ok(svg.includes('M320 189 L336 176'),'fallback arcs originate at the emitter');
+ for(const width of ['7.6','5.7','5.4'])assert.ok(svg.includes('stroke-width="'+width+'"'));
+ assert.match(home,/prefers-reduced-motion:reduce/);
+ assert.doesNotMatch(src,/XMLHttpRequest|WebSocket|sendBeacon|setInterval\(/);
 });
