@@ -1296,6 +1296,43 @@
     @media(max-width:840px){.brand-banner-r99{width:205px;max-height:50px;}}
     @media(max-width:440px){.brand-banner-r99{width:176px;max-height:40px;}}
     @media(prefers-reduced-motion:reduce){.brand-banner-r99{animation:none!important;transition:none!important;}}
+    /* R100: reuse R89 visual gallery under approved Synestra R99 brand. */
+    /* R89: navigation visuelle vers trois démonstrations existantes, sans ressource externe. */
+    .siteforge-gallery { margin-top: 1.5rem; }
+    .siteforge-gallery-intro { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: .5rem 2rem; margin-bottom: 1.1rem; }
+    .siteforge-gallery-intro h3 { margin: 0; font-size: clamp(1.2rem, 2.4vw, 1.6rem); letter-spacing: -.025em; }
+    .siteforge-gallery-intro p { max-width: 34rem; margin: 0; color: var(--muted); font-size: .9rem; line-height: 1.6; }
+    .siteforge-gallery-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; padding: 0; margin: 0; list-style: none; }
+    .siteforge-gallery-card { display: flex; flex-direction: column; min-width: 0; height: 100%; overflow: hidden; text-decoration: none; background: #101c32; border: 1px solid #3c4f6a; border-radius: 1.05rem; transition: border-color .2s, transform .2s, box-shadow .2s; }
+    .siteforge-gallery-card:hover { transform: translateY(-3px); border-color: var(--cyan); box-shadow: 0 .7rem 2rem rgba(0, 0, 0, .18); }
+    .siteforge-gallery-card:focus-visible { outline: 3px solid #a7edff; outline-offset: 4px; }
+    .siteforge-gallery-visual { position: relative; display: block; height: clamp(7.8rem, 16vw, 11rem); isolation: isolate; overflow: hidden; }
+    .siteforge-gallery-visual::before, .siteforge-gallery-visual::after { content: ""; position: absolute; display: block; }
+    .siteforge-gallery-visual--prism { background: #f5eae2; }
+    .siteforge-gallery-visual--prism::before { width: 46%; height: 120%; top: -11%; left: 29%; background: #a260dc; transform: rotate(-28deg); border-radius: 36% 46% 8% 36%; }
+    .siteforge-gallery-visual--prism::after { width: 36%; height: 67%; right: -4%; bottom: -18%; background: #243e76; border-radius: 48% 0 0 50%; }
+    .siteforge-gallery-visual--form { background: radial-gradient(circle at 72% 28%, #7784d0 0, transparent 34%), #141a34; }
+    .siteforge-gallery-visual--form::before { left: 27%; top: 11%; width: 45%; aspect-ratio: 1; border: 1.1rem solid #89eced; border-radius: 42% 55% 36% 54%; transform: rotate(-25deg); }
+    .siteforge-gallery-visual--form::after { right: 19%; top: 25%; width: 25%; aspect-ratio: 1; background: #89b0ff; border-radius: 24% 46%; transform: rotate(22deg); }
+    .siteforge-gallery-visual--signature { background: linear-gradient(130deg, #e6eef2 0%, #cadcdf 65%, #bedbd1); }
+    .siteforge-gallery-visual--signature::before { width: 54%; height: 56%; top: 24%; left: 15%; border-radius: 3rem 4rem 2rem 4rem; background: #224b66; transform: rotate(-19deg); }
+    .siteforge-gallery-visual--signature::after { width: 30%; height: 35%; bottom: 10%; right: 13%; border-radius: 55% 15% 55% 25%; background: #7ecde4; }
+    .siteforge-gallery-copy { display: flex; flex-direction: column; flex: 1; gap: .45rem; padding: 1.1rem 1.15rem 1.2rem; }
+    .siteforge-gallery-eyebrow { font-size: .69rem; text-transform: uppercase; letter-spacing: .12em; color: var(--cyan); font-weight: 800; }
+    .siteforge-gallery-title { font-size: 1.18rem; font-weight: 800; letter-spacing: -.025em; color: var(--text); }
+    .siteforge-gallery-description { color: var(--muted); line-height: 1.5; font-size: .87rem; }
+    .siteforge-gallery-link { margin-top: auto; padding-top: .55rem; color: var(--cyan); font-size: .83rem; font-weight: 750; }
+    .siteforge-gallery-disclaimer { font-size: .79rem; color: var(--quiet); margin: .9rem 0 0; line-height: 1.5; }
+    @media (max-width: 720px) { .siteforge-gallery-list { grid-template-columns: minmax(0, 1fr); } .siteforge-gallery-visual { height: 9.25rem; } }
+    @media (prefers-reduced-motion: reduce) { .siteforge-gallery-card { transition: none; } .siteforge-gallery-card:hover { transform: none; } }
+
+    .siteforge-gallery-card {background:linear-gradient(145deg,#141f2c,#0b1628);border-color:#354253;box-shadow:0 12px 34px rgba(0,0,0,.14);}
+    .siteforge-gallery-card:hover,.siteforge-gallery-card:focus-visible {border-color:#83dced;box-shadow:0 20px 48px rgba(0,22,52,.36),inset 0 1px rgba(208,227,255,.11);}
+    .siteforge-gallery-card:hover .siteforge-gallery-visual {filter:saturate(1.15) brightness(1.04);}
+    .siteforge-gallery-visual {transition:filter .28s ease;}
+    .siteforge-gallery-eyebrow,.siteforge-gallery-link {color:#83dced;}
+    .siteforge-gallery-visual--form {background:radial-gradient(circle at 72% 28%,#8a58ec 0,transparent 34%),#141a34;}
+    @media (prefers-reduced-motion: reduce) {.siteforge-gallery-visual{transition:none!important;}}
   </style>
 </head>
 <body>
@@ -1522,6 +1559,33 @@
             <div class="siteforge-preview-tiles"><div class="siteforge-preview-tile">Clarté du message</div><div class="siteforge-preview-tile">Parcours lisible</div></div>
           </div>
         </div>
+      </div>
+      <div class="siteforge-gallery" aria-labelledby="siteforge-gallery-title">
+        <div class="siteforge-gallery-intro">
+          <h3 id="siteforge-gallery-title">Trois univers, trois façons d’imaginer.</h3>
+          <p>Explorez des créations expérimentales de SiteForge : trois compositions, trois manières de faire prendre forme à une idée, sans inscription ni accès à votre espace personnel.</p>
+        </div>
+        <ul class="siteforge-gallery-list">
+          <li>
+            <a class="siteforge-gallery-card" href="./siteforge/index.html" aria-label="Consulter Prism, la vitrine graphique SiteForge">
+              <span class="siteforge-gallery-visual siteforge-gallery-visual--prism" aria-hidden="true"></span>
+              <span class="siteforge-gallery-copy"><span class="siteforge-gallery-eyebrow">Direction 01</span><span class="siteforge-gallery-title">Prism</span><span class="siteforge-gallery-description">Compositions éditoriales, couleurs franches et parcours de présentation.</span><span class="siteforge-gallery-link">Consulter Prism <span aria-hidden="true">↗</span></span></span>
+            </a>
+          </li>
+          <li>
+            <a class="siteforge-gallery-card" href="./siteforge/lab/index.html" aria-label="Consulter OPEN FORM, atelier graphique expérimental">
+              <span class="siteforge-gallery-visual siteforge-gallery-visual--form" aria-hidden="true"></span>
+              <span class="siteforge-gallery-copy"><span class="siteforge-gallery-eyebrow">Direction 02</span><span class="siteforge-gallery-title">OPEN FORM</span><span class="siteforge-gallery-description">Atelier de formes vectorielles et de compositions reproductibles.</span><span class="siteforge-gallery-link">Consulter OPEN FORM <span aria-hidden="true">↗</span></span></span>
+            </a>
+          </li>
+          <li>
+            <a class="siteforge-gallery-card" href="./siteforge/signature/index.html" aria-label="Consulter Signature, la direction éditoriale SiteForge">
+              <span class="siteforge-gallery-visual siteforge-gallery-visual--signature" aria-hidden="true"></span>
+              <span class="siteforge-gallery-copy"><span class="siteforge-gallery-eyebrow">Direction 03</span><span class="siteforge-gallery-title">Signature</span><span class="siteforge-gallery-description">Composition lumineuse, typographie expressive et mise en page structurée.</span><span class="siteforge-gallery-link">Consulter Signature <span aria-hidden="true">↗</span></span></span>
+            </a>
+          </li>
+        </ul>
+        <p class="siteforge-gallery-disclaimer">Visuels schématiques créés en CSS pour la navigation ; ils ne sont ni des captures d’écran, ni une preuve de service connecté.</p>
       </div>
     </section>
 
