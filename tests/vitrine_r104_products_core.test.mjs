@@ -271,7 +271,7 @@ test('R122: isolated 3D gyroscope lab has real polygonal cross-sections, sphere 
  assert.doesNotThrow(()=>new Script(js),'Native WebGL lab JavaScript must parse');
  assert.match(js,/const buildRing=\(major,w,h\)=>/);
  assert.match(js,/for\(let j=0;j<144;j\+\+\)/);
- assert.ok(js.includes('const nr=-dz/len,nz=dr/len'),'Geometry normals point outward');
+ assert.ok(js.includes('nr=-dz/len,nz=dr/len'),'Geometry normals point outward');
  assert.ok(js.includes('const buildSphere=()=>')&&js.includes('gl.colorMask(false,false,false,false)'),'Sphere writes depth but not colour');
  assert.ok(js.includes('gl.enable(gl.DEPTH_TEST)')&&js.includes('gl.depthFunc(gl.LEQUAL)'));
  assert.ok(js.includes('gl.uniformMatrix3fv(m.basis'));
