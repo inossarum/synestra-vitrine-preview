@@ -263,3 +263,26 @@ test('R121: original animated plasma restored; metallic gyros removed; iOS fallb
  assert.ok(script.includes("if (reduceMotion.matches) return;"));
  assert.ok(script.includes('webglcontextlost'));
 });
+
+test('R122: isolated 3D gyroscope lab has real polygonal cross-sections, sphere depth occlusion, and guards', async()=>{
+ const js=read('assets/core-r122-gyro.js');
+ const lab=read('siteforge/core-3d-lab/index.html');
+ const {Script}=await import('node:vm');
+ assert.doesNotThrow(()=>new Script(js),'Native WebGL lab JavaScript must parse');
+ assert.match(js,/const buildRing=\(major,w,h\)=>/);
+ assert.match(js,/for\(let j=0;j<144;j\+\+\)/);
+ assert.ok(js.includes('const nr=-dz/len,nz=dr/len'),'Geometry normals point outward');
+ assert.ok(js.includes('const buildSphere=()=>')&&js.includes('gl.colorMask(false,false,false,false)'),'Sphere writes depth but not colour');
+ assert.ok(js.includes('gl.enable(gl.DEPTH_TEST)')&&js.includes('gl.depthFunc(gl.LEQUAL)'));
+ assert.ok(js.includes('gl.uniformMatrix3fv(m.basis'));
+ assert.ok(js.includes('const mo=new MutationObserver(()=>request())'),'Overlay starts only after plasma is ready');
+ assert.ok(js.includes("!scene.hasAttribute('data-core-ready')"),'Graceful WebGL fallback');
+ assert.equal((js.match(/major:/g)||[]).length,3,'Exactly three independent real rings');
+ assert.ok(!/\bfetch\s*\(|XMLHttpRequest|WebSocket|sendBeacon|new Function/.test(js));
+ assert.match(lab,/Core R122 — Laboratoire 3D isolé/);
+ assert.match(lab,/script src="\.\.\/\.\.\/assets\/core-r109-webgl\.js" defer/);
+ assert.match(lab,/script src="\.\.\/\.\.\/assets\/core-r122-gyro\.js" defer/);
+ assert.match(lab,/meta name="robots" content="noindex,nofollow"/);
+ assert.match(lab,/prefers-reduced-motion:reduce/);
+ assert.ok(!home.includes('core-r122-gyro.js')&&!home.includes('core-3d-lab'),'R121 homepage remains unchanged');
+});
