@@ -12,17 +12,20 @@
     const field = document.createElement('div');
     field.className = 'syn-ambient-field';
     field.setAttribute('aria-hidden', 'true');
-    const reducedCount = window.innerWidth < 640 ? 14 : 25;
+    // R114: ambient animation continues without pointer, keyboard, or scroll activity.
+    // CSS-only motion on all public pages; paused solely when tab is hidden/reduced-motion.
+    const reducedCount = window.innerWidth < 640 ? 22 : 38;
     for (let i = 0; i < reducedCount; i++) {
       const particle = document.createElement('i');
-      particle.className = i % 7 === 0 ? 'syn-ambient-glint' : 'syn-ambient-particle';
+      const comet = i % 11 === 0;
+      particle.className = comet ? 'syn-ambient-comet' : i % 7 === 0 ? 'syn-ambient-glint' : 'syn-ambient-particle';
       const seed = Math.random();
       particle.style.setProperty('--px', (3 + Math.random() * 94).toFixed(2) + '%');
       particle.style.setProperty('--py', (4 + Math.random() * 92).toFixed(2) + '%');
       particle.style.setProperty('--size', (i % 7 === 0 ? 2.5 : 1.1 + Math.random() * 1.7).toFixed(2) + 'px');
-      particle.style.setProperty('--drift', (10 + Math.random() * 30).toFixed(1) + 'px');
-      particle.style.setProperty('--period', (14 + Math.random() * 23).toFixed(2) + 's');
-      particle.style.setProperty('--offset', (-Math.random() * 28).toFixed(2) + 's');
+      particle.style.setProperty('--drift', (14 + Math.random() * 42).toFixed(1) + 'px');
+      particle.style.setProperty('--period', (comet ? 17 + Math.random() * 20 : 12 + Math.random() * 23).toFixed(2) + 's');
+      particle.style.setProperty('--offset', (-Math.random() * 37).toFixed(2) + 's');
       particle.style.setProperty('--alpha', (.18 + seed * .28).toFixed(2));
       field.appendChild(particle);
     }
@@ -163,9 +166,13 @@ void main(){
  float arcC=r111Arc(p,3.,time);
  float arcD=r111Arc(p,4.,time);
  float arcE=r111Arc(p,5.,time);
- // Five independent radial pulses: centre to edge, fading before the sphere boundary.
+ float arcF=r111Arc(p,6.,time);
+ float arcG=r111Arc(p,7.,time);
+ float arcH=r111Arc(p,8.,time);
+ // R114: eight independent centre-to-edge arcs, bounded by sphere mask.
  base+=vec3(.78,.96,1.)*arcA*1.12+vec3(.39,.77,1.)*arcB*.91+vec3(.78,.69,1.)*arcC*.88;
  base+=vec3(.49,.96,.97)*arcD*.92+vec3(.83,.94,1.)*arcE*.84;
+ base+=vec3(.46,.88,1.)*arcF*.91+vec3(.70,.59,1.)*arcG*.87+vec3(.90,.98,1.)*arcH*.89;
  float shellFade=1.-smoothstep(radius*.977,radius,d);
  float alpha=clamp(.96+rim*.04,0.,1.)*shellFade;
  float orbital=ringFront*spinPulse;
@@ -221,8 +228,9 @@ void main(){
   const size = () => {
     const rect = canvas.getBoundingClientRect();
     if (rect.width < 10 || rect.height < 10) return false;
-    const requested = Math.min(window.devicePixelRatio || 1, 1.5);
-    const maxScale = Math.sqrt(800000/(rect.width*rect.height));
+    // R114: native sharpness improves on retina screens without unbounded GPU cost.
+    const requested = Math.min(window.devicePixelRatio || 1, window.innerWidth < 650 ? 1.8 : 2);
+    const maxScale = Math.sqrt(1200000/(rect.width*rect.height));
     const pixelRatio = Math.min(requested, maxScale);
     const width = Math.max(1, Math.floor(rect.width*pixelRatio));
     const height = Math.max(1, Math.floor(rect.height*pixelRatio));

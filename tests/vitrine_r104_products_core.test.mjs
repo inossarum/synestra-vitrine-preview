@@ -118,7 +118,7 @@ test('R110: native-verified dimensional plasma shader, restrained orbit and boun
  assert.ok(fragment,'R110 shader fragment absent');
  let hash=2166136261;
  for(const ch of fragment)hash=Math.imul(hash ^ ch.charCodeAt(0),16777619)>>>0;
- assert.equal(hash.toString(16),'bda133fc','GLSL source fingerprint changed after R113 radial arcs');
+ assert.equal(hash.toString(16),'fa9a2ccc','GLSL source fingerprint changed after R114 increased arc count');
  for(const term of ['noise3','turn3','ringBloom','ringFront','spiral']){
   if(term==='spiral')continue;
   assert.ok(fragment.includes(term),term);
@@ -130,20 +130,20 @@ test('R110: native-verified dimensional plasma shader, restrained orbit and boun
  assert.doesNotMatch(script,/\bfetch\s*\(|XMLHttpRequest|WebSocket|sendBeacon/);
 });
 
-test('R113: five stronger radial arcs grow from the centre towards the sphere edge',()=>{
+test('R114: eight radial arcs grow from the centre towards the sphere edge',()=>{
  const script=read('assets/core-r109-webgl.js');
  const tick=String.fromCharCode(96);
  const fragment=script.split('const fragment = '+tick)[1]?.split(tick+';')[0]||'';
  for (const needle of ['float r111Arc(', 'float along=dot(p,dir)', 'float growingTip=mix(.06,.675',
    'float body=smoothstep(.012,.06,along)', 'float fork=exp(', 'float awake=step(.24,seed)',
    'float envelope=smoothstep(.015,.12,phase)'])assert.ok(fragment.includes(needle),needle);
- assert.equal(fragment.split('=r111Arc(p,').length-1,5);
+ assert.equal(fragment.split('=r111Arc(p,').length-1,8);
  assert.ok(fragment.indexOf('if(d>radius)')<fragment.indexOf('float arcA='),'Arcs remain inside sphere');
  for (const forbidden of ['fetch(', 'XMLHttpRequest', 'WebSocket', 'sendBeacon'])assert.ok(!script.includes(forbidden),forbidden);
 });
 test('R113: smaller core and seven animated Studio tools keep all three accessible product links',()=>{
- assert.ok(home.includes('transform:scale(.62);transform-origin:center center'));
- assert.ok(home.includes('translateX(-50%) scale(.62)'));
+ assert.ok(home.includes('transform:scale(.57);transform-origin:center center'));
+ assert.ok(home.includes('translateX(-50%) scale(.57)'));
  const orbit=home.split('<div class="core-tools-orbit" aria-hidden="true">')[1]?.split('<nav class="core-r108-links"')[0]||'';
  assert.equal(orbit.split('class="core-tool-satellite"').length-1,7);
  for(const label of ['Connect','Bridge','Relay','Memory','Evidence','Visual','SiteForge'])assert.ok(orbit.includes('<span>'+label+'</span>'),label);
@@ -156,7 +156,7 @@ test('R113: smaller core and seven animated Studio tools keep all three accessib
 test('R111: floating site particles share one local script and obey visibility and reduced motion',()=>{
  const script=read('assets/core-r109-webgl.js');
  assert.match(script,/const startAmbient = \(\) =>/);
- assert.match(script,/window.innerWidth < 640 \? 14 : 25/);
+ assert.match(script,/window.innerWidth < 640 \? 22 : 38/);
  assert.match(script,/document.body.insertBefore\(field, document.body.firstChild\)/);
  assert.match(script,/motionPreference.addEventListener\('change', updateAmbient\)/);
  assert.match(script,/document.addEventListener\('visibilitychange', updateAmbient\)/);
@@ -167,4 +167,19 @@ test('R111: floating site particles share one local script and obey visibility a
   assert.match(source,/@media\(prefers-reduced-motion:reduce\)\{\.syn-ambient-field\{display:none!important\}\}/);
  }
  assert.deepEqual([...home.matchAll(/<script\b[^>]*>/g)].map(m=>m[0]),['<script src="./assets/core-r109-webgl.js" defer>']);
+ for(const source of [home,css]){
+   assert.match(source,/\.syn-ambient-comet\{/);
+   assert.match(source,/@keyframes syn-ambient-comet/);
+   assert.match(source, /\.syn-ambient-paused \.syn-ambient-field/);
+ }
+ assert.ok(script.includes('const comet = i % 11 === 0'));
+});
+test('R114: resolution increases with strict render-pixel and mobile caps',()=>{
+ const source=read('assets/core-r109-webgl.js');
+ assert.ok(source.includes('window.innerWidth < 650 ? 1.8 : 2'));
+ assert.ok(source.includes('Math.sqrt(1200000/(rect.width*rect.height))'));
+ assert.ok(source.includes('clock - lastFrame < 32'));
+ assert.ok(source.includes('document.visibilityState === \'visible\''));
+ assert.ok(!source.includes('setInterval('));
+ assert.ok(!source.includes('setTimeout('));
 });

@@ -1440,7 +1440,7 @@
     .core-r108-stage:before,.core-r108-stage:after{content:none!important}
     .core-r108-top{position:absolute;z-index:5;top:21px;left:26px;right:26px;display:flex;justify-content:space-between;gap:14px;
       font:730 10px/1.4 ui-monospace,Consolas,monospace;letter-spacing:.13em;color:#99b3ce}
-    .core-r108-art{position:absolute;left:50%;top:5%;transform:translateX(-50%) scale(.62);transform-origin:center center;width:min(100%,760px);height:350px;overflow:visible}
+    .core-r108-art{position:absolute;left:50%;top:5%;transform:translateX(-50%) scale(.57);transform-origin:center center;width:min(100%,760px);height:350px;overflow:visible}
     .core-r108-heart{transform-origin:320px 189px;animation:r108-breathe 5.8s ease-in-out infinite}
     .core-r108-orbit{animation:r108-current 18s linear infinite}
     .core-r108-links{position:absolute;z-index:6;left:clamp(20px,5vw,64px);right:clamp(20px,5vw,64px);bottom:54px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
@@ -1463,7 +1463,7 @@
     /* R109: WebGL 3D depth enhancement. R108 SVG stays as zero-script fallback. */
     .core-r109-stage{isolation:isolate}
     .core-r109-canvas{position:absolute;top:0;left:0;z-index:2;display:block;width:100%;height:calc(100% - 58px);
-      transform:scale(.62);transform-origin:center center;
+      transform:scale(.57);transform-origin:center center;
       opacity:0;pointer-events:none;transition:opacity .5s ease}
     .core-r109-stage[data-core-ready="true"] .core-r109-canvas{opacity:1}
     .core-r109-stage .core-r108-art{transition:opacity .35s ease}
@@ -1510,6 +1510,16 @@ body>header,body>main,body>footer{position:relative;z-index:1}
   background:#b7e9f5;box-shadow:0 0 8px rgba(88,204,239,.48);opacity:0;animation:syn-ambient-float var(--period) ease-in-out var(--offset) infinite}
 .syn-ambient-particle:nth-child(5n){background:#bbb1f7;box-shadow:0 0 7px rgba(154,117,236,.38)}
 .syn-ambient-glint{background:#d3ffff;box-shadow:0 0 9px 2px rgba(84,220,245,.35);animation-name:syn-ambient-flare}
+/* R114: occasional light trails and continuous drift, even with no user input. */
+.syn-ambient-comet{position:absolute;left:var(--px);top:var(--py);width:clamp(22px,4vw,42px);height:2px;border-radius:999px;
+  background:linear-gradient(90deg,transparent,rgba(110,205,250,.25),rgba(206,243,255,.85),transparent);
+  filter:drop-shadow(0 0 5px rgba(93,194,250,.38));pointer-events:none;opacity:0;
+  animation:syn-ambient-comet var(--period) ease-in-out var(--offset) infinite}
+@keyframes syn-ambient-comet{
+  0%,55%,100%{opacity:0;transform:translate3d(-24px,20px,0) rotate(-26deg) scaleX(.42)}
+  64%{opacity:.54;transform:translate3d(6px,-5px,0) rotate(-26deg) scaleX(1)}
+  73%{opacity:0;transform:translate3d(54px,-43px,0) rotate(-26deg) scaleX(.65)}
+}
 @keyframes syn-ambient-float{0%,100%{opacity:0;transform:translate3d(0,11px,0)}23%{opacity:var(--alpha)}65%{opacity:var(--alpha);transform:translate3d(var(--drift),-26px,0)}88%{opacity:.05}}
 @keyframes syn-ambient-flare{0%,78%,100%{opacity:0;transform:translate3d(0,5px,0) scale(.55)}83%{opacity:var(--alpha);transform:translate3d(7px,-10px,0) scale(1.3)}90%{opacity:.08}}
 @keyframes syn-ambient-swell{0%{opacity:.12;transform:translate3d(0,0,0) scale(.94)}100%{opacity:.31;transform:translate3d(4vw,-2vh,0) scale(1.08)}}
