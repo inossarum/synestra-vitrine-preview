@@ -316,3 +316,33 @@ test('R123: SiteForge 3D lab editor exposes safe reusable presets and editable s
  assert.equal(api.reset().config.width,1);
  assert.match(status.textContent,/WebGL indisponible/);
 });
+
+test('R124: image-to-3D visual comparison offers bounded local reference and material lighting',async()=>{
+ const {Script,runInNewContext}=await import('node:vm');
+ const mesh=read('assets/core-r122-gyro.js');
+ const editor=read('assets/siteforge-3d-editor.js');
+ const lab=read('siteforge/core-3d-lab/index.html');
+ assert.doesNotThrow(()=>new Script(mesh));
+ assert.doesNotThrow(()=>new Script(editor));
+ for(const n of ['roughness','warmth','exposure']){
+  assert.ok(lab.includes('name="'+n+'"'),n);
+  assert.ok(mesh.includes("['"+n+"',"),'clamp '+n);
+ }
+ for(const x of ['uRoughness','uWarmth','uExposure','gl.uniform1f(m.roughness','gl.uniform1f(m.warmth','gl.uniform1f(m.exposure','gl.getError()'])assert.ok(mesh.includes(x),x);
+ for(const id of ['sf3d-reference-input','sf3d-reference-image','sf3d-reference-remove','sf3d-reference'])assert.ok(lab.includes('id="'+id+'"'),id);
+ assert.ok(editor.includes("['image/png','image/jpeg','image/webp']"));
+ assert.ok(editor.includes('8*1024*1024')&&editor.includes('URL.revokeObjectURL'));
+ assert.ok(lab.includes("img-src 'self' blob:"));
+ assert.doesNotMatch(mesh+editor,/\bfetch\s*\(|XMLHttpRequest|WebSocket|sendBeacon/);
+ assert.ok(!home.includes('sf3d-reference-input'),'main site unchanged');
+ const state={textContent:'',setAttribute(){},getAttribute(){return ''}};
+ const scene={querySelector(){return {getContext(){return null}}}};
+ const document={querySelector:()=>scene,getElementById:()=>state};
+ const window={matchMedia:()=>({matches:false})};
+ runInNewContext(mesh,{document,window,matchMedia:window.matchMedia,console});
+ const api=window.SynestraSiteForge3D;
+ assert.ok(api&&api.snapshot&&api.configure&&api.reset);
+ const v=api.configure({roughness:-12,warmth:99,exposure:100,hacked:1}).config;
+ assert.equal(v.roughness,.06);assert.equal(v.warmth,1);assert.equal(v.exposure,1.7);assert.ok(!('hacked' in v));
+ assert.equal(api.reset().config.roughness,.30);
+});

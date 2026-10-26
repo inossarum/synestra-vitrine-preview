@@ -1,8 +1,8 @@
 <!doctype html>
 <html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self'; base-uri 'none'; frame-ancestors 'none'; form-action 'none'">
-<title>Synestra — Laboratoire de géométrie 3D R122 (non validé)</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self' blob:; base-uri 'none'; frame-ancestors 'none'; form-action 'none'">
+<title>Synestra — Atelier 3D SiteForge R124</title>
 <style>
 :root{color-scheme:dark;font-family:system-ui,Arial,sans-serif;background:#050b17;color:#d4e8fa}
 *{box-sizing:border-box}body{margin:0;padding:24px 14px;background:radial-gradient(ellipse at 50% 20%,#0c1b38,#050b17 65%);min-height:100vh}
@@ -19,6 +19,14 @@ h1{font-size:clamp(1.1rem,3vw,1.65rem);margin:1rem 0 .55rem}p{color:#aec3d8;line
 .fallback-note{text-align:center;margin:1rem auto;max-width:52rem;font-size:.9rem}
 @media(prefers-reduced-motion:reduce){.core-r109-canvas,.core-r122-metal-canvas{transition:none!important}}
 
+.sf3d-comparison{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;align-items:start}
+.sf3d-comparison:has(.sf3d-reference:not([hidden])){grid-template-columns:repeat(2,minmax(0,1fr))}
+.sf3d-reference[hidden],.sf3d-reference img[hidden]{display:none!important}
+.sf3d-preview-panel,.sf3d-reference{min-width:0;margin:0}
+.sf3d-reference{border:1px solid #294261;background:#09172a;border-radius:20px;overflow:hidden}
+.sf3d-reference img{width:100%;height:min(68vw,640px);min-height:320px;object-fit:contain;display:block}
+.sf3d-preview-caption{margin:.2rem;padding:.3rem;color:#b8ddf0;font:.78rem/1.5 ui-monospace,monospace}
+@media(max-width:760px){.sf3d-comparison:has(.sf3d-reference:not([hidden])){grid-template-columns:1fr}.sf3d-reference img{height:300px;min-height:0}}
 .sf3d-panel{margin:1.25rem 0;padding:clamp(1rem,3vw,1.5rem);border:1px solid #35516d;border-radius:18px;background:linear-gradient(155deg,#0b182d,#0e2039)}
 .sf3d-panel h2{margin:0 0 .6rem;font-size:1.28rem;color:#ebf7ff}.sf3d-panel p{color:#bdd1e2}
 .sf3d-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
@@ -35,30 +43,44 @@ h1{font-size:clamp(1.1rem,3vw,1.65rem);margin:1rem 0 .55rem}p{color:#aec3d8;line
 
 </style></head><body><main>
 <a href="../../">Retour à SiteForge</a>
-<h1>Core R122 — Laboratoire 3D isolé</h1>
-<p class="status">Prototype technique · ne remplace pas le Core public · qualité visuelle non validée</p>
-<div class="core-r108-stage" role="img" aria-label="Laboratoire expérimental : trois anneaux métalliques tridimensionnels autour d'une sphère électrique.">
+<h1>SiteForge — Atelier 3D</h1>
+<p class="status">R124 · création et comparaison 3D expérimentale · qualité visuelle en validation</p>
+<div class="sf3d-comparison">
+ <div class="sf3d-preview-panel">
+  <p class="sf3d-preview-caption">Scène 3D construite</p>
+  <div class="core-r108-stage" role="img" aria-label="Laboratoire expérimental : trois anneaux métalliques tridimensionnels autour d'une sphère électrique.">
  <div class="fallback"><div class="orb"></div></div>
  <canvas class="core-r109-canvas" width="1100" height="720" aria-hidden="true"></canvas>
  <canvas class="core-r122-metal-canvas" width="1100" height="720" aria-hidden="true"></canvas>
+  </div>
+ </div>
+ <figure id="sf3d-reference" class="sf3d-reference" hidden>
+  <figcaption class="sf3d-preview-caption">Référence visuelle · image locale</figcaption>
+  <img id="sf3d-reference-image" alt="Image utilisée comme référence esthétique" hidden>
+ </figure>
 </div>
 <p class="sf3d-status" id="sf3d-status" role="status" aria-live="polite">Initialisation du moteur graphique…</p>
 <p class="fallback-note">Si seule la sphère apparaît, l'animation 3D est indisponible ou le mouvement réduit est activé sur cet appareil. Ce laboratoire n'est pas une validation du rendu final.</p>
 
 <section class="sf3d-panel" aria-labelledby="sf3d-panel-title">
  <h2 id="sf3d-panel-title">Atelier de scène 3D</h2>
- <p>Modifie les formes et les matériaux en direct, puis exporte la configuration pour un autre projet SiteForge. Aucun compte supplémentaire ni serveur 3D.</p>
+ <p>Charge une image de référence, compare-la à la scène 3D, affine les matériaux et exporte la configuration. L'image n'est pas envoyée au serveur.</p>
  <form id="sf3d-controls" class="sf3d-fields">
    <label>Largeur des anneaux <output id="sf3d-out-width" for="sf3d-width">1.00</output><input id="sf3d-width" type="range" name="width" min="0.65" max="1.5" step="0.05" value="1"></label>
    <label>Épaisseur 3D <output id="sf3d-out-depth" for="sf3d-depth">1.00</output><input id="sf3d-depth" type="range" name="depth" min="0.65" max="1.8" step="0.05" value="1"></label>
    <label>Vitesse <output id="sf3d-out-speed" for="sf3d-speed">1.00</output><input id="sf3d-speed" type="range" name="speed" min="0" max="3" step="0.1" value="1"></label>
    <label>Orientation horizontale <output id="sf3d-out-yaw" for="sf3d-yaw">0</output><input id="sf3d-yaw" type="range" name="yaw" min="-55" max="55" step="5" value="0"></label>
    <label>Orientation verticale <output id="sf3d-out-pitch" for="sf3d-pitch">0</output><input id="sf3d-pitch" type="range" name="pitch" min="-55" max="55" step="5" value="0"></label>
+   <label>Rugosité métallique <output id="sf3d-out-roughness" for="sf3d-roughness">0.30</output><input id="sf3d-roughness" type="range" name="roughness" min=".06" max="1" step=".02" value=".30"></label>
+   <label>Reflets dorés <output id="sf3d-out-warmth" for="sf3d-warmth">0.62</output><input id="sf3d-warmth" type="range" name="warmth" min="0" max="1" step=".02" value=".62"></label>
+   <label>Exposition <output id="sf3d-out-exposure" for="sf3d-exposure">1.00</output><input id="sf3d-exposure" type="range" name="exposure" min=".6" max="1.7" step=".05" value="1"></label>
    <label>Finition métallique <output id="sf3d-out-material">steel</output>
     <select name="material" id="sf3d-material"><option value="steel">Acier brossé</option><option value="graphite">Graphite</option><option value="gold">Or brossé</option></select>
    </label>
  </form>
  <div class="sf3d-actions">
+   <label class="sf3d-import" for="sf3d-reference-input">Comparer avec une image<input id="sf3d-reference-input" type="file" accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp"></label>
+   <button type="button" id="sf3d-reference-remove">Retirer la référence</button>
    <button type="button" id="sf3d-pause" aria-pressed="false">Mettre en pause</button>
    <button type="button" id="sf3d-reset">Réinitialiser</button>
    <button type="button" id="sf3d-export">Exporter JSON</button>

@@ -6,10 +6,13 @@
 const form=document.getElementById('sf3d-controls');
 const api=window.SynestraSiteForge3D;
 if(!form||!api)return;
-const names=['width','depth','speed','yaw','pitch','material'];
+const names=['width','depth','speed','yaw','pitch','material','roughness','warmth','exposure'];
 const fields=Object.fromEntries(names.map(name=>[name,form.elements.namedItem(name)]));
 const valueNode=name=>document.getElementById('sf3d-out-'+name);
 const status=document.getElementById('sf3d-editor-status');
+const reference=document.getElementById('sf3d-reference');
+const referenceImage=document.getElementById('sf3d-reference-image');
+let referenceObjectUrl=null;
 const say=text=>{if(status)status.textContent=text;};
 const sync=config=>{
  for(const name of names){
@@ -36,6 +39,24 @@ document.getElementById('sf3d-export')?.addEventListener('click',()=>{
  document.body.appendChild(anchor);anchor.click();anchor.remove();setTimeout(()=>URL.revokeObjectURL(url),0);
  say('Configuration JSON exportée. Elle pourra être réutilisée dans SiteForge.');
 });
+const imageInput=document.getElementById('sf3d-reference-input');
+const imageRemove=document.getElementById('sf3d-reference-remove');
+const clearReference=()=>{if(referenceObjectUrl){URL.revokeObjectURL(referenceObjectUrl);referenceObjectUrl=null;}};
+imageInput?.addEventListener('change',event=>{
+ const file=event.target.files?.[0];event.target.value='';
+ if(!file)return;
+ if(!['image/png','image/jpeg','image/webp'].includes(file.type)||file.size>8*1024*1024||file.size===0){
+  say('Référence refusée : image PNG/JPEG/WebP, 8 Mo maximum.');return;
+ }
+ clearReference();
+ const url=URL.createObjectURL(file);referenceObjectUrl=url;
+ referenceImage.onload=()=>{reference.hidden=false;referenceImage.hidden=false;say('Image de référence chargée localement, sans envoi.');};
+ referenceImage.onerror=()=>{reference.hidden=true;clearReference();say('Image illisible.');};
+ referenceImage.alt='Référence locale : '+file.name.slice(0,96);
+ referenceImage.src=url;
+});
+imageRemove?.addEventListener('click',()=>{reference.hidden=true;referenceImage.removeAttribute('src');clearReference();say('Référence retirée.');});
+window.addEventListener('pagehide',clearReference,{once:true});
 document.getElementById('sf3d-import')?.addEventListener('change',async event=>{
  const file=event.target.files?.[0];event.target.value='';
  if(!file)return;
