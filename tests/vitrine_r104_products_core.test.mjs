@@ -343,7 +343,7 @@ test('R119: ring axes separate and foreground metal crosses reduced Core silhoue
 
 test('R120: three raymarched bevelled rectangular 3D solids and centre-origin lightning',()=>{
  const src=read('assets/core-r109-webgl.js');
- const frag=src.match(/const fragment = \`([\\s\\S]*?)\`;/)?.[1]||'';
+ const frag=src.match(/const fragment = \`([\s\S]*?)\`;/)?.[1]||'';
  assert.ok(frag.includes('float sdRectangularRing('),'true ring SDF');
  assert.ok(frag.includes('vec2 box=abs(vec2(length(local.xy)-major,local.z))-vec2(radialHalf,thickHalf)'),'rectangular non-tubular profile');
  assert.ok(frag.includes('for(int stepIndex=0;stepIndex<44;stepIndex++)'),'bounded raymarch');
