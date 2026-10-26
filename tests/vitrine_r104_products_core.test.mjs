@@ -135,7 +135,7 @@ test('R114: eight radial arcs grow from the centre towards the sphere edge',()=>
  const script=read('assets/core-r109-webgl.js');
  const tick=String.fromCharCode(96);
  const fragment=script.split('const fragment = '+tick)[1]?.split(tick+';')[0]||'';
- for (const needle of ['float r111Arc(', 'float along=dot(p,dir)', 'float growingTip=mix(.06,.675',
+ for (const needle of ['float r111Arc(', 'float along=dot(p,dir)', 'float growingTip=mix(.06,.515',
    'float body=smoothstep(.012,.06,along)', 'float fork=exp(', 'float awake=step(.24,seed)',
    'float envelope=smoothstep(.015,.12,phase)'])assert.ok(fragment.includes(needle),needle);
  assert.equal(fragment.split('=r111Arc(p,').length-1,8);
