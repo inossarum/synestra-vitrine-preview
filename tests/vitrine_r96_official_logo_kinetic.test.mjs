@@ -16,7 +16,7 @@ test('R96 logo approuvé, dérivé exact du PNG canonique, asset local SHA-véri
   assert.equal([...html.matchAll(/src="\.\/assets\/synestra-studio-official-v1\.avif"/g)].length,0);
   assert.match(html,/<img class="brand-banner-r99" src="\.\/assets\/synestra-studio-header-y-r99\.webp"/);
   assert.doesNotMatch(html,/<span class="brand-mark"/);
-  assert.match(html,/class="system-stage core-r106-stage"/);
+  assert.match(html,/class="system-stage core-r108-stage"/);
   assert.doesNotMatch(html,/src="[^"]+synestra-master\.svg"/i);
 });
 
@@ -31,8 +31,8 @@ test('R96 donne plus de vie sans JS ni dépendance externe',()=>{
   for(const a of ['logo-buoyancy','marker-a-spin','marker-b-spin','line-breathe','workflow-pulse'])
     assert.ok(html.includes('@keyframes '+a),a);
   assert.match(html,/class="studio-workflow"/);
-  assert.match(html,/class="core-r106-pulse"/);
-  assert.match(html,/class="system-stage core-r106-stage"/);
+  assert.match(html,/class="core-r108-heart"/);
+  assert.match(html,/class="system-stage core-r108-stage"/);
   assert.match(html,/@media \(prefers-reduced-motion:reduce\)|@media \(prefers-reduced-motion: reduce\)/);
   assert.doesNotMatch(html,/<script\b|<iframe\b|<form\b/i);
   assert.match(html,/content="noindex,nofollow"/);
