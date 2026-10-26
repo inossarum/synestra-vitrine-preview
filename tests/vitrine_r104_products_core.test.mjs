@@ -86,6 +86,6 @@ test('R106: reactor and product ports stay in the same hero stage',()=>{
  const scene=home.split('<div class="system-stage core-r106-stage"')[1]?.split('</section>')[0]||'';
  assert.match(scene,/class="core-r106-svg"/);
  assert.match(scene,/aria-label="Explorer les composants autour du Core"/);
- assert.equal((scene.match(/class="core-r106-link/g)||[]).length,3);
+ assert.equal((scene.match(/class="core-r106-link /g)||[]).length,3);
  assert.doesNotMatch(scene,/<script\\b|<iframe\\b|<form\\b/i);
 });
