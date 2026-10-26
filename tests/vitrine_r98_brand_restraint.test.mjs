@@ -12,7 +12,7 @@ test('R98 failure-first: header uses one legible wordmark and no cropped oversiz
 });
 
 test('R104: prior restrained header retained; the old central emblem intentionally replaced by Core',()=>{
-  assert.match(html,/class="system-core syn-core-r104 syn-core-r105"/);
+  assert.match(html,/class="system-stage core-r106-stage"/);
   assert.doesNotMatch(html,/<img class="official-hero-logo"/);
   assert.match(html,/R98_STUDIO_BRAND_RESTRAINT/);
   assert.match(html,/\.official-hero-logo\s*\{[^}]*object-fit:contain;[^}]*filter:brightness\(\.72\) saturate\(\.58\);[^}]*animation:none!important;/s);
