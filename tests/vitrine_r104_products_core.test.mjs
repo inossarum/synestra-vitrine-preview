@@ -64,7 +64,7 @@ test('R104: Cloudflare static export admits public routes, excludes project inte
  const build=read('tools/build_vitrine_static.mjs');
  for(const path of ['connect/index.html','bridge/index.html','offres/index.html','assets/product-pages.css'])assert.ok(build.includes(path),path);
  assert.match(build,/const rootDirs=\['assets','siteforge','signal','connect','bridge','offres'\]/);
- assert.match(build,/assets:new Set\(\['\.avif','\.webp','\.png','\.jpg','\.jpeg','\.svg','\.css'\]\)/);
+ assert.match(build,/assets:new Set\(\['\.avif','\.webp','\.png','\.jpg','\.jpeg','\.svg','\.css','\.js'\]\)/);
  assert.doesNotMatch(build,/rootDirs=\[[^\]]*'tests'/);
  assert.doesNotMatch(build,/child_process|execSync|spawn\(/);
 });
@@ -86,6 +86,18 @@ test('R108: the core remains a navigable and accessible grouped scene',()=>{
  assert.equal((scene.match(/<a href="\.\/(?:siteforge|connect|bridge)\/"[ >]/g)||[]).length,3);
  assert.match(scene,/class="core-r108-note"/);
  assert.doesNotMatch(scene,/<script\b|<iframe\b|<form\b/i);
+});
+test('R109: WebGL Canvas is opt-in with a guaranteed SVG fallback and restricted script',()=>{
+ assert.match(home, /<canvas class="core-r109-canvas" aria-hidden="true" width="960" height="570"><\/canvas>/);
+ assert.match(home, /<svg class="core-r108-art" viewBox="0 0 640 410"/);
+ assert.match(home, /class="system-stage core-r108-stage core-r109-stage"/);
+ assert.deepEqual([...home.matchAll(/<script\b[^>]*>/g)].map(m=>m[0]),['<script src="./assets/core-r109-webgl.js" defer>']);
+ assert.match(home, /script-src 'self'; base-uri 'none'/);
+ assert.match(home, /core-r109-stage\[data-core-ready="true"\] \.core-r108-art\{opacity:0\}/);
+ const script=read('assets/core-r109-webgl.js');
+ for(const guard of ['getContext(\'webgl\'','prefers-reduced-motion: reduce','data-core-ready','webglcontextlost','IntersectionObserver','ResizeObserver','800000','powerPreference: \'low-power\''])
+  assert.ok(script.includes(guard),guard);
+ assert.doesNotMatch(script,/\bfetch\s*\(|XMLHttpRequest|WebSocket|sendBeacon|eval\s*\(|new Function/);
 });
 test('R108: reduced motion and visual simplification are enforced',()=>{
  assert.ok(home.includes('@media(prefers-reduced-motion:reduce){.core-r108-heart'));
