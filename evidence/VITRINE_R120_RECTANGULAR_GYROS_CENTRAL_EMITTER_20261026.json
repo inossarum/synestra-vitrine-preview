@@ -1,0 +1,79 @@
+{
+  "schema": "synestra.visual-delivery-evidence.v1",
+  "mission_id": "SYN_VITRINE_CORE_R120_FLAT_RINGS_CENTRAL_SOURCE",
+  "visual_delta_id": "R120_RECTANGULAR_METAL_AND_CENTRAL_EMITTER_20261026",
+  "timestamp_utc": "2026-10-26",
+  "git": {
+    "repository": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_VITRINE_SITEFORGE_R91_PREVIEW_20261024",
+    "code_sha": "fac1f3e535c25631272f50f7a454adee0ef22d13",
+    "previous_sha": "f25d5c1518e82d52e3ad57f075e766cdd3b8d870",
+    "code_tree_sha": "f4fc6405ec61e56748ef8be6caecbfbe2f285f00",
+    "pr": 5,
+    "draft": true,
+    "main_changed": false
+  },
+  "files": [
+    "assets/core-r109-webgl.js",
+    "index.html",
+    "tests/vitrine_r104_products_core.test.mjs"
+  ],
+  "rendering": {
+    "three_gyros": true,
+    "geometry": "bounded 44-step signed-distance ray intersections against bevelled rectangular ring solids",
+    "major_radii": [
+      0.87,
+      0.97,
+      1.08
+    ],
+    "radial_half_widths": [
+      0.037,
+      0.036,
+      0.034
+    ],
+    "thickness_half_depths": [
+      0.027,
+      0.026,
+      0.025
+    ],
+    "axes": "R119 three independent Rodrigues axes retained",
+    "occlusion": "front depth-sort and analytic sphere front test",
+    "central_emitter": "white hot nucleus plus electric blue corona; eight ray-origin arcs with origin boost",
+    "svg_fallback": "thinner ring strokes 7.6/5.7/5.4 with visible shared emitter and centre-origin static sparks"
+  },
+  "deployment": {
+    "provider": "Cloudflare Pages",
+    "project": "synestra-vitrine-preview",
+    "id": "d165d6d1-a6e7-4b9b-ad98-d2d66f5a31e1",
+    "url": "https://d165d6d1.synestra-vitrine-preview.pages.dev/",
+    "environment": "preview",
+    "status": "success",
+    "deployed_sha": "fac1f3e535c25631272f50f7a454adee0ef22d13",
+    "free_only": true
+  },
+  "tests": {
+    "provider": "Cloudflare Pages build",
+    "node_total": 51,
+    "node_pass": 51,
+    "node_fail": 0,
+    "static_export": "PASS",
+    "static_file_count": 38,
+    "glsl_browser_compilation": "PENDING",
+    "real_browser_visual": "PENDING",
+    "http_external_open": "INCONCLUSIVE: web retrieval refused or unavailable",
+    "source_build_link": "Cloudflare Pages deployment logs (id in deployment)"
+  },
+  "checks": {
+    "VISUAL_PREVIEW_GATE": "PENDING",
+    "VISUAL_PREVIEW_BROWSER": "PENDING",
+    "VISUAL_PREVIEW_DIFF_OBSERVED": "NOT_TESTED",
+    "HOOKS_STATUS": "NOT_APPLICABLE",
+    "SOURCE_GATE": "LIMITED",
+    "FUNCTION_REPORT": "PARTIAL"
+  },
+  "rollback": "No main merge. Restore pre-R120 preview branch state from f25d5c1518e82d52e3ad57f075e766cdd3b8d870 using reviewed non-force revert if needed.",
+  "unresolved": [
+    "Direct authorized browser pixel capture at mobile and desktop viewports",
+    "Real GPU GLSL compilation, visual ring/arc inspection and performance validation"
+  ]
+}
