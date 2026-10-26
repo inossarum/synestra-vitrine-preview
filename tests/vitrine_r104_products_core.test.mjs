@@ -97,7 +97,7 @@ test('R109: WebGL Canvas is opt-in with a guaranteed SVG fallback and restricted
  assert.match(home, /script-src 'self'; base-uri 'none'/);
  assert.match(home, /core-r109-stage\[data-core-ready="true"\] \.core-r108-art\{opacity:0\}/);
  const script=read('assets/core-r109-webgl.js');
- for(const guard of ['getContext(\'webgl\'','prefers-reduced-motion: reduce','data-core-ready','webglcontextlost','IntersectionObserver','ResizeObserver','800000','powerPreference: \'low-power\''])
+ for(const guard of ['getContext(\'webgl\'','prefers-reduced-motion: reduce','data-core-ready','webglcontextlost','IntersectionObserver','ResizeObserver','1200000','powerPreference: \'low-power\''])
   assert.ok(script.includes(guard),guard);
  assert.match(script,/if \(reduceMotion\.matches\) return; \/\/ Static SVG fallback/);
  assert.match(script,/if \(reduceMotion\.matches\) scene\.removeAttribute\('data-core-ready'\)/);
