@@ -406,6 +406,6 @@ test('R126: core point emitter drives anisotropic PBR, and energy is rendered be
  assert.ok(engine.indexOf('if(e){gl.enable(gl.BLEND)')<engine.indexOf('// Invisible sphere populates the depth buffer'),'Emit energy behind metal');
  assert.ok(engine.includes('for(int i=0;i<16;i++)'),'GPU work must have finite bounds');
  assert.match(lab,/noindex,nofollow/);assert.match(lab,/prefers-reduced-motion:reduce/);
- assert.match(lab,/script-src 'self'/);assert.doesNotMatch(engine+editor,/\\bfetch\\s*\\(|XMLHttpRequest|WebSocket|sendBeacon|eval\\s*\\(/);
+ assert.match(lab,/script-src 'self'/);for(const forbidden of ['fetch(','XMLHttpRequest','WebSocket','sendBeacon','eval('])assert.ok(!engine.includes(forbidden)&&!editor.includes(forbidden),forbidden);
  assert.ok(!read('index.html').includes('siteforge-3d-editor.js'),'Main homepage stays independent');
 });
