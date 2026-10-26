@@ -6,6 +6,12 @@ const data=window.ProofPathData;
 if(!data||data.schema!=="synestra.proofpath.machine.v0"||data.synthetic!==true||data.journeys?.length!==3)return;
 const canvas=document.getElementById("signal-canvas");
 const ctx=canvas?.getContext("2d",{alpha:true});
+// One decorative, non-interactive layer for the entire page. No independent render loop.
+const ambientCanvas=document.createElement("canvas");
+ambientCanvas.className="ambient-field";
+ambientCanvas.setAttribute("aria-hidden","true");
+document.body.appendChild(ambientCanvas);
+const ambientCtx=ambientCanvas.getContext("2d",{alpha:true});
 const reduced=window.matchMedia("(prefers-reduced-motion: reduce)");
 const modes={
  explorer:{primary:"#c7ff9a",secondary:"#b8a6ff",tertiary:"#ffffff",kind:0,label:"CRÉER"},
@@ -13,6 +19,7 @@ const modes={
  verifier:{primary:"#8cf1e6",secondary:"#cad1ff",tertiary:"#ffffff",kind:2,label:"PROUVER"}
 };
 let intent="explorer",running=false,requestedMotion=!reduced.matches,visible=true,raf=0,frame=0,lastPaint=0,hoverX=0,hoverY=0,w=1,h=1,dpr=1;
+let sparks=[],nextSparkAt=0,ambientEvents=[],nextEventAt=0,ambientParticles=[];
 const selectors=[...document.querySelectorAll(".mode-choice,.signal-node")];
 const sections=[...document.querySelectorAll(".signal-panel")];
 const label=document.getElementById("mode-label");
@@ -44,6 +51,15 @@ const resize=()=>{
  w=Math.max(1,r.width);h=Math.max(1,r.height);
  canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);
  ctx.setTransform(dpr,0,0,dpr,0,0);
+ if(ambientCtx){
+  const vw=Math.max(320,window.innerWidth),vh=Math.max(320,window.innerHeight);
+  ambientCanvas.width=Math.round(vw*dpr);ambientCanvas.height=Math.round(vh*dpr);
+  ambientCtx.setTransform(dpr,0,0,dpr,0,0);
+  ambientParticles=Array.from({length:vw<650?24:52},()=>({
+   x:Math.random(),y:Math.random(),phase:Math.random()*6.283,
+   speed:.4+Math.random()*.9,radius:.35+Math.random()*1.25,depth:.25+Math.random()*.75
+  }));
+ }
  if(!running)render(performance.now());
 };
 function rgb(hex){
@@ -56,10 +72,78 @@ function line(points,color,opacity,width){
  for(let i=0;i<points.length;i++){const p=points[i];i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1])}
  ctx.strokeStyle=rgba(color,opacity);ctx.lineWidth=width;ctx.stroke();
 }
+
+/* Ambient atmosphere and short-lived electrical discharges share the hero's RAF.
+   Randomness is sampled only at spawn, not on every frame: no epileptic flashing. */
+function drawAmbient(now,theme){
+ if(!ambientCtx)return;
+ const ww=Math.max(320,window.innerWidth),hh=Math.max(320,window.innerHeight);
+ ambientCtx.clearRect(0,0,ww,hh);
+ if(!running)return; // The pause and OS reduced-motion preference stop all decorative effects.
+ const t=now*.001;
+ for(const p of ambientParticles){
+  const x=p.x*ww+Math.sin(t*.27*p.speed+p.phase)*26*p.depth;
+  const y=(p.y*hh-t*(2.5+6*p.speed)*p.depth%hh+hh)%hh;
+  const opacity=(.11+.32*p.depth)*(.7+.3*Math.sin(t*.5+p.phase));
+  ambientCtx.beginPath();ambientCtx.arc(x,y,p.radius,0,Math.PI*2);
+  ambientCtx.fillStyle=rgba(p.depth>.6?theme.primary:theme.secondary,opacity);ambientCtx.fill();
+ }
+ if(now>=nextEventAt){
+  nextEventAt=now+2200+Math.random()*4800;
+  if(ambientEvents.length<2)ambientEvents.push({born:now,life:750+Math.random()*900,
+   x:ww*(.1+Math.random()*.8),y:hh*(.1+Math.random()*.8),
+   angle:-.9+Math.random()*.65,length:32+Math.random()*62});
+ }
+ ambientEvents=ambientEvents.filter(e=>now-e.born<e.life);
+ for(const e of ambientEvents){
+  const life=(now-e.born)/e.life,alpha=Math.sin(Math.PI*life)*.24;
+  const dx=Math.cos(e.angle)*e.length,dy=Math.sin(e.angle)*e.length;
+  const g=ambientCtx.createLinearGradient(e.x,e.y,e.x+dx,e.y+dy);
+  g.addColorStop(0,rgba(theme.primary,0));
+  g.addColorStop(.55,rgba(theme.primary,alpha));
+  g.addColorStop(1,rgba(theme.secondary,0));
+  ambientCtx.beginPath();ambientCtx.moveTo(e.x,e.y);ambientCtx.lineTo(e.x+dx,e.y+dy);
+  ambientCtx.strokeStyle=g;ambientCtx.lineWidth=1;ambientCtx.stroke();
+ }
+}
+function drawDischarges(now,project,theme){
+ if(running&&now>=nextSparkAt){
+  nextSparkAt=now+280+Math.random()*900;
+  if(sparks.length<5){
+   const u=Math.random()*Math.PI*2,v=Math.random()*Math.PI*2;
+   const du=(.28+Math.random()*.85)*(Math.random()<.5?-1:1);
+   const dv=(.32+Math.random()*1.25)*(Math.random()<.5?-1:1);
+   const count=12+Math.floor(Math.random()*9),path=[];
+   for(let k=0;k<=count;k++){
+    const a=k/count,jitter=k===0||k===count?0:1;
+    path.push([u+du*a+(Math.random()-.5)*.24*jitter,
+               v+dv*a+(Math.random()-.5)*.32*jitter]);
+   }
+   sparks.push({born:now,life:240+Math.random()*520,path});
+  }
+ }
+ sparks=sparks.filter(s=>now-s.born<s.life);
+ for(const spark of sparks){
+  const progress=(now-spark.born)/spark.life;
+  const alpha=Math.min(1,(now-spark.born)/90)*Math.min(1,(spark.life-(now-spark.born))/210);
+  if(alpha<=0)continue;
+  const pts=spark.path.map(q=>project(q[0],q[1]));
+  ctx.save();ctx.lineJoin="round";ctx.lineCap="round";
+  ctx.shadowColor=theme.primary;ctx.shadowBlur=18;
+  line(pts,theme.secondary,alpha*.22,7);
+  ctx.shadowColor=theme.secondary;ctx.shadowBlur=8;
+  line(pts,theme.primary,alpha*.72,2.7);
+  ctx.shadowBlur=0;
+  line(pts,"#ffffff",alpha*(.42+.12*Math.sin(progress*Math.PI)),.85);
+  ctx.restore();
+ }
+}
+
 function render(now){
  if(!ctx)return;
  const theme=modes[intent],t=running?now*.00019:frame*.00019;
  ctx.clearRect(0,0,w,h);
+ drawAmbient(now,theme);
  const cx=w*.54,cy=h*.51,size=Math.min(w*.4,h*.5),rx=Math.max(65,size);
  const aura=ctx.createRadialGradient(cx,cy,5,cx,cy,rx*1.5);
  aura.addColorStop(0,rgba(theme.secondary,.18));aura.addColorStop(.42,rgba(theme.primary,.065));aura.addColorStop(1,"rgba(0,0,0,0)");
@@ -107,6 +191,8 @@ function render(now){
    ctx.strokeStyle=rgba(theme.primary,.44);ctx.lineWidth=1.3;ctx.stroke();
   }
  }
+ // Lightning follows the same projected 3D surface as the sphere. No separate timer.
+ drawDischarges(now,project,theme);
  // Orbit cursors and graphic rules tethered to the visual core.
  for(let i=0;i<3;i++){
   const ang=t*1.4+i*2.094,px=cx+Math.cos(ang)*rx*1.32,py=cy+Math.sin(ang*.7)*rx*.75;
@@ -124,17 +210,19 @@ function render(now){
 function loop(now){
  if(!running)return;
  const budget=window.innerWidth<=600?1000/30:1000/45;
- if(now-lastPaint>=budget){lastPaint=now;frame=now;render(now)}
+ if(now-lastPaint>=budget){lastPaint=now;frame=now;if(visible)render(now);else drawAmbient(now,modes[intent])}
  raf=requestAnimationFrame(loop);
 }
 function setMotion(shouldRun){
  if(!ctx)return;
  requestedMotion=shouldRun;
- running=requestedMotion&&!reduced.matches&&visible&&!document.hidden;
+ running=requestedMotion&&!reduced.matches&&!document.hidden;
+ if(!running){sparks=[];ambientEvents=[];nextSparkAt=0;nextEventAt=0}
  cancelAnimationFrame(raf);
  pause.textContent=running?"PAUSE MOTION":reduced.matches?"MOTION RÉDUITE":requestedMotion?"MOTION EN VEILLE":"PLAY MOTION";
  pause.setAttribute("aria-pressed",String(!requestedMotion||reduced.matches));
  canvas.dataset.animating=String(running);
+ ambientCanvas.dataset.animating=String(running);
  if(running){lastPaint=0;raf=requestAnimationFrame(loop)}
  else render(frame);
 }
