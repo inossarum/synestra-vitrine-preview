@@ -1,0 +1,70 @@
+{
+  "schema": "synestra.vitrine.r105.evidence.v1",
+  "evidence_id": "SYN_VITRINE_R105_ADVANCED_CORE_UX_CLOUD_PREVIEW_20261026",
+  "mission_id": "SYN_VITRINE_SITEFORGE_SHOWCASE_20261024",
+  "owner": "Inos",
+  "date": "2026-10-26",
+  "scope": "R105 product navigation, CSS Core, content and preview; no production merge",
+  "source": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_VITRINE_SITEFORGE_R91_PREVIEW_20261024",
+    "tested_head": "a63e2cb0cc1627b7db1bde35dbabfb007496e5da",
+    "blobs": {
+      "index": "fb3e9a50fa2b70c4f959942922ae141e807ec512",
+      "shared_css": "6db824c90b362b60d56320b95739f6add7a4ef72",
+      "connect": "dfd3e117c7215e41e898e9d4b55aabc09a6c7c57",
+      "bridge": "3731074695bfb43195b64e9a0d7d57693bc7417e",
+      "offres": "3304ff9b9174a98207985b0c5b75d996a69bb5e6",
+      "tests": "aad1e4b87002e843bf712a4482e59484bb15c3d6"
+    }
+  },
+  "changes": {
+    "core": "R105 multi-axis kinetic energy chamber: three gyroscopes, rotating tick ring, conic carriers, faceted crystalline iris, energy pulse, particle sparks, three conduit beams towards SiteForge/Connect/Bridge; old R99 official header untouched, no central logo",
+    "navigation": "R105 homepage primary nav Studio/Connect/Bridge/SiteForge/Offres, native Explorer disclosure for secondary sections, mobile wrapping, keyboard focus; 3 route-selector cards",
+    "product_pages": "contextual chapter anchors + non-fiction educational examples on Connect, Bridge and Offres; no fake native controls, no paid offers or downloads",
+    "accessibility": "prefers-reduced-motion, no JavaScript in public pages, CSS breakpoints and focus-visible; browser/screenreader E2E still pending"
+  },
+  "tests": {
+    "cloudflare_node": 35,
+    "passed": 35,
+    "failed": 0,
+    "static_export": "PASS",
+    "allowed_static_files": 37,
+    "cloudflare_deploy": "success",
+    "exact_commit_verified": true,
+    "production_deployments_enabled": false
+  },
+  "deployment": {
+    "provider": "Cloudflare Pages",
+    "project": "synestra-vitrine-preview",
+    "id": "8a5e3575-8da8-4dc1-a83a-6fe96c046bee",
+    "url": "https://8a5e3575.synestra-vitrine-preview.pages.dev",
+    "environment": "preview",
+    "sha": "a63e2cb0cc1627b7db1bde35dbabfb007496e5da",
+    "rollback_preview": "e19350f4-d9fd-4eed-b371-56d67f395d2e",
+    "previous_R104_preview": "6347e40b-b0c5-47bb-b60b-e4cb3e27c75c"
+  },
+  "failures_recovered": [
+    {
+      "build": "938feeaa-50f8-4259-9a11-2d72ba7bb921",
+      "root": "Tests historical assumptions: one FAQ details menu, SiteForge now direct route, R105 test class string"
+    },
+    {
+      "build": "e3f8a64e-8335-4ae6-af3f-8a4c61226ba7",
+      "root": "FAQ regex whitespace and R105 orientation section class"
+    },
+    {
+      "fix": "Scoped FAQ assertions to original five items (new Explorer native details kept), corrected whitespace and structural test, fixed HTML nested node container; never disabled test gate"
+    }
+  ],
+  "limits": {
+    "http_independent": "UNVERIFIED: web.open URL not accessible",
+    "pixels": "NOT_VERIFIED: browser visual comparison unavailable",
+    "lighthouse": "NOT_RUN",
+    "screenreader": "NOT_RUN",
+    "production": "NO",
+    "release": "PR_DRAFT",
+    "pricing": "FREE_ONLY"
+  },
+  "next": "Owner preview visual review of new R105 vs R104; authorized 1440×900 and 390×844 browser pixels/keyboard inspection; then measured performance and production approval."
+}
