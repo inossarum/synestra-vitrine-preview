@@ -106,8 +106,8 @@ test('R107: high-energy plasma composition uses original self-hosted SVG assets 
  assert.doesNotMatch(home,/<script\\b|<foreignObject\\b|<iframe\\b/i);
 });
 test('R107: fallback rendering remains usable when animations are disabled',()=>{
- assert.match(home,/@media\\(prefers-reduced-motion:reduce\\)\\{\\.core-r107-aurora/);
- assert.match(home,/\\.core-r107-discharge\\{opacity:\\.48\\}/);
+ assert.ok(home.includes('@media(prefers-reduced-motion:reduce){.core-r107-aurora'));
+ assert.ok(home.includes('.core-r107-discharge{opacity:.48}'));
  assert.match(home,/VISUALISATION CONCEPTUELLE · NON LIVE/);
  const scene=home.split('<div class="system-stage core-r106-stage"')[1]?.split('</section>')[0]||'';
  assert.equal((scene.match(/class="core-r106-link link-/g)||[]).length,3);
