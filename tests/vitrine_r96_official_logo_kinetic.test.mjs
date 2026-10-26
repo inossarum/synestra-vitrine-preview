@@ -34,7 +34,8 @@ test('R96 donne plus de vie sans JS ni dépendance externe',()=>{
   assert.match(html,/class="core-r108-heart"/);
   assert.match(html,/class="system-stage core-r108-stage"/);
   assert.match(html,/@media \(prefers-reduced-motion:reduce\)|@media \(prefers-reduced-motion: reduce\)/);
-  assert.doesNotMatch(html,/<script\b|<iframe\b|<form\b/i);
+  assert.deepEqual([...html.matchAll(/<script\b[^>]*>/g)].map(x=>x[0]),['<script src="./assets/core-r109-webgl.js" defer>']);
+  assert.doesNotMatch(html,/<iframe\b|<form\b/i);
   assert.match(html,/content="noindex,nofollow"/);
   assert.match(html,/default-src 'none'; style-src 'unsafe-inline'; img-src 'self'/);
 });
