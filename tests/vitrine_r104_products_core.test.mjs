@@ -486,3 +486,13 @@ test('R128: actual tessellated 3D electric nucleus and slim high-resolution XYZ 
  assert.ok(!read('index.html').includes('siteforge-3d-sphere-shaders.js'),'Main page unchanged');
  assert.match(html,/noindex,nofollow/);assert.match(html,/prefers-reduced-motion:reduce/);
 });
+
+test('R128 visual correction: 3D electric sphere does not double-blend backfaces',()=>{
+ const engine=read('assets/core-r122-gyro.js');
+ const core=engine.indexOf('gl.useProgram(sphereProgram)');
+ const enable=engine.indexOf('gl.enable(gl.CULL_FACE);gl.cullFace(gl.BACK)');
+ const draw=engine.indexOf('gl.drawArrays(gl.TRIANGLES,0,sphere.length/3)');
+ const disable=engine.indexOf('gl.disable(gl.CULL_FACE)',draw);
+ assert.ok(enable>=0&&enable<core&&core<draw&&draw<disable,'Cull rear 3D faces only for nucleus');
+ assert.ok(engine.includes('gl.depthFunc(gl.LEQUAL)'),'Metal should still use correct occlusion');
+});

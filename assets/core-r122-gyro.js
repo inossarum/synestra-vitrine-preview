@@ -122,6 +122,7 @@ const render=clock=>{
     gl.bindBuffer(gl.ARRAY_BUFFER,energyQuad);gl.enableVertexAttribArray(e.pos);gl.vertexAttribPointer(e.pos,2,gl.FLOAT,false,0,0);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);gl.disableVertexAttribArray(e.pos);gl.disable(gl.BLEND);
   }
   // R128: real 48x96 geodesic sphere. Quad is only the external optical halo.
+  gl.enable(gl.CULL_FACE);gl.cullFace(gl.BACK);gl.frontFace(gl.CCW);
   gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);gl.useProgram(sphereProgram);
   gl.uniformMatrix3fv(s3.view,false,viewBasis());gl.uniform2f(s3.resolution,width,height);
   gl.uniform1f(s3.radius,params.coreRadius);gl.uniform1f(s3.time,elapsed);
@@ -134,7 +135,7 @@ const render=clock=>{
   gl.bindBuffer(gl.ARRAY_BUFFER,sphereBuffer);
   gl.enableVertexAttribArray(s3.pos);gl.vertexAttribPointer(s3.pos,3,gl.FLOAT,false,0,0);
   gl.drawArrays(gl.TRIANGLES,0,sphere.length/3);
-  gl.disableVertexAttribArray(s3.pos);gl.disable(gl.BLEND);
+  gl.disableVertexAttribArray(s3.pos);gl.disable(gl.BLEND);gl.disable(gl.CULL_FACE);
   // R121 electric visual grammar, reconstructed as thin spatial XYZ filaments.
   const arcs=pulseGeometry.build(params,elapsed);
   gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE);gl.useProgram(pulseProgram);
