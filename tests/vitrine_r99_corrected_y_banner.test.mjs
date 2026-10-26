@@ -13,8 +13,10 @@ test('R99: header displays source-matched corrected geometric Y banner and no du
   assert.match(html,/aria-label="Accueil Synestra"/);
   assert.match(html,/\.brand-banner-r99\s*\{[^}]*object-fit:contain/s);
 });
-test('R99: official core logo remains independent and intact',()=>{
-  assert.match(html,/class="official-hero-logo" src="\.\/assets\/synestra-studio-official-v1\.avif"/);
+test('R104: official R99 header remains intact while the animated Core contains no logo',()=>{
+  assert.match(html,/class="system-core syn-core-r104"/);
+  assert.doesNotMatch(html,/<img class="official-hero-logo"/);
+  assert.match(html,/@keyframes core-beat/);
   assert.match(html,/prefers-reduced-motion/);
   assert.match(html,/id="bridge"/);
   assert.match(html,/id="connect"/);
