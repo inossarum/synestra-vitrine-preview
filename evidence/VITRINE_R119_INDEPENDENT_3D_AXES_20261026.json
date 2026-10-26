@@ -1,0 +1,144 @@
+{
+  "schema": "synestra.vitrine.r119.evidence.v1",
+  "evidence_id": "SYN_VITRINE_R119_INDEPENDENT_3D_AXES_20261026",
+  "date": "2026-10-26",
+  "mission_id": "SYN_VITRINE_CORE_METALLIC_GYROS_R119_20261026",
+  "owner": "Inos",
+  "request": "Thicken each metal ring, shrink the plasma sphere, rotate each ring about its own axis and show real front-of-Core occlusion.",
+  "source": {
+    "repository": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_VITRINE_SITEFORGE_R91_PREVIEW_20261024",
+    "pr": 5,
+    "pr_draft": true,
+    "tested_code_commit": "ca3f2401edf624a4bd284777ff20ed32b0cb1716",
+    "visual_change_commit": "cac6506acf7d1644d32414822acd727474956840",
+    "test_fix_commit": "ca3f2401edf624a4bd284777ff20ed32b0cb1716",
+    "blobs": {
+      "index.html": "5cc96546dffd847f9fe20a5ef73a6b68848124c4",
+      "assets/core-r109-webgl.js": "23573665ec41393863e34bb9ee2a57c84c4d4fe9",
+      "tests/vitrine_r104_products_core.test.mjs": "304f63314f397989deab57c21319fb35ebbab612"
+    },
+    "source_baseline": "315ba4d3a3fa3e6d485eb0359a6a43623062a4ed"
+  },
+  "graphic": {
+    "gyro_count": 3,
+    "individual_axes": [
+      [
+        0.9,
+        0.1,
+        0.42
+      ],
+      [
+        -0.45,
+        0.82,
+        0.35
+      ],
+      [
+        0.6,
+        -0.75,
+        0.29
+      ]
+    ],
+    "glsl_orbit_method": "Rodrigues normal rotation about each normalized 3D axis; intersection ray with ring plane; three-comparator per-pixel depth sort; front fragments over sphere only for z>sqrt(radius^2-d^2); foreground alpha explicitly preserved over fading shell",
+    "periods_seconds": [
+      13,
+      17,
+      20
+    ],
+    "ring_b_reverse": true,
+    "sphere_webgl_radius": {
+      "before": 0.69,
+      "after": 0.53
+    },
+    "sphere_svg_radius_px": {
+      "before": 86,
+      "after": 66
+    },
+    "svg_stroke_px": {
+      "before": [
+        5.8,
+        3.9,
+        3.6
+      ],
+      "after": [
+        9,
+        6.4,
+        6
+      ]
+    },
+    "glsl_outer_width": {
+      "before": [
+        0.038,
+        0.036,
+        0.034
+      ],
+      "after": [
+        0.064,
+        0.061,
+        0.059
+      ]
+    },
+    "three_svgs": "Back ellipses painted before reduced sphere; three foreground paths painted after; distinct CSS rotate3d axes and reduced-motion fallback; approximate SVG depth only",
+    "fragment_fnv1a32": "607c1a5d",
+    "invariant_preservation": "Only one WebGL Canvas/RAF, GPU cap 1.2M px, 32ms guard, eight radial electric arcs with endpoint 0.515 after sphere shrink, three product capsules Connect/Bridge/SiteForge, original Core scale 0.49, accessibility and CSP retained"
+  },
+  "validation": {
+    "source_blob_readback": "PASS",
+    "github_expected_head": "PASS",
+    "failure_first": "Cloudflare preview deployment 23c49aca-aabd-4f3e-9a01-0c79082dc3fd failed 49/50 due only to one historic R114 arc-tip expectation; test corrected without visual changes in ca3f2401; no further failure",
+    "unit_tests": 50,
+    "unit_pass": 50,
+    "unit_fail": 0,
+    "static_export": "PASS",
+    "static_files": 38,
+    "js_syntax": "PASS via Cloudflare build",
+    "cloudflare_build": "PASS",
+    "cloudflare_deploy": "SUCCESS",
+    "native_webgl_compile": "NOT_VERIFIED",
+    "real_browser_render": "NOT_VERIFIED",
+    "real_pixels_front_back": "NOT_VERIFIED",
+    "ios_safari_390_768_1440": "NOT_VERIFIED",
+    "external_web_open": "DNS/URL unavailable to assistant runtime; Cloudflare API deployment success independently established"
+  },
+  "deployment": {
+    "provider": "Cloudflare Pages",
+    "project": "synestra-vitrine-preview",
+    "id": "6a64efe8-c432-43f0-bd31-5ebb08d8db3b",
+    "url": "https://6a64efe8.synestra-vitrine-preview.pages.dev/",
+    "environment": "preview",
+    "status": "success",
+    "code_sha": "ca3f2401edf624a4bd284777ff20ed32b0cb1716",
+    "production_deployments_enabled": false,
+    "rollback_preview": "https://c063382a.synestra-vitrine-preview.pages.dev/",
+    "rollback_code_sha": "d311df8347925560a4db1ea661845e3c758176e3"
+  },
+  "governance": {
+    "billing": "FREE_ONLY, no extra paid service",
+    "main_mutation": false,
+    "acl_secret_change": false,
+    "source_gate": "LIMITED; AGENTS and visual rule verified, prior R118 Evidence/Reasoning read; Memory V1/SAL/Runbook current corpus cannot be fully verified, no local Supervisor execution",
+    "hooks_status": "Cloudflare build hook PASS, Synestra Studio hooks UNKNOWN",
+    "skills_consulted": [
+      "ui-ux@1.0.0#0a362a0938401674166c7a8b871192fbde602c1a",
+      "web-accessibility-engineering@1.0.0#172c442525351804e89e7b273346f03df34bdd89",
+      "visual-regression-testing@1.0.0#aa98fffe9149dfcc0e153f0d1b8b91f3c0a6b4ae"
+    ],
+    "skills_applied": [
+      "Hierarchy: smaller sphere relative to mechanism",
+      "Access: reduced-motion SVG fallback and unchanged navigation",
+      "Regression: 50 assertions + mathematical sampled normal-Z bounds guarantee projection crosses sphere on all three axes, browser pixel baseline remains unverified"
+    ]
+  },
+  "visual_gate": {
+    "id": "R119",
+    "status": "PENDING",
+    "url": "https://6a64efe8.synestra-vitrine-preview.pages.dev/",
+    "access": "AUTHORIZED_PUBLIC existing project",
+    "build_id": "6a64efe8-c432-43f0-bd31-5ebb08d8db3b",
+    "browser": "PENDING",
+    "diff_observed": "NOT_TESTED",
+    "next_visual_mutation_allowed": "NO until browser QA or new explicit owner direction"
+  },
+  "status": "PREVIEW_PUBLISHED_VISUAL_QA_PENDING",
+  "function_report": "PARTIAL"
+}
