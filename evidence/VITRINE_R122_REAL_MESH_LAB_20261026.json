@@ -1,0 +1,77 @@
+{
+  "schema": "synestra.vitrine.evidence.v1",
+  "mission_id": "SYN_VITRINE_R122_REAL_MESH_LAB_20261026",
+  "utc_date": "2026-10-26",
+  "ownership": "Synestra Vitrine branch task/SYN_VITRINE_SITEFORGE_R91_PREVIEW_20261024 PR #5 DRAFT",
+  "repo": "inossarum/synestra-vitrine-preview",
+  "source": {
+    "code_sha": "776fb9b29329885d1e0d1151b4e1f0f5937619d4",
+    "tree_sha": "2df4af5c1d0e8392224b6b77956214c1499c4335",
+    "gyro_blob_sha": "fcab9ebcf960c6cee1709e49f022ed1144cdefff",
+    "lab_blob_sha": "7e2e0da5acaf22fc10c9b432ebbee671d9487369",
+    "homepage_blob_sha": "43810b6eaa878c523eb06d97542d791543765d55",
+    "unchanged_homepage_blob": "43810b6eaa878c523eb06d97542d791543765d55",
+    "source_gate": "LIMITED",
+    "rules_root": "AGENTS.md@a42bcf8055c6f747eaa734f5faa7006cc57409db",
+    "visual_rule": "25_WEB__VISUAL_PREVIEW_AFTER_EACH_CHANGE.md@70de2947cb16ea5053aee37cb13065adfc9b58a4"
+  },
+  "delta": [
+    "Add standalone native WebGL true polygonal ring geometry with 144 angular segments and 8 bevelled cross-section facets, 3 axis-rotating ring meshes",
+    "Use sphere depth-only mask to avoid drawing rear metal over the plasma",
+    "Add isolated laboratory URL under siteforge without changing homepage, plasma shader or product links",
+    "Add failure-first parse, geometry, accessibility/reduced-motion guard test"
+  ],
+  "scene": {
+    "true_meshes": 3,
+    "segments_per_ring": 144,
+    "cross_section_facets": 8,
+    "rotation_periods_sec": [
+      13,
+      -17,
+      20
+    ],
+    "depth_mask_sphere_radius": 0.69,
+    "lighting": "facet normals, brushed metallic shader approximation",
+    "electric_sphere": "identical existing R121 shader, unchanged",
+    "lab_fallback": "explicit when WebGL unavailable; preserves static orb",
+    "reduced_motion": "no WebGL rendering when preference is enabled"
+  },
+  "testing": {
+    "cloudflare_deploy": "539836a7-5540-4867-9173-1ceab1758b8d",
+    "status": "success",
+    "environment": "preview",
+    "deployed_sha": "776fb9b29329885d1e0d1151b4e1f0f5937619d4",
+    "node_total": 48,
+    "node_pass": 48,
+    "node_fail": 0,
+    "static_export": "PASS",
+    "static_file_count": 40,
+    "local_node_check": "PASS for earlier working prototype",
+    "local_chromium_webgl": "UNAVAILABLE: getContext('webgl') returns null under all 4 tested SwiftShader/ANGLE launch configurations",
+    "gpu_compile_in_browser": "PENDING",
+    "pixel_inspection": "PENDING",
+    "mobile_ios": "PENDING",
+    "external_web_open": "UNAVAILABLE through browser retrieval interface"
+  },
+  "preview": {
+    "base": "https://539836a7.synestra-vitrine-preview.pages.dev/",
+    "lab": "https://539836a7.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+    "access_context": "Cloudflare Pages preview",
+    "web_access_test": "PENDING; Cloudflare deploy and static export confirm publication but do not prove direct user/browser access"
+  },
+  "policy": {
+    "billing": "FREE_ONLY",
+    "main_untouched": true,
+    "production_untouched": true,
+    "no_new_service": true,
+    "preview_only": true,
+    "visual_gate": "PENDING",
+    "function_report": "PARTIAL"
+  },
+  "rollback": {
+    "stable_electric_core_code_sha": "1f5264fcd58c1327e415d4bffc468babd0c7f56a",
+    "last_docs_before_lab": "3e320981bbdacb393c69a71218118ad19e7d93e8",
+    "mechanism": "revert lab-only files on preview branch, no forced HEAD, preserve existing electricity and R121"
+  },
+  "next": "Real WebGL pixel capture at 390x844 and 1440x900 (authorized browser GPU), inspect styling/occlusion/performance and iterate on lab only until visually approved. Do not activate on homepage automatically."
+}
