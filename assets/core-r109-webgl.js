@@ -29,6 +29,28 @@
       particle.style.setProperty('--alpha', (.18 + seed * .28).toFixed(2));
       field.appendChild(particle);
     }
+    // R115: autonomous ambient events without any additional JS animation loop.
+    // Existing tab visibility and reduced-motion controls apply to this aria-hidden layer.
+    const wispCount = window.innerWidth < 640 ? 2 : 3;
+    for (let i = 0; i < wispCount; i++) {
+      const wisp = document.createElement('i');
+      wisp.className = 'syn-ambient-wisp';
+      wisp.style.setProperty('--px', (12 + Math.random() * 74).toFixed(1) + '%');
+      wisp.style.setProperty('--py', (8 + Math.random() * 80).toFixed(1) + '%');
+      wisp.style.setProperty('--period', (21 + Math.random() * 18).toFixed(2) + 's');
+      wisp.style.setProperty('--offset', (-Math.random() * 30).toFixed(2) + 's');
+      field.appendChild(wisp);
+    }
+    const beaconCount = window.innerWidth < 640 ? 2 : 3;
+    for (let i = 0; i < beaconCount; i++) {
+      const beacon = document.createElement('i');
+      beacon.className = 'syn-ambient-beacon';
+      beacon.style.setProperty('--px', (9 + Math.random() * 82).toFixed(1) + '%');
+      beacon.style.setProperty('--py', (10 + Math.random() * 79).toFixed(1) + '%');
+      beacon.style.setProperty('--period', (11 + Math.random() * 15).toFixed(2) + 's');
+      beacon.style.setProperty('--offset', (-Math.random() * 20).toFixed(2) + 's');
+      field.appendChild(beacon);
+    }
     document.body.insertBefore(field, document.body.firstChild);
   };
   startAmbient();
@@ -92,7 +114,7 @@ vec3 turn3(vec3 n,vec2 t){
 }
 float r111Arc(vec2 p,float index,float seconds) {
   // Short asynchronous electrical discharges grow outwards from the nucleus.
-  float cycleTime=1.85;
+  float cycleTime=1.12; // R115: faster non-strobing electrical cycles
   float cell=floor(seconds/cycleTime+index*.37);
   float phase=fract(seconds/cycleTime+index*.37);
   float seed=hash3(vec3(cell,index*1.81,11.3));
@@ -104,7 +126,7 @@ float r111Arc(vec2 p,float index,float seconds) {
   float across=dot(p,vec2(-dir.y,dir.x));
   float branchSeed=hash3(vec3(cell,9.21,index));
   float jitter=sin(along*36.+seed*20.)*.022+sin(along*91.+branchSeed*21.)*.010;
-  float growingTip=mix(.06,.675,smoothstep(.06,.58,phase));
+  float growingTip=mix(.06,.675,smoothstep(.04,.46,phase));
   float body=smoothstep(.012,.06,along)*(1.-smoothstep(growingTip-.06,growingTip,along));
   float filament=exp(-abs(across-jitter)*92.)+.26*exp(-abs(across-jitter)*21.);
   float forkOrigin=growingTip*.46;

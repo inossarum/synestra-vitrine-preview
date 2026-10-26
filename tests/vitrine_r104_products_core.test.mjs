@@ -118,7 +118,7 @@ test('R110: native-verified dimensional plasma shader, restrained orbit and boun
  assert.ok(fragment,'R110 shader fragment absent');
  let hash=2166136261;
  for(const ch of fragment)hash=Math.imul(hash ^ ch.charCodeAt(0),16777619)>>>0;
- assert.equal(hash.toString(16),'fa9a2ccc','GLSL source fingerprint changed after R114 increased arc count');
+ assert.equal(hash.toString(16),'40d987a4','GLSL source fingerprint changed after R115 faster electrical impulses');
  for(const term of ['noise3','turn3','ringBloom','ringFront','spiral']){
   if(term==='spiral')continue;
   assert.ok(fragment.includes(term),term);
@@ -182,4 +182,41 @@ test('R114: resolution increases with strict render-pixel and mobile caps',()=>{
  assert.ok(source.includes('document.visibilityState === \'visible\''));
  assert.ok(!source.includes('setInterval('));
  assert.ok(!source.includes('setTimeout('));
+});
+
+test('R115: seven capsules centered on the orbital anchors during rotation and mobile',()=>{
+ const orbit=home.split('<div class="core-tools-orbit" aria-hidden="true">')[1]?.split('<nav class="core-r108-links"')[0]||'';
+ assert.equal(orbit.split('class="core-tool-satellite"').length-1,7);
+ assert.match(home,/\.core-tool-satellite>span\{[^}]*transform:translate\(-50%,-50%\)/);
+ assert.match(home,/@keyframes core-tools-upright\{from\{transform:translate\(-50%,-50%\) rotate\(0deg\)\}to\{transform:translate\(-50%,-50%\) rotate\(-360deg\)\}\}/);
+ assert.match(home,/@media\(max-width:620px\)\{\.core-tools-orbit/);
+ assert.match(home,/@media\(prefers-reduced-motion:reduce\)\{\.core-tools-orbit/);
+ assert.match(home,/\.core-r108-stage\{animation:core-r115-atmosphere/);
+ assert.match(home,/@media\(prefers-reduced-motion:reduce\)\{\.core-r108-stage\{animation:none!important\}\}/);
+});
+test('R115: electrical radial propagation faster without extra flash frequency outside sphere',()=>{
+ const script=read('assets/core-r109-webgl.js');
+ const tick=String.fromCharCode(96);
+ const fragment=script.split('const fragment = '+tick)[1]?.split(tick+';')[0]||'';
+ assert.ok(fragment.includes('float cycleTime=1.12;'));
+ assert.ok(fragment.includes('float growingTip=mix(.06,.675,smoothstep(.04,.46,phase));'));
+ assert.equal(fragment.split('=r111Arc(p,').length-1,8);
+ assert.ok(fragment.indexOf('if(d>radius)')<fragment.indexOf('float arcA='));
+ assert.ok(script.includes('clock - lastFrame < 32'));
+});
+test('R115: autonomous ambient wisps and beacons share visibility and reduced-motion control',()=>{
+ const script=read('assets/core-r109-webgl.js');
+ for(const name of ['syn-ambient-wisp','syn-ambient-beacon']){
+   assert.ok(script.includes("className = '"+name+"'"),name);
+   for(const style of [home,css]) {
+      assert.ok(style.includes('.'+name+'{')&&style.includes('@keyframes '+name+'{'),name);
+      assert.ok(style.includes('.syn-ambient-paused .syn-ambient-field *'));
+      assert.ok(style.includes('@media(prefers-reduced-motion:reduce){.syn-ambient-field{display:none!important}}'));
+   }
+ }
+ assert.ok(script.includes('const wispCount = window.innerWidth < 640 ? 2 : 3'));
+ assert.ok(script.includes('const beaconCount = window.innerWidth < 640 ? 2 : 3'));
+ assert.ok(script.indexOf('const wispCount')<script.indexOf('document.body.insertBefore(field'));
+ assert.ok(script.includes("document.addEventListener('visibilitychange', updateAmbient)"));
+ assert.doesNotMatch(script,/setInterval\(|setTimeout\(|\bfetch\s*\(|XMLHttpRequest|WebSocket|sendBeacon/);
 });
