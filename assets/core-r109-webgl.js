@@ -125,9 +125,9 @@ float r111Arc(vec2 p,float index,float seconds) {
   float along=dot(p,dir);
   float across=dot(p,vec2(-dir.y,dir.x));
   float branchSeed=hash3(vec3(cell,9.21,index));
-  float jitter=(sin(along*36.+seed*20.)*.022+sin(along*91.+branchSeed*21.)*.010)*smoothstep(0.,.16,max(along,0.));
-  float growingTip=mix(.045,.515,smoothstep(.04,.46,phase));
-  float body=smoothstep(-.005,.014,along)*(1.-smoothstep(growingTip-.06,growingTip,along));
+  float jitter=sin(along*36.+seed*20.)*.022+sin(along*91.+branchSeed*21.)*.010;
+  float growingTip=mix(.06,.675,smoothstep(.04,.46,phase));
+  float body=smoothstep(.012,.06,along)*(1.-smoothstep(growingTip-.06,growingTip,along));
   float filament=exp(-abs(across-jitter)*92.)+.26*exp(-abs(across-jitter)*21.);
   float forkOrigin=growingTip*.46;
   float forkOffset=(along-forkOrigin)*(branchSeed-.5)*.57;
@@ -137,100 +137,31 @@ float r111Arc(vec2 p,float index,float seconds) {
   return awake*envelope*(body*filament+fork+front);
 }
 
-// R120: physical rectangular-section metal rings, not 2D bands or tubes.
-// The ray intersects a bounded signed-distance solid; real depth and face
-// normals control occlusion, lighting and the visible chamfer.
-float sdRectangularRing(vec3 local,float major,float radialHalf,float thickHalf) {
- vec2 box=abs(vec2(length(local.xy)-major,local.z))-vec2(radialHalf,thickHalf);
- return length(max(box,vec2(0.)))+min(max(box.x,box.y),0.)-.0045;
-}
-vec4 metalGyro(vec2 p,float seconds,float slot,out float zpos) {
- float speed=slot<1.5?6.283185/13.:(slot<2.5?-6.283185/17.:6.283185/20.);
- float phase=slot<1.5?-.64:(slot<2.5?1.24:2.37);
- float spin=seconds*speed+phase;
- vec3 axis=normalize(slot<1.5?vec3(.90,.10,.42):(slot<2.5?vec3(-.45,.82,.35):vec3(.60,-.75,.29)));
- vec3 baseNormal=normalize(slot<1.5?vec3(.86,.22,.46):(slot<2.5?vec3(-.58,.71,.42):vec3(.72,-.62,.33)));
- vec3 plane=normalize(baseNormal*cos(spin)+cross(axis,baseNormal)*sin(spin)
-                       +axis*dot(axis,baseNormal)*(1.-cos(spin)));
- vec3 tangentX=normalize(cross(abs(plane.z)>.91?vec3(0.,1.,0.):vec3(0.,0.,1.),plane));
- vec3 tangentY=cross(plane,tangentX);
- float major=slot<1.5?.87:(slot<2.5?.97:1.08);
- float radialHalf=slot<1.5?.037:(slot<2.5?.036:.034);
- float thickHalf=slot<1.5?.027:(slot<2.5?.026:.025);
- float bound=major+radialHalf+thickHalf+.012;
- zpos=-10.;
- if(dot(p,p)>bound*bound) return vec4(0.);
- // Orthographic front-to-back ray, conservatively bounded by a real sphere.
- float cap=sqrt(max(bound*bound-dot(p,p),0.));
- float travel=1.30-cap;
- float rayEnd=1.30+cap;
- vec3 local=vec3(0.);
- float signedDistance=1.;
- bool hit=false;
- for(int stepIndex=0;stepIndex<44;stepIndex++) {
-  vec3 world=vec3(p,1.30-travel);
-  local=vec3(dot(world,tangentX),dot(world,tangentY),dot(world,plane));
-  signedDistance=sdRectangularRing(local,major,radialHalf,thickHalf);
-  if(signedDistance<.0024){hit=true;zpos=world.z;break;}
-  travel+=max(signedDistance*.92,.003);
-  if(travel>rayEnd) break;
- }
- if(!hit)return vec4(0.);
- // Face/chamfer normal from the actual solid, not a projected ellipse.
- float e=.005;
- vec3 nx=vec3(e,0.,0.),ny=vec3(0.,e,0.),nz=vec3(0.,0.,e);
- vec3 normalLocal=normalize(vec3(
-  sdRectangularRing(local+nx,major,radialHalf,thickHalf)-sdRectangularRing(local-nx,major,radialHalf,thickHalf),
-  sdRectangularRing(local+ny,major,radialHalf,thickHalf)-sdRectangularRing(local-ny,major,radialHalf,thickHalf),
-  sdRectangularRing(local+nz,major,radialHalf,thickHalf)-sdRectangularRing(local-nz,major,radialHalf,thickHalf)));
- vec3 normal=normalize(tangentX*normalLocal.x+tangentY*normalLocal.y+plane*normalLocal.z);
- float light=max(dot(normal,normalize(vec3(-.48,.64,.88))),0.);
- float face=abs(normalLocal.z);
- float brush=.5+.5*sin(atan(local.y,local.x)*54.+seconds*speed*.22);
- float sheen=pow(brush,9.)*.18+pow(max(dot(reflect(vec3(.33,-.43,-.84),normal),vec3(0.,0.,1.)),0.),22.)*.36;
- vec3 darkMetal=slot<1.5?vec3(.19,.25,.32):(slot<2.5?vec3(.22,.27,.32):vec3(.22,.24,.30));
- vec3 lightMetal=slot<1.5?vec3(.71,.78,.83):(slot<2.5?vec3(.75,.81,.84):vec3(.70,.74,.79));
- vec3 metal=mix(darkMetal,lightMetal,clamp(.23+.58*light+.16*face,0.,1.));
- metal+=vec3(.22,.23,.23)*sheen;
- metal+=vec3(.055,.064,.075)*pow(1.-max(dot(normal,vec3(0.,0.,1.)),0.),3.);
- float opacity=.97*(1.-smoothstep(.0012,.005,signedDistance));
- return vec4(clamp(metal,0.,1.),opacity);
-}
-// Three compare/swap passes sort every pixel back to front.
-void orderGyros(inout vec4 m0,inout vec4 m1,inout vec4 m2,
-                inout float z0,inout float z1,inout float z2) {
- if(z0>z1){float tz=z0;z0=z1;z1=tz;vec4 tm=m0;m0=m1;m1=tm;}
- if(z1>z2){float tz=z1;z1=z2;z2=tz;vec4 tm=m1;m1=m2;m2=tm;}
- if(z0>z1){float tz=z0;z0=z1;z1=tz;vec4 tm=m0;m0=m1;m1=tm;}
-}
-
 void main(){
  vec2 p=(uv-.5)*2.;
  p.x*=resolution.x/max(resolution.y,1.);
  p.y+=.08;
- float radius=.53;
+ float radius=.69;
  float d=length(p);
  float t=time*.28;
- float metalDepthA=0.,metalDepthB=0.,metalDepthC=0.;
- vec4 metalA=metalGyro(p,time,1.,metalDepthA);
- vec4 metalB=metalGyro(p,time,2.,metalDepthB);
- vec4 metalC=metalGyro(p,time,3.,metalDepthC);
- orderGyros(metalA,metalB,metalC,metalDepthA,metalDepthB,metalDepthC);
+ float ellipseAngle=-.30;
+ float ca=cos(ellipseAngle),sa=sin(ellipseAngle);
+ vec2 q=vec2(p.x*ca-p.y*sa,p.x*sa+p.y*ca);
+ float oval=length(vec2(q.x/.98,q.y/.31));
+ float od=abs(oval-1.);
+ float ring=exp(-od*od*4400.);
+ float ringBloom=exp(-od*od*480.);
+ float ringFront=smoothstep(-.12,.10,q.y);
+ float spinPulse=.77+.23*sin(atan(q.y/.31,q.x/.98)*3.-time*.46);
  float aura=exp(-pow(d/.88,2.)*3.0);
  vec3 cyan=vec3(.31,.87,1.);
  vec3 lavender=vec3(.64,.47,1.);
  vec3 navy=vec3(.009,.034,.108);
  vec3 backdrop=mix(vec3(.07,.11,.35),vec3(.04,.33,.55),smoothstep(-.8,.8,p.x));
- vec3 outside=backdrop*aura*.055;
- float outsideA=clamp(aura*.065,0.,.22);
- if(d>radius){
-   // Gimbal fragments outside the sphere show both front and back metallic arcs.
-   outside=mix(outside,metalA.rgb,metalA.a);
-   outside=mix(outside,metalB.rgb,metalB.a);
-   outside=mix(outside,metalC.rgb,metalC.a);
-   outsideA=clamp(outsideA+metalA.a+metalB.a+metalC.a,0.,1.);
-   gl_FragColor=vec4(outside,outsideA);return;
- }
+ vec3 ringCol=mix(lavender,cyan,smoothstep(-.42,.6,p.x));
+ vec3 outside=backdrop*aura*.07+ringCol*(ring*.34+ringBloom*.025)*spinPulse;
+ float outsideA=clamp(aura*.065+ring*.43+ringBloom*.035,0.,.65);
+ if(d>radius){ gl_FragColor=vec4(outside,outsideA); return; }
  vec3 n=vec3(p,sqrt(max(radius*radius-dot(p,p),0.)))/radius;
  n=turn3(n,tilt+vec2(sin(t*.23)*.15,cos(t*.18)*.08));
  float v=noise3(n*3.7+vec3(t*.65,t*.22,-t*.25));
@@ -252,7 +183,8 @@ void main(){
  base+=vec3(.70,.83,.95)*pow(max(dot(n,normalize(vec3(-.28,.46,1.))),0.),22.)*.11;
  float topRim=smoothstep(-.2,.8,p.y)*rim;
  base+=vec3(.09,.22,.35)*topRim;
- // R120: emitter is composited after the eight discharges, at their origin.
+ float centralSource=exp(-d*d*115.);
+ base+=vec3(.72,.93,1.)*centralSource*.31;
  float arcA=r111Arc(p,1.,time);
  float arcB=r111Arc(p,2.,time);
  float arcC=r111Arc(p,3.,time);
@@ -262,28 +194,13 @@ void main(){
  float arcG=r111Arc(p,7.,time);
  float arcH=r111Arc(p,8.,time);
  // R114: eight independent centre-to-edge arcs, bounded by sphere mask.
- base+=(vec3(.78,.96,1.)*arcA*1.12+vec3(.39,.77,1.)*arcB*.91+vec3(.78,.69,1.)*arcC*.88)*originBoost;
- base+=(vec3(.49,.96,.97)*arcD*.92+vec3(.83,.94,1.)*arcE*.84)*originBoost;
- float originBoost=1.+.52*exp(-d*d*95.);
- base+=(vec3(.46,.88,1.)*arcF*.91+vec3(.70,.59,1.)*arcG*.87+vec3(.90,.98,1.)*arcH*.89)*originBoost;
- // Compact white-hot nucleus, blue corona and soft non-strobing pulse.
- float emitterPulse=.91+.09*sin(time*2.1);
- float emitterCorona=exp(-d*d*145.);
- float emitterCore=exp(-d*d*1750.);
- base+=vec3(.21,.58,1.)*emitterCorona*.60*emitterPulse;
- base+=vec3(.80,.96,1.)*emitterCore*1.3*emitterPulse;
+ base+=vec3(.78,.96,1.)*arcA*1.12+vec3(.39,.77,1.)*arcB*.91+vec3(.78,.69,1.)*arcC*.88;
+ base+=vec3(.49,.96,.97)*arcD*.92+vec3(.83,.94,1.)*arcE*.84;
+ base+=vec3(.46,.88,1.)*arcF*.91+vec3(.70,.59,1.)*arcG*.87+vec3(.90,.98,1.)*arcH*.89;
  float shellFade=1.-smoothstep(radius*.977,radius,d);
  float alpha=clamp(.96+rim*.04,0.,1.)*shellFade;
- // Only sections with z in front of the sphere are composited above the plasma.
- float sphereFrontZ=sqrt(max(radius*radius-d*d,0.));
- float frontA=metalA.a*step(sphereFrontZ+.01,metalDepthA);
- float frontB=metalB.a*step(sphereFrontZ+.01,metalDepthB);
- float frontC=metalC.a*step(sphereFrontZ+.01,metalDepthC);
- base=mix(base,metalA.rgb,frontA);
- base=mix(base,metalB.rgb,frontB);
- base=mix(base,metalC.rgb,frontC);
- // Foreground metal stays visible at the sphere rim rather than fading with shell alpha.
- alpha=clamp(alpha+max(max(frontA,frontB),frontC)*(1.-alpha),0.,1.);
+ float orbital=ringFront*spinPulse;
+ base+=ringCol*(ring*.32+ringBloom*.018)*orbital;
  gl_FragColor=vec4(clamp(base,0.,1.),alpha);
 }`;
 
