@@ -11,8 +11,9 @@ test('R98 failure-first: header uses one legible wordmark and no cropped oversiz
   assert.doesNotMatch(header,/<span class="brand-mark"|class="brand-name"/);
 });
 
-test('R98: official logo retained fully in stage, no animated flash or forced cropping',()=>{
-  assert.match(html,/<img class="official-hero-logo" src="\.\/assets\/synestra-studio-official-v1\.avif"/);
+test('R104: prior restrained header retained; the old central emblem intentionally replaced by Core',()=>{
+  assert.match(html,/class="system-core syn-core-r104"/);
+  assert.doesNotMatch(html,/<img class="official-hero-logo"/);
   assert.match(html,/R98_STUDIO_BRAND_RESTRAINT/);
   assert.match(html,/\.official-hero-logo\s*\{[^}]*object-fit:contain;[^}]*filter:brightness\(\.72\) saturate\(\.58\);[^}]*animation:none!important;/s);
   assert.match(html,/\.system-core\s*\{[^}]*box-shadow:none!important;/s);
@@ -20,7 +21,7 @@ test('R98: official logo retained fully in stage, no animated flash or forced cr
 });
 
 test('R98: no logo mutation and no extra scripts while preserving semantics',()=>{
-  assert.equal((html.match(/src="\.\/assets\/synestra-studio-official-v1\.avif"/g)||[]).length,1);
+  assert.equal((html.match(/src="\.\/assets\/synestra-studio-official-v1\.avif"/g)||[]).length,0);
   assert.match(html,/<a class="brand" href="\.\/" aria-label="Accueil Synestra">/);
   assert.match(html,/id="bridge"/);
   assert.match(html,/id="connect"/);
