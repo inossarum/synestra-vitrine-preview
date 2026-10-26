@@ -286,3 +286,33 @@ test('R122: isolated 3D gyroscope lab has real polygonal cross-sections, sphere 
  assert.match(lab,/prefers-reduced-motion:reduce/);
  assert.ok(!home.includes('core-r122-gyro.js')&&!home.includes('core-3d-lab'),'R121 homepage remains unchanged');
 });
+
+test('R123: SiteForge 3D lab editor exposes safe reusable presets and editable scene parameters',async()=>{
+ const {Script,runInNewContext}=await import('node:vm');
+ const mesh=read('assets/core-r122-gyro.js');
+ const editor=read('assets/siteforge-3d-editor.js');
+ const lab=read('siteforge/core-3d-lab/index.html');
+ assert.doesNotThrow(()=>new Script(mesh));
+ assert.doesNotThrow(()=>new Script(editor));
+ for(const name of ['width','depth','speed','yaw','pitch','material'])assert.ok(lab.includes('name="'+name+'"'),name);
+ for(const name of ['sf3d-export','sf3d-import','sf3d-pause','sf3d-reset','sf3d-status'])assert.ok(lab.includes('id="'+name+'"'),name);
+ for(const name of ['buildRing(ring.major,ring.w*params.width,ring.h*params.depth)','gl.uniform3fv(m.tint','!params.paused','window.SynestraSiteForge3D=Object.freeze'])assert.ok(mesh.includes(name),name);
+ assert.ok(!/\bfetch\s*\(|XMLHttpRequest|WebSocket|sendBeacon/.test(mesh+editor));
+ assert.ok(lab.includes('script src="../../assets/siteforge-3d-editor.js" defer'));
+ assert.ok(lab.includes('content="noindex,nofollow"'));
+ assert.ok(!home.includes('siteforge-3d-editor.js'),'Primary vitrine unchanged');
+ // Failure-first: WebGL missing must not disable configuration export/import.
+ const status={textContent:'',setAttribute(){},getAttribute(){return ''}};
+ const scene={querySelector(){return {getContext(){return null}};}};
+ const fakeDocument={querySelector:()=>scene,getElementById:()=>status};
+ const win={matchMedia:()=>({matches:false})};
+ runInNewContext(mesh,{document:fakeDocument,window:win,matchMedia:win.matchMedia,console});
+ const api=win.SynestraSiteForge3D;
+ assert.ok(api&&api.configure&&api.snapshot&&api.reset);
+ const applied=api.configure({width:9,depth:-3,speed:100,yaw:-900,pitch:25,material:'gold',paused:true,unexpected:'anything'}).config;
+ assert.equal(applied.width,1.5);assert.equal(applied.depth,.65);assert.equal(applied.speed,3);assert.equal(applied.yaw,-55);
+ assert.equal(applied.material,'gold');assert.equal(applied.paused,true);
+ assert.ok(!('unexpected' in applied));
+ assert.equal(api.reset().config.width,1);
+ assert.match(status.textContent,/WebGL indisponible/);
+});

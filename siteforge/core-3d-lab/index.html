@@ -18,6 +18,21 @@ h1{font-size:clamp(1.1rem,3vw,1.65rem);margin:1rem 0 .55rem}p{color:#aec3d8;line
 .core-r108-stage[data-core-ready="true"] .fallback{opacity:0}
 .fallback-note{text-align:center;margin:1rem auto;max-width:52rem;font-size:.9rem}
 @media(prefers-reduced-motion:reduce){.core-r109-canvas,.core-r122-metal-canvas{transition:none!important}}
+
+.sf3d-panel{margin:1.25rem 0;padding:clamp(1rem,3vw,1.5rem);border:1px solid #35516d;border-radius:18px;background:linear-gradient(155deg,#0b182d,#0e2039)}
+.sf3d-panel h2{margin:0 0 .6rem;font-size:1.28rem;color:#ebf7ff}.sf3d-panel p{color:#bdd1e2}
+.sf3d-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
+.sf3d-fields>label{display:flex;flex-direction:column;gap:.45rem;color:#e7f4ff;font-weight:650;font-size:.9rem}
+.sf3d-fields output{display:inline-block;align-self:start;padding:.15rem .5rem;border-radius:5px;background:#1a3550;font:600 .85rem ui-monospace,monospace;color:#bcf0ff}
+.sf3d-fields input[type=range]{width:100%;accent-color:#83dfff;min-height:28px}
+.sf3d-fields select{background:#142b43;color:#fff;border:1px solid #647c92;border-radius:7px;padding:.65rem}
+.sf3d-actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.15rem;align-items:center}
+.sf3d-actions button,.sf3d-import{cursor:pointer;border:1px solid #5b7893;border-radius:8px;background:#1b3954;color:#e9f5ff;font:600 .86rem system-ui;padding:.75rem .95rem}
+.sf3d-actions button:hover,.sf3d-import:hover{background:#275574}
+.sf3d-import input{display:block;max-width:220px;font-size:.7rem;margin-top:.45rem}
+.sf3d-actions button:focus-visible,.sf3d-fields input:focus-visible,.sf3d-fields select:focus-visible,.sf3d-import:focus-within{outline:3px solid #e6fdff;outline-offset:3px}
+.sf3d-status{min-height:1.8em;font-size:.85rem}.sf3d-status[data-state=ready]{color:#a4eec8}.sf3d-status[data-state=error]{color:#ffb5b5}.sf3d-limit{font-size:.8rem}
+
 </style></head><body><main>
 <a href="../../">Retour à SiteForge</a>
 <h1>Core R122 — Laboratoire 3D isolé</h1>
@@ -27,7 +42,32 @@ h1{font-size:clamp(1.1rem,3vw,1.65rem);margin:1rem 0 .55rem}p{color:#aec3d8;line
  <canvas class="core-r109-canvas" width="1100" height="720" aria-hidden="true"></canvas>
  <canvas class="core-r122-metal-canvas" width="1100" height="720" aria-hidden="true"></canvas>
 </div>
+<p class="sf3d-status" id="sf3d-status" role="status" aria-live="polite">Initialisation du moteur graphique…</p>
 <p class="fallback-note">Si seule la sphère apparaît, l'animation 3D est indisponible ou le mouvement réduit est activé sur cet appareil. Ce laboratoire n'est pas une validation du rendu final.</p>
+
+<section class="sf3d-panel" aria-labelledby="sf3d-panel-title">
+ <h2 id="sf3d-panel-title">Atelier de scène 3D</h2>
+ <p>Modifie les formes et les matériaux en direct, puis exporte la configuration pour un autre projet SiteForge. Aucun compte supplémentaire ni serveur 3D.</p>
+ <form id="sf3d-controls" class="sf3d-fields">
+   <label>Largeur des anneaux <output id="sf3d-out-width" for="sf3d-width">1.00</output><input id="sf3d-width" type="range" name="width" min="0.65" max="1.5" step="0.05" value="1"></label>
+   <label>Épaisseur 3D <output id="sf3d-out-depth" for="sf3d-depth">1.00</output><input id="sf3d-depth" type="range" name="depth" min="0.65" max="1.8" step="0.05" value="1"></label>
+   <label>Vitesse <output id="sf3d-out-speed" for="sf3d-speed">1.00</output><input id="sf3d-speed" type="range" name="speed" min="0" max="3" step="0.1" value="1"></label>
+   <label>Orientation horizontale <output id="sf3d-out-yaw" for="sf3d-yaw">0</output><input id="sf3d-yaw" type="range" name="yaw" min="-55" max="55" step="5" value="0"></label>
+   <label>Orientation verticale <output id="sf3d-out-pitch" for="sf3d-pitch">0</output><input id="sf3d-pitch" type="range" name="pitch" min="-55" max="55" step="5" value="0"></label>
+   <label>Finition métallique <output id="sf3d-out-material">steel</output>
+    <select name="material" id="sf3d-material"><option value="steel">Acier brossé</option><option value="graphite">Graphite</option><option value="gold">Or brossé</option></select>
+   </label>
+ </form>
+ <div class="sf3d-actions">
+   <button type="button" id="sf3d-pause" aria-pressed="false">Mettre en pause</button>
+   <button type="button" id="sf3d-reset">Réinitialiser</button>
+   <button type="button" id="sf3d-export">Exporter JSON</button>
+   <label class="sf3d-import" for="sf3d-import">Importer une configuration<input id="sf3d-import" type="file" accept=".json,application/json"></label>
+ </div>
+ <p class="sf3d-status" id="sf3d-editor-status" role="status" aria-live="polite">Atelier prêt pour les réglages.</p>
+ <p class="sf3d-limit">Statut : prototype de scène 3D. L'export est une configuration JSON réutilisable, pas un modèle GLB ni une image photoréaliste.</p>
+</section>
 <script src="../../assets/core-r109-webgl.js" defer></script>
 <script src="../../assets/core-r122-gyro.js" defer></script>
+<script src="../../assets/siteforge-3d-editor.js" defer></script>
 </main></body></html>
