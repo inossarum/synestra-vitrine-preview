@@ -469,7 +469,7 @@ test('R128: actual tessellated 3D electric nucleus and slim high-resolution XYZ 
  const shaderApi={};runInNewContext(sphere,{window:shaderApi});
  assert.ok(shaderApi.SynestraSphere3DShaders.vertex.includes('attribute vec3 aPosition'));
  assert.ok(shaderApi.SynestraSphere3DShaders.vertex.includes('uView*(aPosition*uRadius)'),'Sphere positions rotate in xyz');
- assert.ok(shaderApi.SynestraSphere3DShaders.fragment.includes('noise3(n*3.7'),'Original R121 noise modulation remapped to actual sphere normals');
+ assert.ok(shaderApi.SynestraSphere3DShaders.fragment.includes('noise3(n*3.9'),'Original R121 noise modulation remapped to actual sphere normals');
  assert.ok(shaderApi.SynestraSphere3DShaders.halo.includes('NO FLAT')===false,'Halo must be an optical layer only');
  assert.ok(engine.includes('for(let i=0;i<48;i++')&&engine.includes('for(let j=0;j<96;j++'),'Sphere tessellation 48x96');
  assert.ok(engine.includes('sphereProgram=link(sphereVertex,sphereFragment)'));
