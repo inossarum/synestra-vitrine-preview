@@ -9,7 +9,7 @@ const checkOnly=process.argv.includes('--check');
 const rootFiles=['index.html','_headers'];
 const rootDirs=['assets','siteforge','signal','connect','bridge','offres'];
 const extensions={
- assets:new Set(['.avif','.webp','.png','.jpg','.jpeg','.svg','.css']),
+ assets:new Set(['.avif','.webp','.png','.jpg','.jpeg','.svg','.css','.js']),
  siteforge:new Set(['.html','.css','.js','.mjs','.json']),
  signal:new Set(['.html','.css','.js','.mjs','.json']),
  connect:new Set(['.html']),
@@ -42,7 +42,7 @@ for(const dir of rootDirs){
  scan(abs,dir,dir);
 }
 if(files.length<26||files.length>120||
- !['siteforge/index.html','siteforge/lab/index.html','siteforge/signature/index.html','signal/index.html','connect/index.html','bridge/index.html','offres/index.html','assets/product-pages.css']
+ !['siteforge/index.html','siteforge/lab/index.html','siteforge/signature/index.html','signal/index.html','connect/index.html','bridge/index.html','offres/index.html','assets/product-pages.css','assets/core-r109-webgl.js']
  .every(p=>files.some(f=>f.rel.replaceAll('\\','/')===p)))throw Error('STATIC_REQUIRED_ROUTES_MISSING');
 if(!checkOnly){
  if(existsSync(output))throw Error('STATIC_DIST_EXISTS_NO_OVERWRITE');
