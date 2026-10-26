@@ -1,0 +1,80 @@
+{
+  "schema": "synestra.vitrine.r111.evidence.v1",
+  "id": "SYN_VITRINE_R111_RANDOM_ARCS_AMBIENT_20261026",
+  "date": "2026-10-26",
+  "owner": "Inos",
+  "mission_id": "SYN_VITRINE_SITEFORGE_SHOWCASE_20261024",
+  "objective": "Occasional randomized internal electric arcs in single 3D Core; life across home Connect Bridge Offers via floating particles and ambient events",
+  "authority": {
+    "repository": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_VITRINE_SITEFORGE_R91_PREVIEW_20261024",
+    "pr": 5,
+    "draft": true,
+    "tested_code_head": "2a8840e240963623a9cc8267091181d224f7ba38",
+    "production_disabled": true
+  },
+  "changed_files": [
+    "assets/core-r109-webgl.js",
+    "index.html",
+    "assets/product-pages.css",
+    "connect/index.html",
+    "bridge/index.html",
+    "offres/index.html",
+    "tests/vitrine_r104_products_core.test.mjs"
+  ],
+  "implementation": {
+    "core": "Three potential GLSL electric arcs inside radius=.69 sphere, pseudo-random on/off per 2.05s cycle and circuit, randomized angle and offset, smooth 0.15+0.33-cycle fades, bounded brightness. R110 orb material, one tilted orbit, and native product links retained.",
+    "ambient": "Single existing same-origin script injects a decorative aria-hidden DOM field: 25 particles desktop, 14 mobile, staggered non-uniform motion, few glints, two diffuse CSS aurora pockets; fixed behind page content; no pointer capture.",
+    "cross_pages": "Reuses same JS on home and Connect/Bridge/Offres, extends each page's CSP only to script-src self, other directives preserved.",
+    "performance": "R110 limit ~30fps WebGL, 800000 max backing pixels, visibility pause, ambient CSS pausing on hidden tab, no remote libraries or telemetry; reduced-motion disables ambient particles and keeps static SVG fallback",
+    "regression": "Existing 38 tests retained, 2 R111 tests added, historic R110 fixed digest replaced with R111 fingerprint and fresh native shader validation."
+  },
+  "proof": {
+    "cloudflare": {
+      "project": "synestra-vitrine-preview",
+      "deployment_id": "1960b289-cb01-4162-a5ff-cf9e4d4b6ed9",
+      "preview_url": "https://1960b289.synestra-vitrine-preview.pages.dev",
+      "environment": "preview",
+      "stage": "success",
+      "deployed_sha": "2a8840e240963623a9cc8267091181d224f7ba38",
+      "tests": 40,
+      "pass": 40,
+      "fail": 0,
+      "allowlisted_files": 38,
+      "production_deployments_enabled": false
+    },
+    "native_gl": {
+      "environment": "EGL 1.5 Mesa OpenGL ES 3.2 surfaceless",
+      "shader_normalized_fnv1a32": "cd66a4ce",
+      "compiled": true,
+      "program_linked": true,
+      "draw_rgba": true,
+      "read_pixels": true,
+      "gl_error": "0x0",
+      "frames_seconds": [
+        0.7,
+        2.1,
+        3.8,
+        6.9
+      ],
+      "scene_pixel_differences": true,
+      "fragment_sha256": "17a25111e3e2a087b008ae5780e85980c9e6f54c97c81a3d228c6ada8a22e755",
+      "contact_sheet_sha256": "1c7ae04eb3ca16442c8e36cdd718d9fa4611c06d90daacc7e01c171bdecefb1c",
+      "qa_container_path": "/mnt/data/r110qa/core-r111-electric-arcs-qa.png"
+    }
+  },
+  "recovery": {
+    "r110_preview": "https://268810ee.synestra-vitrine-preview.pages.dev",
+    "previous_deploy": "268810ee-9976-41f2-a809-43f3ca89b71f",
+    "main_mutated": false
+  },
+  "limits": {
+    "complete_http_browser_e2e": "NOT_VERIFIED",
+    "real_iOS_safari": "NOT_RUN",
+    "ambient_cross_page_browser_pixels": "NOT_VERIFIED",
+    "native_GL": "QUALIFIED_SHADER_ONLY_NOT_FULL_WEB_APP",
+    "hook_execution": "UNKNOWN"
+  },
+  "next": "Owner review cloud preview on real browser/phone including randomly flashing arcs, low CPU/GPU, particles behind text and reduced-motion; correct only observed regressions, then consider owner-approved production.",
+  "function_report": "PARTIAL"
+}
