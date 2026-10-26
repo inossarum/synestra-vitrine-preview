@@ -118,7 +118,7 @@ test('R110: native-verified dimensional plasma shader, restrained orbit and boun
  assert.ok(fragment,'R110 shader fragment absent');
  let hash=2166136261;
  for(const ch of fragment)hash=Math.imul(hash ^ ch.charCodeAt(0),16777619)>>>0;
- assert.equal(hash.toString(16),'40d987a4','GLSL source fingerprint changed after R115 faster electrical impulses');
+ assert.equal(hash.toString(16),'a543602c','GLSL source fingerprint changed after R116 refined material');
  for(const term of ['noise3','turn3','ringBloom','ringFront','spiral']){
   if(term==='spiral')continue;
   assert.ok(fragment.includes(term),term);
@@ -141,15 +141,16 @@ test('R114: eight radial arcs grow from the centre towards the sphere edge',()=>
  assert.ok(fragment.indexOf('if(d>radius)')<fragment.indexOf('float arcA='),'Arcs remain inside sphere');
  for (const forbidden of ['fetch(', 'XMLHttpRequest', 'WebSocket', 'sendBeacon'])assert.ok(!script.includes(forbidden),forbidden);
 });
-test('R113: smaller core and seven animated Studio tools keep all three accessible product links',()=>{
- assert.ok(home.includes('transform:scale(.57);transform-origin:center center'));
- assert.ok(home.includes('translateX(-50%) scale(.57)'));
+test('R116: smaller Core and three actual Studio tools keep real product links',()=>{
+ assert.ok(home.includes('transform:scale(.49);transform-origin:center center'));
+ assert.ok(home.includes('translateX(-50%) scale(.49)'));
  const orbit=home.split('<div class="core-tools-orbit" aria-hidden="true">')[1]?.split('<nav class="core-r108-links"')[0]||'';
- assert.equal(orbit.split('class="core-tool-satellite"').length-1,7);
- for(const label of ['Connect','Bridge','Relay','Memory','Evidence','Visual','SiteForge'])assert.ok(orbit.includes('<span>'+label+'</span>'),label);
+ assert.equal(orbit.split('class="core-tool-satellite"').length-1,3);
+ for(const label of ['Connect','Bridge','SiteForge'])assert.ok(orbit.includes('<span>'+label+'</span>'),label);
  for(const rule of ['@keyframes core-tools-turn','@keyframes core-tools-upright',
    '@media(prefers-reduced-motion:reduce){.core-tools-orbit',
    '@media(max-width:620px){.core-tools-orbit'])assert.ok(home.includes(rule),rule);
+ for(const n of ['Relay','Memory','Evidence','Visual']) assert.ok(!orbit.includes('<span>'+n+'</span>'),n);
  assert.ok(!orbit.includes('<a '),'Decorative labels must not create fake navigation links');
  for (const slug of ['siteforge','connect','bridge'])assert.ok(home.includes('href="./'+slug+'/"'),slug);
 });
@@ -184,9 +185,9 @@ test('R114: resolution increases with strict render-pixel and mobile caps',()=>{
  assert.ok(!source.includes('setTimeout('));
 });
 
-test('R115: seven capsules centered on the orbital anchors during rotation and mobile',()=>{
+test('R116: three capsules centered on their orbital anchors during rotation and mobile',()=>{
  const orbit=home.split('<div class="core-tools-orbit" aria-hidden="true">')[1]?.split('<nav class="core-r108-links"')[0]||'';
- assert.equal(orbit.split('class="core-tool-satellite"').length-1,7);
+ assert.equal(orbit.split('class="core-tool-satellite"').length-1,3);
  assert.match(home,/\.core-tool-satellite>span\{[^}]*transform:translate\(-50%,-50%\)/);
  assert.match(home,/@keyframes core-tools-upright\{from\{transform:translate\(-50%,-50%\) rotate\(0deg\)\}to\{transform:translate\(-50%,-50%\) rotate\(-360deg\)\}\}/);
  assert.match(home,/@media\(max-width:620px\)\{\.core-tools-orbit/);
@@ -219,4 +220,28 @@ test('R115: autonomous ambient wisps and beacons share visibility and reduced-mo
  assert.ok(script.indexOf('const wispCount')<script.indexOf('document.body.insertBefore(field'));
  assert.ok(script.includes("document.addEventListener('visibilitychange', updateAmbient)"));
  assert.doesNotMatch(script,/setInterval\(|setTimeout\(|\bfetch\s*\(|XMLHttpRequest|WebSocket|sendBeacon/);
+});
+
+test('R116: refined single-ring Core respects validated products, reduced motion and clarity',()=>{
+ const orbit=home.split('<div class="core-tools-orbit" aria-hidden="true">')[1]?.split('<nav class="core-r108-links"')[0]||'';
+ assert.equal((orbit.match(/class="core-tool-satellite"/g)||[]).length,3);
+ for (const name of ['Connect','Bridge','SiteForge']) assert.ok(orbit.includes('<span>'+name+'</span>'),name);
+ for (const name of ['Relay','Memory','Evidence','Visual']) assert.ok(!orbit.includes('<span>'+name+'</span>'),name);
+ assert.ok(!orbit.includes('<img '),'Unverified product logos must not be fabricated');
+ for (const ang of ['-90deg','30deg','150deg']) assert.ok(home.includes('--orbit-angle:'+ang),ang);
+ const svg=home.split('<svg class="core-r108-art"')[1]?.split('</svg>')[0]||'';
+ assert.equal((svg.match(/<ellipse/g)||[]).length,1);
+ assert.ok(home.includes('scale(.49)'));
+ assert.ok(home.includes('@media(prefers-reduced-motion:reduce){.core-tools-orbit'));
+ for(const name of ['connect','bridge','siteforge']) assert.ok(home.includes('href="./'+name+'/\"'),name);
+ const src=read('assets/core-r109-webgl.js');
+ const tick=String.fromCharCode(96);
+ const fragment=src.split('const fragment = '+tick)[1]?.split(tick+';')[0]||'';
+ assert.equal(fragment.split('=r111Arc(p,').length-1,8);
+ assert.ok(fragment.includes('float cycleTime=1.12;'));
+ assert.ok(fragment.includes('float centralSource=exp(-d*d*115.);'));
+ assert.ok(fragment.includes('base+=cyan*currents*(.045+.19*light)'));
+ assert.ok(fragment.includes('base+=ringCol*(ring*.32+ringBloom*.018)*orbital;'));
+ assert.ok(fragment.indexOf('if(d>radius)')<fragment.indexOf('float arcA='));
+ assert.ok(src.includes('Math.sqrt(1200000/(rect.width*rect.height))'));
 });

@@ -153,14 +153,14 @@ void main(){
  float ringBloom=exp(-od*od*480.);
  float ringFront=smoothstep(-.12,.10,q.y);
  float spinPulse=.77+.23*sin(atan(q.y/.31,q.x/.98)*3.-time*.46);
- float aura=exp(-pow(d/.94,2.)*2.5);
+ float aura=exp(-pow(d/.88,2.)*3.0);
  vec3 cyan=vec3(.31,.87,1.);
  vec3 lavender=vec3(.64,.47,1.);
  vec3 navy=vec3(.009,.034,.108);
  vec3 backdrop=mix(vec3(.07,.11,.35),vec3(.04,.33,.55),smoothstep(-.8,.8,p.x));
  vec3 ringCol=mix(lavender,cyan,smoothstep(-.42,.6,p.x));
- vec3 outside=backdrop*aura*.13+ringCol*(ring*.63+ringBloom*.065)*spinPulse;
- float outsideA=clamp(aura*.12+ring*.7+ringBloom*.08,0.,.8);
+ vec3 outside=backdrop*aura*.07+ringCol*(ring*.34+ringBloom*.025)*spinPulse;
+ float outsideA=clamp(aura*.065+ring*.43+ringBloom*.035,0.,.65);
  if(d>radius){ gl_FragColor=vec4(outside,outsideA); return; }
  vec3 n=vec3(p,sqrt(max(radius*radius-dot(p,p),0.)))/radius;
  n=turn3(n,tilt+vec2(sin(t*.23)*.15,cos(t*.18)*.08));
@@ -174,15 +174,17 @@ void main(){
  float rim=pow(1.-max(n.z,0.),2.2);
  float soft=clamp(.18+v*.63+light*.55,0.,1.);
  vec3 base=mix(navy,vec3(.035,.17,.39),soft);
- base=mix(base,vec3(.15,.09,.38),smoothstep(.52,.88,v)*.37);
- base+=cyan*currents*(.10+.47*light);
- base+=lavender*secondary*(.09+.22*v);
- base+=cyan*rim*.78;
+ base=mix(base,vec3(.12,.09,.30),smoothstep(.52,.88,v)*.17);
+ base+=cyan*currents*(.045+.19*light);
+ base+=lavender*secondary*(.035+.10*v);
+ base+=cyan*rim*.54;
  float spec=pow(max(dot(reflect(normalize(vec3(.53,-.71,-1.)),n),vec3(0.,0.,1.)),0.),24.);
- base+=vec3(.88,.96,1.)*spec*.54;
- base+=vec3(.70,.83,.95)*pow(max(dot(n,normalize(vec3(-.28,.46,1.))),0.),22.)*.20;
+ base+=vec3(.88,.96,1.)*spec*.29;
+ base+=vec3(.70,.83,.95)*pow(max(dot(n,normalize(vec3(-.28,.46,1.))),0.),22.)*.11;
  float topRim=smoothstep(-.2,.8,p.y)*rim;
  base+=vec3(.09,.22,.35)*topRim;
+ float centralSource=exp(-d*d*115.);
+ base+=vec3(.72,.93,1.)*centralSource*.31;
  float arcA=r111Arc(p,1.,time);
  float arcB=r111Arc(p,2.,time);
  float arcC=r111Arc(p,3.,time);
@@ -198,7 +200,7 @@ void main(){
  float shellFade=1.-smoothstep(radius*.977,radius,d);
  float alpha=clamp(.96+rim*.04,0.,1.)*shellFade;
  float orbital=ringFront*spinPulse;
- base+=ringCol*(ring*.75+ringBloom*.045)*orbital;
+ base+=ringCol*(ring*.32+ringBloom*.018)*orbital;
  gl_FragColor=vec4(clamp(base,0.,1.),alpha);
 }`;
 
