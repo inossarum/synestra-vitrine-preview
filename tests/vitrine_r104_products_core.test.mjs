@@ -12,6 +12,7 @@ test('R108: one clean energy Core keeps three product links and the R99 brand',(
  assert.match(home,/class="core-r108-heart"/);
  assert.match(home,/class="core-r117-metal-a"/);
  assert.match(home,/class="core-r117-metal-b"/);
+ assert.match(home,/class="core-r118-metal-c"/);
  assert.match(home,/class="brand-banner-r99" src="\.\/assets\/synestra-studio-header-y-r99.webp"/);
  assert.doesNotMatch(home,/<img class="official-hero-logo"/);
  assert.doesNotMatch(home,/class="core-r107-|class="core-r106-svg"/);
@@ -119,7 +120,7 @@ test('R110: native-verified dimensional plasma shader, restrained orbit and boun
  assert.ok(fragment,'R110 shader fragment absent');
  let hash=2166136261;
  for(const ch of fragment)hash=Math.imul(hash ^ ch.charCodeAt(0),16777619)>>>0;
- assert.equal(hash.toString(16),'5dcc9433','GLSL source fingerprint changed after R117 depth-composited metallic gimbals');
+ assert.equal(hash.toString(16),'2b871361','GLSL source fingerprint changed after R117 depth-composited metallic gimbals');
  for(const term of ['noise3','turn3','metalGyro','sphereFrontZ']){
   assert.ok(fragment.includes(term),term);
  }
@@ -230,7 +231,7 @@ test('R116: refined single-ring Core respects validated products, reduced motion
  assert.ok(!orbit.includes('<img '),'Unverified product logos must not be fabricated');
  for (const ang of ['-90deg','30deg','150deg']) assert.ok(home.includes('--orbit-angle:'+ang),ang);
  const svg=home.split('<svg class="core-r108-art"')[1]?.split('</svg>')[0]||'';
- assert.equal((svg.match(/<ellipse/g)||[]).length,2);
+ assert.equal((svg.match(/<ellipse/g)||[]).length,3);
  assert.ok(home.includes('scale(.49)'));
  assert.ok(home.includes('@media(prefers-reduced-motion:reduce){.core-tools-orbit'));
  for(const name of ['connect','bridge','siteforge']) assert.ok(home.includes('href="./'+name+'/\"'),name);
@@ -248,9 +249,9 @@ test('R116: refined single-ring Core respects validated products, reduced motion
 
 test('R117: two visible brushed-metal gimbals with proper SVG front/back paint order',()=>{
  const svg=home.split('<svg class="core-r108-art"')[1]?.split('</svg>')[0]||'';
- assert.equal((svg.match(/<ellipse/g)||[]).length,2);
- for(const id of ['r117-titanium','r117-platinum'])assert.ok(svg.includes('id="'+id+'"'),id);
- for(const name of ['core-r117-metal-a','core-r117-metal-b']) {
+ assert.equal((svg.match(/<ellipse/g)||[]).length,3);
+ for(const id of ['r117-titanium','r117-platinum','r118-tungsten'])assert.ok(svg.includes('id="'+id+'"'),id);
+ for(const name of ['core-r117-metal-a','core-r117-metal-b','core-r118-metal-c']) {
   assert.equal((svg.match(new RegExp('class="'+name+'"','g'))||[]).length,2,name);
   assert.ok(home.includes('.'+name+'{animation:'),name);
  }
@@ -260,18 +261,20 @@ test('R117: two visible brushed-metal gimbals with proper SVG front/back paint o
  assert.ok(back>=0&&back<heart&&heart<front,'Metal back layers must be painted first and front layers last');
  assert.ok(svg.includes('M164 189 A156 72 0 0 0 476 189'));
  assert.ok(svg.includes('M181 189 A139 93 0 0 0 459 189'));
- assert.ok(home.includes('@media(prefers-reduced-motion:reduce){.core-r108-heart,.core-r108-orbit,.core-r117-metal-a,.core-r117-metal-b{animation:none!important}'));
+ assert.ok(home.includes('@media(prefers-reduced-motion:reduce){.core-r108-heart,.core-r108-orbit,.core-r117-metal-a,.core-r117-metal-b,.core-r118-metal-c{animation:none!important}'));
 });
 test('R117: WebGL metal gimbals solve 3D projection and depth-sort against illuminated sphere',()=>{
  const script=read('assets/core-r109-webgl.js');
  const fragment=script.match(/const fragment = \`([\s\S]*?)\`;/)?.[1]?.trim()||'';
  assert.ok(fragment.includes('vec4 metalGyro(vec2 p,float seconds,float slot,out float zpos)'));
  assert.ok(fragment.includes('zpos=-(p.x*plane.x+p.y*plane.y)/plane.z;'));
- for(const n of ['1.','2.'])assert.ok(fragment.includes('metalGyro(p,time,'+n),n);
+ for(const n of ['1.','2.','3.'])assert.ok(fragment.includes('metalGyro(p,time,'+n),n);
  assert.ok(fragment.includes('float sphereFrontZ=sqrt(max(radius*radius-d*d,0.));'));
  assert.ok(fragment.includes('float frontA=metalA.a*step(sphereFrontZ+.01,metalDepthA);'));
  assert.ok(fragment.includes('float frontB=metalB.a*step(sphereFrontZ+.01,metalDepthB);'));
- assert.ok(fragment.includes('if(metalDepthA>metalDepthB)'),"Metal ordering must be depth-aware");
+ assert.equal(fragment.split('if(z').length-1,3,'3 compare-swap depth sort operations');
+ assert.ok(fragment.includes('orderGyros(metalA,metalB,metalC,metalDepthA,metalDepthB,metalDepthC);'));
+ assert.ok(fragment.includes('float frontC=metalC.a*step(sphereFrontZ+.01,metalDepthC);'));
  assert.ok(fragment.indexOf('float frontA=')>fragment.indexOf('float arcH='),'Front metal must be composited after electric plasma');
  assert.ok(!fragment.includes('ringBloom')&&!fragment.includes('ringFront'),'No legacy flat electric ring competing with metal');
  assert.equal(fragment.split('=r111Arc(p,').length-1,8);
@@ -279,4 +282,24 @@ test('R117: WebGL metal gimbals solve 3D projection and depth-sort against illum
  assert.ok(script.includes('clock - lastFrame < 32'));
  assert.ok(script.includes('Math.sqrt(1200000/(rect.width*rect.height))'));
  assert.doesNotMatch(script,/\bfetch\s*\(|XMLHttpRequest|WebSocket|sendBeacon|setInterval\(|setTimeout\(/);
+});
+
+test('R118: three thicker metallic gyros, 13/17/20s independent spin, fallback safety',()=>{
+ const svg=home.split('<svg class="core-r108-art"')[1]?.split('</svg>')[0]||'';
+ assert.equal((svg.match(/<ellipse/g)||[]).length,3);
+ for(const thickness of ['5.8','3.9','3.6'])assert.ok(svg.includes('stroke-width="'+thickness+'"'),thickness);
+ for(const name of ['core-r117-metal-a','core-r117-metal-b','core-r118-metal-c'])
+   assert.equal(svg.split('class="'+name+'"').length-1,2,name);
+ for(const animation of ['r118-gyro-a 13s','r118-gyro-b 17s','r118-gyro-c 20s'])assert.ok(home.includes(animation),animation);
+ assert.ok(home.includes('.core-r118-metal-c{transform:rotate(-61deg)}'));
+ const source=read('assets/core-r109-webgl.js');
+ const tick=String.fromCharCode(96);
+ const fragment=source.split('const fragment = '+tick)[1]?.split(tick+';')[0]||'';
+ for(const spin of ['6.283185/13.','-6.283185/17.','6.283185/20.'])assert.ok(fragment.includes(spin),spin);
+ assert.equal(fragment.split('=metalGyro(p,time,').length-1,3);
+ assert.equal(fragment.split('if(z').length-1,3);
+ assert.equal(fragment.split('=r111Arc(p,').length-1,8);
+ assert.ok(source.includes('if (reduceMotion.matches) return;'));
+ assert.ok(home.includes('scale(.49)'));
+ assert.doesNotMatch(source,/XMLHttpRequest|WebSocket|sendBeacon|setInterval\(/);
 });

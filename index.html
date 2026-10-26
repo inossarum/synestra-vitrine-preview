@@ -1443,12 +1443,14 @@
     .core-r108-art{position:absolute;left:50%;top:5%;transform:translateX(-50%) scale(.49);transform-origin:center center;width:min(100%,760px);height:350px;overflow:visible}
     .core-r108-heart{transform-origin:320px 189px;animation:r108-breathe 5.8s ease-in-out infinite}
     .core-r108-orbit{animation:r108-current 18s linear infinite}
-    /* R117: two restrained brushed-metal gimbals, real foreground/background layers. */
-    .core-r117-metal-a,.core-r117-metal-b{transform-box:view-box;transform-origin:320px 189px}
-    .core-r117-metal-a{animation:r117-gyro-a 21s linear infinite}
-    .core-r117-metal-b{animation:r117-gyro-b 28s linear infinite reverse}
-    @keyframes r117-gyro-a{from{transform:rotate(-25deg)}to{transform:rotate(335deg)}}
-    @keyframes r117-gyro-b{from{transform:rotate(42deg)}to{transform:rotate(402deg)}}
+    /* R118: three precision-metal gyroscopes, phase-distinct and accelerated. */
+    .core-r117-metal-a,.core-r117-metal-b,.core-r118-metal-c{transform-box:view-box;transform-origin:320px 189px}
+    .core-r117-metal-a{animation:r118-gyro-a 13s linear infinite}
+    .core-r117-metal-b{animation:r118-gyro-b 17s linear infinite reverse}
+    .core-r118-metal-c{animation:r118-gyro-c 20s linear infinite}
+    @keyframes r118-gyro-a{from{transform:rotate(-25deg)}to{transform:rotate(335deg)}}
+    @keyframes r118-gyro-b{from{transform:rotate(42deg)}to{transform:rotate(402deg)}}
+    @keyframes r118-gyro-c{from{transform:rotate(-61deg)}to{transform:rotate(299deg)}}
     .core-r108-links{position:absolute;z-index:6;left:clamp(20px,5vw,64px);right:clamp(20px,5vw,64px);bottom:54px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
     .core-r108-links a{display:flex;align-items:center;justify-content:center;gap:9px;min-height:55px;border:1px solid rgba(137,186,218,.24);
       background:rgba(13,29,49,.78);border-radius:11px;text-decoration:none;color:#e7f4ff;transition:border-color .2s,background .2s}
@@ -1464,8 +1466,8 @@
       .core-r108-art{top:6%;width:110%;height:270px}.core-r108-links{left:13px;right:13px;bottom:55px;gap:6px}
       .core-r108-links a{min-height:45px;gap:4px;padding:6px 3px}.core-r108-links a span:first-child{display:none}
       .core-r108-links a strong{font-size:12px}.core-r108-note{font-size:10px}}
-    @media(prefers-reduced-motion:reduce){.core-r108-heart,.core-r108-orbit,.core-r117-metal-a,.core-r117-metal-b{animation:none!important}
-      .core-r117-metal-a{transform:rotate(-25deg)}.core-r117-metal-b{transform:rotate(42deg)}
+    @media(prefers-reduced-motion:reduce){.core-r108-heart,.core-r108-orbit,.core-r117-metal-a,.core-r117-metal-b,.core-r118-metal-c{animation:none!important}
+      .core-r117-metal-a{transform:rotate(-25deg)}.core-r117-metal-b{transform:rotate(42deg)}.core-r118-metal-c{transform:rotate(-61deg)}
       .core-r108-links a{transition:none!important}}
 
     /* R109: WebGL 3D depth enhancement. R108 SVG stays as zero-script fallback. */
@@ -1616,26 +1618,37 @@ body>header,body>main,body>footer{position:relative;z-index:1}
               <stop offset="0" stop-color="#334353"/><stop offset=".35" stop-color="#a7b8c8"/>
               <stop offset=".68" stop-color="#eff5f8"/><stop offset="1" stop-color="#43596c"/>
             </linearGradient>
+            <linearGradient id="r118-tungsten" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0" stop-color="#3c4654"/><stop offset=".30" stop-color="#9fabb9"/>
+              <stop offset=".58" stop-color="#d5dfeb"/><stop offset="1" stop-color="#4d5b6a"/>
+            </linearGradient>
           </defs>
           <circle cx="320" cy="189" r="177" fill="url(#r108-aura)"/>
           <circle cx="320" cy="189" r="103" fill="#31bdeb" opacity=".18" filter="url(#r108-halo)"/>
           <!-- R117: back halves sit behind the sphere in SVG fallback. -->
-          <g class="core-r117-metal-a" fill="none" stroke="url(#r117-titanium)" stroke-width="4.2">
+          <g class="core-r117-metal-a" fill="none" stroke="url(#r117-titanium)" stroke-width="5.8">
             <ellipse cx="320" cy="189" rx="156" ry="72"/>
           </g>
-          <g class="core-r117-metal-b" fill="none" stroke="url(#r117-platinum)" stroke-width="2.8" opacity=".88">
+          <g class="core-r117-metal-b" fill="none" stroke="url(#r117-platinum)" stroke-width="3.9" opacity=".88">
             <ellipse cx="320" cy="189" rx="139" ry="93"/>
+          </g>
+          <g class="core-r118-metal-c" fill="none" stroke="url(#r118-tungsten)" stroke-width="3.6" opacity=".86">
+            <ellipse cx="320" cy="189" rx="166" ry="58"/>
           </g>
           <circle class="core-r108-heart" cx="320" cy="189" r="86" fill="url(#r108-plasma)" stroke="#9beaff" stroke-width="1.25"/>
           <path d="M267 150C287 125 318 121 339 132" stroke="#f2ffff" stroke-width="3" opacity=".56" fill="none" stroke-linecap="round"/>
           <circle cx="289" cy="149" r="13" fill="#f5ffff" opacity=".16" filter="url(#r108-halo)"/>
           <!-- Front halves are painted AFTER the sphere, so they pass in front. -->
           <g class="core-r117-metal-a" fill="none" stroke="url(#r117-titanium)" stroke-linecap="round">
-            <path d="M164 189 A156 72 0 0 0 476 189" stroke-width="4.2"/>
+            <path d="M164 189 A156 72 0 0 0 476 189" stroke-width="5.8"/>
             <path d="M164 189 A156 72 0 0 0 476 189" stroke="#ebf5fa" stroke-width=".8" opacity=".36"/>
           </g>
           <g class="core-r117-metal-b" fill="none" stroke="url(#r117-platinum)" stroke-linecap="round" opacity=".88">
-            <path d="M181 189 A139 93 0 0 0 459 189" stroke-width="2.8"/>
+            <path d="M181 189 A139 93 0 0 0 459 189" stroke-width="3.9"/>
+          </g>
+          <g class="core-r118-metal-c" fill="none" stroke="url(#r118-tungsten)" stroke-linecap="round" opacity=".86">
+            <path d="M154 189 A166 58 0 0 0 486 189" stroke-width="3.6"/>
+            <path d="M154 189 A166 58 0 0 0 486 189" stroke="#eaf1f7" stroke-width=".6" opacity=".25"/>
           </g>
           <g fill="#c7f7ff" opacity=".76">
             <circle cx="164" cy="173" r="2"/><circle cx="414" cy="77" r="1.8"/>
