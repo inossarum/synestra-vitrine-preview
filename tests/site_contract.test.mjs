@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import './siteforge_r137_live_controls.test.mjs'; // R137 live lab acceptance runs in standard Cloudflare build gate.
+import './siteforge_r132_r116_clean_lab.test.mjs'; // R116 provenance and isolation.
+import './siteforge_r136_mobile_sticky_preview.test.mjs'; // Mobile sticky continuity.
 
 const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 const count = (fragment) => html.split(fragment).length - 1;
