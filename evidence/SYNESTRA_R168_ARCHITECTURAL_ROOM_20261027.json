@@ -1,0 +1,108 @@
+{
+  "schema": "synestra.vitrine.r168.architectural_room_preview.v1",
+  "date": "2026-10-27",
+  "mission_id": "SYN_VITRINE_R168_ARCHITECTURAL_CHAMBER_PREVIEW_20261027",
+  "owner_intent": "Owner rejects subtle R167 backdrop as insufficient, expects an actual futuristic room behind the approved Synestra sphere. Do not modify the approved sphere or publish to the live vitrine.",
+  "source": {
+    "repository": "inossarum/synestra-vitrine-preview",
+    "parent_review_sha": "55b143f6daa72befa95ee4e238d5bac8d7fecfc1",
+    "branch": "task/SYN_VITRINE_R168_ARCHITECTURAL_CHAMBER_REVIEW_20261027",
+    "approved_home_git_blob_sha": "1413e30138ba1657f7056401818e697ddbd32ac8",
+    "approved_core_engine_git_blob_sha": "dd63d75fdb966de2052595c95b7b6cb736d6c7cc"
+  },
+  "deliverables": {
+    "architecture_svg": "assets/vitrine-r168-room.svg",
+    "site_styles": "assets/vitrine-r168-chamber-preview.css",
+    "isolated_preview": "vitrine-r168-chamber-preview.html",
+    "rebuild": "r168_build_preview.py",
+    "verification_tests": [
+      "tests/siteforge_r168_architectural_room.test.mjs",
+      "tests/siteforge_r168_chamber_browser_qa.mjs",
+      "tests/siteforge_r168_chamber_reduced_qa.mjs"
+    ],
+    "chrome_captures": [
+      "r168-chamber-desktop.png",
+      "r168-chamber-mobile.png",
+      "r168-chamber-reduced-desktop.png",
+      "r168-chamber-reduced-mobile.png"
+    ]
+  },
+  "visual_design": {
+    "scene": "3D-perspective illustration of a complete enclosed futuristic room: side walls, metallic panelling, recessed ceiling, chamfered portal/rear wall, metallic panelled perspective floor and directional LED accent bars",
+    "materials": "Layered metallic gradients / dim green/violet LED accents and soft lighting",
+    "palette": {
+      "violet": "#53318d",
+      "green": "#69dcb4",
+      "dark": "#070d18",
+      "core": "#eaffff"
+    },
+    "layers": {
+      "architecture": "SVG inside stage at z-index 0",
+      "existing_plasma": "existing WebGL canvas at z-index 3",
+      "links": "unchanged original stage links"
+    },
+    "visible_core_diameter": "CSS matrix(0.49, 0, 0, 0.49, 0, 0)",
+    "animations_added": 0,
+    "external_assets_added": 0
+  },
+  "tests": {
+    "failure_first": {
+      "status": "EXPECTED_FAIL",
+      "new_coverage": 3
+    },
+    "node_contract": {
+      "status": "PASS",
+      "total": 74,
+      "passed": 74,
+      "failed": 0
+    },
+    "chrome_webgl_desktop": {
+      "status": "PASS",
+      "viewport": 1280,
+      "bodyWidth": 1265,
+      "canvas": 1,
+      "glError": 0,
+      "controls": 18,
+      "coreScale": 0.49
+    },
+    "chrome_webgl_mobile": {
+      "status": "PASS",
+      "viewport": 390,
+      "bodyWidth": 390,
+      "canvas": 1,
+      "glError": 0,
+      "controls": 18,
+      "coreScale": 0.49
+    },
+    "chrome_reduced_motion_desktop": {
+      "status": "PASS",
+      "webgl_not_started": true,
+      "fallback_visible": true,
+      "old_shell_absent": true,
+      "room_visible": true
+    },
+    "chrome_reduced_motion_mobile": {
+      "status": "PASS",
+      "webgl_not_started": true,
+      "fallback_visible": true,
+      "old_shell_absent": true,
+      "room_visible": true
+    },
+    "static_approval": {
+      "homepage_unchanged": true,
+      "core_js_unchanged": true
+    },
+    "aesthetic_acceptance": "PENDING_OWNER",
+    "physical_gpu_fps": "NOT_MEASURED"
+  },
+  "publication": {
+    "review_branch_only": true,
+    "approved_vitrine_unchanged": true,
+    "main_unchanged": true,
+    "cloudflare_deployment": false,
+    "public_page": "NOT_DEPLOYED",
+    "github_preview": "PENDING_UPLOAD"
+  },
+  "rollback": "Delete independent R168 preview/CSS/SVG assets; approved homepage unchanged",
+  "status": "LOCAL_REVIEW_PROTOTYPE_VERIFIED_PENDING_GITHUB"
+}
