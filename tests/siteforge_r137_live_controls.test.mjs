@@ -190,3 +190,26 @@ test('R144: visibility 0 retains currents, breaks solid outline and resets indep
  const alpha0=.58*.6+.65*.12;
  assert.ok(alpha0>0&&alpha0<.9,'energy visible with transparent negative space');
 });
+
+
+test('R144: mobile-native change events activate all energy and relief modes',()=>{
+ const x=fixture();x.frame(40);
+ assert.equal(typeof x.events.change,'function','change listener for native selects must exist');
+ let time=40;
+ for(const value of [1,2,3,4,5,0]){
+  x.controls.energyMode.value=String(value);
+  x.events.change({target:x.controls.energyMode});
+  x.frame(time+=45);
+  assert.equal(x.arrays.get('surfaceSettings')[0],value,'energy mode '+value);
+ }
+ for(const value of [1,2,3,4,5,0]){
+  x.controls.reliefMode.value=String(value);
+  x.events.change({target:x.controls.reliefMode});
+  x.frame(time+=45);
+  assert.equal(x.arrays.get('reliefSettings')[0],value,'relief mode '+value);
+ }
+ x.controls.surfaceMotion.value='3';
+ x.events.change({target:x.controls.surfaceMotion});
+ x.frame(time+=45);
+ assert.equal(x.arrays.get('surfaceSettings')[1],3);
+});
