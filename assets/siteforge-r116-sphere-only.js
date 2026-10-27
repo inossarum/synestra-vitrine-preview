@@ -252,13 +252,13 @@ void main(){
       // Refined original plasma: smoother continuous 3D streamlines.
       float ribbon=pow(max(0.,.5+.5*cos(winding)),max(2.5,6.5/ribbonWidth));
       float secondaryRibbon=pow(max(0.,.5+.5*cos(winding*.8-q.z*7.2)),max(3.,8./ribbonWidth));
-      flowCurrents=ribbon*.90+secondaryRibbon*.53+sideFilament*.17;
+      flowCurrents=ribbon*.89+secondaryRibbon*.18;
     }else if(uFlow.x<1.5){
       // Magnetic flux tubes: closed, strongly curved field-loop bands.
       float fieldAngle=angle*4.+q.z*6.5+sin(planar*9.+broad*2.2-t*.65)*2.;
       float fieldLoop=pow(max(0.,.5+.5*cos(fieldAngle)),max(2.,7./ribbonWidth));
       float layering=pow(max(0.,.5+.5*cos(q.z*11.+planar*7.-t*.43)),3.);
-      flowCurrents=fieldLoop*(.42+.87*layering)+sideFilament*.14;
+      flowCurrents=fieldLoop*(.40+.68*layering);
       flowFog=.54;
     }else if(uFlow.x<2.5){
       // Aurora: flowing translucent vertical sheets, not spiralling plasma.
@@ -266,25 +266,25 @@ void main(){
                          sin(q.y*5.+t*.24)*1.8+broad*3.2-t*.55;
       float veil=pow(max(0.,.5+.5*cos(curtainPhase)),max(1.8,5.2/ribbonWidth));
       float feather=.5+.5*sin(q.y*9.-t*.38+detail*4.);
-      flowCurrents=veil*(.38+.83*feather)+sideFilament*.13;
+      flowCurrents=veil*(.38+.67*feather);
       flowFog=.46;
     }else if(uFlow.x<3.5){
       // Ionized nebula: broad, turbulent luminous clouds, minimal filaments.
       float densityCloud=smoothstep(.17,.69,broad*.70+detail*.30);
       float swirls=.5+.5*cos(q.z*5.+planar*4.-t*.22+depthWarp*2.);
-      flowCurrents=densityCloud*(.28+.38*swirls) + hollow*.10;
+      flowCurrents=densityCloud*(.28+.28*swirls);
       flowFog=1.55+.55*ribbonWidth;
     }else{
       // Fusion jets: eight radial stellar emission cones with local ripples.
       float radialPhase=angle*8.+q.z*3.4+depthWarp*2.3-t*.42;
       float jets=pow(max(0.,.5+.5*cos(radialPhase)),max(2.,9./ribbonWidth));
       float outward=smoothstep(.08,.36,planar)*exp(-distance3D*1.2);
-      flowCurrents=jets*(.50+1.22*outward)+sideFilament*.10;
+      flowCurrents=jets*(.50+.86*outward);
       flowFog=.40;
     }
     float currents=0.;
     currents=flowCurrents;
-    currents+=electrical*.80+vortex*.64+fusion*.72;
+    // Only the selected volumetric flow remains active: no legacy energy overlays.
     float fog=(volumeFog*.13+.12*hollow)*interior*uShape.y;
     fog*=flowFog;
     float density=(fog+currents*.27*emission*uShape.y+
@@ -327,7 +327,7 @@ void main(){
  }
  float halo=exp(-r2*3.1),hot=exp(-r2*14.);
  float energy=(uLayer<.5?halo*.26:hot*1.13+halo*.13)*vLife*vGlint;
- if(uPass>.5&&uPass<1.5)energy*=.28; // atmosphere, not dot noise
+ if(uPass>.5&&uPass<1.5)energy*=.025; // restrained shell: no starfield over the material
  float bound=1.-smoothstep(radius*.95,radius*1.035,length(p));
  energy*=bound*clamp(uEffects.w,0.,1.);
  if(uPass>2.5)energy*=pow(max(uShape.w,0.),1.55)*1.62;
@@ -419,9 +419,9 @@ void main(){
    gl.uniform1f(U.uLayer,0);gl.drawArrays(gl.POINTS,0,count);
    gl.uniform1f(U.uLayer,1);gl.drawArrays(gl.POINTS,0,count);
   };
-  if(num('shellVisibility')>0)emit(1,sphereCount);
-  if(num('arcIntensity')>0)emit(2,lightningCount);
-  if(num('coreSize')>0&&num('coreLight')>0)emit(3,coreCount);
+  // Volumetric quad already renders the shell; omit decorative point overlay entirely.
+  if(num('arcIntensity')>0&&num('arcDensity')>0)emit(2,lightningCount);
+  // The ray-marched nucleus is authoritative; avoid a second speckled core.
   if(extra)emit(0,extraCount);
   gl.disable(gl.BLEND);
   status(vfxStatus,'Plasma GPU actif · '+(extra?extraCount+' particules':'particules additionnelles désactivées')+
