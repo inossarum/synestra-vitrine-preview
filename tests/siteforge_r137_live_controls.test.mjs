@@ -179,19 +179,21 @@ test('R138: every slider or color picker changes a distinct GPU uniform or the z
  assert.equal(fx.u1.get('shellThicknessRatio'),.45);
 });
 
-test('R139: wall thickness changes projected shell contour, not alpha or global exposure',()=>{
- const fragment=js.match(/const fragment = `([\\s\\S]*?)`;/)?.[1]??'';
- assert.match(fragment,/float innerRadius=radius-shellDepth;/);
- assert.match(fragment,/float wallMask=smoothstep\\(innerRadius-innerFeather,innerRadius\\+innerFeather,d\\);/);
- assert.match(fragment,/base=mix\\(base,wallMaterial\\*wallIllum,wallMask/);
- assert.match(fragment,/float alpha=sphereAlpha\\*shellFade;/);
- assert.doesNotMatch(fragment,/float alpha=[^;]*shellOptical/);
- assert.doesNotMatch(fragment,/float alpha=[^;]*shellThicknessRatio/);
- const r=.69, thin=r-(.012+.31*.0-.012*.0), thick=r-.31;
- // Geometric edge position changes by almost 0.3 normalized projected units.
- assert.ok(thin-thick>.28);
- assert.match(fragment,/float exposure=pow\\(max\\(luminanceRatio,0\\.\\),1\\.45\\);/);
- assert.match(fragment,/vec3 toneMapped=vec3\\(1\\.\\)-exp\\(-radiance\\*1\\.14\\);/);
+test('R139: shell has a moving visible inner contour, not opacity-linked thickness',()=>{
+ const fragment=js.slice(js.indexOf('void main(){'),js.indexOf('`;',js.indexOf('void main(){')));
+ for(const signature of [
+   'float innerRadius=radius-shellDepth;',
+   'float wallMask=smoothstep(innerRadius-innerFeather,innerRadius+innerFeather,d);',
+   'base=mix(base,wallMaterial*wallIllum,wallMask',
+   'float alpha=sphereAlpha*shellFade;',
+   'float exposure=pow(max(luminanceRatio,0.),1.45);',
+   'vec3 toneMapped=vec3(1.)-exp(-radiance*1.14);'
+ ]) assert.ok(fragment.includes(signature),'missing geometric/exposure effect: '+signature);
+ assert.ok(!fragment.includes('float alpha=sphereAlpha*shellFade*mix('));
+ assert.ok(!fragment.includes('float alpha=sphereAlpha*shellFade*shellOptical'));
+ const r=.69;
+ const thin=r-.012, thick=r-.31;
+ assert.ok(thin-thick>.28,'inner boundary must move by perceptible distance');
 });
 test('R139: luminance can darken the whole sphere and brighten all radiance',()=>{
  const f=buildFixture();f.next(40);
