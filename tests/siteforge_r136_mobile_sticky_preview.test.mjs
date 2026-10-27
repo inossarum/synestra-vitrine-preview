@@ -12,8 +12,8 @@ test('R152: one responsive canvas with simplified controls and no old slider gro
  assert.equal((html.match(/<canvas /g)||[]).length,1);
  assert.equal((html.match(/<script src=/g)||[]).length,1);
  assert.match(html,/siteforge-r116-sphere-only\.js/);
- assert.equal((html.match(/data-sphere-control=/g)||[]).length,16);
- assert.equal((html.match(/type="range"/g)||[]).length,11);
+ assert.equal((html.match(/data-sphere-control=/g)||[]).length,18);
+ assert.equal((html.match(/type="range"/g)||[]).length,12);
  assert.match(html,/<form class="lab-controls"/);
  assert.match(html,/<details class="vfx-advanced">/);
  assert.doesNotMatch(html,/Type de relief|Énergie de surface|Épaisseur de la coque|Agitation de la matière/);
