@@ -1,4 +1,4 @@
-/* SiteForge R144 — energy families are visibly distinct, relief has material-specific sculpted shading, hide shell while keeping circulating energy. R140 fixed geomN, R142 material and R116 original eight arcs preserved. */
+/* SiteForge R145 — electrical discharges dominate electric mode; late-pass relief emboss/shadow ensures visible geometry change. R140 fixed surface normal, R144 transparency, and original 8 arcs preserved. */
 (() => {
   'use strict';
   const scene = document.querySelector('.core-r108-stage');
@@ -138,6 +138,34 @@ float r111Arc(vec2 p,float index,float seconds) {
   float front=exp(-pow((along-growingTip)/.046,2.))*exp(-abs(across-jitter)*18.)*.29;
   return awake*envelope*(body*filament+fork+front);
 }
+// Branched, segmented high-voltage discharge IN MATERIAL COORDINATES.
+// Unlike liquid sinusoidal bands, this is a thin angular polyline which
+// jumps between irregular nodes and occasionally spawns a short fork.
+float r145ElectricBolt(vec2 surface,float index,float seconds){
+ float epoch=floor(seconds*2.25+index*.29);
+ float phase=fract(seconds*2.25+index*.29);
+ float seed=hash3(vec3(epoch,index*1.73,5.19));
+ float ang=6.283185*fract(seed+index*.317);
+ vec2 axis=vec2(cos(ang),sin(ang));
+ float along=dot(surface,axis);
+ float across=dot(surface,vec2(-axis.y,axis.x));
+ float segment=floor(along*17.);
+ float mixNode=fract(along*17.);
+ float node0=hash3(vec3(segment,index,epoch));
+ float node1=hash3(vec3(segment+1.,index,epoch));
+ float jagged=mix(node0,node1,mixNode)*.106-.053;
+ float start=.02+seed*.13;
+ float end=.43+.28*hash3(vec3(epoch,index,8.2));
+ float extent=smoothstep(start,start+.055,along)*(1.-smoothstep(end-.08,end,along));
+ float flash=smoothstep(.015,.095,phase)*(1.-smoothstep(.63,.88,phase));
+ float path=abs(across-jagged);
+ float core=exp(-path*170.);
+ float halo=exp(-path*34.);
+ float forkNode=.18+seed*.23;
+ float forkPath=abs(across-jagged-(along-forkNode)*(.30*(node0-.5)));
+ float fork=smoothstep(forkNode-.02,forkNode+.02,along)*exp(-forkPath*155.)*.68;
+ return flash*extent*(core+halo*.19+fork);
+}
 
 void main(){
  vec2 p=(uv-.5)*2.;
@@ -237,12 +265,16 @@ void main(){
  float energyShadow=gasPocket*.61;
  float energyScatter=litCloud*.36;
  float energySurfaceSpec=1.;
+ float dryElectric=1.-step(.5,abs(surfaceSettings.x-1.));
  float shapeFlow=sin(angle*6.+flowN.z*13.-flowClock*1.4+v*5.);
  if(surfaceSettings.x>.5 && surfaceSettings.x<1.5){
-   // ELECTRIC: a near-black substrate with branching needle-sharp discharges.
-   float lightning=sin(filamentPhase*2.3+v2*11.+sin(flowN.y*22.)*3.);
-   energyMask=pow(max(.5+.5*lightning,0.),30.)*flowSettings.x*2.25;
-   energyCoverage=energyMask*.35;
+   // ELECTRIC: dry, broken high-voltage arcs, NOT sinuous liquid bands.
+   float electricA=r145ElectricBolt(flowN.xy,1.0,time);
+   float electricB=r145ElectricBolt(flowN.xy,2.7,time);
+   float electricC=r145ElectricBolt(flowN.xy,4.9,time);
+   float lightning=max(electricA,max(electricB,electricC));
+   energyMask=lightning*flowSettings.x*2.2;
+   energyCoverage=lightning*.13;
    energyTint=mix(rimColor,vec3(.78,.97,1.),.60);
    energyPalette=vec3(.009,.025,.075);
    energyShadow=.89;
@@ -349,25 +381,33 @@ void main(){
  base+=energyTint*bumpSpec*.39*reliefStrength*shineRatio*energySurfaceSpec;
  base+=mix(primaryColor,secondaryColor,micro)*mineral;
  base*=.82+.18*pow(max(geomN.z,0.),.55);
- base+=cyan*currents*(.045+.19*light);
- base+=lavender*secondary*(.035+.10*v);
- base+=mix(cyan,lavender,clamp(v2,0.,1.))*turbulenceGlow;
+ base+=cyan*currents*(.045+.19*light)*(1.-dryElectric*.97);
+ base+=lavender*secondary*(.035+.10*v)*(1.-dryElectric*.97);
+ base+=mix(cyan,lavender,clamp(v2,0.,1.))*turbulenceGlow*(1.-dryElectric*.95);
  // HDR-like emissive strand cores and lower-energy bloom are resolved by the
  // existing tone mapper, preserving color and avoiding white clipping.
- base+=mix(cyan,lavender,clamp(v2*.74,0.,1.))*(curlGlow*.76+microThreads*.10*detailRatio)*shimmer;
+ base+=mix(cyan,lavender,clamp(v2*.74,0.,1.))*(curlGlow*.76+microThreads*.10*detailRatio)*shimmer*(1.-dryElectric*.97);
  base+=energyTint*(energyMask*1.38+energyCoverage*.46)*surfaceSettings.w*shimmer;
  base+=mix(primaryColor,cyan,.48)*agitation*.12*(eddyA-.5);
  base+=rimColor*rim*(.28+.30*shellOptical)*rimRatio*shellVisibilityRatio;
  // Stable broad and sharp specular lobes, even at neutral rotation.
  float spec=pow(max(dot(geomN,normalize(vec3(-.38,.55,.92))),0.),12.);
  float specFine=pow(max(dot(geomN,normalize(vec3(.47,-.18,.91))),0.),34.);
- base+=vec3(.88,.96,1.)*(spec*.42+specFine*.28)*shineRatio;
+ base+=vec3(.88,.96,1.)*(spec*.42+specFine*.28)*shineRatio*(1.-dryElectric*.95);
  float topRim=smoothstep(-.2,.8,p.y)*rim;
  base+=rimColor*topRim*.17*rimRatio*shellVisibilityRatio;
  float coreSize=max(flowSettings.w,.003);
  float centralSource=exp(-d*d*115./(coreSize*coreSize));
  float coreBloom=exp(-d*d*8.5/(coreSize*coreSize));
  base+=coreColor*(centralSource*.64+coreBloom*.62)*coreRatio;
+ // An electric discharge needs a black dielectric substrate and blue-white
+ // flashes, not the watery scattered gas that other energy types use.
+ if(dryElectric>.5){
+   vec3 midnight=energyPalette*.36+energyTint*energyMask*.20+
+                 coreColor*(centralSource*.30+coreBloom*.065)*coreRatio;
+   base=mix(base,midnight,.80);
+   base+=energyTint*energyMask*1.95*surfaceSettings.w;
+ }
  vec3 scatter=mix(primaryColor,secondaryColor,.4);
  base=mix(base,scatter*(.48+.44*shellOptical),shellDiffuse*.23);
  // A shallow translucent layer at grazing angles implies wall depth without
@@ -378,6 +418,23 @@ void main(){
  base+=rimColor*shellInnerEdge*.10*(1.-shellDiffuse*.45)*shellVisibilityRatio;
  float shellHaze=exp(-pow((radius-d)/(.06+.04*shellDiffuse),2.));
  base+=mix(rimColor,scatter,.42)*shellHaze*shellDiffuse*.095*shellVisibilityRatio;
+ // Late material emboss: apply AFTER plasma glow and shell scattering.
+ // Earlier bump-only shading was overwritten by emissive additions and
+ // relief modes became visually indistinguishable.
+ float sculptDepth=clamp(reliefStrength,0.,2.);
+ float grooves=pow(1.-clamp(reliefHeight,0.,1.),1.6);
+ float crests=pow(clamp(reliefHeight,0.,1.),2.6);
+ float contourShade=clamp(1.-grooves*.75*sculptDepth+
+                          crests*.65*sculptDepth+
+                          (bumpLight-.55)*.9*sculptDepth,.12,2.4);
+ if(reliefSettings.x>1.5 && reliefSettings.x<2.5)
+   contourShade*=mix(.28,1.08,smoothstep(.08,.32,reliefHeight));
+ if(reliefSettings.x>3.5 && reliefSettings.x<4.5)
+   contourShade*=mix(.65,1.26,step(.13,fract(reliefHeight*4.)));
+ if(reliefSettings.x>4.5)
+   contourShade=mix(1.,contourShade,.035);
+ base*=mix(1.,contourShade,clamp(sculptDepth*.85,0.,1.));
+ base+=energyTint*crests*.16*sculptDepth*(1.-dryElectric*.65);
  base=(base-vec3(.3))*contrastRatio+vec3(.3);
  float arcA=r111Arc(p,1.,time);
  float arcB=r111Arc(p,2.,time);
@@ -388,9 +445,9 @@ void main(){
  float arcG=r111Arc(p,7.,time);
  float arcH=r111Arc(p,8.,time);
  // R114: eight independent centre-to-edge arcs, bounded by sphere mask.
- base+=vec3(.78,.96,1.)*arcA*1.12+vec3(.39,.77,1.)*arcB*.91+vec3(.78,.69,1.)*arcC*.88;
- base+=vec3(.49,.96,.97)*arcD*.92+vec3(.83,.94,1.)*arcE*.84;
- base+=vec3(.46,.88,1.)*arcF*.91+vec3(.70,.59,1.)*arcG*.87+vec3(.90,.98,1.)*arcH*.89;
+ base+=(vec3(.78,.96,1.)*arcA*1.12+vec3(.39,.77,1.)*arcB*.91+vec3(.78,.69,1.)*arcC*.88)*mix(1.,2.9,dryElectric);
+ base+=(vec3(.49,.96,.97)*arcD*.92+vec3(.83,.94,1.)*arcE*.84)*mix(1.,2.9,dryElectric);
+ base+=(vec3(.46,.88,1.)*arcF*.91+vec3(.70,.59,1.)*arcG*.87+vec3(.90,.98,1.)*arcH*.89)*mix(1.,2.9,dryElectric);
  // Opacity belongs solely to opacity. Thickness changes only the narrow
  // grazing-angle wall shading, not alpha nor a second interior disk.
  float edgeSoftness=mix(.008,.063,shellDiffuse);
