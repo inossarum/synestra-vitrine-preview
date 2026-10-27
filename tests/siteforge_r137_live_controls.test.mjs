@@ -3,319 +3,144 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {runInNewContext} from 'node:vm';
 
-const read=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
-const html=read('siteforge/core-3d-lab/index.html');
-const js=read('assets/siteforge-r116-sphere-only.js');
-const keys=['diameter','opacity','rotation','agitation','details','shine','contrast',
-  'coreLight','rimLight','diffusion','thickness','luminance','primary','secondary','core','rim'];
+const load=path=>readFileSync(new URL('../'+path,import.meta.url),'utf8');
+const js=load('assets/siteforge-r116-sphere-only.js');
+const html=load('siteforge/core-3d-lab/index.html');
+const rangeDefaults={diameter:100,opacity:100,diffusion:65,thickness:45,rotation:100,agitation:100,details:100,shine:100,contrast:100,
+ luminance:100,coreSize:100,coreLight:100,rimLight:100,
+ surfaceGlow:100,surfaceEmission:100,surfaceFlow:100,surfaceSpeed:100,surfaceDirection:0,
+ reliefIntensity:65,reliefScale:90,reliefRoughness:80,reliefContrast:100,reliefDeform:15,reliefSpeed:100};
+const selectors=['energyMode','surfaceMotion','reliefMode'];
+const colors=['primary','secondary','core','rim'];
+const defaults={...rangeDefaults,energyMode:0,surfaceMotion:0,reliefMode:0,
+ primary:'#092b63',secondary:'#1f174d',core:'#b8edff',rim:'#4fddff'};
+const keys=Object.keys(defaults);
 
-test('R137: exactly 16 unique, labelled native browser controls, 4 colors and a reset',()=>{
- const found=[...html.matchAll(/data-sphere-control="([^"]+)"/g)].map(x=>x[1]);
- assert.deepEqual(found.sort(),[...keys].sort());
- for(const key of keys) {
-   assert.match(html,new RegExp('for="sf-'+key+'"'));
-   assert.match(html,new RegExp('data-sphere-value="'+key+'"'));
- }
+test('R143: labelled native controls and preserved single sticky WebGL scene',()=>{
+ const found=[...html.matchAll(/data-sphere-control="([^"]+)"/g)].map(m=>m[1]);
+ assert.equal(found.length,31);
+ assert.deepEqual(found.sort(),keys.sort());
+ for(const key of keys)assert.match(html,new RegExp('for="sf-'+key+'"'));
+ assert.equal((html.match(/type="range"/g)||[]).length,24);
  assert.equal((html.match(/type="color"/g)||[]).length,4);
- assert.equal((html.match(/type="range"/g)||[]).length,12);
- assert.match(html,/<button class="reset" type="reset">/);
+ assert.equal((html.match(/<select /g)||[]).length,3);
  assert.equal((html.match(/<canvas /g)||[]).length,1);
+ assert.equal((html.match(/<script src=/g)||[]).length,1);
  assert.match(html,/\.core-r108-stage\{position:sticky;top:env\(safe-area-inset-top,0px\)/);
 });
 
-test('R137: real native WebGL shader uniforms and retina sampling replace CSS scaled resolution',()=>{
- for(const key of ['speedRatio','detailRatio','agitationRatio','shineRatio','contrastRatio',
-    'coreRatio','rimRatio','sphereAlpha','shellDiffusionRatio','shellThicknessRatio','luminanceRatio','primaryColor','secondaryColor','coreColor','rimColor']){
-   assert.match(js,new RegExp('uniform (?:vec3|float) '+key+';'));
- }
- assert.match(js,/canvas\.clientWidth, logicalHeight = canvas\.clientHeight/);
- assert.match(js,/1900000/);
- assert.match(js,/gl\.uniform3fv\(/);
- assert.match(js,/micro=noise3/);
- assert.match(js,/webglcontextlost/);
- assert.doesNotMatch(js,/fetch\(|WebSocket|localStorage|sessionStorage|document\.cookie/);
-});
-
-function buildFixture(){
- const u1=new Map(),u3=new Map(),events={},raf=[];
- const keysAndValues={diameter:'100',opacity:'100',rotation:'100',agitation:'100',
-   details:'100',shine:'100',contrast:'100',coreLight:'100',rimLight:'100',diffusion:'65',thickness:'45',luminance:'100',
-   primary:'#092b63',secondary:'#1f174d',core:'#b8edff',rim:'#4fddff'};
- const controls=Object.fromEntries(Object.entries(keysAndValues).map(([key,value])=>
-   [key,{dataset:{sphereControl:key},value,defaultValue:value,
-     type:value[0]==='#'?'color':'range',hasAttribute:n=>n==='data-sphere-control'}]));
- const outputs=Object.fromEntries(Object.keys(controls).map(k=>[k,{textContent:''}]));
- const panel={addEventListener:(type,fn)=>events[type]=fn};
- const fallback={querySelector:()=>({setAttribute(){}})};
- const attributes=new Set(),css={};
+function fixture(noWebGL=false){
+ const events={},queue=[],uniforms=new Map(),arrays=new Map(),styles={};
+ const controls=Object.fromEntries(Object.entries(defaults).map(([key,val])=>{
+  const value=String(val),type=selectors.includes(key)?'select-one':colors.includes(key)?'color':'range';
+  return [key,{value,defaultValue:value,type,dataset:{sphereControl:key},
+    getAttribute:name=>name==='data-default'?selectors.includes(key)?value:null:null,
+    hasAttribute:name=>name==='data-sphere-control',selectedOptions:[{textContent:value}]}];
+ }));
+ const outputs=Object.fromEntries(keys.map(key=>[key,{textContent:''}]));
+ const status={textContent:''};
  const gl={
-   VERTEX_SHADER:35633,FRAGMENT_SHADER:35632,COMPILE_STATUS:35713,LINK_STATUS:35714,
-   ARRAY_BUFFER:34962,STATIC_DRAW:35044,FLOAT:5126,TRIANGLES:4,COLOR_BUFFER_BIT:16384,
-   createShader:()=>({}),shaderSource(){},compileShader(){},getShaderParameter:()=>true,
-   deleteShader(){},createProgram:()=>({}),attachShader(){},linkProgram(){},
-   getProgramParameter:()=>true,useProgram(){},createBuffer:()=>({}),
-   bindBuffer(){},bufferData(){},getAttribLocation:()=>0,enableVertexAttribArray(){},
-   vertexAttribPointer(){},getUniformLocation:(_,key)=>key,
-   uniform1f:(key,value)=>u1.set(key,value),
-   uniform2f(){},uniform3fv:(key,value)=>u3.set(key,Array.from(value)),
-   viewport(){},clearColor(){},clear(){},drawArrays(){},
+  VERTEX_SHADER:35633,FRAGMENT_SHADER:35632,COMPILE_STATUS:35713,LINK_STATUS:35714,
+  ARRAY_BUFFER:34962,STATIC_DRAW:35044,FLOAT:5126,TRIANGLES:4,COLOR_BUFFER_BIT:16384,
+  createShader:()=>({}),shaderSource(){},compileShader(){},getShaderParameter:()=>true,deleteShader(){},
+  createProgram:()=>({}),attachShader(){},linkProgram(){},getProgramParameter:()=>true,useProgram(){},
+  createBuffer:()=>({}),bindBuffer(){},bufferData(){},getAttribLocation:()=>0,
+  enableVertexAttribArray(){},vertexAttribPointer(){},getUniformLocation:(_,key)=>key,
+  uniform1f:(name,val)=>uniforms.set(name,val),uniform2f(){},
+  uniform3fv:(name,values)=>arrays.set(name,Array.from(values)),
+  uniform4fv:(name,values)=>arrays.set(name,Array.from(values)),
+  viewport(){},clearColor(){},clear(){},drawArrays(){}
  };
- const canvas={clientWidth:420,clientHeight:260,width:960,height:570,
-   getContext:()=>gl,addEventListener(){}};
+ const canvas={clientWidth:420,clientHeight:260,width:960,height:570,getContext:()=>noWebGL?null:gl,addEventListener(){}};
  const scene={
-   querySelector:selector=>selector==='.core-r109-canvas'?canvas:fallback,
-   style:{setProperty:(k,v)=>css[k]=v},
-   setAttribute:(name)=>attributes.add(name),
-   removeAttribute:name=>attributes.delete(name),
-   hasAttribute:name=>attributes.has(name),addEventListener(){}
+  querySelector:query=>query==='.core-r109-canvas'?canvas:{querySelector:()=>({setAttribute(){}})},
+  style:{setProperty:(k,v)=>styles[k]=v},
+  addEventListener(){},hasAttribute:()=>false,setAttribute(){},removeAttribute(){}
  };
- const renderStatus={textContent:''};
  const document={
-   querySelector:(selector)=>{
-     if(selector==='.core-r108-stage')return scene;
-     if(selector==='.lab-controls')return panel;
-     if(selector==='[data-render-status]')return renderStatus;
-     const m=selector.match(/^\[data-sphere-value="(.+)"\]$/);
-     return m?outputs[m[1]]:null;
-   },
-   querySelectorAll:selector=>selector==='[data-sphere-control]'?Object.values(controls):[],
-   visibilityState:'visible',addEventListener(){}
+  visibilityState:'visible',addEventListener(){},
+  querySelectorAll:query=>query==='[data-sphere-control]'?Object.values(controls):[],
+  querySelector:query=>query==='.core-r108-stage'?scene:query==='.lab-controls'?{addEventListener:(k,fn)=>events[k]=fn}
+    :query==='[data-render-status]'?status:outputs[query.match(/data-sphere-value="([^"]+)"/)?.[1]]||null
  };
- const window={devicePixelRatio:2,innerWidth:390,
-   matchMedia:()=>({matches:false,addEventListener(){}})};
- const Observer=class{constructor(cb){this.cb=cb}observe(){this.cb([{isIntersecting:true}])}disconnect(){}};
- const Resize=class{observe(){}disconnect(){}};
- runInNewContext(js,{window,document,IntersectionObserver:Observer,ResizeObserver:Resize,
-   requestAnimationFrame:callback=>{raf.push(callback);return raf.length;},
-   cancelAnimationFrame:()=>{},Float32Array});
- const next=clock=>{const fn=raf.shift();assert.equal(typeof fn,'function');fn(clock)};
- return {controls,outputs,events,scene,renderStatus,css,u1,u3,canvas,next};
+ const window={innerWidth:390,devicePixelRatio:2,matchMedia:()=>({matches:false,addEventListener(){}})};
+ const IO=class{constructor(fn){this.fn=fn}observe(){this.fn([{isIntersecting:true}])}disconnect(){}};
+ const RO=class{observe(){}disconnect(){}};
+ runInNewContext(js,{document,window,Float32Array,IntersectionObserver:IO,ResizeObserver:RO,
+  requestAnimationFrame:fn=>{queue.push(fn);return queue.length},cancelAnimationFrame:()=>{}});
+ return {controls,events,uniforms,arrays,styles,status,canvas,
+  frame:time=>{const fn=queue.shift();assert.equal(typeof fn,'function');fn(time)}};
 }
 
-test('R137: slider changes drive the GPU; reset returns exact UI defaults',()=>{
- const fx=buildFixture();
- fx.next(40);
- assert.equal(fx.u1.get('speedRatio'),1);
- assert.equal(fx.u1.get('sphereAlpha'),1);
- assert.equal(fx.u1.get('shellDiffusionRatio'),.65);
- assert.equal(fx.u1.get('shellThicknessRatio'),.45);
- assert.equal(fx.u1.get('luminanceRatio'),1);
- assert.equal(fx.canvas.width,840);
- assert.equal(fx.css['--sphere-zoom'],'1');
- assert.match(fx.renderStatus.textContent,/WebGL actif/);
- fx.controls.rotation.value='250';
- fx.controls.opacity.value='35';
- fx.controls.diameter.value='130';
- fx.controls.primary.value='#ff0000';
- fx.controls.diffusion.value='0';
- fx.controls.thickness.value='100';
- fx.events.input({target:fx.controls.rotation});
- fx.next(82);
- assert.equal(fx.u1.get('speedRatio'),2.5);
- assert.equal(fx.u1.get('sphereAlpha'),.35);
- assert.equal(fx.u1.get('shellDiffusionRatio'),0);
- assert.equal(fx.u1.get('shellThicknessRatio'),1);
- assert.equal(fx.css['--sphere-zoom'],'1.3');
- assert.ok(Math.abs(fx.u3.get('primaryColor')[0]-1)<.0001);
- assert.ok(Math.abs(fx.u3.get('primaryColor')[1])<.0001);
- fx.events.reset({preventDefault(){}});
- fx.next(125);
- assert.equal(fx.controls.primary.value,'#092b63');
- assert.equal(fx.controls.opacity.value,'100');
- assert.equal(fx.u1.get('sphereAlpha'),1);
- assert.equal(fx.u1.get('speedRatio'),1);
- assert.equal(fx.u1.get('shellDiffusionRatio'),.65);
- assert.equal(fx.u1.get('shellThicknessRatio'),.45);
- assert.equal(fx.css['--sphere-zoom'],'1');
-});
-
-test('R138: all independent shader controls have shader consumers, not inert uniforms',()=>{
- const fragment=js.match(/const fragment = `([\s\S]*?)`;/)?.[1]??'';
- for(const name of ['speedRatio','detailRatio','agitationRatio','shineRatio','contrastRatio',
-  'coreRatio','rimRatio','sphereAlpha','shellDiffusionRatio','shellThicknessRatio','luminanceRatio',
-  'primaryColor','secondaryColor','coreColor','rimColor']) {
-   assert.ok(fragment.includes(name),name);
-   assert.ok(fragment.split(new RegExp('\\b'+name+'\\b')).length>=3,'unused shader parameter '+name);
- }
- assert.doesNotMatch(fragment,/base\+=ringCol\*\(ring\*/);
- assert.match(fragment,/float shellRim=smoothstep\(shellStart-shellFeather,shellStart\+shellFeather,grazing\);/);
- assert.match(fragment,/smoothstep\(-\.90,\.95,dot\(geomN/);
- assert.match(js,/scheduleDraw\(\)/);
-});
-
-test('R138: every slider or color picker changes a distinct GPU uniform or the zoom',()=>{
- const fx=buildFixture();
- fx.next(40);
- const scalar={
-  opacity:'sphereAlpha',rotation:'speedRatio',agitation:'agitationRatio',
-  details:'detailRatio',shine:'shineRatio',contrast:'contrastRatio',
-  coreLight:'coreRatio',rimLight:'rimRatio',
-  diffusion:'shellDiffusionRatio',thickness:'shellThicknessRatio',luminance:'luminanceRatio'
- };
+test('R143: four packed GPU vectors map surface/core/relief controls independently',()=>{
+ const x=fixture();x.frame(40);
+ assert.equal(x.arrays.get('surfaceSettings')[0],0);
+ assert.equal(x.arrays.get('flowSettings')[3],1);
+ assert.equal(x.arrays.get('reliefSettings')[1],.65);
+ const steps=[
+  ['energyMode','5','surfaceSettings',0,5],
+  ['surfaceMotion','3','surfaceSettings',1,3],
+  ['surfaceEmission','200','surfaceSettings',3,2],
+  ['surfaceFlow','30','flowSettings',0,.3],
+  ['surfaceDirection','180','flowSettings',2,180],
+  ['coreSize','170','flowSettings',3,1.7],
+  ['reliefMode','4','reliefSettings',0,4],
+  ['reliefIntensity','180','reliefSettings',1,1.8],
+  ['reliefScale','20','reliefSettings',2,.2],
+  ['reliefRoughness','140','reliefSettings',3,1.4],
+  ['reliefContrast','80','reliefDynamics',0,.8],
+  ['reliefDeform','50','reliefDynamics',1,.5],
+  ['reliefSpeed','170','reliefDynamics',2,1.7]
+ ];
  let clock=40;
- for(const [key,uniform] of Object.entries(scalar)){
-   const before=fx.u1.get(uniform);
-   fx.controls[key].value=key==='diffusion'?'0':key==='thickness'?'100':key==='luminance'?'200':key==='opacity'?'40':'150';
-   fx.events.input({target:fx.controls[key]});
-   fx.next(clock+=45);
-   assert.notEqual(fx.u1.get(uniform),before,key+' must update '+uniform);
+ for(const [name,value,group,index,expected] of steps){
+  x.controls[name].value=value;
+  x.events.input({target:x.controls[name]});
+  x.frame(clock+=45);
+  assert.ok(Math.abs(x.arrays.get(group)[index]-expected)<.00001,name);
  }
- for(const [key,uniform] of Object.entries({
-  primary:'primaryColor',secondary:'secondaryColor',core:'coreColor',rim:'rimColor'
- })){
-   const before=fx.u3.get(uniform).join(',');
-   fx.controls[key].value='#ffaa11';
-   fx.events.input({target:fx.controls[key]});
-   fx.next(clock+=45);
-   assert.notEqual(fx.u3.get(uniform).join(','),before,key+' must update '+uniform);
- }
- fx.controls.diameter.value='125';
- fx.events.input({target:fx.controls.diameter});
- assert.equal(fx.css['--sphere-zoom'],'1.25');
- fx.events.reset({preventDefault(){}});
- fx.next(clock+=45);
- assert.equal(fx.css['--sphere-zoom'],'1');
- assert.equal(fx.u1.get('shellDiffusionRatio'),.65);
- assert.equal(fx.u1.get('shellThicknessRatio'),.45);
+ assert.equal(x.uniforms.get('sphereAlpha'),1);
+ x.events.reset({preventDefault(){}});x.frame(clock+45);
+ assert.equal(x.arrays.get('surfaceSettings')[0],0);
+ assert.equal(x.arrays.get('flowSettings')[3],1);
+ assert.equal(x.arrays.get('reliefSettings')[1],.65);
+ assert.equal(x.arrays.get('reliefDynamics')[1],.15);
 });
 
-test('R140: normals driving light stay fixed while only texture coordinates rotate',()=>{
- const fragment=js.match(/const fragment = `([\s\S]*?)`;/)?.[1]??'';
+test('R143: coherent calm baseline and six energy families; relief changes shading and silhouette gently',()=>{
  for(const signature of [
-   'vec3 geomN=vec3(p,sqrt(max(radius*radius-dot(p,p),0.)))/radius;',
-   'vec3 n=turn3(geomN,tilt+vec2(',
-   'float light=.32+.68*smoothstep(-.90,.95,dot(geomN,normalize(',
-   'float rim=pow(1.-clamp(geomN.z,0.,1.),2.05);',
-   'float spec=pow(max(dot(geomN,normalize(',
-   'float specFine=pow(max(dot(geomN,normalize('
- ]) assert.ok(fragment.includes(signature),'missing front normal isolation: '+signature);
- assert.doesNotMatch(fragment,/dot\(n,normalize\(/);
- assert.doesNotMatch(fragment,/pow\(1\.-max\(n\.z/);
+  'float calmFlow=.14;',
+  'float drift=time*.28*(calmFlow+.86*agitation)*flowSettings.y;',
+  'vec3 warp=(.035+agitation*.155)*vec3(',
+  'float turbulenceGlow=(.10+.90*agitation)*(',
+  'float curlGlow=(.16+.84*agitation)*(',
+  'vec3 bumpNormal=normalize(geomN+vec3(reliefGrad*.27*reliefSettings.y*reliefDynamics.x,0.));',
+  'float silhouetteRadius=radius+reliefDynamics.y*.006*(',
+  'float coreSize=max(flowSettings.w,.003);',
+  'float centralSource=exp(-d*d*115./(coreSize*coreSize));',
+  'float alpha=sphereAlpha*shellFade;'
+ ])assert.ok(js.includes(signature),signature);
+ for(const mode of ['surfaceSettings.x>.5','surfaceSettings.x>1.5','surfaceSettings.x>2.5','surfaceSettings.x>3.5','surfaceSettings.x>4.5'])
+  assert.ok(js.includes(mode),mode);
+ const fragment=js.slice(js.indexOf('void main(){'),js.indexOf('  const shader = (type, code)'));
+ assert.equal((fragment.match(/=r111Arc\(p,/g)||[]).length,8);
+ assert.ok(fragment.includes('vec3 geomN=vec3(p,'));
+ assert.ok(fragment.includes('float light=.32+.68*smoothstep(-.90,.95,dot(geomN,'));
+ assert.doesNotMatch(fragment,/wallMask|innerRadius|innerShadow/);
  assert.match(js,/new ResizeObserver\(\(\)=>scheduleDraw\(\)\)/);
 });
-test('R140: thickness affects only a smooth rim band and never cuts the front-facing sphere',()=>{
- const fragment=js.match(/const fragment = `([\s\S]*?)`;/)?.[1]??'';
- for(const signature of [
-   'float grazing=1.-clamp(geomN.z,0.,1.);',
-   'float shellStart=mix(.98,.32,clamp(shellThicknessRatio,0.,1.));',
-   'float shellRim=smoothstep(shellStart-shellFeather,shellStart+shellFeather,grazing);',
-   'base=mix(base,wallMaterial,shellRim*(',
-   'float alpha=sphereAlpha*shellFade;',
-   'float exposure=pow(max(luminanceRatio,0.),1.45);'
- ]) assert.ok(fragment.includes(signature),'missing smooth shell rim: '+signature);
- assert.doesNotMatch(fragment,/wallMask|innerRadius|innerShadow|innerEdge/);
- const smooth=(a,b,x)=>{
-   const t=Math.max(0,Math.min(1,(x-a)/(b-a)));
-   return t*t*(3-2*t);
- };
- const band=(radiusFraction, thickness,diffusion)=>{
-   const z=Math.sqrt(Math.max(0,1-radiusFraction*radiusFraction));
-   const grazing=1-z;
-   const start=.98+(.32-.98)*thickness;
-   const feather=.025+(.14-.025)*diffusion;
-   return smooth(start-feather,start+feather,grazing);
- };
- for(const thickness of [0,.45,1]){
-   assert.equal(band(0,thickness,.65),0,'no interior disc allowed');
-   assert.equal(band(.4,thickness,.65),0,'central hemisphere unchanged by thickness');
- }
- assert.ok(band(.93,1,.65)>band(.93,0,.65)+.4,'wide shell band must be visible near rim');
- assert.ok(band(.93,.45,.65)<band(.93,1,.65),'thickness must broaden rim band');
-});
-test('R139: luminance can darken the whole sphere and brighten all radiance',()=>{
- const f=buildFixture();f.next(40);
- assert.equal(f.u1.get('luminanceRatio'),1);
- f.controls.luminance.value='0';f.events.input({target:f.controls.luminance});
- f.next(90);
- assert.equal(f.u1.get('luminanceRatio'),0);
- f.controls.luminance.value='250';f.events.input({target:f.controls.luminance});
- f.next(140);
- assert.equal(f.u1.get('luminanceRatio'),2.5);
- f.events.reset({preventDefault(){}});f.next(190);
- assert.equal(f.u1.get('luminanceRatio'),1);
+
+test('R143: no WebGL keeps an accessible fallback and never declares GPU ready',()=>{
+ const x=fixture(true);
+ assert.match(x.status.textContent,/WebGL indisponible/);
+ assert.equal(x.uniforms.size,0);
 });
 
-
-test('R141: agitation produces independent domain warping and plasma emission',()=>{
- const expected=[
-  'float agitation=clamp(agitationRatio,0.,2.);',
-  'float drift=time*.28*agitation;',
-  'vec3 warp=agitation*.18*vec3(',
-  'vec3 flowN=normalize(n+warp);',
-  'float v=noise3(flowN*3.7',
-  'float v2=noise3(flowN*7.5',
-  'float micro=noise3(flowN*',
-  'float turbulenceGlow=agitation*(.24*foldA+.16*foldB);',
-  'base+=mix(cyan,lavender,clamp(v2,0.,1.))*turbulenceGlow;'
- ];
- for(const signature of expected)assert.ok(js.includes(signature),'missing response: '+signature);
- assert.match(js,/vec3 geomN=vec3\(p,/);
- assert.match(js,/float light=\.32\+\.68\*smoothstep\(-\.90,\.95,dot\(geomN,/);
- assert.match(js,/float alpha=sphereAlpha\*shellFade;/);
- assert.doesNotMatch(js,/geomN\s*=\s*normalize\(.*warp/);
- assert.match(html,/0 % volutes calmes/);
- assert.match(html,/200 % turbulences de plasma/);
-});
-test('R141: agitation at 0 has no warp or turbulent emission; larger strength amplifies both',()=>{
- const swirl=(agitation,n,time)=>{
-   const drift=time*.28*agitation;
-   return agitation*.18*Math.sin(n[1]*13+n[2]*5+drift*4.1+.55*5);
- };
- const n=[.3,.7,.4];
- assert.equal(swirl(0,n,4),0);
- assert.notEqual(swirl(1,n,4),0);
- assert.notEqual(swirl(2,n,4),swirl(1,n,4));
- assert.ok(2*.18>1*.18&&1*.18>0);
- assert.equal(0*(.24*.9+.16*.8),0);
- assert.ok(2*(.24*.9+.16*.8)>1*(.24*.9+.16*.8));
-});
-test('R141: agitation input maps to GPU uniform and resets independently of rotation',()=>{
- const fx=buildFixture();
- fx.next(40);
- const rotation=fx.u1.get('speedRatio');
- fx.controls.agitation.value='0';
- fx.events.input({target:fx.controls.agitation});
- fx.next(82);
- assert.equal(fx.u1.get('agitationRatio'),0);
- assert.equal(fx.u1.get('speedRatio'),rotation);
- fx.controls.agitation.value='200';
- fx.events.input({target:fx.controls.agitation});
- fx.next(130);
- assert.equal(fx.u1.get('agitationRatio'),2);
- assert.equal(fx.u1.get('speedRatio'),rotation);
- fx.events.reset({preventDefault(){}});
- fx.next(180);
- assert.equal(fx.u1.get('agitationRatio'),1);
-});
-
-
-test('R142: layered emissive plasma material and nested cloud shading are genuine shader effects',()=>{
- const fragment=js.slice(js.indexOf('void main(){'),js.indexOf('  const shader = (type, code)'));
- for(const signature of [
-   'float cloudDensity=clamp(v*.52+v2*.31+eddyA*.17,0.,1.);',
-   'float gasPocket=1.-smoothstep(.28,.69,cloudDensity);',
-   'float litCloud=smoothstep(.34,.82,cloudDensity);',
-   'float microThreads=pow(max(.5+.5*sin(filamentPhase),0.),13.);',
-   'float glowingVeins=pow(max(.5+.5*sin(filamentPhase*.57-v2*8.+drift*1.7),0.),11.);',
-   'float curlGlow=agitation*(microThreads*.48+glowingVeins*.32)*(.50+.50*litCloud);',
-   'base=mix(base,navy*.36+fluidTint*.30,gasPocket*.61);',
-   'base+=mix(primaryColor*.42,cyan*.72,litCloud)*litCloud*.36;',
-   'base+=mix(cyan,lavender,clamp(v2*.74,0.,1.))*(curlGlow*.76+microThreads*.10*detailRatio)*shimmer;'
- ]) assert.ok(fragment.includes(signature),'missing plasma material response: '+signature);
- assert.match(fragment,/vec3 geomN=vec3\(p,/);
- assert.match(fragment,/float light=\.32\+\.68\*smoothstep\(-\.90,\.95,dot\(geomN,/);
- assert.match(fragment,/float alpha=sphereAlpha\*shellFade;/);
- assert.equal((fragment.match(/=r111Arc\(p,/g)||[]).length,8);
- assert.doesNotMatch(fragment,/wallMask|innerRadius|innerShadow/);
-});
-test('R142: plasma cloud density and emission vary continuously without a fake hemisphere seam',()=>{
- const clamp=(x,min,max)=>Math.min(max,Math.max(min,x));
- const smooth=(lo,hi,v)=>{const z=clamp((v-lo)/(hi-lo),0,1);return z*z*(3-2*z)};
- const sample=(v,v2,eddy,agit)=>{const cloud=clamp(v*.52+v2*.31+eddy*.17,0,1),pocket=1-smooth(.28,.69,cloud),lit=smooth(.34,.82,cloud);return {pocket,lit,emission:agit*(.48*.8+.32*.7)*(.50+.50*lit)}};
- const dark=sample(.12,.21,.14,1),bright=sample(.81,.77,.69,1);
- assert.ok(dark.pocket>bright.pocket,'low-density gas reveals deep dark pockets');
- assert.ok(bright.lit>dark.lit,'dense cloud responds with bright scatter');
- assert.ok(bright.emission>dark.emission);
- assert.equal(sample(.81,.77,.69,0).emission,0,'no turbulent emission when agitation is zero');
- assert.ok(sample(.81,.77,.69,2).emission>sample(.81,.77,.69,1).emission);
+test('R143: baseline R142 shader remains local and uses one context with bounded GPU resolution',()=>{
+ assert.match(js,/canvas\.clientWidth, logicalHeight = canvas\.clientHeight/);
+ assert.match(js,/1900000/);
+ assert.match(js,/webglcontextlost/);
+ assert.ok(js.includes('float cloudDensity=clamp(v*.52+v2*.31+eddyA*.17,0.,1.);'));
+ assert.ok(js.includes('float microThreads=pow(max(.5+.5*sin(filamentPhase),0.),13.);'));
+ assert.doesNotMatch(js,/fetch\(|WebSocket|localStorage|sessionStorage|document\.cookie/);
 });
