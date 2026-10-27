@@ -87,7 +87,7 @@ test('R152: legacy marble sphere and all its old controls truly removed',()=>{
   assert.ok(!js.includes(token),token+' should not exist in new engine');
  for(const key of ['energyMode','reliefMode','agitation','diffusion','thickness','surfaceFlow','rimLight'])
   assert.doesNotMatch(html,new RegExp('id="sf-'+key+'"'));
- assert.match(js,/SiteForge R152/);
+ assert.match(js,/SiteForge R153/);
  assert.equal((html.match(/data-sphere-control=/g)||[]).length,16);
 });
 test('R152: only one WebGL shader program, canvas and source script',()=>{
@@ -190,7 +190,7 @@ test('R153: four presets change the volumetric plasma material itself, not only 
   'vortex=pow(max(0.,.5+.5*sin(theta*5.8+d*18.+warp*.82-t*1.2)),12.);',
   'else if(uControls.x>2.5&&uControls.x<3.5)',
   'fusion=pow(max(0.,.5+.5*sin(theta*12.+warp*1.2-t*.38)),19.)',
-  'threads+=uCore*electric*.90',
+  'threads+=uCyan*electric*.76;',
   'float excitation=.58+.55*emission;'
  ])assert.ok(field.includes(key),key);
  const x=fixture();x.frame(40);
