@@ -9,7 +9,7 @@ const html=read('siteforge/core-3d-lab/index.html');
 const defaults={
  particlePreset:0,particleIntensity:100,coreLight:135,arcIntensity:140,arcDensity:100,
  diameter:100,shellVisibility:100,coreSize:70,particleDensity:100,
- particleSpeed:100,particleSize:100,opacity:100,
+ particleSpeed:100,particleSize:100,opacity:100,flowType:0,flowStructure:100,
  primary:'#08142e',secondary:'#53318d',core:'#eaffff',rim:'#51dfff'
 };
 const colorKeys=['primary','secondary','core','rim'];
@@ -22,9 +22,9 @@ function fixture({failLink=false,failCompile=false,noWebGL=false,reduceMotion=fa
  const exportStatus={textContent:''};
  const outputs=Object.fromEntries(Object.keys(defaults).map(k=>[k,{textContent:''}]));
  const controls=Object.fromEntries(Object.entries(defaults).map(([key,val])=>{
-  const v=String(val),type=key==='particlePreset'?'select-one':colorKeys.includes(key)?'color':'range';
+  const v=String(val),type=(key==='particlePreset'||key==='flowType')?'select-one':colorKeys.includes(key)?'color':'range';
   return [key,{value:v,defaultValue:v,type,dataset:{sphereControl:key},
-   getAttribute:k=>k==='data-default'&&key==='particlePreset'?v:null,
+   getAttribute:k=>k==='data-default'&&(key==='particlePreset'||key==='flowType')?v:null,
    hasAttribute:k=>k==='data-sphere-control',
    selectedOptions:[{textContent:v}]}];
  }));
@@ -98,7 +98,7 @@ test('R152: legacy marble sphere and all its old controls truly removed',()=>{
  for(const key of ['energyMode','reliefMode','agitation','diffusion','thickness','surfaceFlow','rimLight'])
   assert.doesNotMatch(html,new RegExp('id="sf-'+key+'"'));
  assert.match(js,/SiteForge R154/);
- assert.equal((html.match(/data-sphere-control=/g)||[]).length,16);
+ assert.equal((html.match(/data-sphere-control=/g)||[]).length,18);
 });
 test('R152: only one WebGL shader program, canvas and source script',()=>{
  assert.equal((js.match(/gl\.createProgram\(\)/g)||[]).length,1);
@@ -233,7 +233,7 @@ test('R153: electrical bolt starts distributed inside volume, while points form 
  assert.ok(!v.includes('p=vec3((cos(ang)*reach-sin(ang)*zig)'),'old center-origin arcs must be removed');
 });
 test('R153: failure-first and simple palette still intact after effect redesign',()=>{
- assert.equal((html.match(/data-sphere-control=/g)||[]).length,16);
+ assert.equal((html.match(/data-sphere-control=/g)||[]).length,18);
  assert.equal((js.match(/gl.createProgram\(\)/g)||[]).length,1);
  const x=fixture({failLink:true});x.frame(40);
  assert.equal(x.draws.length,0);
@@ -263,7 +263,7 @@ test('R154: energy reference is legible on mobile and still shares palette and e
  assert.match(html,/transform:scale\(calc\(1\.22 \* var\(--sphere-zoom,1\)\)\)/);
  assert.match(html,/transform:scale\(calc\(\.92 \* var\(--sphere-zoom,1\)\)\)/);
  assert.match(js,/if\(uPass>\.5&&uPass<1\.5\)energy\*=\.28/);
- assert.equal((html.match(/data-sphere-control=/g)||[]).length,16);
+ assert.equal((html.match(/data-sphere-control=/g)||[]).length,18);
 });
 
 
@@ -311,7 +311,7 @@ test('R156: export button is accessible, stays separate from reset and contains 
  assert.deepEqual(x.download.revoked,[]);
  x.download.revokeLater();
  assert.deepEqual(x.download.revoked,['blob:siteforge-export-test']);
- assert.match(x.exportStatus.textContent,/16 paramètres actuels/);
+ assert.match(x.exportStatus.textContent,/18 paramètres actuels/);
 });
 test('R156: export continues to work with zero GPU, shader link error, reduced motion and after reset',()=>{
  for(const option of [{noWebGL:true},{failLink:true},{reduceMotion:true}]){
@@ -326,4 +326,46 @@ test('R156: export continues to work with zero GPU, shader link error, reduced m
  x.callbacks.reset({preventDefault(){}});
  x.exportCallbacks.click();
  assert.equal(JSON.parse(x.download.blob.parts.join('')).parameters.opacity,100);
+});
+
+
+test('R157: flow family and structure independent of particle presets',()=>{
+ assert.match(html,/data-sphere-control="flowType"/);
+ assert.match(html,/data-sphere-control="flowStructure"/);
+ for(const name of ['Flux plasma','Rubans magnétiques','Voiles d’aurore','Brume ionique','Jets de fusion'])assert.ok(html.includes(name),name);
+ const x=fixture();x.frame(40);
+ assert.deepEqual(x.uniforms.get('uFlow'),[0,1]);
+ for(let i=1;i<=4;i++){
+  x.controls.flowType.value=String(i);x.controls.flowStructure.value=String(50+i*25);
+  x.callbacks.change({target:x.controls.flowType});x.frame(41+i*45);
+  assert.equal(x.uniforms.get('uFlow')[0],i);
+  assert.equal(x.uniforms.get('uFlow')[1],(50+i*25)/100);
+ }
+ assert.equal(x.controls.particlePreset.value,'0');
+});
+test('R157: five physically distinct volume materials share one GPU program',()=>{
+ const fragment=js.slice(js.indexOf('const fragment='),js.indexOf('function compile('));
+ for(const term of ['uniform vec2 uFlow;','if(uFlow.x<.5){','else if(uFlow.x<1.5){','else if(uFlow.x<2.5){','else if(uFlow.x<3.5){','float ribbonWidth=clamp(uFlow.y,.3,2.);','currents=flowCurrents;','fog*=flowFog;','float core=exp(-dot(q,q)/(nucleusRadius*nucleusRadius)*1.65);'])assert.ok(fragment.includes(term),term);
+ assert.equal((js.match(/gl.createProgram\(\)/g)||[]).length,1);
+ assert.equal((html.match(/<canvas /g)||[]).length,1);
+});
+test('R157: owner-disabled arcs and extra sprites stay disabled for every flow family',()=>{
+ const x=fixture();x.controls.particlePreset.value='4';x.controls.arcIntensity.value='0';x.controls.arcDensity.value='0';x.controls.opacity.value='9';
+ for(let i=0;i<=4;i++){
+  x.controls.flowType.value=String(i);x.callbacks.change({target:x.controls.flowType});x.frame(80+i*50);
+  assert.equal(x.uniforms.get('uFlow')[0],i);
+  assert.equal(x.uniforms.get('uEffects')[0],0);
+  assert.equal(x.uniforms.get('uEffects')[1],0);
+  assert.equal(x.uniforms.get('uControls')[0],4);
+ }
+ assert.deepEqual(x.draws.filter(d=>d.mode===0).map(d=>d.count).slice(-4),[1480,1480,160,160]);
+});
+test('R157: JSON export includes new flow family and structure and retains old saved fields',()=>{
+ const x=fixture();x.controls.flowType.value='3';x.controls.flowStructure.value='174';
+ x.controls.particlePreset.value='4';x.controls.arcIntensity.value='0';x.controls.arcDensity.value='0';x.controls.opacity.value='9';
+ x.exportCallbacks.click();
+ const p=JSON.parse(x.download.blob.parts.join('')).parameters;
+ assert.equal(Object.keys(p).length,18);assert.equal(p.flowType,3);assert.equal(p.flowStructure,174);
+ assert.equal(p.particlePreset,4);assert.equal(p.arcIntensity,0);assert.equal(p.arcDensity,0);assert.equal(p.opacity,9);
+ assert.match(x.exportStatus.textContent,/18 paramètres/);
 });
