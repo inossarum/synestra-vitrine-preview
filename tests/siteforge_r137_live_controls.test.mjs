@@ -8,7 +8,7 @@ const js=read('assets/siteforge-r116-sphere-only.js');
 const html=read('siteforge/core-3d-lab/index.html');
 const defaults={
  particlePreset:4,particleIntensity:100,coreLight:135,arcIntensity:140,arcDensity:100,
- diameter:100,shellVisibility:100,coreSize:70,particleDensity:100,
+ diameter:100,shellVisibility:0,coreSize:70,particleDensity:100,
  particleSpeed:100,particleSize:100,opacity:100,flowType:0,flowStructure:100,
  primary:'#08142e',secondary:'#53318d',core:'#eaffff',rim:'#51dfff'
 };
@@ -121,7 +121,7 @@ test('R152: native quick controls, safe defaults and accessible advanced setting
  assert.match(html,/aria-live="polite"/);
  assert.match(html,/default-src 'none'; script-src 'self'/);
  assert.match(html,/noindex,nofollow/);
- assert.equal((html.match(/type="range"/g)||[]).length,12);
+ assert.equal((html.match(/type="range"/g)||[]).length,9);
  assert.equal((html.match(/type="color"/g)||[]).length,4);
  assert.equal((html.match(/<select /g)||[]).length,1);
  const keys=Object.keys(defaults);
@@ -257,7 +257,7 @@ test('R154: physically volumetric optical depth, quality budget and interactive 
  assert.equal((html.match(/<canvas /g)||[]).length,1);
 });
 test('R154: energy reference is legible on mobile and still shares palette and engine',()=>{
- assert.match(html,/R160 · FLUX PUR/);
+ assert.match(html,/R161 · SANS COQUE/);
  assert.match(html,/transform:scale\(calc\(1\.22 \* var\(--sphere-zoom,1\)\)\)/);
  assert.match(html,/transform:scale\(calc\(\.92 \* var\(--sphere-zoom,1\)\)\)/);
  assert.match(js,/if\(uPass>\.5&&uPass<1\.5\)energy\*=\.025/);
@@ -342,7 +342,7 @@ test('R160: five material families stay independent of the locked pure overlay p
 });
 test('R157: five physically distinct volume materials share one GPU program',()=>{
  const fragment=js.slice(js.indexOf('const fragment='),js.indexOf('function compile('));
- for(const term of ['uniform vec2 uFlow;','if(uFlow.x<.5){','else if(uFlow.x<1.5){','else if(uFlow.x<2.5){','else if(uFlow.x<3.5){','float ribbonWidth=clamp(uFlow.y,.3,2.);','currents=flowCurrents;','shellFog*=flowFog;','float core=exp(-dot(q,q)/(nucleusRadius*nucleusRadius)*1.65);'])assert.ok(fragment.includes(term),term);
+ for(const term of ['uniform vec2 uFlow;','if(uFlow.x<.5){','else if(uFlow.x<1.5){','else if(uFlow.x<2.5){','else if(uFlow.x<3.5){','float ribbonWidth=clamp(uFlow.y,.3,2.);','currents=flowCurrents;','float density=(currents*.43*emission+','float core=exp(-dot(q,q)/(nucleusRadius*nucleusRadius)*1.65);'])assert.ok(fragment.includes(term),term);
  assert.equal((js.match(/gl.createProgram\(\)/g)||[]).length,1);
  assert.equal((html.match(/<canvas /g)||[]).length,1);
 });

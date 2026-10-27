@@ -235,7 +235,7 @@ void main(){
     float stream=pow(max(0.,.5+.5*cos(winding*.8-q.z*7.2)),8.);
     float volumeFog=clamp(.23+.30*broad+.18*detail,0.,1.);
     float hollow=1.-smoothstep(.2,.83,abs(broad-detail)*2.0);
-    float interior=1.-smoothstep(.83,1.0,distance3D);
+    float interior=1.-smoothstep(.92,1.02,distance3D);
     float core=exp(-dot(q,q)/(nucleusRadius*nucleusRadius)*1.65);
     float coreHalo=exp(-dot(q,q)/(nucleusRadius*nucleusRadius)*.18);
     float electrical=0.,vortex=0.,fusion=0.;
@@ -289,36 +289,30 @@ void main(){
     float currents=0.;
     currents=flowCurrents;
     // Only the selected volumetric flow remains active: no legacy energy overlays.
-    // The shell slider owns only optical haze and rim, NOT flowing energy.
-    float shellFog=(volumeFog*.13+.12*hollow)*interior*uShape.y;
-    shellFog*=flowFog;
-    float density=(shellFog+currents*.27*emission+
+    // Shell-free emission: only flow currents and nucleus contribute to optical density.
+    float density=(currents*.43*emission+
                    core*.69+coreHalo*.11)*interior;
     float absorption=clamp(density*stride*5.2,0.,.49);
     vec3 blue=mix(uDeep*.65,uViolet*.69,clamp(distance3D*.72+broad*.42,0.,1.));
     float violetBand=.5+.5*sin(angle*3.0+q.z*4.0+broad*2.2);
     vec3 ion=mix(uCyan,uViolet,clamp(.12+.72*violetBand,0.,1.));
     vec3 filamentColor=mix(blue,ion,clamp(currents*.83+.11,0.,1.));
-    vec3 radiance=filamentColor*(.50+currents*1.05)
+    vec3 radiance=filamentColor*(.50+currents*1.30)
                   +uCyan*coreHalo*.50
                   +uCore*core*pow(max(uShape.w,0.),1.35)*2.4;
     accum+=trans*radiance*absorption;
     trans*=1.-absorption;
     sceneDensity+=absorption;
   }
-  // Optical absorption/transparency and refractive-looking cyan boundary.
+  // Borderless energy: radial mask only fades the currents at the limit.
   float silhouette=xy/radius;
-  float rim=pow(smoothstep(.67,1.0,silhouette),2.);
-  float edge=1.-smoothstep(.966,1.027,silhouette);
+  float edge=1.-smoothstep(.92,1.0,silhouette);
   float coreScreen=exp(-dot(p,p)/(nucleusRadius*nucleusRadius)*1.8);
-  vec3 rimTint=mix(uCyan,uViolet,.38);
   vec3 result=accum*2.05+
-              rimTint*rim*uShape.y*.24+
               uCore*coreScreen*pow(max(uShape.w,0.),1.26)*.56;
   // HDR-inspired, smooth light mapping; no clipped flat cyan marble.
   result=vec3(1.)-exp(-max(result,vec3(0.))*1.15);
-  float alpha=(1.-trans)+rim*.16*uShape.y+
-              coreScreen*.69;
+  float alpha=(1.-trans)+coreScreen*.69;
   gl_FragColor=vec4(result,clamp(alpha*edge*uEffects.w,0.,1.));
   return;
  }

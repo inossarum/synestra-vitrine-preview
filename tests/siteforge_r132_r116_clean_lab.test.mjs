@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 const load=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
-const sha=s=>createHash('sha1').update('blob '+Buffer.byteLength(s)+'\0'+s).digest('hex');
+const sha=s=>{const source=s.replace(/\r\n/g,'\n');return createHash('sha1').update('blob '+Buffer.byteLength(source)+'\0'+source).digest('hex');};
 const page=load('siteforge/core-3d-lab/index.html');
 const current=load('assets/siteforge-r116-sphere-only.js');
 const historical=load('assets/core-r109-webgl.js');

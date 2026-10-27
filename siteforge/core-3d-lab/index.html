@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex,nofollow">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
-<title>SiteForge — Core énergétique 3D R157</title>
+<title>SiteForge — Core énergétique 3D R161</title>
 <style>
 :root{color-scheme:dark;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#050a14;color:#e7f4ff}
 *{box-sizing:border-box}
@@ -41,7 +41,7 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 .reset{display:block;width:100%;background:#18354b;color:#e4f5ff;padding:13px;border:1px solid #55869d;border-radius:12px;font-weight:700;cursor:pointer}
 .help{font-size:.76rem;color:#90a8bd;margin:0}
 .control-group + .control-group{border-top:1px solid #21384e;padding-top:12px}
-@media(min-width:701px){.core-r109-canvas{transform:scale(calc(.75 * var(--sphere-zoom,1)))}.core-r108-art{transform:translateX(-50%) scale(calc(.75 * var(--sphere-zoom,1)))}}
+@media(min-width:701px){.core-r109-canvas{transform:scale(calc(.92 * var(--sphere-zoom,1)))}.core-r108-art{transform:translateX(-50%) scale(calc(.75 * var(--sphere-zoom,1)))}}
  /* Mobile: the sticky canvas is a sibling of the scrolling form, not nested inside a short wrapper. */
 @media(max-width:700px){
  body{padding:12px 12px max(16px,env(safe-area-inset-bottom,0px))}
@@ -72,7 +72,7 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 </defs>
 <circle cx="320" cy="191" r="164" fill="url(#sf152-aura)"/>
 <circle cx="320" cy="191" r="95" fill="#51dfff" opacity=".23" filter="url(#sf152-glow)"/>
-<circle cx="320" cy="191" r="87" fill="url(#sf152-plasma)"/>
+<!-- Fallback stays shell-free too: luminous energy curves and central glow only. -->
 <g fill="none" stroke-linecap="round">
 <path d="M274 151 Q295 130 315 150 T357 165 T381 202" stroke="#b6fcff" stroke-width="2.2" opacity=".72"/>
 <path d="M258 194 Q283 214 298 192 T333 171 T371 192" stroke="#89e9ff" stroke-width="1.9" opacity=".66"/>
@@ -83,7 +83,7 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 </svg>
 </div>
 <form class="lab-controls" aria-label="Création de la nouvelle sphère plasma VFX" autocomplete="off">
-<div class="panel-head"><h2>Plasma Studio</h2><span class="preview-state">R160 · FLUX PUR</span></div>
+<div class="panel-head"><h2>Plasma Studio</h2><span class="preview-state">R161 · SANS COQUE</span></div>
 <p class="help">Un même Core 3D, plusieurs matériaux énergétiques remplaçables. Ajuste le flux indépendamment du noyau et conserve tes effets désactivés.</p>
 <fieldset class="control-group"><legend>✨ Création rapide</legend>
 <div class="control-row"><label class="control-label" for="sf-flowType"><span>Énergie qui traverse la sphère</span><output for="sf-flowType" data-sphere-value="flowType">Flux plasma</output></label>
@@ -102,15 +102,15 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 <fieldset class="control-group"><legend>🌐 Volume de plasma</legend>
 <div class="control-row"><label class="control-label" for="sf-flowStructure"><span>Largeur des courants</span><output for="sf-flowStructure" data-sphere-value="flowStructure">100 %</output></label><input id="sf-flowStructure" data-sphere-control="flowStructure" type="range" min="30" max="200" value="100" step="1"></div>
 <div class="control-row"><label class="control-label" for="sf-diameter"><span>Diamètre</span><output for="sf-diameter" data-sphere-value="diameter">100 %</output></label><input id="sf-diameter" data-sphere-control="diameter" type="range" min="50" max="150" value="100" step="1"></div>
-<div class="control-row"><label class="control-label" for="sf-shellVisibility"><span>Coque externe visible</span><output for="sf-shellVisibility" data-sphere-value="shellVisibility">100 %</output></label><input id="sf-shellVisibility" data-sphere-control="shellVisibility" type="range" min="0" max="100" value="100" step="1"></div>
+<input id="sf-shellVisibility" type="hidden" data-sphere-control="shellVisibility" data-default="0" value="0">
 <div class="control-row"><label class="control-label" for="sf-coreSize"><span>Taille du noyau</span><output for="sf-coreSize" data-sphere-value="coreSize">70 %</output></label><input id="sf-coreSize" data-sphere-control="coreSize" type="range" min="0" max="200" value="70" step="1"></div>
-<p class="help">À 0 % la coque disparaît, sans atténuer les courants énergétiques intérieurs. La taille et la puissance du noyau restent indépendantes.</p>
+<p class="help">La coque opaque est supprimée. Seuls restent les flux énergétiques, le noyau et leur lumière.</p>
 </fieldset>
 <details class="vfx-advanced"><summary>Réglages avancés</summary>
 <fieldset class="control-group"><legend>Émission et vitesse</legend>
-<div class="control-row"><label class="control-label" for="sf-particleDensity"><span>Densité des particules</span><output for="sf-particleDensity" data-sphere-value="particleDensity">100 %</output></label><input id="sf-particleDensity" data-sphere-control="particleDensity" type="range" min="0" max="250" value="100" step="1"></div>
+<input id="sf-particleDensity" type="hidden" data-sphere-control="particleDensity" data-default="100" value="100">
 <div class="control-row"><label class="control-label" for="sf-particleSpeed"><span>Vitesse des flux</span><output for="sf-particleSpeed" data-sphere-value="particleSpeed">100 %</output></label><input id="sf-particleSpeed" data-sphere-control="particleSpeed" type="range" min="0" max="250" value="100" step="1"></div>
-<div class="control-row"><label class="control-label" for="sf-particleSize"><span>Finesse lumineuse</span><output for="sf-particleSize" data-sphere-value="particleSize">100 %</output></label><input id="sf-particleSize" data-sphere-control="particleSize" type="range" min="20" max="200" value="100" step="1"></div>
+<input id="sf-particleSize" type="hidden" data-sphere-control="particleSize" data-default="100" value="100">
 <div class="control-row"><label class="control-label" for="sf-opacity"><span>Opacité générale</span><output for="sf-opacity" data-sphere-value="opacity">100 %</output></label><input id="sf-opacity" data-sphere-control="opacity" type="range" min="0" max="100" value="100" step="1"></div>
 </fieldset>
 <fieldset class="control-group"><legend>Palette plasma d’origine</legend><div class="color-grid">

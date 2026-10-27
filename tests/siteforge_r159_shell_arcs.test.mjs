@@ -7,11 +7,9 @@ const js=read('assets/siteforge-r116-sphere-only.js');
 const html=read('siteforge/core-3d-lab/index.html');
 const volume=js.slice(js.indexOf('const fragment='),js.indexOf('function compile('));
 
-test('R159: shell visibility controls only shell haze/rim, never interior flow currents',()=>{
- assert.match(volume,/float shellFog=.*uShape\.y/);
- assert.match(volume,/float density=\(shellFog\+currents\*\.27\*emission\+/);
- assert.doesNotMatch(volume,/currents\*\.27\*emission\*uShape\.y/);
- assert.match(volume,/rimTint\*rim\*uShape\.y/);
+test('R161 supersedes R159: shell removed, energy currents and nucleus independent',()=>{
+ assert.doesNotMatch(volume,/shellFog|rimTint\*rim\*uShape\.y/);
+ assert.match(volume,/float density=\(currents\*\.43\*emission\+/);
  assert.match(volume,/coreScreen\*\.69/);
 });
 

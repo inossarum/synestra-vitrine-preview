@@ -1,0 +1,44 @@
+{
+  "schema": "synestra.siteforge.r161.local_qa.v1",
+  "date": "2026-10-27",
+  "objective": "Remove unattractive spherical shell and irrelevant particle density and luminous finesse UI, preserve single volumetric engine",
+  "base_repo": "inossarum/synestra-vitrine-preview",
+  "base_preview_commit": "2154bcdc590fd7e5db90b962483ca07dc900e85b",
+  "worktree": "I:\\_STUDIO_STAGING\\siteforge_r161_local_20261027",
+  "effects": {
+    "shellFog": "removed",
+    "rimTint": "removed",
+    "silhouette": "fade only",
+    "shellControl": "hidden default 0",
+    "particleDensity": "hidden default 100",
+    "particleSize": "hidden default 100",
+    "json_parameter_count": 18,
+    "energy_families": 5,
+    "webgl_engine_count": 1
+  },
+  "tests": {
+    "failure_first": "2/3 intentional R161 tests failed against R160",
+    "targeted_suite": "PASS",
+    "node_site_contract": {
+      "tests": 59,
+      "passed": 59,
+      "failed": 0
+    },
+    "chrome_real": {
+      "state": "PASS",
+      "webgl": true,
+      "glError": 0,
+      "flowFamilies": 5,
+      "controlFields": 18,
+      "renderStatus": "Nouvelle sphère plasma WebGL active.",
+      "extraParticles": 0,
+      "lightning": 0,
+      "screenshot": "r161-browser-preview.png"
+    },
+    "production_deployed": false,
+    "preview_published": false
+  },
+  "decision": "Visual review of captured screenshot: coherent shell-free cyan/violet arms, emission and viewport scale tuned once; no old marble or shell restored.",
+  "rollback": "Return to preview source 2154bcdc590fd7e5db90b962483ca07dc900e85b; no remote refs changed",
+  "status": "LOCAL_VERIFIED_NOT_PUBLISHED"
+}
