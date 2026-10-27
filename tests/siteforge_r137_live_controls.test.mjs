@@ -76,7 +76,7 @@ test('R143: four packed GPU vectors map surface/core/relief controls independent
  const x=fixture();x.frame(40);
  assert.equal(x.arrays.get('surfaceSettings')[0],0);
  assert.equal(x.arrays.get('flowSettings')[3],1);
- assert.equal(x.arrays.get('reliefSettings')[1],.65);
+ assert.ok(Math.abs(x.arrays.get('reliefSettings')[1]-.65)<.00001);
  const steps=[
   ['energyMode','5','surfaceSettings',0,5],
   ['surfaceMotion','3','surfaceSettings',1,3],
@@ -103,8 +103,8 @@ test('R143: four packed GPU vectors map surface/core/relief controls independent
  x.events.reset({preventDefault(){}});x.frame(clock+45);
  assert.equal(x.arrays.get('surfaceSettings')[0],0);
  assert.equal(x.arrays.get('flowSettings')[3],1);
- assert.equal(x.arrays.get('reliefSettings')[1],.65);
- assert.equal(x.arrays.get('reliefDynamics')[1],.15);
+ assert.ok(Math.abs(x.arrays.get('reliefSettings')[1]-.65)<.00001);
+ assert.ok(Math.abs(x.arrays.get('reliefDynamics')[1]-.15)<.00001);
 });
 
 test('R143: coherent calm baseline and six energy families; relief changes shading and silhouette gently',()=>{
