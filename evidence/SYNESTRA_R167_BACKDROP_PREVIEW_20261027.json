@@ -1,0 +1,67 @@
+{
+  "schema": "synestra.vitrine.r167.background_preview.v1",
+  "date": "2026-10-27",
+  "mission": "SYN_VITRINE_R167_FUTURISTIC_BACKDROP_CONCEPT",
+  "owner_request": "A futuristic background to accompany the already approved Synestra Core sphere, without changing the sphere itself. Return to SiteForge 3D lab work after recording this request.",
+  "base": "abf929d1cf0de8098d27ea4f1d0add0a0c6b503c",
+  "source": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "approved_home_sha": "1413e30138ba1657f7056401818e697ddbd32ac8",
+    "approved_renderer_sha": "dd63d75fdb966de2052595c95b7b6cb736d6c7cc",
+    "css": "assets/vitrine-r167-backdrop-proposal.css",
+    "generator": "r167_build_preview.py",
+    "generated_preview": "vitrine-r167-backdrop-preview.html"
+  },
+  "design": {
+    "palette": {
+      "violet": "#53318d",
+      "green": "#69dcb4"
+    },
+    "layers": [
+      "subtle radial glows",
+      "perspective grid (43px) fading in depth",
+      "faint directional tech contour highlights"
+    ],
+    "behavior": "static decor, no extra canvas, no interactions",
+    "diameter_css": "matrix(0.49,0,0,0.49,0,0)"
+  },
+  "tests": {
+    "desktop_chrome": {
+      "status": "PASS",
+      "webgl_error": 0,
+      "canvas": 1,
+      "json_controls": 18,
+      "width": 1280,
+      "body_width": 1265,
+      "shot": "r167-backdrop-desktop.png"
+    },
+    "mobile_chrome": {
+      "status": "PASS",
+      "webgl_error": 0,
+      "canvas": 1,
+      "json_controls": 18,
+      "width": 390,
+      "body_width": 390,
+      "shot": "r167-backdrop-mobile.png"
+    },
+    "reduced_motion": {
+      "desktop": "PASS",
+      "mobile": "PASS",
+      "old_fallback_sphere": false,
+      "screenshot_desktop": "r167-backdrop-reduced-desktop.png",
+      "screenshot_mobile": "r167-backdrop-reduced-mobile.png"
+    },
+    "source_immutability": {
+      "homepage_sha_unchanged": true,
+      "webgl_sha_unchanged": true
+    },
+    "visual_acceptance": "PENDING_OWNER"
+  },
+  "deployment": {
+    "production": false,
+    "preview_branch": false,
+    "github_isolated_prototype": "PENDING"
+  },
+  "rollback": "Delete preview CSS/generated derivative; original index remains immutable",
+  "status": "ISOLATED_VISUAL_PROTOTYPE_LOCAL_VERIFIED"
+}

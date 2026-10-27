@@ -1,0 +1,41 @@
+/* R167 – Futuristic backdrop CONCEPT ONLY. Apply to a derived preview, never the validated index.html. */
+.core-r109-stage .syn-r167-backdrop{
+ position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none;
+ background:
+  radial-gradient(ellipse 42% 38% at 53% 35%,rgba(83,49,141,.16),transparent 84%),
+  radial-gradient(ellipse 36% 24% at 72% 49%,rgba(105,220,180,.055),transparent 88%),
+  linear-gradient(145deg,rgba(25,25,53,.09),transparent 65%);
+ opacity:.83;
+}
+.core-r109-stage .syn-r167-backdrop::before{
+ content:"";position:absolute;inset:36% -36% -53%;
+ background-image:linear-gradient(90deg,rgba(105,220,180,.115) 1px,transparent 1px),
+                  linear-gradient(rgba(130,103,214,.09) 1px,transparent 1px);
+ background-size:43px 43px;
+ transform:perspective(580px) rotateX(66deg) translateY(10%);
+ transform-origin:center top;
+ -webkit-mask-image:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.8) 36%,black 73%,transparent 100%);
+ mask-image:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.8) 36%,black 73%,transparent 100%);
+ opacity:.7;
+}
+.core-r109-stage .syn-r167-backdrop::after{
+ content:"";position:absolute;inset:6% 6% 29%;
+ background:
+   conic-gradient(from 34deg at 49% 52%,transparent 0 46deg,
+                  rgba(105,220,180,.10) 55deg,transparent 59deg 173deg,
+                  rgba(126,96,208,.12) 180deg,transparent 189deg 290deg,
+                  rgba(105,220,180,.07) 294deg,transparent 303deg);
+ -webkit-mask-image:radial-gradient(ellipse at center,transparent 30%,black 77%,transparent 96%);
+ mask-image:radial-gradient(ellipse at center,transparent 30%,black 77%,transparent 96%);
+ opacity:.55;
+}
+@media(max-width:620px){
+ .core-r109-stage .syn-r167-backdrop{opacity:.66}
+ .core-r109-stage .syn-r167-backdrop::before{background-size:36px 36px;opacity:.52}
+ .core-r109-stage .syn-r167-backdrop::after{opacity:.38}
+}
+@media(prefers-reduced-motion:reduce){
+ .core-r109-stage .syn-r167-backdrop,
+ .core-r109-stage .syn-r167-backdrop::before,
+ .core-r109-stage .syn-r167-backdrop::after{animation:none!important;transition:none!important}
+}
