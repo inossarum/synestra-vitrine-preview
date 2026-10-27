@@ -1,0 +1,242 @@
+{
+  "schema": "synestra.siteforge.r154.real_3d_reference_plasma.evidence.v1",
+  "date": "2026-10-27",
+  "mission_id": "SYN_SITEFORGE_R154_REFERENCE_IMAGE_TO_3D_PLASMA_20261027",
+  "owner": "Inos",
+  "objective": "Reproduce the newly generated glowing cyan-violet spiral plasma-core reference in an interactive, genuinely volumetric 3D SiteForge renderer, using existing authorized tools and mandatory Synestra procedures.",
+  "reference": {
+    "authority": "owner selected latest conversation image as target",
+    "description": "Large translucent glowing sphere, white-blue compact nucleus, winding broad cyan and violet plasma ribbons inside a dark indigo volumetric field, thin lightning, no metal rings or UI.",
+    "image_generation_reference_id": "6d071739-77a4-42ca-9061-ea00a068528e",
+    "reference_availability": "VISUAL_IN_CONVERSATION, not embedded or copied into public production"
+  },
+  "source": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_SITEFORGE_R116_CLEAN_LAB_20261027",
+    "deploy_commit": "1bc7663e212423fc8adb37e750a99aaf51bd1add",
+    "shader_blob": "4e7fb318d89d5db1ce1d17bae77be3e4cc5a60dd",
+    "html_blob": "5603f0fc2cbf3531513ee74115cd9f4ff49804ec",
+    "r137_test_blob": "0be0ab6568b44eceb76afacbdaac6cd6506534b4",
+    "r132_test_blob": "f5bdada513fa33b019e5d35cf7a46c94152e556b",
+    "r136_test_blob": "719e28d3be6569968c5dd4992b3357a2d28f6490"
+  },
+  "root_cause": "R153 plotted mostly 2D noise/filaments at reconstructed front-surface normal; its GPU POINTS could not show coherent spiral ribbon volume sampled from back to front. Old preview zoom .49 desktop / .8 mobile also made the sphere too small relative to reference.",
+  "changes": [
+    "Convert primary fragment pass to a genuine ray-marched sphere volume integrating 3D density and emission from the front hemisphere through back with depth attenuation/transmittance and single 3D noise sample per step.",
+    "Use logarithmic swirling cyan-violet streams, longitudinal narrow filaments and broad bands at several rotated depths; preserve 4 preset modes electrically, vortically and fusion-distinct.",
+    "Rotate the 3D sample coordinates in response to pointer tilt; per-pixel 3D depth bounds, silhouette transparency and a soft cyan-violet rim.",
+    "Independent white-blue nucleus compact 3D radius and high-power radiance, HDR-like optical response with no fixed photo plane.",
+    "One existing WebGL1 shader program and canvas still execute 3D volumetric quad plus shell, internal branching lightning, compact core and extra particle GPU passes; no new 3D server/Bridge/broker.",
+    "Adaptive 14 mobile / 22 desktop ray samples, mobile DPR max 1.5 and pixel budget 650000, desktop higher quality.",
+    "Enlarge scene preview from old desktop scale .49 to .92 and mobile .8 to 1.22, no new UI: preserve 16 existing controls.",
+    "Make spiral ribbons broader with cyan/violet alternating channels; reduce overbright random shell sprite speckles to 28% of prior emission.",
+    "Update R154 GPU regression tests and legacy test expectations while preserving rollback and original reference SVG."
+  ],
+  "build": {
+    "initial_failed_deployment_id": "9666b01c-7859-46b3-b5d8-14924b13bf4a",
+    "initial_failure": "Two tests still matched historical shader version R153 and obsolete vec3 plasma variable; no observed shader failure.",
+    "corrective_commit": "1bc7663e212423fc8adb37e750a99aaf51bd1add",
+    "deployment_id": "e3fcb95f-a452-4e96-b0bb-719c44715ae0",
+    "preview": "https://e3fcb95f.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+    "stages": [
+      "queued:success",
+      "initialize:success",
+      "clone_repo:success",
+      "build:success",
+      "deploy:success"
+    ],
+    "tests": 69,
+    "pass": 69,
+    "fail": 0,
+    "static_export": "PASS"
+  },
+  "real_browser": {
+    "provider": "Cloudflare Browser Rendering content API",
+    "runtime": "Actual Chromium WebGL, touch mobile 390×844 or 410×520 viewport, running exact current GitHub branch source in isolated HTML fixture (no Access bypass)",
+    "source_access_qualification": "The live preview is Access-protected; browser tests used a temporary HTML fixture that inlined the checked-in JavaScript and removed CSP only in the isolated fixture, never from the deployed site.",
+    "webgl_compile_link": "PASS",
+    "shader_gpu_error": 0,
+    "js_errors": [],
+    "gpu_draw_submissions_first_frame": [
+      1480,
+      1480,
+      540,
+      540,
+      160,
+      160,
+      340,
+      340
+    ],
+    "main_status": "Nouvelle sphère plasma WebGL active.",
+    "r154_preset_pixels": {
+      "Plasma": [
+        [
+          208,
+          229,
+          237,
+          255
+        ],
+        [
+          39,
+          42,
+          75,
+          141
+        ],
+        [
+          98,
+          133,
+          173,
+          185
+        ],
+        [
+          85,
+          121,
+          158,
+          140
+        ],
+        [
+          46,
+          54,
+          89,
+          145
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "Électrique": [
+        [
+          213,
+          234,
+          242,
+          255
+        ],
+        [
+          55,
+          68,
+          106,
+          154
+        ],
+        [
+          116,
+          156,
+          194,
+          194
+        ],
+        [
+          101,
+          132,
+          175,
+          163
+        ],
+        [
+          64,
+          83,
+          122,
+          165
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "Vortex": [
+        [
+          217,
+          235,
+          243,
+          255
+        ],
+        [
+          57,
+          63,
+          105,
+          162
+        ],
+        [
+          89,
+          111,
+          157,
+          181
+        ],
+        [
+          96,
+          134,
+          172,
+          158
+        ],
+        [
+          86,
+          120,
+          158,
+          171
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "Fusion": [
+        [
+          207,
+          227,
+          235,
+          255
+        ],
+        [
+          35,
+          35,
+          67,
+          139
+        ],
+        [
+          64,
+          75,
+          117,
+          163
+        ],
+        [
+          61,
+          79,
+          118,
+          144
+        ],
+        [
+          47,
+          60,
+          94,
+          143
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "snapshot_review": "A real Cloudflare Chromium jpeg snapshot was rendered and manually inspected in session; cyan-violet spiral structure and white compact center visible, but visibly simpler and more speckled than reference. Framing enlarged and dot shell attenuated after first snapshot.",
+    "benchmark_caveat": "Headless Chromium under a comparable ~850 ms probe submitted about 9 ray-marched frames versus about 20 historical R153 shader frames. This is a relative synthetic browser observation, NOT measured iPhone FPS; quality vs performance remains a known issue.",
+    "full_frame_perceptual_similarity": "NOT_VERIFIED; no established objective similarity score or human approval",
+    "safari_iphone": "NOT_VERIFIED",
+    "owner_acceptance": "PENDING"
+  },
+  "policy": {
+    "preview_only": true,
+    "cloudflare_production_deployments_enabled": false,
+    "main_unchanged": true,
+    "production_unchanged": true,
+    "observer_unchanged": true,
+    "free_only": true,
+    "no_extra_broker_or_renderer": true
+  },
+  "rollback": "https://f27d23fa.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+  "status": "R154_PREVIEW_DEPLOYED_69_PASS__REAL_CHROMIUM_3D_GPU_PIXELS_PROVEN__PERFORMANCE_AND_ARTISTIC_ACCEPTANCE_PENDING"
+}
