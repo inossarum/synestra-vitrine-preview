@@ -255,20 +255,23 @@ void main(){
     if(uFlow.x<.5){
       // R162: asymmetric, multi-scale filament topology within the SAME ray-marched volume.
       // Depth offset, low-frequency wandering, strand breakup and travelling pulses.
-      float wander=.32*sin(angle*2.3+q.z*3.1+t*.21)
+      float wander=.32*sin(angle*2.+q.z*3.1+t*.21)
                   +.22*sin(q.y*6.7-q.z*4.5-t*.17)+(broad-.5)*.65;
       float depthTwist=q.z*(2.8+.7*sin(t*.23+planar*5.))
                       +.35*sin(q.x*5.1+q.z*3.1-t*.25);
-      float organicLane=angle*(6.4+.75*sin(q.z*2.9+planar*6.1))
-                       +4.3*log(planar+.23)-t*.27+wander*2.2+depthTwist;
-      float localPhase=sin(organicLane*.33+q.x*3.4+q.z*2.1-t*.17);
+      // The angular part must contain only integer winding numbers at +/-PI.
+      // Keep all irregular distortion in a strictly periodic phase offset.
+      float basePhase=4.3*log(planar+.23)-t*.27+wander*2.2+depthTwist
+                    +.75*sin(q.z*2.9+planar*6.1)*sin(angle*3.+q.z*1.7);
+      float organicLane=angle*6.+basePhase;
+      float localPhase=sin(angle*2.+basePhase*.33+q.x*3.4+q.z*2.1-t*.17);
       float primaryVein=pow(max(0.,.5+.5*cos(organicLane+localPhase*.55)),
                             max(5.,11.4/ribbonWidth));
-      float tributary=pow(max(0.,.5+.5*cos(organicLane*1.63+wander+depthTwist*.33)),
+      float tributary=pow(max(0.,.5+.5*cos(angle*9.+basePhase*1.63+wander+depthTwist*.33)),
                           max(9.,18./ribbonWidth));
-      float hairline=pow(max(0.,.5+.5*cos(organicLane*3.17+q.z*8.1-q.y*5.6)),
+      float hairline=pow(max(0.,.5+.5*cos(angle*19.+basePhase*3.17+q.z*8.1-q.y*5.6)),
                          max(16.,35./ribbonWidth));
-      float wisp=pow(max(0.,.5+.5*cos(organicLane*.57-q.x*4.7+depthTwist*1.4)),
+      float wisp=pow(max(0.,.5+.5*cos(angle*3.+basePhase*.57-q.x*4.7+depthTwist*1.4)),
                      max(6.,11./ribbonWidth));
       float pulse=.78+.22*sin(t*2.1+planar*11.+q.z*5.+wander*3.);
       float breakup=.64+.36*smoothstep(.23,.72,broad+.19*sin(q.z*8.+t*.3));

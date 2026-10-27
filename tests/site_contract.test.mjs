@@ -6,6 +6,7 @@ import './siteforge_r159_shell_arcs.test.mjs'; // R159 independent shell/arc con
 import './siteforge_r160_pure_material.test.mjs'; // R160 pure-only visual family acceptance.
 import './siteforge_r161_shell_free_ui.test.mjs'; // R161 shell-free UI and 18-field compatibility acceptance.
 import './siteforge_r162_organic_volumetric.test.mjs'; // R162 organic multi-scale volumetric streams.
+import './siteforge_r163_angular_continuity.test.mjs'; // R163 periodic polar filaments: eliminate seam.
 import './siteforge_r132_r116_clean_lab.test.mjs'; // R116 provenance and isolation.
 import './siteforge_r136_mobile_sticky_preview.test.mjs'; // Mobile sticky continuity.
 

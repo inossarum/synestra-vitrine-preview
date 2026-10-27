@@ -1,0 +1,76 @@
+{
+  "schema": "synestra.siteforge.r163.angular_continuity.evidence.v1",
+  "date": "2026-10-27",
+  "mission_id": "SYN_SITEFORGE_R163_ANGULAR_SEAM_20261027",
+  "owner": "ChatGPT local SiteForge preview scope",
+  "intent": "Owner screenshot reveals horizontal discontinuity at negative X boundary and repetitive radial strands in R162. Target periodic continuity without resetting sphere or removing existing multi-scale detail.",
+  "base": {
+    "repository": "inossarum/synestra-vitrine-preview",
+    "sha": "005ee61745fc544669e69d20623ba2fbd6a35c4f",
+    "branch": "task/SYN_SITEFORGE_R116_CLEAN_LAB_20261027"
+  },
+  "cause": "Fractional angular coefficients 2.3, 6.4, 1.63, 3.17, 0.57 applied to atan(y,x); at ±PI periodicity breaks, confirmed by failure-first numerical test.",
+  "fix": "Sixfold base periodic winding; all Fourier harmonic angle multipliers integral 2,3,6,9,19; depth-dependent phase retained as periodic distortions; other flow families unchanged.",
+  "tests": {
+    "failure_first": {
+      "name": "siteforge_r163_angular_continuity.test.mjs",
+      "status": "EXPECTED_FAIL_R162",
+      "failing": 2,
+      "passing": 1,
+      "example": {
+        "depth": -0.42,
+        "time": 0.4,
+        "above": 1.4775101700109965,
+        "below": 0.0005625871409552345
+      }
+    },
+    "regression": {
+      "name": "node --test tests/site_contract.test.mjs",
+      "status": "PASS",
+      "total": 65,
+      "passed": 65,
+      "failed": 0
+    },
+    "seam_numerical": {
+      "status": "PASS",
+      "sample_depths": 5,
+      "sample_times": 3,
+      "threshold_abs_delta": 0.012
+    },
+    "chrome": {
+      "status": "PASS",
+      "engine": "Chrome headless SwiftShader ANGLE WebGL",
+      "glError": 0,
+      "materials_tested": 5,
+      "canvas": 1,
+      "control_count": 18,
+      "mobile_viewport": 390,
+      "mobile_body_width": 390,
+      "desktop_screenshot": "r163-browser-desktop.png",
+      "mobile_screenshot": "r163-browser-mobile.png"
+    },
+    "gpu_hardware_fps": {
+      "status": "NOT_MEASURED"
+    },
+    "owner_aesthetic_review": {
+      "status": "PENDING"
+    }
+  },
+  "invariants": {
+    "one_sphere": true,
+    "one_WebGL_program": true,
+    "shell_free": true,
+    "extra_particles": 0,
+    "arcs": 0,
+    "export_schema": "synestra.siteforge.plasma-settings.v1",
+    "json_controls": 18,
+    "material_families": 5,
+    "prod_change": false,
+    "free_only": true
+  },
+  "rollback": {
+    "git_sha": "005ee61745fc544669e69d20623ba2fbd6a35c4f",
+    "preview_url": "https://c7e97bd2.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/"
+  },
+  "stage": "LOCAL_VERIFIED_REMOTE_PUBLICATION_PENDING"
+}
