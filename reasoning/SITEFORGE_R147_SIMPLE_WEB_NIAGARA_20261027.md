@@ -28,3 +28,14 @@ Respect denied write; require explicitly authorized update of the two legacy tes
 SOURCE_GATE=LIMITED
 HOOKS_STATUS=UNKNOWN
 FUNCTION_REPORT=BLOCKED
+
+
+## Revalidation and reversal of the historical block (2026-10-27, same session)
+The earlier GitHub write denial and four subsequent tool timeouts did **not** demonstrate a permanent GitHub repository ACL change. Direct GitHub connector reads resumed, and the **same formerly refused** tests/siteforge_r132_r116_clean_lab.test.mjs update succeeded via the ordinary GitHub update_file operation, commit 7ee2510e70c7cf240dd129a026350934fd76b68e. The mobile compatibility test update also succeeded, commit 34a677e5cc4f9150eb227916af5c45cb2e6d10d5. All three tests now expect 38 owner-approved controls and were read back. No alternative permission path, new repository, policy alteration or bypass was used. The precise cause of intermittent tool refusals/timeouts remains unproven; do not attribute it confidently to GitHub ACL.
+
+Cloudflare Pages project was rechecked: production_deployments_enabled=false, allowlist includes task/SYN_SITEFORGE_R116_CLEAN_LAB_20261027. A preview was deployed for source commit 34a677e5cc4f9150eb227916af5c45cb2e6d10d5, deployment d49214a5-09c9-46ff-aed7-3dfb98815460 at https://d49214a5.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/. All stages SUCCESS, Node tests 68/68 PASS and SYNESTRA_STATIC_EXPORT=PASS, confirmed from Cloudflare logs. This supersedes the **DO NOT DEPLOY** line above, which was applicable only while known failing test expectations and unverified permissions persisted.
+
+Limits: static tests and Cloudflare build do not demonstrate WebGL shader compilation in a real phone browser, pixel quality, FPS, physically volumetric 3D or parity with Unreal Niagara. Those remain GPU_VISUAL_E2E_PENDING. Production and main are unchanged; last R146 preview remains a rollback URL.
+
+CURRENT_STATUS=R147_PREVIEW_DEPLOYED_68_PASS; VISUAL_GPU_QA_PENDING
+FUNCTION_REPORT=PARTIAL
