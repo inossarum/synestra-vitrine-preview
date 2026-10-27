@@ -262,7 +262,7 @@ test('R154: energy reference is legible on mobile and still shares palette and e
  assert.match(html,/R157 · FLUX MODULABLE/);
  assert.match(html,/transform:scale\(calc\(1\.22 \* var\(--sphere-zoom,1\)\)\)/);
  assert.match(html,/transform:scale\(calc\(\.92 \* var\(--sphere-zoom,1\)\)\)/);
- assert.match(js,/if\(uPass>\.5&&uPass<1\.5\)energy\*=\.28/);
+ assert.match(js,/if\(uPass>\.5&&uPass<1\.5\)energy\*=\.025/);
  assert.equal((html.match(/data-sphere-control=/g)||[]).length,18);
 });
 
