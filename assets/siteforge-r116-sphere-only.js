@@ -25,6 +25,7 @@
     ];
     for (const [selector, key] of stops) fallback?.querySelector(selector)?.setAttribute('stop-color',controls[key]?.value || defaults[key]);
   };
+  let scheduleDraw = () => {};
   const syncUI = () => {
     for (const [key, el] of Object.entries(controls)) {
       const out = document.querySelector('[data-sphere-value="'+key+'"]');
@@ -36,12 +37,13 @@
   };
   const panel = document.querySelector('.lab-controls');
   panel?.addEventListener('input', event => {
-    if (event.target?.hasAttribute('data-sphere-control')) syncUI();
+    if (event.target?.hasAttribute('data-sphere-control')) {syncUI();scheduleDraw();}
   });
   panel?.addEventListener('reset', event => {
     event.preventDefault();
     for (const [key, el] of Object.entries(controls)) el.value = defaults[key];
     syncUI();
+    scheduleDraw();
   });
   syncUI();
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -78,6 +80,8 @@ uniform float contrastRatio;
 uniform float coreRatio;
 uniform float rimRatio;
 uniform float sphereAlpha;
+uniform float shellDiffusionRatio;
+uniform float shellThicknessRatio;
 uniform vec3 primaryColor;
 uniform vec3 secondaryColor;
 uniform vec3 coreColor;
@@ -140,7 +144,6 @@ void main(){
  float od=abs(oval-1.);
  float ring=exp(-od*od*4400.);
  float ringBloom=exp(-od*od*480.);
- float ringFront=smoothstep(-.12,.10,q.y);
  float spinPulse=.77+.23*sin(atan(q.y/.31,q.x/.98)*3.-time*.46);
  float aura=exp(-pow(d/.88,2.)*3.0);
  vec3 cyan=vec3(.31,.87,1.);
@@ -148,8 +151,12 @@ void main(){
  vec3 navy=vec3(.009,.034,.108);
  vec3 backdrop=mix(vec3(.07,.11,.35),vec3(.04,.33,.55),smoothstep(-.8,.8,p.x));
  vec3 ringCol=mix(lavender,cyan,smoothstep(-.42,.6,p.x));
- vec3 outside=backdrop*aura*.07+ringCol*(ring*.34+ringBloom*.025)*spinPulse;
- float outsideA=clamp(aura*.065+ring*.43+ringBloom*.035,0.,.65);
+ // Draw the orbit outside, never over the sphere: removes the false equator seam.
+ float exteriorFog=exp(-pow(max(d-radius,0.)/(.018+.08*shellDiffusionRatio),2.));
+ vec3 outside=backdrop*aura*.07+ringCol*(ring*.34+ringBloom*.025)*spinPulse
+              +rimColor*exteriorFog*shellDiffusionRatio*.10;
+ float outsideA=clamp(aura*.065+ring*.43+ringBloom*.035
+              +exteriorFog*shellDiffusionRatio*.12,0.,.75);
  if(d>radius){ gl_FragColor=vec4(outside,outsideA); return; }
  vec3 n=vec3(p,sqrt(max(radius*radius-dot(p,p),0.)))/radius;
  n=turn3(n,tilt+vec2(t*.55+sin(t*.23)*.15,cos(t*.18)*.08));
@@ -157,28 +164,42 @@ void main(){
  float v2=noise3(n*7.5+vec3(drift*.3,-drift*.6,drift*.47));
  // Fine-scale volumetric striations add depth without changing R116 silhouettes.
  float micro=noise3(n*(12.+detailRatio*9.)+vec3(drift*.26,-drift*.16,drift*.11));
- float mineral=(micro-.5)*.17*detailRatio;
+ float mineral=(micro-.5)*.26*detailRatio;
  float angle=atan(n.y,n.x);
  float filament=sin(angle*5.+n.z*9.5+v*5.0-drift*2.0);
  float currents=pow(max(0.,filament*.5+.5),7.0);
  float secondary=pow(max(0.,sin(angle*8.0-n.z*11.0+v2*4.+drift)*.5+.5),12.);
- float light=max(dot(n,normalize(vec3(-.45,.58,1.))),0.);
- float rim=pow(1.-max(n.z,0.),2.2);
- float soft=clamp(.18+v*.63+light*.55,0.,1.);
+ // Wraparound lighting avoids a dark/bright hemisphere cut.
+ float light=.20+.80*smoothstep(-.72,.84,dot(n,normalize(vec3(-.45,.58,1.))));
+ float rim=pow(1.-max(n.z,0.),2.05);
+ float soft=clamp(.18+v*.56+light*.47,0.,1.);
+ // Independent optical depth and scattering of a controllable 3D shell.
+ float frontDepth=sqrt(max(radius*radius-d*d,0.));
+ float shellDepth=mix(.022,.29,clamp(shellThicknessRatio,0.,1.));
+ float innerRadius=max(radius-shellDepth,.04);
+ float innerDepth=sqrt(max(innerRadius*innerRadius-d*d,0.));
+ float shellOptical=1.-exp(-max(frontDepth-innerDepth,0.)*8.5);
+ float shellDiffuse=clamp(shellDiffusionRatio,0.,1.);
  vec3 base=mix(navy,primaryColor,soft);
- base=mix(base,secondaryColor,smoothstep(.52,.88,v)*.17);
+ base=mix(base,secondaryColor,smoothstep(.33,.82,v)*.42);
  base+=mix(primaryColor,secondaryColor,micro)*mineral;
  base*=.82+.18*pow(max(n.z,0.),.55);
  base+=cyan*currents*(.045+.19*light);
  base+=lavender*secondary*(.035+.10*v);
- base+=rimColor*rim*.54*rimRatio;
- float spec=pow(max(dot(reflect(normalize(vec3(.53,-.71,-1.)),n),vec3(0.,0.,1.)),0.),24.);
- base+=vec3(.88,.96,1.)*spec*.29*shineRatio;
- base+=vec3(.70,.83,.95)*pow(max(dot(n,normalize(vec3(-.28,.46,1.))),0.),22.)*.11*shineRatio;
+ base+=rimColor*rim*(.28+.30*shellOptical)*rimRatio;
+ // Stable broad and sharp specular lobes, even at neutral rotation.
+ float spec=pow(max(dot(n,normalize(vec3(-.38,.55,.92))),0.),12.);
+ float specFine=pow(max(dot(n,normalize(vec3(.47,-.18,.91))),0.),34.);
+ base+=vec3(.88,.96,1.)*(spec*.42+specFine*.28)*shineRatio;
  float topRim=smoothstep(-.2,.8,p.y)*rim;
- base+=rimColor*topRim*.18*rimRatio;
+ base+=rimColor*topRim*.17*rimRatio;
  float centralSource=exp(-d*d*115.);
- base+=coreColor*centralSource*.31*coreRatio;
+ float coreBloom=exp(-d*d*19.);
+ base+=coreColor*(centralSource*.50+coreBloom*.23)*coreRatio;
+ vec3 scatter=mix(primaryColor,secondaryColor,.4);
+ base=mix(base,scatter*(.48+.44*shellOptical),shellDiffuse*.23);
+ float shellHaze=exp(-pow((radius-d)/(.09+.10*shellThicknessRatio),2.));
+ base+=mix(rimColor,scatter,.42)*shellHaze*shellDiffuse*(.09+.13*shellOptical);
  base=(base-vec3(.3))*contrastRatio+vec3(.3);
  float arcA=r111Arc(p,1.,time);
  float arcB=r111Arc(p,2.,time);
@@ -192,10 +213,11 @@ void main(){
  base+=vec3(.78,.96,1.)*arcA*1.12+vec3(.39,.77,1.)*arcB*.91+vec3(.78,.69,1.)*arcC*.88;
  base+=vec3(.49,.96,.97)*arcD*.92+vec3(.83,.94,1.)*arcE*.84;
  base+=vec3(.46,.88,1.)*arcF*.91+vec3(.70,.59,1.)*arcG*.87+vec3(.90,.98,1.)*arcH*.89;
- float shellFade=1.-smoothstep(radius*.977,radius,d);
- float alpha=clamp(.96+rim*.04,0.,1.)*shellFade*sphereAlpha;
- float orbital=ringFront*spinPulse;
- base+=ringCol*(ring*.32+ringBloom*.018)*orbital;
+ // Distinct controls: thickness defines physical shell path; diffusion softens
+ // its boundary and opacity distribution without changing the diameter.
+ float edgeSoftness=mix(.008,.063,shellDiffuse);
+ float shellFade=1.-smoothstep(radius-edgeSoftness,radius-.001,d);
+ float alpha=sphereAlpha*shellFade*mix(.98,.24+.72*shellOptical,shellDiffuse);
  gl_FragColor=vec4(clamp(base,0.,1.),alpha);
 }`;
 
@@ -205,6 +227,7 @@ void main(){
     gl.shaderSource(obj, code);
     gl.compileShader(obj);
     if (!gl.getShaderParameter(obj, gl.COMPILE_STATUS)) {
+      stateText('Erreur shader WebGL : aperçu SVG de secours.');
       gl.deleteShader(obj);
       return null;
     }
@@ -218,7 +241,7 @@ void main(){
   gl.attachShader(program, vert);
   gl.attachShader(program, frag);
   gl.linkProgram(program);
-  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return;
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {stateText('Programme WebGL indisponible : aperçu SVG.');return;}
   gl.deleteShader(vert);
   gl.deleteShader(frag);
   gl.useProgram(program);
@@ -237,15 +260,17 @@ void main(){
   const tilt = gl.getUniformLocation(program, 'tilt');
   const parameters = Object.fromEntries([
     'speedRatio','detailRatio','agitationRatio','shineRatio','contrastRatio',
-    'coreRatio','rimRatio','sphereAlpha','primaryColor','secondaryColor','coreColor','rimColor'
+    'coreRatio','rimRatio','sphereAlpha','shellDiffusionRatio','shellThicknessRatio',
+    'primaryColor','secondaryColor','coreColor','rimColor'
   ].map(key => [key, gl.getUniformLocation(program, key)]));
   if (res === null || time === null || tilt === null ||
-      Object.values(parameters).some(v => v === null)) return;
+      Object.values(parameters).some(v => v === null)) {stateText('Uniforme GPU manquant : aperçu SVG.');return;}
   const applyUniforms = () => {
     const keys = {
       speedRatio:'rotation',detailRatio:'details',agitationRatio:'agitation',
       shineRatio:'shine',contrastRatio:'contrast',coreRatio:'coreLight',
-      rimRatio:'rimLight',sphereAlpha:'opacity'
+      rimRatio:'rimLight',sphereAlpha:'opacity',
+      shellDiffusionRatio:'diffusion',shellThicknessRatio:'thickness'
     };
     for (const [name, control] of Object.entries(keys)) gl.uniform1f(parameters[name],numeric(control));
     for (const [name, control] of Object.entries({
@@ -305,7 +330,7 @@ void main(){
     if (!scene.hasAttribute('data-core-ready')) {scene.setAttribute('data-core-ready','true');stateText('WebGL actif — les réglages sont appliqués en direct.');}
     if (visible && document.visibilityState === 'visible' && !still) frame=requestAnimationFrame(draw);
   };
-  const request = () => {
+  scheduleDraw = () => {
     if (reduceMotion.matches) { scene.removeAttribute('data-core-ready'); return; }
     if (!active || frame || document.visibilityState !== 'visible' || !visible) return;
     frame=requestAnimationFrame(draw);
@@ -313,7 +338,7 @@ void main(){
   const observer = new IntersectionObserver(entries => {
     visible=entries[0]?.isIntersecting ?? false;
     last=0;
-    if (visible) request();
+    if (visible) scheduleDraw();
     else if (frame) {cancelAnimationFrame(frame);frame=0;}
   },{threshold:.01});
   observer.observe(scene);
@@ -322,15 +347,15 @@ void main(){
     const rect=scene.getBoundingClientRect();
     targetX=Math.max(-.28,Math.min(.28,(event.clientX-rect.left)/rect.width-.5));
     targetY=Math.max(-.22,Math.min(.22,(event.clientY-rect.top)/rect.height-.5));
-    request();
+    scheduleDraw();
   },{passive:true});
   scene.addEventListener('pointerleave',()=>{
-    targetX=0;targetY=0;request();
+    targetX=0;targetY=0;scheduleDraw();
   },{passive:true});
   const resize = new ResizeObserver(()=>request());
   resize.observe(canvas);
-  document.addEventListener('visibilitychange',()=>{last=0;request();});
-  reduceMotion.addEventListener('change',()=>{last=0;request();});
+  document.addEventListener('visibilitychange',()=>{last=0;scheduleDraw();});
+  reduceMotion.addEventListener('change',()=>{last=0;scheduleDraw();});
   canvas.addEventListener('webglcontextlost',event=>{
     event.preventDefault();
     active=false;
@@ -341,5 +366,5 @@ void main(){
     observer.disconnect();
     resize.disconnect();
   },{once:true});
-  request();
+  scheduleDraw();
 })();
