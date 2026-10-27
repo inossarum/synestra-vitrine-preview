@@ -16,6 +16,7 @@
  const rgb=k=>[1,3,5].map(i=>parseInt((controls[k]?.value||defaults[k]||'#ffffff').slice(i,i+2),16)/255);
  const mainStatus=document.querySelector('[data-render-status]');
  const vfxStatus=document.querySelector('[data-vfx-status]');
+ const arcPanel=document.querySelector('[data-electric-options]');
  const status=(target,value)=>{if(target&&target.textContent!==value)target.textContent=value;};
  let schedule=()=>{};
  function sync(){
@@ -24,6 +25,8 @@
    if(out)out.textContent=e.type==='color'?e.value.toUpperCase():
      e.type==='select-one'?e.selectedOptions[0]?.textContent:e.value+' %';
   }
+  const electricMode=sel('flowType')===0&&sel('particlePreset')===1;
+  if(arcPanel)arcPanel.hidden=!electricMode;
   stage.style.setProperty('--sphere-zoom',String(num('diameter')));
   stage.style.setProperty('--fallback-opacity',String(num('opacity')));
  }
@@ -115,8 +118,9 @@ void main(){
   life=mix(.18,1.,smoothstep(-.7,.55,z))*clamp(uShape.y,0.,1.);
   vAxis=vec2(cos(spin),sin(spin));sizeFactor=.70;
  }else if(uPass>1.5&&uPass<2.5){
-  // Jagged lightning chains, 30 thin beads each; branches and flashes.
-  float chain=floor(i/30.),bead=mod(i,30.);
+  // Connected GPU line segments: each neighbouring pair shares the same vertex.
+  float segment=floor(i/2.);
+  float chain=floor(segment/29.),bead=mod(segment,29.)+mod(i,2.);
   float epoch=floor(t*.90+chain*.37),phase=fract(t*.90+chain*.37);
   // Independent origins scattered through the whole plasma volume.
   float originAngle=rnd(chain*13.+epoch*21.)*6.283185;
@@ -285,9 +289,10 @@ void main(){
     float currents=0.;
     currents=flowCurrents;
     // Only the selected volumetric flow remains active: no legacy energy overlays.
-    float fog=(volumeFog*.13+.12*hollow)*interior*uShape.y;
-    fog*=flowFog;
-    float density=(fog+currents*.27*emission*uShape.y+
+    // The shell slider owns only optical haze and rim, NOT flowing energy.
+    float shellFog=(volumeFog*.13+.12*hollow)*interior*uShape.y;
+    shellFog*=flowFog;
+    float density=(shellFog+currents*.27*emission+
                    core*.69+coreHalo*.11)*interior;
     float absorption=clamp(density*stride*5.2,0.,.49);
     vec3 blue=mix(uDeep*.65,uViolet*.69,clamp(distance3D*.72+broad*.42,0.,1.));
@@ -317,14 +322,17 @@ void main(){
   gl_FragColor=vec4(result,clamp(alpha*edge*uEffects.w,0.,1.));
   return;
  }
+ if(uPass>1.5&&uPass<2.5){
+  // Thin, continuous high-voltage traces (GL.LINES), never a bead cloud.
+  if(length(p)>=radius*.98)discard;
+  float flash=clamp(vLife,0.,1.)*clamp(uEffects.w,0.,1.);
+  vec3 boltColor=mix(uCyan,uCore,uLayer>.5?.88:.34);
+  float intensity=flash*(uLayer>.5?.87:.24);
+  gl_FragColor=vec4(boltColor*intensity,clamp(intensity,0.,1.));
+  return;
+ }
  vec2 c=gl_PointCoord*2.-1.;
  float r2=dot(c,c);
- if(uPass>1.5&&uPass<2.5){
-  float along=dot(c,vAxis);
-  float cross=c.x*vAxis.y-c.y*vAxis.x;
-  // Elongate each tiny sprite along its discharge path, not across it.
-  r2=along*along*.19+cross*cross*11.6;
- }
  float halo=exp(-r2*3.1),hot=exp(-r2*14.);
  float energy=(uLayer<.5?halo*.26:hot*1.13+halo*.13)*vLife*vGlint;
  if(uPass>.5&&uPass<1.5)energy*=.025; // restrained shell: no starfield over the material
@@ -381,8 +389,9 @@ void main(){
   const mobile=window.innerWidth<=700,preset=sel('particlePreset');
   const extra=preset!==4&&num('particleIntensity')>0&&num('particleDensity')>0;
   const sphereCount=mobile?1480:MAX;
-  const lightningCount=Math.min(mobile?720:1200,
-    Math.floor((mobile?540:900)*num('arcDensity')/30)*30);
+  const electricalMode=sel('flowType')===0&&preset===1;
+  const lightningCount=electricalMode&&num('arcIntensity')>0&&num('arcDensity')>0
+    ?Math.min(mobile?928:1740,Math.floor((mobile?11:20)*num('arcDensity'))*58):0;
   const coreCount=mobile?160:260;
   const extraCount=Math.min(mobile?650:MAX,Math.round((mobile?340:560)*num('particleDensity')));
   gl.useProgram(program);
@@ -413,19 +422,22 @@ void main(){
   gl.bindBuffer(gl.ARRAY_BUFFER,seeds);
   gl.enableVertexAttribArray(S);gl.vertexAttribPointer(S,1,gl.FLOAT,false,0,0);
   gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE);
-  const emit=(pass,count)=>{
+  const emit=(pass,count,mode=gl.POINTS)=>{
    if(!count)return;
    gl.uniform1f(U.uPass,pass);
-   gl.uniform1f(U.uLayer,0);gl.drawArrays(gl.POINTS,0,count);
-   gl.uniform1f(U.uLayer,1);gl.drawArrays(gl.POINTS,0,count);
+   gl.uniform1f(U.uLayer,0);gl.drawArrays(mode,0,count);
+   gl.uniform1f(U.uLayer,1);gl.drawArrays(mode,0,count);
   };
   // Volumetric quad already renders the shell; omit decorative point overlay entirely.
-  if(num('arcIntensity')>0&&num('arcDensity')>0)emit(2,lightningCount);
+  if(lightningCount>0){
+   gl.uniform1f(U.uPass,2);gl.uniform1f(U.uLayer,0);gl.drawArrays(gl.LINES,0,lightningCount);
+   gl.uniform1f(U.uLayer,1);gl.drawArrays(gl.LINES,0,lightningCount);
+  }
   // The ray-marched nucleus is authoritative; avoid a second speckled core.
   if(extra)emit(0,extraCount);
   gl.disable(gl.BLEND);
   status(vfxStatus,'Plasma GPU actif · '+(extra?extraCount+' particules':'particules additionnelles désactivées')+
-    ' · '+Math.floor(lightningCount/30)+' éclairs');
+    ' · '+Math.floor(lightningCount/58)+' éclairs');
   if(!stage.hasAttribute('data-core-ready')){
    stage.setAttribute('data-core-ready','true');
    status(mainStatus,'Nouvelle sphère plasma WebGL active.');

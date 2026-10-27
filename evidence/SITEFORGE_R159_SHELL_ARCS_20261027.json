@@ -1,0 +1,66 @@
+{
+  "schema": "synestra.siteforge.r159.shell_lightning.evidence.v1",
+  "date": "2026-10-27",
+  "mission_id": "SYN_SITEFORGE_R159_SHELL_ARCS_SEPARATION_20261027",
+  "scope": "Existing R158 WebGL sphere retained. Decouple shell opacity from interior currents; electric-only connected lightning; preserve export controls.",
+  "sources": {
+    "studio_policy_main": "b74399167683e27f6a43c5a8f1f33267e83d66d6",
+    "repo": "inossarum/synestra-vitrine-preview",
+    "base_commit": "045ed77d5d50e4b6f99fe0fe15878c2289411841",
+    "branch": "task/SYN_SITEFORGE_R159_SHELL_LIGHTNING_20261027",
+    "implementation_commit": "0e759d0f0515aba932f08f1a47b4be634baa7818",
+    "files": {
+      "shader": "d025bf489092a1d3427849508a78208471d7ff4a",
+      "ui": "77f9be1f16ec15ad987ffec68ed484d79833eb0b",
+      "regression_tests": "ac5741b3097ce06c4cca3c959f2db93baa180eca",
+      "new_tests": "67350d8ce7c608833f844335f0393bfa96e20898"
+    }
+  },
+  "failure_first": {
+    "new_tests": 4,
+    "initial_failed": 3,
+    "pass_before_fix": 1,
+    "system": "Node 24 on owner PC; observed before implementation"
+  },
+  "tests": {
+    "targeted_local": {
+      "command": "node --test --test-reporter=dot tests/siteforge_r159_shell_arcs.test.mjs tests/siteforge_r137_live_controls.test.mjs",
+      "status": "PASS",
+      "scope": "isolated owner PC clone after edits; GitHub readback source transformed from same base"
+    },
+    "github_static_readback": {
+      "checks": 10,
+      "pass": 10,
+      "status": "PASS",
+      "ref": "0e759d0f0515aba932f08f1a47b4be634baa7818"
+    },
+    "full_node_suite": {
+      "status": "UNKNOWN",
+      "reason": "Desktop Commander timeout, completion not observed, no success claim"
+    },
+    "real_webgl_browser": {
+      "status": "PENDING",
+      "reason": "No authenticated browser framebuffer and no complete live graphics validation at R159 SHA"
+    },
+    "preview": {
+      "status": "PENDING",
+      "reason": "Cloudflare Pages preview branch includes only R116 and R91, not isolated R159; no IAM/config override"
+    },
+    "end_user_visual_acceptance": {
+      "status": "PENDING"
+    }
+  },
+  "safety": {
+    "new_webgl_programs": 0,
+    "new_canvases": 0,
+    "control_count": 18,
+    "export_schema": "synestra.siteforge.plasma-settings.v1",
+    "production_main_untouched": true,
+    "live_r158_preview_untouched": true,
+    "cloudflare_config_unchanged": true,
+    "no_payg": true,
+    "no_visual_done_claim": true
+  },
+  "next": "Recover full Node/browser E2E on exact R159; verify owner/lease; publish authorized preview via existing approved path, compare against screenshot, obtain owner art acceptance.",
+  "status": "SOURCE_ONLY_PARTIAL_VISUAL_GATE_PENDING"
+}

@@ -7,7 +7,7 @@ const read=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
 const js=read('assets/siteforge-r116-sphere-only.js');
 const html=read('siteforge/core-3d-lab/index.html');
 const defaults={
- particlePreset:0,particleIntensity:100,coreLight:135,arcIntensity:140,arcDensity:100,
+ particlePreset:4,particleIntensity:100,coreLight:135,arcIntensity:140,arcDensity:100,
  diameter:100,shellVisibility:100,coreSize:70,particleDensity:100,
  particleSpeed:100,particleSize:100,opacity:100,flowType:0,flowStructure:100,
  primary:'#08142e',secondary:'#53318d',core:'#eaffff',rim:'#51dfff'
@@ -22,7 +22,7 @@ function fixture({failLink=false,failCompile=false,noWebGL=false,reduceMotion=fa
  const exportStatus={textContent:''};
  const outputs=Object.fromEntries(Object.keys(defaults).map(k=>[k,{textContent:''}]));
  const controls=Object.fromEntries(Object.entries(defaults).map(([key,val])=>{
-  const v=String(val),type=(key==='particlePreset'||key==='flowType')?'select-one':colorKeys.includes(key)?'color':'range';
+  const v=String(val),type=key==='particlePreset'?'hidden':key==='flowType'?'select-one':colorKeys.includes(key)?'color':'range';
   return [key,{value:v,defaultValue:v,type,dataset:{sphereControl:key},
    getAttribute:k=>k==='data-default'&&(key==='particlePreset'||key==='flowType')?v:null,
    hasAttribute:k=>k==='data-sphere-control',
@@ -33,7 +33,7 @@ function fixture({failLink=false,failCompile=false,noWebGL=false,reduceMotion=fa
  const gl={
   VERTEX_SHADER:35633,FRAGMENT_SHADER:35632,COMPILE_STATUS:35713,LINK_STATUS:35714,
   ARRAY_BUFFER:34962,STATIC_DRAW:35044,FLOAT:5126,
-  TRIANGLES:4,POINTS:0,BLEND:3042,ONE:1,COLOR_BUFFER_BIT:16384,
+  TRIANGLES:4,POINTS:0,LINES:1,BLEND:3042,ONE:1,COLOR_BUFFER_BIT:16384,
   createShader:()=>({}),shaderSource(){},compileShader(){},getShaderParameter:()=>!failCompile,
   getShaderInfoLog:()=> 'synthetic compile failure',deleteShader(){},
   createProgram:()=>({id:++programCount}),attachShader(){},linkProgram(){},
@@ -123,14 +123,14 @@ test('R152: native quick controls, safe defaults and accessible advanced setting
  assert.match(html,/noindex,nofollow/);
  assert.equal((html.match(/type="range"/g)||[]).length,12);
  assert.equal((html.match(/type="color"/g)||[]).length,4);
- assert.equal((html.match(/<select /g)||[]).length,2);
+ assert.equal((html.match(/<select /g)||[]).length,1);
  const keys=Object.keys(defaults);
  for(const key of keys)assert.match(html,new RegExp('data-sphere-control="'+key+'"'));
 });
-test('R152: real draw submission structure in deterministic GPU fixture',()=>{
+test('R160: pure-mode default draws exactly one volumetric pass',()=>{
  const x=fixture();x.frame();
  assert.deepEqual(x.draws.map(d=>[d.mode,d.count]),[
-  [4,6],[0,540],[0,540],[0,340],[0,340]
+  [4,6]
  ]);
  assert.match(x.mainStatus.textContent,/Nouvelle sphère plasma WebGL active/);
  assert.match(x.vfxStatus.textContent,/Plasma GPU actif/);
@@ -139,16 +139,14 @@ test('R152: real draw submission structure in deterministic GPU fixture',()=>{
 test('R152: disabling supplemental particles keeps plasma shell, internal arcs and nucleus',()=>{
  const x=fixture();x.frame(40);
  x.controls.particlePreset.value='4';x.callbacks.change({target:x.controls.particlePreset});x.frame(90);
- assert.deepEqual(x.draws.slice(-3).map(d=>[d.mode,d.count]),[
-  [4,6],[0,540],[0,540]
- ]);
+ assert.deepEqual(x.draws.slice(-1).map(d=>[d.mode,d.count]),[[4,6]]);
  assert.match(x.vfxStatus.textContent,/particules additionnelles désactivées/);
 });
-test('R152: zero shell hides surface while keeping nucleus and internal lightning',()=>{
+test('R160: zero shell retains volumetric core without extra particle overlays',()=>{
  const x=fixture();x.frame(40);
  x.controls.shellVisibility.value='0';x.callbacks.input({target:x.controls.shellVisibility});x.frame(90);
  assert.equal(x.uniforms.get('uShape')[1],0);
- assert.deepEqual(x.draws.slice(-5).map(d=>d.count),[6,540,540,340,340]);
+ assert.deepEqual(x.draws.slice(-1).map(d=>d.count),[6]);
 });
 test('R152: nucleus flux stays independent of nucleus radius',()=>{
  const x=fixture();x.frame(40);
@@ -157,12 +155,12 @@ test('R152: nucleus flux stays independent of nucleus radius',()=>{
  assert.equal(x.uniforms.get('uShape')[3],5);
  assert.equal(x.uniforms.get('uShape')[2],size);
 });
-test('R152: native picker selection changes emitter material and restores defaults',()=>{
+test('R152: legacy shader pathway remains reversible and resets to hidden pure mode',()=>{
  const x=fixture();x.frame(40);
  x.controls.particlePreset.value='2';x.callbacks.change({target:x.controls.particlePreset});x.frame(90);
  assert.equal(x.uniforms.get('uControls')[0],2);
  x.callbacks.reset({preventDefault(){}});x.frame(140);
- assert.equal(x.uniforms.get('uControls')[0],0);
+ assert.equal(x.uniforms.get('uControls')[0],4);
  assert.equal(x.controls.coreLight.value,'135');
 });
 test('R152: compile and link failures never pretend to have active GPU rendering',()=>{
@@ -182,9 +180,9 @@ test('R152: accessible reduced motion keeps static original plasma fallback',()=
 test('R152: independently bounded mobile GPU work and narrow arc segments',()=>{
  assert.match(js,/const MAX=2048/);
  assert.match(js,/mobile\?1480:MAX/);
- assert.match(js,/Math\.min\(mobile\?720:1200,/);
+ assert.match(js,/Math\.min\(mobile\?928:1740,/);
  assert.match(js,/const coreCount=mobile\?160:260/);
- assert.match(js,/float chain=floor\(i\/30\.\),bead=mod\(i,30\.\)/);
+ assert.match(js,/float segment=floor\(i\/2\.\)/);
  assert.match(js,/float fork=step\(17\.,bead\)/);
 });
 
@@ -229,7 +227,7 @@ test('R153: electrical bolt starts distributed inside volume, while points form 
   'p=vec3((origin+dir*reach+vec2(-dir.y,dir.x)*zig)*uShape.x,',
   'vAxis=dir;sizeFactor=.77;'
  ])assert.ok(v.includes(key),key);
- assert.ok(f.includes('r2=along*along*.19+cross*cross*11.6;'));
+ assert.ok(f.includes('if(uPass>1.5&&uPass<2.5){'));
  assert.ok(!v.includes('p=vec3((cos(ang)*reach-sin(ang)*zig)'),'old center-origin arcs must be removed');
 });
 test('R153: failure-first and simple palette still intact after effect redesign',()=>{
@@ -259,7 +257,7 @@ test('R154: physically volumetric optical depth, quality budget and interactive 
  assert.equal((html.match(/<canvas /g)||[]).length,1);
 });
 test('R154: energy reference is legible on mobile and still shares palette and engine',()=>{
- assert.match(html,/R157 · FLUX MODULABLE/);
+ assert.match(html,/R160 · FLUX PUR/);
  assert.match(html,/transform:scale\(calc\(1\.22 \* var\(--sphere-zoom,1\)\)\)/);
  assert.match(html,/transform:scale\(calc\(\.92 \* var\(--sphere-zoom,1\)\)\)/);
  assert.match(js,/if\(uPass>\.5&&uPass<1\.5\)energy\*=\.025/);
@@ -285,7 +283,6 @@ test('R156: export button is accessible, stays separate from reset and contains 
  assert.match(html,/aria-describedby="sf-export-description"/);
  assert.match(html,/data-export-status role="status" aria-live="polite"/);
  const x=fixture();
- x.controls.particlePreset.value='2';
  x.controls.arcIntensity.value='287';
  x.controls.coreLight.value='420';
  x.controls.particleDensity.value='213';
@@ -299,7 +296,7 @@ test('R156: export button is accessible, stays separate from reset and contains 
  assert.equal(parsed.version,1);
  assert.equal(parsed.engine,'siteforge-plasma-webgl1');
  assert.deepEqual(Object.keys(parsed.parameters).sort(),Object.keys(defaults).sort());
- assert.equal(parsed.parameters.particlePreset,2);
+ assert.equal(parsed.parameters.particlePreset,4);
  assert.equal(parsed.parameters.arcIntensity,287);
  assert.equal(parsed.parameters.coreLight,420);
  assert.equal(parsed.parameters.particleDensity,213);
@@ -329,7 +326,7 @@ test('R156: export continues to work with zero GPU, shader link error, reduced m
 });
 
 
-test('R157: flow family and structure independent of particle presets',()=>{
+test('R160: five material families stay independent of the locked pure overlay preset',()=>{
  assert.match(html,/data-sphere-control="flowType"/);
  assert.match(html,/data-sphere-control="flowStructure"/);
  for(const name of ['Flux plasma','Rubans magnétiques','Voiles d’aurore','Brume ionique','Jets de fusion'])assert.ok(html.includes(name),name);
@@ -341,11 +338,11 @@ test('R157: flow family and structure independent of particle presets',()=>{
   assert.equal(x.uniforms.get('uFlow')[0],i);
   assert.equal(x.uniforms.get('uFlow')[1],(50+i*25)/100);
  }
- assert.equal(x.controls.particlePreset.value,'0');
+ assert.equal(x.controls.particlePreset.value,'4');
 });
 test('R157: five physically distinct volume materials share one GPU program',()=>{
  const fragment=js.slice(js.indexOf('const fragment='),js.indexOf('function compile('));
- for(const term of ['uniform vec2 uFlow;','if(uFlow.x<.5){','else if(uFlow.x<1.5){','else if(uFlow.x<2.5){','else if(uFlow.x<3.5){','float ribbonWidth=clamp(uFlow.y,.3,2.);','currents=flowCurrents;','fog*=flowFog;','float core=exp(-dot(q,q)/(nucleusRadius*nucleusRadius)*1.65);'])assert.ok(fragment.includes(term),term);
+ for(const term of ['uniform vec2 uFlow;','if(uFlow.x<.5){','else if(uFlow.x<1.5){','else if(uFlow.x<2.5){','else if(uFlow.x<3.5){','float ribbonWidth=clamp(uFlow.y,.3,2.);','currents=flowCurrents;','shellFog*=flowFog;','float core=exp(-dot(q,q)/(nucleusRadius*nucleusRadius)*1.65);'])assert.ok(fragment.includes(term),term);
  assert.equal((js.match(/gl.createProgram\(\)/g)||[]).length,1);
  assert.equal((html.match(/<canvas /g)||[]).length,1);
 });
@@ -382,10 +379,10 @@ test('R157: aurora and nebula material shader variables are scoped, regression o
 
 
 test('R158: material-only composition draws no duplicated shell/core sprites and honors disabled effects',()=>{
- const source=js.slice(js.indexOf('const emit=(pass,count)'),js.indexOf('gl.disable(gl.BLEND);',js.indexOf('const emit=(pass,count)')));
+ const source=js.slice(js.indexOf('const emit=(pass,count,mode=gl.POINTS)'),js.indexOf('gl.disable(gl.BLEND);',js.indexOf('const emit=(pass,count,mode=gl.POINTS)')));
  assert.doesNotMatch(source,/emit\(1,/);
  assert.doesNotMatch(source,/emit\(3,/);
- assert.match(source,/if\(num\('arcIntensity'\)>0&&num\('arcDensity'\)>0\)emit\(2,lightningCount\);/);
+ assert.match(source,/if\(lightningCount>0\)\{/);
  const x=fixture();x.controls.arcIntensity.value='0';x.controls.arcDensity.value='0';
  x.controls.particlePreset.value='4';x.frame(40);
  assert.deepEqual(x.draws.map(x=>[x.mode,x.count]),[[4,6]]);

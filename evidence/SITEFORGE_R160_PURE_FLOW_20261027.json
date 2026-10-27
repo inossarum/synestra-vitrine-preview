@@ -1,0 +1,56 @@
+{
+  "schema": "synestra.siteforge.r160.pure_flow.evidence.v1",
+  "date": "2026-10-27",
+  "mission_id": "SYN_SITEFORGE_R160_PURE_MATERIAL_20261027",
+  "owner": "ChatGPT, preview-only isolated work",
+  "user_input": "Apart from Plasma pur, all styles in 'Style du plasma' do not blend with current coherent energy.",
+  "reference": {
+    "branch_parent": "112fbc93275193556b8d57a1a9250d93d8fcbb04",
+    "development_branch": "task/SYN_SITEFORGE_R160_PURE_FLOW_ONLY_20261027",
+    "checked_commit": "5627c97e5d866b2e6cfb6a274a18e4f5d83047ad",
+    "stage": "SOURCE_VALIDATED_PREVIEW_PENDING"
+  },
+  "delta": {
+    "ui": "Remove visible redundant plasma style dropdown and add hidden particlePreset value=4 with data-default=4 and helpful pure-energy text.",
+    "gpu": "No geometry or WebGL shader changes from R159; existing pure emitter suppresses extra sprites and electrical overlay for all 5 selected volume families.",
+    "compatibility": "Exactly 18 live controls exported including particlePreset=4, JSON schema synestra.siteforge.plasma-settings.v1 unchanged.",
+    "branding": "Status R160 FLUX PUR, remove misleading lightning footer.",
+    "tests_in_deployment": "Add R159 and R160 contract test files to imports of site_contract.test.mjs, already included in Cloudflare Pages build command."
+  },
+  "checks": {
+    "failure_first": {
+      "code": "R159 JS/HTML + R160 contract test",
+      "tests": 4,
+      "failed": 3,
+      "passed": 1,
+      "execution": "V8 JS harness from exact GitHub blobs"
+    },
+    "after_patch": {
+      "code": "R160 exact GitHub commit",
+      "tests": 34,
+      "passed": 34,
+      "failed": 0,
+      "execution": "V8 isolated JS fixture (mock DOM/WebGL), not Node CLI or real Chromium"
+    },
+    "source_blobs": {
+      "html": "ee47a60c1150f178ac7eac26f53e895d995cc6ba",
+      "shader": "d025bf489092a1d3427849508a78208471d7ff4a",
+      "unit_tests": "3861b72eea5d3d6bb53a5b1e3dff2753692f21e3",
+      "new_tests": "bcec4584d82aa0a1c9bf86c39c48410ba008de98",
+      "cloudflare_build_gate": "67ad42377acc7e1042499ebafb25debb72eee9f6"
+    },
+    "real_browser": "PENDING",
+    "build_platform": "PENDING",
+    "visual_acceptance": "PENDING"
+  },
+  "policy": {
+    "production_deployments_enabled": false,
+    "preview_allowlisted_branch": "task/SYN_SITEFORGE_R116_CLEAN_LAB_20261027",
+    "main_untouched": true,
+    "no_new_worker": true,
+    "no_payg": true,
+    "preview_rollback_sha": "045ed77d5d50e4b6f99fe0fe15878c2289411841"
+  },
+  "next": "Recheck branch owner/ref, attach delta to existing PR8, preview-only merge through GitHub, verify build and real URL, visually inspect in browser if free/test resources permit; record new Evidence.",
+  "status": "PARTIAL_SOURCE_TESTED"
+}
