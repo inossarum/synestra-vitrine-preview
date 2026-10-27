@@ -37,9 +37,12 @@
     fallbackPaint();
   };
   const panel = document.querySelector('.lab-controls');
-  panel?.addEventListener('input', event => {
+  const onControlChange = event => {
     if (event.target?.hasAttribute('data-sphere-control')) {syncUI();scheduleDraw();}
-  });
+  };
+  // iOS native select pickers may dispatch change without an input event.
+  panel?.addEventListener('input', onControlChange);
+  panel?.addEventListener('change', onControlChange);
   panel?.addEventListener('reset', event => {
     event.preventDefault();
     for (const [key, el] of Object.entries(controls)) el.value = defaults[key];
