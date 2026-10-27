@@ -36,6 +36,39 @@
   sync();schedule();
  });
  sync();
+ // Export uses the actual live controls, not startup defaults or GPU uniforms.
+ // This stays available when reduced motion is enabled or WebGL is unavailable.
+ const exportButton=document.querySelector('[data-export-json]');
+ const exportStatus=document.querySelector('[data-export-status]');
+ exportButton?.addEventListener('click',()=>{
+  const parameters=Object.fromEntries(Object.entries(controls).map(([key,input])=>[
+   key,input.type==='color'?input.value.toLowerCase():Number(input.value)
+  ]));
+  const documentJSON={
+   schema:'synestra.siteforge.plasma-settings.v1',
+   version:1,
+   engine:'siteforge-plasma-webgl1',
+   parameters
+  };
+  const output=JSON.stringify(documentJSON,null,2)+'\n';
+  let objectURL;
+  try{
+   const blob=new Blob([output],{type:'application/json;charset=utf-8'});
+   objectURL=URL.createObjectURL(blob);
+   const link=document.createElement('a');
+   link.href=objectURL;
+   link.download='synestra-siteforge-plasma-settings.json';
+   document.body.appendChild(link);
+   link.click();
+   link.remove();
+   // Delay release so Safari/iOS can finish handling the download gesture.
+   window.setTimeout(()=>URL.revokeObjectURL(objectURL),1500);
+   status(exportStatus,'Export JSON demandé · 16 paramètres actuels.');
+  }catch(_error){
+   if(objectURL)URL.revokeObjectURL(objectURL);
+   status(exportStatus,'Export indisponible sur ce navigateur.');
+  }
+ });
  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
  if(reduced.matches){status(mainStatus,'Animation réduite : plasma de référence statique.');return;}
  const gl=canvas.getContext('webgl',{
