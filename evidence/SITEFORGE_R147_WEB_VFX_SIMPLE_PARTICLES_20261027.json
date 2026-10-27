@@ -1,0 +1,54 @@
+{
+  "schema": "synestra.siteforge.r147.web-niagara-simple-emitter.evidence.v1",
+  "date": "2026-10-27",
+  "mission_id": "SYN_SITEFORGE_R147_WEB_VFX_SIMPLIFIED_PARTICLES_20261027",
+  "owner": "Inos",
+  "requirement": "Web Niagara-style particle effects, materially richer and easier access/use; independent compact core light intensity",
+  "source": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_SITEFORGE_R116_CLEAN_LAB_20261027",
+    "last_written_commit": "9cabdeaf24ddd433bb3b7ba8fccbb8c8c47452c6",
+    "html_blob": "71e52784dc0f111309fa3e922ac63aadf0f87a62",
+    "shader_blob": "7a04b55ab8013d4c99e8d5b904cceb8ae6923357",
+    "primary_test_blob": "04aa4fbb49c6f7e44d7d5b2cc8364a52a572bde7",
+    "two_unupdated_test_blobs": [
+      "b8ec925f764be08b6569059b4c267df7b1d3fee9",
+      "75ca5fc9625e4877dee89b0e8f4021ca3655e4e4"
+    ]
+  },
+  "implemented": [
+    "New quick-access VFX preset select (4 animated modes + off) and intensity slider",
+    "Advanced particle density/speed/size/spread controls hidden in native details/summary",
+    "240 bounded GPU point sprites with seeded birth phases, individual lifetime/fade, projected depth and four motion families",
+    "Rendered as separate WebGL POINTS pass inside the same canvas/context; sphere shader and original 11 R146 electric currents preserved",
+    "Core power control extended to 500% with nonlinear radiance independent of radius",
+    "Main R147 test updated for controls and code asserts; two historical tests remain outdated"
+  ],
+  "checks": {
+    "source_file_readback": "VERIFIED",
+    "javascript_parse": "PASS by new Function in code edit",
+    "shader_source_structure": "VERIFIED",
+    "controls": 38,
+    "number_of_preset_options": 5,
+    "particle_capacity": 240,
+    "unit_test_suite": "NOT_RUN",
+    "cloudflare_deployment": "NOT_CREATED",
+    "real_gpu_shaders": "NOT_COMPILED_OR_CAPTURED",
+    "mobile_fps": "NOT_VERIFIED",
+    "actual_niagara_equivalence": "NOT_CLAIMED"
+  },
+  "blocker": {
+    "type": "POLICY_DENIED",
+    "operation": "GitHub update_file on tests/siteforge_r132_r116_clean_lab.test.mjs",
+    "effect": "Old tests still assert 32 controls while page contains 38; test/siteforge_r136_mobile_sticky_preview.test.mjs also remains 32, so known validation failure. Do not publish unqualified preview or route around explicit denial.",
+    "permission_status": "DENIED_FOR_THIS_WRITE",
+    "historical_blocker_revalidated": "YES: this turn"
+  },
+  "production": {
+    "changed": false,
+    "main_changed": false,
+    "preview_branch_only": true
+  },
+  "rollback": "https://21afaed2.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+  "status": "SOURCE_IMPLEMENTED_BUT_NOT_DEPLOYED; BLOCKED_BY_EXPLICIT_TEST_WRITE_DENIAL; NO_GPU_VISUAL_QA"
+}
