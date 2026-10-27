@@ -1,4 +1,4 @@
-/* SiteForge R147 — reusable one-context WebGL emitter VFX with 4 presets and simple controls, independent high-flux compact core. R140 fixed geometry and R146 thin arcs preserved. */
+/* SiteForge R148 — clearly visible multi-layer GPU VFX: distinctive presets, substantial particles, additive blooms, visible status/fallback. R140 normal, R146 fine arcs and R147 independent core power preserved. */
 (() => {
   'use strict';
   const scene = document.querySelector('.core-r108-stage');
@@ -567,8 +567,10 @@ void main(){
   // WebGL context after the sphere, no second canvas/renderer/server.
   // Reusable bounded emitter presets; every sprite has seeded life, depth,
   // birth phase, motion, fade and size. Optional: sphere remains if VFX fails.
+  const particleStatus = document.querySelector('[data-vfx-status]');
+  const setParticleStatus = message => {if (particleStatus && particleStatus.textContent!==message) particleStatus.textContent=message;};
   const particleEngine = (() => {
-    const MAX_PARTICLES=240;
+    const MAX_PARTICLES=1024;
     const vfxVertex = `
 #ifdef GL_FRAGMENT_PRECISION_HIGH
 precision highp float;
@@ -584,12 +586,15 @@ uniform vec2 uTilt;
 varying float vFade;
 varying float vDepth;
 varying float vHot;
+varying vec2 vAxis;
+uniform float uLayer;
 float particleRand(float n){return fract(sin(n*127.1)*43758.5453);}
 void main(){
- float i=floor(aSeed*240.);
+ float i=floor(aSeed*1024.);
  float lifetime=.15+.32*uEmitter.w;
  float age=fract(uTime*lifetime*(.73+.53*particleRand(i+5.))+particleRand(i+19.));
  float theta=particleRand(i+27.)*6.283185;
+ vAxis=vec2(cos(theta),sin(theta));
  float depth=particleRand(i+42.)*2.-1.;
  float whirl=theta+uTime*(.12+.32*uEmitter.w)*(depth<0.?-.75:1.);
  float radiusScale=max(.06,uShape.z)*clamp(uShape.y,0.,2.);
@@ -622,8 +627,8 @@ void main(){
  vFade=fade*behind*clamp(uEmitter.y,0.,2.)*(.60+.40*particleRand(i+91.));
  vDepth=behind;
  vHot=particleRand(i+37.);
- gl_PointSize=clamp((1.9+3.4*particleRand(i+8.))*clamp(uShape.x,.2,2.)
-                  *uResolution.y/440.,1.,14.);
+ gl_PointSize=clamp((4.3+5.9*particleRand(i+8.))*clamp(uShape.x,.2,2.)
+                  *uResolution.y/520.*mix(2.45,1.,uLayer),1.,34.);
  gl_Position=vec4(pointPos.x*uResolution.y/max(uResolution.x,1.),
                   pointPos.y-.08,0.,1.);
 }`;
@@ -632,28 +637,40 @@ precision mediump float;
 varying float vFade;
 varying float vDepth;
 varying float vHot;
+varying vec2 vAxis;
 uniform vec3 uParticleColor;
+uniform vec4 uEmitter;
+uniform float uLayer;
 void main(){
  vec2 p=gl_PointCoord*2.-1.;
  float r2=dot(p,p);
- float core=exp(-r2*13.);
- float halo=exp(-r2*3.8)*.28;
- float energy=(core+halo)*vFade;
- vec3 tint=mix(uParticleColor,vec3(1.),vHot*.32);
- gl_FragColor=vec4(tint*energy,clamp(energy,0.,.97));
+ if(uEmitter.x>.5&&uEmitter.x<1.5){
+   // Lightning sparks become thin animated directional streaks.
+   float longitudinal=dot(p,vAxis);
+   float transverse=p.x*vAxis.y-p.y*vAxis.x;
+   r2=longitudinal*longitudinal*.37+transverse*transverse*5.;
+ } else if(uEmitter.x>2.5&&uEmitter.x<3.5){
+   // Hot plasma jets stretch along vertical eruption paths.
+   r2=p.x*p.x*1.9+p.y*p.y*.48;
+ }
+ float halo=exp(-r2*3.2);
+ float hot=exp(-r2*15.);
+ float radiance=(uLayer<.5?halo*.38:hot*1.6+halo*.23)*vFade;
+ vec3 tint=mix(uParticleColor,vec3(1.),.25+.5*vHot);
+ gl_FragColor=vec4(tint*radiance,clamp(radiance,0.,1.));
 }`;
     const pv=shader(gl.VERTEX_SHADER,vfxVertex);
     const pf=shader(gl.FRAGMENT_SHADER,vfxFragment);
-    if(!pv||!pf)return null;
+    if(!pv||!pf){setParticleStatus('VFX indisponible : shader GPU non compilé.');return null;}
     const emitterProgram=gl.createProgram();
-    if(!emitterProgram)return null;
+    if(!emitterProgram){setParticleStatus('VFX indisponible : programme GPU manquant.');return null;}
     gl.attachShader(emitterProgram,pv);
     gl.attachShader(emitterProgram,pf);
     gl.linkProgram(emitterProgram);
-    if(!gl.getProgramParameter(emitterProgram,gl.LINK_STATUS))return null;
+    if(!gl.getProgramParameter(emitterProgram,gl.LINK_STATUS)){setParticleStatus('VFX indisponible : liaison GPU échouée.');return null;}
     gl.deleteShader(pv);gl.deleteShader(pf);
     const emitterBuffer=gl.createBuffer();
-    if(!emitterBuffer)return null;
+    if(!emitterBuffer){setParticleStatus('VFX indisponible : mémoire graphique insuffisante.');return null;}
     gl.bindBuffer(gl.ARRAY_BUFFER,emitterBuffer);
     gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(
       Array.from({length:MAX_PARTICLES},(_,i)=>(i+.5)/MAX_PARTICLES)
@@ -662,16 +679,23 @@ void main(){
     const U=n=>gl.getUniformLocation(emitterProgram,n);
     const uniforms={
       resolution:U('uResolution'),clock:U('uTime'),emitter:U('uEmitter'),
-      shape:U('uShape'),tilt:U('uTilt'),tint:U('uParticleColor')
+      shape:U('uShape'),tilt:U('uTilt'),tint:U('uParticleColor'),layer:U('uLayer')
     };
-    if(attr<0||Object.values(uniforms).some(u=>u===null))return null;
+    if(attr<0||Object.values(uniforms).some(u=>u===null)){setParticleStatus('VFX indisponible : attribut GPU manquant.');return null;}
     gl.bindBuffer(gl.ARRAY_BUFFER,buffer);
     return {
       draw(seconds,rx,ry){
         const preset=ordinal('particlePreset');
         const intensity=numeric('particleIntensity');
-        const count=Math.min(MAX_PARTICLES,Math.max(0,Math.round(120*numeric('particleDensity'))));
-        if(preset===4||intensity<=0||count<=0)return;
+        const mobile=window.innerWidth<=700;
+        const capacity=mobile?640:MAX_PARTICLES;
+        const count=Math.min(capacity,Math.max(0,Math.round((mobile?360:620)*numeric('particleDensity'))));
+        if(preset===4||intensity<=0||count<=0){
+          setParticleStatus('Particules désactivées — la sphère reste active.');
+          return;
+        }
+        const labels=['Plasma vivant','Étincelles électriques','Vortex énergétique','Éruption du noyau'];
+        setParticleStatus('VFX actif · '+labels[preset]+' · '+count+' particules GPU');
         gl.useProgram(emitterProgram);
         gl.bindBuffer(gl.ARRAY_BUFFER,emitterBuffer);
         gl.enableVertexAttribArray(attr);
@@ -685,11 +709,18 @@ void main(){
           numeric('particleSize'),numeric('particleSpread'),numeric('coreSize'),numeric('coreLight')
         ]));
         gl.uniform2f(uniforms.tilt,rx,ry);
-        gl.uniform3fv(uniforms.tint,new Float32Array(color('core')));
-        if(gl.enable&&gl.blendFunc){
-          gl.enable(gl.BLEND);
-          gl.blendFunc(gl.SRC_ALPHA,gl.ONE);
-        }
+        const palette=[[.23,.84,1.],[.78,.94,1.],[.69,.38,1.],[1.,.39,.10]][preset]||[.25,.9,1.];
+        const custom=color('core');
+        const tint=palette.map((v,i)=>v*.86+custom[i]*.14);
+        gl.uniform3fv(uniforms.tint,new Float32Array(tint));
+        // The R147 SRC_ALPHA + fragment energy alpha path squared brightness,
+        // making sparks barely visible. With preweighted RGB, additive ONE/ONE
+        // reveals actual radiation, and two passes form halo + bright core.
+        gl.enable(gl.BLEND);
+        gl.blendFunc(gl.ONE,gl.ONE);
+        gl.uniform1f(uniforms.layer,0);
+        gl.drawArrays(gl.POINTS,0,count);
+        gl.uniform1f(uniforms.layer,1);
         gl.drawArrays(gl.POINTS,0,count);
         if(gl.disable)gl.disable(gl.BLEND);
         // Restore triangle attributes/program before the next sphere frame.
