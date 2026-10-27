@@ -1,0 +1,100 @@
+{
+  "schema": "synestra.siteforge.r151.unified_gpu_sphere_and_arc_emitter.evidence.v1",
+  "date": "2026-10-27",
+  "mission_id": "SYN_SITEFORGE_R151_REBUILD_SPHERE_INTERNAL_ARCS_USING_VFX_20261027",
+  "owner": "Inos",
+  "requirement": "Rebuild the sphere material and internal lightning using the same already-working WebGL particle emitter engine, in compliance with Synestra procedures; no second engine/server/canvas.",
+  "source": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_SITEFORGE_R116_CLEAN_LAB_20261027",
+    "deploy_sha": "ef0ec36b96364adc086b8ea12704105724c77083",
+    "render_blob": "55524dd6c17b1dc5fc2d34282b99c95b648018f6",
+    "html_blob": "823a33986cbff4618d987da42fe68a8f86000cdd",
+    "test_blob": "2a33afe01e730ae2e7ce0269247b378afaa4fc13"
+  },
+  "implementation": {
+    "single_engine": "One WebGL emitterProgram and emitterBuffer drive all four uPass modes; one canvas and one WebGL context",
+    "pass_0": "Optional extra VFX sparks, plasma, vortex or eruption; controlled by preset and intensity",
+    "pass_1": "Sphere volume/surface formed from 3D golden-angle sampling, slow 3D-like projection and glowing sprites",
+    "pass_2": "Internal electrical emission built from 24-point segments per bolt, temporal bursts, random directions, forked sections and depth attenuation",
+    "pass_3": "Compact 3D-projected nucleus GPU emission; source power follows independent coreLight 0..500%, radius follows separate coreSize",
+    "render_order": "Original soft legacy sphere underpainting/backdrop then shell, arcs, nucleus and optional sparks from same GPU point-sprite program with two luminance passes each",
+    "mobile_limits": {
+      "shell_points": 640,
+      "inner_arc_points": 312,
+      "core_points": 112,
+      "extra_points_default": 360,
+      "extra_points_max": 640
+    },
+    "desktop_limits": {
+      "shell_points": 1024,
+      "inner_arc_points": 480,
+      "core_points": 160,
+      "extra_points_default": 620,
+      "extra_points_max": 1024
+    },
+    "fallback": "If emitter program fails to link, base sphere and its original arcs remain fully visible; no forced visual break",
+    "controls": "Existing 38 native controls, no duplicate backend, no added platform connection, preserve shell visibility 0 as energy-only",
+    "user_interface": "R151 unified VFX engine labeled in existing lab"
+  },
+  "build": {
+    "failed_preliminary_deployment": "b14ca512-1a3a-4565-8762-bd38e7d1499e",
+    "initial_failures": 4,
+    "initial_root_causes": [
+      "Obsolete prior draw-call expectations",
+      "Outdated VFX status text assertion",
+      "Original 0-opacity emitter-uniform condition had to explicitly write zero"
+    ],
+    "fixed_commit": "ef0ec36b96364adc086b8ea12704105724c77083",
+    "deployment_id": "e49bc63f-4206-4ee6-9561-ce3d0e59e753",
+    "preview_url": "https://e49bc63f.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+    "cloudflare_stages": [
+      "queued:success",
+      "initialize:success",
+      "clone_repo:success",
+      "build:success",
+      "deploy:success"
+    ],
+    "test_count": 78,
+    "test_pass": 78,
+    "test_fail": 0,
+    "static_export": "PASS"
+  },
+  "real_browser_e2e": {
+    "tool": "Cloudflare Browser Rendering content API",
+    "runtime": "Real Chromium, mobile viewport 390x844, JS enabled, WebGL compilation and drawArrays instrumented",
+    "source": "Exact GitHub R151 HTML/JS in isolated HTML browser test (no Cloudflare Access bypass)",
+    "with_auxiliary_gpu_point_draw_counts": [
+      640,
+      640,
+      312,
+      312,
+      112,
+      112,
+      360,
+      360
+    ],
+    "without_auxiliary_gpu_point_draw_counts": [
+      640,
+      640,
+      312,
+      312,
+      112,
+      112
+    ],
+    "main_status": "WebGL actif — les réglages sont appliqués en direct.",
+    "disabled_status": "Particules additionnelles désactivées — sphère et éclairs GPU actifs.",
+    "result": "VERIFIED: actual GPU draw submissions for shell, internal electric arcs and core continue while optional particles disabled",
+    "scope_limitation": "Instrumented real Chromium WebGL draw calls, NOT a pixel-quality evaluation of visual output and NOT owner's Safari GPU device"
+  },
+  "authority": {
+    "preview_branch_allowlisted": true,
+    "production_deployments_enabled": false,
+    "production_changed": false,
+    "main_changed": false,
+    "visual_observer_changed": false,
+    "paid_external_actions": false
+  },
+  "rollback": "https://b9b43885.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+  "status": "R151_PREVIEW_DEPLOYED_78_PASS__REAL_CHROMIUM_GPU_DRAWS_VERIFIED__OWNER_VISUAL_ACCEPTANCE_PENDING"
+}
