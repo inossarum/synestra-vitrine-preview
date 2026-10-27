@@ -1,4 +1,4 @@
-/* SiteForge R140 — R116 procedural plasma sphere. Geometric normals remain fixed while procedural texture rotates. Shell thickness shades only the grazing-angle periphery, never an interior circle or hemisphere. R116 source blob d78d7222a95fd080a408bba2237dd3b9dda05bd7. */
+/* SiteForge R141 — R116 procedural plasma sphere with perceptible, independent material agitation. Geometric normals remain fixed; rotation, shell, alpha, luminance and eight original arcs are unchanged. R116 source blob d78d7222a95fd080a408bba2237dd3b9dda05bd7. */
 (() => {
   'use strict';
   const scene = document.querySelector('.core-r108-stage');
@@ -137,7 +137,8 @@ void main(){
  float radius=.69;
  float d=length(p);
  float t=time*.28*speedRatio;
- float drift=time*.28*agitationRatio;
+ float agitation=clamp(agitationRatio,0.,2.);
+ float drift=time*.28*agitation;
  float ellipseAngle=-.30;
  float ca=cos(ellipseAngle),sa=sin(ellipseAngle);
  vec2 q=vec2(p.x*ca-p.y*sa,p.x*sa+p.y*ca);
@@ -164,15 +165,31 @@ void main(){
  vec3 geomN=vec3(p,sqrt(max(radius*radius-dot(p,p),0.)))/radius;
  // Rotate ONLY the procedural material coordinates, not lighting geometry.
  vec3 n=turn3(geomN,tilt+vec2(t*.55+sin(t*.23)*.15,cos(t*.18)*.08));
- float v=noise3(n*3.7+vec3(drift*.65,drift*.22,-drift*.25));
- float v2=noise3(n*7.5+vec3(drift*.3,-drift*.6,drift*.47));
- // Fine-scale volumetric striations add depth without changing R116 silhouettes.
- float micro=noise3(n*(12.+detailRatio*9.)+vec3(drift*.26,-drift*.16,drift*.11));
+ // Material agitation is a flowing, strength-controlled 3D domain warp, not
+ // a barely visible playback speed. At 0: warp=0 and no turbulent emission.
+ // At 200: stronger folds, moving eddies and glowing streaks. Geometric
+ // normal geomN is kept UNCHANGED to prevent the R139 hemisphere seam.
+ float eddyA=noise3(n*3.1+vec3(drift*.83,-drift*.55,drift*.33));
+ float eddyB=noise3(n*5.8+vec3(-drift*.41,drift*.67,-drift*.26));
+ vec3 warp=agitation*.18*vec3(
+   sin(n.y*13.+n.z*5.+drift*4.1+eddyB*5.),
+   cos(n.x*12.-n.z*7.-drift*3.7+eddyA*5.),
+   sin(n.x*9.+n.y*11.+drift*3.3+eddyB*4.)
+ );
+ vec3 flowN=normalize(n+warp);
+ float v=noise3(flowN*3.7+vec3(drift*.65,drift*.22,-drift*.25));
+ float v2=noise3(flowN*7.5+vec3(drift*.3,-drift*.6,drift*.47));
+ // Displace the luminous filaments and the fine striations together.
+ float micro=noise3(flowN*(12.+detailRatio*9.)+vec3(drift*.26,-drift*.16,drift*.11));
  float mineral=(micro-.5)*.26*detailRatio;
- float angle=atan(n.y,n.x);
- float filament=sin(angle*5.+n.z*9.5+v*5.0-drift*2.0);
+ float angle=atan(flowN.y,flowN.x);
+ float filament=sin(angle*5.+flowN.z*9.5+v*5.0-drift*2.0);
  float currents=pow(max(0.,filament*.5+.5),7.0);
- float secondary=pow(max(0.,sin(angle*8.0-n.z*11.0+v2*4.+drift)*.5+.5),12.);
+ float secondary=pow(max(0.,sin(angle*8.0-flowN.z*11.0+v2*4.+drift)*.5+.5),12.);
+ // Animated plasma folds are added only to material radiance, not silhouette.
+ float foldA=pow(max(.5+.5*sin(flowN.x*17.+flowN.y*10.+v*6.-drift*5.3),0.),8.);
+ float foldB=pow(max(.5+.5*sin(flowN.y*14.-flowN.z*15.+v2*6.+drift*3.7),0.),10.);
+ float turbulenceGlow=agitation*(.24*foldA+.16*foldB);
  // Lighting is computed in screen/front hemisphere space, independent
  // of rotating texture coordinates and never based on back-facing normals.
  float light=.32+.68*smoothstep(-.90,.95,dot(geomN,normalize(vec3(-.45,.58,1.))));
@@ -193,6 +210,8 @@ void main(){
  base*=.82+.18*pow(max(geomN.z,0.),.55);
  base+=cyan*currents*(.045+.19*light);
  base+=lavender*secondary*(.035+.10*v);
+ base+=mix(cyan,lavender,clamp(v2,0.,1.))*turbulenceGlow;
+ base+=mix(primaryColor,cyan,.48)*agitation*.12*(eddyA-.5);
  base+=rimColor*rim*(.28+.30*shellOptical)*rimRatio;
  // Stable broad and sharp specular lobes, even at neutral rotation.
  float spec=pow(max(dot(geomN,normalize(vec3(-.38,.55,.92))),0.),12.);
