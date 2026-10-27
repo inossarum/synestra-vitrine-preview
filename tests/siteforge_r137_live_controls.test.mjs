@@ -234,3 +234,56 @@ test('R139: luminance can darken the whole sphere and brighten all radiance',()=
  f.events.reset({preventDefault(){}});f.next(190);
  assert.equal(f.u1.get('luminanceRatio'),1);
 });
+
+
+test('R141: agitation produces independent domain warping and plasma emission',()=>{
+ const expected=[
+  'float agitation=clamp(agitationRatio,0.,2.);',
+  'float drift=time*.28*agitation;',
+  'vec3 warp=agitation*.18*vec3(',
+  'vec3 flowN=normalize(n+warp);',
+  'float v=noise3(flowN*3.7',
+  'float v2=noise3(flowN*7.5',
+  'float micro=noise3(flowN*',
+  'float turbulenceGlow=agitation*(.24*foldA+.16*foldB);',
+  'base+=mix(cyan,lavender,clamp(v2,0.,1.))*turbulenceGlow;'
+ ];
+ for(const signature of expected)assert.ok(js.includes(signature),'missing response: '+signature);
+ assert.match(js,/vec3 geomN=vec3\(p,/);
+ assert.match(js,/float light=\.32\+\.68\*smoothstep\(-\.90,\.95,dot\(geomN,/);
+ assert.match(js,/float alpha=sphereAlpha\*shellFade;/);
+ assert.doesNotMatch(js,/geomN\s*=\s*normalize\(.*warp/);
+ assert.match(html,/0 % matière calme/);
+ assert.match(html,/200 % turbulences fortes/);
+});
+test('R141: agitation at 0 has no warp or turbulent emission; larger strength amplifies both',()=>{
+ const swirl=(agitation,n,time)=>{
+   const drift=time*.28*agitation;
+   return agitation*.18*Math.sin(n[1]*13+n[2]*5+drift*4.1+.55*5);
+ };
+ const n=[.3,.7,.4];
+ assert.equal(swirl(0,n,4),0);
+ assert.notEqual(swirl(1,n,4),0);
+ assert.notEqual(swirl(2,n,4),swirl(1,n,4));
+ assert.ok(2*.18>1*.18&&1*.18>0);
+ assert.equal(0*(.24*.9+.16*.8),0);
+ assert.ok(2*(.24*.9+.16*.8)>1*(.24*.9+.16*.8));
+});
+test('R141: agitation input maps to GPU uniform and resets independently of rotation',()=>{
+ const fx=buildFixture();
+ fx.next(40);
+ const rotation=fx.u1.get('speedRatio');
+ fx.controls.agitation.value='0';
+ fx.events.input({target:fx.controls.agitation});
+ fx.next(82);
+ assert.equal(fx.u1.get('agitationRatio'),0);
+ assert.equal(fx.u1.get('speedRatio'),rotation);
+ fx.controls.agitation.value='200';
+ fx.events.input({target:fx.controls.agitation});
+ fx.next(130);
+ assert.equal(fx.u1.get('agitationRatio'),2);
+ assert.equal(fx.u1.get('speedRatio'),rotation);
+ fx.events.reset({preventDefault(){}});
+ fx.next(180);
+ assert.equal(fx.u1.get('agitationRatio'),1);
+});
