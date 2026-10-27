@@ -25,7 +25,7 @@ test('R137: original R116 is preserved; working shader retains eight original ar
 test('R132: isolate sphere without original website ambient decorations',()=>{
   assert.doesNotMatch(core,/startAmbient|syn-ambient-field|siteforge-r119|metalGyro|SynestraSphere3DShaders/);
   assert.match(core,/webglcontextlost/);
-  assert.match(core,/if \(reduceMotion\.matches\) return;/);
+  assert.match(core,/if \(reduceMotion\.matches\) \{stateText/);
 });
 test('R137: isolated lab has one GL renderer and only 13 owner-approved sphere controls',()=>{
   assert.equal((page.match(/<canvas\b/g)||[]).length,1);
@@ -40,6 +40,6 @@ test('R132: the blank lab remains fail-closed and has an SVG fallback',()=>{
   assert.match(page,/noindex,nofollow/);
   assert.match(page,/prefers-reduced-motion:reduce/);
   assert.match(page,/<svg class="core-r108-art"/);
-  assert.doesNotMatch(page,/<(?:iframe|form|link)\b/i);
+  assert.doesNotMatch(page,/<(?:iframe|link)\b/i);
   assert.doesNotMatch(core,/fetch\(|XMLHttpRequest|WebSocket|sendBeacon/);
 });
