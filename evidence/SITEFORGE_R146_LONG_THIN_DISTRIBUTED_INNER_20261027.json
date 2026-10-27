@@ -1,0 +1,53 @@
+{
+  "schema": "synestra.siteforge.r146.lightning-length-distribution-inner.v1",
+  "date": "2026-10-27",
+  "mission_id": "SYN_SITEFORGE_R146_LONG_THIN_DISTRIBUTED_INNER_LIGHTNING_20261027",
+  "objective": "Lengthen, multiply and scatter electric discharges, retain R145 thin cores, and reveal simulated internal discharges through the sphere.",
+  "owner": "Inos",
+  "provenance": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_SITEFORGE_R116_CLEAN_LAB_20261027",
+    "source_commit": "6abcd5122a3df20fa314df8acf6bd40bd1756b2f",
+    "shader_blob": "ecf6ef268b8640c820b197dbf27db7fb43826309",
+    "page_blob": "0627ebc741d7d8b5fd24d8e83bde23f7b98b352d",
+    "source_contract_tests": "READ_ONLY_10_PLUS_CHECKS_PASS"
+  },
+  "changes": {
+    "front_strikes": 8,
+    "added_dispersed_front": 5,
+    "front_legacy_kept": 3,
+    "rear_strikes": 3,
+    "relative_typical_trajectory_length": "~1.95 x R145",
+    "stroke_core_width": "UNCHANGED exp(-path*170.)",
+    "stroke_halo_width": "UNCHANGED exp(-path*34.)",
+    "stroke_fork_width": "UNCHANGED exp(-forkPath*155.)",
+    "rear": "Simulated back hemisphere with separate motion and dim light; WebGL 2D projected, not true volumetric mesh",
+    "alpha": "innerLightning remains independently visible at 0% shell visibility"
+  },
+  "verification": {
+    "deployment_id": "21afaed2-be41-4d67-9673-0ffb2fc5699d",
+    "preview_url": "https://21afaed2.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+    "Cloudflare_Pages_preview": "SUCCESS",
+    "build": "SUCCESS",
+    "deploy": "SUCCESS",
+    "node_tests": 65,
+    "node_pass": 65,
+    "node_fail": 0,
+    "static_export": "PASS",
+    "targeted_R146_source_checks": "PASS",
+    "new_R146_persisted_unit_tests": "NOT_ADDED_WRITE_POLICY_DENIED",
+    "real_browser_GPU_pixels": "NOT_VERIFIED",
+    "iPhone_frame_rate": "NOT_VERIFIED",
+    "label": "R145 in HTML; R146 shader is live"
+  },
+  "policy": {
+    "production_deployments_enabled": false,
+    "preview_branch_allowlisted": true,
+    "main_changed": false,
+    "production_changed": false,
+    "observer_changed": false,
+    "denied_test_and_page_writes": "NO_BYPASS"
+  },
+  "rollback": "https://c82f4bc1.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+  "status": "R146_PREVIEW_DEPLOYED; BROWSER_GPU_VISUAL_QA_PENDING"
+}
