@@ -650,8 +650,9 @@ void main(){
  vFade=fade*behind*clamp(uEmitter.y,0.,2.)*(.60+.40*particleRand(i+91.));
  vDepth=behind;
  vHot=particleRand(i+37.);
- gl_PointSize=clamp((4.3+5.9*particleRand(i+8.))*clamp(uShape.x,.2,2.)
-                  *uResolution.y/520.*mix(2.45,1.,uLayer),1.,34.);
+ // Finer luminous fragments are more coherent with the sphere's filaments.
+ gl_PointSize=clamp((2.8+4.9*particleRand(i+8.))*clamp(uShape.x,.2,2.)
+                  *uResolution.y/520.*mix(1.95,1.,uLayer),1.,25.);
  gl_Position=vec4(pointPos.x*uResolution.y/max(uResolution.x,1.),
                   pointPos.y-.08,0.,1.);
 }`;
@@ -668,6 +669,8 @@ varying vec2 vAxis;
 uniform vec3 uParticleColor;
 uniform vec4 uEmitter;
 uniform float uLayer;
+uniform vec2 uResolution;
+uniform float uGlobalOpacity;
 void main(){
  vec2 p=gl_PointCoord*2.-1.;
  float r2=dot(p,p);
@@ -680,10 +683,18 @@ void main(){
    // Hot plasma jets stretch along vertical eruption paths.
    r2=p.x*p.x*1.9+p.y*p.y*.48;
  }
+ // Match the exact sphere coordinate system and prevent orbiting confetti
+ // from appearing outside its energy volume.
+ vec2 projected=(gl_FragCoord.xy/max(uResolution,vec2(1.))-.5)*2.;
+ projected.x*=uResolution.x/max(uResolution.y,1.);
+ projected.y+=.08;
+ float sphereEnvelope=1.-smoothstep(.62,.702,length(projected));
+ float innerLuminosity=mix(.74,1.25,exp(-dot(projected,projected)*8.));
  float halo=exp(-r2*3.2);
  float hot=exp(-r2*15.);
- float radiance=(uLayer<.5?halo*.38:hot*1.6+halo*.23)*vFade;
- vec3 tint=mix(uParticleColor,vec3(1.),.25+.5*vHot);
+ float radiance=(uLayer<.5?halo*.29:hot*1.24+halo*.14)*vFade
+                 *sphereEnvelope*innerLuminosity*clamp(uGlobalOpacity,0.,1.);
+ vec3 tint=mix(uParticleColor,vec3(1.),.14+.36*vHot);
  gl_FragColor=vec4(tint*radiance,clamp(radiance,0.,1.));
 }`;
     const pv=shader(gl.VERTEX_SHADER,vfxVertex);
@@ -710,7 +721,7 @@ void main(){
     const U=n=>gl.getUniformLocation(emitterProgram,n);
     const uniforms={
       resolution:U('uResolution'),clock:U('uTime'),emitter:U('uEmitter'),
-      shape:U('uShape'),tilt:U('uTilt'),tint:U('uParticleColor'),layer:U('uLayer')
+      shape:U('uShape'),tilt:U('uTilt'),tint:U('uParticleColor'),layer:U('uLayer'),opacity:U('uGlobalOpacity')
     };
     if(attr<0||Object.values(uniforms).some(u=>u===null)){setParticleStatus('VFX indisponible : attribut GPU manquant.');return null;}
     gl.bindBuffer(gl.ARRAY_BUFFER,buffer);
@@ -740,10 +751,17 @@ void main(){
           numeric('particleSize'),numeric('particleSpread'),numeric('coreSize'),numeric('coreLight')
         ]));
         gl.uniform2f(uniforms.tilt,rx,ry);
-        const palette=[[.23,.84,1.],[.78,.94,1.],[.69,.38,1.],[1.,.39,.10]][preset]||[.25,.9,1.];
-        const custom=color('core');
-        const tint=palette.map((v,i)=>v*.86+custom[i]*.14);
+        // Reuse the sphere's edited material palette, with only stylistic
+        // variations per preset. No fixed alien purple/orange overlay.
+        const core=color('core'),rim=color('rim'),secondary=color('secondary');
+        const tint=core.map((v,i)=>{
+          if(preset===0)return v*.58+rim[i]*.42;
+          if(preset===1)return v*.44+.56;
+          if(preset===2)return secondary[i]*.61+rim[i]*.39;
+          return v*.72+rim[i]*.16+[1.,.68,.39][i]*.12;
+        });
         gl.uniform3fv(uniforms.tint,new Float32Array(tint));
+        gl.uniform1f(uniforms.opacity,numeric('opacity'));
         // The R147 SRC_ALPHA + fragment energy alpha path squared brightness,
         // making sparks barely visible. With preweighted RGB, additive ONE/ONE
         // reveals actual radiation, and two passes form halo + bright core.
@@ -754,6 +772,7 @@ void main(){
         gl.uniform1f(uniforms.layer,1);
         gl.drawArrays(gl.POINTS,0,count);
         if(gl.disable)gl.disable(gl.BLEND);
+        if(attr!==pos && gl.disableVertexAttribArray)gl.disableVertexAttribArray(attr);
         // Restore triangle attributes/program before the next sphere frame.
         gl.useProgram(program);
         gl.bindBuffer(gl.ARRAY_BUFFER,buffer);
