@@ -56,6 +56,7 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 }
 @media(prefers-reduced-motion:reduce){.core-r109-canvas,.core-r108-art{transition:none!important}}
 .vfx-advanced{border-top:1px solid #335a76;margin-top:10px;padding-top:8px}.vfx-advanced summary{cursor:pointer;min-height:42px;padding:10px 6px;color:#bfeeff;font-weight:600;list-style-position:inside}.vfx-advanced[open] summary{margin-bottom:12px}.vfx-advanced summary:focus-visible{outline:2px solid #7ce8fa;outline-offset:3px}
+[data-vfx-status]{background:#10283b;border:1px solid #315574;border-radius:9px;padding:9px 12px;color:#bfe9f9;font-weight:600;min-height:42px;display:flex;align-items:center}
 </style>
 </head>
 <body>
@@ -77,13 +78,14 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 </svg>
 </div>
 <form class="lab-controls" aria-label="Réglages en direct de la sphère SiteForge" autocomplete="off">
-<div class="panel-head"><h2>Réglages de la sphère</h2><span class="preview-state">R147 · VFX LAB</span></div>
+<div class="panel-head"><h2>Réglages de la sphère</h2><span class="preview-state">R148 · VFX GRAPHICS</span></div>
 <p class="help">Réglages appliqués à la matière 3D sans recharger. L'anneau extérieur et les arcs sont indépendants de la coque.</p>
 <fieldset class="control-group" aria-label="Studio d’effets de particules"><legend>✨ Effets de particules — accès rapide</legend>
 <div class="control-row"><label class="control-label" for="sf-particlePreset"><span>Style VFX</span></label>
 <select id="sf-particlePreset" data-sphere-control="particlePreset" data-default="0"><option value="0">Plasma vivant</option><option value="1">Étincelles électriques</option><option value="2">Vortex énergétique</option><option value="3">Éruption du noyau</option><option value="4">Désactivé</option></select></div>
 <div class="control-row"><label class="control-label" for="sf-particleIntensity"><span>Intensité des particules</span><output for="sf-particleIntensity" data-sphere-value="particleIntensity">100 %</output></label><input id="sf-particleIntensity" data-sphere-control="particleIntensity" type="range" min="0" max="200" value="100" step="1"></div>
-<p class="help">Un préréglage et un curseur suffisent. Les particules sont animées en 3D projetée, indépendamment de la taille du noyau.</p>
+<p class="help">Choisis un effet et règle sa puissance. Le moteur dessine un halo et un cœur lumineux pour chaque particule, avec des couleurs différentes selon le préréglage.</p>
+<p class="help" data-vfx-status role="status" aria-live="polite">Initialisation des particules GPU…</p>
 <details class="vfx-advanced"><summary>Réglages avancés des particules</summary>
 <div class="control-row"><label class="control-label" for="sf-particleDensity"><span>Nombre de particules</span><output for="sf-particleDensity" data-sphere-value="particleDensity">100 %</output></label><input id="sf-particleDensity" data-sphere-control="particleDensity" type="range" min="0" max="250" value="100" step="1"></div>
 <div class="control-row"><label class="control-label" for="sf-particleSpeed"><span>Vitesse des particules</span><output for="sf-particleSpeed" data-sphere-value="particleSpeed">100 %</output></label><input id="sf-particleSpeed" data-sphere-control="particleSpeed" type="range" min="0" max="250" value="100" step="1"></div>
@@ -138,7 +140,7 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 <p class="help" data-render-status role="status" aria-live="polite">Initialisation du rendu WebGL…</p>
 <p class="help">Prévisualisation isolée. Aucun changement sur le site public ni sur Visual Observer.</p>
 </form>
-<p class="lab-footer">Moteur R116 · moteur de particules WebGL R147 · aperçu expérimental SiteForge. Sur téléphone, le rendu reste fixé en haut pendant le défilement des réglages.</p>
+<p class="lab-footer">Moteur R116 · particules lumineuses double couche R148 · aperçu expérimental SiteForge. Sur téléphone, le rendu reste fixé en haut pendant le défilement des réglages.</p>
 </main>
 <script src="../../assets/siteforge-r116-sphere-only.js" defer></script>
 </body>
