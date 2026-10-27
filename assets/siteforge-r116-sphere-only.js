@@ -1,4 +1,4 @@
-/* SiteForge R146 — longer, more numerous thin electrical discharges distributed around the surface; a dim back-hemisphere electrical layer is visible through the plasma without thickening strokes. R140/R144/R145 invariants and 8 original arcs preserved. */
+/* SiteForge R147 — reusable one-context WebGL emitter VFX with 4 presets and simple controls, independent high-flux compact core. R140 fixed geometry and R146 thin arcs preserved. */
 (() => {
   'use strict';
   const scene = document.querySelector('.core-r108-stage');
@@ -421,12 +421,15 @@ void main(){
  float coreSize=max(flowSettings.w,.003);
  float centralSource=exp(-d*d*115./(coreSize*coreSize));
  float coreBloom=exp(-d*d*8.5/(coreSize*coreSize));
- base+=coreColor*(centralSource*.64+coreBloom*.62)*coreRatio;
+ // More radiant power at a fixed core radius: power affects brightness only.
+ float coreFlux=pow(max(coreRatio,0.),1.55);
+ vec3 hotCore=mix(coreColor,vec3(1.),clamp((coreRatio-1.)/4.,0.,.72));
+ base+=hotCore*(centralSource*.82+coreBloom*.42)*coreFlux;
  // An electric discharge needs a black dielectric substrate and blue-white
  // flashes, not the watery scattered gas that other energy types use.
  if(dryElectric>.5){
    vec3 midnight=energyPalette*.36+energyTint*energyMask*.20+
-                 coreColor*(centralSource*.30+coreBloom*.065)*coreRatio;
+                 hotCore*(centralSource*.30+coreBloom*.065)*coreFlux;
    base=mix(base,midnight,.80);
    base+=energyTint*energyMask*1.95*surfaceSettings.w;
    // Back-layer light shines through the otherwise dark electrical shell.
@@ -560,6 +563,144 @@ void main(){
     })) gl.uniform3fv(parameters[name],new Float32Array(color(control)));
   };
 
+  // R147: genuine independently animated GPU point sprites, drawn on the SAME
+  // WebGL context after the sphere, no second canvas/renderer/server.
+  // Reusable bounded emitter presets; every sprite has seeded life, depth,
+  // birth phase, motion, fade and size. Optional: sphere remains if VFX fails.
+  const particleEngine = (() => {
+    const MAX_PARTICLES=240;
+    const vfxVertex = `
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+attribute float aSeed;
+uniform vec2 uResolution;
+uniform float uTime;
+uniform vec4 uEmitter; // preset, intensity, density, speed
+uniform vec4 uShape;   // size, spread, core size, core flux
+uniform vec2 uTilt;
+varying float vFade;
+varying float vDepth;
+varying float vHot;
+float particleRand(float n){return fract(sin(n*127.1)*43758.5453);}
+void main(){
+ float i=floor(aSeed*240.);
+ float lifetime=.15+.32*uEmitter.w;
+ float age=fract(uTime*lifetime*(.73+.53*particleRand(i+5.))+particleRand(i+19.));
+ float theta=particleRand(i+27.)*6.283185;
+ float depth=particleRand(i+42.)*2.-1.;
+ float whirl=theta+uTime*(.12+.32*uEmitter.w)*(depth<0.?-.75:1.);
+ float radiusScale=max(.06,uShape.z)*clamp(uShape.y,0.,2.);
+ vec3 pointPos;
+ if(uEmitter.x<.5){
+   // Plasma: curl around nucleus, spiral outward while breathing in depth.
+   float r=(.045+age*.53)*radiusScale;
+   pointPos=vec3(cos(whirl+age*4.)*r,sin(whirl+age*4.)*r,
+                 depth*.42+sin(whirl*2.+age*12.)*.10);
+ }else if(uEmitter.x<1.5){
+   // Sparks: ballistic radial jets, staccato birth/death and strong directionality.
+   float r=(.04+pow(age,.72)*.76)*radiusScale;
+   pointPos=vec3(cos(theta)*r,sin(theta)*r,depth*.28+age*.15);
+ }else if(uEmitter.x<2.5){
+   // Vortex: orbiting equatorial belts with a deep 3D spiral.
+   float r=(.18+.31*particleRand(i+65.)) *radiusScale;
+   pointPos=vec3(cos(whirl+age*5.)*r,
+                 sin(whirl+age*5.)*r*.42+sin(theta*.6)*.14,
+                 sin(whirl*.92)*r*.75+depth*.18);
+ }else{
+   // Eruption: rising jets and wandering embers from a compact source.
+   float drift=(.08+age*.46)*radiusScale;
+   pointPos=vec3(cos(theta)*drift*.55+sin(age*12.+theta)*.036,
+                 -.08+age*.87*radiusScale,
+                 depth*.25+cos(theta+age*7.)*.12);
+ }
+ pointPos.xy+=uTilt*.12*(.3+age);
+ float fade=smoothstep(0.,.12,age)*(1.-smoothstep(.64,1.,age));
+ float behind=mix(.38,1.,step(0.,pointPos.z));
+ vFade=fade*behind*clamp(uEmitter.y,0.,2.)*(.60+.40*particleRand(i+91.));
+ vDepth=behind;
+ vHot=particleRand(i+37.);
+ gl_PointSize=clamp((1.9+3.4*particleRand(i+8.))*clamp(uShape.x,.2,2.)
+                  *uResolution.y/440.,1.,14.);
+ gl_Position=vec4(pointPos.x*uResolution.y/max(uResolution.x,1.),
+                  pointPos.y-.08,0.,1.);
+}`;
+    const vfxFragment = `
+precision mediump float;
+varying float vFade;
+varying float vDepth;
+varying float vHot;
+uniform vec3 uParticleColor;
+void main(){
+ vec2 p=gl_PointCoord*2.-1.;
+ float r2=dot(p,p);
+ float core=exp(-r2*13.);
+ float halo=exp(-r2*3.8)*.28;
+ float energy=(core+halo)*vFade;
+ vec3 tint=mix(uParticleColor,vec3(1.),vHot*.32);
+ gl_FragColor=vec4(tint*energy,clamp(energy,0.,.97));
+}`;
+    const pv=shader(gl.VERTEX_SHADER,vfxVertex);
+    const pf=shader(gl.FRAGMENT_SHADER,vfxFragment);
+    if(!pv||!pf)return null;
+    const emitterProgram=gl.createProgram();
+    if(!emitterProgram)return null;
+    gl.attachShader(emitterProgram,pv);
+    gl.attachShader(emitterProgram,pf);
+    gl.linkProgram(emitterProgram);
+    if(!gl.getProgramParameter(emitterProgram,gl.LINK_STATUS))return null;
+    gl.deleteShader(pv);gl.deleteShader(pf);
+    const emitterBuffer=gl.createBuffer();
+    if(!emitterBuffer)return null;
+    gl.bindBuffer(gl.ARRAY_BUFFER,emitterBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(
+      Array.from({length:MAX_PARTICLES},(_,i)=>(i+.5)/MAX_PARTICLES)
+    ),gl.STATIC_DRAW);
+    const attr=gl.getAttribLocation(emitterProgram,'aSeed');
+    const U=n=>gl.getUniformLocation(emitterProgram,n);
+    const uniforms={
+      resolution:U('uResolution'),clock:U('uTime'),emitter:U('uEmitter'),
+      shape:U('uShape'),tilt:U('uTilt'),tint:U('uParticleColor')
+    };
+    if(attr<0||Object.values(uniforms).some(u=>u===null))return null;
+    gl.bindBuffer(gl.ARRAY_BUFFER,buffer);
+    return {
+      draw(seconds,rx,ry){
+        const preset=ordinal('particlePreset');
+        const intensity=numeric('particleIntensity');
+        const count=Math.min(MAX_PARTICLES,Math.max(0,Math.round(120*numeric('particleDensity'))));
+        if(preset===4||intensity<=0||count<=0)return;
+        gl.useProgram(emitterProgram);
+        gl.bindBuffer(gl.ARRAY_BUFFER,emitterBuffer);
+        gl.enableVertexAttribArray(attr);
+        gl.vertexAttribPointer(attr,1,gl.FLOAT,false,0,0);
+        gl.uniform2f(uniforms.resolution,canvas.width,canvas.height);
+        gl.uniform1f(uniforms.clock,seconds);
+        gl.uniform4fv(uniforms.emitter,new Float32Array([
+          preset,intensity,numeric('particleDensity'),numeric('particleSpeed')
+        ]));
+        gl.uniform4fv(uniforms.shape,new Float32Array([
+          numeric('particleSize'),numeric('particleSpread'),numeric('coreSize'),numeric('coreLight')
+        ]));
+        gl.uniform2f(uniforms.tilt,rx,ry);
+        gl.uniform3fv(uniforms.tint,new Float32Array(color('core')));
+        if(gl.enable&&gl.blendFunc){
+          gl.enable(gl.BLEND);
+          gl.blendFunc(gl.SRC_ALPHA,gl.ONE);
+        }
+        gl.drawArrays(gl.POINTS,0,count);
+        if(gl.disable)gl.disable(gl.BLEND);
+        // Restore triangle attributes/program before the next sphere frame.
+        gl.useProgram(program);
+        gl.bindBuffer(gl.ARRAY_BUFFER,buffer);
+        gl.enableVertexAttribArray(pos);
+        gl.vertexAttribPointer(pos,2,gl.FLOAT,false,0,0);
+      }
+    };
+  })();
+
   let visible = true;
   let active = true;
   let frame = 0;
@@ -609,6 +750,7 @@ void main(){
     gl.clearColor(0,0,0,0);
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.drawArrays(gl.TRIANGLES,0,6);
+    particleEngine?.draw(still?0:elapsed,rx,ry);
     if (!scene.hasAttribute('data-core-ready')) {scene.setAttribute('data-core-ready','true');stateText('WebGL actif — les réglages sont appliqués en direct.');}
     if (visible && document.visibilityState === 'visible' && !still) frame=requestAnimationFrame(draw);
   };
