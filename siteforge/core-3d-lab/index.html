@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex,nofollow">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
-<title>SiteForge — Labo vierge · Sphère R116</title>
+<title>SiteForge — Plasma Studio R152</title>
 <style>
 :root{color-scheme:dark;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#050a14;color:#e7f4ff}
 *{box-sizing:border-box}
@@ -55,14 +55,14 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
  .core-r108-art{top:50%;transform:translate(-50%,-50%) scale(calc(.8 * var(--sphere-zoom,1)))}
 }
 @media(prefers-reduced-motion:reduce){.core-r109-canvas,.core-r108-art{transition:none!important}}
-.vfx-advanced{border-top:1px solid #335a76;margin-top:10px;padding-top:8px}.vfx-advanced summary{cursor:pointer;min-height:42px;padding:10px 6px;color:#bfeeff;font-weight:600;list-style-position:inside}.vfx-advanced[open] summary{margin-bottom:12px}.vfx-advanced summary:focus-visible{outline:2px solid #7ce8fa;outline-offset:3px}
+.vfx-advanced{grid-column:1/-1;border-top:1px solid #335a76;margin-top:10px;padding-top:8px}.vfx-advanced summary{cursor:pointer;min-height:42px;padding:10px 6px;color:#bfeeff;font-weight:600;list-style-position:inside}.vfx-advanced[open] summary{margin-bottom:12px}.vfx-advanced .control-group{margin:10px 0 16px}.vfx-advanced summary:focus-visible{outline:2px solid #7ce8fa;outline-offset:3px}
 [data-vfx-status]{background:#10283b;border:1px solid #315574;border-radius:9px;padding:9px 12px;color:#bfe9f9;font-weight:600;min-height:42px;display:flex;align-items:center}
 </style>
 </head>
 <body>
 <main>
-<h1>SiteForge <span aria-hidden="true">·</span> Atelier sphère R116</h1>
-<div class="core-r108-stage core-r109-stage" role="img" aria-label="Sphère énergétique Synestra R116, sans panneau de réglages ni gyroscope métallique.">
+<h1>SiteForge <span aria-hidden="true">·</span> Plasma Studio</h1>
+<div class="core-r108-stage core-r109-stage" role="img" aria-label="Nouvelle sphère énergétique plasma bleu-cyan-violet produite par le moteur VFX WebGL.">
 <canvas class="core-r109-canvas" width="960" height="570" aria-hidden="true"></canvas>
 <svg class="core-r108-art" viewBox="0 0 640 410" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
 <defs>
@@ -77,70 +77,45 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 <circle cx="289" cy="149" r="13" fill="#f5ffff" opacity=".23" filter="url(#r108-halo)"/>
 </svg>
 </div>
-<form class="lab-controls" aria-label="Réglages en direct de la sphère SiteForge" autocomplete="off">
-<div class="panel-head"><h2>Réglages de la sphère</h2><span class="preview-state">R151 · UNIFIED VFX</span></div>
-<p class="help">Réglages appliqués à la matière 3D sans recharger. L'anneau extérieur et les arcs sont indépendants de la coque.</p>
-<fieldset class="control-group" aria-label="Studio d’effets de particules"><legend>✨ Effets de particules — accès rapide</legend>
-<div class="control-row"><label class="control-label" for="sf-particlePreset"><span>Style VFX</span></label>
-<select id="sf-particlePreset" data-sphere-control="particlePreset" data-default="0"><option value="0">Plasma vivant</option><option value="1">Étincelles électriques</option><option value="2">Vortex énergétique</option><option value="3">Éruption du noyau</option><option value="4">Désactivé</option></select></div>
-<div class="control-row"><label class="control-label" for="sf-particleIntensity"><span>Intensité des particules</span><output for="sf-particleIntensity" data-sphere-value="particleIntensity">100 %</output></label><input id="sf-particleIntensity" data-sphere-control="particleIntensity" type="range" min="0" max="200" value="100" step="1"></div>
-<p class="help">Choisis un effet : ses particules suivent la palette de la sphère et stimulent sa matière. Leurs halos restent intégrés à son volume, plutôt que de flotter devant.</p>
-<p class="help" data-vfx-status role="status" aria-live="polite">Initialisation des particules GPU…</p>
-<details class="vfx-advanced"><summary>Réglages avancés des particules</summary>
-<div class="control-row"><label class="control-label" for="sf-particleDensity"><span>Nombre de particules</span><output for="sf-particleDensity" data-sphere-value="particleDensity">100 %</output></label><input id="sf-particleDensity" data-sphere-control="particleDensity" type="range" min="0" max="250" value="100" step="1"></div>
-<div class="control-row"><label class="control-label" for="sf-particleSpeed"><span>Vitesse des particules</span><output for="sf-particleSpeed" data-sphere-value="particleSpeed">100 %</output></label><input id="sf-particleSpeed" data-sphere-control="particleSpeed" type="range" min="0" max="250" value="100" step="1"></div>
-<div class="control-row"><label class="control-label" for="sf-particleSize"><span>Taille des particules</span><output for="sf-particleSize" data-sphere-value="particleSize">100 %</output></label><input id="sf-particleSize" data-sphere-control="particleSize" type="range" min="20" max="200" value="100" step="1"></div>
-<div class="control-row"><label class="control-label" for="sf-particleSpread"><span>Dispersion spatiale</span><output for="sf-particleSpread" data-sphere-value="particleSpread">100 %</output></label><input id="sf-particleSpread" data-sphere-control="particleSpread" type="range" min="0" max="200" value="100" step="1"></div>
-<p class="help">Émetteur WebGL : points lumineux individuels, naissances, trajectoires et extinction progressive. Le nombre est plafonné pour préserver les mobiles.</p>
-</details></fieldset>
-<fieldset class="control-group"><legend>Forme et présence</legend><div class="control-row"><label class="control-label" for="sf-diameter"><span>Diamètre</span><output for="sf-diameter" data-sphere-value="diameter">100 %</output></label><input id="sf-diameter" data-sphere-control="diameter" type="range" min="50" max="150" value="100" step="1"></div>
-<div class="control-row"><label class="control-label" for="sf-opacity"><span>Opacité</span><output for="sf-opacity" data-sphere-value="opacity">100 %</output></label><input id="sf-opacity" data-sphere-control="opacity" type="range" min="0" max="100" value="100" step="1"></div></fieldset>
-<fieldset class="control-group"><legend>Coque · diffusion, épaisseur et visibilité</legend>
-<div class="control-row"><label class="control-label" for="sf-shellVisibility"><span>Visibilité de la coque</span><output for="sf-shellVisibility" data-sphere-value="shellVisibility">100 %</output></label><input id="sf-shellVisibility" data-sphere-control="shellVisibility" type="range" min="0" max="100" value="100" step="1"></div>
-<div class="control-row"><label class="control-label" for="sf-diffusion"><span>Diffusion de la coque</span><output for="sf-diffusion" data-sphere-value="diffusion">65 %</output></label><input id="sf-diffusion" data-sphere-control="diffusion" type="range" min="0" max="100" value="65" step="1"></div>
-<div class="control-row"><label class="control-label" for="sf-thickness"><span>Épaisseur de la coque</span><output for="sf-thickness" data-sphere-value="thickness">45 %</output></label><input id="sf-thickness" data-sphere-control="thickness" type="range" min="0" max="100" value="45" step="1"></div>
-<p class="help">Visibilité de la coque : à 0 %, la sphère et son contour disparaissent, mais l’énergie animée reste visible. Diffusion et épaisseur restent indépendantes.</p>
+<form class="lab-controls" aria-label="Création de la nouvelle sphère plasma VFX" autocomplete="off">
+<div class="panel-head"><h2>Plasma Studio</h2><span class="preview-state">R152 · NOUVEAU MOTEUR</span></div>
+<p class="help">La sphère, le noyau et les éclairs sont créés par un seul moteur GPU. Aucun ancien effet ni réglage de matière héritée.</p>
+<fieldset class="control-group"><legend>✨ Création rapide</legend>
+<div class="control-row"><label class="control-label" for="sf-particlePreset"><span>Style du plasma</span></label>
+<select id="sf-particlePreset" data-sphere-control="particlePreset" data-default="0"><option value="0">Plasma originel</option><option value="1">Plasma électrique</option><option value="2">Vortex ionique</option><option value="3">Fusion du noyau</option><option value="4">Plasma pur, sans particules supplémentaires</option></select></div>
+<div class="control-row"><label class="control-label" for="sf-particleIntensity"><span>Émission VFX</span><output for="sf-particleIntensity" data-sphere-value="particleIntensity">100 %</output></label><input id="sf-particleIntensity" data-sphere-control="particleIntensity" type="range" min="0" max="200" value="100" step="1"></div>
+<div class="control-row"><label class="control-label" for="sf-coreLight"><span>Puissance du noyau</span><output for="sf-coreLight" data-sphere-value="coreLight">135 %</output></label><input id="sf-coreLight" data-sphere-control="coreLight" type="range" min="0" max="500" value="135" step="1"></div>
+<p class="help" data-vfx-status role="status" aria-live="polite">Initialisation du moteur plasma…</p>
 </fieldset>
-<fieldset class="control-group"><legend>Mouvement</legend><div class="control-row"><label class="control-label" for="sf-rotation"><span>Vitesse de rotation</span><output for="sf-rotation" data-sphere-value="rotation">100 %</output></label><input id="sf-rotation" data-sphere-control="rotation" type="range" min="0" max="300" value="100" step="1"></div>
-<div class="control-row"><label class="control-label" for="sf-agitation"><span>Agitation de la matière</span><output for="sf-agitation" data-sphere-value="agitation">100 %</output></label><input id="sf-agitation" data-sphere-control="agitation" type="range" min="0" max="200" value="100" step="1"></div>
-<p class="help">Agitation : 0 % volutes calmes · 100 % tourbillons lumineux · 200 % turbulences de plasma. Rotation et coque restent indépendantes.</p></fieldset>
-<fieldset class="control-group"><legend>Énergie de surface</legend>
-<div class="control-row"><label class="control-label" for="sf-energyMode"><span>Type d’énergie</span></label><select id="sf-energyMode" data-sphere-control="energyMode" data-default="0"><option value="0">Plasma</option><option value="1">Électrique</option><option value="2">Liquide</option><option value="3">Brume ionique</option><option value="4">Fusion solaire</option><option value="5">Cristalline</option></select></div>
-<div class="control-row"><label class="control-label" for="sf-surfaceMotion"><span>Type de mouvement</span></label><select id="sf-surfaceMotion" data-sphere-control="surfaceMotion" data-default="0"><option value="0">Tourbillons</option><option value="1">Écoulement</option><option value="2">Ondes</option><option value="3">Courants magnétiques</option></select></div>
-<div class="control-row"><label class="control-label" for="sf-surfaceGlow"><span>Luminosité de surface</span><output for="sf-surfaceGlow" data-sphere-value="surfaceGlow">100 %</output></label><input id="sf-surfaceGlow" data-sphere-control="surfaceGlow" type="range" min="0" max="200" value="100" step="1"></div>
-<div class="control-row"><label class="control-label" for="sf-surfaceEmission"><span>Émission de surface</span><output for="sf-surfaceEmission" data-sphere-value="surfaceEmission">100 %</output></label><input id="sf-surfaceEmission" data-sphere-control="surfaceEmission" type="range" min="0" max="250" value="100" step="1"></div>
-<div class="control-row"><label class="control-label" for="sf-surfaceFlow"><span>Densité des filaments</span><output for="sf-surfaceFlow" data-sphere-value="surfaceFlow">100 %</output></label><input id="sf-surfaceFlow" data-sphere-control="surfaceFlow" type="range" min="0" max="200" value="100" step="1"></div>
-<div class="control-row"><label class="control-label" for="sf-surfaceSpeed"><span>Vitesse d’écoulement</span><output for="sf-surfaceSpeed" data-sphere-value="surfaceSpeed">100 %</output></label><input id="sf-surfaceSpeed" data-sphere-control="surfaceSpeed" type="range" min="0" max="200" value="100" step="1"></div>
-<div class="control-row"><label class="control-label" for="sf-surfaceDirection"><span>Direction du flux</span><output for="sf-surfaceDirection" data-sphere-value="surfaceDirection">0 °</output></label><input id="sf-surfaceDirection" data-sphere-control="surfaceDirection" type="range" min="0" max="360" value="0" step="1"></div>
-<p class="help">Électrique : décharges anguleuses et ramifications sur fond sombre. Liquide : écoulements fluides. Agitation et rotation restent indépendantes.</p></fieldset>
-<fieldset class="control-group"><legend>Matière</legend><div class="control-row"><label class="control-label" for="sf-details"><span>Détails de surface</span><output for="sf-details" data-sphere-value="details">100 %</output></label><input id="sf-details" data-sphere-control="details" type="range" min="0" max="200" value="100" step="1"></div>
-<div class="control-row"><label class="control-label" for="sf-shine"><span>Brillance</span><output for="sf-shine" data-sphere-value="shine">100 %</output></label><input id="sf-shine" data-sphere-control="shine" type="range" min="0" max="200" value="100" step="1"></div>
-<div class="control-row"><label class="control-label" for="sf-contrast"><span>Contraste</span><output for="sf-contrast" data-sphere-value="contrast">100 %</output></label><input id="sf-contrast" data-sphere-control="contrast" type="range" min="50" max="150" value="100" step="1"></div></fieldset>
-<fieldset class="control-group"><legend>Lumière</legend>
-<div class="control-row"><label class="control-label" for="sf-luminance"><span>Luminance générale</span><output for="sf-luminance" data-sphere-value="luminance">100 %</output></label><input id="sf-luminance" data-sphere-control="luminance" type="range" min="0" max="250" value="100" step="1"></div>
-<div class="control-row"><label class="control-label" for="sf-coreSize"><span>Taille du noyau</span><output for="sf-coreSize" data-sphere-value="coreSize">100 %</output></label><input id="sf-coreSize" data-sphere-control="coreSize" type="range" min="0" max="200" value="100" step="1"></div>
-<div class="control-row"><label class="control-label" for="sf-coreLight"><span>Puissance du noyau</span><output for="sf-coreLight" data-sphere-value="coreLight">100 %</output></label><input id="sf-coreLight" data-sphere-control="coreLight" type="range" min="0" max="500" value="100" step="1"></div>
-<div class="control-row"><label class="control-label" for="sf-rimLight"><span>Liseré lumineux</span><output for="sf-rimLight" data-sphere-value="rimLight">100 %</output></label><input id="sf-rimLight" data-sphere-control="rimLight" type="range" min="0" max="200" value="100" step="1"></div></fieldset>
-<fieldset class="control-group"><legend>Relief de surface</legend>
-<div class="control-row"><label class="control-label" for="sf-reliefMode"><span>Type de relief</span></label><select id="sf-reliefMode" data-sphere-control="reliefMode" data-default="0"><option value="0">Ondulé</option><option value="1">Veiné</option><option value="2">Craquelé</option><option value="3">Plasma turbulent</option><option value="4">Cristallin</option><option value="5">Lisse énergétique</option></select></div>
-<div class="control-row"><label class="control-label" for="sf-reliefIntensity"><span>Intensité du relief</span><output for="sf-reliefIntensity" data-sphere-value="reliefIntensity">65 %</output></label><input id="sf-reliefIntensity" data-sphere-control="reliefIntensity" type="range" min="0" max="200" value="65" step="1"></div>
-<div class="control-row"><label class="control-label" for="sf-reliefScale"><span>Taille des ondulations</span><output for="sf-reliefScale" data-sphere-value="reliefScale">90 %</output></label><input id="sf-reliefScale" data-sphere-control="reliefScale" type="range" min="10" max="200" value="90" step="1"></div>
-<div class="control-row"><label class="control-label" for="sf-reliefRoughness"><span>Rugosité</span><output for="sf-reliefRoughness" data-sphere-value="reliefRoughness">80 %</output></label><input id="sf-reliefRoughness" data-sphere-control="reliefRoughness" type="range" min="0" max="200" value="80" step="1"></div>
-<div class="control-row"><label class="control-label" for="sf-reliefContrast"><span>Contraste du relief</span><output for="sf-reliefContrast" data-sphere-value="reliefContrast">100 %</output></label><input id="sf-reliefContrast" data-sphere-control="reliefContrast" type="range" min="0" max="200" value="100" step="1"></div>
-<div class="control-row"><label class="control-label" for="sf-reliefDeform"><span>Déformation du contour</span><output for="sf-reliefDeform" data-sphere-value="reliefDeform">15 %</output></label><input id="sf-reliefDeform" data-sphere-control="reliefDeform" type="range" min="0" max="100" value="15" step="1"></div>
-<div class="control-row"><label class="control-label" for="sf-reliefSpeed"><span>Vitesse du relief</span><output for="sf-reliefSpeed" data-sphere-value="reliefSpeed">100 %</output></label><input id="sf-reliefSpeed" data-sphere-control="reliefSpeed" type="range" min="0" max="200" value="100" step="1"></div>
-<p class="help">Le relief agit maintenant sur les creux, les arêtes et les ombres après l’émission lumineuse. Compare Lisse, Craquelé, Cristallin avec une forte intensité.</p></fieldset>
-<fieldset class="control-group"><legend>Couleurs de la sphère</legend><div class="color-grid">
-<div class="control-row"><label class="control-label" for="sf-primary"><span>Principale</span><output for="sf-primary" data-sphere-value="primary">#092B63</output></label><input id="sf-primary" data-sphere-control="primary" type="color" value="#092b63"></div>
-<div class="control-row"><label class="control-label" for="sf-secondary"><span>Secondaire</span><output for="sf-secondary" data-sphere-value="secondary">#1F174D</output></label><input id="sf-secondary" data-sphere-control="secondary" type="color" value="#1f174d"></div>
-<div class="control-row"><label class="control-label" for="sf-core"><span>Noyau</span><output for="sf-core" data-sphere-value="core">#B8EDFF</output></label><input id="sf-core" data-sphere-control="core" type="color" value="#b8edff"></div>
-<div class="control-row"><label class="control-label" for="sf-rim"><span>Liseré</span><output for="sf-rim" data-sphere-value="rim">#4FDDFF</output></label><input id="sf-rim" data-sphere-control="rim" type="color" value="#4fddff"></div>
+<fieldset class="control-group"><legend>⚡ Éclairs intérieurs</legend>
+<div class="control-row"><label class="control-label" for="sf-arcIntensity"><span>Énergie des éclairs</span><output for="sf-arcIntensity" data-sphere-value="arcIntensity">140 %</output></label><input id="sf-arcIntensity" data-sphere-control="arcIntensity" type="range" min="0" max="300" value="140" step="1"></div>
+<div class="control-row"><label class="control-label" for="sf-arcDensity"><span>Nombre d’éclairs</span><output for="sf-arcDensity" data-sphere-value="arcDensity">100 %</output></label><input id="sf-arcDensity" data-sphere-control="arcDensity" type="range" min="0" max="200" value="100" step="1"></div>
+</fieldset>
+<fieldset class="control-group"><legend>🌐 Volume de plasma</legend>
+<div class="control-row"><label class="control-label" for="sf-diameter"><span>Diamètre</span><output for="sf-diameter" data-sphere-value="diameter">100 %</output></label><input id="sf-diameter" data-sphere-control="diameter" type="range" min="50" max="150" value="100" step="1"></div>
+<div class="control-row"><label class="control-label" for="sf-shellVisibility"><span>Matière sphérique visible</span><output for="sf-shellVisibility" data-sphere-value="shellVisibility">100 %</output></label><input id="sf-shellVisibility" data-sphere-control="shellVisibility" type="range" min="0" max="100" value="100" step="1"></div>
+<div class="control-row"><label class="control-label" for="sf-coreSize"><span>Taille du noyau</span><output for="sf-coreSize" data-sphere-value="coreSize">70 %</output></label><input id="sf-coreSize" data-sphere-control="coreSize" type="range" min="0" max="200" value="70" step="1"></div>
+<p class="help">À 0 % de matière, les éclairs et le noyau restent visibles. La taille et la puissance du noyau sont indépendantes.</p>
+</fieldset>
+<details class="vfx-advanced"><summary>Réglages avancés</summary>
+<fieldset class="control-group"><legend>Émission et vitesse</legend>
+<div class="control-row"><label class="control-label" for="sf-particleDensity"><span>Densité des particules</span><output for="sf-particleDensity" data-sphere-value="particleDensity">100 %</output></label><input id="sf-particleDensity" data-sphere-control="particleDensity" type="range" min="0" max="250" value="100" step="1"></div>
+<div class="control-row"><label class="control-label" for="sf-particleSpeed"><span>Vitesse des flux</span><output for="sf-particleSpeed" data-sphere-value="particleSpeed">100 %</output></label><input id="sf-particleSpeed" data-sphere-control="particleSpeed" type="range" min="0" max="250" value="100" step="1"></div>
+<div class="control-row"><label class="control-label" for="sf-particleSize"><span>Finesse lumineuse</span><output for="sf-particleSize" data-sphere-value="particleSize">100 %</output></label><input id="sf-particleSize" data-sphere-control="particleSize" type="range" min="20" max="200" value="100" step="1"></div>
+<div class="control-row"><label class="control-label" for="sf-opacity"><span>Opacité générale</span><output for="sf-opacity" data-sphere-value="opacity">100 %</output></label><input id="sf-opacity" data-sphere-control="opacity" type="range" min="0" max="100" value="100" step="1"></div>
+</fieldset>
+<fieldset class="control-group"><legend>Palette plasma d’origine</legend><div class="color-grid">
+<div class="control-row"><label class="control-label" for="sf-primary"><span>Profondeur bleu nuit</span><output for="sf-primary" data-sphere-value="primary">#08142E</output></label><input id="sf-primary" data-sphere-control="primary" type="color" value="#08142e"></div>
+<div class="control-row"><label class="control-label" for="sf-secondary"><span>Violet énergétique</span><output for="sf-secondary" data-sphere-value="secondary">#53318D</output></label><input id="sf-secondary" data-sphere-control="secondary" type="color" value="#53318d"></div>
+<div class="control-row"><label class="control-label" for="sf-core"><span>Noyau blanc-bleu</span><output for="sf-core" data-sphere-value="core">#EAFFFF</output></label><input id="sf-core" data-sphere-control="core" type="color" value="#eaffff"></div>
+<div class="control-row"><label class="control-label" for="sf-rim"><span>Plasma cyan</span><output for="sf-rim" data-sphere-value="rim">#51DFFF</output></label><input id="sf-rim" data-sphere-control="rim" type="color" value="#51dfff"></div>
 </div></fieldset>
-<button class="reset" type="reset">Rétablir les valeurs de référence</button>
-<p class="help" data-render-status role="status" aria-live="polite">Initialisation du rendu WebGL…</p>
-<p class="help">Prévisualisation isolée. Aucun changement sur le site public ni sur Visual Observer.</p>
+</details>
+<button class="reset" type="reset">Restaurer le plasma d'origine</button>
+<p class="help" data-render-status role="status" aria-live="polite">Préparation du moteur WebGL…</p>
+<p class="help">Atelier de prévisualisation isolé. Aucun effet sur le site public ni Visual Observer.</p>
 </form>
-<p class="lab-footer">Moteur WebGL VFX unifié R151 · sphère, noyau, éclairs et particules · aperçu expérimental SiteForge. Sur téléphone, le rendu reste fixé en haut pendant le défilement des réglages.</p>
+<p class="lab-footer">Moteur VFX R152 · sphère plasma recréée, éclairs et noyau · ancien rendu entièrement retiré. Sur téléphone, le rendu reste fixé en haut pendant le défilement des réglages.</p>
 </main>
 <script src="../../assets/siteforge-r116-sphere-only.js" defer></script>
 </body>
