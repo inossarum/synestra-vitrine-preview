@@ -144,3 +144,49 @@ test('R143: baseline R142 shader remains local and uses one context with bounded
  assert.ok(js.includes('float microThreads=pow(max(.5+.5*sin(filamentPhase),0.),13.);'));
  assert.doesNotMatch(js,/fetch\(|WebSocket|localStorage|sessionStorage|document\.cookie/);
 });
+
+
+test('R144: six materials have distinct major shading profiles, not just a color-picker value',()=>{
+ const shader=js.slice(js.indexOf('void main(){'),js.indexOf('  const shader = (type, code)'));
+ for(const term of [
+  'float lightning=sin(filamentPhase*2.3',
+  'float flowing=sin(flowN.y*16.',
+  'energyMask=smoothstep(.33,.77,cloudDensity)',
+  'float solarCells=abs(sin(',
+  'float facets=abs(fract(flowN.x*8.',
+  'base=mix(base,energyPalette,clamp(.58+.12*energyShadow,0.,1.));',
+  'base+=energyTint*(energyMask*1.38+energyCoverage*.46)*surfaceSettings.w*shimmer;'
+ ])assert.ok(shader.includes(term),term);
+ const distinct=[
+  ['plasma',.61,1,0],['electric',.89,1.8,1],['liquid',.23,2.4,2],
+  ['fog',.14,.32,3],['solar',.68,.77,4],['crystal',.55,2.5,5]
+ ];
+ assert.equal(new Set(distinct.map(v=>v.slice(1).join(':'))).size,6);
+});
+test('R144: relief modes have dedicated height fields and actual optical shading',()=>{
+ for(const term of [
+  'reliefHeight=pow(max(.5+.5*veins,0.),9.);',
+  'reliefHeight=smoothstep(.08,.19,fractures);',
+  'reliefHeight=.5+.5*sin(flowN.y*reliefFrequency',
+  'reliefHeight=floor((flowN.x+flowN.y*.7+v*.35)',
+  'reliefHeight=.48+.03*v;',
+  'float reliefTangentAmplitude=clamp(reliefStrength*.72,0.,1.6);',
+  'base*=reliefShade;'
+ ])assert.ok(js.includes(term),term);
+});
+test('R144: visibility 0 retains currents, breaks solid outline and resets independently',()=>{
+ const x=fixture();x.frame(40);
+ assert.equal(x.uniforms.get('shellVisibilityRatio'),1);
+ x.controls.shellVisibility.value='0';x.events.input({target:x.controls.shellVisibility});x.frame(90);
+ assert.equal(x.uniforms.get('shellVisibilityRatio'),0);
+ assert.equal(x.uniforms.get('sphereAlpha'),1);
+ x.events.reset({preventDefault(){}});x.frame(140);
+ assert.equal(x.uniforms.get('shellVisibilityRatio'),1);
+ for(const term of [
+  'float circulatingEnergyAlpha=clamp((energyMask*.58+energyCoverage*.65+curlGlow*.27)*surfaceSettings.w+dischargeAlpha,0.,.98);',
+  'float alpha=sphereAlpha*shellFade*mix(circulatingEnergyAlpha,1.,clamp(shellVisibilityRatio,0.,1.));',
+  'base+=rimColor*rim*(.28+.30*shellOptical)*rimRatio*shellVisibilityRatio;'
+ ])assert.ok(js.includes(term),term);
+ const alpha0=.58*.6+.65*.12;
+ assert.ok(alpha0>0&&alpha0<.9,'energy visible with transparent negative space');
+});
