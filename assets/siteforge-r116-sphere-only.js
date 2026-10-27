@@ -633,7 +633,11 @@ void main(){
                   pointPos.y-.08,0.,1.);
 }`;
     const vfxFragment = `
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
 precision mediump float;
+#endif
 varying float vFade;
 varying float vDepth;
 varying float vHot;
@@ -667,7 +671,11 @@ void main(){
     gl.attachShader(emitterProgram,pv);
     gl.attachShader(emitterProgram,pf);
     gl.linkProgram(emitterProgram);
-    if(!gl.getProgramParameter(emitterProgram,gl.LINK_STATUS)){setParticleStatus('VFX indisponible : liaison GPU échouée.');return null;}
+    if(!gl.getProgramParameter(emitterProgram,gl.LINK_STATUS)){
+      const info=String(gl.getProgramInfoLog?.(emitterProgram)||'').replace(/[\r\n\t]+/g,' ').slice(0,180);
+      setParticleStatus('VFX indisponible : liaison GPU échouée'+(info?' ('+info+')':'.'));
+      return null;
+    }
     gl.deleteShader(pv);gl.deleteShader(pf);
     const emitterBuffer=gl.createBuffer();
     if(!emitterBuffer){setParticleStatus('VFX indisponible : mémoire graphique insuffisante.');return null;}
