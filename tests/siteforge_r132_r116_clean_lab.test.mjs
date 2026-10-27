@@ -27,12 +27,12 @@ test('R132: isolate sphere without original website ambient decorations',()=>{
   assert.match(core,/webglcontextlost/);
   assert.match(core,/if \(reduceMotion\.matches\) \{stateText/);
 });
-test('R137: isolated lab has one GL renderer and 16 owner-approved sphere controls',()=>{
+test('R137: isolated lab has one GL renderer and 31 owner-approved sphere controls',()=>{
   assert.equal((page.match(/<canvas\b/g)||[]).length,1);
   assert.equal((page.match(/<script\b/g)||[]).length,1);
   assert.match(page,/class="core-r108-stage core-r109-stage"/);
   assert.match(page,/src="\.\.\/\.\.\/assets\/siteforge-r116-sphere-only\.js"/);
-  assert.equal((page.match(/data-sphere-control=/g)||[]).length,16);
+  assert.equal((page.match(/data-sphere-control=/g)||[]).length,31);
   assert.doesNotMatch(page,/siteforge-3d-editor|siteforge-r119|core-r122|siteforge-3d-pulse-geometry|siteforge-3d-sphere-shaders/);
 });
 test('R132: the blank lab remains fail-closed and has an SVG fallback',()=>{
