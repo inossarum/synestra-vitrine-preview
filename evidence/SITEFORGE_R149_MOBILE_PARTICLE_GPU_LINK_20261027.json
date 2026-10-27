@@ -1,0 +1,61 @@
+{
+  "schema": "synestra.siteforge.r149.mobile_webgl_particle_link_error.evidence.v1",
+  "date": "2026-10-27",
+  "mission_id": "SYN_SITEFORGE_R149_MOBILE_VFX_LINK_FAIL_20261027",
+  "owner": "Inos",
+  "input": {
+    "source": "Owner-provided mobile browser screenshot",
+    "observation": "The SiteForge sphere renders but the VFX panel shows 'VFX indisponible : liaison GPU échouée.' with Plasma vivant selected and 100% intensity.",
+    "status": "GPU_LINK_FAIL_VISIBLE_ON_REAL_MOBILE",
+    "screenshot_pixels": "USER_SCREENSHOT_SEEN_NOT_STORED_IN_REPO"
+  },
+  "diagnosis": {
+    "confirmed": "VFX program failed at gl.LINK_STATUS while main sphere program continues to run",
+    "source_inspection": "R148 particle vertex uses #ifdef GL_FRAGMENT_PRECISION_HIGH for highp/mediump default floating point; particle fragment hard-coded mediump. Shared varyings vFade/vHot/vAxis therefore may have incompatible precision on highp-capable mobile devices.",
+    "root_cause_status": "LIKELY_SHADER_PRECISION_MISMATCH_NEEDS_MOBILE_REVALIDATION",
+    "test_gap": "R148 unit fixture getProgramParameter always returned true, so linker failure was never exercised."
+  },
+  "implementation": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_SITEFORGE_R116_CLEAN_LAB_20261027",
+    "tested_sha": "5589551afd7732a1f587739968928f7ba668085e",
+    "shader_blob": "e8f0efe5fe10d196a33311efec9f35961be8aa7e",
+    "test_blob": "8af0d96d28f1520deef95a25a771020f79ba9a6c",
+    "page_blob": "86f252affd215e2055dabf8b7a99d9b91dc9b3a9",
+    "edits": [
+      "Particle fragment precision now matches vertex under GL_FRAGMENT_PRECISION_HIGH and fallback branch.",
+      "VFX linker errors surface a sanitized bounded message from gl.getProgramInfoLog instead of an uninformative status.",
+      "Mock GPU linker failure test added and highp/mediump compatibility negative regression test added.",
+      "Preview tag updated to R149; main sphere behavior retained."
+    ]
+  },
+  "verification": {
+    "Cloudflare_project": "synestra-vitrine-preview",
+    "deployment_id": "c26521dc-ae99-466a-bb87-552a6d94c1f0",
+    "url": "https://c26521dc.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+    "Cloudflare_stages": [
+      "queued:success",
+      "initialize:success",
+      "clone_repo:success",
+      "build:success",
+      "deploy:success"
+    ],
+    "node_tests": 72,
+    "node_pass": 72,
+    "node_fail": 0,
+    "static_export": "PASS",
+    "file_re_reads": "VERIFIED",
+    "real_remote_ios_webgl_shader_link": "NOT_YET_VERIFIED",
+    "standalone_headless_chromium_probe": "TIMED_OUT; NOT A GPU PASS",
+    "actual_particle_visual_acceptance": "PENDING"
+  },
+  "authority": {
+    "production_deployments_enabled": false,
+    "preview_branch_allowlisted": true,
+    "main_changed": false,
+    "production_changed": false,
+    "free_only": true
+  },
+  "rollback": "https://9e056a25.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+  "status": "R149_PREVIEW_DEPLOYED_72_PASS__MOBILE_GPU_LINK_RECHECK_REQUIRED"
+}
