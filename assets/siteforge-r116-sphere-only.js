@@ -1,4 +1,4 @@
-/* SiteForge R143 — configurable energy, coherent calm state, core radius and relief-lit plasma surface. Preserve R140 fixed geomN, R142 source, original eight arcs and preview-only isolation. R116 source blob d78d7222a95fd080a408bba2237dd3b9dda05bd7. */
+/* SiteForge R144 — energy families are visibly distinct, relief has material-specific sculpted shading, hide shell while keeping circulating energy. R140 fixed geomN, R142 material and R116 original eight arcs preserved. */
 (() => {
   'use strict';
   const scene = document.querySelector('.core-r108-stage');
@@ -84,6 +84,7 @@ uniform float sphereAlpha;
 uniform float shellDiffusionRatio;
 uniform float shellThicknessRatio;
 uniform float luminanceRatio;
+uniform float shellVisibilityRatio;
 uniform vec4 surfaceSettings; // type, movement, luminosity, emission
 uniform vec4 flowSettings;    // filament density, flow speed, direction degrees, core radius
 uniform vec4 reliefSettings;  // type, height, scale, roughness
@@ -166,9 +167,9 @@ void main(){
  // Draw the orbit outside, never over the sphere: removes the false equator seam.
  float exteriorFog=exp(-pow(max(d-radius,0.)/(.018+.08*shellDiffusionRatio),2.));
  vec3 outside=backdrop*aura*.07+ringCol*(ring*.34+ringBloom*.025)*spinPulse
-              +rimColor*exteriorFog*shellDiffusionRatio*.10;
+              +rimColor*exteriorFog*shellDiffusionRatio*.10*shellVisibilityRatio;
  float outsideA=clamp(aura*.065+ring*.43+ringBloom*.035
-              +exteriorFog*shellDiffusionRatio*.12,0.,.75);
+              +exteriorFog*shellDiffusionRatio*.12*shellVisibilityRatio,0.,.75);
  if(d>silhouetteRadius){ gl_FragColor=vec4(outside,outsideA); return; }
  // Fixed front-facing geometric normal: rotating it previously swept a
  // light/dark meridian across the sphere and made two hemispheres visible.
@@ -223,42 +224,103 @@ void main(){
  float shimmer=.84+.16*sin(time*1.6+v2*11.);
  // Cooler and warmer currents separate optically; thin dark pockets add depth.
  vec3 fluidTint=mix(primaryColor,secondaryColor,clamp(.38+.62*v2,0.,1.));
- // Each surface-energy family has independent structural and emissive response.
+ // Each energy mode has a distinct MATERIAL PROFILE, not just a tint.
+ // Local density/filament patterns are bounded and continuous on the front hemisphere.
  float energyStrands=(microThreads*.55+glowingVeins*.45)*flowSettings.x;
  vec3 energyTint=mix(rimColor,coreColor,.16);
+ vec3 energyPalette=mix(primaryColor,secondaryColor,.32);
  float energyMask=energyStrands;
- float energyCloud=litCloud;
+ float energyCoverage=litCloud*.14;
+ float energyShadow=gasPocket*.61;
+ float energyScatter=litCloud*.36;
+ float energySurfaceSpec=1.;
+ float shapeFlow=sin(angle*6.+flowN.z*13.-flowClock*1.4+v*5.);
  if(surfaceSettings.x>.5 && surfaceSettings.x<1.5){
-   energyMask=pow(max(.5+.5*sin(filamentPhase*1.8+v2*7.),0.),22.)*flowSettings.x*1.65;
-   energyTint=mix(rimColor,vec3(.72,.95,1.),.42);
+   // ELECTRIC: a near-black substrate with branching needle-sharp discharges.
+   float lightning=sin(filamentPhase*2.3+v2*11.+sin(flowN.y*22.)*3.);
+   energyMask=pow(max(.5+.5*lightning,0.),30.)*flowSettings.x*2.25;
+   energyCoverage=energyMask*.35;
+   energyTint=mix(rimColor,vec3(.78,.97,1.),.60);
+   energyPalette=vec3(.009,.025,.075);
+   energyShadow=.89;
+   energyScatter=.08;
+   energySurfaceSpec=1.8;
  } else if(surfaceSettings.x>1.5 && surfaceSettings.x<2.5){
-   energyMask=(.5+.5*sin(flowN.y*9.+v*4.-flowClock*1.6))*.55*flowSettings.x;
-   energyCloud=.50+.50*litCloud;
+   // LIQUID: glossy laminar flowing bands and smooth specular wakes.
+   float flowing=sin(flowN.y*16.+sin(flowN.x*8.+flowClock)*2.+v*3.-flowClock*2.);
+   energyMask=smoothstep(.20,.92,.5+.5*flowing)*flowSettings.x*.76;
+   energyCoverage=smoothstep(.16,.80,.5+.5*shapeFlow)*.31;
+   energyTint=vec3(.21,.89,.98);
+   energyPalette=mix(primaryColor,vec3(.025,.34,.52),.82);
+   energyShadow=.23;
+   energyScatter=.47;
+   energySurfaceSpec=2.4;
  } else if(surfaceSettings.x>2.5 && surfaceSettings.x<3.5){
-   energyMask=litCloud*.17*flowSettings.x;
-   energyCloud=.64+.36*litCloud;
+   // ION FOG: nebulous clouds with soft distributed blue-violet luminance.
+   energyMask=smoothstep(.33,.77,cloudDensity)*flowSettings.x*.70;
+   energyCoverage=smoothstep(.26,.73,cloudDensity)*.48;
+   energyTint=vec3(.58,.45,1.);
+   energyPalette=mix(primaryColor,vec3(.19,.13,.48),.84);
+   energyShadow=.14;
+   energyScatter=.95;
+   energySurfaceSpec=.32;
  } else if(surfaceSettings.x>3.5 && surfaceSettings.x<4.5){
-   energyMask=(litCloud*.72+microThreads*.28)*flowSettings.x;
-   energyTint=mix(primaryColor,vec3(1.,.27,.035),.82);
+   // SOLAR FUSION: warm rolling convection cells, hot seams, dark pits.
+   float solarCells=abs(sin(flowN.x*12.+v*5.+flowClock)*cos(flowN.y*12.-v2*5.));
+   energyMask=pow(solarCells,3.)*flowSettings.x*1.25;
+   energyCoverage=smoothstep(.32,.79,cloudDensity)*.27;
+   energyTint=vec3(1.,.38,.055);
+   energyPalette=mix(primaryColor,vec3(.48,.083,.014),.91);
+   energyShadow=.68;
+   energyScatter=.64;
+   energySurfaceSpec=.77;
  } else if(surfaceSettings.x>4.5){
-   energyMask=(step(.72,fract(flowN.x*8.+v*.3))*.42+step(.76,fract(flowN.y*7.-v2*.4))*.36)*flowSettings.x;
-   energyTint=mix(rimColor,vec3(.82,.96,1.),.55);
+   // CRYSTAL: angular intersecting facets and hard, orthogonal glowing edges.
+   float facets=abs(fract(flowN.x*8.+v*.25)-.5)+abs(fract(flowN.y*7.-v2*.35)-.5);
+   float facetsEdge=1.-smoothstep(.42,.55,facets);
+   energyMask=facetsEdge*flowSettings.x*1.1;
+   energyCoverage=smoothstep(.55,.84,facets)*.24;
+   energyTint=vec3(.66,.93,1.);
+   energyPalette=mix(primaryColor,vec3(.11,.43,.65),.82);
+   energyShadow=.55;
+   energyScatter=.27;
+   energySurfaceSpec=2.5;
  }
- // Continuous analytic bump shading, computed in surface tangent coordinates.
- // It changes highlight direction, not the globally fixed geomN/sphere terminator.
+ // Relief types change HEIGHT FIELDS, local shading and surface microcontrast.
  float reliefFrequency=mix(4.,28.,clamp(reliefSettings.z*.5,0.,1.));
  float reliefClock=time*.22*reliefDynamics.z;
+ float reliefHeight=.5+.5*sin(flowN.x*reliefFrequency+reliefClock)*cos(flowN.y*reliefFrequency*.83-reliefClock);
  vec2 reliefGrad=vec2(cos(flowN.x*reliefFrequency+reliefClock),cos(flowN.y*reliefFrequency*.83-reliefClock));
- if(reliefSettings.x>.5 && reliefSettings.x<1.5)reliefGrad=vec2(cos(angle*reliefFrequency*.6+v*7.),sin(angle*reliefFrequency*.6+v2*6.));
- else if(reliefSettings.x>1.5 && reliefSettings.x<2.5)reliefGrad=vec2(sign(sin(flowN.x*reliefFrequency+v*4.)),sign(cos(flowN.y*reliefFrequency-v2*4.)));
- else if(reliefSettings.x>2.5 && reliefSettings.x<3.5)reliefGrad=vec2(sin(flowN.y*reliefFrequency+v*10.-reliefClock),cos(flowN.x*reliefFrequency+v2*9.+reliefClock));
- else if(reliefSettings.x>3.5 && reliefSettings.x<4.5)reliefGrad=vec2(step(.55,fract(flowN.x*reliefFrequency))-.5,step(.55,fract(flowN.y*reliefFrequency))-.5)*2.;
- else if(reliefSettings.x>4.5)reliefGrad*=.09;
- vec3 bumpNormal=normalize(geomN+vec3(reliefGrad*.27*reliefSettings.y*reliefDynamics.x,0.));
+ if(reliefSettings.x>.5 && reliefSettings.x<1.5){
+   // VEINS: bright raised striations.
+   float veins=sin(angle*reliefFrequency*.6+v*7.);
+   reliefHeight=pow(max(.5+.5*veins,0.),9.);
+   reliefGrad=vec2(cos(angle*reliefFrequency*.6+v*7.),sin(angle*reliefFrequency*.6+v2*6.));
+ } else if(reliefSettings.x>1.5 && reliefSettings.x<2.5){
+   // CRACKED: dark fractures with hard surrounding plateaus.
+   float fractures=min(abs(sin(flowN.x*reliefFrequency+v*4.)),abs(cos(flowN.y*reliefFrequency-v2*4.)));
+   reliefHeight=smoothstep(.08,.19,fractures);
+   reliefGrad=vec2(sign(sin(flowN.x*reliefFrequency+v*4.)),sign(cos(flowN.y*reliefFrequency-v2*4.)));
+ } else if(reliefSettings.x>2.5 && reliefSettings.x<3.5){
+   // TURBULENT: high-amplitude convoluted rolling folds.
+   reliefHeight=.5+.5*sin(flowN.y*reliefFrequency+v*11.-reliefClock)*cos(flowN.x*reliefFrequency+v2*9.+reliefClock);
+   reliefGrad=vec2(sin(flowN.y*reliefFrequency+v*10.-reliefClock),cos(flowN.x*reliefFrequency+v2*9.+reliefClock));
+ } else if(reliefSettings.x>3.5 && reliefSettings.x<4.5){
+   // CRYSTALLINE: discrete facet planes with angular bevels.
+   reliefHeight=floor((flowN.x+flowN.y*.7+v*.35)*reliefFrequency*.35)*.11;
+   reliefGrad=vec2(step(.55,fract(flowN.x*reliefFrequency))-.5,step(.55,fract(flowN.y*reliefFrequency))-.5)*2.;
+ } else if(reliefSettings.x>4.5){
+   // SMOOTH: essentially no bump, explicit visual contrast to the other modes.
+   reliefHeight=.48+.03*v;
+   reliefGrad*=.02;
+ }
+ float reliefStrength=reliefSettings.y*reliefDynamics.x;
+ float reliefTangentAmplitude=clamp(reliefStrength*.72,0.,1.6);
+ vec3 bumpNormal=normalize(geomN+vec3(reliefGrad*reliefTangentAmplitude,0.));
  float bumpLight=clamp(.46+.54*dot(bumpNormal,normalize(vec3(-.38,.60,.72))),0.,1.);
- float bumpSpec=pow(max(dot(bumpNormal,normalize(vec3(.40,-.25,.88))),0.),mix(45.,7.,clamp(reliefSettings.w*.5,0.,1.)));
-
- // Lighting is computed in screen/front hemisphere space, independent
+ float bumpSpec=pow(max(dot(bumpNormal,normalize(vec3(.40,-.25,.88))),0.),mix(44.,5.,clamp(reliefSettings.w*.5,0.,1.)));
+ float reliefShade=clamp(.27+bumpLight*.63+reliefHeight*.55*reliefStrength,0.,2.0);
+  // Lighting is computed in screen/front hemisphere space, independent
  // of rotating texture coordinates and never based on back-facing normals.
  float light=.32+.68*smoothstep(-.90,.95,dot(geomN,normalize(vec3(-.45,.58,1.))));
  float rim=pow(1.-clamp(geomN.z,0.,1.),2.05);
@@ -276,11 +338,12 @@ void main(){
  base=mix(base,secondaryColor,smoothstep(.33,.82,v)*.42);
  // Dense cloud hollows and illuminated gaseous layers provide depth without
  // introducing a fake inner disc or rotating the surface lighting normal.
- base=mix(base,navy*.36+fluidTint*.30,gasPocket*.61);
- base+=mix(primaryColor*.42,cyan*.72,litCloud)*energyCloud*.36;
+ base=mix(base,navy*.36+fluidTint*.30,gasPocket*energyShadow);
+ base=mix(base,energyPalette,clamp(.58+.12*energyShadow,0.,1.));
+ base+=mix(primaryColor*.42,energyTint*.72,litCloud)*energyScatter*.36;
  base*=mix(.56,1.34,clamp(surfaceSettings.z*.5,0.,1.));
- base*=mix(.76,1.24,bumpLight);
- base+=energyTint*bumpSpec*.25*reliefSettings.y*shineRatio;
+ base*=reliefShade;
+ base+=energyTint*bumpSpec*.39*reliefStrength*shineRatio*energySurfaceSpec;
  base+=mix(primaryColor,secondaryColor,micro)*mineral;
  base*=.82+.18*pow(max(geomN.z,0.),.55);
  base+=cyan*currents*(.045+.19*light);
@@ -289,15 +352,15 @@ void main(){
  // HDR-like emissive strand cores and lower-energy bloom are resolved by the
  // existing tone mapper, preserving color and avoiding white clipping.
  base+=mix(cyan,lavender,clamp(v2*.74,0.,1.))*(curlGlow*.76+microThreads*.10*detailRatio)*shimmer;
- base+=energyTint*(energyMask*.66+energyStrands*.12)*surfaceSettings.w*shimmer;
+ base+=energyTint*(energyMask*1.38+energyCoverage*.46)*surfaceSettings.w*shimmer;
  base+=mix(primaryColor,cyan,.48)*agitation*.12*(eddyA-.5);
- base+=rimColor*rim*(.28+.30*shellOptical)*rimRatio;
+ base+=rimColor*rim*(.28+.30*shellOptical)*rimRatio*shellVisibilityRatio;
  // Stable broad and sharp specular lobes, even at neutral rotation.
  float spec=pow(max(dot(geomN,normalize(vec3(-.38,.55,.92))),0.),12.);
  float specFine=pow(max(dot(geomN,normalize(vec3(.47,-.18,.91))),0.),34.);
  base+=vec3(.88,.96,1.)*(spec*.42+specFine*.28)*shineRatio;
  float topRim=smoothstep(-.2,.8,p.y)*rim;
- base+=rimColor*topRim*.17*rimRatio;
+ base+=rimColor*topRim*.17*rimRatio*shellVisibilityRatio;
  float coreSize=max(flowSettings.w,.003);
  float centralSource=exp(-d*d*115./(coreSize*coreSize));
  float coreBloom=exp(-d*d*8.5/(coreSize*coreSize));
@@ -308,10 +371,10 @@ void main(){
  // drawing an artificial inner hemisphere onto the front surface.
  vec3 wallMaterial=mix(base*.72+secondaryColor*.28,
                        base*.62+rimColor*.38,clamp(light,0.,1.));
- base=mix(base,wallMaterial,shellRim*(.33+.20*(1.-shellDiffuse)));
- base+=rimColor*shellInnerEdge*.10*(1.-shellDiffuse*.45);
+ base=mix(base,wallMaterial,shellRim*(.33+.20*(1.-shellDiffuse))*shellVisibilityRatio);
+ base+=rimColor*shellInnerEdge*.10*(1.-shellDiffuse*.45)*shellVisibilityRatio;
  float shellHaze=exp(-pow((radius-d)/(.06+.04*shellDiffuse),2.));
- base+=mix(rimColor,scatter,.42)*shellHaze*shellDiffuse*.095;
+ base+=mix(rimColor,scatter,.42)*shellHaze*shellDiffuse*.095*shellVisibilityRatio;
  base=(base-vec3(.3))*contrastRatio+vec3(.3);
  float arcA=r111Arc(p,1.,time);
  float arcB=r111Arc(p,2.,time);
@@ -329,7 +392,11 @@ void main(){
  // grazing-angle wall shading, not alpha nor a second interior disk.
  float edgeSoftness=mix(.008,.063,shellDiffuse);
  float shellFade=1.-smoothstep(silhouetteRadius-edgeSoftness,silhouetteRadius-.001,d);
- float alpha=sphereAlpha*shellFade;
+ // At shell visibility 0, transparent dark gaps reveal the background.
+ // Only current filaments, mode-specific clouds and original arcs remain.
+ float dischargeAlpha=clamp((arcA+arcB+arcC+arcD+arcE+arcF+arcG+arcH)*.29,0.,.64);
+ float circulatingEnergyAlpha=clamp((energyMask*.58+energyCoverage*.65+curlGlow*.27)*surfaceSettings.w+dischargeAlpha,0.,.98);
+ float alpha=sphereAlpha*shellFade*mix(circulatingEnergyAlpha,1.,clamp(shellVisibilityRatio,0.,1.));
  // Exposure is independent of nuclear light, specularity and transparency.
  float exposure=pow(max(luminanceRatio,0.),1.45);
  vec3 radiance=max(base,vec3(0.))*exposure;
@@ -376,7 +443,7 @@ void main(){
   const tilt = gl.getUniformLocation(program, 'tilt');
   const parameters = Object.fromEntries([
     'speedRatio','detailRatio','agitationRatio','shineRatio','contrastRatio',
-    'coreRatio','rimRatio','sphereAlpha','shellDiffusionRatio','shellThicknessRatio','luminanceRatio',
+    'coreRatio','rimRatio','sphereAlpha','shellDiffusionRatio','shellThicknessRatio','luminanceRatio','shellVisibilityRatio',
     'surfaceSettings','flowSettings','reliefSettings','reliefDynamics',
     'primaryColor','secondaryColor','coreColor','rimColor'
   ].map(key => [key, gl.getUniformLocation(program, key)]));
@@ -388,7 +455,7 @@ void main(){
       shineRatio:'shine',contrastRatio:'contrast',coreRatio:'coreLight',
       rimRatio:'rimLight',sphereAlpha:'opacity',
       shellDiffusionRatio:'diffusion',shellThicknessRatio:'thickness',
-      luminanceRatio:'luminance'
+      luminanceRatio:'luminance',shellVisibilityRatio:'shellVisibility'
     };
     for (const [name, control] of Object.entries(keys)) gl.uniform1f(parameters[name],numeric(control));
     gl.uniform4fv(parameters.surfaceSettings,new Float32Array([
