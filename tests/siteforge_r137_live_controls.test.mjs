@@ -138,7 +138,7 @@ test('R138: all independent shader controls have shader consumers, not inert uni
    assert.ok(fragment.split(new RegExp('\\b'+name+'\\b')).length>=3,'unused shader parameter '+name);
  }
  assert.doesNotMatch(fragment,/base\+=ringCol\*\(ring\*/);
- assert.match(fragment,/float wallMask=smoothstep\(innerRadius-innerFeather,innerRadius\+innerFeather,d\);/);
+ assert.match(fragment,/float shellRim=smoothstep\(shellStart-shellFeather,shellStart\+shellFeather,grazing\);/);
  assert.match(fragment,/smoothstep\(-\.72,\.84/);
  assert.match(js,/scheduleDraw\(\)/);
 });
@@ -179,21 +179,48 @@ test('R138: every slider or color picker changes a distinct GPU uniform or the z
  assert.equal(fx.u1.get('shellThicknessRatio'),.45);
 });
 
-test('R139: shell has a moving visible inner contour, not opacity-linked thickness',()=>{
- const fragment=js.slice(js.indexOf('void main(){'),js.indexOf('`;',js.indexOf('void main(){')));
+test('R140: normals driving light stay fixed while only texture coordinates rotate',()=>{
+ const fragment=js.match(/const fragment = `([\s\S]*?)`;/)?.[1]??'';
  for(const signature of [
-   'float innerRadius=radius-shellDepth;',
-   'float wallMask=smoothstep(innerRadius-innerFeather,innerRadius+innerFeather,d);',
-   'base=mix(base,wallMaterial*wallIllum,wallMask',
+   'vec3 geomN=vec3(p,sqrt(max(radius*radius-dot(p,p),0.)))/radius;',
+   'vec3 n=turn3(geomN,tilt+vec2(',
+   'float light=.32+.68*smoothstep(-.90,.95,dot(geomN,normalize(',
+   'float rim=pow(1.-clamp(geomN.z,0.,1.),2.05);',
+   'float spec=pow(max(dot(geomN,normalize(',
+   'float specFine=pow(max(dot(geomN,normalize('
+ ]) assert.ok(fragment.includes(signature),'missing front normal isolation: '+signature);
+ assert.doesNotMatch(fragment,/dot\(n,normalize\(/);
+ assert.doesNotMatch(fragment,/pow\(1\.-max\(n\.z/);
+ assert.match(js,/new ResizeObserver\(\(\)=>scheduleDraw\(\)\)/);
+});
+test('R140: thickness affects only a smooth rim band and never cuts the front-facing sphere',()=>{
+ const fragment=js.match(/const fragment = `([\s\S]*?)`;/)?.[1]??'';
+ for(const signature of [
+   'float grazing=1.-clamp(geomN.z,0.,1.);',
+   'float shellStart=mix(.98,.32,clamp(shellThicknessRatio,0.,1.));',
+   'float shellRim=smoothstep(shellStart-shellFeather,shellStart+shellFeather,grazing);',
+   'base=mix(base,wallMaterial,shellRim*(',
    'float alpha=sphereAlpha*shellFade;',
-   'float exposure=pow(max(luminanceRatio,0.),1.45);',
-   'vec3 toneMapped=vec3(1.)-exp(-radiance*1.14);'
- ]) assert.ok(fragment.includes(signature),'missing geometric/exposure effect: '+signature);
- assert.ok(!fragment.includes('float alpha=sphereAlpha*shellFade*mix('));
- assert.ok(!fragment.includes('float alpha=sphereAlpha*shellFade*shellOptical'));
- const r=.69;
- const thin=r-.012, thick=r-.31;
- assert.ok(thin-thick>.28,'inner boundary must move by perceptible distance');
+   'float exposure=pow(max(luminanceRatio,0.),1.45);'
+ ]) assert.ok(fragment.includes(signature),'missing smooth shell rim: '+signature);
+ assert.doesNotMatch(fragment,/wallMask|innerRadius|innerShadow|innerEdge/);
+ const smooth=(a,b,x)=>{
+   const t=Math.max(0,Math.min(1,(x-a)/(b-a)));
+   return t*t*(3-2*t);
+ };
+ const band=(radiusFraction, thickness,diffusion)=>{
+   const z=Math.sqrt(Math.max(0,1-radiusFraction*radiusFraction));
+   const grazing=1-z;
+   const start=.98+(.32-.98)*thickness;
+   const feather=.025+(.14-.025)*diffusion;
+   return smooth(start-feather,start+feather,grazing);
+ };
+ for(const thickness of [0,.45,1]){
+   assert.equal(band(0,thickness,.65),0,'no interior disc allowed');
+   assert.equal(band(.4,thickness,.65),0,'central hemisphere unchanged by thickness');
+ }
+ assert.ok(band(.93,1,.65)>band(.93,0,.65)+.4,'wide shell band must be visible near rim');
+ assert.ok(band(.93,.45,.65)<band(.93,1,.65),'thickness must broaden rim band');
 });
 test('R139: luminance can darken the whole sphere and brighten all radiance',()=>{
  const f=buildFixture();f.next(40);
