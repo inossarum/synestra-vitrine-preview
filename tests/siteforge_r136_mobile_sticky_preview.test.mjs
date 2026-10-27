@@ -12,6 +12,6 @@ test('the renderer and initial lab baseline remain single-instance',()=>{
  assert.equal((html.match(/<canvas /g)||[]).length,1);
  assert.equal((html.match(/<script src=/g)||[]).length,1);
  assert.match(html,/siteforge-r116-sphere-only\.js/);
- assert.equal((html.match(/data-sphere-control=/g)||[]).length,16);
+ assert.equal((html.match(/data-sphere-control=/g)||[]).length,31);
  assert.match(html,/<form class="lab-controls"/);
 });
