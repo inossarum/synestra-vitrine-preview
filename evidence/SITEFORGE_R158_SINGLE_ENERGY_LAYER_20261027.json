@@ -1,0 +1,63 @@
+{
+  "schema": "synestra.siteforge.r158.clutter_reduction.evidence.v1",
+  "date": "2026-10-27",
+  "mission_id": "SYN_SITEFORGE_R158_SINGLE_COHERENT_ENERGY_LAYER_20261027",
+  "user_input": "Screenshot: cluttered blue particle starfield obscuring swirls and white core; too much visually overlapping",
+  "changes": [
+    "Removed layered obsolete electrical/vortex/fusion additions from flow material; one selected material is authoritative",
+    "De-emphasized redundant shell point layer and stopped drawing it",
+    "Stopped redundant nucleus point emitter; raymarched core remains in volume",
+    "Arcs drawn only when both intensity and density >0",
+    "All existing 18 controls, JSON export, selected energy materials, original core and palette preserved"
+  ],
+  "source": {
+    "commit": "3f88542bb8a28c87219eea9b89aeab8df8994ad7",
+    "branch": "task/SYN_SITEFORGE_R116_CLEAN_LAB_20261027",
+    "repo": "inossarum/synestra-vitrine-preview"
+  },
+  "build": {
+    "deployment_id": "7d9018b8-c872-40e6-8427-0606d33e7550",
+    "preview": "https://7d9018b8.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+    "build": "success",
+    "deploy": "success",
+    "tests": 78,
+    "pass": 78,
+    "fail": 0,
+    "static_export": "PASS"
+  },
+  "real_browser": {
+    "runtime": "Cloudflare Browser Rendering real Chromium mobile viewport 390x844",
+    "input": {
+      "particlePreset": 4,
+      "arcIntensity": 0,
+      "arcDensity": 0,
+      "flowType": 0,
+      "flowStructure": 100,
+      "opacity": 9
+    },
+    "draws_first_four": [
+      [
+        4,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        4,
+        6
+      ]
+    ],
+    "meaning": "Only full-screen TRIANGLES; no gl.POINTS for shell/core/arcs/additional particles",
+    "status": "Nouvelle sphère plasma WebGL active.",
+    "errors": []
+  },
+  "limitations": "Full-frame screenshot aesthetic compared with owner target and Safari performance not yet validated",
+  "rollback": "https://5f56302f.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+  "status": "R158_PREVIEW_DEPLOYED_REAL_GPU_NO_OVERLAY_DRAW_78_PASS"
+}
