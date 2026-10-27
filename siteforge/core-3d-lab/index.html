@@ -66,15 +66,20 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 <canvas class="core-r109-canvas" width="960" height="570" aria-hidden="true"></canvas>
 <svg class="core-r108-art" viewBox="0 0 640 410" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
 <defs>
-<radialGradient id="r108-aura"><stop offset="0" stop-color="#3c92ee" stop-opacity=".29"/><stop offset=".55" stop-color="#4340af" stop-opacity=".10"/><stop offset="1" stop-color="#111a2a" stop-opacity="0"/></radialGradient>
-<radialGradient id="r108-plasma" cx=".34" cy=".25" r=".8"><stop offset="0" stop-color="#ffffff"/><stop offset=".14" stop-color="#c0ffff"/><stop offset=".36" stop-color="#51dfff"/><stop offset=".65" stop-color="#395bce"/><stop offset=".88" stop-color="#53318d"/><stop offset="1" stop-color="#08142e"/></radialGradient>
-<filter id="r108-halo" x="-75%" y="-75%" width="250%" height="250%"><feGaussianBlur stdDeviation="18"/></filter>
+<radialGradient id="sf152-aura"><stop offset="0" stop-color="#51dfff" stop-opacity=".37"/><stop offset=".42" stop-color="#395bce" stop-opacity=".16"/><stop offset="1" stop-color="#08142e" stop-opacity="0"/></radialGradient>
+<radialGradient id="sf152-plasma" cx=".38" cy=".34" r=".78"><stop offset="0" stop-color="#ffffff"/><stop offset=".12" stop-color="#c0ffff"/><stop offset=".34" stop-color="#51dfff"/><stop offset=".64" stop-color="#395bce"/><stop offset=".85" stop-color="#53318d"/><stop offset="1" stop-color="#08142e"/></radialGradient>
+<filter id="sf152-glow" x="-75%" y="-75%" width="250%" height="250%"><feGaussianBlur stdDeviation="16"/></filter>
 </defs>
-<circle cx="320" cy="189" r="177" fill="url(#r108-aura)"/>
-<circle cx="320" cy="189" r="103" fill="#31bdeb" opacity=".18" filter="url(#r108-halo)"/>
-<circle cx="320" cy="189" r="86" fill="url(#r108-plasma)" stroke="#9beaff" stroke-width="1.25"/>
-<path d="M267 150C287 125 318 121 339 132" stroke="#f2ffff" stroke-width="3" opacity=".56" fill="none" stroke-linecap="round"/>
-<circle cx="289" cy="149" r="13" fill="#f5ffff" opacity=".23" filter="url(#r108-halo)"/>
+<circle cx="320" cy="191" r="164" fill="url(#sf152-aura)"/>
+<circle cx="320" cy="191" r="95" fill="#51dfff" opacity=".23" filter="url(#sf152-glow)"/>
+<circle cx="320" cy="191" r="87" fill="url(#sf152-plasma)"/>
+<g fill="none" stroke-linecap="round">
+<path d="M274 151 Q295 130 315 150 T357 165 T381 202" stroke="#b6fcff" stroke-width="2.2" opacity=".72"/>
+<path d="M258 194 Q283 214 298 192 T333 171 T371 192" stroke="#89e9ff" stroke-width="1.9" opacity=".66"/>
+<path d="M310 244 Q329 225 345 238 T373 223" stroke="#e6ffff" stroke-width="1.8" opacity=".56"/>
+<path d="M288 176 L302 185 L312 169 L328 187 L341 180" stroke="#ffffff" stroke-width="1.5" opacity=".85"/>
+</g>
+<circle cx="305" cy="174" r="17" fill="#e5ffff" opacity=".27" filter="url(#sf152-glow)"/>
 </svg>
 </div>
 <form class="lab-controls" aria-label="Création de la nouvelle sphère plasma VFX" autocomplete="off">
