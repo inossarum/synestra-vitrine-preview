@@ -1597,8 +1597,8 @@ body>header,body>main,body>footer{position:relative;z-index:1}
         </div>
       </div>
 
-      <div class="system-stage core-r108-stage core-r109-stage" role="group" aria-label="Core Synestra : un noyau d'énergie stylisé, avec trois liens vers les produits. Animation purement illustrative.">
-        <div class="core-r108-top"><span>CORE / SYNESTRA</span><span>ÉNERGIE CONCEPTUELLE</span></div>
+      <div class="system-stage core-r108-stage core-r109-stage" role="group" aria-label="Prototype énergétique Synestra : courants violets et verts autour d'un noyau lumineux, avec trois liens vers les produits.">
+        <div class="core-r108-top"><span>CORE / SYNESTRA</span><span>PROTOTYPE / 01</span></div>
         <canvas class="core-r109-canvas" aria-hidden="true" width="960" height="570"></canvas>
         <div class="synestra-core-prototype-controls" hidden aria-hidden="true">
 <input type="hidden" data-sphere-control="flowType" data-default="0" value="0">
@@ -1623,23 +1623,37 @@ body>header,body>main,body>footer{position:relative;z-index:1}
         <span data-render-status hidden></span><span data-vfx-status hidden></span>
         <svg class="core-r108-art" viewBox="0 0 640 410" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
           <defs>
-            <radialGradient id="r108-aura"><stop offset="0" stop-color="#3c92ee" stop-opacity=".29"/><stop offset=".55" stop-color="#4340af" stop-opacity=".10"/><stop offset="1" stop-color="#111a2a" stop-opacity="0"/></radialGradient>
-            <radialGradient id="r108-plasma" cx=".34" cy=".25" r=".8"><stop offset="0" stop-color="#ffffff"/><stop offset=".14" stop-color="#c0ffff"/><stop offset=".36" stop-color="#51dfff"/><stop offset=".65" stop-color="#395bce"/><stop offset=".88" stop-color="#53318d"/><stop offset="1" stop-color="#08142e"/></radialGradient>
-            <linearGradient id="r108-arc" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a68dff" stop-opacity=".15"/><stop offset=".45" stop-color="#98eaff" stop-opacity=".9"/><stop offset="1" stop-color="#3dd5ed" stop-opacity=".12"/></linearGradient>
-            <filter id="r108-halo" x="-75%" y="-75%" width="250%" height="250%"><feGaussianBlur stdDeviation="18"/></filter>
+            <linearGradient id="syn-r165-vein" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#53318d" stop-opacity=".72"/>
+              <stop offset=".45" stop-color="#a4a0e8" stop-opacity=".9"/>
+              <stop offset=".7" stop-color="#69dcb4" stop-opacity=".82"/>
+              <stop offset="1" stop-color="#53318d" stop-opacity=".18"/>
+            </linearGradient>
+            <radialGradient id="syn-r165-core">
+              <stop offset="0" stop-color="#eaffff"/>
+              <stop offset=".3" stop-color="#b9fce2" stop-opacity=".95"/>
+              <stop offset=".65" stop-color="#69dcb4" stop-opacity=".4"/>
+              <stop offset="1" stop-color="#53318d" stop-opacity="0"/>
+            </radialGradient>
+            <filter id="syn-r165-soft" x="-70%" y="-70%" width="240%" height="240%"><feGaussianBlur stdDeviation="6"/></filter>
           </defs>
-          <circle cx="320" cy="189" r="177" fill="url(#r108-aura)"/>
-          <circle cx="320" cy="189" r="103" fill="#31bdeb" opacity=".18" filter="url(#r108-halo)"/>
-          <g class="core-r108-orbit" fill="none" stroke="url(#r108-arc)" stroke-linecap="round">
-            <ellipse cx="320" cy="189" rx="164" ry="88" transform="rotate(-28 320 189)" stroke-width="1.8" stroke-dasharray="265 68"/>
+          <g class="syn-r165-currents" fill="none" stroke="url(#syn-r165-vein)" stroke-linecap="round">
+            <g id="syn-r165-strands" opacity=".88">
+              <path d="M319 189 C292 168 276 128 244 115 S197 112 181 86" stroke-width="6"/>
+              <path d="M317 189 C291 174 263 153 223 156 S168 138 161 120" stroke-width="3.5" opacity=".58"/>
+              <path d="M319 187 C349 156 376 143 409 114 S453 100 471 83" stroke-width="7"/>
+              <path d="M323 188 C354 172 398 166 438 178 S474 178 485 169" stroke-width="3" opacity=".67"/>
+              <path d="M321 192 C350 216 382 223 420 253 S465 277 477 291" stroke-width="6"/>
+              <path d="M323 192 C351 208 366 251 387 285 S406 328 406 346" stroke-width="3.5" opacity=".58"/>
+              <path d="M317 191 C290 220 261 245 232 283 S208 311 192 330" stroke-width="7"/>
+              <path d="M316 188 C282 191 253 200 222 219 S183 228 169 242" stroke-width="4" opacity=".59"/>
+              <path d="M319 188 C320 155 310 132 292 99 S281 73 286 60" stroke-width="3" opacity=".45"/>
+              <path d="M319 192 C322 228 313 263 308 300 S299 344 284 356" stroke-width="4" opacity=".56"/>
+            </g>
+            <use href="#syn-r165-strands" opacity=".38" filter="url(#syn-r165-soft)"/>
           </g>
-          <circle class="core-r108-heart" cx="320" cy="189" r="86" fill="url(#r108-plasma)" stroke="#9beaff" stroke-width="1.25"/>
-          <path d="M267 150C287 125 318 121 339 132" stroke="#f2ffff" stroke-width="3" opacity=".56" fill="none" stroke-linecap="round"/>
-          <circle cx="289" cy="149" r="13" fill="#f5ffff" opacity=".23" filter="url(#r108-halo)"/>
-          <g fill="#c7f7ff" opacity=".76">
-            <circle cx="164" cy="173" r="2"/><circle cx="414" cy="77" r="1.8"/>
-            <circle cx="470" cy="235" r="2"/><circle cx="253" cy="312" r="1.7"/>
-          </g>
+          <circle cx="319" cy="189" r="23" fill="url(#syn-r165-core)"/>
+          <circle cx="319" cy="189" r="5" fill="#eaffff" opacity=".97"/>
         </svg>
         <div class="core-tools-orbit" aria-hidden="true">
           <div class="core-tool-satellite"><span>Connect</span></div>

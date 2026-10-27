@@ -1,0 +1,66 @@
+{
+  "schema": "synestra.siteforge.r165.first_prototype_fallback.v1",
+  "date": "2026-10-27",
+  "mission_id": "SYN_SITEFORGE_R165_FIRST_PROTOTYPE_FALLBACK_20261027",
+  "objective": "Normalize the vitrine Core's non-WebGL / reduced-motion fallback with approved Synestra green/purple plasma and first-prototype labeling; preserve R164 live WebGL and old displayed diameter.",
+  "base_repo": "inossarum/synestra-vitrine-preview",
+  "base_sha": "69bfdba281af4a4ace6c21dea17f555ec4743c4e",
+  "target_branch": "task/SYN_SITEFORGE_R116_CLEAN_LAB_20261027",
+  "visual_delta": {
+    "new_label": "PROTOTYPE / 01",
+    "removed_fallback": "old opaque/core-r108-heart spherical SVG, orbit ellipse, blue sphere",
+    "new_fallback": "borderless green-violet filament SVG with illuminated core; no animation",
+    "live_webgl_shader": "unchanged",
+    "display_diameter": "CSS matrix(0.49,0,0,0.49,0,0), unchanged",
+    "color_refs": [
+      "#53318d",
+      "#69dcb4",
+      "#eaffff"
+    ],
+    "site_navigation": "SiteForge/Connect/Bridge unchanged"
+  },
+  "tests": {
+    "failure_first": {
+      "suite": "tests/siteforge_r165_hero_fallback.test.mjs",
+      "result": "EXPECTED_FAIL on R164"
+    },
+    "node_contract": {
+      "command": "node --test tests/site_contract.test.mjs",
+      "tests": 68,
+      "pass": 68,
+      "fail": 0,
+      "status": "PASS"
+    },
+    "real_chrome_webgl": {
+      "file": "tests/siteforge_r164_home_webgl_qa.mjs",
+      "desktop": "PASS",
+      "mobile": "PASS",
+      "webgl_error": 0,
+      "canvas_count": 1,
+      "json_parameters": 18,
+      "scale": 0.49
+    },
+    "real_chrome_reduced_motion": {
+      "file": "tests/siteforge_r165_reduced_motion_browser_qa.mjs",
+      "desktop": "PASS",
+      "mobile": "PASS",
+      "svg_fallback_visible": true,
+      "old_sphere": false,
+      "webgl_animation_ready": false
+    },
+    "artifacts": [
+      "r165-fallback-desktop.png",
+      "r165-fallback-mobile.png"
+    ],
+    "external_access": "NOT_PROVEN",
+    "hardware_gpu_fps": "NOT_MEASURED"
+  },
+  "safety": {
+    "production_deployment": false,
+    "main_branch_untouched": true,
+    "cloudflare_denied_this_turn": "NO_RETRY",
+    "one_webgl_engine": true
+  },
+  "rollback_sha": "69bfdba281af4a4ace6c21dea17f555ec4743c4e",
+  "state": "LOCAL_E2E_PASS_PENDING_GIT_AND_CLOUDFLARE_PREVIEW"
+}
