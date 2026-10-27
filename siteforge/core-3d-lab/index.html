@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex,nofollow">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
-<title>SiteForge — Plasma Studio R153</title>
+<title>SiteForge — Core plasma 3D R154</title>
 <style>
 :root{color-scheme:dark;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#050a14;color:#e7f4ff}
 *{box-sizing:border-box}
@@ -15,9 +15,9 @@ main{width:min(100%,1240px);margin:0 auto;display:grid;grid-template-columns:min
 h1{grid-column:1/-1;font-size:clamp(1.15rem,2.4vw,1.5rem);font-weight:650;letter-spacing:.01em;margin:0}
 p{color:#9db3c8;font-size:.85rem;line-height:1.5;margin:13px 0 0}.lab-footer{grid-column:1/-1}
 .core-r108-stage{position:sticky;top:16px;isolation:isolate;overflow:hidden;min-width:0;height:clamp(395px,65svh,650px);border:1px solid rgba(129,186,231,.23);border-radius:23px;background:radial-gradient(ellipse 55% 60% at 50% 36%,rgba(33,62,119,.18),transparent 84%),linear-gradient(145deg,#0b1527,#050a14);box-shadow:0 30px 65px rgba(0,4,18,.29),inset 0 1px rgba(226,245,255,.08)}
-.core-r109-canvas{position:absolute;top:0;left:0;z-index:2;display:block;width:100%;height:100%;transform:scale(calc(.49 * var(--sphere-zoom,1)));transform-origin:center center;opacity:0;pointer-events:none;transition:opacity .5s ease}
+.core-r109-canvas{position:absolute;top:0;left:0;z-index:2;display:block;width:100%;height:100%;transform:scale(calc(.92 * var(--sphere-zoom,1)));transform-origin:center center;opacity:0;pointer-events:none;transition:opacity .5s ease}
 .core-r109-stage[data-core-ready="true"] .core-r109-canvas{opacity:1}
-.core-r108-art{opacity:var(--fallback-opacity,1);position:absolute;left:50%;top:5%;transform:translateX(-50%) scale(calc(.49 * var(--sphere-zoom,1)));transform-origin:center center;width:min(100%,760px);height:350px;overflow:visible;pointer-events:none;transition:opacity .35s ease}
+.core-r108-art{opacity:var(--fallback-opacity,1);position:absolute;left:50%;top:5%;transform:translateX(-50%) scale(calc(.92 * var(--sphere-zoom,1)));transform-origin:center center;width:min(100%,760px);height:350px;overflow:visible;pointer-events:none;transition:opacity .35s ease}
 .core-r109-stage[data-core-ready="true"] .core-r108-art{opacity:0}
 /* One GPU canvas. The whole preview stays visible while the user edits sliders.
    Colors are input type=color, not non-functional colored range controls. */
@@ -51,8 +51,8 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
  .core-r108-stage{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;
   height:clamp(190px,34svh,290px);border-radius:16px;
   box-shadow:0 12px 30px rgba(0,4,18,.78),0 0 0 8px #050a14}
- .core-r109-canvas{height:100%;transform:scale(calc(.8 * var(--sphere-zoom,1)))}
- .core-r108-art{top:50%;transform:translate(-50%,-50%) scale(calc(.8 * var(--sphere-zoom,1)))}
+ .core-r109-canvas{height:100%;transform:scale(calc(1.22 * var(--sphere-zoom,1)))}
+ .core-r108-art{top:50%;transform:translate(-50%,-50%) scale(calc(1.22 * var(--sphere-zoom,1)))}
 }
 @media(prefers-reduced-motion:reduce){.core-r109-canvas,.core-r108-art{transition:none!important}}
 .vfx-advanced{grid-column:1/-1;border-top:1px solid #335a76;margin-top:10px;padding-top:8px}.vfx-advanced summary{cursor:pointer;min-height:42px;padding:10px 6px;color:#bfeeff;font-weight:600;list-style-position:inside}.vfx-advanced[open] summary{margin-bottom:12px}.vfx-advanced .control-group{margin:10px 0 16px}.vfx-advanced summary:focus-visible{outline:2px solid #7ce8fa;outline-offset:3px}
@@ -83,8 +83,8 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 </svg>
 </div>
 <form class="lab-controls" aria-label="Création de la nouvelle sphère plasma VFX" autocomplete="off">
-<div class="panel-head"><h2>Plasma Studio</h2><span class="preview-state">R153 · PLASMA VIVANT</span></div>
-<p class="help">Quatre signatures réellement distinctes : filaments plasma, décharges électriques, tourbillons ioniques et fusion du noyau. Même moteur VFX, aucune ancienne matière.</p>
+<div class="panel-head"><h2>Plasma Studio</h2><span class="preview-state">R154 · VOLUME 3D</span></div>
+<p class="help">Nouveau volume plasma 3D : vortex cyan-violet en profondeur, courants spiralés et noyau blanc-bleu compact, inspirés du visuel de référence. Les réglages restent simples.</p>
 <fieldset class="control-group"><legend>✨ Création rapide</legend>
 <div class="control-row"><label class="control-label" for="sf-particlePreset"><span>Style du plasma</span></label>
 <select id="sf-particlePreset" data-sphere-control="particlePreset" data-default="0"><option value="0">Plasma originel</option><option value="1">Plasma électrique</option><option value="2">Vortex ionique</option><option value="3">Fusion du noyau</option><option value="4">Plasma pur, sans particules supplémentaires</option></select></div>
@@ -120,7 +120,7 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 <p class="help" data-render-status role="status" aria-live="polite">Préparation du moteur WebGL…</p>
 <p class="help">Atelier de prévisualisation isolé. Aucun effet sur le site public ni Visual Observer.</p>
 </form>
-<p class="lab-footer">Moteur VFX R153 · plasma volumique et éclairs distribués · aperçu expérimental SiteForge. Sur téléphone, le rendu reste fixé en haut pendant le défilement des réglages.</p>
+<p class="lab-footer">Moteur R154 · ray marching plasma 3D, vortex profond et éclairs intégrés · aperçu expérimental SiteForge. Sur téléphone, le rendu reste fixé en haut pendant le défilement des réglages.</p>
 </main>
 <script src="../../assets/siteforge-r116-sphere-only.js" defer></script>
 </body>
