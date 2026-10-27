@@ -1,15 +1,42 @@
-/* SiteForge R132 — R116 sphere only. Original source: Git blob d78d7222a95fd080a408bba2237dd3b9dda05bd7 (commit b602b60755bd31e3645045116ef2f0946c48c712). Global ambient decoration intentionally excluded; GPU shader, animation, sizing and failure handling unchanged. */
+/* SiteForge R137 — original R116 plasma sphere, with owner-requested uniform controls and refined native-resolution WebGL shading. No new model, metallic rings or Visual Observer backend. R116 source: d78d7222a95fd080a408bba2237dd3b9dda05bd7. */
 (() => {
   'use strict';
   const scene = document.querySelector('.core-r108-stage');
   const canvas = scene?.querySelector('.core-r109-canvas');
   if (!scene || !canvas) return;
+  const controls = Object.fromEntries(
+    [...document.querySelectorAll('[data-sphere-control]')].map(el => [el.dataset.sphereControl, el])
+  );
+  const defaults = Object.fromEntries(Object.entries(controls).map(([key, el]) => [key, el.defaultValue]));
+  const numeric = key => Number(controls[key]?.value ?? defaults[key]) / 100;
+  const color = key => {
+    const value = controls[key]?.value || defaults[key] || '#ffffff';
+    return [1,3,5].map(offset => parseInt(value.slice(offset, offset+2), 16) / 255);
+  };
+  const syncUI = () => {
+    for (const [key, el] of Object.entries(controls)) {
+      const out = document.querySelector('[data-sphere-value="'+key+'"]');
+      if (out) out.textContent = el.type === 'color' ? el.value.toUpperCase() : el.value + ' %';
+    }
+    scene.style.setProperty('--sphere-zoom', String(numeric('diameter')));
+    scene.style.opacity = '1'; // Opacity is restricted to sphere pixels, not the preview panel.
+  };
+  const panel = document.querySelector('.lab-controls');
+  panel?.addEventListener('input', event => {
+    if (event.target?.hasAttribute('data-sphere-control')) syncUI();
+  });
+  panel?.addEventListener('reset', event => {
+    event.preventDefault();
+    for (const [key, el] of Object.entries(controls)) el.value = defaults[key];
+    syncUI();
+  });
+  syncUI();
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   if (reduceMotion.matches) return; // Static SVG fallback; do not initialise WebGL.
   const gl = canvas.getContext('webgl', {
     alpha: true, antialias: false, depth: false, stencil: false,
     premultipliedAlpha: false, preserveDrawingBuffer: false,
-    powerPreference: 'low-power'
+    powerPreference: 'high-performance'
   });
   if (!gl) return;
 
@@ -30,6 +57,18 @@ varying vec2 uv;
 uniform vec2 resolution;
 uniform vec2 tilt;
 uniform float time;
+uniform float speedRatio;
+uniform float detailRatio;
+uniform float agitationRatio;
+uniform float shineRatio;
+uniform float contrastRatio;
+uniform float coreRatio;
+uniform float rimRatio;
+uniform float sphereAlpha;
+uniform vec3 primaryColor;
+uniform vec3 secondaryColor;
+uniform vec3 coreColor;
+uniform vec3 rimColor;
 float hash3(vec3 p) {
   p=fract(p*.1031);
   p+=dot(p,p.yzx+33.33);
@@ -79,7 +118,8 @@ void main(){
  p.y+=.08;
  float radius=.69;
  float d=length(p);
- float t=time*.28;
+ float t=time*.28*speedRatio;
+ float drift=time*.28*agitationRatio;
  float ellipseAngle=-.30;
  float ca=cos(ellipseAngle),sa=sin(ellipseAngle);
  vec2 q=vec2(p.x*ca-p.y*sa,p.x*sa+p.y*ca);
@@ -99,28 +139,34 @@ void main(){
  float outsideA=clamp(aura*.065+ring*.43+ringBloom*.035,0.,.65);
  if(d>radius){ gl_FragColor=vec4(outside,outsideA); return; }
  vec3 n=vec3(p,sqrt(max(radius*radius-dot(p,p),0.)))/radius;
- n=turn3(n,tilt+vec2(sin(t*.23)*.15,cos(t*.18)*.08));
- float v=noise3(n*3.7+vec3(t*.65,t*.22,-t*.25));
- float v2=noise3(n*7.5+vec3(t*.3,-t*.6,t*.47));
+ n=turn3(n,tilt+vec2(t*.55+sin(t*.23)*.15,cos(t*.18)*.08));
+ float v=noise3(n*3.7+vec3(drift*.65,drift*.22,-drift*.25));
+ float v2=noise3(n*7.5+vec3(drift*.3,-drift*.6,drift*.47));
+ // Fine-scale volumetric striations add depth without changing R116 silhouettes.
+ float micro=noise3(n*(12.+detailRatio*9.)+vec3(drift*.26,-drift*.16,drift*.11));
+ float mineral=(micro-.5)*.17*detailRatio;
  float angle=atan(n.y,n.x);
- float filament=sin(angle*5.+n.z*9.5+v*5.0-t*2.0);
+ float filament=sin(angle*5.+n.z*9.5+v*5.0-drift*2.0);
  float currents=pow(max(0.,filament*.5+.5),7.0);
- float secondary=pow(max(0.,sin(angle*8.0-n.z*11.0+v2*4.+t)*.5+.5),12.);
+ float secondary=pow(max(0.,sin(angle*8.0-n.z*11.0+v2*4.+drift)*.5+.5),12.);
  float light=max(dot(n,normalize(vec3(-.45,.58,1.))),0.);
  float rim=pow(1.-max(n.z,0.),2.2);
  float soft=clamp(.18+v*.63+light*.55,0.,1.);
- vec3 base=mix(navy,vec3(.035,.17,.39),soft);
- base=mix(base,vec3(.12,.09,.30),smoothstep(.52,.88,v)*.17);
+ vec3 base=mix(navy,primaryColor,soft);
+ base=mix(base,secondaryColor,smoothstep(.52,.88,v)*.17);
+ base+=mix(primaryColor,secondaryColor,micro)*mineral;
+ base*=.82+.18*pow(max(n.z,0.),.55);
  base+=cyan*currents*(.045+.19*light);
  base+=lavender*secondary*(.035+.10*v);
- base+=cyan*rim*.54;
+ base+=rimColor*rim*.54*rimRatio;
  float spec=pow(max(dot(reflect(normalize(vec3(.53,-.71,-1.)),n),vec3(0.,0.,1.)),0.),24.);
- base+=vec3(.88,.96,1.)*spec*.29;
- base+=vec3(.70,.83,.95)*pow(max(dot(n,normalize(vec3(-.28,.46,1.))),0.),22.)*.11;
+ base+=vec3(.88,.96,1.)*spec*.29*shineRatio;
+ base+=vec3(.70,.83,.95)*pow(max(dot(n,normalize(vec3(-.28,.46,1.))),0.),22.)*.11*shineRatio;
  float topRim=smoothstep(-.2,.8,p.y)*rim;
- base+=vec3(.09,.22,.35)*topRim;
+ base+=rimColor*topRim*.18*rimRatio;
  float centralSource=exp(-d*d*115.);
- base+=vec3(.72,.93,1.)*centralSource*.31;
+ base+=coreColor*centralSource*.31*coreRatio;
+ base=(base-vec3(.3))*contrastRatio+vec3(.3);
  float arcA=r111Arc(p,1.,time);
  float arcB=r111Arc(p,2.,time);
  float arcC=r111Arc(p,3.,time);
@@ -134,7 +180,7 @@ void main(){
  base+=vec3(.49,.96,.97)*arcD*.92+vec3(.83,.94,1.)*arcE*.84;
  base+=vec3(.46,.88,1.)*arcF*.91+vec3(.70,.59,1.)*arcG*.87+vec3(.90,.98,1.)*arcH*.89;
  float shellFade=1.-smoothstep(radius*.977,radius,d);
- float alpha=clamp(.96+rim*.04,0.,1.)*shellFade;
+ float alpha=clamp(.96+rim*.04,0.,1.)*shellFade*sphereAlpha;
  float orbital=ringFront*spinPulse;
  base+=ringCol*(ring*.32+ringBloom*.018)*orbital;
  gl_FragColor=vec4(clamp(base,0.,1.),alpha);
@@ -176,7 +222,23 @@ void main(){
   const res = gl.getUniformLocation(program, 'resolution');
   const time = gl.getUniformLocation(program, 'time');
   const tilt = gl.getUniformLocation(program, 'tilt');
-  if (res === null || time === null || tilt === null) return;
+  const parameters = Object.fromEntries([
+    'speedRatio','detailRatio','agitationRatio','shineRatio','contrastRatio',
+    'coreRatio','rimRatio','sphereAlpha','primaryColor','secondaryColor','coreColor','rimColor'
+  ].map(key => [key, gl.getUniformLocation(program, key)]));
+  if (res === null || time === null || tilt === null ||
+      Object.values(parameters).some(v => v === null)) return;
+  const applyUniforms = () => {
+    const keys = {
+      speedRatio:'rotation',detailRatio:'details',agitationRatio:'agitation',
+      shineRatio:'shine',contrastRatio:'contrast',coreRatio:'coreLight',
+      rimRatio:'rimLight',sphereAlpha:'opacity'
+    };
+    for (const [name, control] of Object.entries(keys)) gl.uniform1f(parameters[name],numeric(control));
+    for (const [name, control] of Object.entries({
+      primaryColor:'primary',secondaryColor:'secondary',coreColor:'core',rimColor:'rim'
+    })) gl.uniform3fv(parameters[name],new Float32Array(color(control)));
+  };
 
   let visible = true;
   let active = true;
@@ -186,14 +248,16 @@ void main(){
   let elapsed = 0;
   let targetX = 0, targetY = 0, rx = 0, ry = 0;
   const size = () => {
-    const rect = canvas.getBoundingClientRect();
-    if (rect.width < 10 || rect.height < 10) return false;
-    // R114: native sharpness improves on retina screens without unbounded GPU cost.
-    const requested = Math.min(window.devicePixelRatio || 1, window.innerWidth < 650 ? 1.8 : 2);
-    const maxScale = Math.sqrt(1200000/(rect.width*rect.height));
+    // clientWidth/Height deliberately ignore CSS zoom: rendering at transformed
+    // box dimensions blurs the sphere on Retina/mobile screens.
+    const logicalWidth = canvas.clientWidth, logicalHeight = canvas.clientHeight;
+    if (logicalWidth < 10 || logicalHeight < 10) return false;
+    const mobile = window.innerWidth <= 700;
+    const requested = Math.min(window.devicePixelRatio || 1, mobile ? 2.0 : 2.5);
+    const maxScale = Math.sqrt((mobile ? 950000 : 1900000)/(logicalWidth*logicalHeight));
     const pixelRatio = Math.min(requested, maxScale);
-    const width = Math.max(1, Math.floor(rect.width*pixelRatio));
-    const height = Math.max(1, Math.floor(rect.height*pixelRatio));
+    const width = Math.max(1, Math.floor(logicalWidth*pixelRatio));
+    const height = Math.max(1, Math.floor(logicalHeight*pixelRatio));
     if (canvas.width !== width || canvas.height !== height) {
       canvas.width = width;
       canvas.height = height;
@@ -221,6 +285,7 @@ void main(){
     ry += (targetY-ry)*.06;
     gl.uniform1f(time,still?0:elapsed);
     gl.uniform2f(tilt,still?0:rx,still?0:ry);
+    applyUniforms();
     gl.clearColor(0,0,0,0);
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.drawArrays(gl.TRIANGLES,0,6);
