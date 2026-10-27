@@ -1,4 +1,4 @@
-/* SiteForge R153 — original plasma with materially distinct VFX presets, filament-grade volume detail and distributed internal lightning.
+/* SiteForge R154 — ray-marched THREE-DIMENSIONAL plasma reference: luminous central core, sweeping cyan-violet vortex arms and depth-resolved energy. Existing WebGL emitter and 16 controls retained.
  * One GPU VFX program: quad volumetric plasma + particle shell, branching arcs, nucleus.
  * Historical marble shader, old arcs and their settings are REMOVED.
  * WebGL1, iPhone precision parity, mobile bounded particles, no network.
@@ -144,6 +144,8 @@ uniform vec2 uResolution;
 uniform float uTime,uPass,uLayer;
 uniform vec4 uControls,uShape,uEffects;
 uniform vec3 uCore,uCyan,uViolet,uDeep;
+uniform vec2 uTilt;
+uniform float uVolumeSteps;
 float hash3(vec3 v){v=fract(v*.1031);v+=dot(v,v.yzx+33.33);return fract((v.x+v.y)*v.z);}
 float noise3(vec3 p){
  vec3 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
@@ -157,64 +159,86 @@ void main(){
  p.x*=uResolution.x/max(uResolution.y,1.);p.y+=.08;
  float radius=.64*clamp(uShape.x,.5,1.5);
  if(uPass>3.5){
-  // Original plasma image: luminous white nucleus, cyan cloud, royal blue
-  // and violet depth — now a living 3D sampled energy field.
-  float d=length(p)/radius;
-  if(d>1.04)discard;
-  float front=sqrt(max(0.,1.-d*d));
-  float theta=atan(p.y,p.x),t=uTime*max(.05,uControls.z);
-  vec3 pos=vec3(p*5.1,front*2.7);
-  float f=noise3(pos+vec3(sin(t*.26),cos(t*.19),t*.24));
-  float g=noise3(pos*2.1+vec3(t*.14,-t*.21,-t*.34));
-  float h=noise3(pos*3.9-vec3(t*.42,t*.18,-t*.15));
-  // Warp several scales of 3D noise into continuous luminous streamlines.
-  float warp=(f-.5)*7.2+(g-.5)*3.7;
-  float helix=theta*6.7+warp+d*5.2-t*.72;
-  float thin=pow(max(0.,.5+.5*sin(helix)),22.);
-  float wisps=pow(max(0.,1.-abs(f-g)*3.3),6.);
-  float tendril=pow(max(0.,.5+.5*sin(theta*17.+g*15.-t*.78)),29.);
-  float cloud=clamp(f*.49+g*.37+h*.14,0.,1.);
-  float turbulence=abs(f-g)*.64+abs(g-h)*.36;
-  float darkness=smoothstep(.16,.53,turbulence);
-  float coreRadius=max(.025,uShape.z*.15);
-  float nucleus=exp(-pow(d/coreRadius,2.)*2.1);
-  float glow=exp(-d*d*4.5),fresnel=pow(1.-front,1.8);
+  // True 3D ray integration. The image reference is a luminous white-blue
+  // central star enclosed in translucent indigo space, with five broad
+  // cyan/violet plasma arms winding through front and rear depth layers.
+  float xy=length(p);
+  if(xy>=radius*1.025)discard;
+  float halfDepth=sqrt(max(0.,radius*radius-dot(p,p)));
+  float stride=(2.*halfDepth)/max(uVolumeSteps,1.);
+  float t=uTime*max(.04,uControls.z);
+  float rotY=uTilt.x*1.5,rotX=uTilt.y*1.5;
+  float sy=sin(rotY),cy=cos(rotY),sx=sin(rotX),cx=cos(rotX);
+  vec3 accum=vec3(0.);
+  float trans=1.;
+  float sceneDensity=0.;
   float emission=clamp(uControls.y,0.,2.);
-  float electric=0.,vortex=0.,fusion=0.;
-  if(uControls.x>.5&&uControls.x<1.5){
-    // Electrical mode: hard branching channels through darker plasma.
-    electric=pow(max(0.,.5+.5*sin(theta*23.+warp*2.4-t*1.4)),35.);
-  }else if(uControls.x>1.5&&uControls.x<2.5){
-    // Vortex mode: helical bands wrapped in depth, not electric bolts.
-    vortex=pow(max(0.,.5+.5*sin(theta*5.8+d*18.+warp*.82-t*1.2)),12.);
-  }else if(uControls.x>2.5&&uControls.x<3.5){
-    // Fusion mode: radial jets from the compact white-hot core.
-    fusion=pow(max(0.,.5+.5*sin(theta*12.+warp*1.2-t*.38)),19.)*exp(-d*1.8);
+  // Compact core size independent of its radiance. Power never widens the core.
+  float nucleusRadius=max(.018,radius*uShape.z*.105);
+  for(int i=0;i<26;i++){
+    if(float(i)>=uVolumeSteps)break;
+    float z=halfDepth-(float(i)+.5)*stride;
+    vec3 q=vec3(p,z);
+    // The camera tilt rotates the full volumetric field, not a flat UV plane.
+    q=vec3(q.x*cy+q.z*sy,
+           q.y*cx-(q.z*cy-q.x*sy)*sx,
+           q.y*sx+(q.z*cy-q.x*sy)*cx);
+    float distance3D=length(q)/radius;
+    float planar=length(q.xy)/radius;
+    float angle=atan(q.y,q.x);
+    float broad=noise3(q*3.8+vec3(t*.12,-t*.11,t*.08));
+    float detail=noise3(q*10.5+vec3(-t*.17,t*.21,t*.12));
+    float depthWarp=(broad-.5)*1.05+(detail-.5)*.35;
+    // Logarithmic spiral filaments in a rotating three-dimensional volume.
+    float winding=angle*5.0+5.8*log(planar+.15)-t*.52
+                  +q.z*2.6+depthWarp*1.35;
+    float spiral=pow(max(0.,.5+.5*cos(winding)),10.);
+    float sideFilament=pow(max(0.,.5+.5*cos(winding*1.8+detail*3.2)),25.);
+    float stream=pow(max(0.,.5+.5*cos(winding*.78-q.z*7.2)),13.);
+    float volumeFog=clamp(.23+.30*broad+.18*detail,0.,1.);
+    float hollow=1.-smoothstep(.2,.83,abs(broad-detail)*2.0);
+    float interior=1.-smoothstep(.83,1.0,distance3D);
+    float core=exp(-dot(q,q)/(nucleusRadius*nucleusRadius)*1.65);
+    float coreHalo=exp(-dot(q,q)/(nucleusRadius*nucleusRadius)*.18);
+    float electrical=0.,vortex=0.,fusion=0.;
+    if(uControls.x>.5&&uControls.x<1.5){
+      electrical=pow(max(0.,.5+.5*cos(winding*2.2+detail*9.)),23.);
+    }else if(uControls.x>1.5&&uControls.x<2.5){
+      vortex=pow(max(0.,.5+.5*cos(winding*.72+q.z*8.)),9.);
+    }else if(uControls.x>2.5&&uControls.x<3.5){
+      fusion=pow(max(0.,.5+.5*cos(angle*10.+depthWarp*2.-t*.5)),14.)
+             *exp(-distance3D*2.5);
+    }
+    float currents=(spiral*.82+stream*.48+sideFilament*.27
+                    +electrical*.80+vortex*.64+fusion*.72);
+    float fog=(volumeFog*.13+.12*hollow)*interior*uShape.y;
+    float density=(fog+currents*.27*emission*uShape.y+
+                   core*.69+coreHalo*.11)*interior;
+    float absorption=clamp(density*stride*5.2,0.,.49);
+    vec3 blue=mix(uDeep*.65,uViolet*.69,clamp(distance3D*.72+broad*.42,0.,1.));
+    vec3 ion=mix(uCyan,uViolet,.17+.48*clamp(detail*.65+distance3D*.28,0.,1.));
+    vec3 filamentColor=mix(blue,ion,clamp(currents*.83+.11,0.,1.));
+    vec3 radiance=filamentColor*(.50+currents*1.05)
+                  +uCyan*coreHalo*.50
+                  +uCore*core*pow(max(uShape.w,0.),1.35)*2.4;
+    accum+=trans*radiance*absorption;
+    trans*=1.-absorption;
+    sceneDensity+=absorption;
   }
-  vec3 mist=mix(uDeep*.25,uViolet*.74,clamp(d*.64+cloud*.29,0.,1.));
-  mist=mix(mist,uCyan*.76,clamp(cloud*.42+thin*.19+vortex*.29,0.,1.));
-  mist*=1.-darkness*.40;
-  vec3 threads=uCyan*(thin*.88+tendril*.40+wisps*.11+vortex*.60)
-               +uCore*(thin*.08+electric*.90+fusion*.55);
-  float excitation=.58+.55*emission;
-  if(uControls.x>.5&&uControls.x<1.5){
-    mist*=.38;threads+=uCyan*electric*.76;
-  }else if(uControls.x>1.5&&uControls.x<2.5){
-    threads+=mix(uCyan,uViolet,.4)*vortex*.43;
-  }else if(uControls.x>2.5&&uControls.x<3.5){
-    threads+=uCore*fusion*.65;
-  }
-  vec3 plasma=(mist*(.30+.57*cloud)+threads*excitation)*uShape.y;
-  float corona=pow(max(0.,.5+.5*sin(theta*9.+warp-t*.53)),18.)
-               *exp(-d*d*9.);
-  plasma+=uCore*nucleus*pow(max(uShape.w,0.),1.55)*1.40;
-  plasma+=uCyan*corona*.32*pow(max(uShape.w,0.),.85);
-  plasma+=mix(uCyan,uViolet,.25)*glow*.16+uCyan*fresnel*.12*uShape.y;
-  float alpha=clamp((.28+.55*cloud)*uShape.y+nucleus*.88+
-                    (thin*.22+electric*.28+vortex*.15)*uShape.y,0.,1.);
-  float edge=1.-smoothstep(.976,1.04,d);
-  vec3 radiance=vec3(1.)-exp(-max(plasma,vec3(0.))*1.17);
-  gl_FragColor=vec4(radiance,alpha*edge*clamp(uEffects.w,0.,1.));
+  // Optical absorption/transparency and refractive-looking cyan boundary.
+  float silhouette=xy/radius;
+  float rim=pow(smoothstep(.67,1.0,silhouette),2.);
+  float edge=1.-smoothstep(.966,1.027,silhouette);
+  float coreScreen=exp(-dot(p,p)/(nucleusRadius*nucleusRadius)*1.8);
+  vec3 rimTint=mix(uCyan,uViolet,.38);
+  vec3 result=accum*2.05+
+              rimTint*rim*uShape.y*.24+
+              uCore*coreScreen*pow(max(uShape.w,0.),1.26)*.56;
+  // HDR-inspired, smooth light mapping; no clipped flat cyan marble.
+  result=vec3(1.)-exp(-max(result,vec3(0.))*1.15);
+  float alpha=(1.-trans)+rim*.16*uShape.y+
+              coreScreen*.69;
+  gl_FragColor=vec4(result,clamp(alpha*edge*uEffects.w,0.,1.));
   return;
  }
  vec2 c=gl_PointCoord*2.-1.;
@@ -254,7 +278,7 @@ void main(){
  }
  gl.deleteShader(vert);gl.deleteShader(frag);
  const A=gl.getAttribLocation(program,'aPosition'),S=gl.getAttribLocation(program,'aSeed');
- const keys=['uResolution','uTime','uPass','uLayer','uTilt','uControls','uShape','uEffects','uCore','uCyan','uViolet','uDeep'];
+ const keys=['uResolution','uTime','uPass','uLayer','uTilt','uControls','uShape','uEffects','uCore','uCyan','uViolet','uDeep','uVolumeSteps'];
  const U=Object.fromEntries(keys.map(k=>[k,gl.getUniformLocation(program,k)]));
  if(A<0||S<0||keys.some(k=>U[k]===null)){status(mainStatus,'GPU : paramètres incomplets.');return;}
  const quad=gl.createBuffer(),seeds=gl.createBuffer();if(!quad||!seeds)return;
@@ -287,6 +311,7 @@ void main(){
   gl.useProgram(program);
   gl.uniform2f(U.uResolution,canvas.width,canvas.height);
   gl.uniform1f(U.uTime,elapsed);gl.uniform2f(U.uTilt,tiltX,tiltY);
+  gl.uniform1f(U.uVolumeSteps,mobile?18:26);
   gl.uniform4fv(U.uControls,new Float32Array([
     preset,num('particleIntensity'),num('particleSpeed'),num('particleDensity')
   ]));
