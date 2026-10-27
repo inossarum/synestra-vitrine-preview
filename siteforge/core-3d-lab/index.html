@@ -75,21 +75,23 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 </svg>
 </div>
 <form class="lab-controls" aria-label="Réglages en direct de la sphère SiteForge" autocomplete="off">
-<div class="panel-head"><h2>Réglages de la sphère</h2><span class="preview-state">R138 · CANDIDATE</span></div>
+<div class="panel-head"><h2>Réglages de la sphère</h2><span class="preview-state">R139 · CANDIDATE</span></div>
 <p class="help">Réglages appliqués à la matière 3D sans recharger. L'anneau extérieur et les arcs sont indépendants de la coque.</p>
 <fieldset class="control-group"><legend>Forme et présence</legend><div class="control-row"><label class="control-label" for="sf-diameter"><span>Diamètre</span><output for="sf-diameter" data-sphere-value="diameter">100 %</output></label><input id="sf-diameter" data-sphere-control="diameter" type="range" min="50" max="150" value="100" step="1"></div>
 <div class="control-row"><label class="control-label" for="sf-opacity"><span>Opacité</span><output for="sf-opacity" data-sphere-value="opacity">100 %</output></label><input id="sf-opacity" data-sphere-control="opacity" type="range" min="0" max="100" value="100" step="1"></div></fieldset>
 <fieldset class="control-group"><legend>Coque · diffusion et épaisseur</legend>
 <div class="control-row"><label class="control-label" for="sf-diffusion"><span>Diffusion de la coque</span><output for="sf-diffusion" data-sphere-value="diffusion">65 %</output></label><input id="sf-diffusion" data-sphere-control="diffusion" type="range" min="0" max="100" value="65" step="1"></div>
 <div class="control-row"><label class="control-label" for="sf-thickness"><span>Épaisseur de la coque</span><output for="sf-thickness" data-sphere-value="thickness">45 %</output></label><input id="sf-thickness" data-sphere-control="thickness" type="range" min="0" max="100" value="45" step="1"></div>
-<p class="help">Diffusion : enveloppe plus douce et translucide. Épaisseur : profondeur optique du matériau, sans augmenter le diamètre.</p>
+<p class="help">Diffusion : adoucit les bords. Épaisseur : déplace le contour intérieur visible de la coque, sans modifier le diamètre ni l’opacité.</p>
 </fieldset>
 <fieldset class="control-group"><legend>Mouvement</legend><div class="control-row"><label class="control-label" for="sf-rotation"><span>Vitesse de rotation</span><output for="sf-rotation" data-sphere-value="rotation">100 %</output></label><input id="sf-rotation" data-sphere-control="rotation" type="range" min="0" max="300" value="100" step="1"></div>
 <div class="control-row"><label class="control-label" for="sf-agitation"><span>Agitation de la matière</span><output for="sf-agitation" data-sphere-value="agitation">100 %</output></label><input id="sf-agitation" data-sphere-control="agitation" type="range" min="0" max="200" value="100" step="1"></div></fieldset>
 <fieldset class="control-group"><legend>Matière</legend><div class="control-row"><label class="control-label" for="sf-details"><span>Détails de surface</span><output for="sf-details" data-sphere-value="details">100 %</output></label><input id="sf-details" data-sphere-control="details" type="range" min="0" max="200" value="100" step="1"></div>
 <div class="control-row"><label class="control-label" for="sf-shine"><span>Brillance</span><output for="sf-shine" data-sphere-value="shine">100 %</output></label><input id="sf-shine" data-sphere-control="shine" type="range" min="0" max="200" value="100" step="1"></div>
 <div class="control-row"><label class="control-label" for="sf-contrast"><span>Contraste</span><output for="sf-contrast" data-sphere-value="contrast">100 %</output></label><input id="sf-contrast" data-sphere-control="contrast" type="range" min="50" max="150" value="100" step="1"></div></fieldset>
-<fieldset class="control-group"><legend>Lumière</legend><div class="control-row"><label class="control-label" for="sf-coreLight"><span>Lumière du noyau</span><output for="sf-coreLight" data-sphere-value="coreLight">100 %</output></label><input id="sf-coreLight" data-sphere-control="coreLight" type="range" min="0" max="200" value="100" step="1"></div>
+<fieldset class="control-group"><legend>Lumière</legend>
+<div class="control-row"><label class="control-label" for="sf-luminance"><span>Luminance générale</span><output for="sf-luminance" data-sphere-value="luminance">100 %</output></label><input id="sf-luminance" data-sphere-control="luminance" type="range" min="0" max="250" value="100" step="1"></div>
+<div class="control-row"><label class="control-label" for="sf-coreLight"><span>Lumière du noyau</span><output for="sf-coreLight" data-sphere-value="coreLight">100 %</output></label><input id="sf-coreLight" data-sphere-control="coreLight" type="range" min="0" max="200" value="100" step="1"></div>
 <div class="control-row"><label class="control-label" for="sf-rimLight"><span>Liseré lumineux</span><output for="sf-rimLight" data-sphere-value="rimLight">100 %</output></label><input id="sf-rimLight" data-sphere-control="rimLight" type="range" min="0" max="200" value="100" step="1"></div></fieldset>
 <fieldset class="control-group"><legend>Couleurs de la sphère</legend><div class="color-grid">
 <div class="control-row"><label class="control-label" for="sf-primary"><span>Principale</span><output for="sf-primary" data-sphere-value="primary">#092B63</output></label><input id="sf-primary" data-sphere-control="primary" type="color" value="#092b63"></div>
@@ -101,7 +103,7 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 <p class="help" data-render-status role="status" aria-live="polite">Initialisation du rendu WebGL…</p>
 <p class="help">Prévisualisation isolée. Aucun changement sur le site public ni sur Visual Observer.</p>
 </form>
-<p class="lab-footer">Moteur R116 · coque volumétrique R138 · aperçu expérimental SiteForge. Sur téléphone, le rendu reste fixé en haut pendant le défilement des réglages.</p>
+<p class="lab-footer">Moteur R116 · coque géométrique projetée R139 · aperçu expérimental SiteForge. Sur téléphone, le rendu reste fixé en haut pendant le défilement des réglages.</p>
 </main>
 <script src="../../assets/siteforge-r116-sphere-only.js" defer></script>
 </body>
