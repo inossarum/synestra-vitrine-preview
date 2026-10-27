@@ -369,3 +369,13 @@ test('R157: JSON export includes new flow family and structure and retains old s
  assert.equal(p.particlePreset,4);assert.equal(p.arcIntensity,0);assert.equal(p.arcDensity,0);assert.equal(p.opacity,9);
  assert.match(x.exportStatus.textContent,/18 paramètres/);
 });
+
+
+test('R157: aurora and nebula material shader variables are scoped, regression of real GPU failure',()=>{
+ const f=js.slice(js.indexOf('const fragment='),js.indexOf('function compile('));
+ assert.ok(f.includes('float hollow=1.-smoothstep('));
+ assert.ok(f.includes('float sideFilament=pow('));
+ assert.ok(f.includes('flowCurrents=veil*(.38+.83*feather)+sideFilament*.13;'));
+ assert.ok(f.includes('flowCurrents=densityCloud*(.28+.38*swirls) + hollow*.10;'));
+ assert.doesNotMatch(f,/\bwisps\b/,'undefined wisps must never reach WebGL shader compiler');
+});
