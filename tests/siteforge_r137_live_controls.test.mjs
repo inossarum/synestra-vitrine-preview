@@ -30,7 +30,7 @@ test('R143: labelled native controls and preserved single sticky WebGL scene',()
 });
 
 function fixture(noWebGL=false){
- const events={},queue=[],uniforms=new Map(),arrays=new Map(),styles={},drawCalls=[];
+ const events={},queue=[],uniforms=new Map(),arrays=new Map(),styles={},drawCalls=[],blendPairs=[];
  const controls=Object.fromEntries(Object.entries(defaults).map(([key,val])=>{
   const value=String(val),type=selectors.includes(key)?'select-one':colors.includes(key)?'color':'range';
   return [key,{value,defaultValue:value,type,dataset:{sphereControl:key},
@@ -38,7 +38,7 @@ function fixture(noWebGL=false){
     hasAttribute:name=>name==='data-sphere-control',selectedOptions:[{textContent:value}]}];
  }));
  const outputs=Object.fromEntries(keys.map(key=>[key,{textContent:''}]));
- const status={textContent:''};
+ const status={textContent:''},vfxStatus={textContent:''};
  const gl={
   VERTEX_SHADER:35633,FRAGMENT_SHADER:35632,COMPILE_STATUS:35713,LINK_STATUS:35714,
   ARRAY_BUFFER:34962,STATIC_DRAW:35044,FLOAT:5126,TRIANGLES:4,POINTS:0,BLEND:3042,SRC_ALPHA:770,ONE:1,COLOR_BUFFER_BIT:16384,
@@ -49,7 +49,7 @@ function fixture(noWebGL=false){
   uniform1f:(name,val)=>uniforms.set(name,val),uniform2f(){},
   uniform3fv:(name,values)=>arrays.set(name,Array.from(values)),
   uniform4fv:(name,values)=>arrays.set(name,Array.from(values)),
-  viewport(){},clearColor(){},clear(){},enable(){},disable(){},blendFunc(){},drawArrays:(mode,first,count)=>drawCalls.push({mode,count})
+  viewport(){},clearColor(){},clear(){},enable(){},disable(){},blendFunc:(src,dst)=>blendPairs.push([src,dst]),drawArrays:(mode,first,count)=>drawCalls.push({mode,count})
  };
  const canvas={clientWidth:420,clientHeight:260,width:960,height:570,getContext:()=>noWebGL?null:gl,addEventListener(){}};
  const scene={
@@ -61,14 +61,14 @@ function fixture(noWebGL=false){
   visibilityState:'visible',addEventListener(){},
   querySelectorAll:query=>query==='[data-sphere-control]'?Object.values(controls):[],
   querySelector:query=>query==='.core-r108-stage'?scene:query==='.lab-controls'?{addEventListener:(k,fn)=>events[k]=fn}
-    :query==='[data-render-status]'?status:outputs[query.match(/data-sphere-value="([^"]+)"/)?.[1]]||null
+    :query==='[data-render-status]'?status:query==='[data-vfx-status]'?vfxStatus:outputs[query.match(/data-sphere-value="([^"]+)"/)?.[1]]||null
  };
  const window={innerWidth:390,devicePixelRatio:2,matchMedia:()=>({matches:false,addEventListener(){}})};
  const IO=class{constructor(fn){this.fn=fn}observe(){this.fn([{isIntersecting:true}])}disconnect(){}};
  const RO=class{observe(){}disconnect(){}};
  runInNewContext(js,{document,window,Float32Array,IntersectionObserver:IO,ResizeObserver:RO,
   requestAnimationFrame:fn=>{queue.push(fn);return queue.length},cancelAnimationFrame:()=>{}});
- return {controls,events,uniforms,arrays,styles,status,canvas,drawCalls,
+ return {controls,events,uniforms,arrays,styles,status,vfxStatus,canvas,drawCalls,blendPairs,
   frame:time=>{const fn=queue.shift();assert.equal(typeof fn,'function');fn(time)}};
 }
 
@@ -291,7 +291,7 @@ test('R147: one-click VFX presets, independent core flux and collapsible advance
 });
 test('R147: actual GPU particle sprites have independent life, depth, birth, fade and 4 trajectories',()=>{
  const required=[
-  'const MAX_PARTICLES=240;',
+  'const MAX_PARTICLES=1024;',
   'attribute float aSeed;',
   'float age=fract(uTime*lifetime*',
   'float depth=particleRand(i+42.)*2.-1.;',
@@ -310,21 +310,62 @@ test('R147: actual GPU particle sprites have independent life, depth, birth, fad
 });
 test('R147: preset and intensity control the particle draw independently, safety cap and reset',()=>{
  const x=fixture();x.frame(40);
- assert.equal(x.drawCalls.filter(z=>z.mode===0).length,1,'one sprite emission on the first frame');
- assert.equal(x.drawCalls.at(-1).count,120);
+ assert.equal(x.drawCalls.filter(z=>z.mode===0).length,2,'separate halo and bright core sprite passes');
+ assert.equal(x.drawCalls.at(-1).count,360);
  let clock=40;
  x.controls.particleIntensity.value='0';x.events.input({target:x.controls.particleIntensity});x.frame(clock+=50);
- assert.equal(x.drawCalls.filter(z=>z.mode===0).length,1,'0 intensity turns emitter off');
+ assert.equal(x.drawCalls.filter(z=>z.mode===0).length,2,'0 intensity turns emitter off');
  x.controls.particleIntensity.value='100';
  x.controls.particlePreset.value='4';
  x.events.change({target:x.controls.particlePreset});x.frame(clock+=50);
- assert.equal(x.drawCalls.filter(z=>z.mode===0).length,1,'disabled preset emits nothing');
+ assert.equal(x.drawCalls.filter(z=>z.mode===0).length,2,'disabled preset emits nothing');
  x.controls.particlePreset.value='3';
  x.controls.particleDensity.value='250';
  x.events.change({target:x.controls.particlePreset});x.frame(clock+=50);
- assert.equal(x.drawCalls.at(-1).count,240,'max particles bounded');
+ assert.equal(x.drawCalls.at(-1).count,640,'mobile GPU sprite capacity is bounded');
  assert.equal(x.arrays.get('uEmitter')[0],3);
  x.events.reset({preventDefault(){}});x.frame(clock+=50);
  assert.equal(x.arrays.get('uEmitter')[0],0);
- assert.equal(x.drawCalls.at(-1).count,120);
+ assert.equal(x.drawCalls.at(-1).count,360);
+});
+
+
+test('R148: visible particle VFX use two distinct additive luminous passes, not squared alpha',()=>{
+ for(const signature of [
+  'const MAX_PARTICLES=1024;',
+  'const capacity=mobile?640:MAX_PARTICLES;',
+  'gl.blendFunc(gl.ONE,gl.ONE);',
+  'gl.uniform1f(uniforms.layer,0);',
+  'gl.uniform1f(uniforms.layer,1);',
+  'float hot=exp(-r2*15.);',
+  'float halo=exp(-r2*3.2);',
+  'uLayer<.5?halo*.38:hot*1.6+halo*.23',
+  'VFX actif · '
+ ])assert.ok(js.includes(signature),signature);
+ assert.doesNotMatch(js,/gl\.blendFunc\(gl\.SRC_ALPHA,gl\.ONE\)/);
+ assert.match(html,/data-vfx-status role="status" aria-live="polite"/);
+ const x=fixture();x.frame(40);
+ assert.equal(x.drawCalls.filter(q=>q.mode===0).length,2);
+ assert.equal(x.drawCalls.filter(q=>q.mode===0)[0].count,360);
+ assert.deepEqual(x.blendPairs.at(-1),[1,1]);
+ assert.match(x.vfxStatus.textContent,/VFX actif/);
+ assert.match(x.vfxStatus.textContent,/360 particules GPU/);
+});
+test('R148: visually distinct material palettes, GPU directions and ergonomic disabled mode',()=>{
+ const x=fixture();x.frame(40);
+ const plasma=Array.from(x.arrays.get('uParticleColor'));
+ let clock=40;
+ for(let i=1;i<=3;i++){
+  x.controls.particlePreset.value=String(i);
+  x.events.change({target:x.controls.particlePreset});x.frame(clock+=47);
+  const next=Array.from(x.arrays.get('uParticleColor'));
+  assert.notDeepEqual(next,plasma,'VFX preset '+i+' must differ from plasma');
+  assert.match(x.vfxStatus.textContent,/VFX actif/);
+ }
+ x.controls.particlePreset.value='4';
+ x.events.change({target:x.controls.particlePreset});x.frame(clock+=48);
+ assert.match(x.vfxStatus.textContent,/désactivées/);
+ const particles=x.drawCalls.filter(z=>z.mode===0).length;
+ x.controls.particleIntensity.value='0';x.events.input({target:x.controls.particleIntensity});x.frame(clock+=48);
+ assert.equal(x.drawCalls.filter(z=>z.mode===0).length,particles);
 });
