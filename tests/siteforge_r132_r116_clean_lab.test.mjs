@@ -14,7 +14,7 @@ test('R152: original historical source remains unchanged for rollback and proven
 test('R152: old sphere implementation is not in the active runtime',()=>{
  assert.doesNotMatch(current,/r111Arc|r145ElectricBolt|uniform vec4 reliefSettings|uniform vec4 surfaceSettings/);
  assert.doesNotMatch(current,/R140 fixed|R116 source blob|shellThicknessRatio/);
- assert.equal((page.match(/data-sphere-control=/g)||[]).length,16);
+ assert.equal((page.match(/data-sphere-control=/g)||[]).length,18);
  assert.equal((page.match(/<script src=/g)||[]).length,1);
  assert.match(page,/src="\.\.\/\.\.\/assets\/siteforge-r116-sphere-only\.js"/);
 });
