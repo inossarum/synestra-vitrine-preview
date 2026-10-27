@@ -1,4 +1,4 @@
-/* SiteForge R157 — replaceable 3D volume flow materials on ONE WebGL renderer: luminous central core, sweeping cyan-violet vortex arms and depth-resolved energy. Existing WebGL emitter and 16 controls retained.
+/* SiteForge R157 — replaceable 3D volume flow materials on ONE WebGL renderer: luminous central core, sweeping cyan-violet vortex arms and depth-resolved energy. Existing WebGL emitter retained; 18 controls total.
  * One GPU VFX program: quad volumetric plasma + particle shell, branching arcs, nucleus.
  * Historical marble shader, old arcs and their settings are REMOVED.
  * WebGL1, iPhone precision parity, mobile bounded particles, no network.
