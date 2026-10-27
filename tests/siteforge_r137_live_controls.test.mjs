@@ -100,7 +100,7 @@ test('R152: only one WebGL shader program, canvas and source script',()=>{
 });
 test('R152: source plasma reference uses original cyan, white, violet, midnight',()=>{
  for(const hex of ['#08142e','#53318d','#eaffff','#51dfff'])assert.ok(html.includes(hex));
- assert.match(js,/float helix=theta\*7\./);
+ assert.match(js,/float helix=theta\*6\.7\+warp\+d\*5\.2/);
  assert.match(js,/float nucleus=exp\(/);
  assert.match(js,/float cloud=clamp\(/);
  assert.match(js,/float noise3\(vec3 p\)/);
@@ -176,4 +176,51 @@ test('R152: independently bounded mobile GPU work and narrow arc segments',()=>{
  assert.match(js,/const coreCount=mobile\?160:260/);
  assert.match(js,/float chain=floor\(i\/30\.\),bead=mod\(i,30\.\)/);
  assert.match(js,/float fork=step\(17\.,bead\)/);
+});
+
+test('R153: four presets change the volumetric plasma material itself, not only extra particles',()=>{
+ const field=js.slice(js.indexOf('if(uPass>3.5){',js.indexOf('const fragment=')),
+                      js.indexOf('vec2 c=gl_PointCoord'));
+ for(const key of [
+  'float warp=(f-.5)*7.2+(g-.5)*3.7;',
+  'float electric=0.,vortex=0.,fusion=0.;',
+  'if(uControls.x>.5&&uControls.x<1.5)',
+  'electric=pow(max(0.,.5+.5*sin(theta*23.+warp*2.4-t*1.4)),35.);',
+  'else if(uControls.x>1.5&&uControls.x<2.5)',
+  'vortex=pow(max(0.,.5+.5*sin(theta*5.8+d*18.+warp*.82-t*1.2)),12.);',
+  'else if(uControls.x>2.5&&uControls.x<3.5)',
+  'fusion=pow(max(0.,.5+.5*sin(theta*12.+warp*1.2-t*.38)),19.)',
+  'threads+=uCore*electric*.90',
+  'float excitation=.58+.55*emission;'
+ ])assert.ok(field.includes(key),key);
+ const x=fixture();x.frame(40);
+ for(const i of [1,2,3,4]){
+  x.controls.particlePreset.value=String(i);
+  x.callbacks.change({target:x.controls.particlePreset});x.frame(50+i*45);
+  assert.equal(x.uniforms.get('uControls')[0],i);
+ }
+});
+test('R153: electrical bolt starts distributed inside volume, while points form finer streaks',()=>{
+ const v=js.slice(js.indexOf('const vertex='),js.indexOf('const fragment='));
+ const f=js.slice(js.indexOf('const fragment='),js.indexOf('function compile('));
+ for(const key of [
+  'float originAngle=rnd(chain*13.+epoch*21.)*6.283185;',
+  'float originRadius=.025+.38*rnd(chain*19.+epoch*7.);',
+  'vec2 origin=vec2(cos(originAngle),sin(originAngle))*originRadius;',
+  'float zig=stepNoise*.028+sin(bead*.92+chain*3.7)*.008;',
+  'float fork=step(17.,bead)',
+  'p=vec3((origin+dir*reach+vec2(-dir.y,dir.x)*zig)*uShape.x,',
+  'vAxis=dir;sizeFactor=.77;'
+ ])assert.ok(v.includes(key),key);
+ assert.ok(f.includes('r2=along*along*.19+cross*cross*11.6;'));
+ assert.ok(!v.includes('p=vec3((cos(ang)*reach-sin(ang)*zig)'),'old center-origin arcs must be removed');
+});
+test('R153: failure-first and simple palette still intact after effect redesign',()=>{
+ assert.equal((html.match(/data-sphere-control=/g)||[]).length,16);
+ assert.equal((js.match(/gl.createProgram\(\)/g)||[]).length,1);
+ const x=fixture({failLink:true});x.frame(40);
+ assert.equal(x.draws.length,0);
+ assert.match(x.mainStatus.textContent,/Échec liaison GPU/);
+ const y=fixture();y.frame(40);
+ assert.match(y.mainStatus.textContent,/Nouvelle sphère plasma WebGL active/);
 });
