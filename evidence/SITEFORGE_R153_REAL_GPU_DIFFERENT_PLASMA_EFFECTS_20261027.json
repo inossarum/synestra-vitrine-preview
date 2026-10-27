@@ -1,0 +1,280 @@
+{
+  "schema": "synestra.siteforge.r153.distinct_energy_effects.evidence.v1",
+  "date": "2026-10-27",
+  "mission_id": "SYN_SITEFORGE_R153_REWORK_PLASMA_ENERGY_EFFECTS_20261027",
+  "objective": "Improve post-R152 plasma energy effects without resurrecting old sphere/sliders/renderer and demonstrate genuinely distinct energy styles at pixel level.",
+  "source": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_SITEFORGE_R116_CLEAN_LAB_20261027",
+    "commit": "a7449c89663cc6bc52499d0ea46d1db9e18aa543",
+    "renderer_blob": "99c202164478cc3ccaeed9d9b80059c91b5640f2",
+    "page_blob": "212251909669a1d823fe06b8d7d09ab2bb798017",
+    "tests_blob": "49d829f76daeddb90aceb3342f95a834d9d82da6"
+  },
+  "observed_root_causes": [
+    "R152 plasma quad never read uControls.x (style), so the 4 named presets only altered supplemental particle positions; plasma material remained identical.",
+    "R152 internal arcs originated close to the center, with widely-jittered isolated beads and insufficient continuous thin stroke appearance.",
+    "R152 cloud/filament blending had insufficiently differentiated depth zones."
+  ],
+  "changes": [
+    "Main plasma quad now switches among explicit plasma, electrical, ion vortex and core fusion procedural fields; default plasma uses domain-warped 3D noise, narrow luminous filaments, dark channels and a compact corona.",
+    "Emission slider now modulates brightness of volumetric filaments while core radius and core flux remain independent.",
+    "Electrical lightning 30-bead paths launch from reproducible scattered origins across inner volume and animate with short coherent zigzags and stochastic forks.",
+    "Point sprite radiance elongates in path direction but becomes tighter transversely; avoids liquid/thick lightning.",
+    "No additional controls: 16 existing native controls preserved, single WebGL1 program, old marble removed, original white/cyan/royal/violet palette retained."
+  ],
+  "real_browser": {
+    "provider": "Cloudflare Browser Rendering content endpoint",
+    "runtime": "Real Chromium WebGL on 390x844 mobile viewport",
+    "source": "Identical GitHub R153 HTML+JS rendered in isolated test document, CSP meta omitted to inline existing script only; Cloudflare Access-protected preview was not bypassed.",
+    "test": "Native select change event sequentially selects styles 0,1,2,3; intercept WebGLRenderingContext.drawArrays at TRIANGLES and gl.readPixels eight fixed framebuffer points for each style.",
+    "pixel_sample_rgba": {
+      "0": [
+        [
+          80,
+          132,
+          148,
+          157
+        ],
+        [
+          89,
+          160,
+          178,
+          170
+        ],
+        [
+          33,
+          49,
+          71,
+          161
+        ],
+        [
+          34,
+          56,
+          77,
+          138
+        ],
+        [
+          32,
+          53,
+          74,
+          153
+        ],
+        [
+          28,
+          44,
+          63,
+          125
+        ],
+        [
+          18,
+          28,
+          42,
+          106
+        ],
+        [
+          44,
+          78,
+          99,
+          170
+        ]
+      ],
+      "1": [
+        [
+          67,
+          113,
+          126,
+          156
+        ],
+        [
+          82,
+          155,
+          170,
+          180
+        ],
+        [
+          15,
+          25,
+          36,
+          161
+        ],
+        [
+          21,
+          42,
+          54,
+          138
+        ],
+        [
+          18,
+          32,
+          44,
+          153
+        ],
+        [
+          20,
+          37,
+          47,
+          128
+        ],
+        [
+          11,
+          20,
+          28,
+          106
+        ],
+        [
+          25,
+          48,
+          61,
+          169
+        ]
+      ],
+      "2": [
+        [
+          90,
+          151,
+          166,
+          154
+        ],
+        [
+          116,
+          192,
+          206,
+          203
+        ],
+        [
+          34,
+          51,
+          74,
+          161
+        ],
+        [
+          114,
+          191,
+          209,
+          174
+        ],
+        [
+          71,
+          130,
+          152,
+          169
+        ],
+        [
+          44,
+          77,
+          96,
+          136
+        ],
+        [
+          19,
+          29,
+          44,
+          107
+        ],
+        [
+          37,
+          63,
+          85,
+          166
+        ]
+      ],
+      "3": [
+        [
+          57,
+          84,
+          99,
+          148
+        ],
+        [
+          73,
+          131,
+          150,
+          169
+        ],
+        [
+          34,
+          50,
+          73,
+          159
+        ],
+        [
+          61,
+          118,
+          138,
+          136
+        ],
+        [
+          145,
+          162,
+          172,
+          153
+        ],
+        [
+          136,
+          190,
+          201,
+          171
+        ],
+        [
+          20,
+          32,
+          46,
+          109
+        ],
+        [
+          36,
+          58,
+          79,
+          161
+        ]
+      ]
+    },
+    "rgb_absolute_difference_vs_style0": {
+      "0_to_1": 413,
+      "0_to_2": 803,
+      "0_to_3": 1117
+    },
+    "gpu_error_all_modes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "javascript_errors": [],
+    "particle_draw_submissions": 144,
+    "status": "Nouvelle sphère plasma WebGL active. Plasma GPU actif · 340 particules · 18 éclairs.",
+    "result": "PASS: all four material styles produce distinct actual GPU framebuffer pixels, not merely different uniforms or mock results.",
+    "scope_limit": "Eight samples per style establish visible shader delta at fixed viewport; not a full screenshot/subjective quality test, nor Safari iPhone certification."
+  },
+  "build": {
+    "failed_candidate_deployment": "600485f9-cc4a-4873-bed0-3f1921df230a",
+    "failure": "Two tests expected R152 label and obsolete electric filament substring",
+    "repair": "Update two obsolete assertions, no shader change made for build failure",
+    "tested_commit": "a7449c89663cc6bc52499d0ea46d1db9e18aa543",
+    "deployment_id": "f27d23fa-1967-48d2-97f1-7721e9515228",
+    "url": "https://f27d23fa.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+    "stages": [
+      "queued:success",
+      "initialize:success",
+      "clone_repo:success",
+      "build:success",
+      "deploy:success"
+    ],
+    "tests_total": 67,
+    "tests_pass": 67,
+    "tests_fail": 0,
+    "static_export": "PASS"
+  },
+  "policy": {
+    "project": "synestra-vitrine-preview",
+    "production_deployments_enabled": false,
+    "preview_allowlisted": true,
+    "production_unchanged": true,
+    "main_unchanged": true,
+    "no_extra_renderer": true,
+    "free_only": true
+  },
+  "rollback": "https://e43b4e42.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+  "status": "R153_PREVIEW_DEPLOYED_67_PASS_REAL_CHROMIUM_MODE_PIXELS_DISTINCT__OWNER_VISUAL_ACCEPTANCE_PENDING"
+}
