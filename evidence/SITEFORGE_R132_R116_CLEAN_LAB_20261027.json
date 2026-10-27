@@ -1,0 +1,69 @@
+{
+  "schema": "synestra.siteforge.r132.clean-r116-lab.evidence.v1",
+  "evidence_id": "SYN_SITEFORGE_R132_R116_CLEAN_LAB_20261027",
+  "date": "2026-10-27",
+  "mission_id": "SYN_SITEFORGE_R116_BLANK_LAB_20261027",
+  "owner": "Inos",
+  "objective": "Repartir de la sphere exacte R116 dans un laboratoire isole, sans aucun reglage, comparateur ou ajout creatif; progresser etape par etape.",
+  "source": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_SITEFORGE_R116_CLEAN_LAB_20261027",
+    "historical_r116_code_commit": "b602b60755bd31e3645045116ef2f0946c48c712",
+    "r116_source_shader_blob": "d78d7222a95fd080a408bba2237dd3b9dda05bd7",
+    "r116_home_index_blob": "4707e6dbc1330fcdf3a3abb48f909406c5e86d61",
+    "prior_r116_evidence_commit": "0374a23dfbcb36c1a4b0923c6c2fa54e1047a857",
+    "code_and_tests_commit": "ae7b912396ce79ac85d64f4ff3f6440e15c22290"
+  },
+  "files": {
+    "siteforge/core-3d-lab/index.html": "1e2a1e234f9f9f47266913b6512258eab1af2764",
+    "assets/siteforge-r116-sphere-only.js": "53aadccfa3bca735b05547b807ac1e6e5a7f0614",
+    "tests/siteforge_r132_r116_clean_lab.test.mjs": "dc8ddef5a52b5f849179509585edf3ad2ee26218"
+  },
+  "scope": {
+    "stage_count": 1,
+    "canvas_count": 1,
+    "shader_source": "R116 fragment exact original byte-for-byte; application-global ambient initialization omitted",
+    "r116_arcs": 8,
+    "metal_gyros_added": 0,
+    "editor_controls": 0,
+    "presets": 0,
+    "configuration_api": 0,
+    "file_import_export": 0,
+    "reference_comparator": 0,
+    "homepage_changed": false,
+    "legacy_r129_r131_engines_loaded": false,
+    "extra_dependencies": false,
+    "preserved_original_mobile_svg_sphere_fallback": true
+  },
+  "checks": {
+    "github_readback": "PASS: page, extracted engine, tests file; home+old engine historical blob SHA verified",
+    "static_page_checks": "PASS: 6/6 nominal plus source pin/8 shader fidelity checks",
+    "js_engine_parse": "PASS via V8 Function parser",
+    "js_node_test_parse": "PASS equivalent module syntax after stripping import statements; not native Node test execution",
+    "browser_api_simulation": "PASS 9/9: JS syntax, test parser, reduced motion no GPU, WebGL missing fail-closed, one mock GPU draw, two shaders, GPU ready state, 8 arcs, resolution uniform",
+    "real_webgl_glsl_gpu": "NOT_VERIFIED",
+    "real_safari_chrome_screenshot": "NOT_VERIFIED",
+    "node_suite": "NOT_EXECUTED",
+    "pages_deployment": "NOT_DEPLOYED (new branch not in Cloudflare preview allowlist)",
+    "rawgithack_http": "NOT_VERIFIED (browser tool inaccessible)",
+    "historical_r116_cloudflare_deploy": "PASS as recorded R116 evidence only; not a new R132 deployment"
+  },
+  "governance": {
+    "free_only": true,
+    "main_mutated": false,
+    "production_mutated": false,
+    "cloudflare_config_mutated": false,
+    "new_branch_only": true,
+    "source_gate": "LIMITED: Memory V1 corpus and SAL/Runbooks current not confirmed",
+    "hooks_status": "UNKNOWN",
+    "skillruntime_executed": false,
+    "supervisor_executed": false,
+    "central_skills_consulted": [
+      "failure-first@1.0.0#373c5f508b3ef91d1ffc1fc5afec7007a643d590",
+      "visual-regression-testing@1.0.0#aa98fffe9149dfcc0e153f0d1b8b91f3c0a6b4ae"
+    ],
+    "rollback": "Restore base R116 commit b602b60755bd31e3645045116ef2f0946c48c712 by switching branch; no prod state touched"
+  },
+  "next": "Ask owner to review exact R116 orb as step zero; only after approval add one requested change. For published preview, separately approve safe preview branch enrollment; browser GPU test remains required.",
+  "function_report": "PARTIAL (page and tests versioned, live browser visual validation and deployment not done)"
+}
