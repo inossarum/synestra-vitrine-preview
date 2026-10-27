@@ -290,8 +290,8 @@ void main(){
  function resize(){
   const w=canvas.clientWidth,h=canvas.clientHeight;if(w<10||h<10)return false;
   const mobile=window.innerWidth<=700;
-  const scale=Math.min(window.devicePixelRatio||1,mobile?1.75:2.25,
-    Math.sqrt((mobile?850000:1500000)/(w*h)));
+  const scale=Math.min(window.devicePixelRatio||1,mobile?1.5:2.25,
+    Math.sqrt((mobile?650000:1500000)/(w*h)));
   const W=Math.max(1,Math.floor(w*scale)),H=Math.max(1,Math.floor(h*scale));
   if(canvas.width!==W||canvas.height!==H){canvas.width=W;canvas.height=H;}
   gl.viewport(0,0,W,H);return true;
