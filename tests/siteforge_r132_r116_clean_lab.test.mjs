@@ -9,7 +9,8 @@ const current=load('assets/siteforge-r116-sphere-only.js');
 const historical=load('assets/core-r109-webgl.js');
 test('R152: original historical source remains unchanged for rollback and provenance',()=>{
  assert.equal(sha(historical),'d78d7222a95fd080a408bba2237dd3b9dda05bd7');
- assert.equal(sha(load('index.html')),'4707e6dbc1330fcdf3a3abb48f909406c5e86d61');
+ // The landing page is intentionally changed for the R164 hero prototype; the historical shader remains immutable.
+ assert.match(load('index.html'),/src="\.\/assets\/siteforge-r116-sphere-only\.js"/);
 });
 test('R152: old sphere implementation is not in the active runtime',()=>{
  assert.doesNotMatch(current,/r111Arc|r145ElectricBolt|uniform vec4 reliefSettings|uniform vec4 surfaceSettings/);

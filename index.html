@@ -1545,7 +1545,14 @@ body>header,body>main,body>footer{position:relative;z-index:1}
 .syn-ambient-paused .syn-ambient-field *,.syn-ambient-paused .syn-ambient-field:before,.syn-ambient-paused .syn-ambient-field:after{animation-play-state:paused!important}
 @media(max-width:640px){.syn-ambient-field:before,.syn-ambient-field:after{width:95vw;height:36vh;opacity:.16}}
 @media(prefers-reduced-motion:reduce){.syn-ambient-field{display:none!important}}
-  </style>
+
+/* R164: SiteForge shader replaces old orbit sphere while preserving its displayed diameter. */
+.core-r109-stage .core-r109-canvas{transform:scale(.49)!important;transform-origin:center center;height:calc(100% - 58px);pointer-events:none}
+.core-r109-stage[data-core-ready="true"] .core-r108-art{display:none}
+.core-r109-stage .core-tools-orbit{display:none!important}
+.core-r109-stage{background:radial-gradient(ellipse 55% 60% at 50% 36%,rgba(83,49,141,.15),transparent 84%),linear-gradient(145deg,#0b1024,#070c17)}
+@media(max-width:620px){.core-r109-stage .core-r109-canvas{transform:scale(.49)!important}}
+</style>
 </head>
 <body>
   <a class="skip" href="#contenu">Aller au contenu</a>
@@ -1593,6 +1600,27 @@ body>header,body>main,body>footer{position:relative;z-index:1}
       <div class="system-stage core-r108-stage core-r109-stage" role="group" aria-label="Core Synestra : un noyau d'énergie stylisé, avec trois liens vers les produits. Animation purement illustrative.">
         <div class="core-r108-top"><span>CORE / SYNESTRA</span><span>ÉNERGIE CONCEPTUELLE</span></div>
         <canvas class="core-r109-canvas" aria-hidden="true" width="960" height="570"></canvas>
+        <div class="synestra-core-prototype-controls" hidden aria-hidden="true">
+<input type="hidden" data-sphere-control="flowType" data-default="0" value="0">
+<input type="hidden" data-sphere-control="particlePreset" data-default="4" value="4">
+<input type="hidden" data-sphere-control="particleIntensity" data-default="200" value="200">
+<input type="hidden" data-sphere-control="coreLight" data-default="500" value="500">
+<input type="hidden" data-sphere-control="arcIntensity" data-default="140" value="140">
+<input type="hidden" data-sphere-control="arcDensity" data-default="100" value="100">
+<input type="hidden" data-sphere-control="flowStructure" data-default="94" value="94">
+<input type="hidden" data-sphere-control="diameter" data-default="101" value="101">
+<input type="hidden" data-sphere-control="shellVisibility" data-default="0" value="0">
+<input type="hidden" data-sphere-control="coreSize" data-default="73" value="73">
+<input type="hidden" data-sphere-control="particleDensity" data-default="100" value="100">
+<input type="hidden" data-sphere-control="particleSpeed" data-default="100" value="100">
+<input type="hidden" data-sphere-control="particleSize" data-default="100" value="100">
+<input type="hidden" data-sphere-control="opacity" data-default="100" value="100">
+<input type="hidden" data-sphere-control="primary" data-default="#08142e" value="#08142e">
+<input type="hidden" data-sphere-control="secondary" data-default="#53318d" value="#53318d">
+<input type="hidden" data-sphere-control="core" data-default="#eaffff" value="#eaffff">
+<input type="hidden" data-sphere-control="rim" data-default="#69dcb4" value="#69dcb4">
+        </div>
+        <span data-render-status hidden></span><span data-vfx-status hidden></span>
         <svg class="core-r108-art" viewBox="0 0 640 410" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
           <defs>
             <radialGradient id="r108-aura"><stop offset="0" stop-color="#3c92ee" stop-opacity=".29"/><stop offset=".55" stop-color="#4340af" stop-opacity=".10"/><stop offset="1" stop-color="#111a2a" stop-opacity="0"/></radialGradient>
@@ -1922,6 +1950,6 @@ body>header,body>main,body>footer{position:relative;z-index:1}
     <p>© 2026 Synestra · Studio numérique</p>
     <p>Phase pilote · Informations communiquées avec prudence</p>
   </footer>
-<script src="./assets/core-r109-webgl.js" defer></script>
+<script src="./assets/siteforge-r116-sphere-only.js" defer></script>
 </body>
 </html>
