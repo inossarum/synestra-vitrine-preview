@@ -14,8 +14,8 @@ body{margin:0;min-height:100svh;padding:clamp(12px,3vw,30px);background:#050a14}
 main{width:min(100%,1240px);margin:0 auto;display:grid;grid-template-columns:minmax(0,1.18fr) minmax(320px,.82fr);align-items:start;gap:16px 20px}
 h1{grid-column:1/-1;font-size:clamp(1.15rem,2.4vw,1.5rem);font-weight:650;letter-spacing:.01em;margin:0}
 p{color:#9db3c8;font-size:.85rem;line-height:1.5;margin:13px 0 0}.lab-footer{grid-column:1/-1}
-.core-r108-stage{position:sticky;top:16px;isolation:isolate;overflow:hidden;min-width:0;height:clamp(395px,65svh,650px);border:1px solid rgba(129,186,231,.23);border-radius:23px;background:radial-gradient(ellipse 55% 60% at 50% 36%,rgba(33,62,119,.18),transparent 84%),linear-gradient(145deg,#0b1527,#050a14);box-shadow:0 30px 65px rgba(0,4,18,.29),inset 0 1px rgba(226,245,255,.08)}
-.core-r109-canvas{position:absolute;top:0;left:0;z-index:2;display:block;width:100%;height:100%;transform:scale(calc(.92 * var(--sphere-zoom,1)));transform-origin:center center;opacity:0;pointer-events:none;transition:opacity .5s ease}
+.core-r108-stage{touch-action:none;cursor:grab;position:sticky;top:16px;isolation:isolate;overflow:hidden;min-width:0;height:clamp(395px,65svh,650px);border:1px solid rgba(129,186,231,.23);border-radius:23px;background:radial-gradient(ellipse 55% 60% at 50% 36%,rgba(33,62,119,.18),transparent 84%),linear-gradient(145deg,#0b1527,#050a14);box-shadow:0 30px 65px rgba(0,4,18,.29),inset 0 1px rgba(226,245,255,.08)}
+.core-r108-stage.orbit-dragging{cursor:grabbing}\n.core-r108-stage:focus-visible{outline:2px solid #69dcb4;outline-offset:3px}\n.core-r109-canvas{position:absolute;top:0;left:0;z-index:2;display:block;width:100%;height:100%;transform:scale(calc(.92 * var(--sphere-zoom,1)));transform-origin:center center;opacity:0;pointer-events:none;transition:opacity .5s ease}
 .core-r109-stage[data-core-ready="true"] .core-r109-canvas{opacity:1}
 .core-r108-art{opacity:var(--fallback-opacity,1);position:absolute;left:50%;top:5%;transform:translateX(-50%) scale(calc(.92 * var(--sphere-zoom,1)));transform-origin:center center;width:min(100%,760px);height:350px;overflow:visible;pointer-events:none;transition:opacity .35s ease}
 .core-r109-stage[data-core-ready="true"] .core-r108-art{opacity:0}
@@ -62,7 +62,7 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 <body>
 <main>
 <h1>SiteForge <span aria-hidden="true">·</span> Plasma Studio</h1>
-<div class="core-r108-stage core-r109-stage" role="img" aria-label="Nouvelle sphère énergétique plasma bleu-cyan-violet produite par le moteur VFX WebGL.">
+<div class="core-r108-stage core-r109-stage" tabindex="0" role="group" aria-label="Aperçu 3D interactif. Glisser pour faire tourner la sphère ; flèches pour orienter ; Home ou double-clic pour recentrer.">
 <canvas class="core-r109-canvas" width="960" height="570" aria-hidden="true"></canvas>
 <svg class="core-r108-art" viewBox="0 0 640 410" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
 <defs>
@@ -83,8 +83,8 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 </svg>
 </div>
 <form class="lab-controls" aria-label="Création de la nouvelle sphère plasma VFX" autocomplete="off">
-<div class="panel-head"><h2>Plasma Studio</h2><span class="preview-state">R170 · FLUX COHÉRENTS</span></div>
-<p class="help">R170 expérimental : trajectoires moins répétitives, couches d’énergie dans la profondeur et pause réelle des courants. La vitrine Synestra conserve sa version approuvée.</p>
+<div class="panel-head"><h2>Plasma Studio</h2><span class="preview-state">R171 · ORBITE 3D</span></div>
+<p class="help">R171 expérimental : faites glisser le Core avec la souris ou le doigt pour inspecter les courants en profondeur. Flèches pour orienter, Home ou double-clic pour recentrer. La pause à 0 % reprend sans saut de phase. Vitrine inchangée.</p>
 <fieldset class="control-group"><legend>✨ Création rapide</legend>
 <div class="control-row"><label class="control-label" for="sf-flowType"><span>Énergie qui traverse la sphère</span><output for="sf-flowType" data-sphere-value="flowType">Flux plasma</output></label>
 <select id="sf-flowType" data-sphere-control="flowType" data-default="0"><option value="0">Flux plasma</option><option value="1">Rubans magnétiques</option><option value="2">Voiles d’aurore</option><option value="3">Brume ionique</option><option value="4">Jets de fusion</option></select></div>

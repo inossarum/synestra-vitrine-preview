@@ -1,4 +1,4 @@
-/* SiteForge LAB R170 (isolated from the approved Synestra vitrine) — replaceable 3D volume flow materials on ONE WebGL renderer: luminous central core, sweeping cyan-violet vortex arms and depth-resolved energy. Existing WebGL emitter retained; 18 controls total.
+/* SiteForge LAB R171 (isolated from the approved Synestra vitrine) — replaceable 3D volume flow materials on ONE WebGL renderer: luminous central core, sweeping cyan-violet vortex arms and depth-resolved energy. Existing WebGL emitter retained; 18 controls total.
  * One GPU VFX program: quad volumetric plasma + particle shell, branching arcs, nucleus.
  * Historical marble shader, old arcs and their settings are REMOVED.
  * WebGL1, iPhone precision parity, mobile bounded particles, no network.
@@ -103,7 +103,7 @@ void main(){
   gl_Position=vec4(aPosition,0.,1.);return;
  }
  float i=floor(aSeed*2048.),a=rnd(i+27.)*6.283185;
- float depth=rnd(i+41.)*2.-1.,t=uTime*max(0.,uControls.z);
+ float depth=rnd(i+41.)*2.-1.,t=uTime;
  float radius=.64*clamp(uShape.x,.5,1.5);
  vec3 p=vec3(0.);
  float life=1.,sizeFactor=1.;
@@ -204,7 +204,7 @@ void main(){
   if(xy>=radius*1.025)discard;
   float halfDepth=sqrt(max(0.,radius*radius-dot(p,p)));
   float stride=(2.*halfDepth)/max(uVolumeSteps,1.);
-  float t=uTime*max(0.,uControls.z);
+  float t=uTime;
   float rotY=uTilt.x*1.5,rotX=uTilt.y*1.5;
   float sy=sin(rotY),cy=cos(rotY),sx=sin(rotX),cx=cos(rotX);
   vec3 accum=vec3(0.);
@@ -406,7 +406,11 @@ void main(){
  gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(Array.from({length:MAX},(_,i)=>(i+.5)/MAX)),gl.STATIC_DRAW);
  let active=true,visible=true,frame=0,last=0,lastFrame=0,elapsed=0,tiltX=0,tiltY=0;
  function resize(){
-  const w=canvas.clientWidth,h=canvas.clientHeight;if(w<10||h<10)return false;
+  // The WebGL canvas must follow the actual sticky preview panel size. Its
+  // HTML width/height attributes (960x570) are only a pre-init fallback.
+  const w=stage.clientWidth,h=stage.clientHeight;if(w<10||h<10)return false;
+  if(canvas.style.width!==w+'px')canvas.style.width=w+'px';
+  if(canvas.style.height!==h+'px')canvas.style.height=h+'px';
   const mobile=window.innerWidth<=700;
   const scale=Math.min(window.devicePixelRatio||1,mobile?1.5:2.25,
     Math.sqrt((mobile?650000:1500000)/(w*h)));
@@ -418,7 +422,7 @@ void main(){
   frame=0;if(!active||!visible||document.visibilityState!=='visible')return;
   if(lastFrame&&now-lastFrame<32){frame=requestAnimationFrame(draw);return;}
   if(!resize())return;lastFrame=now;
-  if(last)elapsed+=Math.min((now-last)/1000,.06);last=now;
+  if(last)elapsed+=Math.min((now-last)/1000,.06)*Math.max(0,num('particleSpeed'));last=now;
   const mobile=window.innerWidth<=700,preset=sel('particlePreset');
   const extra=preset!==4&&num('particleIntensity')>0&&num('particleDensity')>0;
   const sphereCount=mobile?1480:MAX;
@@ -484,13 +488,49 @@ void main(){
  },{threshold:.01});observer.observe(stage);
  const resizeObserver=new ResizeObserver(()=>schedule());resizeObserver.observe(canvas);
  document.addEventListener('visibilitychange',()=>{last=0;schedule();});
+ // R171: persistent bounded volume orbit. Touch gestures start only on the
+ // preview; form sliders, scrolling elsewhere and exported JSON remain independent.
+ const orbit={pointerId:null,x:0,y:0};
+ const updateOrbit=()=>{
+  stage.dataset.orbitYaw=tiltX.toFixed(3);
+  stage.dataset.orbitPitch=tiltY.toFixed(3);
+  schedule();
+ };
+ const resetOrbit=()=>{tiltX=0;tiltY=0;updateOrbit();};
+ stage.addEventListener('pointerdown',event=>{
+  if(orbit.pointerId!==null||!event.isPrimary||event.pointerType==='mouse'&&event.button!==0)return;
+  orbit.pointerId=event.pointerId;orbit.x=event.clientX;orbit.y=event.clientY;
+  stage.setPointerCapture(event.pointerId);
+  stage.classList.add('orbit-dragging');
+  stage.focus({preventScroll:true});
+ });
  stage.addEventListener('pointermove',event=>{
-  if(event.pointerType==='touch')return;
+  if(event.pointerId!==orbit.pointerId)return;
   const r=stage.getBoundingClientRect();
-  tiltX=Math.max(-.28,Math.min(.28,(event.clientX-r.left)/r.width-.5));
-  tiltY=Math.max(-.22,Math.min(.22,(event.clientY-r.top)/r.height-.5));
- },{passive:true});
- stage.addEventListener('pointerleave',()=>{tiltX=0;tiltY=0;},{passive:true});
+  tiltX=Math.max(-1.05,Math.min(1.05,tiltX+(event.clientX-orbit.x)/Math.max(r.width,1)*2.2));
+  tiltY=Math.max(-.72,Math.min(.72,tiltY+(event.clientY-orbit.y)/Math.max(r.height,1)*1.45));
+  orbit.x=event.clientX;orbit.y=event.clientY;updateOrbit();
+ });
+ const stopOrbit=event=>{
+  if(event.pointerId!==orbit.pointerId)return;
+  if(stage.hasPointerCapture(event.pointerId))stage.releasePointerCapture(event.pointerId);
+  orbit.pointerId=null;stage.classList.remove('orbit-dragging');
+ };
+ stage.addEventListener('pointerup',stopOrbit);
+ stage.addEventListener('pointercancel',stopOrbit);
+ stage.addEventListener('dblclick',resetOrbit);
+ stage.addEventListener('keydown',event=>{
+  const delta=.12;
+  if(event.key==='Home'){event.preventDefault();resetOrbit();return;}
+  if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key))return;
+  event.preventDefault();
+  if(event.key==='ArrowLeft')tiltX=Math.max(-1.05,tiltX-delta);
+  if(event.key==='ArrowRight')tiltX=Math.min(1.05,tiltX+delta);
+  if(event.key==='ArrowUp')tiltY=Math.max(-.72,tiltY-delta);
+  if(event.key==='ArrowDown')tiltY=Math.min(.72,tiltY+delta);
+  updateOrbit();
+ });
+ updateOrbit();
  canvas.addEventListener('webglcontextlost',event=>{
   event.preventDefault();active=false;
   if(frame)cancelAnimationFrame(frame);frame=0;

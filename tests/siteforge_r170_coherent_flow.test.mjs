@@ -15,9 +15,9 @@ test('R170: home, approved sphere, JSON schema remain untouched',()=>{
  assert.match(shader,/schema:'synestra\.siteforge\.plasma-settings\.v1'/);
 });
 test('R170: speed 0.0 is a real pause in all time-driven shader paths',()=>{
- assert.match(shader,/float t=uTime\*max\(0\.,uControls\.z\);/);
- assert.match(shader,/float depth=rnd\(i\+41\.\)\*2\.-1\.,t=uTime\*max\(0\.,uControls\.z\);/);
- assert.doesNotMatch(shader,/uTime\*max\(\.0[45],uControls\.z\)/);
+ assert.match(shader,/float t=uTime;/);
+ assert.match(shader,/float depth=rnd\(i\+41\.\)\*2\.-1\.,t=uTime;/);
+ assert.doesNotMatch(shader,/uTime\*max\(0\.,uControls\.z\)/);
  assert.match(html,/0 % = pause/);
 });
 test('R170: primary volumetric field has non-radial 3D warping and depth-local energy balance',()=>{
@@ -32,5 +32,5 @@ test('R170: only one WebGL draw engine and 5 material families preserved',()=>{
  assert.equal((shader.match(/gl\.createProgram\(\)/g)||[]).length,1);
  assert.match(shader,/gl\.drawArrays\(gl\.TRIANGLES,0,6\)/);
  for(const x of ["}else if(uFlow.x<1.5){","}else if(uFlow.x<2.5){","}else if(uFlow.x<3.5){"])assert.ok(shader.includes(x));
- assert.match(html,/R170 · FLUX COHÉRENTS/);
+ assert.match(html,/R171 · ORBITE 3D/);
 });

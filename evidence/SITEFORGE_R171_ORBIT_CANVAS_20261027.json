@@ -1,0 +1,115 @@
+{
+  "schema": "synestra.siteforge.r171.orbit_clock_canvas.evidence.v1",
+  "date": "2026-10-27",
+  "mission_id": "SYN_SITEFORGE_R171_ORBIT_CANVAS_FIX_20261027",
+  "repo": "inossarum/synestra-vitrine-preview",
+  "base_sha": "324d8d28757ad9d3d1468b2caad14345aa7e0a09",
+  "target_branch": "task/SYN_SITEFORGE_R116_CLEAN_LAB_20261027",
+  "owner_scope": "SiteForge laboratory only; approved homepage untouched",
+  "changes": {
+    "camera": "Pointer-captured mouse and touch orbit, keyboard arrow orientation, Home and double-click reset, bounded yaw/pitch; no new JSON control",
+    "clock": "One accumulated shader clock weighted by selected speed; freeze at 0 and phase-continuous resume",
+    "canvas": "Physical WebGL drawing buffer and CSS layout bound to stage.clientWidth / stage.clientHeight, eliminating prior intrinsic 960px horizontal crop",
+    "ui": "R171 orbit help text and keyboard focus; no extra engine",
+    "unchanged": [
+      "homepage index.html",
+      "approved assets/siteforge-r116-sphere-only.js",
+      "18 JSON fields",
+      "five materials",
+      "R169 architectural draft"
+    ]
+  },
+  "tests": {
+    "failure_first": "R171 new feature tests failed against R170 as expected",
+    "contracts": {
+      "file": "tests/site_contract.test.mjs",
+      "total": 79,
+      "pass": 79,
+      "fail": 0
+    },
+    "chrome": {
+      "script": "tests/siteforge_r171_live_orbit_qa.mjs",
+      "engine": "Chrome ANGLE SwiftShader WebGL",
+      "webgl_error": 0,
+      "materials": {
+        "pass": 5,
+        "total": 5
+      },
+      "canvas_count": 1,
+      "parameters": 18,
+      "mouse": {
+        "yaw": 0.519,
+        "pitch": -0.181,
+        "pass": true
+      },
+      "keyboard": {
+        "home_reset": true,
+        "arrow_rotation": true
+      },
+      "touch": {
+        "yaw": 0.391,
+        "pitch": -0.126,
+        "pass": true
+      },
+      "speed": {
+        "zero_frames_identical": true,
+        "hundred_frames_different": true
+      },
+      "desktop_geometry": {
+        "stage": [
+          591,
+          518
+        ],
+        "canvas": [
+          591,
+          518
+        ],
+        "offset_error_px": 0.0312,
+        "stage_rect_width_px": 592.9375,
+        "canvas_rect_width_px": 543.72
+      },
+      "historical_defect": {
+        "stage_width_px": 592.9375,
+        "canvas_rect_width_px": 883.2,
+        "canvas_backing": [
+          960,
+          570
+        ],
+        "cause": "HTML intrinsic canvas dimensions were used instead of actual stage dimensions"
+      },
+      "mobile": {
+        "viewport": 390,
+        "body_width": 390,
+        "canvas": [
+          364,
+          285
+        ],
+        "getError": 0
+      },
+      "captures": [
+        "r171-browser-desktop.png",
+        "r171-browser-desktop-later.png",
+        "r171-browser-orbited.png",
+        "r171-browser-paused.png",
+        "r171-browser-mobile.png"
+      ]
+    },
+    "limitations": {
+      "native_physical_gpu_fps": "NOT_MEASURED",
+      "user_art_approval": "PENDING",
+      "cloudflare_preview": "NOT_PUBLISHED"
+    }
+  },
+  "protected": {
+    "homepage_git_blob": "1413e30138ba1657f7056401818e697ddbd32ac8",
+    "approved_engine_git_blob": "dd63d75fdb966de2052595c95b7b6cb736d6c7cc",
+    "main_mutated": false,
+    "prod_mutated": false,
+    "free_only": true
+  },
+  "rollback": {
+    "git_source": "324d8d28757ad9d3d1468b2caad14345aa7e0a09",
+    "method": "restore isolated lab shader + page/tests and discard experimental branch"
+  },
+  "status": "LOCAL_E2E_PASS_PENDING_GITHUB"
+}
