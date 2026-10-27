@@ -1,4 +1,4 @@
-/* SiteForge R148 — clearly visible multi-layer GPU VFX: distinctive presets, substantial particles, additive blooms, visible status/fallback. R140 normal, R146 fine arcs and R147 independent core power preserved. */
+/* SiteForge R150 — VFX visually integrated into original sphere: one material, linked colors, shared emission and volume-bound particles. R149 iOS precision fix retained. */
 (() => {
   'use strict';
   const scene = document.querySelector('.core-r108-stage');
@@ -92,6 +92,7 @@ uniform vec4 surfaceSettings; // type, movement, luminosity, emission
 uniform vec4 flowSettings;    // filament density, flow speed, direction degrees, core radius
 uniform vec4 reliefSettings;  // type, height, scale, roughness
 uniform vec4 reliefDynamics;  // contrast, contour displacement, animation speed, reserved
+uniform vec4 particleMaterial; // preset/intensity/density/speed from the VFX emitter
 uniform vec3 primaryColor;
 uniform vec3 secondaryColor;
 uniform vec3 coreColor;
@@ -462,6 +463,25 @@ void main(){
    contourShade=mix(1.,contourShade,.035);
  base*=mix(1.,contourShade,clamp(sculptDepth*.85,0.,1.));
  base+=energyTint*crests*.16*sculptDepth*(1.-dryElectric*.65);
+ // VFX particles excite the original sphere material instead of looking
+ // like a separate, overlaid layer of unrelated light.
+ float vfxAmount=clamp(particleMaterial.y,0.,2.)*(1.-step(3.5,particleMaterial.x));
+ float vfxSignal=0.;
+ vec3 vfxTint=mix(coreColor,rimColor,.50);
+ if(particleMaterial.x<.5){
+   vfxSignal=mix(microThreads,litCloud,.45)*(.65+.35*sin(drift*1.8+v2*3.));
+ } else if(particleMaterial.x<1.5){
+   vfxSignal=max(energyMask*.22,microThreads*.78);
+   vfxTint=mix(coreColor,vec3(1.),.46);
+ } else if(particleMaterial.x<2.5){
+   vfxSignal=pow(.5+.5*sin(atan(p.y,p.x)*8.-time*.42+v*3.),8.);
+   vfxTint=mix(secondaryColor,rimColor,.44);
+ } else if(particleMaterial.x<3.5){
+   vfxSignal=centralSource*.62+pow(max(.5+.5*sin(filamentPhase+drift*3.),0.),16.)*.38;
+   vfxTint=mix(coreColor,vec3(1.),.25);
+ }
+ float vfxEnvelope=1.-smoothstep(.45,.70,d);
+ base+=vfxTint*vfxAmount*(vfxSignal*.20+centralSource*.075)*vfxEnvelope;
  base=(base-vec3(.3))*contrastRatio+vec3(.3);
  float arcA=r111Arc(p,1.,time);
  float arcB=r111Arc(p,2.,time);
@@ -532,7 +552,7 @@ void main(){
   const parameters = Object.fromEntries([
     'speedRatio','detailRatio','agitationRatio','shineRatio','contrastRatio',
     'coreRatio','rimRatio','sphereAlpha','shellDiffusionRatio','shellThicknessRatio','luminanceRatio','shellVisibilityRatio',
-    'surfaceSettings','flowSettings','reliefSettings','reliefDynamics',
+    'surfaceSettings','flowSettings','reliefSettings','reliefDynamics','particleMaterial',
     'primaryColor','secondaryColor','coreColor','rimColor'
   ].map(key => [key, gl.getUniformLocation(program, key)]));
   if (res === null || time === null || tilt === null ||
@@ -557,6 +577,9 @@ void main(){
     ]));
     gl.uniform4fv(parameters.reliefDynamics,new Float32Array([
       numeric('reliefContrast'),numeric('reliefDeform'),numeric('reliefSpeed'),0
+    ]));
+    gl.uniform4fv(parameters.particleMaterial,new Float32Array([
+      ordinal('particlePreset'),numeric('particleIntensity'),numeric('particleDensity'),numeric('particleSpeed')
     ]));
     for (const [name, control] of Object.entries({
       primaryColor:'primary',secondaryColor:'secondary',coreColor:'core',rimColor:'rim'
