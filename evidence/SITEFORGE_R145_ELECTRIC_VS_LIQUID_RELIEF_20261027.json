@@ -1,0 +1,61 @@
+{
+  "schema": "synestra.siteforge.r145.electric-vs-liquid-relief-visibility.evidence.v1",
+  "date": "2026-10-27",
+  "mission_id": "SYN_SITEFORGE_R145_ELECTRIC_RELIEF_FIDELITY_20261027",
+  "owner": "Inos",
+  "user_feedback": [
+    "Electric energy looks like water on sphere",
+    "Relief type menu has no visually recognizable effect"
+  ],
+  "root_cause": {
+    "electric": "R144 electric mode still displayed most of R142's liquid-looking sinusoidal diffuse/reflective plasma layers and fixed specular highlights",
+    "relief": "R144 height/normal shading was applied before multiple additive emission and scattering passes, visually washing out mode-dependent grooves and facets"
+  },
+  "source": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_SITEFORGE_R116_CLEAN_LAB_20261027",
+    "tested_commit": "2d3ecee1935446aad47c13d68c22694652069270",
+    "shader_blob": "2bbd3c9e9e8a515151a72ecdeedbd7dcc95ac87c",
+    "html_blob": "0627ebc741d7d8b5fd24d8e83bde23f7b98b352d",
+    "tests_blob": "48d010c2d665f77d518c851211b184d3e15eb1b6"
+  },
+  "changes": [
+    "Electric branch replaces wavy sine-based light mask with three time-gated jagged multi-segment material-coordinate electric bolts and forks",
+    "Electric mode nearly removes generic cyan/lavender smooth plasma wave, turbulence, secondary microstrand and broad gloss; dark dielectric substrate and heightened real eight original arcs",
+    "Six relief fields preserved; mode-specific late emboss multiplies fully composited material BEFORE original eight electric discharge arcs, with gouged crack shadows and crystal facet shading",
+    "Source comments and control descriptions updated to distinguish electrical and liquid behavior and to expose test settings",
+    "Existing one WebGL canvas, R140 stable geometric normal, 32 native controls, mobile picker change events, shell visibility selective alpha and R142 reference preserved"
+  ],
+  "proof": {
+    "cloudflare_deployment_id": "c82f4bc1-840c-42d5-9516-cf76ad28e516",
+    "preview_url": "https://c82f4bc1.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+    "stages": [
+      "queued:success",
+      "initialize:success",
+      "clone_repo:success",
+      "build:success",
+      "deploy:success"
+    ],
+    "node_tests": 65,
+    "node_pass": 65,
+    "node_fail": 0,
+    "static_export": "PASS",
+    "new_tests": [
+      "Forked electric discharge and liquid suppression verified in shader source",
+      "Late relief shading contrast mathematical test and distinct crack/crystal branches",
+      "Mobile native energy/relief change events remain independent with reset and shell=0"
+    ],
+    "real_GPU_pixels": "NOT_VERIFIED",
+    "mobile_fps": "NOT_VERIFIED",
+    "visual_owner_acceptance": "PENDING"
+  },
+  "scope": {
+    "isolated_preview_only": true,
+    "main_unchanged": true,
+    "production_unchanged": true,
+    "observer_unchanged": true,
+    "free_only": true
+  },
+  "rollback": "https://8f50123d.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+  "status": "PREVIEW_DEPLOYED_65_PASS; GPU_VISUAL_E2E_PENDING"
+}
