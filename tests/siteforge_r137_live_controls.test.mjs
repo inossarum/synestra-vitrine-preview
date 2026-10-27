@@ -29,8 +29,9 @@ test('R143: labelled native controls and preserved single sticky WebGL scene',()
  assert.match(html,/\.core-r108-stage\{position:sticky;top:env\(safe-area-inset-top,0px\)/);
 });
 
-function fixture(noWebGL=false){
+function fixture(noWebGL=false,failVFXLink=false){
  const events={},queue=[],uniforms=new Map(),arrays=new Map(),styles={},drawCalls=[],blendPairs=[];
+ let programCount=0;
  const controls=Object.fromEntries(Object.entries(defaults).map(([key,val])=>{
   const value=String(val),type=selectors.includes(key)?'select-one':colors.includes(key)?'color':'range';
   return [key,{value,defaultValue:value,type,dataset:{sphereControl:key},
@@ -43,7 +44,7 @@ function fixture(noWebGL=false){
   VERTEX_SHADER:35633,FRAGMENT_SHADER:35632,COMPILE_STATUS:35713,LINK_STATUS:35714,
   ARRAY_BUFFER:34962,STATIC_DRAW:35044,FLOAT:5126,TRIANGLES:4,POINTS:0,BLEND:3042,SRC_ALPHA:770,ONE:1,COLOR_BUFFER_BIT:16384,
   createShader:()=>({}),shaderSource(){},compileShader(){},getShaderParameter:()=>true,deleteShader(){},
-  createProgram:()=>({}),attachShader(){},linkProgram(){},getProgramParameter:()=>true,useProgram(){},
+  createProgram:()=>({index:++programCount}),attachShader(){},linkProgram(){},getProgramParameter:p=>!(failVFXLink&&p.index===2),getProgramInfoLog:()=> 'varying precision mismatch at link',useProgram(){},
   createBuffer:()=>({}),bindBuffer(){},bufferData(){},getAttribLocation:()=>0,
   enableVertexAttribArray(){},vertexAttribPointer(){},getUniformLocation:(_,key)=>key,
   uniform1f:(name,val)=>uniforms.set(name,val),uniform2f(){},
@@ -368,4 +369,36 @@ test('R148: visually distinct material palettes, GPU directions and ergonomic di
  const particles=x.drawCalls.filter(z=>z.mode===0).length;
  x.controls.particleIntensity.value='0';x.events.input({target:x.controls.particleIntensity});x.frame(clock+=48);
  assert.equal(x.drawCalls.filter(z=>z.mode===0).length,particles);
+});
+
+
+test('R149: particle vertex and fragment have identical float precision on highp and mediump GPUs',()=>{
+ const readShader=key=>{
+  const m=js.match(new RegExp('const '+key+' = '+String.fromCharCode(96)+'([\\s\\S]*?)'+String.fromCharCode(96)+';'));
+  assert.ok(m,'particle shader '+key+' must be present');
+  return m[1];
+ };
+ const vertex=readShader('vfxVertex');
+ const fragment=readShader('vfxFragment');
+ const resolved=(glsl,hasHighp)=>{
+  const match=glsl.match(/#ifdef GL_FRAGMENT_PRECISION_HIGH\s*precision (highp|mediump) float;\s*#else\s*precision (highp|mediump) float;\s*#endif/);
+  if(match)return hasHighp?match[1]:match[2];
+  return glsl.match(/precision (highp|mediump) float;/)?.[1]||'highp';
+ };
+ assert.equal(resolved(vertex,true),'highp');
+ assert.equal(resolved(fragment,true),'highp');
+ assert.equal(resolved(vertex,false),'mediump');
+ assert.equal(resolved(fragment,false),'mediump');
+ // Failure-first: R148 fragment hard-coded mediump, so a highp device would
+ // expose a vertex/fragment varying precision mismatch.
+ const oldFragment=fragment.replace(/#ifdef GL_FRAGMENT_PRECISION_HIGH[\s\S]*?#endif/,'precision mediump float;');
+ assert.notEqual(resolved(vertex,true),resolved(oldFragment,true),'old shader must fail compatibility gate');
+});
+test('R149: particle GPU link failure is surfaced and never declared as a VFX success',()=>{
+ const x=fixture(false,true);x.frame(40);
+ assert.match(x.vfxStatus.textContent,/liaison GPU échouée/);
+ assert.match(x.vfxStatus.textContent,/varying precision mismatch at link/);
+ assert.equal(x.drawCalls.filter(z=>z.mode===0).length,0,'no particles on link failure');
+ assert.equal(x.drawCalls.filter(z=>z.mode===4).length,1,'sphere remains functional');
+ assert.doesNotMatch(x.vfxStatus.textContent,/VFX actif/);
 });
