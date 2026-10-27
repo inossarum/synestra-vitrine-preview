@@ -13,13 +13,26 @@
     const value = controls[key]?.value || defaults[key] || '#ffffff';
     return [1,3,5].map(offset => parseInt(value.slice(offset, offset+2), 16) / 255);
   };
+  const status = document.querySelector('[data-render-status]');
+  const stateText = message => {if (status) status.textContent = message;};
+  const fallback = scene.querySelector('.core-r108-art');
+  const fallbackPaint = () => {
+    const stops = [
+      ['#r108-plasma stop:nth-child(4)','primary'],
+      ['#r108-plasma stop:nth-child(6)','primary'],
+      ['#r108-plasma stop:nth-child(7)','secondary'],
+      ['#r108-plasma stop:nth-child(3)','core']
+    ];
+    for (const [selector, key] of stops) fallback?.querySelector(selector)?.setAttribute('stop-color',controls[key]?.value || defaults[key]);
+  };
   const syncUI = () => {
     for (const [key, el] of Object.entries(controls)) {
       const out = document.querySelector('[data-sphere-value="'+key+'"]');
       if (out) out.textContent = el.type === 'color' ? el.value.toUpperCase() : el.value + ' %';
     }
     scene.style.setProperty('--sphere-zoom', String(numeric('diameter')));
-    scene.style.opacity = '1'; // Opacity is restricted to sphere pixels, not the preview panel.
+    scene.style.setProperty('--fallback-opacity',String(numeric('opacity')));
+    fallbackPaint();
   };
   const panel = document.querySelector('.lab-controls');
   panel?.addEventListener('input', event => {
@@ -32,13 +45,13 @@
   });
   syncUI();
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  if (reduceMotion.matches) return; // Static SVG fallback; do not initialise WebGL.
+  if (reduceMotion.matches) {stateText('Animation réduite : aperçu statique disponible.');return;} // Accessible motion fallback
   const gl = canvas.getContext('webgl', {
     alpha: true, antialias: false, depth: false, stencil: false,
     premultipliedAlpha: false, preserveDrawingBuffer: false,
     powerPreference: 'high-performance'
   });
-  if (!gl) return;
+  if (!gl) {stateText('WebGL indisponible : aperçu de secours.');return;}
 
   const vertex = `
 attribute vec2 aPosition;
@@ -289,7 +302,7 @@ void main(){
     gl.clearColor(0,0,0,0);
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.drawArrays(gl.TRIANGLES,0,6);
-    if (!scene.hasAttribute('data-core-ready')) scene.setAttribute('data-core-ready','true');
+    if (!scene.hasAttribute('data-core-ready')) {scene.setAttribute('data-core-ready','true');stateText('WebGL actif — les réglages sont appliqués en direct.');}
     if (visible && document.visibilityState === 'visible' && !still) frame=requestAnimationFrame(draw);
   };
   const request = () => {
@@ -324,6 +337,7 @@ void main(){
     if(frame)cancelAnimationFrame(frame);
     frame=0;
     scene.removeAttribute('data-core-ready');
+    stateText('Contexte WebGL perdu : recharge la page pour reprendre.');
     observer.disconnect();
     resize.disconnect();
   },{once:true});
