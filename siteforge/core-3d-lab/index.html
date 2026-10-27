@@ -88,9 +88,9 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 <fieldset class="control-group"><legend>✨ Création rapide</legend>
 <div class="control-row"><label class="control-label" for="sf-flowType"><span>Énergie qui traverse la sphère</span><output for="sf-flowType" data-sphere-value="flowType">Flux plasma</output></label>
 <select id="sf-flowType" data-sphere-control="flowType" data-default="0"><option value="0">Flux plasma</option><option value="1">Rubans magnétiques</option><option value="2">Voiles d’aurore</option><option value="3">Brume ionique</option><option value="4">Jets de fusion</option></select></div>
-<p class="help">Le noyau et les couleurs sont indépendants. Les éclairs n'apparaissent qu'en Flux plasma + Plasma électrique.</p>
-<div class="control-row"><label class="control-label" for="sf-particlePreset"><span>Style du plasma</span></label>
-<select id="sf-particlePreset" data-sphere-control="particlePreset" data-default="0"><option value="0">Plasma originel</option><option value="1">Plasma électrique</option><option value="2">Vortex ionique</option><option value="3">Fusion du noyau</option><option value="4">Plasma pur, sans particules supplémentaires</option></select></div>
+<p class="help">Le noyau, les couleurs et le volume restent indépendants du matériau énergétique choisi.</p>
+<input id="sf-particlePreset" type="hidden" data-sphere-control="particlePreset" data-default="4" value="4">
+<p class="help">Flux pur, sans surcouche de particules. Le matériau énergétique sélectionné reste seul maître du rendu 3D.</p>
 <div class="control-row"><label class="control-label" for="sf-particleIntensity"><span>Émission VFX</span><output for="sf-particleIntensity" data-sphere-value="particleIntensity">100 %</output></label><input id="sf-particleIntensity" data-sphere-control="particleIntensity" type="range" min="0" max="200" value="100" step="1"></div>
 <div class="control-row"><label class="control-label" for="sf-coreLight"><span>Puissance du noyau</span><output for="sf-coreLight" data-sphere-value="coreLight">135 %</output></label><input id="sf-coreLight" data-sphere-control="coreLight" type="range" min="0" max="500" value="135" step="1"></div>
 <p class="help" data-vfx-status role="status" aria-live="polite">Initialisation du moteur plasma…</p>
@@ -123,7 +123,7 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 <button class="reset" type="reset">Restaurer le plasma d'origine</button>
 <div class="export-controls">
 <button class="reset" type="button" data-export-json aria-describedby="sf-export-description">Exporter les paramètres (.json)</button>
-<p class="help" id="sf-export-description">Enregistre les 18 réglages affichés, avec leurs valeurs actuelles et leurs couleurs, dans un fichier JSON réutilisable.</p>
+<p class="help" id="sf-export-description">Enregistre les 18 valeurs (dont le mode Plasma pur de compatibilité), les réglages et les couleurs actuels dans un JSON réutilisable.</p>
 <p class="help" data-export-status role="status" aria-live="polite"></p>
 </div>
 <p class="help" data-render-status role="status" aria-live="polite">Préparation du moteur WebGL…</p>
