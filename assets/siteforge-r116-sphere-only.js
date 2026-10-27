@@ -1,4 +1,4 @@
-/* SiteForge R154 — ray-marched THREE-DIMENSIONAL plasma reference: luminous central core, sweeping cyan-violet vortex arms and depth-resolved energy. Existing WebGL emitter and 16 controls retained.
+/* SiteForge R157 — replaceable 3D volume flow materials on ONE WebGL renderer: luminous central core, sweeping cyan-violet vortex arms and depth-resolved energy. Existing WebGL emitter and 16 controls retained.
  * One GPU VFX program: quad volumetric plasma + particle shell, branching arcs, nucleus.
  * Historical marble shader, old arcs and their settings are REMOVED.
  * WebGL1, iPhone precision parity, mobile bounded particles, no network.
@@ -63,7 +63,7 @@
    link.remove();
    // Delay release so Safari/iOS can finish handling the download gesture.
    window.setTimeout(()=>URL.revokeObjectURL(objectURL),1500);
-   status(exportStatus,'Export JSON demandé · 16 paramètres actuels.');
+   status(exportStatus,'Export JSON demandé · '+Object.keys(parameters).length+' paramètres actuels.');
   }catch(_error){
    if(objectURL)URL.revokeObjectURL(objectURL);
    status(exportStatus,'Export indisponible sur ce navigateur.');
@@ -179,6 +179,7 @@ uniform vec4 uControls,uShape,uEffects;
 uniform vec3 uCore,uCyan,uViolet,uDeep;
 uniform vec2 uTilt;
 uniform float uVolumeSteps;
+uniform vec2 uFlow; // material family 0..4, ribbon width 0.3..2
 float hash3(vec3 v){v=fract(v*.1031);v+=dot(v,v.yzx+33.33);return fract((v.x+v.y)*v.z);}
 float noise3(vec3 p){
  vec3 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
@@ -242,9 +243,50 @@ void main(){
       fusion=pow(max(0.,.5+.5*cos(angle*10.+depthWarp*2.-t*.5)),14.)
              *exp(-distance3D*2.5);
     }
-    float currents=(spiral*.82+stream*.48+sideFilament*.27
-                    +electrical*.80+vortex*.64+fusion*.72);
+    // R157: only this flow material changes. Nucleus/core halo, electric arcs,
+    // extra particle presets and alpha stay in their original independent passes.
+    float ribbonWidth=clamp(uFlow.y,.3,2.);
+    float flowCurrents=0.;
+    float flowFog=1.;
+    if(uFlow.x<.5){
+      // Refined original plasma: smoother continuous 3D streamlines.
+      float ribbon=pow(max(0.,.5+.5*cos(winding)),max(2.5,6.5/ribbonWidth));
+      float secondaryRibbon=pow(max(0.,.5+.5*cos(winding*.8-q.z*7.2)),max(3.,8./ribbonWidth));
+      flowCurrents=ribbon*.90+secondaryRibbon*.53+sideFilament*.17;
+    }else if(uFlow.x<1.5){
+      // Magnetic flux tubes: closed, strongly curved field-loop bands.
+      float fieldAngle=angle*4.+q.z*6.5+sin(planar*9.+broad*2.2-t*.65)*2.;
+      float fieldLoop=pow(max(0.,.5+.5*cos(fieldAngle)),max(2.,7./ribbonWidth));
+      float layering=pow(max(0.,.5+.5*cos(q.z*11.+planar*7.-t*.43)),3.);
+      flowCurrents=fieldLoop*(.42+.87*layering)+sideFilament*.14;
+      flowFog=.54;
+    }else if(uFlow.x<2.5){
+      // Aurora: flowing translucent vertical sheets, not spiralling plasma.
+      float curtainPhase=q.x*9.+q.z*8.+
+                         sin(q.y*5.+t*.24)*1.8+broad*3.2-t*.55;
+      float veil=pow(max(0.,.5+.5*cos(curtainPhase)),max(1.8,5.2/ribbonWidth));
+      float feather=.5+.5*sin(q.y*9.-t*.38+detail*4.);
+      flowCurrents=veil*(.38+.83*feather)+wisps*.13;
+      flowFog=.46;
+    }else if(uFlow.x<3.5){
+      // Ionized nebula: broad, turbulent luminous clouds, minimal filaments.
+      float densityCloud=smoothstep(.17,.69,broad*.70+detail*.30);
+      float swirls=.5+.5*cos(q.z*5.+planar*4.-t*.22+depthWarp*2.);
+      flowCurrents=densityCloud*(.28+.38*swirls) + wisps*.10;
+      flowFog=1.55+.55*ribbonWidth;
+    }else{
+      // Fusion jets: eight radial stellar emission cones with local ripples.
+      float radialPhase=angle*8.+q.z*3.4+depthWarp*2.3-t*.42;
+      float jets=pow(max(0.,.5+.5*cos(radialPhase)),max(2.,9./ribbonWidth));
+      float outward=smoothstep(.08,.36,planar)*exp(-distance3D*1.2);
+      flowCurrents=jets*(.50+1.22*outward)+sideFilament*.10;
+      flowFog=.40;
+    }
+    float currents=0.;
+    currents=flowCurrents;
+    currents+=electrical*.80+vortex*.64+fusion*.72;
     float fog=(volumeFog*.13+.12*hollow)*interior*uShape.y;
+    fog*=flowFog;
     float density=(fog+currents*.27*emission*uShape.y+
                    core*.69+coreHalo*.11)*interior;
     float absorption=clamp(density*stride*5.2,0.,.49);
@@ -313,7 +355,7 @@ void main(){
  }
  gl.deleteShader(vert);gl.deleteShader(frag);
  const A=gl.getAttribLocation(program,'aPosition'),S=gl.getAttribLocation(program,'aSeed');
- const keys=['uResolution','uTime','uPass','uLayer','uTilt','uControls','uShape','uEffects','uCore','uCyan','uViolet','uDeep','uVolumeSteps'];
+ const keys=['uResolution','uTime','uPass','uLayer','uTilt','uControls','uShape','uEffects','uCore','uCyan','uViolet','uDeep','uVolumeSteps','uFlow'];
  const U=Object.fromEntries(keys.map(k=>[k,gl.getUniformLocation(program,k)]));
  if(A<0||S<0||keys.some(k=>U[k]===null)){status(mainStatus,'GPU : paramètres incomplets.');return;}
  const quad=gl.createBuffer(),seeds=gl.createBuffer();if(!quad||!seeds)return;
@@ -347,6 +389,7 @@ void main(){
   gl.uniform2f(U.uResolution,canvas.width,canvas.height);
   gl.uniform1f(U.uTime,elapsed);gl.uniform2f(U.uTilt,tiltX,tiltY);
   gl.uniform1f(U.uVolumeSteps,mobile?14:22);
+  gl.uniform2f(U.uFlow,sel('flowType'),num('flowStructure'));
   gl.uniform4fv(U.uControls,new Float32Array([
     preset,num('particleIntensity'),num('particleSpeed'),num('particleDensity')
   ]));
