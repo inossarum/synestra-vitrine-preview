@@ -257,7 +257,7 @@ test('R154: physically volumetric optical depth, quality budget and interactive 
  assert.equal((html.match(/<canvas /g)||[]).length,1);
 });
 test('R154: energy reference is legible on mobile and still shares palette and engine',()=>{
- assert.match(html,/R157 · FLUX MODULABLE/);
+ assert.match(html,/R160 · FLUX PUR/);
  assert.match(html,/transform:scale\(calc\(1\.22 \* var\(--sphere-zoom,1\)\)\)/);
  assert.match(html,/transform:scale\(calc\(\.92 \* var\(--sphere-zoom,1\)\)\)/);
  assert.match(js,/if\(uPass>\.5&&uPass<1\.5\)energy\*=\.025/);
