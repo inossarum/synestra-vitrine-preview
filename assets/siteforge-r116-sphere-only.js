@@ -1,4 +1,4 @@
-/* SiteForge R142 — cinematic blue/cyan plasma material: nested cloud density, fine luminous flows, layered scatter. Retains R140 normal-safe silhouette and R141 agitation/16 live controls. Original R116 source blob d78d7222a95fd080a408bba2237dd3b9dda05bd7. */
+/* SiteForge R143 — configurable energy, coherent calm state, core radius and relief-lit plasma surface. Preserve R140 fixed geomN, R142 source, original eight arcs and preview-only isolation. R116 source blob d78d7222a95fd080a408bba2237dd3b9dda05bd7. */
 (() => {
   'use strict';
   const scene = document.querySelector('.core-r108-stage');
@@ -7,8 +7,9 @@
   const controls = Object.fromEntries(
     [...document.querySelectorAll('[data-sphere-control]')].map(el => [el.dataset.sphereControl, el])
   );
-  const defaults = Object.fromEntries(Object.entries(controls).map(([key, el]) => [key, el.defaultValue]));
+  const defaults = Object.fromEntries(Object.entries(controls).map(([key, el]) => [key, el.getAttribute?.('data-default') ?? el.defaultValue ?? el.value]));
   const numeric = key => Number(controls[key]?.value ?? defaults[key]) / 100;
+  const ordinal = key => Number(controls[key]?.value ?? defaults[key]);
   const color = key => {
     const value = controls[key]?.value || defaults[key] || '#ffffff';
     return [1,3,5].map(offset => parseInt(value.slice(offset, offset+2), 16) / 255);
@@ -29,7 +30,7 @@
   const syncUI = () => {
     for (const [key, el] of Object.entries(controls)) {
       const out = document.querySelector('[data-sphere-value="'+key+'"]');
-      if (out) out.textContent = el.type === 'color' ? el.value.toUpperCase() : el.value + ' %';
+      if (out) out.textContent = el.type === 'color' ? el.value.toUpperCase() : key === 'surfaceDirection' ? el.value + ' °' : el.type === 'select-one' ? el.selectedOptions[0]?.textContent : el.value + ' %';
     }
     scene.style.setProperty('--sphere-zoom', String(numeric('diameter')));
     scene.style.setProperty('--fallback-opacity',String(numeric('opacity')));
@@ -83,6 +84,10 @@ uniform float sphereAlpha;
 uniform float shellDiffusionRatio;
 uniform float shellThicknessRatio;
 uniform float luminanceRatio;
+uniform vec4 surfaceSettings; // type, movement, luminosity, emission
+uniform vec4 flowSettings;    // filament density, flow speed, direction degrees, core radius
+uniform vec4 reliefSettings;  // type, height, scale, roughness
+uniform vec4 reliefDynamics;  // contrast, contour displacement, animation speed, reserved
 uniform vec3 primaryColor;
 uniform vec3 secondaryColor;
 uniform vec3 coreColor;
@@ -135,10 +140,15 @@ void main(){
  p.x*=resolution.x/max(resolution.y,1.);
  p.y+=.08;
  float radius=.69;
+ // A subtle continuous edge displacement, independent of alpha and shell thickness.
+ float contourAngle=atan(p.y,p.x);
+ float silhouetteRadius=radius+reliefDynamics.y*.006*(sin(contourAngle*17.+time*.22*reliefDynamics.z)+.35*sin(contourAngle*37.-time*.14*reliefDynamics.z));
  float d=length(p);
  float t=time*.28*speedRatio;
  float agitation=clamp(agitationRatio,0.,2.);
- float drift=time*.28*agitation;
+ // A beautiful, slowly breathing baseline remains even at 0% agitation.
+ float calmFlow=.14;
+ float drift=time*.28*(calmFlow+.86*agitation)*flowSettings.y;
  float ellipseAngle=-.30;
  float ca=cos(ellipseAngle),sa=sin(ellipseAngle);
  vec2 q=vec2(p.x*ca-p.y*sa,p.x*sa+p.y*ca);
@@ -159,7 +169,7 @@ void main(){
               +rimColor*exteriorFog*shellDiffusionRatio*.10;
  float outsideA=clamp(aura*.065+ring*.43+ringBloom*.035
               +exteriorFog*shellDiffusionRatio*.12,0.,.75);
- if(d>radius){ gl_FragColor=vec4(outside,outsideA); return; }
+ if(d>silhouetteRadius){ gl_FragColor=vec4(outside,outsideA); return; }
  // Fixed front-facing geometric normal: rotating it previously swept a
  // light/dark meridian across the sphere and made two hemispheres visible.
  vec3 geomN=vec3(p,sqrt(max(radius*radius-dot(p,p),0.)))/radius;
@@ -172,12 +182,22 @@ void main(){
  float eddyA=noise3(n*3.1+vec3(drift*.83,-drift*.55,drift*.33));
  // Second eddy uses analytic flow to avoid another expensive 3D noise lookup on phones.
  float eddyB=.5+.5*sin(n.x*8.3-n.y*5.7+n.z*9.1+drift*1.7);
- vec3 warp=agitation*.18*vec3(
+ vec3 warp=(.035+agitation*.155)*vec3(
    sin(n.y*13.+n.z*5.+drift*4.1+eddyB*5.),
    cos(n.x*12.-n.z*7.-drift*3.7+eddyA*5.),
    sin(n.x*9.+n.y*11.+drift*3.3+eddyB*4.)
  );
- vec3 flowN=normalize(n+warp);
+ // Independent surface motion and direction, active at calm agitation.
+ float flowAngle=flowSettings.z*.01745329252;
+ vec2 flowDir=vec2(cos(flowAngle),sin(flowAngle));
+ float flowClock=time*.28*flowSettings.y;
+ float motionPhase=dot(n.xy,flowDir)*13.+flowClock*2.2;
+ float motionPattern=sin(motionPhase);
+ if(surfaceSettings.y>.5 && surfaceSettings.y<1.5)motionPattern=sin(dot(n.xy,flowDir)*19.-flowClock*3.);
+ else if(surfaceSettings.y>1.5 && surfaceSettings.y<2.5)motionPattern=sin(d*23.-flowClock*3.8);
+ else if(surfaceSettings.y>2.5)motionPattern=sin(atan(n.y,n.x)*9.+n.z*8.-flowClock*2.);
+ vec3 motionWarp=.045*vec3(flowDir.x*motionPattern,flowDir.y*motionPattern,cos(motionPhase));
+ vec3 flowN=normalize(n+warp+motionWarp);
  float v=noise3(flowN*3.7+vec3(drift*.65,drift*.22,-drift*.25));
  float v2=noise3(flowN*7.5+vec3(drift*.3,-drift*.6,drift*.47));
  // Displace the luminous filaments and the fine striations together.
@@ -190,7 +210,7 @@ void main(){
  // Animated plasma folds are added only to material radiance, not silhouette.
  float foldA=pow(max(.5+.5*sin(flowN.x*17.+flowN.y*10.+v*6.-drift*5.3),0.),8.);
  float foldB=pow(max(.5+.5*sin(flowN.y*14.-flowN.z*15.+v2*6.+drift*3.7),0.),10.);
- float turbulenceGlow=agitation*(.24*foldA+.16*foldB);
+ float turbulenceGlow=(.10+.90*agitation)*(.24*foldA+.16*foldB);
  // R142: layered gas, bright flowlines and softly shaded plasma clouds.
  // Reuse sampled 3D noise for realistic nested structure on mobile GPUs.
  float cloudDensity=clamp(v*.52+v2*.31+eddyA*.17,0.,1.);
@@ -199,10 +219,45 @@ void main(){
  float filamentPhase=angle*10.+flowN.z*19.+v*10.-drift*3.7;
  float microThreads=pow(max(.5+.5*sin(filamentPhase),0.),13.);
  float glowingVeins=pow(max(.5+.5*sin(filamentPhase*.57-v2*8.+drift*1.7),0.),11.);
- float curlGlow=agitation*(microThreads*.48+glowingVeins*.32)*(.50+.50*litCloud);
+ float curlGlow=(.16+.84*agitation)*(microThreads*.48+glowingVeins*.32)*(.50+.50*litCloud);
  float shimmer=.84+.16*sin(time*1.6+v2*11.);
  // Cooler and warmer currents separate optically; thin dark pockets add depth.
  vec3 fluidTint=mix(primaryColor,secondaryColor,clamp(.38+.62*v2,0.,1.));
+ // Each surface-energy family has independent structural and emissive response.
+ float energyStrands=(microThreads*.55+glowingVeins*.45)*flowSettings.x;
+ vec3 energyTint=mix(rimColor,coreColor,.16);
+ float energyMask=energyStrands;
+ float energyCloud=litCloud;
+ if(surfaceSettings.x>.5 && surfaceSettings.x<1.5){
+   energyMask=pow(max(.5+.5*sin(filamentPhase*1.8+v2*7.),0.),22.)*flowSettings.x*1.65;
+   energyTint=mix(rimColor,vec3(.72,.95,1.),.42);
+ } else if(surfaceSettings.x>1.5 && surfaceSettings.x<2.5){
+   energyMask=(.5+.5*sin(flowN.y*9.+v*4.-flowClock*1.6))*.55*flowSettings.x;
+   energyCloud=.50+.50*litCloud;
+ } else if(surfaceSettings.x>2.5 && surfaceSettings.x<3.5){
+   energyMask=litCloud*.17*flowSettings.x;
+   energyCloud=.64+.36*litCloud;
+ } else if(surfaceSettings.x>3.5 && surfaceSettings.x<4.5){
+   energyMask=(litCloud*.72+microThreads*.28)*flowSettings.x;
+   energyTint=mix(primaryColor,vec3(1.,.27,.035),.82);
+ } else if(surfaceSettings.x>4.5){
+   energyMask=(step(.72,fract(flowN.x*8.+v*.3))*.42+step(.76,fract(flowN.y*7.-v2*.4))*.36)*flowSettings.x;
+   energyTint=mix(rimColor,vec3(.82,.96,1.),.55);
+ }
+ // Continuous analytic bump shading, computed in surface tangent coordinates.
+ // It changes highlight direction, not the globally fixed geomN/sphere terminator.
+ float reliefFrequency=mix(4.,28.,clamp(reliefSettings.z*.5,0.,1.));
+ float reliefClock=time*.22*reliefDynamics.z;
+ vec2 reliefGrad=vec2(cos(flowN.x*reliefFrequency+reliefClock),cos(flowN.y*reliefFrequency*.83-reliefClock));
+ if(reliefSettings.x>.5 && reliefSettings.x<1.5)reliefGrad=vec2(cos(angle*reliefFrequency*.6+v*7.),sin(angle*reliefFrequency*.6+v2*6.));
+ else if(reliefSettings.x>1.5 && reliefSettings.x<2.5)reliefGrad=vec2(sign(sin(flowN.x*reliefFrequency+v*4.)),sign(cos(flowN.y*reliefFrequency-v2*4.)));
+ else if(reliefSettings.x>2.5 && reliefSettings.x<3.5)reliefGrad=vec2(sin(flowN.y*reliefFrequency+v*10.-reliefClock),cos(flowN.x*reliefFrequency+v2*9.+reliefClock));
+ else if(reliefSettings.x>3.5 && reliefSettings.x<4.5)reliefGrad=vec2(step(.55,fract(flowN.x*reliefFrequency))-.5,step(.55,fract(flowN.y*reliefFrequency))-.5)*2.;
+ else if(reliefSettings.x>4.5)reliefGrad*=.09;
+ vec3 bumpNormal=normalize(geomN+vec3(reliefGrad*.27*reliefSettings.y*reliefDynamics.x,0.));
+ float bumpLight=clamp(.46+.54*dot(bumpNormal,normalize(vec3(-.38,.60,.72))),0.,1.);
+ float bumpSpec=pow(max(dot(bumpNormal,normalize(vec3(.40,-.25,.88))),0.),mix(45.,7.,clamp(reliefSettings.w*.5,0.,1.)));
+
  // Lighting is computed in screen/front hemisphere space, independent
  // of rotating texture coordinates and never based on back-facing normals.
  float light=.32+.68*smoothstep(-.90,.95,dot(geomN,normalize(vec3(-.45,.58,1.))));
@@ -222,7 +277,10 @@ void main(){
  // Dense cloud hollows and illuminated gaseous layers provide depth without
  // introducing a fake inner disc or rotating the surface lighting normal.
  base=mix(base,navy*.36+fluidTint*.30,gasPocket*.61);
- base+=mix(primaryColor*.42,cyan*.72,litCloud)*litCloud*.36;
+ base+=mix(primaryColor*.42,cyan*.72,litCloud)*energyCloud*.36;
+ base*=mix(.56,1.34,clamp(surfaceSettings.z*.5,0.,1.));
+ base*=mix(.76,1.24,bumpLight);
+ base+=energyTint*bumpSpec*.25*reliefSettings.y*shineRatio;
  base+=mix(primaryColor,secondaryColor,micro)*mineral;
  base*=.82+.18*pow(max(geomN.z,0.),.55);
  base+=cyan*currents*(.045+.19*light);
@@ -231,6 +289,7 @@ void main(){
  // HDR-like emissive strand cores and lower-energy bloom are resolved by the
  // existing tone mapper, preserving color and avoiding white clipping.
  base+=mix(cyan,lavender,clamp(v2*.74,0.,1.))*(curlGlow*.76+microThreads*.10*detailRatio)*shimmer;
+ base+=energyTint*(energyMask*.66+energyStrands*.12)*surfaceSettings.w*shimmer;
  base+=mix(primaryColor,cyan,.48)*agitation*.12*(eddyA-.5);
  base+=rimColor*rim*(.28+.30*shellOptical)*rimRatio;
  // Stable broad and sharp specular lobes, even at neutral rotation.
@@ -239,8 +298,9 @@ void main(){
  base+=vec3(.88,.96,1.)*(spec*.42+specFine*.28)*shineRatio;
  float topRim=smoothstep(-.2,.8,p.y)*rim;
  base+=rimColor*topRim*.17*rimRatio;
- float centralSource=exp(-d*d*115.);
- float coreBloom=exp(-d*d*8.5);
+ float coreSize=max(flowSettings.w,.003);
+ float centralSource=exp(-d*d*115./(coreSize*coreSize));
+ float coreBloom=exp(-d*d*8.5/(coreSize*coreSize));
  base+=coreColor*(centralSource*.64+coreBloom*.62)*coreRatio;
  vec3 scatter=mix(primaryColor,secondaryColor,.4);
  base=mix(base,scatter*(.48+.44*shellOptical),shellDiffuse*.23);
@@ -268,7 +328,7 @@ void main(){
  // Opacity belongs solely to opacity. Thickness changes only the narrow
  // grazing-angle wall shading, not alpha nor a second interior disk.
  float edgeSoftness=mix(.008,.063,shellDiffuse);
- float shellFade=1.-smoothstep(radius-edgeSoftness,radius-.001,d);
+ float shellFade=1.-smoothstep(silhouetteRadius-edgeSoftness,silhouetteRadius-.001,d);
  float alpha=sphereAlpha*shellFade;
  // Exposure is independent of nuclear light, specularity and transparency.
  float exposure=pow(max(luminanceRatio,0.),1.45);
@@ -317,6 +377,7 @@ void main(){
   const parameters = Object.fromEntries([
     'speedRatio','detailRatio','agitationRatio','shineRatio','contrastRatio',
     'coreRatio','rimRatio','sphereAlpha','shellDiffusionRatio','shellThicknessRatio','luminanceRatio',
+    'surfaceSettings','flowSettings','reliefSettings','reliefDynamics',
     'primaryColor','secondaryColor','coreColor','rimColor'
   ].map(key => [key, gl.getUniformLocation(program, key)]));
   if (res === null || time === null || tilt === null ||
@@ -330,6 +391,18 @@ void main(){
       luminanceRatio:'luminance'
     };
     for (const [name, control] of Object.entries(keys)) gl.uniform1f(parameters[name],numeric(control));
+    gl.uniform4fv(parameters.surfaceSettings,new Float32Array([
+      ordinal('energyMode'),ordinal('surfaceMotion'),numeric('surfaceGlow'),numeric('surfaceEmission')
+    ]));
+    gl.uniform4fv(parameters.flowSettings,new Float32Array([
+      numeric('surfaceFlow'),numeric('surfaceSpeed'),ordinal('surfaceDirection'),numeric('coreSize')
+    ]));
+    gl.uniform4fv(parameters.reliefSettings,new Float32Array([
+      ordinal('reliefMode'),numeric('reliefIntensity'),numeric('reliefScale'),numeric('reliefRoughness')
+    ]));
+    gl.uniform4fv(parameters.reliefDynamics,new Float32Array([
+      numeric('reliefContrast'),numeric('reliefDeform'),numeric('reliefSpeed'),0
+    ]));
     for (const [name, control] of Object.entries({
       primaryColor:'primary',secondaryColor:'secondary',coreColor:'core',rimColor:'rim'
     })) gl.uniform3fv(parameters[name],new Float32Array(color(control)));
