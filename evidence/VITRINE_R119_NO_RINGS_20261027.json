@@ -1,0 +1,67 @@
+{
+  "schema": "synestra.vitrine.r119-ringfree.evidence.v1",
+  "date": "2026-10-27",
+  "mission_id": "SYN_CORE_R119_NO_RINGS_20261027",
+  "owner": "Inos",
+  "objective": "Remove all three R119 metallic rings while preserving the R119 electric sphere, 8 radial discharges and the SVG/mobile fallback.",
+  "baseline": {
+    "commit": "ca3f2401edf624a4bd284777ff20ed32b0cb1716",
+    "preview": "https://6a64efe8.synestra-vitrine-preview.pages.dev/",
+    "unchanged": true
+  },
+  "source": {
+    "repository": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_CORE_R119_NO_RINGS_20261027",
+    "pr": null,
+    "code_commit": "947658718489013cbca1b0d42f9cd410ee564daf",
+    "blobs": {
+      "assets/core-r109-webgl.js": "bc6f545e7190417cff4e9b95e0417d109ad297ee",
+      "index.html": "60147e783c245c9ee4a30c69fef32f9c52836f4b",
+      "tests/vitrine_r104_products_core.test.mjs": "5c23dc311daf6242c2892b3ada0eac32a3285bba"
+    }
+  },
+  "delta": [
+    "Removed GLSL metalGyro, depth sorting, front and rear metal compositing.",
+    "Removed three fallback SVG metal rings, their gradients and 3D animation CSS.",
+    "Updated legacy assertions and added ring-free failure-first/non-regression checks."
+  ],
+  "validation": {
+    "negative_before": "PASS: original R119 shader and fallback contained 3 metal rings",
+    "static_in_memory": "8/8 controlled checks PASS before Git mutation",
+    "readback": "PASS: 3 modified blob SHA returned on pinned branch and core invariants rechecked",
+    "arc_count": 8,
+    "sphere_glsl_radius": 0.53,
+    "sphere_svg_radius_px": 66,
+    "svg_metal_ellipse_count": 0,
+    "old_navigation_retained": true,
+    "shader_fingerprint": "8b36e6b9",
+    "node_tests": "NOT_EXECUTED",
+    "gpu_shader_compilation": "NOT_VERIFIED",
+    "chrome_safari_visual": "NOT_VERIFIED",
+    "ci": "NO_STATUS",
+    "cloudflare_preview": "NOT_DEPLOYED"
+  },
+  "publication": {
+    "production_branch": "main",
+    "production_changed": false,
+    "source_branch_allowed_by_cloudflare_preview_rules": false,
+    "reason": "Preview branch includes only task/SYN_VITRINE_SITEFORGE_R91_PREVIEW_20261024; no permission expansion",
+    "public_preview_url": "NOT_AVAILABLE"
+  },
+  "safety": {
+    "free_only": true,
+    "acl_unchanged": true,
+    "secrets_unchanged": true,
+    "rollback": "Restore immutable R119 commit ca3f2401...; no rebase/merge of active PR5"
+  },
+  "consulted_skills": [
+    "generative-3d-texture-pbr@1.0.0#44f288ec3e8e3020d0c7e675cebbda4700579b4c",
+    "visual-regression-testing@1.0.0#aa98fffe9149dfcc0e153f0d1b8b91f3c0a6b4ae",
+    "failure-first@1.0.0#373c5f508b3ef91d1ffc1fc5afec7007a643d590"
+  ],
+  "source_gate": "LIMITED",
+  "memory_status": "MANQUANTE",
+  "hooks_status": "UNKNOWN",
+  "function_report": "PARTIAL",
+  "next": "Node 22 test suite and authorized browser GPU capture/visual comparison on exact code SHA; publish only after approval of preview scope."
+}
