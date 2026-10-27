@@ -193,7 +193,7 @@ test('R154: four presets affect real 3D plasma ray samples, not only optional pa
   'electrical=pow(max(0.,.5+.5*cos(winding*2.2+detail*9.)),23.);',
   'vortex=pow(max(0.,.5+.5*cos(winding*.72+q.z*8.)),9.);',
   'fusion=pow(max(0.,.5+.5*cos(angle*10.+depthWarp*2.-t*.5)),14.)',
-  'float violetBand=.5+.5*sin(angle*2.7+q.z*4.0+broad*2.2);',
+  'float violetBand=.5+.5*sin(angle*3.0+q.z*4.0+broad*2.2);',
   'accum+=trans*radiance*absorption;',
   'trans*=1.-absorption;',
   'float nucleusRadius=max(.018,radius*uShape.z*.105);'
@@ -254,4 +254,17 @@ test('R154: energy reference is legible on mobile and still shares palette and e
  assert.match(html,/transform:scale\(calc\(\.92 \* var\(--sphere-zoom,1\)\)\)/);
  assert.match(js,/if\(uPass>\.5&&uPass<1\.5\)energy\*=\.28/);
  assert.equal((html.match(/data-sphere-control=/g)||[]).length,16);
+});
+
+
+test('R155: all polar harmonics reconnect after a full 2π turn, preventing left horizontal shader seam',()=>{
+ const frag=js.slice(js.indexOf('const fragment='),js.indexOf('function compile('));
+ assert.match(frag,/float winding=angle\*5\.0\+/);
+ assert.match(frag,/float sideFilament=pow\(max\(0\.,\.5\+\.5\*cos\(winding\*1\.8\+/);
+ assert.match(frag,/float stream=pow\(max\(0\.,\.5\+\.5\*cos\(winding\*\.8-q\.z\*7\.2\)\),8\.\);/);
+ assert.match(frag,/vortex=pow\(max\(0\.,\.5\+\.5\*cos\(winding\*\.8\+q\.z\*8\.\)\),9\.\);/);
+ assert.match(frag,/float violetBand=\.5\+\.5\*sin\(angle\*3\.0\+q\.z\*4\.0\+broad\*2\.2\);/);
+ const harmonics=[5,5*1.8,5*.8,5*.8,3];
+ for(const n of harmonics)assert.ok(Math.abs(n-Math.round(n))<1e-8,'integer angular harmonics must be 2pi-periodic: '+n);
+ for(const old of ['winding*.78','winding*.72','angle*2.7'])assert.ok(!frag.includes(old),'discontinuous R154 angular phase must not regress: '+old);
 });
