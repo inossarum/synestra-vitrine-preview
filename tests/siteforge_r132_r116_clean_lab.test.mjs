@@ -21,8 +21,8 @@ test('R152: old sphere implementation is not in the active runtime',()=>{
 test('R152: blue-cyan-violet original plasma source is now independent of old effect controls',()=>{
  assert.match(current,/void main\(\)/);
  assert.match(current,/uPass>3\.5/);
- assert.match(current,/vec3 plasma=/);
- assert.match(current,/float coreRadius=max\(/);
+ assert.match(current,/vec3 accum=vec3\(0\.\)/);
+ assert.match(current,/float nucleusRadius=max\(/);
  for(const k of ['energyMode','reliefMode','surfaceFlow','agitation','thickness','diffusion'])
   assert.doesNotMatch(page,new RegExp('id="sf-'+k+'"'));
 });
