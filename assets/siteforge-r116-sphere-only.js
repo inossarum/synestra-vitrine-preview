@@ -175,7 +175,7 @@ void main(){
   float emission=clamp(uControls.y,0.,2.);
   // Compact core size independent of its radiance. Power never widens the core.
   float nucleusRadius=max(.018,radius*uShape.z*.105);
-  for(int i=0;i<26;i++){
+  for(int i=0;i<22;i++){
     if(float(i)>=uVolumeSteps)break;
     float z=halfDepth-(float(i)+.5)*stride;
     vec3 q=vec3(p,z);
@@ -187,7 +187,7 @@ void main(){
     float planar=length(q.xy)/radius;
     float angle=atan(q.y,q.x);
     float broad=noise3(q*3.8+vec3(t*.12,-t*.11,t*.08));
-    float detail=noise3(q*10.5+vec3(-t*.17,t*.21,t*.12));
+    float detail=.5+.5*sin(dot(q,vec3(18.,-13.,11.))+t*.45+(broad-.5)*4.);
     float depthWarp=(broad-.5)*1.05+(detail-.5)*.35;
     // Logarithmic spiral filaments in a rotating three-dimensional volume.
     float winding=angle*5.0+5.8*log(planar+.15)-t*.52
@@ -311,7 +311,7 @@ void main(){
   gl.useProgram(program);
   gl.uniform2f(U.uResolution,canvas.width,canvas.height);
   gl.uniform1f(U.uTime,elapsed);gl.uniform2f(U.uTilt,tiltX,tiltY);
-  gl.uniform1f(U.uVolumeSteps,mobile?18:26);
+  gl.uniform1f(U.uVolumeSteps,mobile?14:22);
   gl.uniform4fv(U.uControls,new Float32Array([
     preset,num('particleIntensity'),num('particleSpeed'),num('particleDensity')
   ]));
