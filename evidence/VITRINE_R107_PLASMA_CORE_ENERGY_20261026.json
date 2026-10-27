@@ -1,0 +1,67 @@
+{
+  "schema": "synestra.vitrine.r107.preview-evidence.v1",
+  "id": "VITRINE_R107_PLASMA_CORE_ENERGY_20261026",
+  "mission_id": "SYN_VITRINE_SITEFORGE_SHOWCASE_20261024",
+  "date": "2026-10-26",
+  "owner": "Inos",
+  "authority": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_VITRINE_SITEFORGE_R91_PREVIEW_20261024",
+    "code_head": "7ac77af41acb1ea6013c85ad5c7c8800ebaa0b62",
+    "pr": 5,
+    "pr_draft": true,
+    "production_deployments_enabled": false,
+    "prior_deployment": "d69e75e3-4410-4697-aca1-d0f48e1bcf09"
+  },
+  "references": [
+    {
+      "source": "Codrops",
+      "url": "https://tympanus.net/codrops/2024/12/19/crafting-a-dreamy-particle-effect-with-three-js-and-gpgpu/",
+      "intent": "particle flux, blur, light and interactive energy, technique studied but no dependency imported"
+    },
+    {
+      "source": "Codrops",
+      "url": "https://tympanus.net/codrops/2025/06/09/how-to-create-interactive-droplet-like-metaballs-with-three-js-and-glsl/",
+      "intent": "fluid energy blending, inspiration only"
+    },
+    {
+      "source": "Magic Energy Bolt",
+      "url": "https://github.com/pawelnosko/magic-energy-bolt",
+      "intent": "interlaced particle stream, branching electric arcing and cinematic bloom; design inspiration, no source copied"
+    },
+    {
+      "source": "Awwwards/2026 selection",
+      "url": "https://www.adveris.fr/sites-internet-innovants-de-l-annee/",
+      "intent": "rhythm and purposeful animated narrative, not motion for motion sake"
+    }
+  ],
+  "changes": {
+    "scene": "R106 existing reactor unchanged metal geometry; R107 procedural SVG aurora, layered magnetic filament loops, neon atmospheric haze, in-chamber electric filaments, four branching lightning arcs with blurred/sharp strokes, shockwave rings, 16 charged particles, center flare",
+    "animation": "CSS transforms/opacity/stroke-dashoffset with stagger; hover/focus enhances discharge; reduced-motion switches off every R107 animated effect",
+    "security": "No external asset/scripting/WebGL/CDN or new Worker; existing R99 brand and 3 native navigation links untouched; no simulated telemetry"
+  },
+  "proof": {
+    "cloudflare_project": "synestra-vitrine-preview",
+    "deployment": "e95dfa9c-715a-41f9-8b5e-f52aeadf1180",
+    "environment": "preview",
+    "url": "https://e95dfa9c.synestra-vitrine-preview.pages.dev",
+    "deployed_code_sha": "7ac77af41acb1ea6013c85ad5c7c8800ebaa0b62",
+    "stage": "success",
+    "tests_passed": 37,
+    "tests_failed": 0,
+    "allowlisted_files": 37,
+    "headers_rule_count": 1,
+    "production_disabled": true,
+    "pr_draft": true
+  },
+  "limits": {
+    "web_tool_live_http": "NOT_ACCESSIBLE (web.open returned not accessible)",
+    "visual_pixels": "NOT_VERIFIED",
+    "mobile_safari": "NOT_RUN",
+    "desktop_browser": "NOT_RUN",
+    "screenreader": "NOT_RUN",
+    "performance_real_user": "NOT_RUN"
+  },
+  "next": "Visual acceptance of actual R107 on desktop/mobile; if approved qualify browser screenshot/reduced-motion/contrast/reflow, then decide production release separately.",
+  "function_report": "PARTIAL"
+}

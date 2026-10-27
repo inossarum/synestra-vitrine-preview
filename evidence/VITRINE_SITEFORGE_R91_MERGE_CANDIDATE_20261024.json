@@ -1,0 +1,116 @@
+{
+  "schema": "synestra.vitrine.r91.merge-integration-evidence.v1",
+  "evidence_id": "VITRINE_SITEFORGE_R91_MERGE_CANDIDATE_20261024",
+  "mission_id": "SYN_VITRINE_SITEFORGE_SHOWCASE_20261024",
+  "created_at": "2026-10-24T21:58:03.833Z",
+  "updated_at": "2026-10-24T21:58:03.833Z",
+  "time_provenance": "UTC functions.exec runtime clock; action times from Synestra Connect Bridge observedAt",
+  "owner": "Inos",
+  "sources": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "studio_pr309_head": "6450150464fbce9041cadf1484f17711f15a5281",
+    "vitrine_pr3_head": "78cdb83825478948e9557aae01f4eb0ad562cf60",
+    "main_head": "1eb9f9acc1d7091d42077f30d3159483057a02a6",
+    "r85_branch_head": "ecf3c59d6497ea015bf117799804c92a2e5251e8",
+    "new_candidate_branch": "task/SYN_VITRINE_SITEFORGE_R91_PREVIEW_20261024",
+    "source_commit": "d6d0b41eb5721f41ca6a7ccd3a70a8540ffde6fb",
+    "source_git_tree": "4294303bb7a2043235faf10bdd401fafdfc7b642",
+    "merge_parents": [
+      "1eb9f9acc1d7091d42077f30d3159483057a02a6",
+      "ecf3c59d6497ea015bf117799804c92a2e5251e8"
+    ],
+    "source_file_blobs": {
+      "root_index": "c354a8b5b2a89e494f9a061b6cb7f28b68e2aa01",
+      "siteforge_index": "b67811bf23f04d147645144fcf735c017db0be79",
+      "signal_index": "d0aa2efac1078de7eabdc36247788fdbdd8274e4"
+    },
+    "git_url": "https://github.com/inossarum/synestra-vitrine-preview/tree/task/SYN_VITRINE_SITEFORGE_R91_PREVIEW_20261024"
+  },
+  "merge_probe": {
+    "method": "git merge-tree --write-tree --name-only main other in separately owned no-checkout clone",
+    "pr3_to_main": {
+      "conflicts": 1,
+      "paths": [
+        "index.html"
+      ],
+      "exit_code": 1
+    },
+    "r85_to_main": {
+      "conflicts": 22,
+      "scope": "index.html + 20 siteforge HTMLs + tests/test_siteforge_preview.py",
+      "exit_code": 1
+    },
+    "root_cause": "DIVERGED_BRANCHES_AND_ADD_ADD_SITEFORGE_PAGES; no conflict suppression",
+    "request_id": "83de0dc4-e93a-4a1a-99e0-640a0eab5f87",
+    "outcome": "CONFIRMED_REAL_GIT_CONFLICTS"
+  },
+  "recovery": {
+    "first_merge_failure": "Git did not proceed without local committer identity, no merge left in progress",
+    "recovery": "ephemeral synthetic QA identity bound only to isolated merge invocation",
+    "merge_resolution": "explicit SHA-bound isolated merge, choose R85 version for 22 conflicted page/test files, retain current main Signal assets",
+    "conflicts_remaining": 0,
+    "staged_files": 57,
+    "whitespace_failure": "legacy trailing whitespace in tests/web_pilot_real_capture_qa.mjs",
+    "repair": "removed single trailing whitespace in owned merge candidate",
+    "git_diff_check": 0,
+    "original_branches_mutated": false,
+    "request_ids": [
+      "0ad7dbd4-024c-4599-b4ec-8571ab10cedd",
+      "0f492eff-1c04-47c7-92a5-38583f0f9be6",
+      "82301e19-403b-4bbf-860c-97678c3cbc53"
+    ]
+  },
+  "tests": {
+    "initial_pre_fix": {
+      "node_pass": 87,
+      "node_fail": 0,
+      "python_pass": 13,
+      "python_fail": 2,
+      "cause": "main-root legacy contract asserted obsolete primary button CSS class and exact copy string incompatible with R85"
+    },
+    "bounded_fix": "adapted only tests/test_public_entry.py to assert the known HTTPS app link within hero-actions and exact qualification copy with curly apostrophe/son vs le variants; no production security weakening",
+    "after_fix": {
+      "node_pass": 87,
+      "node_fail": 0,
+      "node_exit": 0,
+      "python_pass": 15,
+      "python_fail": 0,
+      "python_exit": 0,
+      "git_diff_check": 0,
+      "git_unmerged": 0
+    },
+    "request_id": "56d1d223-5f28-4ed2-9cb5-612cf825547e",
+    "original_source_visual": "R86 four inspected above-the-fold Chrome CDP screenshots on exactly matching R85 HTML root; not new inspection of R91 site or Signal",
+    "e2e_public": "NOT_RUN",
+    "reader_wcag": "NOT_CERTIFIED"
+  },
+  "durability": {
+    "local_merge_commit": "d6d0b41eb5721f41ca6a7ccd3a70a8540ffde6fb",
+    "local_tree": "4294303bb7a2043235faf10bdd401fafdfc7b642",
+    "local_commit_status_clean": true,
+    "push_request_id": "0fe481d6-7e2a-45be-84e7-508e7e9ed22d",
+    "push_exit_code": 0,
+    "github_ref_readback": true,
+    "remote_tree_readback": true,
+    "git_exact_commit_parents_verified": true,
+    "original_pr3_draft_untouched": true,
+    "main_untouched": true,
+    "pr309_untouched": true
+  },
+  "gates": {
+    "owner_original_pr3_lease": "UNKNOWN_NO_MODIFICATION",
+    "new_r91_candidate_ownership": "CREATED_AND_TESTED_IN_CURRENT_SESSION",
+    "local_git_hooks_active": 0,
+    "repo_ci_status": "UNKNOWN",
+    "production_deployment": "NOT_AUTHORIZED_NOT_EXECUTED",
+    "publication_approval": "HUMAN_GATE",
+    "cloudflare_access_config": "NOT_MODIFIED",
+    "bridge_software_key_read_write_qa": "AUTHENTICATED_SOFTWARE_ONLY",
+    "native_windows_bridge_enrollment": "NOT_ATTESTED",
+    "desktop_commander": "NOT_USED",
+    "pixel_media_transfer": "POLICY_DENIED_RETAINED",
+    "pricing": "FREE_ONLY"
+  },
+  "next": "Human authorization for integration target and publication/rollback after visual review; controlled R91 candidate PR to main may supersede old PR3 if explicitly approved. No auto-merge.",
+  "function_report": "PARTIAL"
+}

@@ -1,0 +1,64 @@
+{
+  "schema": "synestra.siteforge.3d-lab-r125-evidence.v1",
+  "mission_id": "SYN_SITEFORGE_3D_LAB_R125_FULL_ROTATION_MATERIAL_20261026",
+  "owner": "SiteForge 3D / Synestra Vitrine PR #5 DRAFT",
+  "date": "2026-10-26",
+  "repo": "inossarum/synestra-vitrine-preview",
+  "branch": "task/SYN_VITRINE_SITEFORGE_R91_PREVIEW_20261024",
+  "code_sha": "0d766eaaefc7dde729c7e55410b3dc9be05f4bc2",
+  "source_tree_sha": "1bdf385591ff243dae62c896d0b49831f48bd808",
+  "files": {
+    "engine": "assets/core-r122-gyro.js",
+    "engine_blob": "21ddb7e7c7fd6994c8db930a2fba6974ab56adcb",
+    "lab": "siteforge/core-3d-lab/index.html",
+    "lab_blob": "aeb6ecbca3f783f7968373223d52169bc0e78c97",
+    "tests": "tests/vitrine_r104_products_core.test.mjs",
+    "tests_blob": "3b15d1125022ff94945b5ca235fac62de2b72e20",
+    "main_homepage_blob": "43810b6eaa878c523eb06d97542d791543765d55"
+  },
+  "changes": {
+    "axes": "New perpendicular axes with dot(normal,axis) < .025 for three metal ring plane normals",
+    "periods_seconds": [
+      13,
+      -17,
+      20
+    ],
+    "spin": "For each ring Rodrigues angle=time*(±TAU/period)+phase; quarter tilt, half turn flips plane, full turn restores orientation",
+    "geometry": "256 angular sectors (up from 144), 8 planar bevel segments, real depth test and sphere occlusion",
+    "shader": "GLSL WebGL1 precision conditional; GGX microfacet distribution, Smith masking, Fresnel Schlick, procedural reflection cards, radial steel brush, filmic tone map",
+    "performance": "bounded around 30fps via 32ms frame guard and existing 1.2M pixel cap",
+    "fallback": "Existing R121 sphere and clear reduced-motion/WebGL-unavailable state retained",
+    "safety": "No remote texture download; no analytics; no change to primary page."
+  },
+  "preview": {
+    "url": "https://b4857d2c.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+    "project": "synestra-vitrine-preview",
+    "environment": "preview",
+    "deployment_id": "b4857d2c-0c61-4cf3-b541-9b064219827c",
+    "deployment_status": "success",
+    "deployed_sha": "0d766eaaefc7dde729c7e55410b3dc9be05f4bc2"
+  },
+  "validation": {
+    "node_tests": 51,
+    "passed": 51,
+    "failed": 0,
+    "static_export": "PASS",
+    "static_file_count": 41,
+    "rotational_kinematics_unit": "PASS quarter, half, full turn algebra for all 3 normals",
+    "shader_browser_compile": "PENDING",
+    "actual_pixel_capture": "PENDING",
+    "iphone_visual_qa": "PENDING",
+    "performance_live_gpu": "PENDING",
+    "site_visual_gate": "PENDING"
+  },
+  "rollback": {
+    "previous_documented_head": "d2578e87be3c5bf818e751d7803c92ebaf3f0a84",
+    "method": "Revert latest R125 code commit on preview branch after lease recheck; no force update of main"
+  },
+  "status": {
+    "SOURCE_GATE": "LIMITED",
+    "HOOKS_STATUS": "NOT_APPLICABLE",
+    "FUNCTION_REPORT": "PARTIAL",
+    "next": "Open Preview in actual WebGL-enabled iPhone and desktop, inspect material, ring plane turnover, 390/768/1440 viewports and console; do not declare visual DONE before verified pixel inspection"
+  }
+}

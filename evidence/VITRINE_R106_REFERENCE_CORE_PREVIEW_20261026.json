@@ -1,0 +1,70 @@
+{
+  "schema": "synestra.vitrine.r106.preview.evidence.v1",
+  "id": "VITRINE_R106_REFERENCE_DRIVEN_CINEMATIC_CORE_20261026",
+  "date": "2026-10-26",
+  "owner": "Inos",
+  "mission": "SYN_VITRINE_SITEFORGE_SHOWCASE_20261024",
+  "sources": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_VITRINE_SITEFORGE_R91_PREVIEW_20261024",
+    "code_sha": "a00217d90d45a125fbbedc45e948343535d94502",
+    "prior_preview": "https://8a5e3575.synestra-vitrine-preview.pages.dev",
+    "external_references": [
+      {
+        "name": "Nanoshrine",
+        "url": "https://www.cssdesignawards.com/sites/nanoshrine-interactive/45555/"
+      },
+      {
+        "name": "Orbyte Studio",
+        "url": "https://www.awwwards.com/inspiration/sections-orbyte-studio"
+      },
+      {
+        "name": "GRAIR",
+        "url": "https://grair.undreamstudio.com/"
+      },
+      {
+        "name": "GoogleChrome Motion",
+        "url": "https://github.com/GoogleChrome/modern-web-guidance/blob/main/skills/modern-web-guidance/guides/ui-behaviors/motion.md"
+      },
+      {
+        "name": "web.dev motion",
+        "url": "https://web.dev/learn/accessibility/motion"
+      }
+    ]
+  },
+  "delta": {
+    "index_html": "R106 replaces R105 center concentric CSS with original inline SVG 3D-like reactor, metallic lighting, iris blades, plasma, rear/front depth torii and ground shadow; 3 navigational native anchors into existing SiteForge, Connect, Bridge; responsive layout, focus and reduced-motion",
+    "brand": "Original R99 official banner retained, no bridge logo master changed",
+    "components": "No scripts, forms, external libraries, new worker or 3D engine",
+    "test_changes": "Migrated R96/R98/R99 legacy assertions to new scene, rewritten R104 product/core tests for actual portals"
+  },
+  "verification": {
+    "cloudflare_project": "synestra-vitrine-preview",
+    "deployment_id": "d69e75e3-4410-4697-aca1-d0f48e1bcf09",
+    "preview_url": "https://d69e75e3.synestra-vitrine-preview.pages.dev",
+    "deployment_stage": "success",
+    "deploy_sha": "a00217d90d45a125fbbedc45e948343535d94502",
+    "node_tests_passed": 35,
+    "node_tests_failed": 0,
+    "static_file_count": 37,
+    "production_enabled": false,
+    "pr_draft": true,
+    "local_independent_http": "UNVERIFIED:web tool reports URL inaccessible",
+    "pixel_visual": "NOT_VERIFIED",
+    "screenreader": "NOT_RUN",
+    "rollback_url": "https://8a5e3575.synestra-vitrine-preview.pages.dev"
+  },
+  "incident": {
+    "first_deploy_id": "c6b22bab-bdf9-4d70-87ff-6bfa6052ebbc",
+    "first_status": "failure",
+    "cause": "2 tests asserted old stage-pulse-line and counted links container as fourth link",
+    "correction": "Updated scoped historical motion check and precise actual portal link count",
+    "final": "success"
+  },
+  "limits": [
+    "No live data, backend connectivity or Bridge installer implied",
+    "SVG 3D-like illustration not actual WebGL scene",
+    "No production merge, plan change or payment"
+  ],
+  "status": "PREVIEW_CLOUD_PASS_PIXELS_PENDING"
+}

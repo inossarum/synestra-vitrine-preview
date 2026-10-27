@@ -1,0 +1,79 @@
+{
+  "schema": "synestra.vitrine.r115.evidence.v1",
+  "id": "SYN_VITRINE_R115_ORBIT_CENTER_FAST_ARCS_IDLE_LIFE_20261026",
+  "date": "2026-10-26",
+  "owner": "Inos",
+  "mission_id": "SYN_VITRINE_SITEFORGE_SHOWCASE_20261024",
+  "user_observation": "Owner iPhone screenshot R114: Studio satellite labels off-centre relative to orbit; owner asks centre labels, faster electrical arcs, more autonomously animated life site-wide.",
+  "source": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_VITRINE_SITEFORGE_R91_PREVIEW_20261024",
+    "pr": 5,
+    "type": "DRAFT",
+    "parent_head": "2cda19979ea967d8736a2a1ddb190a721ab2af1e",
+    "tested_code_commit": "52be2a4db924f2efe2c8030024c1891c822b8113",
+    "files": [
+      "index.html",
+      "assets/core-r109-webgl.js",
+      "assets/product-pages.css",
+      "tests/vitrine_r104_products_core.test.mjs"
+    ],
+    "blob_sha": [
+      "441546e2b72c4a9dea25cde1ab49b28736f3e418",
+      "d1fe60303e9a4257043fc25fd795dc4e4e2bdd74",
+      "df416e9314fd5ffec369095f47f7d44fe2f9cd22",
+      "28389f1768fb9f7c389e84a348be0084040290e4"
+    ]
+  },
+  "changes": {
+    "orbit": "Changed CSS satellite span anchor translate(-50%,-50%), retained in both frame endpoints of counterrotation; seven real Studio component names, mobile orbit controls intact; baseline screenshot shows left/top anchoring skew.",
+    "arcs": "Kept eight R114 radial arc channels; reduced cycleTime from 1.85s to 1.12s (~65% higher frequency) and growth front smoothstep phase .06-.58 -> .04-.46; retained attack/release fades, sphere boundary and 32ms frame guard; shader source FNV1a32=40d987a4.",
+    "autonomous": "Added 2 wisps + 2 beacons mobile, 3 each desktop, CSS-only animated via existing aria-hidden ambient layer across index/Connect/Bridge/Offres. Added stage ambient border/halo cycle 17s. Retained 22 mobile/38 desktop existing particles and comets; pointer independence; pause hidden-tab and prefers-reduced-motion; no extra RAF loop, intervals, telemetry or network calls.",
+    "unchanged": "Scale .57, seven orbit tools, existing product links, R114 retina budget 1.2M pixels, branding R99."
+  },
+  "verification": {
+    "precommit_static_guards": "14/14 PASS",
+    "github_atomic_commit": "PASS",
+    "github_readback": "PASS",
+    "cloudflare_build": "PASS",
+    "cloudflare_node_tests": 45,
+    "cloudflare_node_pass": 45,
+    "cloudflare_node_fail": 0,
+    "static_export": "PASS",
+    "static_file_count": 38,
+    "cloudflare_deploy": "success",
+    "external_web_open": "INACCESSIBLE_VIA_WEB_TOOL",
+    "real_safari_visual_review": "PENDING",
+    "pixel_alignment_after_change": "NOT_VISUALLY_VERIFIED",
+    "native_gpu_test_of_changed_shader": "NOT_RUN"
+  },
+  "deployment": {
+    "cloudflare_project": "synestra-vitrine-preview",
+    "id": "17ccf74e-606a-48e9-b8b8-d87a5138a042",
+    "url": "https://17ccf74e.synestra-vitrine-preview.pages.dev/",
+    "sha": "52be2a4db924f2efe2c8030024c1891c822b8113",
+    "environment": "preview",
+    "result": "SUCCESS",
+    "previous_preview": "https://b68fe24b.synestra-vitrine-preview.pages.dev/",
+    "production_deployments_enabled": false,
+    "main_unchanged": true
+  },
+  "rules": {
+    "agents_root_blob_sha": "a42bcf8055c6f747eaa734f5faa7006cc57409db",
+    "visual_preview_rule_sha": "70de2947cb16ea5053aee37cb13065adfc9b58a4",
+    "source_gate": "LIMITED (Memory V1 and browser E2E not qualified)",
+    "billing": "FREE_ONLY",
+    "safety": "Preview only; unchanged ACL/CSP/identity; no new paid tools"
+  },
+  "skills": {
+    "consulted": [
+      "ui-ux@1.0.0#0a362a0938401674166c7a8b871192fbde602c1a",
+      "web-accessibility-engineering@1.0.0#172c442525351804e89e7b273346f03df34bdd89",
+      "visual-regression-testing@1.0.0#aa98fffe9149dfcc0e153f0d1b8b91f3c0a6b4ae"
+    ],
+    "execution": "advisory applied manually, no skill runtime"
+  },
+  "status": "PREVIEW_PUBLISHED_PENDING_DEVICE_VISUAL_GATE",
+  "function_report": "PARTIAL",
+  "next": "Owner inspect preview on iPhone for label centering and arc speed. If collision/blur, bounded delta; never infer pixel visual PASS from CI. Production merge/publish remains excluded."
+}

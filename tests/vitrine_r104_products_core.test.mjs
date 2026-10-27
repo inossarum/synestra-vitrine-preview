@@ -1,0 +1,533 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync,existsSync} from 'node:fs';
+const read=(p)=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
+const home=read('index.html');
+const css=read('assets/product-pages.css');
+const pages=Object.fromEntries(['connect','bridge','offres'].map(n=>[n,read(n+'/index.html')]));
+test('R108: one clean energy Core keeps three product links and the R99 brand',()=>{
+ assert.match(home,/class="system-stage core-r108-stage core-r109-stage"/);
+ assert.match(home,/<svg class="core-r108-art" viewBox="0 0 640 410"/);
+ assert.equal((home.match(/id="r108-(?:aura|plasma|arc|halo)"/g)||[]).length,4);
+ assert.match(home,/class="core-r108-heart"/);
+ assert.match(home,/class="core-r108-orbit"/);
+ assert.match(home,/class="brand-banner-r99" src="\.\/assets\/synestra-studio-header-y-r99.webp"/);
+ assert.doesNotMatch(home,/<img class="official-hero-logo"/);
+ assert.doesNotMatch(home,/class="core-r107-|class="core-r106-svg"/);
+ assert.doesNotMatch(home,/class="motion-strip"|class="container r105-orientation"/);
+ assert.match(home,/prefers-reduced-motion:reduce/);
+ assert.match(home,/class="nav-explore"/);
+});
+
+test('R104: Connect, Bridge and offers are linked from homepage and exist',()=>{
+ for(const slug of Object.keys(pages)){
+  assert.match(home,new RegExp('href="\\./'+slug+'/"'));
+  assert.ok(existsSync(new URL('../'+slug+'/index.html',import.meta.url)));
+  assert.equal((pages[slug].match(/<h1\b/g)||[]).length,1,slug);
+  assert.match(pages[slug],/\.\.\/assets\/product-pages.css/);
+  assert.match(pages[slug],/\.\.\/assets\/synestra-studio-header-y-r99.webp/);
+  assert.match(pages[slug],/noindex,nofollow/);
+  assert.match(pages[slug],/default-src 'none'; style-src 'self'; img-src 'self'/);
+  assert.deepEqual([...pages[slug].matchAll(/<script\b[^>]*>/g)].map(m=>m[0]),['<script src="../assets/core-r109-webgl.js" defer>']);
+  assert.match(pages[slug],/script-src 'self'; base-uri 'none'/);
+  assert.doesNotMatch(pages[slug],/<iframe\b|<form\b/i);
+ }
+ assert.match(home,/href="\.\/offres\/#bridge"/);
+});
+test('R104: Connect uses honest architecture and Bridge has offers and actual distribution status',()=>{
+ assert.match(pages.connect,/PASSERELLE MCP/);
+ assert.match(pages.connect,/Central Skills|CENTRAL SKILLS/);
+ assert.match(pages.connect,/ne garantit pas|ne garantit pas qu|ne garantit/);
+ assert.match(pages.bridge,/href="\.\.\/offres\/#bridge"/);
+ assert.match(pages.bridge,/installateur Bridge signé/);
+ assert.match(pages.bridge,/aucun bouton ne prétend télécharger/);
+ assert.match(pages.offres,/id="bridge"/);
+ assert.match(pages.offres,/id="connect"/);
+ assert.match(pages.offres,/Téléchargement indisponible/);
+ for(const s of Object.values(pages)){
+  assert.doesNotMatch(s,/href="[^"]+\.(?:msix|exe|zip)"/i);
+  assert.doesNotMatch(s,/\b(?:9,99\s*€|14,99\s*€|\/mois)\b/i);
+ }
+});
+test('R104: shared R99 tokens, semantic navigation and accessible motion rules',()=>{
+ for(const token of ['--ink:#060b12','--panel:#141f2c','--cyan:#00c4f1','--violet:#8a58ec','--teal:#20dba9'])assert.ok(css.includes(token),token);
+ assert.match(css,/@media\(prefers-reduced-motion:reduce\)/);
+ assert.match(css,/focus-visible/);
+ assert.match(css,/@media\(max-width:620px\)/);
+ for(const [name,html] of Object.entries(pages)){
+  assert.match(html,/<a class="skip" href="#contenu">/);
+  assert.match(html,/<main class="wrap" id="contenu" tabindex="-1">/);
+  assert.match(html,/aria-label="Navigation principale"/);
+  assert.match(html,/role="img" aria-label="/);
+  if(name==='bridge')assert.match(html,/href="\.\.\/offres\/"/);
+ }
+});
+test('R104: Cloudflare static export admits public routes, excludes project internals',()=>{
+ const build=read('tools/build_vitrine_static.mjs');
+ for(const path of ['connect/index.html','bridge/index.html','offres/index.html','assets/product-pages.css'])assert.ok(build.includes(path),path);
+ assert.match(build,/const rootDirs=\['assets','siteforge','signal','connect','bridge','offres'\]/);
+ assert.match(build,/assets:new Set\(\['\.avif','\.webp','\.png','\.jpg','\.jpeg','\.svg','\.css','\.js'\]\)/);
+ assert.doesNotMatch(build,/rootDirs=\[[^\]]*'tests'/);
+ assert.doesNotMatch(build,/child_process|execSync|spawn\(/);
+});
+
+test('R105: contextual chapter navigation and examples on all product pages',()=>{
+ for(const html of Object.values(pages)){
+  assert.match(html,/class="product-chapters"/);
+  assert.match(html,/class="product-example"/);
+  assert.match(html,/aria-label="Dans cette page"/);
+ }
+ assert.match(css,/\.product-chapters a:focus-visible/);
+ assert.match(css,/prefers-reduced-motion:reduce/);
+});
+
+test('R108: the core remains a navigable and accessible grouped scene',()=>{
+ const scene=home.split('<div class="system-stage core-r108-stage core-r109-stage"')[1]?.split('</section>')[0]||'';
+ assert.match(scene,/aria-label="Core Synestra/);
+ assert.match(scene,/aria-label="Explorer Synestra"/);
+ assert.equal((scene.match(/<a href="\.\/(?:siteforge|connect|bridge)\/"[ >]/g)||[]).length,3);
+ assert.match(scene,/class="core-r108-note"/);
+ assert.doesNotMatch(scene,/<script\b|<iframe\b|<form\b/i);
+});
+test('R109: WebGL Canvas is opt-in with a guaranteed SVG fallback and restricted script',()=>{
+ assert.match(home, /<canvas class="core-r109-canvas" aria-hidden="true" width="960" height="570"><\/canvas>/);
+ assert.match(home, /<svg class="core-r108-art" viewBox="0 0 640 410"/);
+ assert.match(home, /class="system-stage core-r108-stage core-r109-stage"/);
+ assert.deepEqual([...home.matchAll(/<script\b[^>]*>/g)].map(m=>m[0]),['<script src="./assets/core-r109-webgl.js" defer>']);
+ assert.match(home, /script-src 'self'; base-uri 'none'/);
+ assert.match(home, /core-r109-stage\[data-core-ready="true"\] \.core-r108-art\{opacity:0\}/);
+ const script=read('assets/core-r109-webgl.js');
+ for(const guard of ['getContext(\'webgl\'','prefers-reduced-motion: reduce','data-core-ready','webglcontextlost','IntersectionObserver','ResizeObserver','1200000','powerPreference: \'low-power\''])
+  assert.ok(script.includes(guard),guard);
+ assert.match(script,/if \(reduceMotion\.matches\) return; \/\/ Static SVG fallback/);
+ assert.match(script,/if \(reduceMotion\.matches\) scene\.removeAttribute\('data-core-ready'\)/);
+ assert.doesNotMatch(script,/\bfetch\s*\(|XMLHttpRequest|WebSocket|sendBeacon|eval\s*\(|new Function/);
+});
+test('R108: reduced motion and visual simplification are enforced',()=>{
+ assert.ok(home.includes('@media(prefers-reduced-motion:reduce){.core-r108-heart'));
+ assert.match(home, /@keyframes r108-breathe/);
+ assert.match(home, /@keyframes r108-current/);
+ assert.doesNotMatch(home, /core-r107-discharge|core-r107-particles|core-r107-shockwave/);
+ assert.doesNotMatch(home, /<div class="motion-strip"|<section class="container r105-orientation"/);
+ assert.match(home, /Une même énergie, trois façons de donner vie à vos projets\./);
+});
+
+test('R110: native-verified dimensional plasma shader, restrained orbit and bounded frame-rate',()=>{
+ const script=read('assets/core-r109-webgl.js');
+ const fragment=script.match(/const fragment = \`([\s\S]*?)\`;/)?.[1]?.trim();
+ assert.ok(fragment,'R110 shader fragment absent');
+ let hash=2166136261;
+ for(const ch of fragment.replace(/\r\n/g,'\n'))hash=Math.imul(hash ^ ch.charCodeAt(0),16777619)>>>0;
+ assert.equal(hash.toString(16),'a543602c','GLSL source fingerprint changed after R116 refined material');
+ for(const term of ['noise3','turn3','ringBloom','ringFront','spiral']){
+  if(term==='spiral')continue;
+  assert.ok(fragment.includes(term),term);
+ }
+ assert.match(script,/clock - lastFrame < 32/);
+ assert.match(script,/lastFrame = clock;/);
+ assert.match(script,/prefers-reduced-motion: reduce/);
+ assert.match(script,/scene.removeAttribute\('data-core-ready'\)/);
+ assert.doesNotMatch(script,/\bfetch\s*\(|XMLHttpRequest|WebSocket|sendBeacon/);
+});
+
+test('R114: eight radial arcs grow from the centre towards the sphere edge',()=>{
+ const script=read('assets/core-r109-webgl.js');
+ const tick=String.fromCharCode(96);
+ const fragment=script.split('const fragment = '+tick)[1]?.split(tick+';')[0]||'';
+ for (const needle of ['float r111Arc(', 'float along=dot(p,dir)', 'float growingTip=mix(.06,.675',
+   'float body=smoothstep(.012,.06,along)', 'float fork=exp(', 'float awake=step(.24,seed)',
+   'float envelope=smoothstep(.015,.12,phase)'])assert.ok(fragment.includes(needle),needle);
+ assert.equal(fragment.split('=r111Arc(p,').length-1,8);
+ assert.ok(fragment.indexOf('if(d>radius)')<fragment.indexOf('float arcA='),'Arcs remain inside sphere');
+ for (const forbidden of ['fetch(', 'XMLHttpRequest', 'WebSocket', 'sendBeacon'])assert.ok(!script.includes(forbidden),forbidden);
+});
+test('R116: smaller Core and three actual Studio tools keep real product links',()=>{
+ assert.ok(home.includes('transform:scale(.49);transform-origin:center center'));
+ assert.ok(home.includes('translateX(-50%) scale(.49)'));
+ const orbit=home.split('<div class="core-tools-orbit" aria-hidden="true">')[1]?.split('<nav class="core-r108-links"')[0]||'';
+ assert.equal(orbit.split('class="core-tool-satellite"').length-1,3);
+ for(const label of ['Connect','Bridge','SiteForge'])assert.ok(orbit.includes('<span>'+label+'</span>'),label);
+ for(const rule of ['@keyframes core-tools-turn','@keyframes core-tools-upright',
+   '@media(prefers-reduced-motion:reduce){.core-tools-orbit',
+   '@media(max-width:620px){.core-tools-orbit'])assert.ok(home.includes(rule),rule);
+ for(const n of ['Relay','Memory','Evidence','Visual']) assert.ok(!orbit.includes('<span>'+n+'</span>'),n);
+ assert.ok(!orbit.includes('<a '),'Decorative labels must not create fake navigation links');
+ for (const slug of ['siteforge','connect','bridge'])assert.ok(home.includes('href="./'+slug+'/"'),slug);
+});
+test('R111: floating site particles share one local script and obey visibility and reduced motion',()=>{
+ const script=read('assets/core-r109-webgl.js');
+ assert.match(script,/const startAmbient = \(\) =>/);
+ assert.match(script,/window.innerWidth < 640 \? 22 : 38/);
+ assert.match(script,/document.body.insertBefore\(field, document.body.firstChild\)/);
+ assert.match(script,/motionPreference.addEventListener\('change', updateAmbient\)/);
+ assert.match(script,/document.addEventListener\('visibilitychange', updateAmbient\)/);
+ assert.ok(script.indexOf('startAmbient();') < script.indexOf('const scene ='));
+ for(const source of [home,css]){
+  assert.match(source,/\.syn-ambient-field\{/);
+  assert.match(source,/@keyframes syn-ambient-float/);
+  assert.match(source,/@media\(prefers-reduced-motion:reduce\)\{\.syn-ambient-field\{display:none!important\}\}/);
+ }
+ assert.deepEqual([...home.matchAll(/<script\b[^>]*>/g)].map(m=>m[0]),['<script src="./assets/core-r109-webgl.js" defer>']);
+ for(const source of [home,css]){
+   assert.match(source,/\.syn-ambient-comet\{/);
+   assert.match(source,/@keyframes syn-ambient-comet/);
+   assert.match(source, /\.syn-ambient-paused \.syn-ambient-field/);
+ }
+ assert.ok(script.includes('const comet = i % 11 === 0'));
+});
+test('R114: resolution increases with strict render-pixel and mobile caps',()=>{
+ const source=read('assets/core-r109-webgl.js');
+ assert.ok(source.includes('window.innerWidth < 650 ? 1.8 : 2'));
+ assert.ok(source.includes('Math.sqrt(1200000/(rect.width*rect.height))'));
+ assert.ok(source.includes('clock - lastFrame < 32'));
+ assert.ok(source.includes('document.visibilityState === \'visible\''));
+ assert.ok(!source.includes('setInterval('));
+ assert.ok(!source.includes('setTimeout('));
+});
+
+test('R116: three capsules centered on their orbital anchors during rotation and mobile',()=>{
+ const orbit=home.split('<div class="core-tools-orbit" aria-hidden="true">')[1]?.split('<nav class="core-r108-links"')[0]||'';
+ assert.equal(orbit.split('class="core-tool-satellite"').length-1,3);
+ assert.match(home,/\.core-tool-satellite>span\{[^}]*transform:translate\(-50%,-50%\)/);
+ assert.match(home,/@keyframes core-tools-upright\{from\{transform:translate\(-50%,-50%\) rotate\(0deg\)\}to\{transform:translate\(-50%,-50%\) rotate\(-360deg\)\}\}/);
+ assert.match(home,/@media\(max-width:620px\)\{\.core-tools-orbit/);
+ assert.match(home,/@media\(prefers-reduced-motion:reduce\)\{\.core-tools-orbit/);
+ assert.match(home,/\.core-r108-stage\{animation:core-r115-atmosphere/);
+ assert.match(home,/@media\(prefers-reduced-motion:reduce\)\{\.core-r108-stage\{animation:none!important\}\}/);
+});
+test('R115: electrical radial propagation faster without extra flash frequency outside sphere',()=>{
+ const script=read('assets/core-r109-webgl.js');
+ const tick=String.fromCharCode(96);
+ const fragment=script.split('const fragment = '+tick)[1]?.split(tick+';')[0]||'';
+ assert.ok(fragment.includes('float cycleTime=1.12;'));
+ assert.ok(fragment.includes('float growingTip=mix(.06,.675,smoothstep(.04,.46,phase));'));
+ assert.equal(fragment.split('=r111Arc(p,').length-1,8);
+ assert.ok(fragment.indexOf('if(d>radius)')<fragment.indexOf('float arcA='));
+ assert.ok(script.includes('clock - lastFrame < 32'));
+});
+test('R115: autonomous ambient wisps and beacons share visibility and reduced-motion control',()=>{
+ const script=read('assets/core-r109-webgl.js');
+ for(const name of ['syn-ambient-wisp','syn-ambient-beacon']){
+   assert.ok(script.includes("className = '"+name+"'"),name);
+   for(const style of [home,css]) {
+      assert.ok(style.includes('.'+name+'{')&&style.includes('@keyframes '+name+'{'),name);
+      assert.ok(style.includes('.syn-ambient-paused .syn-ambient-field *'));
+      assert.ok(style.includes('@media(prefers-reduced-motion:reduce){.syn-ambient-field{display:none!important}}'));
+   }
+ }
+ assert.ok(script.includes('const wispCount = window.innerWidth < 640 ? 2 : 3'));
+ assert.ok(script.includes('const beaconCount = window.innerWidth < 640 ? 2 : 3'));
+ assert.ok(script.indexOf('const wispCount')<script.indexOf('document.body.insertBefore(field'));
+ assert.ok(script.includes("document.addEventListener('visibilitychange', updateAmbient)"));
+ assert.doesNotMatch(script,/setInterval\(|setTimeout\(|\bfetch\s*\(|XMLHttpRequest|WebSocket|sendBeacon/);
+});
+
+test('R116: refined single-ring Core respects validated products, reduced motion and clarity',()=>{
+ const orbit=home.split('<div class="core-tools-orbit" aria-hidden="true">')[1]?.split('<nav class="core-r108-links"')[0]||'';
+ assert.equal((orbit.match(/class="core-tool-satellite"/g)||[]).length,3);
+ for (const name of ['Connect','Bridge','SiteForge']) assert.ok(orbit.includes('<span>'+name+'</span>'),name);
+ for (const name of ['Relay','Memory','Evidence','Visual']) assert.ok(!orbit.includes('<span>'+name+'</span>'),name);
+ assert.ok(!orbit.includes('<img '),'Unverified product logos must not be fabricated');
+ for (const ang of ['-90deg','30deg','150deg']) assert.ok(home.includes('--orbit-angle:'+ang),ang);
+ const svg=home.split('<svg class="core-r108-art"')[1]?.split('</svg>')[0]||'';
+ assert.equal((svg.match(/<ellipse/g)||[]).length,1);
+ assert.ok(home.includes('scale(.49)'));
+ assert.ok(home.includes('@media(prefers-reduced-motion:reduce){.core-tools-orbit'));
+ for(const name of ['connect','bridge','siteforge']) assert.ok(home.includes('href="./'+name+'/\"'),name);
+ const src=read('assets/core-r109-webgl.js');
+ const tick=String.fromCharCode(96);
+ const fragment=src.split('const fragment = '+tick)[1]?.split(tick+';')[0]||'';
+ assert.equal(fragment.split('=r111Arc(p,').length-1,8);
+ assert.ok(fragment.includes('float cycleTime=1.12;'));
+ assert.ok(fragment.includes('float centralSource=exp(-d*d*115.);'));
+ assert.ok(fragment.includes('base+=cyan*currents*(.045+.19*light)'));
+ assert.ok(fragment.includes('base+=ringCol*(ring*.32+ringBloom*.018)*orbital;'));
+ assert.ok(fragment.indexOf('if(d>radius)')<fragment.indexOf('float arcA='));
+ assert.ok(src.includes('Math.sqrt(1200000/(rect.width*rect.height))'));
+});
+
+test('R121: original animated plasma restored; metallic gyros removed; iOS fallback has an electric nucleus',()=>{
+ const script=read('assets/core-r109-webgl.js');
+ const fragment=script.match(/const fragment = \`([\s\S]*?)\`;/)?.[1]||'';
+ assert.ok(fragment.includes('float radius=.69;'),'Restore original energy sphere');
+ assert.ok(fragment.includes('float centralSource=exp(-d*d*115.);'),'Original central energy source');
+ assert.equal(fragment.split('=r111Arc(p,').length-1,8,'Eight live radial discharges');
+ assert.ok(fragment.includes('base+=cyan*currents*(.045+.19*light);'),'Turbulent energized surface');
+ assert.ok(!fragment.includes('metalGyro(')&&!fragment.includes('sdRectangularRing('),'No metallic rings');
+ const svg=home.split('<svg class="core-r108-art"')[1]?.split('</svg>')[0]||'';
+ assert.equal((svg.match(/<ellipse/g)||[]).length,1,'Only original subtle orbit');
+ assert.ok(svg.includes('core-r121-discharge')&&svg.includes('r121-emitter'),'Mobile energy fallback');
+ assert.equal((svg.match(/M320 189/g)||[]).length,16,'Eight arcs x glow and filament from nucleus');
+ for(const banned of ['core-r117-metal-a','core-r117-metal-b','core-r118-metal-c','r118-gyro-a','r120-emitter'])assert.ok(!home.includes(banned),banned);
+ assert.ok(home.includes('@media(prefers-reduced-motion:reduce){.core-r121-discharge path{animation:none!important}}'));
+ assert.ok(script.includes("if (reduceMotion.matches) return;"));
+ assert.ok(script.includes('webglcontextlost'));
+});
+
+test('R122: isolated 3D gyroscope lab has real polygonal cross-sections, sphere depth occlusion, and guards', async()=>{
+ const js=read('assets/core-r122-gyro.js');
+ const lab=read('siteforge/core-3d-lab/index.html');
+ const {Script}=await import('node:vm');
+ assert.doesNotThrow(()=>new Script(js),'Native WebGL lab JavaScript must parse');
+ assert.match(js,/const buildRing=\(major,w,h\)=>/);
+ assert.match(js,/for\(let j=0;j<256;j\+\+\)/);
+ assert.ok(js.includes('nr=-dz/len,nz=dr/len'),'Geometry normals point outward');
+ assert.ok(js.includes('const buildSphere=()=>')&&js.includes('gl.colorMask(false,false,false,false)'),'Sphere writes depth but not colour');
+ assert.ok(js.includes('gl.enable(gl.DEPTH_TEST)')&&js.includes('gl.depthFunc(gl.LEQUAL)'));
+ assert.ok(js.includes('gl.uniformMatrix3fv(m.basis'));
+ assert.ok(js.includes('const mo=new MutationObserver(()=>request())'),'Overlay starts only after plasma is ready');
+ assert.ok(js.includes("!scene.hasAttribute('data-core-ready')"),'Graceful WebGL fallback');
+ assert.equal((js.match(/major:/g)||[]).length,3,'Exactly three independent real rings');
+ assert.ok(!/\bfetch\s*\(|XMLHttpRequest|WebSocket|sendBeacon|new Function/.test(js));
+ assert.match(lab,/SiteForge — Atelier 3D/);
+ assert.match(lab,/script src="\.\.\/\.\.\/assets\/core-r109-webgl\.js" defer/);
+ assert.match(lab,/script src="\.\.\/\.\.\/assets\/core-r122-gyro\.js" defer/);
+ assert.match(lab,/meta name="robots" content="noindex,nofollow"/);
+ assert.match(lab,/prefers-reduced-motion:reduce/);
+ assert.ok(!home.includes('core-r122-gyro.js')&&!home.includes('core-3d-lab'),'R121 homepage remains unchanged');
+});
+
+test('R123: SiteForge 3D lab editor exposes safe reusable presets and editable scene parameters',async()=>{
+ const {Script,runInNewContext}=await import('node:vm');
+ const mesh=read('assets/core-r122-gyro.js');
+ const editor=read('assets/siteforge-3d-editor.js');
+ const lab=read('siteforge/core-3d-lab/index.html');
+ assert.doesNotThrow(()=>new Script(mesh));
+ assert.doesNotThrow(()=>new Script(editor));
+ for(const name of ['width','depth','speed','yaw','pitch','material'])assert.ok(lab.includes('name="'+name+'"'),name);
+ for(const name of ['sf3d-export','sf3d-import','sf3d-pause','sf3d-reset','sf3d-status'])assert.ok(lab.includes('id="'+name+'"'),name);
+ for(const name of ['buildRing(ring.major,ring.w*params.depth,ring.h*params.width)','gl.uniform3fv(m.tint','!params.paused','window.SynestraSiteForge3D=Object.freeze'])assert.ok(mesh.includes(name),name);
+ assert.ok(!/\bfetch\s*\(|XMLHttpRequest|WebSocket|sendBeacon/.test(mesh+editor));
+ assert.ok(lab.includes('script src="../../assets/siteforge-3d-editor.js" defer'));
+ assert.ok(lab.includes('content="noindex,nofollow"'));
+ assert.ok(!home.includes('siteforge-3d-editor.js'),'Primary vitrine unchanged');
+ // Failure-first: WebGL missing must not disable configuration export/import.
+ const status={textContent:'',setAttribute(){},getAttribute(){return ''}};
+ const scene={querySelector(){return {getContext(){return null}};}};
+ const fakeDocument={querySelector:()=>scene,getElementById:()=>status};
+ const win={matchMedia:()=>({matches:false})};
+ runInNewContext(mesh,{document:fakeDocument,window:win,matchMedia:win.matchMedia,console});
+ const api=win.SynestraSiteForge3D;
+ assert.ok(api&&api.configure&&api.snapshot&&api.reset);
+ const applied=api.configure({width:9,depth:-3,speed:100,yaw:-900,pitch:25,material:'gold',paused:true,unexpected:'anything'}).config;
+ assert.equal(applied.width,5);assert.equal(applied.depth,.15);assert.equal(applied.speed,3);assert.equal(applied.yaw,-55);
+ assert.equal(applied.material,'gold');assert.equal(applied.paused,true);
+ assert.ok(!('unexpected' in applied));
+ assert.equal(api.reset().config.width,1);
+ assert.match(status.textContent,/WebGL indisponible/);
+});
+
+test('R124: image-to-3D visual comparison offers bounded local reference and material lighting',async()=>{
+ const {Script,runInNewContext}=await import('node:vm');
+ const mesh=read('assets/core-r122-gyro.js');
+ const editor=read('assets/siteforge-3d-editor.js');
+ const lab=read('siteforge/core-3d-lab/index.html');
+ assert.doesNotThrow(()=>new Script(mesh));
+ assert.doesNotThrow(()=>new Script(editor));
+ for(const n of ['roughness','warmth','exposure']){
+  assert.ok(lab.includes('name="'+n+'"'),n);
+  assert.ok(mesh.includes("['"+n+"',"),'clamp '+n);
+ }
+ for(const x of ['uRoughness','uWarmth','uExposure','gl.uniform1f(m.roughness','gl.uniform1f(m.warmth','gl.uniform1f(m.exposure','gl.getError()'])assert.ok(mesh.includes(x),x);
+ for(const id of ['sf3d-reference-input','sf3d-reference-image','sf3d-reference-remove','sf3d-reference'])assert.ok(lab.includes('id="'+id+'"'),id);
+ assert.ok(editor.includes("['image/png','image/jpeg','image/webp']"));
+ assert.ok(editor.includes('8*1024*1024')&&editor.includes('URL.revokeObjectURL'));
+ assert.ok(lab.includes("img-src 'self' blob:"));
+ assert.doesNotMatch(mesh+editor,/\bfetch\s*\(|XMLHttpRequest|WebSocket|sendBeacon/);
+ assert.ok(!home.includes('sf3d-reference-input'),'main site unchanged');
+ const state={textContent:'',setAttribute(){},getAttribute(){return ''}};
+ const scene={querySelector(){return {getContext(){return null}}}};
+ const document={querySelector:()=>scene,getElementById:()=>state};
+ const window={matchMedia:()=>({matches:false})};
+ runInNewContext(mesh,{document,window,matchMedia:window.matchMedia,console});
+ const api=window.SynestraSiteForge3D;
+ assert.ok(api&&api.snapshot&&api.configure&&api.reset);
+ const v=api.configure({roughness:-12,warmth:99,exposure:100,hacked:1}).config;
+ assert.equal(v.roughness,.06);assert.equal(v.warmth,1);assert.equal(v.exposure,1.7);assert.ok(!('hacked' in v));
+ assert.equal(api.reset().config.roughness,.30);
+});
+
+test('R125: rings complete visible 360-degree gimbal flips; microfacet steel shading replaces flat colour',async()=>{
+ const {Script}=await import('node:vm');
+ const mesh=read('assets/core-r122-gyro.js'),lab=read('siteforge/core-3d-lab/index.html');
+ assert.doesNotThrow(()=>new Script(mesh));
+ const normals=[...mesh.matchAll(/axis:\[([^\]]+)\],normal:\[([^\]]+)\]/g)].map(m=>[m[1],m[2]].map(s=>s.split(',').map(Number)));
+ assert.equal(normals.length,3,'3 spinning metal gyros expected');
+ const normalize=a=>a.map(x=>x/Math.hypot(...a));
+ const dot=(a,b)=>a.reduce((sum,x,i)=>sum+x*b[i],0);
+ const cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+ const rotate=(v,k,t)=>v.map((x,i)=>x*Math.cos(t)+cross(k,v)[i]*Math.sin(t)+k[i]*dot(k,v)*(1-Math.cos(t)));
+ for(const [axis,normal] of normals){
+  const a=normalize(axis),n=normalize(normal);
+  assert.ok(Math.abs(dot(a,n))<.025,'Axis must be perpendicular to ring plane, not aligned like R124');
+  const quarter=rotate(n,a,Math.PI/2),half=rotate(n,a,Math.PI),full=rotate(n,a,2*Math.PI);
+  assert.ok(Math.abs(dot(quarter,n))<.08,'Quarter turn must visibly tilt the ring plane');
+  assert.ok(dot(half,n)<-.97,'Half-turn must flip the front and rear');
+  assert.ok(dot(full,n)>.999,'360 degrees must restore original orientation');
+ }
+ for(const period of ['6.283185/13','-6.283185/17','6.283185/20'])assert.ok(mesh.includes(period));
+ for(const term of ['distributionGGX','geometrySmith','fresnelSchlick','studioEnvironment','tonemapACES','gl.getError()'])
+   assert.ok(mesh.includes(term),'Metal shader lacks '+term);
+ assert.match(mesh,/for\(let j=0;j<256;j\+\+\)/);
+ assert.ok(mesh.includes('const bevel=Math.min(w,h)*.22'));
+ assert.ok(mesh.includes('lastFrame&&clock-lastFrame<32'),'Mobile FPS capped');
+ assert.ok(lab.includes('anneaux 360°')&&lab.includes('microfacet GGX'));
+ assert.ok(!home.includes('core-r122-gyro.js'),'Public home remains unchanged');
+ assert.doesNotMatch(mesh,/\bfetch\s*\(|XMLHttpRequest|WebSocket|sendBeacon/);
+});
+
+test('R126: energy preset has 8 types, 6 pulse modes, 4 safe hex colours, and bounded numeric controls',async()=>{
+ const {Script,runInNewContext}=await import('node:vm');
+ const mesh=read('assets/core-r122-gyro.js'),editor=read('assets/siteforge-3d-editor.js'),lab=read('siteforge/core-3d-lab/index.html');
+ assert.doesNotThrow(()=>new Script(mesh));assert.doesNotThrow(()=>new Script(editor));
+ const status={textContent:'',setAttribute(){},getAttribute(){return ''}};
+ const scene={querySelector(){return {getContext(){return null}}}};
+ const document={querySelector:()=>scene,getElementById:()=>status};
+ const window={matchMedia:()=>({matches:false})};
+ runInNewContext(mesh,{document,window,matchMedia:window.matchMedia,console});
+ const api=window.SynestraSiteForge3D;
+ assert.ok(api,'Configuration must exist even without WebGL');
+ for(const n of ['anisotropy','imperfection','scratches','edgeWear','energyType','pulseType','primaryColor','secondaryColor','pulseColor','glowColor','pulseCount','energySpeed','amplitude','thickness','turbulence','chaos','glow','density','coreIntensity'])assert.ok(lab.includes('name="'+n+'"'),n);
+ for(const v of ['plasma','electric','arc','vortex','nebula','flame','crystalline','quantum','radial','spiral','branching','wave','burst','orbiting'])assert.ok(lab.includes('value="'+v+'"'),v);
+ const values=api.configure({pulseCount:200,coreIntensity:200,energySpeed:-20,anisotropy:-5,energyType:'quantum',pulseType:'orbiting',primaryColor:'#AA00EF',glowColor:'javascript:alert(1)',unknown:'reject'}).config;
+ assert.equal(values.pulseCount,16);assert.equal(values.coreIntensity,3);assert.equal(values.energySpeed,0);assert.equal(values.anisotropy,0);
+ assert.equal(values.energyType,'quantum');assert.equal(values.pulseType,'orbiting');assert.equal(values.primaryColor,'#aa00ef');
+ assert.equal(values.glowColor,'#c0f5ff');assert.ok(!('unknown' in values));
+ const invalid=api.configure({energyType:'other',pulseType:'other',primaryColor:'red',pulseCount:NaN}).config;
+ assert.equal(invalid.energyType,'quantum');assert.equal(invalid.pulseType,'orbiting');assert.equal(invalid.primaryColor,'#aa00ef');assert.equal(invalid.pulseCount,16);
+ const exported=JSON.parse(JSON.stringify(api.snapshot()));
+ assert.equal(exported.schema,'synestra.siteforge.3d-preset.v1');assert.equal(exported.config.pulseCount,16);
+ assert.equal(api.reset().config.energyType,'electric');
+});
+test('R126: core point emitter drives anisotropic PBR, and energy is rendered before physical depth',()=>{
+ const engine=read('assets/core-r122-gyro.js'),lab=read('siteforge/core-3d-lab/index.html'),editor=read('assets/siteforge-3d-editor.js');
+ for(const term of ['distributionGGXAniso','uAnisotropy','uImperfection','uScratches','uEdgeWear','vWorld','uCoreColor','uCoreIntensity','coreDir=normalize(-vWorld','energyProgram','uPulseCount','uPulseType','uEnergyType','uGlowColor','gl.TRIANGLE_STRIP','gl.colorMask(false,false,false,false)'])
+  assert.ok(engine.includes(term),term);
+ assert.ok(engine.indexOf('if(e){gl.enable(gl.BLEND)')<engine.indexOf('// Invisible sphere populates the depth buffer'),'Emit energy behind metal');
+ assert.ok(engine.includes('const arcs=pulseGeometry.build(params,elapsed)'),'XYZ geometry must update with current preset');
+ assert.match(lab,/noindex,nofollow/);assert.match(lab,/prefers-reduced-motion:reduce/);
+ assert.match(lab,/script-src 'self'/);for(const forbidden of ['fetch(','XMLHttpRequest','WebSocket','sendBeacon','eval('])assert.ok(!engine.includes(forbidden)&&!editor.includes(forbidden),forbidden);
+ assert.ok(!read('index.html').includes('siteforge-3d-editor.js'),'Main homepage stays independent');
+});
+
+test('R127: actual spatial geometry covers XYZ, geometry controls change visible coordinates, and work is bounded',async()=>{
+ const {Script,runInNewContext}=await import('node:vm');
+ const source=read('assets/siteforge-3d-pulse-geometry.js');
+ assert.doesNotThrow(()=>new Script(source));
+ const window={};runInNewContext(source,{window,Math,Float32Array,Array,Object});
+ const geom=window.SynestraPulseGeometry;assert.ok(geom);
+ const base={pulseCount:8,pulseType:'radial',pulseNature:'electric',depthSpread:1,seed:7,amplitude:1,quality:'balanced',energySpeed:1};
+ const original=geom.build(base,2);
+ assert.equal(original.directions.length,8);
+ assert.ok(original.directions.some(v=>v[2]>.15)&&original.directions.some(v=>v[2]<-.15),'3D must include negative and positive Z, not screen-space XY');
+ assert.ok(original.glow.length>0&&original.filaments.length>0);
+ for(const array of [original.glow,original.filaments]){
+  assert.equal(array.length%5,0);
+  assert.ok(Array.from(array).every(Number.isFinite),'GPU vertex attributes must be finite');
+ }
+ const alter=geom.build({...base,pulseType:'spiral',pulseNature:'ribbon',twist:2,spread:2,seed:23},2);
+ assert.notDeepEqual(Array.from(original.glow.slice(0,30)),Array.from(alter.glow.slice(0,30)),'Controls must change 3D vertices');
+ const count=geom.build({...base,pulseCount:16,quality:'high'},2);
+ assert.ok(count.glow.length>original.glow.length,'More pulses must generate more real spatial geometry');
+ const freeze=geom.build({...base,energySpeed:0},2),speedup=geom.build({...base,energySpeed:3},2);
+ assert.notDeepEqual(Array.from(freeze.glow.slice(0,30)),Array.from(speedup.glow.slice(0,30)),'Energy speed acts independently');
+ assert.equal(geom.build({...base,pulseCount:99,quality:'high'},2).directions.length,16,'Max 16: no unbounded game-like load');
+});
+test('R127: swapped, extended ring sliders and independent pulse physics are safe and exportable',async()=>{
+ const {Script,runInNewContext}=await import('node:vm');
+ const engine=read('assets/core-r122-gyro.js'),editor=read('assets/siteforge-3d-editor.js'),lab=read('siteforge/core-3d-lab/index.html');
+ assert.doesNotThrow(()=>new Script(engine));assert.doesNotThrow(()=>new Script(editor));
+ const status={textContent:'',setAttribute(){},getAttribute(){return ''}};
+ const scene={querySelector(){return {getContext(){return null}};}};
+ const document={querySelector:()=>scene,getElementById:()=>status};
+ const window={matchMedia:()=>({matches:false})};
+ runInNewContext(engine,{document,window,matchMedia:window.matchMedia,console});
+ const api=window.SynestraSiteForge3D;
+ const out=api.configure({width:90,depth:-5,pulseNature:'particles',quality:'eco',depthSpread:99,seed:2300,pulseType:'orbiting',turbulence:1.4,unknown:'reject'}).config;
+ assert.equal(out.width,5);assert.equal(out.depth,.15);
+ assert.equal(out.pulseNature,'particles');assert.equal(out.pulseType,'orbiting');assert.equal(out.quality,'eco');
+ assert.equal(out.depthSpread,1);assert.equal(out.seed,999);assert.equal(out.turbulence,1.4);assert.ok(!('unknown' in out));
+ assert.equal(api.snapshot().config.pulseNature,'particles');
+ assert.equal(api.reset().config.pulseNature,'electric');
+ assert.match(engine,/r\.w\*params\.depth,r\.h\*params\.width/);
+ assert.ok(engine.includes('ringElapsed+=dt*params.speed'),'Independent ring vs energy speed');
+ for(const key of ['pulseNature','quality','spread','depthSpread','branching','twist','flicker','pulseLength','coreRadius','seed'])assert.ok(lab.includes('name="'+key+'"'),key);
+ for(const name of ['width','depth'])assert.match(lab,new RegExp('name="'+name+'" min="\\.15" max="5"'));
+ assert.ok(lab.includes('.core-r108-stage[data-metal-ready="true"] .core-r109-canvas{opacity:0}'),'Uneditable legacy arcs must be hidden');
+ assert.ok(lab.includes('siteforge-3d-pulse-geometry.js'));
+ for(const forbidden of ['fetch(','XMLHttpRequest','WebSocket','sendBeacon'])assert.ok(!engine.includes(forbidden)&&!editor.includes(forbidden));
+ assert.ok(!read('index.html').includes('siteforge-3d-pulse-geometry.js'),'Main homepage must remain unchanged');
+ assert.match(lab,/noindex,nofollow/);assert.match(lab,/prefers-reduced-motion:reduce/);
+});
+
+test('R128: actual tessellated 3D electric nucleus and slim high-resolution XYZ discharges',async()=>{
+ const {Script,runInNewContext}=await import('node:vm');
+ const engine=read('assets/core-r122-gyro.js'),sphere=read('assets/siteforge-3d-sphere-shaders.js');
+ const trails=read('assets/siteforge-3d-pulse-geometry.js'),html=read('siteforge/core-3d-lab/index.html');
+ assert.doesNotThrow(()=>new Script(sphere));assert.doesNotThrow(()=>new Script(engine));
+ assert.doesNotThrow(()=>new Script(trails));
+ const shaderApi={};runInNewContext(sphere,{window:shaderApi});
+ assert.ok(shaderApi.SynestraSphere3DShaders.vertex.includes('attribute vec3 aPosition'));
+ assert.ok(shaderApi.SynestraSphere3DShaders.vertex.includes('uView*(aPosition*uRadius)'),'Sphere positions rotate in xyz');
+ assert.ok(shaderApi.SynestraSphere3DShaders.fragment.includes('noise3(n*3.9'),'Original R121 noise modulation remapped to actual sphere normals');
+ assert.ok(shaderApi.SynestraSphere3DShaders.halo.includes('NO FLAT')===false,'Halo must be an optical layer only');
+ assert.ok(engine.includes('for(let i=0;i<48;i++')&&engine.includes('for(let j=0;j<96;j++'),'Sphere tessellation 48x96');
+ assert.ok(engine.includes('sphereProgram=link(sphereVertex,sphereFragment)'));
+ assert.ok(engine.includes('gl.drawArrays(gl.TRIANGLES,0,sphere.length/3)'),'Real sphere mesh must render');
+ assert.ok(engine.includes('gl.uniform1f(d.radius,params.coreRadius)'),'Depth occlusion matches 3D core scale');
+ assert.ok(trails.includes('eco:22,balanced:40,high:64'));
+ assert.ok(trails.includes('.0024*thickness*width')&&trails.includes('.0115*thickness*width'),'Fine core and separate optical sheath');
+ assert.ok(trails.includes('tm/1.12+i*.37'),'Original asynchronous electric rhythm is reused in 3D');
+ const sandbox={};runInNewContext(trails,{window:sandbox,Math,Float32Array,Array,Object});
+ const res=sandbox.SynestraPulseGeometry.build({pulseNature:'electric',pulseType:'branching',pulseCount:8,energySpeed:1,quality:'high'},2.1);
+ assert.equal(res.quality,64);
+ assert.ok(res.directions.some(d=>d[2]>.1)&&res.directions.some(d=>d[2]<-.1),'Non-planar charge distribution');
+ assert.ok(html.includes('siteforge-3d-sphere-shaders.js')&&html.indexOf('siteforge-3d-sphere-shaders.js')<html.indexOf('core-r122-gyro.js'));
+ assert.ok(!read('index.html').includes('siteforge-3d-sphere-shaders.js'),'Main page unchanged');
+ assert.match(html,/noindex,nofollow/);assert.match(html,/prefers-reduced-motion:reduce/);
+});
+
+test('R128 visual correction: 3D electric sphere does not double-blend backfaces',()=>{
+ const engine=read('assets/core-r122-gyro.js');
+ const core=engine.indexOf('gl.useProgram(sphereProgram)');
+ const enable=engine.indexOf('gl.enable(gl.CULL_FACE);gl.cullFace(gl.BACK)');
+ const draw=engine.indexOf('gl.drawArrays(gl.TRIANGLES,0,sphere.length/3)');
+ const disable=engine.indexOf('gl.disable(gl.CULL_FACE)',draw);
+ assert.ok(enable>=0&&enable<core&&core<draw&&draw<disable,'Cull rear 3D faces only for nucleus');
+ assert.ok(engine.includes('gl.depthFunc(gl.LEQUAL)'),'Metal should still use correct occlusion');
+});
+
+test('R128 count fidelity: mesh consists of 9216 triangles and 27648 vertex positions',()=>{
+ const engine=read('assets/core-r122-gyro.js'),lab=read('siteforge/core-3d-lab/index.html');
+ assert.ok(engine.includes('for(let i=0;i<48;i++'));
+ assert.ok(engine.includes('for(let j=0;j<96;j++'));
+ assert.equal(48*96*2,9216);
+ assert.equal(48*96*6,27648);
+ assert.ok(lab.includes('9 216 triangles (27 648 sommets)'),'The UI must not mistake vertices for triangles');
+});
+
+test('R129: reference-driven electric nucleus is a second real 3D mesh, not an image billboard', async()=>{
+ const {Script,runInNewContext}=await import('node:vm');
+ const sphere=read('assets/siteforge-3d-sphere-shaders.js');
+ const renderer=read('assets/core-r122-gyro.js');
+ const lab=read('siteforge/core-3d-lab/index.html');
+ assert.doesNotThrow(()=>new Script(sphere));
+ assert.doesNotThrow(()=>new Script(renderer));
+ const window={};runInNewContext(sphere,{window});
+ const sh=window.SynestraSphere3DShaders;
+ assert.ok(sh.fragment.includes('if(uInner>.5)'),'Inner emissive sphere uses a separate 3D surface pass');
+ for(const term of ['noise3(warp*13.4','fresnel','uPrimary','uSecondary','uGlowColor','vec3 n=normalize(vNormal)'])
+   assert.ok(sh.fragment.includes(term),term);
+ assert.ok(sh.vertex.includes('uView*(aPosition*uRadius)'),'Actual XYZ vertex geometry, not a screen-space quad');
+ assert.ok(renderer.includes('gl.uniform1f(s3.radius,params.coreRadius*.14)'),'Emissive centre is smaller spatial sphere');
+ assert.ok(renderer.includes('gl.uniform1f(s3.inner,1)'));
+ assert.ok(renderer.includes('gl.drawArrays(gl.TRIANGLES,0,sphere.length/3)'));
+ assert.ok(renderer.includes('edgeFlash'),'Ring bevel and metal receive bright directional highlights');
+ assert.ok(renderer.includes('gl.enable(gl.CULL_FACE);gl.cullFace(gl.BACK)'),'Back faces remain culled');
+ assert.ok(!lab.includes('data:image/'),'No painted reference used as fake 3D');
+ for(const script of [sphere,renderer])for(const forbidden of ['fetch(','XMLHttpRequest','WebSocket','sendBeacon'])
+   assert.ok(!script.includes(forbidden),'No outside data source: '+forbidden);
+ assert.ok(!read('index.html').includes('siteforge-3d-sphere-shaders.js'),'Homepage must not change');
+ assert.match(lab,/noindex,nofollow/);
+ assert.match(lab,/prefers-reduced-motion:reduce/);
+});

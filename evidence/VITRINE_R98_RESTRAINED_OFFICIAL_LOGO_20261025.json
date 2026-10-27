@@ -1,0 +1,138 @@
+{
+  "schema": "synestra.vitrine.r98.brand-harmony.v1",
+  "evidence_id": "VITRINE_R98_RESTRAINED_OFFICIAL_LOGO_20261025",
+  "mission_id": "SYN_VITRINE_SITEFORGE_SHOWCASE_20261024",
+  "owner": "Inos",
+  "observed_at_utc": "2026-10-25T09:16:00Z",
+  "mission": {
+    "objective": "Resolve owner screenshot feedback: header official-logo crop and flashy overbright central logo in professional navy/cyan Synestra site",
+    "scope": "Source-only website visual fit; no modified canonical logo, deployment, security IAM or Worker changes",
+    "repository": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_VITRINE_SITEFORGE_R91_PREVIEW_20261024",
+    "pr": 5,
+    "base": "main",
+    "exact_tested_head": "e728f6aa585020a64717dd37b5cb1614f122f69e",
+    "code_html_blob": "973f361952c9a979a9b98aaf462fd89e84b37463",
+    "logo_asset_blob": "5871125a3b934acd93613201b56bc75f2a81a231",
+    "canonical_logo_sha256": "c83dc24f18df338c359e9da4c58913e29c54bafa94357734e70820125e01b9bd"
+  },
+  "observation": {
+    "input": "Owner-supplied screenshots of public preview and explicit feedback: header logo cropped; central logo too flashy and incompatible with rest of site's subdued design",
+    "original_header": "brand-mark overflow:hidden 53x55; image positioned 75x75 at left:-11 top:-3, cropped square emblem with adjacent duplicate wordmark",
+    "original_core": "center 202px vivid logo, full saturation/brightness and logo-buoyancy motion",
+    "first_cause": "Presentation CSS and structure mismatch; asset itself is approved and unchanged"
+  },
+  "failure_first": {
+    "test": "tests/vitrine_r98_brand_restraint.test.mjs",
+    "negative_head": "3e1fe83aac1f98033ddf39df36488375b8bdf2cf",
+    "negative_result": "3 FAIL / 0 PASS, before the visual correction",
+    "negative_cases": [
+      "crops/duplicates logo in header",
+      "central logo animated and overbright",
+      "uses logo image twice"
+    ]
+  },
+  "correction": {
+    "implementation": "Header uses readable text-only SYNESTRA / STUDIO NUMÉRIQUE; complete official logo only in scene; intentionally restrained brightness/saturation and static logo, subtle stage lighting",
+    "logo_image_references": 1,
+    "header_images": 0,
+    "hero_css": {
+      "object_fit": "contain",
+      "filter": "brightness(0.72) saturate(0.58)",
+      "opacity": "0.91",
+      "animation": "none",
+      "core_shadow": "none",
+      "core_overflow": "visible"
+    },
+    "other_animations": "radar/orbits/Connect rotation/interactive details preserved",
+    "canonical_asset_mutated": false,
+    "site_sections_retained": [
+      "SiteForge",
+      "Bridge",
+      "Connect"
+    ],
+    "policy_csp_unchanged": "img-src 'self' https://raw.githubusercontent.com; default-src 'none'"
+  },
+  "validation": {
+    "node": {
+      "total": 110,
+      "passed": 110,
+      "failed": 0
+    },
+    "python": {
+      "total": 15,
+      "passed": 15,
+      "failed": 0
+    },
+    "chrome_local": {
+      "viewports": [
+        320,
+        390,
+        768,
+        1440,
+        1920
+      ],
+      "viewport_gate": "PASS",
+      "horizontal_overflow_pixels": 0,
+      "official_hero_img_decode": "PASS",
+      "hero_filter_computed": "brightness(0.72) saturate(0.58)",
+      "header_img_count": 0,
+      "hero_object_fit": "contain",
+      "hero_animation": "none",
+      "parent_overflow": "visible",
+      "accessibility_keyboard": "PASS",
+      "FAQ": 5,
+      "reduced_motion": "PASS"
+    },
+    "web_pilot": {
+      "local_MCP_tool_calls": 6,
+      "status": "PASS",
+      "advisory": "ADVISORY_NO_FLAGS",
+      "field_CWV": "NOT_ATTESTED"
+    },
+    "capture_sha256": {
+      "320x780": "1fae15f797a863076a510fc8bac9250906aee141e4fc9174a3f866a436aa1752",
+      "390x844": "a9fcbff987aca17cd0e0184de2d74f5f9024bfdbc587ca2c217efdd7143fc9f4",
+      "768x1024": "38d32b88531be6d050b56582a1b9a25160cdb90a0438b76dbde1a6df5882af85",
+      "1440x900": "36a9ef114366b9eaa021e51da2e01f6904844cdbecf9e323e7c1a6a391c74611",
+      "1920x1080": "d032825d642408d99dd89bae13a09b0727d0d31e7c319f31feed2b9376fc3cf4"
+    },
+    "public_preview": {
+      "url": "https://raw.githack.com/inossarum/synestra-vitrine-preview/e728f6aa585020a64717dd37b5cb1614f122f69e/index.html",
+      "html_http": 200,
+      "logo_avif_http": 200,
+      "asset_bytes": 20508,
+      "final_asset_host": "raw.githubusercontent.com",
+      "csp_allows_raw_github_image": true,
+      "html_logo_references": 1,
+      "html_wordmark_present": true,
+      "restrained_css_present": true
+    },
+    "visual_model_direct_inspection": "NOT_ATTESTED; captures generated on owner Windows but native Visual Observer binary delivery not available; owner screenshot and Chrome computed styles are available"
+  },
+  "methods": {
+    "skills": [
+      "ui-ux@1.0.0#0a362a0938401674166c7a8b871192fbde602c1a",
+      "web-accessibility-engineering@1.0.0#172c442525351804e89e7b273346f03df34bdd89",
+      "failure-first@1.0.0#373c5f508b3ef91d1ffc1fc5afec7007a643d590"
+    ],
+    "skills_use": "Methods applied manually, SkillRuntime execution not claimed",
+    "github_MCP": "EXCUTED, branch source+tests changed with SHA checked",
+    "synestra_bridge": "EXECUTED, authorized process operations on isolated checkout",
+    "chrome_web_pilot": "EXECUTED and VERIFIED for local code",
+    "Visual Observer": "NOT_AVAILABLE as a directly callable tool"
+  },
+  "limits": {
+    "source_gate": "LIMITED: canonical I:\\ source mount not independently revalidated in this action; GitHub SHA authority verified",
+    "hooks": "UNKNOWN",
+    "user_visual_approval": "PENDING",
+    "public_real_pixel_E2E": "NOT_ATTESTED",
+    "release": "HOLD",
+    "main_unchanged": true
+  },
+  "next": [
+    "Owner reviews R98 screenshot/link for visual tone and wordmark legibility",
+    "If further visual feedback, adjust same isolated draft branch; qualify before declaring design done",
+    "Do not merge/deploy without explicit decision and target E2E; reevaluate GitHack-only CSP allowlist for real origin"
+  ]
+}

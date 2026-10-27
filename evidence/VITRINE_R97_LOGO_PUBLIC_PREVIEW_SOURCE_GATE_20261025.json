@@ -1,0 +1,199 @@
+{
+  "schema": "synestra.vitrine.r97.public-logo-csp-studio-tools.v1",
+  "evidence_id": "VITRINE_R97_LOGO_PUBLIC_PREVIEW_SOURCE_GATE_20261025",
+  "mission_id": "SYN_VITRINE_SITEFORGE_SHOWCASE_20261024",
+  "owner": "Inos",
+  "observed_at_utc": "2026-10-25T09:00:51Z",
+  "authority": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_VITRINE_SITEFORGE_R91_PREVIEW_20261024",
+    "pr": 5,
+    "draft": true,
+    "merged": false,
+    "base": "main",
+    "tested_head": "12d526ac77e026ade902c1c1aa841af393a4c9ab",
+    "logo_origin_sha256": "c83dc24f18df338c359e9da4c58913e29c54bafa94357734e70820125e01b9bd",
+    "logo_web_git_blob": "5871125a3b934acd93613201b56bc75f2a81a231",
+    "r96_evidence_git_blob": "93cf69cf9e73b9d0a4a068f41dbd6acfdb260c8e",
+    "r96_reasoning_git_blob": "785d3e7ebeb89a4943b7c194977981e91b673624"
+  },
+  "incident": {
+    "symptom": "Owner-supplied screenshot of public GitHack preview shows two broken official-logo icons: header and orbital scene.",
+    "first_cause": "Image resource resolved by HTTP redirect to raw.githubusercontent.com; preview HTML restricted img-src to 'self'. Local file:// Chrome passed but public preview cross-origin asset was excluded.",
+    "observed_pre_fix_public_asset": "HTTP 200 image/avif 20508 bytes final origin raw.githubusercontent.com",
+    "old_meta_csp": "default-src 'none'; style-src 'unsafe-inline'; img-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
+    "negative_test": "tests/vitrine_r97_preview_redirect_csp.test.mjs",
+    "negative_run": {
+      "head": "da82763274932b87fa5470f483ba9e453e600c37",
+      "tests": 2,
+      "failed": 1,
+      "passed": 1,
+      "error": "GitHack AVIF redirects to raw.githubusercontent.com; img-src self alone blocks it on the public preview"
+    }
+  },
+  "delta": {
+    "path": "index.html",
+    "fix": "img-src 'self' https://raw.githubusercontent.com",
+    "strict_security_preserved": [
+      "default-src 'none'",
+      "form-action 'none'",
+      "base-uri 'none'",
+      "frame-ancestors 'none'",
+      "no scripts",
+      "no wildcard",
+      "no data:",
+      "no broad script permission"
+    ],
+    "postfix_html_blob": "434be41ec00c75262f2eaf39e26d7af1ee7f735a",
+    "asset_changed": false,
+    "other_features_changed": false
+  },
+  "verification": {
+    "local": {
+      "node": {
+        "pass": 107,
+        "fail": 0
+      },
+      "python": {
+        "pass": 15,
+        "fail": 0
+      },
+      "chrome": [
+        "390x844 PASS; viewport no overflow; local official logo both locations loaded; keyboard and FAQ",
+        "1440x900 PASS; viewport no overflow; local official logo both locations loaded; keyboard and FAQ",
+        "CSS animated features and reduced motion PASS"
+      ],
+      "web_pilot": {
+        "calls": 6,
+        "status": "PASS",
+        "advisory": "ADVISORY_NO_FLAGS",
+        "external_http_requests_in_local_file_test": 0,
+        "field_core_web_vitals": "NOT_PROVEN"
+      }
+    },
+    "public_transport": {
+      "preview": "https://raw.githack.com/inossarum/synestra-vitrine-preview/12d526ac77e026ade902c1c1aa841af393a4c9ab/index.html",
+      "html_http": 200,
+      "html_chars": 86466,
+      "image_http": 200,
+      "image_final_host": "raw.githubusercontent.com",
+      "image_content_type": "image/avif",
+      "image_bytes": 20508,
+      "logo_refs_in_html": 2,
+      "meta_csp_contains_exact_image_allowlist": true,
+      "redirect_policy_contract": "PASS"
+    },
+    "screenshots_sha256": {
+      "390x844": "d5750103fbbd24e3353d8463104fe15a3e1936242848ed29f9aaec3902bef9bb",
+      "1440x900": "a6dc3c7fbe621c6ad8ee76850b2f038927e119fed16b45c86f8eb7d47da060d6"
+    },
+    "limits": [
+      "Final remote-site browser image decode was not attested because remote headless Chrome could not navigate public proxy in this execution environment; HTTP redirect and meta CSP checks plus local Chrome asset decode do not equal public pixel E2E.",
+      "Native Visual Observer live image delivery tool not exposed in this conversation; no multimodal visual approval from final browser capture.",
+      "Core Web Vitals field data not measured."
+    ]
+  },
+  "studio_tools": {
+    "Synestra Connect Central Skills": {
+      "status": "CONSULTED_APPLIED",
+      "skills": [
+        {
+          "id": "failure-first",
+          "version": "1.0.0",
+          "git_blob_sha": "373c5f508b3ef91d1ffc1fc5afec7007a643d590",
+          "observable": "negative test fails before fix, passes after correction"
+        },
+        {
+          "id": "web-accessibility-engineering",
+          "version": "1.0.0",
+          "git_blob_sha": "172c442525351804e89e7b273346f03df34bdd89",
+          "observable": "Chrome keyboard/reduced-motion/reflow assertions PASS"
+        },
+        {
+          "id": "ui-ux",
+          "version": "1.0.0",
+          "git_blob_sha": "0a362a0938401674166c7a8b871192fbde602c1a",
+          "observable": "owner-visible broken brand identified and corrected without design identity swap"
+        }
+      ],
+      "source_commit": "a2d091230e10b2212e91d155260dd506849d3da1",
+      "runtime_skill_execution": "DISABLED; advisory instructions applied manually"
+    },
+    "Synestra Connect web engines": {
+      "visual_direction": {
+        "status": "CONSULTED_NOT_APPLIED",
+        "style": "prism",
+        "result": "PASS",
+        "reason": "palette from engine conflicts with canonical owner-approved Synestra Studio brand"
+      },
+      "blueprint": {
+        "status": "POLICY_DENIED",
+        "response": "Operation denied or unavailable"
+      },
+      "change_impact": {
+        "status": "POLICY_DENIED",
+        "response": "Operation denied or unavailable"
+      },
+      "content_readiness": {
+        "status": "POLICY_DENIED",
+        "response": "Operation denied or unavailable"
+      },
+      "page_scaffold": {
+        "status": "NOT_APPLICABLE",
+        "reason": "existing functioning site; creating a second scaffold would be duplicate"
+      }
+    },
+    "Synestra Bridge": {
+      "status": "EXECUTED_VERIFIED",
+      "binding": "PAIRED",
+      "execution_authorized": true,
+      "attestation": "SOFTWARE_KEY",
+      "operations": [
+        "start_process",
+        "read_process_output"
+      ],
+      "purpose": "isolated Git checkout, node/python tests, Chrome/CDP, Web Pilot MCP, HTTP redirects"
+    },
+    "GitHub MCP": {
+      "status": "EXECUTED_VERIFIED",
+      "operations": [
+        "get_pr_info",
+        "fetch_file",
+        "create_file",
+        "update_file"
+      ],
+      "result": "dedicated PR #5; atomic file change and readback; main untouched"
+    },
+    "Studio memory/rules": {
+      "status": "CONSULTED",
+      "rule_blob": "a42bcf8055c6f747eaa734f5faa7006cc57409db",
+      "memory_manifest_blob": "bc43f64a6633c8c95e9434baa75ee1fb2dcf924c",
+      "web_product_decision_blob": "b1a70c73951ca1356c77ee12e3bc945d6e633fb8",
+      "web_runbook": "SAL-STUDIO-GITHUB-FIRST-DURABLE-AUTHORING-V1",
+      "sal_blob": "2bbf6256d90514b16ca2e5519f25e085c057b6f1"
+    },
+    "Visual Observer": {
+      "status": "UNAVAILABLE_TO_CHAT",
+      "reference": "Visual Observer PR #302 runbook 1d7324cb432f5330d28f4d3cb5c76ca3f1df6eb8",
+      "model_pixel_inspection": "NOT_ATTESTED"
+    },
+    "Other unrelated Studio engines": {
+      "status": "NOT_CALLED",
+      "reason": "No delta value: child education/Unreal, Cloudflare IAM, Supervisor; user asked site, governance requires reuse-first and minimal calls"
+    }
+  },
+  "safety": {
+    "source_gate": "LIMITED",
+    "hooks": "UNKNOWN",
+    "publication": "HOLD",
+    "no_merge": true,
+    "no_cloudflare_mutation": true,
+    "no_cost": true,
+    "branch_only": true
+  },
+  "next": [
+    "Review exact R97 preview at immutable commit; user visually confirms header/orbital official logo now visible",
+    "If true browser E2E with remote third-party preview is essential, run from supported authorized browser/network context; do not claim based on HTTP only",
+    "Keep in PR DRAFT; distinct authorization required for official publication; roll back CSP origin allowlist when no longer using redirecting proxy"
+  ]
+}

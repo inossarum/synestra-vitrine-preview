@@ -1,0 +1,74 @@
+{
+  "schema": "synestra.siteforge.3d-r128-evidence.v1",
+  "mission_id": "SYN_SITEFORGE_3D_LAB_R128_REAL_3D_ELECTRIC_CORE",
+  "date": "2026-10-26",
+  "repository": "inossarum/synestra-vitrine-preview",
+  "branch": "task/SYN_VITRINE_SITEFORGE_R91_PREVIEW_20261024",
+  "pr": "#5 DRAFT",
+  "code_sha": "e47e461c84911ffdef0c14e2a90a5593ba32a8a1",
+  "baseline_head": "d4378649b8e2e20bedafbb3bb2f4400f72cb5bed",
+  "source_blobs": {
+    "home": "43810b6eaa878c523eb06d97542d791543765d55",
+    "sphereShader": "22c94436267a7a73a32b00d5637a6fb81edbc7be",
+    "arcGeometry": "16eb39fda0f43d9597efe9e0558e7d2fda73b8c5",
+    "gyroEngine": "dc5a266046ad597d33f899641dac2254d6681cad"
+  },
+  "code": "Genuine 3D tessellated sphere 48x96 sectors = 9,216 triangles (27,648 vertices); animated original R121-style 3D noise/electric currents; 3D XYZ branching lightning with narrowed core/halo, 22/40/64 segment profiles; backface culling and three retained metallic rings.",
+  "runtime_source": "Locally cloned exact Git commit on authorized Inos-Cerebros. Headless Chrome --allow-file-access-from-files, --enable-webgl, --window-size=1440,1050, --virtual-time-budget=6500.",
+  "screenshot": {
+    "path": "evidence/SITEFORGE_3D_R128_CHROME_DESKTOP_1440x1050.png",
+    "git_blob_sha": "16f4ea5ceb247973d26b5c745555880127b71440",
+    "format": "image/png",
+    "dimensions_px": [
+      1440,
+      1050
+    ],
+    "capture_kind": "Chrome desktop file-origin, screenshot actually reviewed",
+    "observation": "Real desktop Chrome file-origin capture of the R128 renderer: dark/navy volumetric mesh, bright fine electric arcs, front/rear metallic gyros. Mesh count caption now verified: 9,216 triangles, 27,648 vertices. No claim of photorealistic AAA or iPhone validation.",
+    "browser_gpu_hardware": "UNKNOWN",
+    "capture_source_commit": "e47e461c84911ffdef0c14e2a90a5593ba32a8a1"
+  },
+  "cloudflare": {
+    "deployment_id": "a3aa385f-6f2a-45da-8eb9-9011af820abb",
+    "status": "success",
+    "code_sha": "e47e461c84911ffdef0c14e2a90a5593ba32a8a1",
+    "preview": "https://a3aa385f.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+    "protected_by": "Cloudflare Access; direct unauthenticated rendering not validated"
+  },
+  "tests": {
+    "cloudflare_node_total": 58,
+    "passed": 58,
+    "failed": 0,
+    "static_export": "PASS",
+    "static_files": 43,
+    "source": "Cloudflare Pages deployment logs for c871f5b4",
+    "browser_desktop_visual": "OBSERVED",
+    "browser_mobile": "PENDING",
+    "iphone_safari": "PENDING",
+    "webgl_gpu_vendor": "UNKNOWN",
+    "visual_aaa": "NOT_CLAIMED"
+  },
+  "scope": {
+    "main_updated": false,
+    "homepage_blob_unchanged": true,
+    "scripts_lab_only": true,
+    "no_external_runtime_dependencies": true,
+    "free_only": true,
+    "arc_complexity_cap": 16
+  },
+  "skills": {
+    "visual_regression_testing": "1.0.0#aa98fffe9149dfcc0e153f0d1b8b91f3c0a6b4ae",
+    "method": "pinned desktop viewport, source SHA; review before-after culling and record screenshot blob"
+  },
+  "rollback": {
+    "baseline": "d4378649b8e2e20bedafbb3bb2f4400f72cb5bed",
+    "method": "Revert isolated R128 changes on preview branch with lease validation; never update main directly."
+  },
+  "states": {
+    "SOURCE_GATE": "LIMITED",
+    "HOOKS_STATUS": "PENDING",
+    "VISUAL_GATE": "DESKTOP_CHROME_OBSERVED_MOBILE_PENDING",
+    "FUNCTION_REPORT": "PARTIAL"
+  },
+  "screenshot_review": "ACTUAL_CAPTURE_REVIEWED"
+}

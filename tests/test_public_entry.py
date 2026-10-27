@@ -55,10 +55,16 @@ class PublicEntryTests(unittest.TestCase):
         )
 
     def test_hero_login_uses_same_known_private_app(self):
+        # Hero actions may change styling; the private URL and visible action must not.
+        self.assertIn('<div class="hero-actions">', HTML)
+        hero_actions = HTML.split('<div class="hero-actions">', 1)[1].split("</div>", 1)[0]
+        anchors = Anchors()
+        anchors.feed(hero_actions)
         self.assertTrue(
             any(a["attrs"].get("href") == APP
-                and "action primary" in a["attrs"].get("class", "")
-                for a in self.page.anchors)
+                and "accéder" in a["text"].lower()
+                for a in anchors.anchors),
+            "Hero must offer a real, visible link to the known private app",
         )
 
     def test_all_private_links_use_https_known_host_and_no_inline_credentials(self):
@@ -82,7 +88,8 @@ class PublicEntryTests(unittest.TestCase):
 
     def test_unqualified_security_claim_is_not_published(self):
         self.assertNotIn("la connexion à l'espace privé est sécurisée", HTML.lower())
-        self.assertIn("l'accès au portail et le parcours de connexion sont encore en cours de qualification", HTML.lower())
+        copy = HTML.lower().replace("’", "'")
+        self.assertRegex(copy, r"l'accès au portail et (?:son|le) parcours de connexion sont encore en cours de qualification")
 
 if __name__ == "__main__":
     unittest.main()

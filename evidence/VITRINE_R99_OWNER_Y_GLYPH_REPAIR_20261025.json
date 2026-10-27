@@ -1,0 +1,115 @@
+{
+  "schema": "synestra.vitrine.r99.banner-y.v1",
+  "id": "VITRINE_R99_OWNER_Y_GLYPH_REPAIR_20261025",
+  "mission_id": "SYN_VITRINE_SITEFORGE_SHOWCASE_20261024",
+  "owner": "Inos",
+  "source": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_VITRINE_SITEFORGE_R91_PREVIEW_20261024",
+    "pr": 5,
+    "head_tested": "a79474fd7f5eb4853a9197a1d3ef2b6511393c99",
+    "draft": true,
+    "main_merge": false,
+    "official_png_sha256": "c83dc24f18df338c359e9da4c58913e29c54bafa94357734e70820125e01b9bd",
+    "banner_source_path": "user-provided/generator-artwork/en_tête_futuriste_du_studio_synestra.png",
+    "banner_source_sha256": "db31ff091ff0a8ed5ad2624e83153f22796cf3cc791ab7a4b59eb6a958adf409",
+    "banner_source_size": "2804x561",
+    "repaired_png_sha256": "e43269c2f07b45292fb5c0b89afe9786ffa6dbd1ac628a84eef1392cdd0739d3",
+    "repaired_png_path": "Synestra_Banniere_Y_Corrige_Officiel_R99.png",
+    "repaired_webp_path": "assets/synestra-studio-header-y-r99.webp",
+    "webp_blob": "a3e1d5de3ebc4b9735387358ddca67b3d4f31243",
+    "webp_sha256": "07d99fe5aa837522926dc7f4d8e605a020838df2575549bc01bf282cc00d626c",
+    "webp_size_bytes": 46950,
+    "webp_pixel_size": "785x168",
+    "font_source_file": "UNAVAILABLE; reconstructed Y from approved neighboring wordmark letter-shapes, not independently named font family"
+  },
+  "intervention": {
+    "scope": "Correct letter Y and integrate corrected transparent header wordmark image in existing PR #5 only",
+    "problem": "Previous Y's three limbs visually disjointed at fork; last change added decorative lines without correcting geometry",
+    "repair": "Rebuilt single connected vector-like glyph with matching cap height, stem and steel gradient; image outside Y bounding rectangle preserved pixel-by-pixel",
+    "edit_bbox_xyxy": [
+      1188,
+      193,
+      1323,
+      288
+    ],
+    "changed_pixels": 12702,
+    "outside_y_unchanged": true,
+    "site_header": "Replace temporary text-only SYNESTRA/STUDIO NUMÉRIQUE with source-based corrected typographic image; no extra duplicate wording",
+    "core_logo": "Original official AVIF retained separately unchanged",
+    "motion": "Existing stage animations not modified",
+    "CSP": "R97 image allowlist unchanged",
+    "publication": "HOLD"
+  },
+  "failure_first": {
+    "preintegration_negative_head": "71d538244527aa8cfaf04d3c3bc5330eb2b93d0b",
+    "tests_passed": 1,
+    "tests_failed": 1,
+    "expected_failure": "R99 banner was not yet integrated in header",
+    "corrected_run_node": {
+      "passed": 112,
+      "failed": 0
+    },
+    "python": {
+      "passed": 15,
+      "failed": 0
+    }
+  },
+  "real_tests": {
+    "execution": "Owner's paired Windows Synestra Connect Bridge tools in isolated temporary detached checkout",
+    "chrome": {
+      "mobile": "390x844 PASS",
+      "desktop": "1440x900 PASS",
+      "header_webp": "Loaded in Chrome with naturalWidth 785",
+      "core_avif": "Decoded and unchanged",
+      "horizontal_overflow": 0,
+      "keyboard": "PASS",
+      "reduced_motion": "PASS"
+    },
+    "web_pilot": {
+      "MCP_calls": 6,
+      "status": "PASS",
+      "advisory": "ADVISORY_NO_FLAGS"
+    },
+    "preview": {
+      "url": "https://raw.githack.com/inossarum/synestra-vitrine-preview/a79474fd7f5eb4853a9197a1d3ef2b6511393c99/index.html",
+      "http": 200,
+      "header_asset_http": 200,
+      "asset_final_host": "raw.githubusercontent.com",
+      "image_webp_bytes": 46950,
+      "csp": "default-src 'none'; img-src 'self' https://raw.githubusercontent.com",
+      "official_domain_deploy": "NOT_PERFORMED"
+    },
+    "captures_sha256": {
+      "mobile": "74b8e46ca5546895982d731700c10e07bf4968327047d5d542d595adc97384df",
+      "desktop": "c996fa1ed11f7d077dbbe31c2ef13ac91735b06b7dbb2509fb890c08e04648da"
+    },
+    "visual_observer_native": "NOT_EXECUTED, image output to this model not available; owner visual approval PENDING"
+  },
+  "governance": {
+    "AGENTS_SHA": "a42bcf8055c6f747eaa734f5faa7006cc57409db",
+    "memory_manifest_SHA": "bc43f64a6633c8c95e9434baa75ee1fb2dcf924c",
+    "skills_consulted": [
+      "ui-ux@1.0.0#0a362a0938401674166c7a8b871192fbde602c1a",
+      "failure-first@1.0.0#373c5f508b3ef91d1ffc1fc5afec7007a643d590",
+      "web-accessibility-engineering@1.0.0#172c442525351804e89e7b273346f03df34bdd89"
+    ],
+    "tools_used": [
+      "GitHub MCP: blob, tree, commit, ref, file/test updates, readback",
+      "Synestra Connect Bridge: Git checkout, Node/Python, Chrome CDP, Web Pilot, HTTP public preview",
+      "Container PIL: original bitmap Y replacement and deterministic pixel mask verification"
+    ],
+    "source_gate": "LIMITED: source root I:\\ and live visual observer not reverified",
+    "hooks": "UNKNOWN",
+    "no_merge": true,
+    "no_worker_deploy": true,
+    "no_cloudflare_mutation": true,
+    "cost": "FREE_ONLY"
+  },
+  "next": [
+    "Owner reviews R99 lettering against approved banner",
+    "If accepted, separate QA for public browser pixel E2E via authorized Visual Observer",
+    "Core 3D rotating energy beam feature remains separate requested enhancement and was not delivered by this Y-only delta",
+    "Official release needs separate authorization"
+  ]
+}

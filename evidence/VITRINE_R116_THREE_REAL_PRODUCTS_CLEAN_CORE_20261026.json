@@ -1,0 +1,60 @@
+{
+  "schema": "synestra.vitrine.r116.evidence.v1",
+  "evidence_id": "SYN_VITRINE_R116_THREE_REAL_PRODUCTS_CLEAN_CORE_20261026",
+  "date": "2026-10-26",
+  "mission_id": "SYN_VITRINE_SITEFORGE_SHOWCASE_20261024",
+  "owner": "Inos",
+  "objective": "Publish R116 compact, cleaner central Core with only Connect, Bridge, SiteForge product labels and only verified official logos",
+  "source": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_VITRINE_SITEFORGE_R91_PREVIEW_20261024",
+    "pr": 5,
+    "tested_code_sha": "b602b60755bd31e3645045116ef2f0946c48c712",
+    "base_head": "d9e4edd908eddc7ea7b1c9d5735deee21a027ac5",
+    "sha_index": "4707e6dbc1330fcdf3a3abb48f909406c5e86d61",
+    "sha_shader": "d78d7222a95fd080a408bba2237dd3b9dda05bd7",
+    "sha_tests": "523746365765c32b5e2fe93e9e4823a0f3c071f9"
+  },
+  "changes": {
+    "scale": "0.57 → 0.49 (~14% smaller than R115)",
+    "orbit": "Only three 120-degree spaced Connect Bridge SiteForge names; 55s rotation; mobile and reduced-motion preserved",
+    "logos": "No verified official product icon in currently inspected SiteForge/Connect/Bridge site references; no invented image/icon; product names are genuine",
+    "core": "One fallback SVG elliptical orbit rather than two, fewer highlight streaks; WebGL bloom, surface current, secondary violet noise, rim & specular reduced; fine source at center; existing 8 faster radial electrical arcs remain",
+    "unchanged": "3 real product navigational links, header and wordmark, idle effects all pages, canvas DPR pixel cap, CSP/no network calls"
+  },
+  "verification": {
+    "git_code_commit": "PASS",
+    "git_head_readback": "PASS",
+    "blob_readback": "PASS",
+    "precommit_static_gates": "PASS",
+    "cloudflare_tests": 46,
+    "cloudflare_pass": 46,
+    "cloudflare_fail": 0,
+    "export_files": 38,
+    "static_export": "PASS",
+    "deployment": "success",
+    "live_browser_safari_pixel_e2e": "NOT_VERIFIED",
+    "shader_native_opengl_compile": "NOT_RUN",
+    "web_http_user_device": "NOT_VERIFIED"
+  },
+  "deployment": {
+    "provider": "Cloudflare Pages",
+    "project": "synestra-vitrine-preview",
+    "id": "10d72a08-1688-4899-bb0e-ecb1fa377fa8",
+    "sha": "b602b60755bd31e3645045116ef2f0946c48c712",
+    "environment": "preview",
+    "status": "success",
+    "url": "https://10d72a08.synestra-vitrine-preview.pages.dev/",
+    "production_deployments_enabled": false,
+    "previous_preview": "https://17ccf74e.synestra-vitrine-preview.pages.dev"
+  },
+  "incident": {
+    "initial_failure": "A previous large functions.exec mutation call was rejected by execution safety controls before GitHub write; not proven to be a GitHub ACL denial",
+    "recovery": "Verified unchanged branch then used normal smaller connector-supported source checks, Git blob/tree/commit/ref operations; each returned success. No security setting or permissions changed.",
+    "policy_denied_evidence": "NO_DETERMINATIVE_GITHUB_POLICY_DENIAL"
+  },
+  "source_gate": "LIMITED (Memory V1 manifest and relevant documents not independently fetched, browser E2E outstanding)",
+  "hooks": "Cloudflare build SUCCESS, Studio UNKNOWN",
+  "function_report": "PARTIAL (visual verification remains)",
+  "next": "Owner inspect exact preview iPhone/desktop; verify simplified Core aesthetics and labels, then decide further tweaks; never publish production without explicit approval."
+}

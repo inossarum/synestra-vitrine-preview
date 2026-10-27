@@ -1,0 +1,130 @@
+{
+  "schema": "synestra.vitrine.r95.expressive-design-qa.v1",
+  "evidence_id": "VITRINE_SITEFORGE_R95_CINEMATIC_STUDIO_20261025",
+  "mission_id": "SYN_VITRINE_SITEFORGE_SHOWCASE_20261024",
+  "owner": "Inos",
+  "observed_at_utc": "2026-10-24T23:25:43Z",
+  "authority": {
+    "branch": "task/SYN_VITRINE_SITEFORGE_R91_PREVIEW_20261024",
+    "pr": 5,
+    "base": "main",
+    "head_at_tests": "6b35d03b6d3ab288116956da67cfecbb99a7efb6",
+    "head_verified": true,
+    "draft": true,
+    "publication": "HOLD",
+    "no_merge": true
+  },
+  "source": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "root_html_blob": "b84ed4fc1120483b569d7137502cdbad94c0aa01",
+    "studio_rules_blob": "a42bcf8055c6f747eaa734f5faa7006cc57409db",
+    "studio_L0_blob": "cdfd624dd8c6b6a2918ca031849ab7141ab6afde",
+    "previous_evidence_blob": "94ab2bc77372e2a985ae53439bdecd3269c7c255"
+  },
+  "implementation": {
+    "status": "IMPLEMENTED_VERIFIED_SOURCE",
+    "feature": [
+      "animated radar sweep",
+      "separate orbit highlights",
+      "kinetic glass node glint",
+      "Bridge mockup scan",
+      "Connect hub ring and rotating track",
+      "HUD corner guides",
+      "responsive reduced-motion guards"
+    ],
+    "brands": [
+      "Synestra Bridge",
+      "Synestra Connect",
+      "SiteForge"
+    ],
+    "caveats": "Removed wrong WebApp glyph from visible brand/core/mockup; exact ChatGPT Synestra Connect plugin icon NOT located or verified; neutral typography used in its place. Hidden old SVG still remains as a repository file, not a verified plugin icon.",
+    "no_script": true,
+    "non_live_visuals": true
+  },
+  "testing": {
+    "platform": "Owner Windows Bridge (authenticated staging software key), isolated clean clone, Chrome CDP, Node v24.19.0",
+    "node": {
+      "pass": 101,
+      "fail": 0,
+      "exit_code": 0
+    },
+    "python": {
+      "pass": 15,
+      "exit_code": 0
+    },
+    "real_chrome": {
+      "viewports": [
+        {
+          "width": 390,
+          "height": 844,
+          "result": "PASS",
+          "overflow_px": 0
+        },
+        {
+          "width": 1440,
+          "height": 900,
+          "result": "PASS",
+          "overflow_px": 0
+        }
+      ],
+      "keyboard": "PASS",
+      "faq": 5,
+      "product_render": "PASS",
+      "animation_computed_CSS": "PASS",
+      "reduced_motion": "PASS",
+      "svg_decode": "PASS",
+      "web_pilot": "ADVISORY_NO_FLAGS",
+      "external_requests": 0,
+      "visual_model_pixel_inspection": "NOT_ATTESTED",
+      "field_core_web_vitals": "NOT_MEASURED"
+    },
+    "web_pilot_mcp": {
+      "result": "PASS",
+      "tool_calls": 6
+    },
+    "screenshots_hash_only": {
+      "mobile": {
+        "bytes": 324843,
+        "sha256": "344f9be9f680b0c565c24a4eb2e7d37ccd6d127f24a2aa3233818f5b73fefec9"
+      },
+      "desktop": {
+        "bytes": 939281,
+        "sha256": "26c63377a276cfc36b0a5ed6d4975b4c38b7e8836f5a3e65caeb554875e23adc"
+      }
+    },
+    "qa_file_hashes": {
+      "mobile": "96068b119611fa656629e1fcfb99cb2c96b4ce1d3cb8622862a7707a465cfbc5",
+      "desktop": "ff9550495ae496209ebb7cac1a204d2adecab40f1f15347a805271de41200a5f"
+    }
+  },
+  "preview": {
+    "provider": "raw.githack.com (third-party proxy; not official publication)",
+    "commit": "6b35d03b6d3ab288116956da67cfecbb99a7efb6",
+    "root": "https://raw.githack.com/inossarum/synestra-vitrine-preview/6b35d03b6d3ab288116956da67cfecbb99a7efb6/index.html",
+    "siteforge": "https://raw.githack.com/inossarum/synestra-vitrine-preview/6b35d03b6d3ab288116956da67cfecbb99a7efb6/siteforge/",
+    "signature": "https://raw.githack.com/inossarum/synestra-vitrine-preview/6b35d03b6d3ab288116956da67cfecbb99a7efb6/siteforge/signature/",
+    "http_status_root": 200,
+    "http_status_siteforge": 200,
+    "http_status_signature": 200,
+    "root_characters": 76862
+  },
+  "permissions": {
+    "bridge_binding": "PAIRED",
+    "desktop_commander": "NOT_USED",
+    "main_merge": "NOT_PERFORMED",
+    "worker_deploy": "NOT_PERFORMED",
+    "cloudflare_iam": "NOT_MUTATED"
+  },
+  "limits": [
+    "Exact plugin icon provenance not yet established; do not relabel WebApp SVG as the official Connect plugin icon",
+    "Images captured by Chrome but not delivered to model via native Visual Observer; no aesthetic QA PASS claimed",
+    "No audited Cloudflare production release or user authorization for deploy",
+    "PR #5 remains draft",
+    "Original R91/R92 PR body may mention old preview; R95 scoped update needed"
+  ],
+  "next": [
+    "Obtain exact Connect plugin icon from authenticated metadata or user-provided original asset; copy byte-for-byte and verify content hash",
+    "Finish native Visual Observer MCP media tool + authenticated image E2E, actual visual inspection",
+    "User acceptance of R95 look, then scope approved integration/deployment and rollback"
+  ]
+}

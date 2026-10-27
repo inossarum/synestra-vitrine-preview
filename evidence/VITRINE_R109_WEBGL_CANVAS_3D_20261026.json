@@ -1,0 +1,64 @@
+{
+  "schema": "synestra.vitrine.r109.canvas-core.v1",
+  "id": "SYN_VITRINE_R109_WEBGL_CORE_20261026",
+  "mission_id": "SYN_VITRINE_SITEFORGE_SHOWCASE_20261024",
+  "owner": "Inos",
+  "objective": "Introduce controlled 3D depth via HTML Canvas/WebGL while preserving approved simple R108 visual, product navigation and accessibility",
+  "source": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_VITRINE_SITEFORGE_R91_PREVIEW_20261024",
+    "tested_head": "49ceb23a2b8dbec7f7651e4f8c5d61d7f3e54346",
+    "pr": 5,
+    "draft": true,
+    "prior_r108": "b655a5aae9ef492334308f186e1e777993bb77ae"
+  },
+  "delta": {
+    "core": "Home receives one local canvas WebGL renderer with 3D normal shading, cyan/violet plasma noise, restrained single halo and pointer response. Existing R108 SVG retained as render fallback.",
+    "access": "No change to SiteForge/Connect/Bridge links or product pages",
+    "browser": "Canvas script self-hosted assets/core-r109-webgl.js, no imported libraries, no external network/telemetry, no eval. CSP script-src 'self' only; other CSP directives retained.",
+    "performance": "At most 800000 WebGL backing pixels, 1.5 DPR cap, low-power GL preference, IntersectionObserver pause out-of-view, visibility pause, WebGL context-loss fallback.",
+    "accessibility": "Static SVG without WebGL on initial prefers-reduced-motion; removes ready flag if reduced-motion is newly enabled; keyboard links stay native.",
+    "security": "Static publisher allowlists and requires exactly one local JS file. Source tests explicitly allow this script and still reject other scripts, inline JS, iframes/forms. No billing/production changes."
+  },
+  "tests": {
+    "cloudflare_deployment": "c1734bb8-6a14-4512-bd7f-550217effe1a",
+    "url": "https://c1734bb8.synestra-vitrine-preview.pages.dev",
+    "stage": "success",
+    "environment": "preview",
+    "deployed_sha": "49ceb23a2b8dbec7f7651e4f8c5d61d7f3e54346",
+    "node_tests": 37,
+    "passed": 37,
+    "failed": 0,
+    "node_syntax_check": "PASS",
+    "static_source_count": 38,
+    "production_deployments_enabled": false
+  },
+  "failures_recovered": [
+    {
+      "deployment": "6ed02216-bd88-48ed-b005-6e00893a5de9",
+      "tests": "R100 old scriptless assertion and R108 single-class assertion"
+    },
+    {
+      "deployment": "5486b6e2-b9b9-4979-96cd-ad7f051cf948",
+      "tests": "R104 scene substring and R96 historic class string"
+    },
+    {
+      "resolution": "Use exact single local script security assertion, retain original checks and adopt R109 combined stage class. All 37 tests pass."
+    }
+  ],
+  "limitations": {
+    "webgl_shader_browser_compile": "NOT_RUN (Node syntax check does not compile GLSL)",
+    "actual_browser_pixels": "NOT_VERIFIED",
+    "browser_interaction": "NOT_VERIFIED",
+    "mobile_safari": "NOT_RUN",
+    "lighthouse": "NOT_RUN",
+    "source_csp_check": "PASS (static)",
+    "cloudflare_artifact_deployed": "VERIFIED"
+  },
+  "rollback": {
+    "stable_preview": "https://09878cec.synestra-vitrine-preview.pages.dev",
+    "deployed_r108_id": "09878cec-39d1-4ca7-a3c3-09a60a11a48b",
+    "pr_draft": true
+  },
+  "function_report": "PARTIAL"
+}

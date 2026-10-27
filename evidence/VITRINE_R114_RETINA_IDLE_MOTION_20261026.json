@@ -1,0 +1,109 @@
+{
+  "schema": "synestra.vitrine.r114.evidence.v1",
+  "id": "SYN_VITRINE_R114_RETINA_IDLE_MOTION_20261026",
+  "date": "2026-10-26",
+  "owner": "Inos",
+  "mission_id": "SYN_VITRINE_SITEFORGE_SHOWCASE_20261024",
+  "objective": "Slightly smaller Core; increased WebGL resolution; more centre-outwards electric arcs; continuous ambient page motion even during user inactivity.",
+  "source": {
+    "repository": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_VITRINE_SITEFORGE_R91_PREVIEW_20261024",
+    "pr": 5,
+    "tested_code_sha": "d28c39a669032e87bfcd507797146e62798d8fbf",
+    "base_head": "cb14426aa8c863b2acc3675650e054b6c7bb12fa",
+    "code_commit": "3e71e5693827384e2178d75521a6c4016392f69e",
+    "test_repair_commit": "d28c39a669032e87bfcd507797146e62798d8fbf",
+    "source_blobs": {
+      "index.html": "907ba40e04124f216d9dcc1c23524f5ee28573da",
+      "assets/core-r109-webgl.js": "b38071fb42f1aa76d157d348dd11c3e09983e8e2",
+      "assets/product-pages.css": "30c47e856ac39dd1db0dcddd57ac4fc3edb8bbf8",
+      "tests/vitrine_r104_products_core.test.mjs": "6b79962231af6ec50bc30d4de12ae9acdf905c7c"
+    }
+  },
+  "changes": {
+    "core_scale": {
+      "before": 0.62,
+      "after": 0.57,
+      "change": "8% smaller than R113"
+    },
+    "webgl": {
+      "requested_dpr_desktop_max": 2,
+      "requested_dpr_mobile_max": 1.8,
+      "mobile_breakpoint_px": 650,
+      "max_backing_pixels": 1200000,
+      "prior_max_backing_pixels": 800000,
+      "fps_frame_guard_ms": 32,
+      "uses_existing_raf": true
+    },
+    "electric": {
+      "before": 5,
+      "after": 8,
+      "pattern": "radial pseudo-random fronts from nucleus toward shell; bounded by sphere mask",
+      "glsl_fnv1a32": "fa9a2ccc"
+    },
+    "ambient": {
+      "particles_mobile": 22,
+      "particles_desktop": 38,
+      "was_mobile": 14,
+      "was_desktop": 25,
+      "comets": "2 mobile / 4 desktop via i % 11 === 0",
+      "screens": "Homepage and shared product pages Connect/Bridge/Offres",
+      "user_inactivity": "All CSS ambient animations and existing WebGL RAF continue without input while tab visible; pause when hidden or reduced motion"
+    }
+  },
+  "deployment": {
+    "provider": "Cloudflare Pages",
+    "project": "synestra-vitrine-preview",
+    "id": "b68fe24b-a196-46c5-97c2-0656453c9ac2",
+    "environment": "preview",
+    "url": "https://b68fe24b.synestra-vitrine-preview.pages.dev/",
+    "deployed_sha": "d28c39a669032e87bfcd507797146e62798d8fbf",
+    "latest_stage": "deploy success",
+    "node_pass": 42,
+    "node_fail": 0,
+    "static_export": "PASS",
+    "static_file_count": 38,
+    "production_deployments_enabled": false,
+    "rollback_preview": "14668546-eb48-43eb-899a-bed75df26713"
+  },
+  "tests": {
+    "exact_branch_sha": "VERIFIED",
+    "git_blob_readback": "VERIFIED",
+    "syntax_js": "PASS",
+    "syntax_test": "PASS",
+    "precommit_static_gate": "12/12 PASS",
+    "cloudflare_node": "42/42 PASS",
+    "cloudflare_static_export": "PASS",
+    "cloudflare_deploy": "success",
+    "real_browser_pixel_qa": "PENDING",
+    "real_ios_safari": "NOT_RUN",
+    "independent_http_tool": "INACCESSIBLE",
+    "shader_native_gpu_qa": "NOT_RUN",
+    "measured_gpu_fps": "NOT_RUN"
+  },
+  "incident": {
+    "failed_preview": "4d2a87d1-59d7-42ff-b908-c467f9b0fdec",
+    "failure": "One historical regression test still expected obsolete literal 800000 although new cap is 1200000; 41/42",
+    "recovery": "Minimal legacy test expectation updated to 1200000; second preview 42/42 PASS",
+    "no_burst_retry": true
+  },
+  "skills": {
+    "source": "Synestra Connect pinned staging Central Skills",
+    "consulted": [
+      "ui-ux@1.0.0#0a362a0938401674166c7a8b871192fbde602c1a",
+      "web-accessibility-engineering@1.0.0#172c442525351804e89e7b273346f03df34bdd89",
+      "visual-regression-testing@1.0.0#aa98fffe9149dfcc0e153f0d1b8b91f3c0a6b4ae"
+    ],
+    "execution": "ADVISORY_CONTEXT_ONLY"
+  },
+  "policy": {
+    "free_only": true,
+    "main_unchanged": true,
+    "production_unchanged": true,
+    "privacy": "No new network/API, cookies, identity, dependencies, or data collection",
+    "source_gate": "LIMITED; Memory V1 not re-read, browser E2E outstanding",
+    "hooks": "Cloudflare build PASS, Studio UNKNOWN"
+  },
+  "function_report": "PARTIAL",
+  "next": "Human visual assessment at the exact preview URL on iPhone and desktop; assess sharpness and motion without input, text legibility, collision, load/fps and reduced-motion; apply only observed small correction."
+}

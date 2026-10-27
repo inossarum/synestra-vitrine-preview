@@ -1,0 +1,136 @@
+{
+  "schema": "synestra.vitrine.r96.official-brand-preview-qa.v1",
+  "evidence_id": "VITRINE_SITEFORGE_R96_OFFICIAL_BRAND_20261025",
+  "mission_id": "SYN_VITRINE_SITEFORGE_SHOWCASE_20261024",
+  "owner": "Inos",
+  "observed_at_utc": "2026-10-25T08:46:32Z",
+  "source": {
+    "repository": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_VITRINE_SITEFORGE_R91_PREVIEW_20261024",
+    "pr": 5,
+    "base": "main",
+    "tested_head": "bf8ef0c693ea6f3fb8819cdb4460fff12dd2ecc7",
+    "html_blob": "aa91ca79d945ac78dde9de0e3799fc563e4629cb",
+    "official_logo_web_blob": "5871125a3b934acd93613201b56bc75f2a81a231",
+    "web_logo_path": "assets/synestra-studio-official-v1.avif",
+    "web_logo_sha256": "511d1454953ebca11b4547036960d4aa9613eb294d03268a2b2e2cf9ab89bb8c",
+    "web_logo_bytes": 20508,
+    "web_logo_dimensions": "400x400",
+    "canonical_png_library": "/Synestra/Identite/Synestra_Studio_Logo_Officiel_V1.png",
+    "canonical_png_sha256": "c83dc24f18df338c359e9da4c58913e29c54bafa94357734e70820125e01b9bd",
+    "canonical_png_dimensions": "1254x1254",
+    "canonical_png_bytes": 1505195,
+    "alpha": "RGBA: min=0 max=255 for PNG and AVIF; PIL inspection",
+    "source_asset_approved": "User explicitly approved the image as official Synestra Studio logo V1 (not independently authenticated as original Connect plugin icon)",
+    "refinement": "Web AVIF is an optimized 400x400 derivative, not byte-for-byte identical to the 1254x1254 canonical PNG",
+    "signature_file": "branding/SYNESTRA_STUDIO_OFFICIAL_LOGO_V1_20261025.md",
+    "main_unchanged": "1eb9f9acc1d7091d42077f30d3159483057a02a6"
+  },
+  "implementation": {
+    "site": "Premium futuristic design; violet/cyan/green/chrome, browser-local optimized logo in header and animated core; Bridge/Connect/SiteForge sections",
+    "features": [
+      "logo-buoyancy",
+      "marker-a-spin",
+      "marker-b-spin",
+      "line-breathe",
+      "workflow-pulse",
+      "cin-radar",
+      "cin-connect",
+      "cin-glint",
+      "responsive siteforge preview hover"
+    ],
+    "architecture": "Static HTML/CSS, no JS application dependency, no external runtime asset request",
+    "privacy": "noindex,nofollow; CSP default-src 'none'; img-src 'self'; form-action 'none'",
+    "release_gate": "HOLD",
+    "pull_request_draft": true,
+    "merged": false
+  },
+  "qualification": {
+    "execution_surface": "Owner Windows PC over authenticated Synestra Bridge staging software-key binding; dedicated isolated clean clone",
+    "node_test": {
+      "passed": 105,
+      "failed": 0
+    },
+    "python_unittest": {
+      "passed": 15,
+      "failed": 0
+    },
+    "real_chrome": [
+      {
+        "viewport": "320x780",
+        "result": "PASS",
+        "horizontal_overflow_pixels": 0
+      },
+      {
+        "viewport": "390x844",
+        "result": "PASS",
+        "horizontal_overflow_pixels": 0
+      },
+      {
+        "viewport": "768x1024",
+        "result": "PASS",
+        "horizontal_overflow_pixels": 0
+      },
+      {
+        "viewport": "1440x900",
+        "result": "PASS",
+        "horizontal_overflow_pixels": 0
+      },
+      {
+        "viewport": "1920x1080",
+        "result": "PASS",
+        "horizontal_overflow_pixels": 0
+      }
+    ],
+    "chrome_controls": [
+      "logo loaded both header+core; same local URL",
+      "computed theme #060b12 and violet #8a58ec",
+      "kinetic CSS animations active",
+      "prefers-reduced-motion stops animation",
+      "keyboard focus/skip link PASS",
+      "FAQ five elements PASS",
+      "external requests zero",
+      "Web Pilot ADVISORY_NO_FLAGS"
+    ],
+    "mcp_web_pilot": {
+      "status": "PASS",
+      "calls": 6,
+      "viewports": [
+        "390x844",
+        "1440x900"
+      ],
+      "field_core_web_vitals": "NOT_ATTESTED"
+    },
+    "screenshot_sha256": {
+      "320x780": "76920033d5c395dae8271bb7061c27da5ada8dba75f99bf7e42d46f37701c5f4",
+      "390x844": "f9404a371cbd9bf935d36fb8ff6b970bc5b7ab001507a32cf09dd66264d3dc5a",
+      "768x1024": "d412809d002d93421a070f3cf7d820c30e3b6d041f6f30ae565626dcae3896d4",
+      "1440x900": "9c561e94bd93610e4b6517a23f8c4fb9aa2665d132e0fae05b403bee4ddbf5a1",
+      "1920x1080": "611581aa4b625cccefc533e81178c0dc78fb78f0b1b73c6fa4dbfaeaf1b4cfe8"
+    },
+    "image_delivery_to_chatgpt": "NOT_ATTESTED; do not claim multimodal visual inspection of captured screenshots",
+    "visual_observer_native": "NOT_AVAILABLE_TO_THIS_SESSION",
+    "existing_png_captures": "Only SHA hashes recorded; local QA screenshots to be purged, not published",
+    "candidate_website_public_preview": "https://raw.githack.com/inossarum/synestra-vitrine-preview/bf8ef0c693ea6f3fb8819cdb4460fff12dd2ecc7/index.html",
+    "preview_http": {
+      "vitrine_html": 200,
+      "logo_avif": 200,
+      "siteforge_html": 200,
+      "signature_html": 200
+    },
+    "preview_provider": "raw.githack.com - third-party public proxy of GitHub code, not Synestra official deployment"
+  },
+  "constraints": [
+    "No official public site deployment or merge authorized",
+    "No new Worker, Supervisor or duplicate connector",
+    "No fake Bridge/Connect availability",
+    "No visual pixel receipt via Visual Observer; structural/runtime checks only",
+    "QA temporary artefacts purged separately after hash/readback"
+  ],
+  "next": [
+    "Owner visually reviews R96 preview",
+    "If appearance corrections requested, edit same PR branch and retest affected paths",
+    "When authorized: separate release checklist, asset/license, rollback, deploy E2E",
+    "Optionally qualify Visual Observer native pixel route independently"
+  ]
+}

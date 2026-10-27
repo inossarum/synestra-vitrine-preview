@@ -1,0 +1,141 @@
+{
+  "schema": "synestra.vitrine.r118.evidence.v1",
+  "evidence_id": "SYN_VITRINE_R118_TRIPLE_METALLIC_GYROS_20261026",
+  "date": "2026-10-26",
+  "mission_id": "SYN_VITRINE_CORE_METALLIC_GYROS_R118_20261026",
+  "owner": "Inos",
+  "objective": "Increase thickness of both existing gyroscopes, add a third independently spinning brushed-metal ring, accelerate to 13/17/20 second periods, retain depth-aware front/back composition and SVG fallback.",
+  "source": {
+    "repository": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_VITRINE_SITEFORGE_R91_PREVIEW_20261024",
+    "pr": 5,
+    "pr_state": "OPEN_DRAFT",
+    "base_head": "c47d2cb0463a73e60cc4b866432442301fe45b05",
+    "tested_code_commit": "d311df8347925560a4db1ea661845e3c758176e3",
+    "blobs": {
+      "index.html": "0abfdb0c6a5efe14d965d7842b9e50fb764d2e42",
+      "assets/core-r109-webgl.js": "466f817baae999f584acb2c5c7208fcf9ba709fb",
+      "tests/vitrine_r104_products_core.test.mjs": "3827949531dae5461f7c64e77f613462a2d645b0"
+    },
+    "shader_fragment_fnv1a32": "2b871361",
+    "rollback_code_sha": "296ed3fd8887502870b03db1299da591039781dc"
+  },
+  "graphic": {
+    "ring_count": 3,
+    "periods_seconds": [
+      13,
+      17,
+      20
+    ],
+    "b_reverse": true,
+    "svg_strokes_before": [
+      4.2,
+      2.8
+    ],
+    "svg_strokes_after": [
+      5.8,
+      3.9,
+      3.6
+    ],
+    "webgl_band_smoothstep_outer_before": [
+      0.027,
+      0.027
+    ],
+    "webgl_band_smoothstep_outer_after": [
+      0.038,
+      0.036,
+      0.034
+    ],
+    "radii": [
+      0.87,
+      0.97,
+      1.08
+    ],
+    "depth": "Three 3D tilted planes, zpos=-dot(p,plane.xy)/plane.z; 3-compare swap network sorts all rings far-to-near at every fragment; outside sphere composites sorted rings; inside sphere composites only if ring depth lies in front of sphereFrontZ",
+    "shader": "one original WebGL1 canvas, one RAF guard >=32ms, up to 1.2M backing pixels",
+    "svg": "third elliptical rear layer before nucleus + third foreground path after nucleus; CSS rotations and reduced-motion static orientation",
+    "preserved": "eight electrical arcs at 1.12s, Core scale 0.49, only Connect Bridge SiteForge capsules, semantic links and CSP"
+  },
+  "validation": {
+    "precommit": "PASS; exact three gyro calls, three comparisons and eight arcs checked",
+    "negative_test": "Initial nonmatching CSS patch anchor aborted before any remote mutation; patch applied with verified corrected anchor",
+    "git_expected_head_check": "PASS",
+    "blob_readback": "PASS",
+    "node_syntax_check": "PASS via Cloudflare build",
+    "node_tests": 49,
+    "node_pass": 49,
+    "node_fail": 0,
+    "static_export": "PASS",
+    "static_files": 38,
+    "cloudflare_build": "PASS",
+    "cloudflare_preview_deploy": "SUCCESS",
+    "webgl_native_compile": "NOT_VERIFIED",
+    "browser_pixel_capture": "NOT_VERIFIED",
+    "ios_safari_reflow_fps": "NOT_VERIFIED",
+    "external_web_open": "NOT_ACCESSIBLE_VIA_TOOL; not evidence of Cloudflare HTTP failure"
+  },
+  "deployment": {
+    "provider": "Cloudflare Pages",
+    "project": "synestra-vitrine-preview",
+    "id": "c063382a-7d50-4250-bec5-c839b7b9a62b",
+    "url": "https://c063382a.synestra-vitrine-preview.pages.dev/",
+    "environment": "preview",
+    "status": "success",
+    "code_sha": "d311df8347925560a4db1ea661845e3c758176e3",
+    "production_deployments_enabled": false,
+    "rollback_url": "https://5ec90946.synestra-vitrine-preview.pages.dev/"
+  },
+  "governance": {
+    "billing": "FREE_ONLY; existing Git-connected Preview deployment, no new paid dependency",
+    "production_mutation": false,
+    "main_unchanged": true,
+    "acl_secret_change": false,
+    "source_gate": "LIMITED: AGENTS and web visual rule read+SHA verified; R117 Evidence/Reasoning verified; Memory V1 corpus / SAL / Runbook current manifest not confirmed; Studio bootstrap operation remained QUEUED",
+    "rules": {
+      "AGENTS.md": "a42bcf8055c6f747eaa734f5faa7006cc57409db",
+      "WEB_VISUAL_PREVIEW_AFTER_EACH_CHANGE": "70de2947cb16ea5053aee37cb13065adfc9b58"
+    },
+    "hooks_status": "Cloudflare build hook executed successfully; Studio hooks UNKNOWN",
+    "skills_read": [
+      [
+        "ui-ux",
+        "1.0.0",
+        "0a362a0938401674166c7a8b871192fbde602c1a"
+      ],
+      [
+        "web-accessibility-engineering",
+        "1.0.0",
+        "172c442525351804e89e7b273346f03df34bdd89"
+      ],
+      [
+        "visual-regression-testing",
+        "1.0.0",
+        "aa98fffe9149dfcc0e153f0d1b8b91f3c0a6b4ae"
+      ],
+      [
+        "brainstorming",
+        "1.0.0",
+        "7106f4538744fa7bd04d2ca523961e3be44667d1"
+      ],
+      [
+        "semantic-web-implementation",
+        "1.0.0",
+        "291c352444cb44b3b1f2eb7e5a25f72bffb39ec0"
+      ],
+      [
+        "e2e-testing",
+        "1.0.0",
+        "3fcb7196816ed91c4773ec8004a508b7e288a015"
+      ],
+      [
+        "failure-first",
+        "1.0.0",
+        "373c5f508b3ef91d1ffc1fc5afec7007a643d590"
+      ]
+    ],
+    "skill_execution": "NOT_EXECUTED; instructions applied as advisory checks only"
+  },
+  "status": "PREVIEW_PUBLISHED_VISUAL_QA_PENDING",
+  "function_report": "PARTIAL",
+  "next": "Inspect this exact URL on real Chrome/Safari at 390/768/1440 viewport or authorized browser: verify shader compiles, three moving metallic rings pass correctly front/back, no visual overlap with three product capsules, reduced-motion fallback. Keep PR DRAFT and main unchanged until reviewed."
+}

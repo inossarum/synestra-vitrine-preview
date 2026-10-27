@@ -1,0 +1,7 @@
+# R101 — Cloudflare Pages public-preview response protections.
+# Source: Synestra R99 CSP remains page-scoped; avoid overriding Signal/SiteForge policies.
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: no-referrer
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=()
