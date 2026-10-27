@@ -266,13 +266,13 @@ void main(){
                          sin(q.y*5.+t*.24)*1.8+broad*3.2-t*.55;
       float veil=pow(max(0.,.5+.5*cos(curtainPhase)),max(1.8,5.2/ribbonWidth));
       float feather=.5+.5*sin(q.y*9.-t*.38+detail*4.);
-      flowCurrents=veil*(.38+.83*feather)+wisps*.13;
+      flowCurrents=veil*(.38+.83*feather)+sideFilament*.13;
       flowFog=.46;
     }else if(uFlow.x<3.5){
       // Ionized nebula: broad, turbulent luminous clouds, minimal filaments.
       float densityCloud=smoothstep(.17,.69,broad*.70+detail*.30);
       float swirls=.5+.5*cos(q.z*5.+planar*4.-t*.22+depthWarp*2.);
-      flowCurrents=densityCloud*(.28+.38*swirls) + wisps*.10;
+      flowCurrents=densityCloud*(.28+.38*swirls) + hollow*.10;
       flowFog=1.55+.55*ribbonWidth;
     }else{
       // Fusion jets: eight radial stellar emission cones with local ripples.
