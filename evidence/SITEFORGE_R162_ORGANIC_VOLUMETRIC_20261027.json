@@ -1,0 +1,75 @@
+{
+  "schema": "synestra.siteforge.r162.organic_plasma.evidence.v1",
+  "date": "2026-10-27",
+  "mission": "SYN_SITEFORGE_R162_ORGANIC_VOLUMETRIC_20261027",
+  "owner": "Inos intent / ChatGPT isolated technical delta",
+  "source": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "base_sha": "57f0245489492fbdc9e469b2641b9d990b49653e",
+    "target_branch": "task/SYN_SITEFORGE_R116_CLEAN_LAB_20261027",
+    "worktree": "I:\\_STUDIO_STAGING\\siteforge_r162_organic_20261027\\"
+  },
+  "requirement": "Retain existing single 3D sphere and all JSON controls; replace five repetitive plasma fan blades with irregular organic filaments and depth-coherent 3D ribbons; no shell, no additional sprites or electrical overlays.",
+  "modifications": {
+    "shader": "inside uFlow.x<.5 only; asymmetric warped angular trajectories, depthTwist, tributary strands, fine hairlines, travelling pulses, noise breakup; no new shader program or renderer",
+    "optical": "tuned current strength after Chrome visual review; no fog shell",
+    "ui": "R162 PLASMA ORGANIQUE label",
+    "materials": "five prior selectable families retained",
+    "json": "all 18 controls, schema v1 retained"
+  },
+  "validation": {
+    "failure_first": "R162 shader acceptance tests run and failed before R162 patch (2 failures; 1 structural test passed)",
+    "node_unit": {
+      "command": "node --test tests/site_contract.test.mjs",
+      "tests": 62,
+      "passed": 62,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "desktop_chrome": {
+      "browser": "Chrome headless with SwiftShader ANGLE",
+      "ready": true,
+      "webgl": true,
+      "getError": 0,
+      "canvas_count": 1,
+      "screen": "r162-browser-desktop.png",
+      "status": "PASS"
+    },
+    "material_matrix": {
+      "checks": 5,
+      "pass": 5,
+      "webgl_errors": 0,
+      "all_single_canvas": true,
+      "status": "PASS"
+    },
+    "mobile_chrome": {
+      "viewport_width": 390,
+      "body_width": 390,
+      "canvas_width": 364,
+      "canvas_height": 285,
+      "getError": 0,
+      "screenshot": "r162-browser-mobile.png",
+      "status": "PASS"
+    },
+    "performance_fps": {
+      "status": "NOT_MEASURED",
+      "reason": "CPU/software GPU cannot be used to claim hardware AAA FPS"
+    },
+    "visual_review": {
+      "status": "ASSISTANT_REVIEWED",
+      "decision": "R162 second iteration improved bright thin filaments versus dim first; external art acceptance remains open"
+    }
+  },
+  "safety": {
+    "new_canvas": false,
+    "new_engine": false,
+    "new_Payd": false,
+    "branch_preview_only": true,
+    "production_untouched": true
+  },
+  "rollback": {
+    "sha": "57f0245489492fbdc9e469b2641b9d990b49653e",
+    "last_preview": "https://4397d53e.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/"
+  },
+  "status": "LOCAL_E2E_PASS_PENDING_REMOTE_DEPLOY"
+}
