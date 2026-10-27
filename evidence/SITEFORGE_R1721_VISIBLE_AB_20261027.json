@@ -1,0 +1,84 @@
+{
+  "schema": "synestra.siteforge.r1721.visible_magnetic_comparison.v1",
+  "date": "2026-10-27",
+  "mission_id": "SYN_SITEFORGE_R1721_VISIBLE_MAGNETIC_AB_20261027",
+  "user_feedback": "Je ne vois aucune différence",
+  "root_causes": [
+    "R172 braided contribution only 6%, visually barely discernible",
+    "R172 preview starts in Flux plasma (flowType=0), while shader delta affects only Rubans magnetiques (flowType=1)"
+  ],
+  "owner_reference": {
+    "material": "Rubans magnétiques",
+    "emission": 200,
+    "core": 211,
+    "width": 166,
+    "shape": "curved hollow luminous spherical loops with compact central core"
+  },
+  "source": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "base": "1ebd0cd3dbf12b2bb14c9f3fdbd439598852aaff",
+    "branch": "task/SYN_SITEFORGE_R116_CLEAN_LAB_20261027"
+  },
+  "changes": {
+    "shader": "Same one WebGL fragment program, magnetic-flow-only: exact R171 baseline r171Currents vs stronger r172Currents with two sculpted rails, narrow braidTrace and volumetricContrast; composited by uniform uCompare=0/1",
+    "ui": "Accessible A/B buttons Avant R171 / Après R172.1; share same camera, phase and JSON controls. Demo button sets flowType=1, emission=200%, coreLight=211%, flowStructure=166%.",
+    "direct_preview_query": "?demo=magnetic",
+    "ab_not_exported": true,
+    "exported_parameter_count": 18,
+    "added_canvas": 0,
+    "added_renderer": 0,
+    "core_diameter_unchanged": true
+  },
+  "tests": {
+    "failure_first": "3 targeted tests failed against R172, pass after implementation",
+    "unit": {
+      "tests": 85,
+      "pass": 85,
+      "fail": 0
+    },
+    "chrome": {
+      "engine": "real Chrome WebGL SwiftShader",
+      "webgl_error": 0,
+      "materials": 5,
+      "orbital_mouse": true,
+      "orbital_touch": true,
+      "pause_zero_stable": true,
+      "resume_moving": true,
+      "desktop_canvas": [
+        591,
+        518
+      ],
+      "mobile_canvas": [
+        364,
+        285
+      ],
+      "mobile_body_width": 390,
+      "ab_reference_png": "r1721-magnetic-before-crop.png",
+      "ab_candidate_png": "r1721-magnetic-after-crop.png",
+      "reference_base64_chars": 257380,
+      "candidate_base64_chars": 285820,
+      "compressed_length_relative_difference": 0.09950318382198586,
+      "metric_disclaimer": "Size of encoded PNGs, not pixel difference; human visual side-by-side confirms more defined braided ribbons",
+      "demo_verified": {
+        "flowType": 1,
+        "emission": 200,
+        "core": 211,
+        "width": 166
+      },
+      "capture_same_camera_time": true
+    }
+  },
+  "protected": {
+    "approved_home_sha": "1413e30138ba1657f7056401818e697ddbd32ac8",
+    "approved_engine_sha": "dd63d75fdb966de2052595c95b7b6cb736d6c7cc",
+    "main_unchanged": true,
+    "production_unchanged": true
+  },
+  "limits": {
+    "Cloudflare_preview": "NOT_DEPLOYED",
+    "physical_gpu_fps": "NOT_MEASURED",
+    "aesthetic_approval": "PENDING_OWNER"
+  },
+  "rollback": "Revert lab-only commit to R172 base 1ebd0cd3dbf12b2bb14c9f3fdbd439598852aaff",
+  "result": "LOCAL_VERIFIED_PENDING_GITHUB"
+}

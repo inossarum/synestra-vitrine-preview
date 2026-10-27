@@ -1,4 +1,4 @@
-/* SiteForge LAB R171 (isolated from the approved Synestra vitrine) — replaceable 3D volume flow materials on ONE WebGL renderer: luminous central core, sweeping cyan-violet vortex arms and depth-resolved energy. Existing WebGL emitter retained; 18 controls total.
+/* SiteForge LAB R172.1 (isolated from the approved Synestra vitrine) — replaceable 3D volume flow materials on ONE WebGL renderer: luminous central core, sweeping cyan-violet vortex arms and depth-resolved energy. Existing WebGL emitter retained; 18 controls total.
  * One GPU VFX program: quad volumetric plasma + particle shell, branching arcs, nucleus.
  * Historical marble shader, old arcs and their settings are REMOVED.
  * WebGL1, iPhone precision parity, mobile bounded particles, no network.
@@ -19,6 +19,22 @@
  const arcPanel=document.querySelector('[data-electric-options]');
  const status=(target,value)=>{if(target&&target.textContent!==value)target.textContent=value;};
  let schedule=()=>{};
+ // Visual comparison is a lab-only display mode, NOT a 19th JSON setting.
+ let compareVariant=1;
+ const compareGroup=document.querySelector('[data-magnetic-compare-group]');
+ const compareButtons=[...document.querySelectorAll('[data-magnetic-compare]')];
+ const syncCompareUI=()=>{
+  if(compareGroup)compareGroup.hidden=sel('flowType')!==1;
+  for(const button of compareButtons)button.setAttribute('aria-pressed',String((button.dataset.magneticCompare==='r172'?1:0)===compareVariant));
+  stage.dataset.magneticVariant=compareVariant?'r172':'r171';
+ };
+ const applyDemo=()=>{
+  for(const [key,value] of [['flowType','1'],['particleIntensity','200'],['coreLight','211'],['flowStructure','166']]){
+   if(controls[key])controls[key].value=value;
+  }
+  compareVariant=1;sync();schedule();
+ };
+
  function sync(){
   for(const [key,e] of Object.entries(controls)){
    const out=document.querySelector('[data-sphere-value="'+key+'"]');
@@ -27,6 +43,7 @@
   }
   const electricMode=sel('flowType')===0&&sel('particlePreset')===1;
   if(arcPanel)arcPanel.hidden=!electricMode;
+  syncCompareUI();
   stage.style.setProperty('--sphere-zoom',String(num('diameter')));
   stage.style.setProperty('--fallback-opacity',String(num('opacity')));
  }
@@ -34,11 +51,18 @@
  const onChange=e=>{if(e.target?.hasAttribute('data-sphere-control')){sync();schedule();}};
  panel?.addEventListener('input',onChange);
  panel?.addEventListener('change',onChange);
+ panel?.addEventListener('click',event=>{
+  const toggle=event.target.closest('[data-magnetic-compare]');
+  if(toggle){compareVariant=toggle.dataset.magneticCompare==='r172'?1:0;syncCompareUI();schedule();}
+  if(event.target.closest('[data-magnetic-demo]'))applyDemo();
+ });
+
  panel?.addEventListener('reset',e=>{
   e.preventDefault();for(const [key,input] of Object.entries(controls))input.value=defaults[key];
-  sync();schedule();
+  compareVariant=1;sync();schedule();
  });
  sync();
+ if(new URLSearchParams(window.location.search).toString().includes('demo=magnetic'))applyDemo();
  // Export uses the actual live controls, not startup defaults or GPU uniforms.
  // This stays available when reduced motion is enabled or WebGL is unavailable.
  const exportButton=document.querySelector('[data-export-json]');
@@ -183,7 +207,8 @@ uniform vec4 uControls,uShape,uEffects;
 uniform vec3 uCore,uCyan,uViolet,uDeep;
 uniform vec2 uTilt;
 uniform float uVolumeSteps;
-uniform vec2 uFlow; // material family 0..4, ribbon width 0.3..2
+uniform vec2 uFlow;
+uniform float uCompare; // material family 0..4, ribbon width 0.3..2
 float hash3(vec3 v){v=fract(v*.1031);v+=dot(v,v.yzx+33.33);return fract((v.x+v.y)*v.z);}
 float noise3(vec3 p){
  vec3 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
@@ -297,23 +322,22 @@ void main(){
       flowCurrents=(primaryVein*.91+tributary*.48+hairline*.50+wisp*.22)
                    *pulse*breakup*shearEnvelope*depthEnvelope*filamentContrast*2.10;
     }else if(uFlow.x<1.5){
-      // R172 magnetic material: retain the four closed curved ribbons of R171.
-      // All new variation lives inside the existing ray-marched material, not
-      // in a second glow, particle pass or outer shell.
+      // R172.1: visible material relief; R171 baseline can be shown A/B.
+      // Main four magnetic loops and center remain strictly unchanged.
       float fieldAngle=angle*4.+q.z*6.5+sin(planar*9.+broad*2.2-t*.65)*2.;
       float fieldLoop=pow(max(0.,.5+.5*cos(fieldAngle)),max(2.,7./ribbonWidth));
       float layering=pow(max(0.,.5+.5*cos(q.z*11.+planar*7.-t*.43)),3.);
-      // Near/far separation makes the crossing ribbons feel volumetric.
-      float depthRibbon=.88+.12*smoothstep(-.78,.78,q.z/radius);
-      // Fine braids are attached to the same four sweeping bands;
-      // harmonic 8 keeps the field seamless over the polar angle boundary.
-      float braidedPhase=angle*8.+q.z*9.7+planar*6.8-t*.36
-                       +.22*sin(q.y*4.-t*.24);
-      float fineStrand=pow(max(0.,.5+.5*cos(braidedPhase)),
-                           max(7.,18./ribbonWidth));
-      float flowingHighlight=.89+.11*sin(q.z*5.6-planar*6.1+t*.47);
-      flowCurrents=fieldLoop*(.40+.68*layering)*depthRibbon*flowingHighlight
-                   +fineStrand*.06*fieldLoop*depthRibbon;
+      float r171Currents=fieldLoop*(.40+.68*layering);
+      // The outer envelope still comes from the same magnetic field.
+      // Bright sculpted rails and internal braids replace uniform soft ribbons.
+      float ridgeA=pow(max(0.,.5+.5*cos(fieldAngle+.62)),max(4.,11./ribbonWidth));
+      float ridgeB=pow(max(0.,.5+.5*cos(fieldAngle-.73)),max(4.,11./ribbonWidth));
+      float braidTrace=pow(max(0.,.5+.5*cos(fieldAngle*3.+q.z*4.3-t*.41)),
+                            max(8.,20./ribbonWidth));
+      float volumetricContrast=.48+.52*smoothstep(-.64,.68,q.z/max(radius,.01));
+      float r172Currents=fieldLoop*(.27+.43*layering)*volumetricContrast
+                  +fieldLoop*(ridgeA*.88+ridgeB*.70+braidTrace*.86)*volumetricContrast;
+      flowCurrents=mix(r171Currents,r172Currents,uCompare);
       flowFog=.54;
     }else if(uFlow.x<2.5){
       // Aurora: flowing translucent vertical sheets, not spiralling plasma.
@@ -408,7 +432,7 @@ void main(){
  }
  gl.deleteShader(vert);gl.deleteShader(frag);
  const A=gl.getAttribLocation(program,'aPosition'),S=gl.getAttribLocation(program,'aSeed');
- const keys=['uResolution','uTime','uPass','uLayer','uTilt','uControls','uShape','uEffects','uCore','uCyan','uViolet','uDeep','uVolumeSteps','uFlow'];
+ const keys=['uResolution','uTime','uPass','uLayer','uTilt','uControls','uShape','uEffects','uCore','uCyan','uViolet','uDeep','uVolumeSteps','uFlow','uCompare'];
  const U=Object.fromEntries(keys.map(k=>[k,gl.getUniformLocation(program,k)]));
  if(A<0||S<0||keys.some(k=>U[k]===null)){status(mainStatus,'GPU : paramètres incomplets.');return;}
  const quad=gl.createBuffer(),seeds=gl.createBuffer();if(!quad||!seeds)return;
@@ -448,6 +472,7 @@ void main(){
   gl.uniform1f(U.uTime,elapsed);gl.uniform2f(U.uTilt,tiltX,tiltY);
   gl.uniform1f(U.uVolumeSteps,mobile?14:22);
   gl.uniform2f(U.uFlow,sel('flowType'),num('flowStructure'));
+  gl.uniform1f(U.uCompare,compareVariant);
   gl.uniform4fv(U.uControls,new Float32Array([
     preset,num('particleIntensity'),num('particleSpeed'),num('particleDensity')
   ]));

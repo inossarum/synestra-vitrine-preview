@@ -17,17 +17,17 @@ test('R172: improve only existing magnetic field with subtle 3D braiding, preser
  assert.match(magnetic,/float fieldAngle=angle\*4\.\+q\.z\*6\.5/);
  assert.match(magnetic,/float fieldLoop=pow/);
  assert.match(magnetic,/float layering=pow/);
- assert.match(magnetic,/float depthRibbon=/);
- assert.match(magnetic,/float fineStrand=/);
- assert.match(magnetic,/float braidedPhase=angle\*8\./);
- assert.match(magnetic,/float flowingHighlight=/);
- assert.match(magnetic,/flowCurrents=fieldLoop\*/);
+ assert.match(magnetic,/float volumetricContrast=/);
+ assert.match(magnetic,/float ridgeA=/);
+ assert.match(magnetic,/float braidTrace=/);
+ assert.match(magnetic,/float ridgeB=/);
+ assert.match(magnetic,/flowCurrents=mix\(r171Currents,r172Currents,uCompare\)/);
  assert.match(magnetic,/flowFog=\.54;/);
  assert.doesNotMatch(magnetic,/gl\.draw|uShell|uPass|noise3\(/);
 });
 test('R172: 5 material paths kept and UI labels magnetic prototype, no new shell or particles',()=>{
  for(const n of [".5","1.5","2.5","3.5"])assert.ok(lab.includes('uFlow.x<'+n));
- assert.match(html,/R172 · RUBANS 3D/);
+ assert.match(html,/R172.1 · COMPARER/);
  assert.match(html,/Rubans magnétiques/);
  assert.match(html,/Le noyau, les couleurs et le volume restent indépendants/);
 });
