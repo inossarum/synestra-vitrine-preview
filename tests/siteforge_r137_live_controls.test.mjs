@@ -253,8 +253,8 @@ test('R141: agitation produces independent domain warping and plasma emission',(
  assert.match(js,/float light=\.32\+\.68\*smoothstep\(-\.90,\.95,dot\(geomN,/);
  assert.match(js,/float alpha=sphereAlpha\*shellFade;/);
  assert.doesNotMatch(js,/geomN\s*=\s*normalize\(.*warp/);
- assert.match(html,/0 % matière calme/);
- assert.match(html,/200 % turbulences fortes/);
+ assert.match(html,/0 % volutes calmes/);
+ assert.match(html,/200 % turbulences de plasma/);
 });
 test('R141: agitation at 0 has no warp or turbulent emission; larger strength amplifies both',()=>{
  const swirl=(agitation,n,time)=>{
@@ -286,4 +286,36 @@ test('R141: agitation input maps to GPU uniform and resets independently of rota
  fx.events.reset({preventDefault(){}});
  fx.next(180);
  assert.equal(fx.u1.get('agitationRatio'),1);
+});
+
+
+test('R142: layered emissive plasma material and nested cloud shading are genuine shader effects',()=>{
+ const fragment=js.slice(js.indexOf('void main(){'),js.indexOf('  const shader = (type, code)'));
+ for(const signature of [
+   'float cloudDensity=clamp(v*.52+v2*.31+eddyA*.17,0.,1.);',
+   'float gasPocket=1.-smoothstep(.28,.69,cloudDensity);',
+   'float litCloud=smoothstep(.34,.82,cloudDensity);',
+   'float microThreads=pow(max(.5+.5*sin(filamentPhase),0.),13.);',
+   'float glowingVeins=pow(max(.5+.5*sin(filamentPhase*.57-v2*8.+drift*1.7),0.),11.);',
+   'float curlGlow=agitation*(microThreads*.48+glowingVeins*.32)*(.50+.50*litCloud);',
+   'base=mix(base,navy*.36+fluidTint*.30,gasPocket*.61);',
+   'base+=mix(primaryColor*.42,cyan*.72,litCloud)*litCloud*.36;',
+   'base+=mix(cyan,lavender,clamp(v2*.74,0.,1.))*(curlGlow*.76+microThreads*.10*detailRatio)*shimmer;'
+ ]) assert.ok(fragment.includes(signature),'missing plasma material response: '+signature);
+ assert.match(fragment,/vec3 geomN=vec3\(p,/);
+ assert.match(fragment,/float light=\.32\+\.68\*smoothstep\(-\.90,\.95,dot\(geomN,/);
+ assert.match(fragment,/float alpha=sphereAlpha\*shellFade;/);
+ assert.equal((fragment.match(/=r111Arc\(p,/g)||[]).length,8);
+ assert.doesNotMatch(fragment,/wallMask|innerRadius|innerShadow/);
+});
+test('R142: plasma cloud density and emission vary continuously without a fake hemisphere seam',()=>{
+ const clamp=(x,min,max)=>Math.min(max,Math.max(min,x));
+ const smooth=(lo,hi,v)=>{const z=clamp((v-lo)/(hi-lo),0,1);return z*z*(3-2*z)};
+ const sample=(v,v2,eddy,agit)=>{const cloud=clamp(v*.52+v2*.31+eddy*.17,0,1),pocket=1-smooth(.28,.69,cloud),lit=smooth(.34,.82,cloud);return {pocket,lit,emission:agit*(.48*.8+.32*.7)*(.50+.50*lit)}};
+ const dark=sample(.12,.21,.14,1),bright=sample(.81,.77,.69,1);
+ assert.ok(dark.pocket>bright.pocket,'low-density gas reveals deep dark pockets');
+ assert.ok(bright.lit>dark.lit,'dense cloud responds with bright scatter');
+ assert.ok(bright.emission>dark.emission);
+ assert.equal(sample(.81,.77,.69,0).emission,0,'no turbulent emission when agitation is zero');
+ assert.ok(sample(.81,.77,.69,2).emission>sample(.81,.77,.69,1).emission);
 });
