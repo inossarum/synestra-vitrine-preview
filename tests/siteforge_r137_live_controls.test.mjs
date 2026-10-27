@@ -7,7 +7,7 @@ const read=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
 const js=read('assets/siteforge-r116-sphere-only.js');
 const html=read('siteforge/core-3d-lab/index.html');
 const defaults={
- particlePreset:0,particleIntensity:100,coreLight:135,arcIntensity:140,arcDensity:100,
+ particlePreset:4,particleIntensity:100,coreLight:135,arcIntensity:140,arcDensity:100,
  diameter:100,shellVisibility:100,coreSize:70,particleDensity:100,
  particleSpeed:100,particleSize:100,opacity:100,flowType:0,flowStructure:100,
  primary:'#08142e',secondary:'#53318d',core:'#eaffff',rim:'#51dfff'
@@ -22,7 +22,7 @@ function fixture({failLink=false,failCompile=false,noWebGL=false,reduceMotion=fa
  const exportStatus={textContent:''};
  const outputs=Object.fromEntries(Object.keys(defaults).map(k=>[k,{textContent:''}]));
  const controls=Object.fromEntries(Object.entries(defaults).map(([key,val])=>{
-  const v=String(val),type=(key==='particlePreset'||key==='flowType')?'select-one':colorKeys.includes(key)?'color':'range';
+  const v=String(val),type=key==='particlePreset'?'hidden':key==='flowType'?'select-one':colorKeys.includes(key)?'color':'range';
   return [key,{value:v,defaultValue:v,type,dataset:{sphereControl:key},
    getAttribute:k=>k==='data-default'&&(key==='particlePreset'||key==='flowType')?v:null,
    hasAttribute:k=>k==='data-sphere-control',
@@ -123,14 +123,14 @@ test('R152: native quick controls, safe defaults and accessible advanced setting
  assert.match(html,/noindex,nofollow/);
  assert.equal((html.match(/type="range"/g)||[]).length,12);
  assert.equal((html.match(/type="color"/g)||[]).length,4);
- assert.equal((html.match(/<select /g)||[]).length,2);
+ assert.equal((html.match(/<select /g)||[]).length,1);
  const keys=Object.keys(defaults);
  for(const key of keys)assert.match(html,new RegExp('data-sphere-control="'+key+'"'));
 });
-test('R152: real draw submission structure in deterministic GPU fixture',()=>{
+test('R160: pure-mode default draws exactly one volumetric pass',()=>{
  const x=fixture();x.frame();
  assert.deepEqual(x.draws.map(d=>[d.mode,d.count]),[
-  [4,6],[0,340],[0,340]
+  [4,6]
  ]);
  assert.match(x.mainStatus.textContent,/Nouvelle sphère plasma WebGL active/);
  assert.match(x.vfxStatus.textContent,/Plasma GPU actif/);
@@ -142,11 +142,11 @@ test('R152: disabling supplemental particles keeps plasma shell, internal arcs a
  assert.deepEqual(x.draws.slice(-1).map(d=>[d.mode,d.count]),[[4,6]]);
  assert.match(x.vfxStatus.textContent,/particules additionnelles désactivées/);
 });
-test('R152: zero shell hides surface while keeping nucleus and internal lightning',()=>{
+test('R160: zero shell retains volumetric core without extra particle overlays',()=>{
  const x=fixture();x.frame(40);
  x.controls.shellVisibility.value='0';x.callbacks.input({target:x.controls.shellVisibility});x.frame(90);
  assert.equal(x.uniforms.get('uShape')[1],0);
- assert.deepEqual(x.draws.slice(-3).map(d=>d.count),[6,340,340]);
+ assert.deepEqual(x.draws.slice(-1).map(d=>d.count),[6]);
 });
 test('R152: nucleus flux stays independent of nucleus radius',()=>{
  const x=fixture();x.frame(40);
@@ -155,12 +155,12 @@ test('R152: nucleus flux stays independent of nucleus radius',()=>{
  assert.equal(x.uniforms.get('uShape')[3],5);
  assert.equal(x.uniforms.get('uShape')[2],size);
 });
-test('R152: native picker selection changes emitter material and restores defaults',()=>{
+test('R152: legacy shader pathway remains reversible and resets to hidden pure mode',()=>{
  const x=fixture();x.frame(40);
  x.controls.particlePreset.value='2';x.callbacks.change({target:x.controls.particlePreset});x.frame(90);
  assert.equal(x.uniforms.get('uControls')[0],2);
  x.callbacks.reset({preventDefault(){}});x.frame(140);
- assert.equal(x.uniforms.get('uControls')[0],0);
+ assert.equal(x.uniforms.get('uControls')[0],4);
  assert.equal(x.controls.coreLight.value,'135');
 });
 test('R152: compile and link failures never pretend to have active GPU rendering',()=>{
@@ -283,7 +283,6 @@ test('R156: export button is accessible, stays separate from reset and contains 
  assert.match(html,/aria-describedby="sf-export-description"/);
  assert.match(html,/data-export-status role="status" aria-live="polite"/);
  const x=fixture();
- x.controls.particlePreset.value='2';
  x.controls.arcIntensity.value='287';
  x.controls.coreLight.value='420';
  x.controls.particleDensity.value='213';
@@ -297,7 +296,7 @@ test('R156: export button is accessible, stays separate from reset and contains 
  assert.equal(parsed.version,1);
  assert.equal(parsed.engine,'siteforge-plasma-webgl1');
  assert.deepEqual(Object.keys(parsed.parameters).sort(),Object.keys(defaults).sort());
- assert.equal(parsed.parameters.particlePreset,2);
+ assert.equal(parsed.parameters.particlePreset,4);
  assert.equal(parsed.parameters.arcIntensity,287);
  assert.equal(parsed.parameters.coreLight,420);
  assert.equal(parsed.parameters.particleDensity,213);
@@ -327,7 +326,7 @@ test('R156: export continues to work with zero GPU, shader link error, reduced m
 });
 
 
-test('R157: flow family and structure independent of particle presets',()=>{
+test('R160: five material families stay independent of the locked pure overlay preset',()=>{
  assert.match(html,/data-sphere-control="flowType"/);
  assert.match(html,/data-sphere-control="flowStructure"/);
  for(const name of ['Flux plasma','Rubans magnétiques','Voiles d’aurore','Brume ionique','Jets de fusion'])assert.ok(html.includes(name),name);
@@ -339,7 +338,7 @@ test('R157: flow family and structure independent of particle presets',()=>{
   assert.equal(x.uniforms.get('uFlow')[0],i);
   assert.equal(x.uniforms.get('uFlow')[1],(50+i*25)/100);
  }
- assert.equal(x.controls.particlePreset.value,'0');
+ assert.equal(x.controls.particlePreset.value,'4');
 });
 test('R157: five physically distinct volume materials share one GPU program',()=>{
  const fragment=js.slice(js.indexOf('const fragment='),js.indexOf('function compile('));
