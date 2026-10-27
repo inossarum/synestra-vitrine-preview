@@ -1,0 +1,67 @@
+{
+  "schema": "synestra.siteforge.r156.json_export.evidence.v1",
+  "date": "2026-10-27",
+  "mission_id": "SYN_SITEFORGE_R156_RESTORE_JSON_SETTINGS_EXPORT_20261027",
+  "owner": "Inos",
+  "owner_requirement": "Restore option to export currently chosen Plasma Studio settings as JSON without changing the ongoing improved R155 3D plasma rendering.",
+  "source": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_SITEFORGE_R116_CLEAN_LAB_20261027",
+    "deploy_commit": "62c53d8a1a3a8a7bbd544338b3269aa0182d645e",
+    "renderer_blob": "4b201e8c11809683d21d8545c85e5bae069a021d",
+    "page_blob": "cc6048ace667993dda3d6048258332fbf2588c44",
+    "test_blob": "cec5bb295f101469d095d647b5ba3d2a777c7c97"
+  },
+  "delta": [
+    "New visible button 'Exporter les paramètres (.json)' inside existing editor, with accessible descriptive copy and aria-live status; reset remains unchanged.",
+    "Export handler is registered before reduced-motion and WebGL initialization, so downloading can work if shader compilation/link fails or WebGL is disabled.",
+    "At click time, collect all 16 current data-sphere-control values (12 numeric incl style, 4 lowercase hex color values), serialize with stable schema 'synestra.siteforge.plasma-settings.v1', version 1 and engine identifier.",
+    "Use browser Blob application/json;charset=utf-8 and one-click anchor download 'synestra-siteforge-plasma-settings.json'; delayed URL revocation for mobile Safari.",
+    "Two new regression tests verify edited values, total keys and types, filename, reset defaults, no-GPU, reduced-motion and link-failure paths.",
+    "No graphics shader, data-processing network endpoint, old controls or production application modified."
+  ],
+  "qa": {
+    "node_tests": 72,
+    "node_pass": 72,
+    "node_fail": 0,
+    "static_export": "PASS",
+    "cloudflare_project": "synestra-vitrine-preview",
+    "deployment_id": "f0a93f28-8ead-4d07-8387-9d7057a166a6",
+    "preview_url": "https://f0a93f28.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+    "stages": [
+      "queued:success",
+      "initialize:success",
+      "clone_repo:success",
+      "build:success",
+      "deploy:success"
+    ],
+    "source_readback": "VERIFIED",
+    "real_browser": {
+      "browser": "Cloudflare Browser Rendering actual Chromium JavaScript DOM, simulated 390x844 mobile viewport (not iPhone Safari)",
+      "method": "Exact GitHub HTML and JS run in isolated page because deployed preview is Access-protected; test instrumented Blob and intercepted anchor click to inspect JSON without initiating server download.",
+      "observed_filename": "synestra-siteforge-plasma-settings.json",
+      "schema": "synestra.siteforge.plasma-settings.v1",
+      "keys": 16,
+      "edited_values": {
+        "coreLight": 387,
+        "arcDensity": 173,
+        "particlePreset": 3,
+        "secondary": "#aa55ee"
+      },
+      "main_renderer_status": "Nouvelle sphère plasma WebGL active.",
+      "status": "Export JSON demandé · 16 paramètres actuels.",
+      "result": "PASS: direct handler reads current values and builds an actual JSON Blob; virtual anchor click triggered",
+      "limitation": "Automated browser confirmed Blob and click dispatch, not an actual saved file in iOS Files or browser download manager; Safari owner E2E not verified."
+    }
+  },
+  "rollback": "https://95a000ac.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+  "safety": {
+    "production_deployments_enabled": false,
+    "preview_branch_allowlisted": true,
+    "main_changed": false,
+    "production_changed": false,
+    "access_bypass": false,
+    "free_only": true
+  },
+  "status": "R156_PREVIEW_DEPLOYED_72_PASS_REAL_CHROMIUM_JSON_BLOB_VERIFIED__IOS_DOWNLOAD_CONFIRMATION_PENDING"
+}
