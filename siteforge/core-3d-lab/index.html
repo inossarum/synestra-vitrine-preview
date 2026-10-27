@@ -19,6 +19,16 @@ p{color:#9db3c8;font-size:.85rem;line-height:1.5;margin:13px 0 0}
 .core-r109-stage[data-core-ready="true"] .core-r109-canvas{opacity:1}
 .core-r108-art{position:absolute;left:50%;top:5%;transform:translateX(-50%) scale(.49);transform-origin:center center;width:min(100%,760px);height:350px;overflow:visible;pointer-events:none;transition:opacity .35s ease}
 .core-r109-stage[data-core-ready="true"] .core-r108-art{opacity:0}
+/* Mobile lab: the WebGL viewport stays in sight while the future controls scroll.
+   Sticky is applied to the existing scene, not to its canvas: one GL context only. */
+@media(max-width:700px){
+ body{padding:12px 12px max(16px,env(safe-area-inset-bottom,0px))}
+ .core-r108-stage{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;
+  height:clamp(190px,34svh,290px);border-radius:16px;
+  box-shadow:0 12px 30px rgba(0,4,18,.78),0 0 0 8px #050a14}
+ .core-r109-canvas{height:100%;transform:scale(.66)}
+ .core-r108-art{top:50%;transform:translate(-50%,-50%) scale(.66)}
+}
 @media(prefers-reduced-motion:reduce){.core-r109-canvas,.core-r108-art{transition:none!important}}
 </style>
 </head>
