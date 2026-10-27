@@ -194,7 +194,7 @@ void main(){
                   +q.z*2.6+depthWarp*1.35;
     float spiral=pow(max(0.,.5+.5*cos(winding)),6.);
     float sideFilament=pow(max(0.,.5+.5*cos(winding*1.8+detail*3.2)),25.);
-    float stream=pow(max(0.,.5+.5*cos(winding*.78-q.z*7.2)),8.);
+    float stream=pow(max(0.,.5+.5*cos(winding*.8-q.z*7.2)),8.);
     float volumeFog=clamp(.23+.30*broad+.18*detail,0.,1.);
     float hollow=1.-smoothstep(.2,.83,abs(broad-detail)*2.0);
     float interior=1.-smoothstep(.83,1.0,distance3D);
@@ -204,7 +204,7 @@ void main(){
     if(uControls.x>.5&&uControls.x<1.5){
       electrical=pow(max(0.,.5+.5*cos(winding*2.2+detail*9.)),23.);
     }else if(uControls.x>1.5&&uControls.x<2.5){
-      vortex=pow(max(0.,.5+.5*cos(winding*.72+q.z*8.)),9.);
+      vortex=pow(max(0.,.5+.5*cos(winding*.8+q.z*8.)),9.);
     }else if(uControls.x>2.5&&uControls.x<3.5){
       fusion=pow(max(0.,.5+.5*cos(angle*10.+depthWarp*2.-t*.5)),14.)
              *exp(-distance3D*2.5);
@@ -216,7 +216,7 @@ void main(){
                    core*.69+coreHalo*.11)*interior;
     float absorption=clamp(density*stride*5.2,0.,.49);
     vec3 blue=mix(uDeep*.65,uViolet*.69,clamp(distance3D*.72+broad*.42,0.,1.));
-    float violetBand=.5+.5*sin(angle*2.7+q.z*4.0+broad*2.2);
+    float violetBand=.5+.5*sin(angle*3.0+q.z*4.0+broad*2.2);
     vec3 ion=mix(uCyan,uViolet,clamp(.12+.72*violetBand,0.,1.));
     vec3 filamentColor=mix(blue,ion,clamp(currents*.83+.11,0.,1.));
     vec3 radiance=filamentColor*(.50+currents*1.05)
