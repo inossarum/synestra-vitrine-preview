@@ -130,7 +130,7 @@ test('R152: native quick controls, safe defaults and accessible advanced setting
 test('R152: real draw submission structure in deterministic GPU fixture',()=>{
  const x=fixture();x.frame();
  assert.deepEqual(x.draws.map(d=>[d.mode,d.count]),[
-  [4,6],[0,1480],[0,1480],[0,540],[0,540],[0,160],[0,160],[0,340],[0,340]
+  [4,6],[0,540],[0,540],[0,340],[0,340]
  ]);
  assert.match(x.mainStatus.textContent,/Nouvelle sphère plasma WebGL active/);
  assert.match(x.vfxStatus.textContent,/Plasma GPU actif/);
@@ -139,8 +139,8 @@ test('R152: real draw submission structure in deterministic GPU fixture',()=>{
 test('R152: disabling supplemental particles keeps plasma shell, internal arcs and nucleus',()=>{
  const x=fixture();x.frame(40);
  x.controls.particlePreset.value='4';x.callbacks.change({target:x.controls.particlePreset});x.frame(90);
- assert.deepEqual(x.draws.slice(-7).map(d=>[d.mode,d.count]),[
-  [4,6],[0,1480],[0,1480],[0,540],[0,540],[0,160],[0,160]
+ assert.deepEqual(x.draws.slice(-3).map(d=>[d.mode,d.count]),[
+  [4,6],[0,540],[0,540]
  ]);
  assert.match(x.vfxStatus.textContent,/particules additionnelles désactivées/);
 });
@@ -148,7 +148,7 @@ test('R152: zero shell hides surface while keeping nucleus and internal lightnin
  const x=fixture();x.frame(40);
  x.controls.shellVisibility.value='0';x.callbacks.input({target:x.controls.shellVisibility});x.frame(90);
  assert.equal(x.uniforms.get('uShape')[1],0);
- assert.deepEqual(x.draws.slice(-7).map(d=>d.count),[6,540,540,160,160,340,340]);
+ assert.deepEqual(x.draws.slice(-5).map(d=>d.count),[6,540,540,340,340]);
 });
 test('R152: nucleus flux stays independent of nucleus radius',()=>{
  const x=fixture();x.frame(40);
@@ -358,7 +358,7 @@ test('R157: owner-disabled arcs and extra sprites stay disabled for every flow f
   assert.equal(x.uniforms.get('uEffects')[1],0);
   assert.equal(x.uniforms.get('uControls')[0],4);
  }
- assert.deepEqual(x.draws.filter(d=>d.mode===0).map(d=>d.count).slice(-4),[1480,1480,160,160]);
+ assert.deepEqual(x.draws.filter(d=>d.mode===0).map(d=>d.count),[]);
 });
 test('R157: JSON export includes new flow family and structure and retains old saved fields',()=>{
  const x=fixture();x.controls.flowType.value='3';x.controls.flowStructure.value='174';
@@ -375,7 +375,18 @@ test('R157: aurora and nebula material shader variables are scoped, regression o
  const f=js.slice(js.indexOf('const fragment='),js.indexOf('function compile('));
  assert.ok(f.includes('float hollow=1.-smoothstep('));
  assert.ok(f.includes('float sideFilament=pow('));
- assert.ok(f.includes('flowCurrents=veil*(.38+.83*feather)+sideFilament*.13;'));
- assert.ok(f.includes('flowCurrents=densityCloud*(.28+.38*swirls) + hollow*.10;'));
+ assert.ok(f.includes('flowCurrents=veil*(.38+.67*feather);'));
+ assert.ok(f.includes('flowCurrents=densityCloud*(.28+.28*swirls);'));
  assert.doesNotMatch(f,/\bwisps\b/,'undefined wisps must never reach WebGL shader compiler');
+});
+
+
+test('R158: material-only composition draws no duplicated shell/core sprites and honors disabled effects',()=>{
+ const source=js.slice(js.indexOf('const emit=(pass,count)'),js.indexOf('gl.disable(gl.BLEND);',js.indexOf('const emit=(pass,count)')));
+ assert.doesNotMatch(source,/emit\(1,/);
+ assert.doesNotMatch(source,/emit\(3,/);
+ assert.match(source,/if\(num\('arcIntensity'\)>0&&num\('arcDensity'\)>0\)emit\(2,lightningCount\);/);
+ const x=fixture();x.controls.arcIntensity.value='0';x.controls.arcDensity.value='0';
+ x.controls.particlePreset.value='4';x.frame(40);
+ assert.deepEqual(x.draws.map(x=>[x.mode,x.count]),[[4,6]]);
 });
