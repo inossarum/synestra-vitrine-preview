@@ -17,7 +17,7 @@ p{color:#9db3c8;font-size:.85rem;line-height:1.5;margin:13px 0 0}.lab-footer{gri
 .core-r108-stage{position:sticky;top:16px;isolation:isolate;overflow:hidden;min-width:0;height:clamp(395px,65svh,650px);border:1px solid rgba(129,186,231,.23);border-radius:23px;background:radial-gradient(ellipse 55% 60% at 50% 36%,rgba(33,62,119,.18),transparent 84%),linear-gradient(145deg,#0b1527,#050a14);box-shadow:0 30px 65px rgba(0,4,18,.29),inset 0 1px rgba(226,245,255,.08)}
 .core-r109-canvas{position:absolute;top:0;left:0;z-index:2;display:block;width:100%;height:100%;transform:scale(calc(.49 * var(--sphere-zoom,1)));transform-origin:center center;opacity:0;pointer-events:none;transition:opacity .5s ease}
 .core-r109-stage[data-core-ready="true"] .core-r109-canvas{opacity:1}
-.core-r108-art{position:absolute;left:50%;top:5%;transform:translateX(-50%) scale(calc(.49 * var(--sphere-zoom,1)));transform-origin:center center;width:min(100%,760px);height:350px;overflow:visible;pointer-events:none;transition:opacity .35s ease}
+.core-r108-art{opacity:var(--fallback-opacity,1);position:absolute;left:50%;top:5%;transform:translateX(-50%) scale(calc(.49 * var(--sphere-zoom,1)));transform-origin:center center;width:min(100%,760px);height:350px;overflow:visible;pointer-events:none;transition:opacity .35s ease}
 .core-r109-stage[data-core-ready="true"] .core-r108-art{opacity:0}
 /* One GPU canvas. The whole preview stays visible while the user edits sliders.
    Colors are input type=color, not non-functional colored range controls. */
@@ -93,7 +93,8 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 <div class="control-row"><label class="control-label" for="sf-rim"><span>Liseré</span><output for="sf-rim" data-sphere-value="rim">#4FDDFF</output></label><input id="sf-rim" data-sphere-control="rim" type="color" value="#4fddff"></div>
 </div></fieldset>
 <button class="reset" type="reset">Rétablir les valeurs de référence</button>
-<p class="help" role="status">Mode expérimental isolé. Aucun changement sur le site public ni sur Visual Observer.</p>
+<p class="help" data-render-status role="status" aria-live="polite">Initialisation du rendu WebGL…</p>
+<p class="help">Prévisualisation isolée. Aucun changement sur le site public ni sur Visual Observer.</p>
 </form>
 <p class="lab-footer">Moteur R116 · matière rééclairée R137 · aperçu expérimental SiteForge. Sur téléphone, le rendu reste fixé en haut pendant le défilement des réglages.</p>
 </main>
