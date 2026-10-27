@@ -731,6 +731,8 @@ uniform vec4 uEmitter;
 uniform float uLayer;
 uniform vec2 uResolution;
 uniform float uGlobalOpacity;
+uniform float uShellVisibility;
+uniform vec4 uShape;
 uniform float uPass;
 void main(){
  vec2 p=gl_PointCoord*2.-1.;
@@ -755,8 +757,11 @@ void main(){
  float hot=exp(-r2*15.);
  float effectPower=(uPass>.5 && uPass<1.5)?1.38:
                    (uPass>1.5 && uPass<2.5)?2.15:(uPass>2.5)?2.4:1.;
+ float coreRadiance=(uPass>2.5)?pow(max(uShape.w,0.),1.3):1.;
+ float shellVisibility=(uPass>.5 && uPass<1.5)?clamp(uShellVisibility,0.,1.):1.;
  float radiance=(uLayer<.5?halo*.29:hot*1.24+halo*.14)*vFade
-                 *sphereEnvelope*innerLuminosity*effectPower*clamp(uGlobalOpacity,0.,1.);
+                 *sphereEnvelope*innerLuminosity*effectPower*coreRadiance
+                 *shellVisibility*clamp(uGlobalOpacity,0.,1.);
  vec3 tint=mix(uParticleColor,vec3(1.),.14+.36*vHot);
  gl_FragColor=vec4(tint*radiance,clamp(radiance,0.,1.));
 }`;
@@ -784,7 +789,7 @@ void main(){
     const U=n=>gl.getUniformLocation(emitterProgram,n);
     const uniforms={
       resolution:U('uResolution'),clock:U('uTime'),emitter:U('uEmitter'),
-      shape:U('uShape'),tilt:U('uTilt'),tint:U('uParticleColor'),layer:U('uLayer'),opacity:U('uGlobalOpacity'),pass:U('uPass')
+      shape:U('uShape'),tilt:U('uTilt'),tint:U('uParticleColor'),layer:U('uLayer'),opacity:U('uGlobalOpacity'),pass:U('uPass'),shell:U('uShellVisibility')
     };
     if(attr<0||Object.values(uniforms).some(u=>u===null)){setParticleStatus('VFX indisponible : attribut GPU manquant.');return null;}
     gl.bindBuffer(gl.ARRAY_BUFFER,buffer);
@@ -793,14 +798,17 @@ void main(){
         const preset=ordinal('particlePreset');
         const intensity=numeric('particleIntensity');
         const mobile=window.innerWidth<=700;
-        const capacity=mobile?640:MAX_PARTICLES;
-        const count=Math.min(capacity,Math.max(0,Math.round((mobile?360:620)*numeric('particleDensity'))));
-        if(preset===4||intensity<=0||count<=0){
-          setParticleStatus('Particules désactivées — la sphère reste active.');
+        const count=Math.min(mobile?640:MAX_PARTICLES,
+          Math.max(0,Math.round((mobile?360:620)*numeric('particleDensity'))));
+        if(numeric('opacity')<=0){
+          setParticleStatus('Énergie invisible : opacité générale à 0 %.');
           return;
         }
         const labels=['Plasma vivant','Étincelles électriques','Vortex énergétique','Éruption du noyau'];
-        setParticleStatus('VFX actif · '+labels[preset]+' · '+count+' particules GPU');
+        const enableExtra=preset!==4&&intensity>0&&count>0;
+        setParticleStatus(enableExtra?
+          'VFX actif · '+labels[preset]+' · '+count+' particules · sphère et éclairs GPU':
+          'Particules additionnelles désactivées — sphère et éclairs GPU actifs.');
         gl.useProgram(emitterProgram);
         gl.bindBuffer(gl.ARRAY_BUFFER,emitterBuffer);
         gl.enableVertexAttribArray(attr);
@@ -808,14 +816,14 @@ void main(){
         gl.uniform2f(uniforms.resolution,canvas.width,canvas.height);
         gl.uniform1f(uniforms.clock,seconds);
         gl.uniform4fv(uniforms.emitter,new Float32Array([
-          preset,intensity,numeric('particleDensity'),numeric('particleSpeed')
+          preset,Math.max(intensity,.5),numeric('particleDensity'),numeric('particleSpeed')
         ]));
         gl.uniform4fv(uniforms.shape,new Float32Array([
           numeric('particleSize'),numeric('particleSpread'),numeric('coreSize'),numeric('coreLight')
         ]));
         gl.uniform2f(uniforms.tilt,rx,ry);
-        // Reuse the sphere's edited material palette, with only stylistic
-        // variations per preset. No fixed alien purple/orange overlay.
+        gl.uniform1f(uniforms.opacity,numeric('opacity'));
+        gl.uniform1f(uniforms.shell,numeric('shellVisibility'));
         const core=color('core'),rim=color('rim'),secondary=color('secondary');
         const tint=core.map((v,i)=>{
           if(preset===0)return v*.58+rim[i]*.42;
@@ -823,20 +831,24 @@ void main(){
           if(preset===2)return secondary[i]*.61+rim[i]*.39;
           return v*.72+rim[i]*.16+[1.,.68,.39][i]*.12;
         });
-        gl.uniform3fv(uniforms.tint,new Float32Array(tint));
-        gl.uniform1f(uniforms.opacity,numeric('opacity'));
-        // The R147 SRC_ALPHA + fragment energy alpha path squared brightness,
-        // making sparks barely visible. With preweighted RGB, additive ONE/ONE
-        // reveals actual radiation, and two passes form halo + bright core.
+        // All effects are passes of this single GPU point-sprite program,
+        // rather than independent particle, arc and shell shader systems.
+        const emit=(pass,size,tone)=>{
+          gl.uniform1f(uniforms.pass,pass);
+          gl.uniform3fv(uniforms.tint,new Float32Array(tone));
+          gl.uniform1f(uniforms.layer,0);
+          gl.drawArrays(gl.POINTS,0,size);
+          gl.uniform1f(uniforms.layer,1);
+          gl.drawArrays(gl.POINTS,0,size);
+        };
         gl.enable(gl.BLEND);
         gl.blendFunc(gl.ONE,gl.ONE);
-        gl.uniform1f(uniforms.layer,0);
-        gl.drawArrays(gl.POINTS,0,count);
-        gl.uniform1f(uniforms.layer,1);
-        gl.drawArrays(gl.POINTS,0,count);
+        emit(1,mobile?640:1024,rim.map((v,i)=>v*.58+secondary[i]*.42));
+        emit(2,mobile?312:480,core.map((v,i)=>v*.46+.54));
+        emit(3,mobile?112:160,core);
+        if(enableExtra)emit(0,count,tint);
         if(gl.disable)gl.disable(gl.BLEND);
         if(attr!==pos && gl.disableVertexAttribArray)gl.disableVertexAttribArray(attr);
-        // Restore triangle attributes/program before the next sphere frame.
         gl.useProgram(program);
         gl.bindBuffer(gl.ARRAY_BUFFER,buffer);
         gl.enableVertexAttribArray(pos);
