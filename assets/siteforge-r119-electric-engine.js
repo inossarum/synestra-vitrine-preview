@@ -83,14 +83,16 @@
     refresh();return snapshot();
   };
   window.SynestraSiteForge3D=Object.freeze({snapshot,configure,reset:()=>configure(defaults)});
+  const status=document.getElementById?.('sf3d-status');
+  const report=(value,state='info')=>{if(status){status.textContent=value;status.setAttribute('data-state',state);}};
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  if (reduceMotion.matches) return; // Static SVG fallback; do not initialise WebGL.
+  if (reduceMotion.matches) {report('Mouvement réduit : sphère de secours fixe.');return;} // No WebGL on reduced motion.
   const gl = canvas.getContext('webgl', {
     alpha: true, antialias: false, depth: false, stencil: false,
     premultipliedAlpha: false, preserveDrawingBuffer: false,
     powerPreference: 'low-power'
   });
-  if (!gl) return;
+  if (!gl) {report('WebGL indisponible : sphère de secours fixe.','error');return;}
 
   const vertex = `
 attribute vec2 aPosition;
@@ -227,13 +229,13 @@ void main(){
   };
   const vert = shader(gl.VERTEX_SHADER, vertex);
   const frag = shader(gl.FRAGMENT_SHADER, fragment);
-  if (!vert || !frag) return;
+  if (!vert || !frag) {report('Shader R119 indisponible : sphère de secours.','error');return;}
   const program = gl.createProgram();
   if (!program) return;
   gl.attachShader(program, vert);
   gl.attachShader(program, frag);
   gl.linkProgram(program);
-  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return;
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {report('Programme R119 refusé par le GPU.','error');return;}
   gl.deleteShader(vert);
   gl.deleteShader(frag);
   gl.useProgram(program);
@@ -303,7 +305,7 @@ void main(){
     gl.clearColor(0,0,0,0);
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.drawArrays(gl.TRIANGLES,0,6);
-    if (!scene.hasAttribute('data-core-ready')) scene.setAttribute('data-core-ready','true');
+    if (!scene.hasAttribute('data-core-ready')) {scene.setAttribute('data-core-ready','true');report('R119 actif · huit arcs électriques d’origine · aucun anneau.','ready');}
     if (visible && document.visibilityState === 'visible' && !still && !params.paused) frame=requestAnimationFrame(draw);
   };
   const request = () => {
@@ -339,6 +341,7 @@ void main(){
     if(frame)cancelAnimationFrame(frame);
     frame=0;
     scene.removeAttribute('data-core-ready');
+    report('Contexte WebGL perdu : retour à la sphère fixe.','error');
     observer.disconnect();
     resize.disconnect();
   },{once:true});
