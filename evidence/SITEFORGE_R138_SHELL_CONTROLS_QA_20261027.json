@@ -1,0 +1,65 @@
+{
+  "schema": "synestra.siteforge.r138.qa.v1",
+  "date": "2026-10-27",
+  "mission": "SYN_SITEFORGE_R138_SHELL_DIFFUSION_THICKNESS_CONTROLS_20261027",
+  "source_commit": "b0fe4c5c858a03b81422879351d8037d1bdab0d1",
+  "deployment_id": "ebf7671c-f011-4b6a-ba27-0b23f63bcfa6",
+  "preview_url": "https://ebf7671c.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+  "source_blobs": {
+    "shader": "9453fa1acae6f200bded751ccf4295f27892d1e8",
+    "html": "ce7ac4475b49fc0c466f57c4f232627a1541a017",
+    "tests": "509766e8dfeb914724565cb5cae89738ee92c5cd"
+  },
+  "reported_issue": "Some sliders appear inactive and sphere visually split; owner requests diffuse shell and variable thickness.",
+  "source_findings": [
+    "Original shader drew orbital ellipse inside sphere surface causing an apparent equator.",
+    "Hard max(dot(light),0) lighting terminator divided illuminated and dark hemisphere.",
+    "Detail, nuclear glow and specular response were too small to be reliably visible."
+  ],
+  "fixes": [
+    "Removed internal ellipse overlay",
+    "Softened diffuse lighting terminator",
+    "Strengthened specular response, microtexture, secondary tint and central glow",
+    "Added independently controlled procedural shell light scattering and optical path depth",
+    "Added immediate redraw and shader compile failure UI"
+  ],
+  "controls": {
+    "range_count": 11,
+    "color_count": 4,
+    "new": [
+      {
+        "key": "diffusion",
+        "default": 65,
+        "range": [
+          0,
+          100
+        ]
+      },
+      {
+        "key": "thickness",
+        "default": 45,
+        "range": [
+          0,
+          100
+        ]
+      }
+    ]
+  },
+  "tests": {
+    "provider": "Cloudflare Pages official build log",
+    "total": 58,
+    "pass": 58,
+    "fail": 0,
+    "static_export": "PASS",
+    "mocked_gpu_controls_15": "PASS",
+    "actual_browser_gpu_pixels": "PENDING",
+    "actual_mobile_sticky": "PENDING",
+    "independent_HTTP_status": "UNVERIFIED"
+  },
+  "scope": {
+    "production_unchanged": true,
+    "visual_observer_other_chat": true,
+    "main_untouched": true
+  },
+  "status": "DEPLOYED_BUILD_PASS_VISUAL_E2E_PENDING"
+}
