@@ -11,30 +11,54 @@
 :root{color-scheme:dark;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#050a14;color:#e7f4ff}
 *{box-sizing:border-box}
 body{margin:0;min-height:100svh;padding:clamp(12px,3vw,30px);background:#050a14}
-main{width:min(100%,920px);margin:0 auto}
-h1{font-size:clamp(1.15rem,2.4vw,1.5rem);font-weight:650;letter-spacing:.01em;margin:0 0 14px}
-p{color:#9db3c8;font-size:.85rem;line-height:1.5;margin:13px 0 0}
-.core-r108-stage{position:relative;isolation:isolate;overflow:hidden;height:clamp(395px,65svh,650px);border:1px solid rgba(129,186,231,.23);border-radius:23px;background:radial-gradient(ellipse 55% 60% at 50% 36%,rgba(33,62,119,.18),transparent 84%),linear-gradient(145deg,#0b1527,#050a14);box-shadow:0 30px 65px rgba(0,4,18,.29),inset 0 1px rgba(226,245,255,.08)}
-.core-r109-canvas{position:absolute;top:0;left:0;z-index:2;display:block;width:100%;height:calc(100% - 58px);transform:scale(.49);transform-origin:center center;opacity:0;pointer-events:none;transition:opacity .5s ease}
+main{width:min(100%,1240px);margin:0 auto;display:grid;grid-template-columns:minmax(0,1.18fr) minmax(320px,.82fr);align-items:start;gap:16px 20px}
+h1{grid-column:1/-1;font-size:clamp(1.15rem,2.4vw,1.5rem);font-weight:650;letter-spacing:.01em;margin:0}
+p{color:#9db3c8;font-size:.85rem;line-height:1.5;margin:13px 0 0}.lab-footer{grid-column:1/-1}
+.core-r108-stage{position:sticky;top:16px;isolation:isolate;overflow:hidden;min-width:0;height:clamp(395px,65svh,650px);border:1px solid rgba(129,186,231,.23);border-radius:23px;background:radial-gradient(ellipse 55% 60% at 50% 36%,rgba(33,62,119,.18),transparent 84%),linear-gradient(145deg,#0b1527,#050a14);box-shadow:0 30px 65px rgba(0,4,18,.29),inset 0 1px rgba(226,245,255,.08)}
+.core-r109-canvas{position:absolute;top:0;left:0;z-index:2;display:block;width:100%;height:100%;transform:scale(calc(.49 * var(--sphere-zoom,1)));transform-origin:center center;opacity:0;pointer-events:none;transition:opacity .5s ease}
 .core-r109-stage[data-core-ready="true"] .core-r109-canvas{opacity:1}
-.core-r108-art{position:absolute;left:50%;top:5%;transform:translateX(-50%) scale(.49);transform-origin:center center;width:min(100%,760px);height:350px;overflow:visible;pointer-events:none;transition:opacity .35s ease}
+.core-r108-art{position:absolute;left:50%;top:5%;transform:translateX(-50%) scale(calc(.49 * var(--sphere-zoom,1)));transform-origin:center center;width:min(100%,760px);height:350px;overflow:visible;pointer-events:none;transition:opacity .35s ease}
 .core-r109-stage[data-core-ready="true"] .core-r108-art{opacity:0}
-/* Mobile lab: the WebGL viewport stays in sight while the future controls scroll.
-   Sticky is applied to the existing scene, not to its canvas: one GL context only. */
+/* One GPU canvas. The whole preview stays visible while the user edits sliders.
+   Colors are input type=color, not non-functional colored range controls. */
+.lab-controls{grid-column:2;grid-row:2;margin:0;display:grid;gap:14px;padding:17px 18px 20px;border:1px solid #294058;background:#0b1728;border-radius:20px}
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.panel-head h2{margin:0;font-size:1.16rem}
+.preview-state{font-size:.68rem;letter-spacing:.06em;padding:5px 8px;border:1px solid #376478;color:#a2eeff;border-radius:40px;white-space:nowrap}
+.control-group{margin:0;border:0;padding:0;min-width:0}
+.control-group legend{padding:0;margin-bottom:12px;font-weight:700;color:#b8d7f5;font-size:.9rem}
+.control-row{margin:0 0 17px;min-width:0}
+.control-row:last-child{margin-bottom:0}
+.control-label{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:4px;font-size:.85rem;color:#e8f4ff}
+.control-label output{color:#83edff;white-space:nowrap;font-variant-numeric:tabular-nums;font-weight:650}
+input[type=range]{width:100%;margin:0;accent-color:#66d9f7;cursor:pointer;height:25px}
+input[type=range]:focus-visible,input[type=color]:focus-visible,.reset:focus-visible{outline:3px solid #aff4ff;outline-offset:3px}
+.color-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.color-grid .control-row{margin:0}
+.color-grid .control-label{display:flex;flex-wrap:wrap;gap:4px}
+input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;border-radius:10px;cursor:pointer;background:#14263d}
+.reset{display:block;width:100%;background:#18354b;color:#e4f5ff;padding:13px;border:1px solid #55869d;border-radius:12px;font-weight:700;cursor:pointer}
+.help{font-size:.76rem;color:#90a8bd;margin:0}
+.control-group + .control-group{border-top:1px solid #21384e;padding-top:12px}
+@media(min-width:701px){.core-r109-canvas{transform:scale(calc(.75 * var(--sphere-zoom,1)))}.core-r108-art{transform:translateX(-50%) scale(calc(.75 * var(--sphere-zoom,1)))}}
+ /* Mobile: the sticky canvas is a sibling of the scrolling form, not nested inside a short wrapper. */
 @media(max-width:700px){
  body{padding:12px 12px max(16px,env(safe-area-inset-bottom,0px))}
+ main{display:block}
+ h1{margin:0 0 10px;font-size:1.08rem}
+ .lab-controls{margin-top:14px;padding:14px 13px 20px}
  .core-r108-stage{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;
   height:clamp(190px,34svh,290px);border-radius:16px;
   box-shadow:0 12px 30px rgba(0,4,18,.78),0 0 0 8px #050a14}
- .core-r109-canvas{height:100%;transform:scale(.66)}
- .core-r108-art{top:50%;transform:translate(-50%,-50%) scale(.66)}
+ .core-r109-canvas{height:100%;transform:scale(calc(.8 * var(--sphere-zoom,1)))}
+ .core-r108-art{top:50%;transform:translate(-50%,-50%) scale(calc(.8 * var(--sphere-zoom,1)))}
 }
 @media(prefers-reduced-motion:reduce){.core-r109-canvas,.core-r108-art{transition:none!important}}
 </style>
 </head>
 <body>
 <main>
-<h1>Sphère R116 <span aria-hidden="true">·</span> point de départ</h1>
+<h1>SiteForge <span aria-hidden="true">·</span> Atelier sphère R116</h1>
 <div class="core-r108-stage core-r109-stage" role="img" aria-label="Sphère énergétique Synestra R116, sans panneau de réglages ni gyroscope métallique.">
 <canvas class="core-r109-canvas" width="960" height="570" aria-hidden="true"></canvas>
 <svg class="core-r108-art" viewBox="0 0 640 410" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
@@ -50,7 +74,28 @@ p{color:#9db3c8;font-size:.85rem;line-height:1.5;margin:13px 0 0}
 <circle cx="289" cy="149" r="13" fill="#f5ffff" opacity=".23" filter="url(#r108-halo)"/>
 </svg>
 </div>
-<p>Référence R116 d’origine. Aucun réglage, préréglage ou effet ajouté.</p>
+<form class="lab-controls" aria-label="Réglages en direct de la sphère SiteForge" autocomplete="off">
+<div class="panel-head"><h2>Réglages de la sphère</h2><span class="preview-state">R137 · CANDIDATE</span></div>
+<p class="help">Chaque changement agit sur le rendu animé, sans recharger la page. Les éclairs et l'anneau restent indépendants.</p>
+<fieldset class="control-group"><legend>Forme et présence</legend><div class="control-row"><label class="control-label" for="sf-diameter"><span>Diamètre</span><output for="sf-diameter" data-sphere-value="diameter">100 %</output></label><input id="sf-diameter" data-sphere-control="diameter" type="range" min="50" max="150" value="100" step="1"></div>
+<div class="control-row"><label class="control-label" for="sf-opacity"><span>Opacité</span><output for="sf-opacity" data-sphere-value="opacity">100 %</output></label><input id="sf-opacity" data-sphere-control="opacity" type="range" min="0" max="100" value="100" step="1"></div></fieldset>
+<fieldset class="control-group"><legend>Mouvement</legend><div class="control-row"><label class="control-label" for="sf-rotation"><span>Vitesse de rotation</span><output for="sf-rotation" data-sphere-value="rotation">100 %</output></label><input id="sf-rotation" data-sphere-control="rotation" type="range" min="0" max="300" value="100" step="1"></div>
+<div class="control-row"><label class="control-label" for="sf-agitation"><span>Agitation de la matière</span><output for="sf-agitation" data-sphere-value="agitation">100 %</output></label><input id="sf-agitation" data-sphere-control="agitation" type="range" min="0" max="200" value="100" step="1"></div></fieldset>
+<fieldset class="control-group"><legend>Matière</legend><div class="control-row"><label class="control-label" for="sf-details"><span>Détails de surface</span><output for="sf-details" data-sphere-value="details">100 %</output></label><input id="sf-details" data-sphere-control="details" type="range" min="0" max="200" value="100" step="1"></div>
+<div class="control-row"><label class="control-label" for="sf-shine"><span>Brillance</span><output for="sf-shine" data-sphere-value="shine">100 %</output></label><input id="sf-shine" data-sphere-control="shine" type="range" min="0" max="200" value="100" step="1"></div>
+<div class="control-row"><label class="control-label" for="sf-contrast"><span>Contraste</span><output for="sf-contrast" data-sphere-value="contrast">100 %</output></label><input id="sf-contrast" data-sphere-control="contrast" type="range" min="50" max="150" value="100" step="1"></div></fieldset>
+<fieldset class="control-group"><legend>Lumière</legend><div class="control-row"><label class="control-label" for="sf-coreLight"><span>Lumière du noyau</span><output for="sf-coreLight" data-sphere-value="coreLight">100 %</output></label><input id="sf-coreLight" data-sphere-control="coreLight" type="range" min="0" max="200" value="100" step="1"></div>
+<div class="control-row"><label class="control-label" for="sf-rimLight"><span>Liseré lumineux</span><output for="sf-rimLight" data-sphere-value="rimLight">100 %</output></label><input id="sf-rimLight" data-sphere-control="rimLight" type="range" min="0" max="200" value="100" step="1"></div></fieldset>
+<fieldset class="control-group"><legend>Couleurs de la sphère</legend><div class="color-grid">
+<div class="control-row"><label class="control-label" for="sf-primary"><span>Principale</span><output for="sf-primary" data-sphere-value="primary">#092B63</output></label><input id="sf-primary" data-sphere-control="primary" type="color" value="#092b63"></div>
+<div class="control-row"><label class="control-label" for="sf-secondary"><span>Secondaire</span><output for="sf-secondary" data-sphere-value="secondary">#1F174D</output></label><input id="sf-secondary" data-sphere-control="secondary" type="color" value="#1f174d"></div>
+<div class="control-row"><label class="control-label" for="sf-core"><span>Noyau</span><output for="sf-core" data-sphere-value="core">#B8EDFF</output></label><input id="sf-core" data-sphere-control="core" type="color" value="#b8edff"></div>
+<div class="control-row"><label class="control-label" for="sf-rim"><span>Liseré</span><output for="sf-rim" data-sphere-value="rim">#4FDDFF</output></label><input id="sf-rim" data-sphere-control="rim" type="color" value="#4fddff"></div>
+</div></fieldset>
+<button class="reset" type="reset">Rétablir les valeurs de référence</button>
+<p class="help" role="status">Mode expérimental isolé. Aucun changement sur le site public ni sur Visual Observer.</p>
+</form>
+<p class="lab-footer">Moteur R116 · matière rééclairée R137 · aperçu expérimental SiteForge. Sur téléphone, le rendu reste fixé en haut pendant le défilement des réglages.</p>
 </main>
 <script src="../../assets/siteforge-r116-sphere-only.js" defer></script>
 </body>
