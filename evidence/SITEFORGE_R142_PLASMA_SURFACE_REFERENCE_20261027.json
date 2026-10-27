@@ -1,0 +1,45 @@
+{
+  "schema": "synestra.siteforge.r142.material-visual-evidence.v1",
+  "date": "2026-10-27",
+  "mission_id": "SYN_SITEFORGE_R142_PLASMA_SURFACE_REFERENCE_20261027",
+  "owner": "Inos",
+  "request": "Match the visual quality of first blue/cyan swirling plasma reference image while retaining R140 continuous sphere and R141 agitation",
+  "source": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_SITEFORGE_R116_CLEAN_LAB_20261027",
+    "code_tested_commit": "2998f191b1aebac8f4370dce94a4d9d18c1bdf4e",
+    "shader_blob": "108f2ef8a06b2b0eb5a2bf51628be9404e654d88",
+    "page_blob": "6a81e2c0d5420d4b14e1e3144401956ecd6cebed",
+    "test_blob": "8832cd6077d8b63e53bb6b4ec90116c6d3167b11"
+  },
+  "deliverables": [
+    "Nested procedural cloud density reusing WebGL noise samples",
+    "Blue-cyan and lavender emissive flowing veins",
+    "Fine glowing microfilaments and turbulence strength",
+    "Shadow pockets and softly lit gas",
+    "Original eight plasma arcs unchanged",
+    "Fixed front geometric normals preserved to prevent split hemisphere",
+    "16 original controls and mobile sticky preview preserved"
+  ],
+  "verification": {
+    "cloudflare_deployment_id": "2af9bda5-ea66-4e2e-a096-3d9b54a8c1cc",
+    "preview_url": "https://2af9bda5.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+    "environment": "preview",
+    "deployment_stages_all": "success",
+    "test_run": 66,
+    "pass": 66,
+    "fail": 0,
+    "static_export": "PASS",
+    "browser_webgl_render_pixels": "NOT_VERIFIED",
+    "exact_equivalence_with_reference_image": "NOT_ATTESTED",
+    "mobile_gpu_performance": "NOT_VERIFIED"
+  },
+  "scope": {
+    "production_unchanged": true,
+    "visual_observer_owned_elsewhere": true,
+    "main_branch_untouched": true,
+    "free_only": true
+  },
+  "rollback": "https://a7f028e4.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+  "status": "CODE_AND_NODE_QA_PASS; REAL_VISUAL_REFERENCE_QA_PENDING"
+}
