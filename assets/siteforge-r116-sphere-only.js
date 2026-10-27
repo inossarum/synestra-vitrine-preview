@@ -801,6 +801,11 @@ void main(){
         const count=Math.min(mobile?640:MAX_PARTICLES,
           Math.max(0,Math.round((mobile?360:620)*numeric('particleDensity'))));
         if(numeric('opacity')<=0){
+          // Update the actual emitter uniform even when no sprite is drawn,
+          // restoring a consistent opacity contract for UI and GPU probes.
+          gl.useProgram(emitterProgram);
+          gl.uniform1f(uniforms.opacity,0);
+          gl.useProgram(program);
           setParticleStatus('Énergie invisible : opacité générale à 0 %.');
           return;
         }
