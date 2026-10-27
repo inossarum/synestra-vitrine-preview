@@ -78,13 +78,13 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 </svg>
 </div>
 <form class="lab-controls" aria-label="Réglages en direct de la sphère SiteForge" autocomplete="off">
-<div class="panel-head"><h2>Réglages de la sphère</h2><span class="preview-state">R149 · VFX GPU FIX</span></div>
+<div class="panel-head"><h2>Réglages de la sphère</h2><span class="preview-state">R150 · VFX FUSION</span></div>
 <p class="help">Réglages appliqués à la matière 3D sans recharger. L'anneau extérieur et les arcs sont indépendants de la coque.</p>
 <fieldset class="control-group" aria-label="Studio d’effets de particules"><legend>✨ Effets de particules — accès rapide</legend>
 <div class="control-row"><label class="control-label" for="sf-particlePreset"><span>Style VFX</span></label>
 <select id="sf-particlePreset" data-sphere-control="particlePreset" data-default="0"><option value="0">Plasma vivant</option><option value="1">Étincelles électriques</option><option value="2">Vortex énergétique</option><option value="3">Éruption du noyau</option><option value="4">Désactivé</option></select></div>
 <div class="control-row"><label class="control-label" for="sf-particleIntensity"><span>Intensité des particules</span><output for="sf-particleIntensity" data-sphere-value="particleIntensity">100 %</output></label><input id="sf-particleIntensity" data-sphere-control="particleIntensity" type="range" min="0" max="200" value="100" step="1"></div>
-<p class="help">Choisis un effet et règle sa puissance. Le moteur dessine un halo et un cœur lumineux pour chaque particule, avec des couleurs différentes selon le préréglage.</p>
+<p class="help">Choisis un effet : ses particules suivent la palette de la sphère et stimulent sa matière. Leurs halos restent intégrés à son volume, plutôt que de flotter devant.</p>
 <p class="help" data-vfx-status role="status" aria-live="polite">Initialisation des particules GPU…</p>
 <details class="vfx-advanced"><summary>Réglages avancés des particules</summary>
 <div class="control-row"><label class="control-label" for="sf-particleDensity"><span>Nombre de particules</span><output for="sf-particleDensity" data-sphere-value="particleDensity">100 %</output></label><input id="sf-particleDensity" data-sphere-control="particleDensity" type="range" min="0" max="250" value="100" step="1"></div>
@@ -140,7 +140,7 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 <p class="help" data-render-status role="status" aria-live="polite">Initialisation du rendu WebGL…</p>
 <p class="help">Prévisualisation isolée. Aucun changement sur le site public ni sur Visual Observer.</p>
 </form>
-<p class="lab-footer">Moteur R116 · moteur GPU particules corrigé R149 · aperçu expérimental SiteForge. Sur téléphone, le rendu reste fixé en haut pendant le défilement des réglages.</p>
+<p class="lab-footer">Moteur R116 · matière et particules synchronisées R150 · aperçu expérimental SiteForge. Sur téléphone, le rendu reste fixé en haut pendant le défilement des réglages.</p>
 </main>
 <script src="../../assets/siteforge-r116-sphere-only.js" defer></script>
 </body>
