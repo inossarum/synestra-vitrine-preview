@@ -20,7 +20,7 @@ function verifyR169Preview(){
  assert.match(r169Review,/script-src 'self'/);
  assert.match(r169Review,/noindex,nofollow/);
  for (const slug of ['connect','bridge','siteforge'])assert.match(r169Review,new RegExp('href="\\./'+slug+'/"'));
- const scripts=[...r169Review.matchAll(/<script\\b[^>]*>/g)].map(x=>x[0]);
+ const scripts=[...r169Review.matchAll(/<script\b[^>]*>/g)].map(x=>x[0]);
  assert.deepEqual(scripts,['<script src="./assets/siteforge-r116-sphere-only.js" defer>']);
 }
 
