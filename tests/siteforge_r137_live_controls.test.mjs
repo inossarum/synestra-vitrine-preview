@@ -6,7 +6,7 @@ import {runInNewContext} from 'node:vm';
 const load=path=>readFileSync(new URL('../'+path,import.meta.url),'utf8');
 const js=load('assets/siteforge-r116-sphere-only.js');
 const html=load('siteforge/core-3d-lab/index.html');
-const rangeDefaults={diameter:100,opacity:100,diffusion:65,thickness:45,rotation:100,agitation:100,details:100,shine:100,contrast:100,
+const rangeDefaults={diameter:100,opacity:100,diffusion:65,thickness:45,shellVisibility:100,rotation:100,agitation:100,details:100,shine:100,contrast:100,
  luminance:100,coreSize:100,coreLight:100,rimLight:100,
  surfaceGlow:100,surfaceEmission:100,surfaceFlow:100,surfaceSpeed:100,surfaceDirection:0,
  reliefIntensity:65,reliefScale:90,reliefRoughness:80,reliefContrast:100,reliefDeform:15,reliefSpeed:100};
@@ -18,10 +18,10 @@ const keys=Object.keys(defaults);
 
 test('R143: labelled native controls and preserved single sticky WebGL scene',()=>{
  const found=[...html.matchAll(/data-sphere-control="([^"]+)"/g)].map(m=>m[1]);
- assert.equal(found.length,31);
+ assert.equal(found.length,32);
  assert.deepEqual(found.sort(),keys.sort());
  for(const key of keys)assert.match(html,new RegExp('for="sf-'+key+'"'));
- assert.equal((html.match(/type="range"/g)||[]).length,24);
+ assert.equal((html.match(/type="range"/g)||[]).length,25);
  assert.equal((html.match(/type="color"/g)||[]).length,4);
  assert.equal((html.match(/<select /g)||[]).length,3);
  assert.equal((html.match(/<canvas /g)||[]).length,1);
@@ -114,11 +114,11 @@ test('R143: coherent calm baseline and six energy families; relief changes shadi
   'vec3 warp=(.035+agitation*.155)*vec3(',
   'float turbulenceGlow=(.10+.90*agitation)*(',
   'float curlGlow=(.16+.84*agitation)*(',
-  'vec3 bumpNormal=normalize(geomN+vec3(reliefGrad*.27*reliefSettings.y*reliefDynamics.x,0.));',
+  'vec3 bumpNormal=normalize(geomN+vec3(reliefGrad*reliefTangentAmplitude,0.));',
   'float silhouetteRadius=radius+reliefDynamics.y*.006*(',
   'float coreSize=max(flowSettings.w,.003);',
   'float centralSource=exp(-d*d*115./(coreSize*coreSize));',
-  'float alpha=sphereAlpha*shellFade;'
+  'float alpha=sphereAlpha*shellFade*mix(circulatingEnergyAlpha,1.,clamp(shellVisibilityRatio,0.,1.));'
  ])assert.ok(js.includes(signature),signature);
  for(const mode of ['surfaceSettings.x>.5','surfaceSettings.x>1.5','surfaceSettings.x>2.5','surfaceSettings.x>3.5','surfaceSettings.x>4.5'])
   assert.ok(js.includes(mode),mode);
