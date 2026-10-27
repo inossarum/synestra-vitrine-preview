@@ -1,4 +1,4 @@
-/* SiteForge R152 — entirely new plasma sphere, original cyan/royal/violet visual.
+/* SiteForge R153 — original plasma with materially distinct VFX presets, filament-grade volume detail and distributed internal lightning.
  * One GPU VFX program: quad volumetric plasma + particle shell, branching arcs, nucleus.
  * Historical marble shader, old arcs and their settings are REMOVED.
  * WebGL1, iPhone precision parity, mobile bounded particles, no network.
@@ -84,18 +84,24 @@ void main(){
  }else if(uPass>1.5&&uPass<2.5){
   // Jagged lightning chains, 30 thin beads each; branches and flashes.
   float chain=floor(i/30.),bead=mod(i,30.);
-  float epoch=floor(t*.9+chain*.37),phase=fract(t*.9+chain*.37);
+  float epoch=floor(t*.90+chain*.37),phase=fract(t*.90+chain*.37);
+  // Independent origins scattered through the whole plasma volume.
+  float originAngle=rnd(chain*13.+epoch*21.)*6.283185;
+  float originRadius=.025+.38*rnd(chain*19.+epoch*7.);
+  vec2 origin=vec2(cos(originAngle),sin(originAngle))*originRadius;
   float aa=rnd(chain*7.+epoch*31.)*6.283185;
-  float reach=(.23+.38*rnd(chain*17.+epoch*3.))*bead/29.;
-  float zig=(rnd(chain*37.+floor(bead*.87)+epoch*11.)-.5)*.06;
-  float fork=step(17.,bead)*(bead-17.)/12.*(rnd(chain*13.+epoch*7.)-.5)*.5;
+  float reach=(.32+.34*rnd(chain*17.+epoch*3.))*bead/29.;
+  // Coherent short jagged turns, rather than isolated widely-spaced dots.
+  float stepNoise=rnd(chain*37.+floor(bead*.56)+epoch*11.)-.5;
+  float zig=stepNoise*.028+sin(bead*.92+chain*3.7)*.008;
+  float fork=step(17.,bead)*(bead-17.)/12.*(rnd(chain*13.+epoch*7.)-.5)*.42;
   float ang=aa+fork;
-  p=vec3((cos(ang)*reach-sin(ang)*zig)*uShape.x,
-         (sin(ang)*reach+cos(ang)*zig)*uShape.x,
-         (rnd(chain*9.+epoch*5.)-.5)*.85);
-  life=smoothstep(.02,.13,phase)*(1.-smoothstep(.67,.91,phase));
-  life*=mix(.29,1.,step(0.,p.z))*clamp(uEffects.x,0.,3.);
-  vAxis=vec2(cos(ang),sin(ang));sizeFactor=.55;
+  vec2 dir=vec2(cos(ang),sin(ang));
+  p=vec3((origin+dir*reach+vec2(-dir.y,dir.x)*zig)*uShape.x,
+         (rnd(chain*9.+epoch*5.)-.5)*.78);
+  life=smoothstep(.015,.11,phase)*(1.-smoothstep(.71,.92,phase));
+  life*=mix(.28,1.,step(0.,p.z))*clamp(uEffects.x,0.,3.);
+  vAxis=dir;sizeFactor=.77;
  }else if(uPass>2.5){
   float ang=a+t*.32;
   float r=pow(rnd(i*2.31+37.),1.5)*.13*clamp(uShape.z,.04,2.);
@@ -161,22 +167,52 @@ void main(){
   float f=noise3(pos+vec3(sin(t*.26),cos(t*.19),t*.24));
   float g=noise3(pos*2.1+vec3(t*.14,-t*.21,-t*.34));
   float h=noise3(pos*3.9-vec3(t*.42,t*.18,-t*.15));
-  float helix=theta*7.+(f-.5)*8.+(g-.5)*4.-t*.53;
-  float thin=pow(max(0.,.5+.5*sin(helix)),16.);
-  float wisps=pow(max(0.,1.-abs(f-g)*3.1),5.);
-  float tendril=pow(max(0.,.5+.5*sin(theta*14.+g*12.-t*.62)),24.);
-  float cloud=clamp(f*.54+g*.31+h*.15,0.,1.);
+  // Warp several scales of 3D noise into continuous luminous streamlines.
+  float warp=(f-.5)*7.2+(g-.5)*3.7;
+  float helix=theta*6.7+warp+d*5.2-t*.72;
+  float thin=pow(max(0.,.5+.5*sin(helix)),22.);
+  float wisps=pow(max(0.,1.-abs(f-g)*3.3),6.);
+  float tendril=pow(max(0.,.5+.5*sin(theta*17.+g*15.-t*.78)),29.);
+  float cloud=clamp(f*.49+g*.37+h*.14,0.,1.);
+  float turbulence=abs(f-g)*.64+abs(g-h)*.36;
+  float darkness=smoothstep(.16,.53,turbulence);
   float coreRadius=max(.025,uShape.z*.15);
   float nucleus=exp(-pow(d/coreRadius,2.)*2.1);
   float glow=exp(-d*d*4.5),fresnel=pow(1.-front,1.8);
-  vec3 mist=mix(uDeep*.5,uViolet*.93,clamp(d*.85+cloud*.21,0.,1.));
-  mist=mix(mist,uCyan*.81,clamp(cloud*.64+thin*.39,0.,1.));
-  vec3 threads=uCyan*(thin*.68+tendril*.53+wisps*.12)+uCore*(thin*.11+wisps*.20);
-  vec3 plasma=(mist*(.38+.62*cloud)+threads)*uShape.y;
-  plasma+=uCore*nucleus*pow(max(uShape.w,0.),1.55)*1.42;
-  plasma+=mix(uCyan,uViolet,.25)*glow*.18+uCyan*fresnel*.18*uShape.y;
-  float alpha=clamp((.45+.45*cloud)*uShape.y+nucleus*.85+thin*.32*uShape.y,0.,1.);
-  float edge=1.-smoothstep(.977,1.04,d);
+  float emission=clamp(uControls.y,0.,2.);
+  float electric=0.,vortex=0.,fusion=0.;
+  if(uControls.x>.5&&uControls.x<1.5){
+    // Electrical mode: hard branching channels through darker plasma.
+    electric=pow(max(0.,.5+.5*sin(theta*23.+warp*2.4-t*1.4)),35.);
+  }else if(uControls.x>1.5&&uControls.x<2.5){
+    // Vortex mode: helical bands wrapped in depth, not electric bolts.
+    vortex=pow(max(0.,.5+.5*sin(theta*5.8+d*18.+warp*.82-t*1.2)),12.);
+  }else if(uControls.x>2.5&&uControls.x<3.5){
+    // Fusion mode: radial jets from the compact white-hot core.
+    fusion=pow(max(0.,.5+.5*sin(theta*12.+warp*1.2-t*.38)),19.)*exp(-d*1.8);
+  }
+  vec3 mist=mix(uDeep*.25,uViolet*.74,clamp(d*.64+cloud*.29,0.,1.));
+  mist=mix(mist,uCyan*.76,clamp(cloud*.42+thin*.19+vortex*.29,0.,1.));
+  mist*=1.-darkness*.40;
+  vec3 threads=uCyan*(thin*.88+tendril*.40+wisps*.11+vortex*.60)
+               +uCore*(thin*.08+electric*.90+fusion*.55);
+  float excitation=.58+.55*emission;
+  if(uControls.x>.5&&uControls.x<1.5){
+    mist*=.38;threads+=uCyan*electric*.76;
+  }else if(uControls.x>1.5&&uControls.x<2.5){
+    threads+=mix(uCyan,uViolet,.4)*vortex*.43;
+  }else if(uControls.x>2.5&&uControls.x<3.5){
+    threads+=uCore*fusion*.65;
+  }
+  vec3 plasma=(mist*(.30+.57*cloud)+threads*excitation)*uShape.y;
+  float corona=pow(max(0.,.5+.5*sin(theta*9.+warp-t*.53)),18.)
+               *exp(-d*d*9.);
+  plasma+=uCore*nucleus*pow(max(uShape.w,0.),1.55)*1.40;
+  plasma+=uCyan*corona*.32*pow(max(uShape.w,0.),.85);
+  plasma+=mix(uCyan,uViolet,.25)*glow*.16+uCyan*fresnel*.12*uShape.y;
+  float alpha=clamp((.28+.55*cloud)*uShape.y+nucleus*.88+
+                    (thin*.22+electric*.28+vortex*.15)*uShape.y,0.,1.);
+  float edge=1.-smoothstep(.976,1.04,d);
   vec3 radiance=vec3(1.)-exp(-max(plasma,vec3(0.))*1.17);
   gl_FragColor=vec4(radiance,alpha*edge*clamp(uEffects.w,0.,1.));
   return;
@@ -186,7 +222,8 @@ void main(){
  if(uPass>1.5&&uPass<2.5){
   float along=dot(c,vAxis);
   float cross=c.x*vAxis.y-c.y*vAxis.x;
-  r2=along*along*.48+cross*cross*5.2;
+  // Elongate each tiny sprite along its discharge path, not across it.
+  r2=along*along*.19+cross*cross*11.6;
  }
  float halo=exp(-r2*3.1),hot=exp(-r2*14.);
  float energy=(uLayer<.5?halo*.26:hot*1.13+halo*.13)*vLife*vGlint;
