@@ -16,6 +16,10 @@ const colorKeys=['primary','secondary','core','rim'];
 
 function fixture({failLink=false,failCompile=false,noWebGL=false,reduceMotion=false}={}){
  const callbacks={},queue=[],uniforms=new Map(),draws=[],attrs={};
+ const download={filename:null,blob:null,clicked:0,revoked:[]};
+ const exportCallbacks={};
+ const exportButton={addEventListener:(name,cb)=>exportCallbacks[name]=cb};
+ const exportStatus={textContent:''};
  const outputs=Object.fromEntries(Object.keys(defaults).map(k=>[k,{textContent:''}]));
  const controls=Object.fromEntries(Object.entries(defaults).map(([key,val])=>{
   const v=String(val),type=key==='particlePreset'?'select-one':colorKeys.includes(key)?'color':'range';
@@ -58,26 +62,32 @@ function fixture({failLink=false,failCompile=false,noWebGL=false,reduceMotion=fa
  const panel={addEventListener:(k,fn)=>callbacks[k]=fn};
  const document={
   visibilityState:'visible',
+  body:{appendChild(link){download.link=link;}},
+  createElement(tag){assert.equal(tag,'a');return {href:'',download:'',click(){download.clicked++;download.filename=this.download;},remove(){download.removed=true;}};},
   querySelectorAll:selector=>selector==='[data-sphere-control]'?Object.values(controls):[],
   querySelector:selector=>{
    if(selector==='.core-r108-stage')return stage;
    if(selector==='.lab-controls')return panel;
    if(selector==='[data-render-status]')return mainStatus;
    if(selector==='[data-vfx-status]')return vfxStatus;
+   if(selector==='[data-export-json]')return exportButton;
+   if(selector==='[data-export-status]')return exportStatus;
    const match=selector.match(/data-sphere-value="([^"]+)"/);
    return match?outputs[match[1]]||null:null;
   },
   addEventListener(){}
  };
- const window={innerWidth:390,devicePixelRatio:2,matchMedia:()=>({matches:reduceMotion})};
- const context={document,window,console,Float32Array,
+ const window={innerWidth:390,devicePixelRatio:2,matchMedia:()=>({matches:reduceMotion}),setTimeout:fn=>{download.revokeLater=fn}};
+ const URL={createObjectURL:blob=>{download.blob=blob;return 'blob:siteforge-export-test';},revokeObjectURL:uri=>download.revoked.push(uri)};
+ class BlobMock{constructor(parts,opts){this.parts=parts;this.type=opts.type;}}
+ const context={document,window,console,Float32Array,Blob:BlobMock,URL,
   requestAnimationFrame:fn=>{queue.push(fn);return queue.length},
   cancelAnimationFrame(){},
   IntersectionObserver:class{constructor(cb){this.cb=cb}observe(){this.cb([{isIntersecting:true}])}disconnect(){}},
   ResizeObserver:class{observe(){}disconnect(){}}
  };
  runInNewContext(js,context);
- return {controls,draws,uniforms,attrs,mainStatus,vfxStatus,callbacks,
+ return {controls,draws,uniforms,attrs,mainStatus,vfxStatus,callbacks,download,exportStatus,exportCallbacks,
   frame(t=40){const fn=queue.shift();if(fn)fn(t)},contextCalls};
 }
 
@@ -267,4 +277,53 @@ test('R155: all polar harmonics reconnect after a full 2π turn, preventing left
  const harmonics=[5,5*1.8,5*.8,5*.8,3];
  for(const n of harmonics)assert.ok(Math.abs(n-Math.round(n))<1e-8,'integer angular harmonics must be 2pi-periodic: '+n);
  for(const old of ['winding*.78','winding*.72','angle*2.7'])assert.ok(!frag.includes(old),'discontinuous R154 angular phase must not regress: '+old);
+});
+
+
+test('R156: export button is accessible, stays separate from reset and contains only live control values',()=>{
+ assert.match(html,/<button[^>]*type="button"[^>]*data-export-json/);
+ assert.match(html,/aria-describedby="sf-export-description"/);
+ assert.match(html,/data-export-status role="status" aria-live="polite"/);
+ const x=fixture();
+ x.controls.particlePreset.value='2';
+ x.controls.arcIntensity.value='287';
+ x.controls.coreLight.value='420';
+ x.controls.particleDensity.value='213';
+ x.controls.secondary.value='#aa55ee';
+ x.exportCallbacks.click();
+ assert.equal(x.download.clicked,1);
+ assert.equal(x.download.filename,'synestra-siteforge-plasma-settings.json');
+ assert.equal(x.download.blob.type,'application/json;charset=utf-8');
+ const parsed=JSON.parse(x.download.blob.parts.join(''));
+ assert.equal(parsed.schema,'synestra.siteforge.plasma-settings.v1');
+ assert.equal(parsed.version,1);
+ assert.equal(parsed.engine,'siteforge-plasma-webgl1');
+ assert.deepEqual(Object.keys(parsed.parameters).sort(),Object.keys(defaults).sort());
+ assert.equal(parsed.parameters.particlePreset,2);
+ assert.equal(parsed.parameters.arcIntensity,287);
+ assert.equal(parsed.parameters.coreLight,420);
+ assert.equal(parsed.parameters.particleDensity,213);
+ assert.equal(parsed.parameters.secondary,'#aa55ee');
+ assert.equal(typeof parsed.parameters.arcIntensity,'number');
+ assert.equal(typeof parsed.parameters.rim,'string');
+ assert.ok(x.download.blob.parts.join('').endsWith('\n'));
+ assert.equal(x.download.removed,true);
+ assert.deepEqual(x.download.revoked,[]);
+ x.download.revokeLater();
+ assert.deepEqual(x.download.revoked,['blob:siteforge-export-test']);
+ assert.match(x.exportStatus.textContent,/16 paramètres actuels/);
+});
+test('R156: export continues to work with zero GPU, shader link error, reduced motion and after reset',()=>{
+ for(const option of [{noWebGL:true},{failLink:true},{reduceMotion:true}]){
+  const x=fixture(option);
+  x.controls.coreSize.value='153';
+  x.exportCallbacks.click();
+  assert.equal(JSON.parse(x.download.blob.parts.join('')).parameters.coreSize,153);
+  assert.equal(x.download.clicked,1);
+ }
+ const x=fixture();
+ x.controls.opacity.value='10';
+ x.callbacks.reset({preventDefault(){}});
+ x.exportCallbacks.click();
+ assert.equal(JSON.parse(x.download.blob.parts.join('')).parameters.opacity,100);
 });
