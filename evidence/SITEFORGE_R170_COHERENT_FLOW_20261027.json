@@ -1,0 +1,103 @@
+{
+  "schema": "synestra.siteforge.r170.coherent_volumetric_flow.evidence.v1",
+  "date": "2026-10-27",
+  "mission_id": "SYN_SITEFORGE_R170_COHERENT_FLOW_PAUSE_20261027",
+  "parent_sha": "abf929d1cf0de8098d27ea4f1d0add0a0c6b503c",
+  "source_repository": "inossarum/synestra-vitrine-preview",
+  "target_branch": "task/SYN_SITEFORGE_R116_CLEAN_LAB_20261027",
+  "scope": "SiteForge laboratory shader/UI/test changes only, approved homepage and its separate shader remain bit-identical",
+  "changes": {
+    "lab_engine": "assets/siteforge-lab-r166-flow.js",
+    "material": "Adds streamBend (3D advected warped lanes), depthEnvelope (layered local brightness), filamentContrast (3D noise) to single existing volumetric flow",
+    "speed": "At speed 0, remove min 0.04/0.05 GPU time floor in fragment and vertex; permit true pause",
+    "ui": "R170 FLOW COHERENTS label and speed 0 helper text",
+    "no_new_sphere": true,
+    "no_second_program": true,
+    "materials": 5,
+    "json_schema": "synestra.siteforge.plasma-settings.v1",
+    "controls": 18
+  },
+  "testing": {
+    "failure_first": {
+      "file": "tests/siteforge_r170_coherent_flow.test.mjs",
+      "result": "EXPECTED_FAIL against R166 then PASS"
+    },
+    "nominal": {
+      "command": "node --test tests/site_contract.test.mjs",
+      "total": 75,
+      "passed": 75,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "real_browser": {
+      "runner": "tests/siteforge_r170_live_flow_qa.mjs",
+      "engine": "Chrome headless/ANGLE SwiftShader WebGL1",
+      "status": "PASS",
+      "webgl_error": 0,
+      "one_canvas": true,
+      "material_matrix": {
+        "pass": 5,
+        "total": 5
+      },
+      "desktop": {
+        "viewport": [
+          1100,
+          800
+        ],
+        "canvas": [
+          591,
+          518
+        ],
+        "first": "r170-browser-desktop.png",
+        "later": "r170-browser-desktop-later.png",
+        "changing_frames": true
+      },
+      "pause": {
+        "speed_percent": 0,
+        "frames_identical": true,
+        "screenshot": "r170-browser-paused.png"
+      },
+      "resume": {
+        "speed_percent": 100,
+        "frames_different": true
+      },
+      "mobile": {
+        "viewport_width": 390,
+        "body_scroll_width": 390,
+        "canvas": [
+          364,
+          285
+        ],
+        "screenshot": "r170-browser-mobile.png"
+      }
+    },
+    "source_immutability": {
+      "homepage_sha": "1413e30138ba1657f7056401818e697ddbd32ac8",
+      "approved_webgl_sha": "dd63d75fdb966de2052595c95b7b6cb736d6c7cc",
+      "status": "PASS"
+    },
+    "performance": {
+      "fps_on_physical_gpu": "NOT_MEASURED",
+      "sw_geometry": "software GPU browser, does not certify hardware AAA performance"
+    },
+    "art_acceptance": "PENDING_OWNER",
+    "publication": {
+      "git": "PENDING",
+      "cloudflare": "NOT_ATTEMPTED",
+      "production": "UNCHANGED"
+    }
+  },
+  "linked_architectural_decision": {
+    "r169_branch": "task/SYN_VITRINE_R169_ADVANCED_CHAMBER_REVIEW_20261027",
+    "r169_sha": "0d6540bbb3ef2dfad76a2fdc95aa696ae34a6e12",
+    "review_pr": 10,
+    "review_comment_id": 6454837823,
+    "user_feedback": "better than R168 but still cluttered; retain for future iteration, no current integration",
+    "status": "DEFERRED_FROZEN"
+  },
+  "rollback": {
+    "branch_base": "abf929d1cf0de8098d27ea4f1d0add0a0c6b503c",
+    "scope": "revert isolated lab-only delta, no main or production files touched"
+  },
+  "result": "LOCAL_VERIFIED_PENDING_GITHUB_PERSISTENCE"
+}

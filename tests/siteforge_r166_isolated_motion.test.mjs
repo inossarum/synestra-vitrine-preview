@@ -17,7 +17,7 @@ test('R166: 3D lab loads a separate single WebGL renderer and preserves schema',
  assert.equal((labPage.match(/<canvas /g)||[]).length,1);
  assert.equal((labPage.match(/<script src=/g)||[]).length,1);
  assert.equal((labPage.match(/data-sphere-control=/g)||[]).length,18);
- assert.match(labPage,/R166 · DYNAMIQUE ORGANIQUE/);
+ assert.match(labPage,/R170 · FLUX COHÉRENTS/);
 });
 test('R166: laboratory current field has depth-specific time advection and pulsing without a second rendering pass',()=>{
  const lab=read('assets/siteforge-lab-r166-flow.js');

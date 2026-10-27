@@ -83,8 +83,8 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 </svg>
 </div>
 <form class="lab-controls" aria-label="Création de la nouvelle sphère plasma VFX" autocomplete="off">
-<div class="panel-head"><h2>Plasma Studio</h2><span class="preview-state">R166 · DYNAMIQUE ORGANIQUE</span></div>
-<p class="help">Prototype expérimental isolé R166 : courants animés en profondeur, pulsations décalées et énergie sans coque. La vitrine Synestra conserve sa version approuvée.</p>
+<div class="panel-head"><h2>Plasma Studio</h2><span class="preview-state">R170 · FLUX COHÉRENTS</span></div>
+<p class="help">R170 expérimental : trajectoires moins répétitives, couches d’énergie dans la profondeur et pause réelle des courants. La vitrine Synestra conserve sa version approuvée.</p>
 <fieldset class="control-group"><legend>✨ Création rapide</legend>
 <div class="control-row"><label class="control-label" for="sf-flowType"><span>Énergie qui traverse la sphère</span><output for="sf-flowType" data-sphere-value="flowType">Flux plasma</output></label>
 <select id="sf-flowType" data-sphere-control="flowType" data-default="0"><option value="0">Flux plasma</option><option value="1">Rubans magnétiques</option><option value="2">Voiles d’aurore</option><option value="3">Brume ionique</option><option value="4">Jets de fusion</option></select></div>
@@ -109,6 +109,7 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 <details class="vfx-advanced"><summary>Réglages avancés</summary>
 <fieldset class="control-group"><legend>Émission et vitesse</legend>
 <input id="sf-particleDensity" type="hidden" data-sphere-control="particleDensity" data-default="100" value="100">
+<p class="help">0 % = pause réelle des courants ; reprise progressive de la vitesse.</p>
 <div class="control-row"><label class="control-label" for="sf-particleSpeed"><span>Vitesse des flux</span><output for="sf-particleSpeed" data-sphere-value="particleSpeed">100 %</output></label><input id="sf-particleSpeed" data-sphere-control="particleSpeed" type="range" min="0" max="250" value="100" step="1"></div>
 <input id="sf-particleSize" type="hidden" data-sphere-control="particleSize" data-default="100" value="100">
 <div class="control-row"><label class="control-label" for="sf-opacity"><span>Opacité générale</span><output for="sf-opacity" data-sphere-value="opacity">100 %</output></label><input id="sf-opacity" data-sphere-control="opacity" type="range" min="0" max="100" value="100" step="1"></div>

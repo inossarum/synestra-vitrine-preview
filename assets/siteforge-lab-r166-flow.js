@@ -1,4 +1,4 @@
-/* SiteForge LAB R166 (isolated from the approved Synestra vitrine) — replaceable 3D volume flow materials on ONE WebGL renderer: luminous central core, sweeping cyan-violet vortex arms and depth-resolved energy. Existing WebGL emitter retained; 18 controls total.
+/* SiteForge LAB R170 (isolated from the approved Synestra vitrine) — replaceable 3D volume flow materials on ONE WebGL renderer: luminous central core, sweeping cyan-violet vortex arms and depth-resolved energy. Existing WebGL emitter retained; 18 controls total.
  * One GPU VFX program: quad volumetric plasma + particle shell, branching arcs, nucleus.
  * Historical marble shader, old arcs and their settings are REMOVED.
  * WebGL1, iPhone precision parity, mobile bounded particles, no network.
@@ -103,7 +103,7 @@ void main(){
   gl_Position=vec4(aPosition,0.,1.);return;
  }
  float i=floor(aSeed*2048.),a=rnd(i+27.)*6.283185;
- float depth=rnd(i+41.)*2.-1.,t=uTime*max(.05,uControls.z);
+ float depth=rnd(i+41.)*2.-1.,t=uTime*max(0.,uControls.z);
  float radius=.64*clamp(uShape.x,.5,1.5);
  vec3 p=vec3(0.);
  float life=1.,sizeFactor=1.;
@@ -204,7 +204,7 @@ void main(){
   if(xy>=radius*1.025)discard;
   float halfDepth=sqrt(max(0.,radius*radius-dot(p,p)));
   float stride=(2.*halfDepth)/max(uVolumeSteps,1.);
-  float t=uTime*max(.04,uControls.z);
+  float t=uTime*max(0.,uControls.z);
   float rotY=uTilt.x*1.5,rotX=uTilt.y*1.5;
   float sy=sin(rotY),cy=cos(rotY),sx=sin(rotX),cx=cos(rotX);
   vec3 accum=vec3(0.);
@@ -268,7 +268,16 @@ void main(){
                           .09*sin((q.x-q.y)*2.3+flowAge*.7));
       float internalShear=.43*sin(q.z*4.3+drifted.y*3.1+flowAge*1.7)
                          +.21*cos(q.x*4.1-drifted.z*2.2-flowAge*.9);
-      float basePhase=4.3*log(planar+.23)-t*.27+wander*2.2+depthTwist+internalShear
+      // R170: spatially bent lanes; only periodic integer angle harmonics remain.
+      float streamBend=.44*sin(drifted.x*4.7+drifted.z*5.2-t*.18)
+                      +.24*cos(drifted.y*6.3-drifted.z*3.8+t*.14);
+      // Depth-layer energy envelopes prevent all six principal streams from
+      // reaching the rim at identical strength (the old pinwheel silhouette).
+      float depthEnvelope=.60+.40*smoothstep(.16,.84,
+          .5+.5*sin(q.z*5.7+q.x*3.2-q.y*2.8+t*.11));
+      float filamentContrast=.68+.32*smoothstep(.23,.76,
+          noise3(drifted*2.8+vec3(.31,-.27,.19)));
+      float basePhase=4.3*log(planar+.23)-t*.27+wander*2.2+depthTwist+internalShear+streamBend
                     +.75*sin(q.z*2.9+planar*6.1)*sin(angle*3.+q.z*1.7);
       float organicLane=angle*6.+basePhase;
       float localPhase=sin(angle*2.+basePhase*.33+q.x*3.4+q.z*2.1-t*.17);
@@ -286,7 +295,7 @@ void main(){
       float breakup=.64+.36*smoothstep(.23,.72,broad+.19*sin(q.z*8.+t*.3));
       // Sustain thin currents without restoring surface haze or opaque shell.
       flowCurrents=(primaryVein*.91+tributary*.48+hairline*.50+wisp*.22)
-                   *pulse*breakup*shearEnvelope*1.72;
+                   *pulse*breakup*shearEnvelope*depthEnvelope*filamentContrast*2.10;
     }else if(uFlow.x<1.5){
       // Magnetic flux tubes: closed, strongly curved field-loop bands.
       float fieldAngle=angle*4.+q.z*6.5+sin(planar*9.+broad*2.2-t*.65)*2.;
