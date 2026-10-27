@@ -170,7 +170,8 @@ void main(){
  // At 200: stronger folds, moving eddies and glowing streaks. Geometric
  // normal geomN is kept UNCHANGED to prevent the R139 hemisphere seam.
  float eddyA=noise3(n*3.1+vec3(drift*.83,-drift*.55,drift*.33));
- float eddyB=noise3(n*5.8+vec3(-drift*.41,drift*.67,-drift*.26));
+ // Second eddy uses analytic flow to avoid another expensive 3D noise lookup on phones.
+ float eddyB=.5+.5*sin(n.x*8.3-n.y*5.7+n.z*9.1+drift*1.7);
  vec3 warp=agitation*.18*vec3(
    sin(n.y*13.+n.z*5.+drift*4.1+eddyB*5.),
    cos(n.x*12.-n.z*7.-drift*3.7+eddyA*5.),
