@@ -1,0 +1,53 @@
+{
+  "schema": "synestra.siteforge.r144.energy-relief-shell-visibility.evidence.v1",
+  "date": "2026-10-27",
+  "mission_id": "SYN_SITEFORGE_R144_ENERGY_RELIEF_SIGNATURES_INVISIBLE_SHELL_20261027",
+  "owner": "Inos",
+  "user_defects": [
+    "Energy types do not visibly change material appearance",
+    "Relief types do not visibly change surface relief"
+  ],
+  "user_requirement": "Shell outline can be hidden completely so only circulating surface energy remains visible",
+  "source": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_SITEFORGE_R116_CLEAN_LAB_20261027",
+    "tested_sha": "888e1df0ea632d86d831dbbda54556c9350a934a",
+    "shader_blob": "c783ffeabc9b509479efc1fa5acf1a33f628deb8",
+    "html_blob": "a887b78cc7e9397fa920e5918431125a4f063f8a",
+    "test_blob": "a76b44994b42cfebb8da8545921ef93661197421"
+  },
+  "changes": [
+    "Energy mode palettes, density, emission and specular response vary strongly for all six families instead of only altering subtle emissive masks",
+    "Relief modes use six different height fields and larger tangent-normal/shading changes",
+    "Native mobile select CHANGE handled in addition to INPUT (possible root cause of inert menus)",
+    "Added independent shellVisibilityRatio 0-100, default 100",
+    "At 0 shell, background becomes transparent except selectively masked energy streams/arcs",
+    "Shell outline, glow and sidewall shading all scaled by shell visibility",
+    "R140 fixed geometric normal and original 8 arcs preserved",
+    "32 total native controls, mobile sticky preview preserved"
+  ],
+  "qa": {
+    "deploy_id": "8f50123d-082b-499b-afef-7b4946800b8b",
+    "preview": "https://8f50123d.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+    "environment": "preview",
+    "build": "success",
+    "deploy": "success",
+    "tests": 62,
+    "passed": 62,
+    "failed": 0,
+    "static_export": "PASS",
+    "ios_change_events_mock_test": "PASS",
+    "energy_and_relief_structure_tests": "PASS",
+    "actual_browser_GPU_pixel_e2e": "NOT_VERIFIED",
+    "actual_mobile_FPS": "NOT_VERIFIED",
+    "equality_vs_reference_image": "NOT_VERIFIED"
+  },
+  "authorization": {
+    "main_mutated": false,
+    "production_mutated": false,
+    "visual_observer_mutated": false,
+    "free_only": true
+  },
+  "rollback": "https://ee82b2c5.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+  "status": "DEPLOYED_62_PASS__VISUAL_PIXEL_GATE_PENDING"
+}
