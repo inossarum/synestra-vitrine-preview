@@ -1,0 +1,70 @@
+{
+  "schema": "synestra.siteforge.r160.preview_deployment_evidence.v1",
+  "date": "2026-10-27",
+  "mission_id": "SYN_SITEFORGE_R160_PURE_MATERIAL_20261027",
+  "source": {
+    "repository": "inossarum/synestra-vitrine-preview",
+    "original_r158_head": "045ed77d5d50e4b6f99fe0fe15878c2289411841",
+    "r160_source_head": "183f7b15f20af6d8e74efd0e58c8870334b200e1",
+    "preview_branch": "task/SYN_SITEFORGE_R116_CLEAN_LAB_20261027",
+    "preview_merge_sha": "2154bcdc590fd7e5db90b962483ca07dc900e85b",
+    "github_pr": 8,
+    "merged": true
+  },
+  "cloudflare": {
+    "project": "synestra-vitrine-preview",
+    "deployment_id": "0e5b85f6-61f4-48f5-b194-bfdcc9dbd662",
+    "deployment_url": "https://0e5b85f6.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+    "environment": "preview",
+    "commit_sha": "2154bcdc590fd7e5db90b962483ca07dc900e85b",
+    "stages": {
+      "queued": "success",
+      "initialize": "success",
+      "clone_repo": "success",
+      "build": "success",
+      "deploy": "success"
+    },
+    "production_deployments_enabled": false,
+    "allowlist_changed": false,
+    "production_untouched": true,
+    "main_untouched_by_this_mission": true
+  },
+  "tests": {
+    "v8_harness": {
+      "tests": 34,
+      "pass": 34,
+      "fail": 0,
+      "mode": "mock DOM/WebGL, not browser E2E"
+    },
+    "real_cloudflare_node_build": {
+      "tests": 86,
+      "pass": 86,
+      "fail": 0,
+      "source": "Cloudflare Pages deployment build log GET /history/logs",
+      "static_export": "SYNESTRA_STATIC_EXPORT=PASS"
+    },
+    "real_chromium_gpu": {
+      "status": "PENDING",
+      "reason": "No authorized no-PAYG browser screenshot/GL framebuffer verification"
+    },
+    "preview_http_page": {
+      "status": "NOT_INDEPENDENTLY_VERIFIED",
+      "reason": "Web retrieval unable to load Pages URL; Cloudflare deployment API confirms deployment success and root URL"
+    },
+    "owner_aesthetic_acceptance": "PENDING"
+  },
+  "requirements": {
+    "pure_plasma_only_ui": true,
+    "material_families_retained": 5,
+    "json_legacy_fields": 18,
+    "second_sphere_created": false,
+    "second_render_engine_created": false,
+    "main_branch_modified": false
+  },
+  "rollback": {
+    "source_commit": "045ed77d5d50e4b6f99fe0fe15878c2289411841",
+    "live_previous_deployment_id": "7d9018b8-c872-40e6-8427-0606d33e7550",
+    "previous_preview_url": "https://7d9018b8.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/"
+  },
+  "status": "R160_PREVIEW_DEPLOYED_BUILD_PASS_86_86__GPU_ART_REVIEW_PENDING"
+}
