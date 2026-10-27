@@ -402,3 +402,51 @@ test('R149: particle GPU link failure is surfaced and never declared as a VFX su
  assert.equal(x.drawCalls.filter(z=>z.mode===4).length,1,'sphere remains functional');
  assert.doesNotMatch(x.vfxStatus.textContent,/VFX actif/);
 });
+
+
+test('R150: VFX material and sphere share the same preset, intensity and animation controls',()=>{
+ for(const source of [
+  'uniform vec4 particleMaterial;',
+  'float vfxAmount=clamp(particleMaterial.y,0.,2.)*(1.-step(3.5,particleMaterial.x));',
+  'base+=vfxTint*vfxAmount*(vfxSignal*.20+centralSource*.075)*vfxEnvelope;',
+  'gl.uniform4fv(parameters.particleMaterial,new Float32Array([',
+  'gl.uniform1f(uniforms.opacity,numeric('
+ ])assert.ok(js.includes(source),source);
+ const x=fixture();x.frame(40);
+ assert.equal(x.arrays.get('particleMaterial')[0],0);
+ assert.equal(x.arrays.get('particleMaterial')[1],1);
+ x.controls.particlePreset.value='2';x.events.change({target:x.controls.particlePreset});x.frame(86);
+ assert.equal(x.arrays.get('particleMaterial')[0],2);
+ assert.equal(x.arrays.get('uEmitter')[0],2);
+ x.controls.particleIntensity.value='0';x.events.input({target:x.controls.particleIntensity});x.frame(135);
+ assert.equal(x.arrays.get('particleMaterial')[1],0,'surface emission off when VFX intensity zero');
+});
+test('R150: particle fragments share sphere silhouette and opacity; no detached pixels',()=>{
+ for(const term of [
+  'vec2 projected=(gl_FragCoord.xy/max(uResolution,vec2(1.))-.5)*2.;',
+  'projected.x*=uResolution.x/max(uResolution.y,1.);',
+  'projected.y+=.08;',
+  'float sphereEnvelope=1.-smoothstep(.62,.702,length(projected));',
+  '*sphereEnvelope*innerLuminosity*clamp(uGlobalOpacity,0.,1.);'
+ ]) assert.ok(js.includes(term),term);
+ const x=fixture();x.frame(40);
+ assert.equal(x.uniforms.get('uGlobalOpacity'),1);
+ x.controls.opacity.value='0';
+ x.events.input({target:x.controls.opacity});x.frame(90);
+ assert.equal(x.uniforms.get('uGlobalOpacity'),0);
+ assert.equal(x.uniforms.get('sphereAlpha'),0);
+ x.events.reset({preventDefault(){}});x.frame(140);
+ assert.equal(x.uniforms.get('uGlobalOpacity'),1);
+});
+test('R150: VFX colors follow sphere color editing without preset losing its identity',()=>{
+ const x=fixture();x.frame(40);
+ const defaultTint=Array.from(x.arrays.get('uParticleColor'));
+ x.controls.core.value='#ff6600';x.events.input({target:x.controls.core});x.frame(87);
+ const edited=Array.from(x.arrays.get('uParticleColor'));
+ assert.notDeepEqual(defaultTint,edited,'VFX must follow live core-color editor');
+ x.controls.particlePreset.value='2';x.events.change({target:x.controls.particlePreset});x.frame(135);
+ assert.notDeepEqual(edited,Array.from(x.arrays.get('uParticleColor')),'vortex remains distinct');
+ assert.ok(js.includes('const core=color('), 'presets must sample core colors in real time');
+ assert.ok(js.includes('const tint=core.map('));
+ assert.ok(!js.includes("const palette=[[.23,.84,1.],[.78,.94,1.],[.69,.38,1.],[1.,.39,.10]]"));
+});
