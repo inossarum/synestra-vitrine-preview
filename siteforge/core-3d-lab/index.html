@@ -117,6 +117,11 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 </div></fieldset>
 </details>
 <button class="reset" type="reset">Restaurer le plasma d'origine</button>
+<div class="export-controls">
+<button class="reset" type="button" data-export-json aria-describedby="sf-export-description">Exporter les paramètres (.json)</button>
+<p class="help" id="sf-export-description">Enregistre les 16 réglages affichés, avec leurs valeurs actuelles et leurs couleurs, dans un fichier JSON réutilisable.</p>
+<p class="help" data-export-status role="status" aria-live="polite"></p>
+</div>
 <p class="help" data-render-status role="status" aria-live="polite">Préparation du moteur WebGL…</p>
 <p class="help">Atelier de prévisualisation isolé. Aucun effet sur le site public ni Visual Observer.</p>
 </form>
