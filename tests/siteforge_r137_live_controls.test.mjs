@@ -97,7 +97,7 @@ test('R152: legacy marble sphere and all its old controls truly removed',()=>{
   assert.ok(!js.includes(token),token+' should not exist in new engine');
  for(const key of ['energyMode','reliefMode','agitation','diffusion','thickness','surfaceFlow','rimLight'])
   assert.doesNotMatch(html,new RegExp('id="sf-'+key+'"'));
- assert.match(js,/SiteForge R154/);
+ assert.match(js,/SiteForge R157/);
  assert.equal((html.match(/data-sphere-control=/g)||[]).length,18);
 });
 test('R152: only one WebGL shader program, canvas and source script',()=>{
