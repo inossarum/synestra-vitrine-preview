@@ -1,0 +1,76 @@
+{
+  "schema": "synestra.siteforge.r131.r119-electric-only.evidence.v1",
+  "evidence_id": "SYN_SITEFORGE_R131_R119_ELECTRIC_ONLY_20261027",
+  "date": "2026-10-27",
+  "owner": "Inos",
+  "mission_id": "SYN_SITEFORGE_3D_R119_ELECTRIC_FIDELITY_20261027",
+  "objective": "Rendre les huit décharges électriques originales R119 seules visibles dans le laboratoire SiteForge; aucun nouvel effet énergétique R129 et aucun anneau.",
+  "authority": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_SITEFORGE_3D_R119_RINGFREE_LAB_20261027",
+    "code_commit": "d9bd2c38b768d4b5d20ffa84e52f3b88034cd7a5",
+    "baseline_original_R119": "ca3f2401edf624a4bd284777ff20ed32b0cb1716",
+    "baseline_no_rings_R119": "947658718489013cbca1b0d42f9cd410ee564daf",
+    "r119_source_blob": "bc6f545e7190417cff4e9b95e0417d109ad297ee"
+  },
+  "files": {
+    "siteforge/core-3d-lab/index.html": "6256e8e1b0d1f98eec48b1cc402e202bb5fc4243",
+    "assets/siteforge-r119-electric-engine.js": "9d9bdeac4de273ee0802d99b852f1c80c1a7ff45",
+    "assets/siteforge-3d-editor.js": "25c35e251f0d269e789afa03870133d971f113e5",
+    "tests/vitrine_r104_products_core.test.mjs": "83c18928fd095ab605aad57d4bdc301667ea8cb9",
+    "index.html": "43810b6eaa878c523eb06d97542d791543765d55"
+  },
+  "implementation": {
+    "original_algorithm": "R119 float r111Arc() identical rhythm 1.12 seconds, seed/envelope/jitter, eight discharge calls; neutral defaults for added GPU uniforms.",
+    "ring_count": 0,
+    "original_arc_count": 8,
+    "scene_canvas_count": 1,
+    "legacy_R129_scripts_loaded": 0,
+    "supported_controls": [
+      "pulseCount 1..8",
+      "energySpeed 0..3",
+      "amplitude 0..2",
+      "thickness .5..2",
+      "coreRadius .7..1.2",
+      "glow 0..2",
+      "primaryColor",
+      "secondaryColor",
+      "pulseColor",
+      "glowColor"
+    ],
+    "schema": "synestra.siteforge.r119-electric.v1",
+    "renderer": "Original R119 analytical spherical WebGL1 fragment; not yet 3D triangulated projection",
+    "main_mutated": false
+  },
+  "validation": {
+    "syntax": "JS engine/editor and test module syntax via equivalent parser checks PASS",
+    "isolated_negative_tests": "7/7 JS checks PASS: reduced motion, WebGL denied, bounded config, schema, original shape, shader loaded alone",
+    "webgl_mock": "PASS: one draw call, 2 shader sources, eight R119 arc calls, pulseCount=8, cyan uniform [.31,.87,1], ready status",
+    "github_blob_readback": "PASS: five file blobs re-read on branch",
+    "home_unchanged": "PASS: branch index.html SHA equals parent HEAD",
+    "node_suite": "NOT_EXECUTED",
+    "real_GPU_GLSL_compile": "NOT_VERIFIED",
+    "visual_screenshot": "NOT_VERIFIED",
+    "mobile_safari": "NOT_VERIFIED",
+    "cloudflare_preview": "NOT_DEPLOYED; branch not on authorized Pages preview include list",
+    "rawgithack_preview": "UNVERIFIED / inaccessible from external browsing"
+  },
+  "governance": {
+    "policy": "FREE_ONLY / NO_DIRECT_MAIN / NO_DEPLOY_WITHOUT_APPROVAL / NO_IAM_EXPANSION",
+    "source_gate": "LIMITED: memory-v1/SAL/Runbooks current not verified",
+    "hooks_status": "UNKNOWN",
+    "skills_consulted": [
+      "visual-regression-testing@1.0.0#aa98fffe9149dfcc0e153f0d1b8b91f3c0a6b4ae",
+      "failure-first@1.0.0#373c5f508b3ef91d1ffc1fc5afec7007a643d590"
+    ],
+    "skills_applied": [
+      "Pinned immutable R119 original shader; no auto-baseline replacement",
+      "Fail-closed config input and no-GPU behavior tested in JS isolate"
+    ],
+    "skill_runtime_executed": false,
+    "supervisor_executed": false,
+    "rollback": "Return to original branch task/SYN_VITRINE_SITEFORGE_R91_PREVIEW_20261024 or immutable R119-no-rings branch; branch isolated from main."
+  },
+  "next": "Run Node tests on exact HEAD, real WebGL GPU compilation and 390/768/1440 pixel comparison to R119. Reproject original R119 effects onto genuine XYZ mesh only after visual acceptance. Any deployment requires authorized preview rule.",
+  "function_report": "PARTIAL"
+}
