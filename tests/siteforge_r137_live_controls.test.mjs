@@ -139,7 +139,7 @@ test('R138: all independent shader controls have shader consumers, not inert uni
  }
  assert.doesNotMatch(fragment,/base\+=ringCol\*\(ring\*/);
  assert.match(fragment,/float shellRim=smoothstep\(shellStart-shellFeather,shellStart\+shellFeather,grazing\);/);
- assert.match(fragment,/smoothstep\(-\.72,\.84/);
+ assert.match(fragment,/smoothstep\(-\.90,\.95,dot\(geomN/);
  assert.match(js,/scheduleDraw\(\)/);
 });
 
