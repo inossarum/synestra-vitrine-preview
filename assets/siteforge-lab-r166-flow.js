@@ -297,11 +297,23 @@ void main(){
       flowCurrents=(primaryVein*.91+tributary*.48+hairline*.50+wisp*.22)
                    *pulse*breakup*shearEnvelope*depthEnvelope*filamentContrast*2.10;
     }else if(uFlow.x<1.5){
-      // Magnetic flux tubes: closed, strongly curved field-loop bands.
+      // R172 magnetic material: retain the four closed curved ribbons of R171.
+      // All new variation lives inside the existing ray-marched material, not
+      // in a second glow, particle pass or outer shell.
       float fieldAngle=angle*4.+q.z*6.5+sin(planar*9.+broad*2.2-t*.65)*2.;
       float fieldLoop=pow(max(0.,.5+.5*cos(fieldAngle)),max(2.,7./ribbonWidth));
       float layering=pow(max(0.,.5+.5*cos(q.z*11.+planar*7.-t*.43)),3.);
-      flowCurrents=fieldLoop*(.40+.68*layering);
+      // Near/far separation makes the crossing ribbons feel volumetric.
+      float depthRibbon=.88+.12*smoothstep(-.78,.78,q.z/radius);
+      // Fine braids are attached to the same four sweeping bands;
+      // harmonic 8 keeps the field seamless over the polar angle boundary.
+      float braidedPhase=angle*8.+q.z*9.7+planar*6.8-t*.36
+                       +.22*sin(q.y*4.-t*.24);
+      float fineStrand=pow(max(0.,.5+.5*cos(braidedPhase)),
+                           max(7.,18./ribbonWidth));
+      float flowingHighlight=.89+.11*sin(q.z*5.6-planar*6.1+t*.47);
+      flowCurrents=fieldLoop*(.40+.68*layering)*depthRibbon*flowingHighlight
+                   +fineStrand*.06*fieldLoop*depthRibbon;
       flowFog=.54;
     }else if(uFlow.x<2.5){
       // Aurora: flowing translucent vertical sheets, not spiralling plasma.

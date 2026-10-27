@@ -11,6 +11,7 @@ import './siteforge_r165_hero_fallback.test.mjs'; // R165 first-prototype fallba
 import './siteforge_r166_isolated_motion.test.mjs'; // R166 lab-only organic 3D dynamics and vitrine SHA invariant.
 import './siteforge_r170_coherent_flow.test.mjs'; // R170 zero-speed freeze and coherent 3D stream morphology.
 import './siteforge_r171_orbit_clock.test.mjs'; // R171 interactive 3D orbit and time continuity.
+import './siteforge_r172_magnetic_depth.test.mjs'; // R172 preserve approved magnetic sphere while adding subtle depth filaments.
 import './siteforge_r132_r116_clean_lab.test.mjs'; // R116 provenance and isolation.
 import './siteforge_r136_mobile_sticky_preview.test.mjs'; // Mobile sticky continuity.
 

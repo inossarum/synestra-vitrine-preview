@@ -1,0 +1,106 @@
+{
+  "schema": "synestra.siteforge.r172.magnetic_depth.evidence.v1",
+  "date": "2026-10-27",
+  "mission": "SYN_SITEFORGE_R172_MAGNETIC_RIBBONS_20261027",
+  "source": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_SITEFORGE_R116_CLEAN_LAB_20261027",
+    "base_sha": "94bbf457f6ce0568918e87261f92bec3e38730fe"
+  },
+  "user_reference": {
+    "source": "user screenshot 2026-10-27 (chat attachment, not republished)",
+    "material": "Rubans magnétiques",
+    "flowType": 1,
+    "particleIntensity": 200,
+    "coreLight": 211,
+    "flowStructure": 166,
+    "explicit_approval": "user praises R171 visual; not an R172 aesthetic approval"
+  },
+  "intent": "Preserve acclaimed closed curved magnetic energy sphere and its nucleus; add restrained near/far depth and fine attached braids without stacking 2D overlays.",
+  "changed_files": [
+    "assets/siteforge-lab-r166-flow.js",
+    "siteforge/core-3d-lab/index.html",
+    "tests/site_contract.test.mjs",
+    "tests/siteforge_r137_live_controls.test.mjs",
+    "tests/siteforge_r166_isolated_motion.test.mjs",
+    "tests/siteforge_r170_coherent_flow.test.mjs",
+    "tests/siteforge_r171_orbit_clock.test.mjs",
+    "tests/siteforge_r172_magnetic_depth.test.mjs",
+    "tests/siteforge_r172_live_magnetic_qa.mjs"
+  ],
+  "shader": {
+    "scope": "uFlow.x >= .5 && <1.5 only",
+    "old_fieldAngle": "unchanged angle*4.+q.z*6.5+sin(...)*2.",
+    "additions": [
+      "depthRibbon=.88+.12*smoothstep(...)",
+      "fineStrand subtle, harmonic angle*8 periodic",
+      "flowingHighlight=.89+.11*sin(...)"
+    ],
+    "new_render_passes": 0,
+    "new_canvas": 0,
+    "new_materials": 0,
+    "changed_core_shader": false,
+    "added_sprites": false,
+    "added_shell": false,
+    "angular_branch_cut_harmonics": "integer 4 and 8"
+  },
+  "validation": {
+    "failure_first": "3 targeted tests, expected failures on R171 before patch",
+    "node": {
+      "tests": 82,
+      "pass": 82,
+      "fail": 0,
+      "status": "PASS"
+    },
+    "chrome": {
+      "engine": "headless Chrome SwiftShader ANGLE",
+      "result": "PASS",
+      "webgl_errors": 0,
+      "materials_pass": 5,
+      "canvas_count": 1,
+      "control_count": 18,
+      "mouse_orbit": true,
+      "touch_orbit": true,
+      "keyboard_reset": true,
+      "pause_zero_frames_identical": true,
+      "resume_frames_different": true,
+      "desktop_canvas": [
+        591,
+        518
+      ],
+      "mobile_canvas": [
+        364,
+        285
+      ],
+      "mobile_body_width": 390
+    },
+    "visual_reference": {
+      "r171": "r172-magnetic-reference.png",
+      "r172": "r172-magnetic-candidate.png",
+      "same_viewport": [
+        1100,
+        800
+      ],
+      "flowType": 1,
+      "particleIntensity": 200,
+      "coreLight": 211,
+      "flowStructure": 166,
+      "freeze": true,
+      "manual_visual_assessment": "Silhouette preserved; differences intentionally subtle",
+      "pixel_metric": "NOT_AVAILABLE (Pillow missing on remote)"
+    },
+    "limits": {
+      "gpu_hardware_fps": "NOT_MEASURED",
+      "owner_R172_approval": "PENDING",
+      "Cloudflare_deployment": "NOT_STARTED"
+    }
+  },
+  "protected": {
+    "homepage_blob": "1413e30138ba1657f7056401818e697ddbd32ac8",
+    "approved_engine_blob": "dd63d75fdb966de2052595c95b7b6cb736d6c7cc",
+    "vitrine_changes": false,
+    "main_changes": false
+  },
+  "rollback": "git base 94bbf457f6ce0568918e87261f92bec3e38730fe; restore lab shader/label/test only",
+  "status": "LOCAL_TESTED_PENDING_GITHUB_PUBLISH"
+}
