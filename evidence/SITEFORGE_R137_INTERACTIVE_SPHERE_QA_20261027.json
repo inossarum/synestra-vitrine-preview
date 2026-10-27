@@ -1,0 +1,77 @@
+{
+  "schema": "synestra.siteforge.r137.controls-preview-evidence.v1",
+  "mission_id": "SYN_SITEFORGE_R137_LIVE_SPHERE_CONTROLS_20261027",
+  "date": "2026-10-27",
+  "owner": "Inos",
+  "objective": "13 live sphere adjustments, visual improvement with original R116 source pin, mobile preview visible while scrolling",
+  "source": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_SITEFORGE_R116_CLEAN_LAB_20261027",
+    "source_commit": "ef1411c4b99ade060e1cedda96d301fb4fd9469e",
+    "lab_html_blob": "da9f99025e847263be5bb17d0293e15a7e8aad5f",
+    "renderer_js_blob": "788411bef27a1887513698b4f1bb1b6019b77edf",
+    "original_R116_renderer_blob": "d78d7222a95fd080a408bba2237dd3b9dda05bd7",
+    "tests_file": "tests/siteforge_r137_live_controls.test.mjs",
+    "test_blob": "6c40c0a3abf00e3a9962afa9c7533a0f766b613d"
+  },
+  "deliverables": {
+    "nine_native_sliders": [
+      "diameter",
+      "opacity",
+      "rotation",
+      "agitation",
+      "details",
+      "shine",
+      "contrast",
+      "coreLight",
+      "rimLight"
+    ],
+    "four_color_inputs": [
+      "primary",
+      "secondary",
+      "core",
+      "rim"
+    ],
+    "reset_button": true,
+    "client_side_shader_uniforms": true,
+    "svg_fallback": true,
+    "retina_sampling_uses_clientWidth": true,
+    "surface_detail_layer": true,
+    "mobile_sticky_scene": true,
+    "original_arcs_count": 8,
+    "bridge_observer_unmodified": true
+  },
+  "verification": {
+    "cloudflare_deployment": "0d027475-0a72-433b-8849-359fe4e15130",
+    "url": "https://0d027475.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+    "environment": "preview",
+    "stages": {
+      "queued": "success",
+      "initialize": "success",
+      "clone_repo": "success",
+      "build": "success",
+      "deploy": "success"
+    },
+    "logs_endpoint": "Cloudflare Pages GET deployments/0d027475-0a72-433b-8849-359fe4e15130/history/logs",
+    "node_tests": {
+      "run": 56,
+      "pass": 56,
+      "fail": 0
+    },
+    "r137_mocked_gpu_controls_tests": 3,
+    "site_static_export": "PASS",
+    "actual_browser_GL_shader_compilation": "NOT_VERIFIED",
+    "actual_mobile_sticky_manual_QA": "NOT_VERIFIED",
+    "independent_public_HTTP_200": "NOT_VERIFIED; web page fetch tool reports inaccessible, distinct from provider deploy state"
+  },
+  "rollback": {
+    "git_earlier_stage_commit": "4b429055b736774cd6a7fb0799030d44649a514b",
+    "previous_preview_deployment": "c2a04b1c-e9cb-4782-8e63-d1bea49838bb",
+    "no_main_changes": true,
+    "no_production_changes": true
+  },
+  "next": "Owner opens deployed preview and tests opacity/color/sticky on real phone; if rendering fails inspect WebGL compile logs and capture via independent Observer chat when available",
+  "function_report": "PARTIAL: compiled/deployed + mocked functional QA verified; real GPU/mobile pixel E2E pending",
+  "source_gate": "LIMITED",
+  "hooks": "UNKNOWN"
+}
