@@ -1,4 +1,4 @@
-/* SiteForge R145 — electrical discharges dominate electric mode; late-pass relief emboss/shadow ensures visible geometry change. R140 fixed surface normal, R144 transparency, and original 8 arcs preserved. */
+/* SiteForge R146 — longer, more numerous thin electrical discharges distributed around the surface; a dim back-hemisphere electrical layer is visible through the plasma without thickening strokes. R140/R144/R145 invariants and 8 original arcs preserved. */
 (() => {
   'use strict';
   const scene = document.querySelector('.core-r108-stage');
@@ -154,8 +154,10 @@ float r145ElectricBolt(vec2 surface,float index,float seconds){
  float node0=hash3(vec3(segment,index,epoch));
  float node1=hash3(vec3(segment+1.,index,epoch));
  float jagged=mix(node0,node1,mixNode)*.106-.053;
- float start=.02+seed*.13;
- float end=.43+.28*hash3(vec3(epoch,index,8.2));
+ // Lengthened discharge trajectory only; stroke core, halo and forks keep
+ // the proven R145 widths for a fine electrical rather than liquid look.
+ float start=.005+seed*.055;
+ float end=.87+.22*hash3(vec3(epoch,index,8.2));
  float extent=smoothstep(start,start+.055,along)*(1.-smoothstep(end-.08,end,along));
  float flash=smoothstep(.015,.095,phase)*(1.-smoothstep(.63,.88,phase));
  float path=abs(across-jagged);
@@ -265,16 +267,37 @@ void main(){
  float energyShadow=gasPocket*.61;
  float energyScatter=litCloud*.36;
  float energySurfaceSpec=1.;
+ float innerLightning=0.; // rear shell projected through the foreground
  float dryElectric=1.-step(.5,abs(surfaceSettings.x-1.));
  float shapeFlow=sin(angle*6.+flowN.z*13.-flowClock*1.4+v*5.);
  if(surfaceSettings.x>.5 && surfaceSettings.x<1.5){
    // ELECTRIC: dry, broken high-voltage arcs, NOT sinuous liquid bands.
-   float electricA=r145ElectricBolt(flowN.xy,1.0,time);
-   float electricB=r145ElectricBolt(flowN.xy,2.7,time);
-   float electricC=r145ElectricBolt(flowN.xy,4.9,time);
-   float lightning=max(electricA,max(electricB,electricC));
+   // Eight surface launch positions, spread over the curved plasma instead
+   // of all starting in the middle; staggered angular/time seeds keep them
+   // independently flashing. This intentionally changes count/length only.
+   float electricA=r145ElectricBolt(flowN.xy-vec2(-.56,.38),1.0,time);
+   float electricB=r145ElectricBolt(flowN.xy-vec2(.30,.55),2.7,time);
+   float electricC=r145ElectricBolt(flowN.xy-vec2(-.12,-.34),4.9,time);
+   float electricD=r145ElectricBolt(flowN.xy-vec2(.52,-.44),6.3,time);
+   float electricE=r145ElectricBolt(flowN.xy-vec2(-.50,-.20),7.8,time);
+   float electricF=r145ElectricBolt(flowN.xy-vec2(.03,.12),9.2,time);
+   float electricG=r145ElectricBolt(flowN.xy-vec2(.44,.04),10.8,time);
+   float electricH=r145ElectricBolt(flowN.xy-vec2(-.04,.57),12.3,time);
+   float lightning=max(max(max(electricA,electricB),max(electricC,electricD)),
+                       max(max(electricE,electricF),max(electricG,electricH)));
+   // Separate back hemisphere provides a translucent depth cue rather than
+   // painting all currents on the near-facing surface. It does not rotate
+   // geomN (R140 seam regression guard), and is dimmer than foreground.
+   vec3 backNormal=turn3(vec3(geomN.xy,-geomN.z),
+                         tilt+vec2(-t*.36, t*.13));
+   float innerA=r145ElectricBolt(backNormal.xy-vec2(-.26,.29),14.1,time*.94);
+   float innerB=r145ElectricBolt(backNormal.xy-vec2(.38,-.25),16.3,time*1.06);
+   float innerC=r145ElectricBolt(backNormal.xy-vec2(-.12,-.51),18.6,time*.89);
+   float rearNetwork=max(innerA,max(innerB,innerC));
+   float rearVisibility=mix(.18,.68,clamp(geomN.z,0.,1.));
+   innerLightning=rearNetwork*rearVisibility;
    energyMask=lightning*flowSettings.x*2.2;
-   energyCoverage=lightning*.13;
+   energyCoverage=lightning*.13+innerLightning*.24;
    energyTint=mix(rimColor,vec3(.78,.97,1.),.60);
    energyPalette=vec3(.009,.025,.075);
    energyShadow=.89;
@@ -407,6 +430,8 @@ void main(){
                  coreColor*(centralSource*.30+coreBloom*.065)*coreRatio;
    base=mix(base,midnight,.80);
    base+=energyTint*energyMask*1.95*surfaceSettings.w;
+   // Back-layer light shines through the otherwise dark electrical shell.
+   base+=mix(coreColor,energyTint,.58)*innerLightning*.94*surfaceSettings.w;
  }
  vec3 scatter=mix(primaryColor,secondaryColor,.4);
  base=mix(base,scatter*(.48+.44*shellOptical),shellDiffuse*.23);
@@ -455,7 +480,7 @@ void main(){
  // At shell visibility 0, transparent dark gaps reveal the background.
  // Only current filaments, mode-specific clouds and original arcs remain.
  float dischargeAlpha=clamp((arcA+arcB+arcC+arcD+arcE+arcF+arcG+arcH)*.29,0.,.64);
- float circulatingEnergyAlpha=clamp((energyMask*.58+energyCoverage*.65+curlGlow*.27)*surfaceSettings.w+dischargeAlpha,0.,.98);
+ float circulatingEnergyAlpha=clamp((energyMask*.58+energyCoverage*.65+innerLightning*.70+curlGlow*.27)*surfaceSettings.w+dischargeAlpha,0.,.98);
  float alpha=sphereAlpha*shellFade*mix(circulatingEnergyAlpha,1.,clamp(shellVisibilityRatio,0.,1.));
  // Exposure is independent of nuclear light, specularity and transparency.
  float exposure=pow(max(luminanceRatio,0.),1.45);
