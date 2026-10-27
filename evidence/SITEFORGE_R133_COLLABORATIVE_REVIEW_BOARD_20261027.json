@@ -1,0 +1,44 @@
+{
+  "schema": "synestra.siteforge.visual-review.r133.v1",
+  "id": "SYN_SITEFORGE_R133_COLLABORATIVE_REVIEW_20261027",
+  "date": "2026-10-27",
+  "mission": "SYN_SITEFORGE_R116_BLANK_LAB_20261027",
+  "board": {
+    "provider": "tldraw",
+    "id": "CeSsS2VzzZ6Dey3w7VEXL",
+    "url": "https://www.tldraw.com/f/CeSsS2VzzZ6Dey3w7VEXL",
+    "title": "Synestra SiteForge — atelier de revue R116 (27 oct. 2026)",
+    "state": "CREATED_AND_READBACK",
+    "shapes": 9,
+    "threads": 1
+  },
+  "intent": "Visual discussion of stepwise modifications on pinned R116 sphere; user requested real-time review.",
+  "capabilities": {
+    "live_collaborative_canvas": true,
+    "annotation_arrows_comments": true,
+    "remote_chatgpt_read_comments": "ON_DEMAND_ONLY via tldraw tool",
+    "auto_agent_response": false,
+    "live_browser_scene_synced": false
+  },
+  "http": {
+    "rawgithack_r132": "403 reported by owner; browser provider external verification failed",
+    "cloudflare_r132": "NOT_DEPLOYED",
+    "board_link": "TOOL_CREATED_AND_OPENED; no independent HTTP probe"
+  },
+  "code": {
+    "r116_source": "b602b60755bd31e3645045116ef2f0946c48c712",
+    "branch": "task/SYN_SITEFORGE_R116_CLEAN_LAB_20261027",
+    "home_modified": false,
+    "siteforge_code_mutated_in_this_turn": false
+  },
+  "protocol": {
+    "no_new_worker": true,
+    "no_server": true,
+    "free_only": true,
+    "no_main_mutation": true,
+    "no_cloudflare_mutation": true,
+    "scope": "board for review only"
+  },
+  "next": "Owner opens board, uploads an exact R116 capture and annotates one requested change; agent reads comments in chat on demand. For integrated SiteForge live pixels require separately verified preview and consent/architectural review.",
+  "function_report": "PARTIAL: board operational; SiteForge synchronized preview and unattended agent listening unavailable"
+}
