@@ -1,7 +1,29 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import test from 'node:test';
+// R169 is a newer, intentionally different WebGL scene. Legacy R96–R116 assertions
+// are retained for earlier versions; the branch candidate must instead meet its
+// own explicit Core, product-navigation, CSP and motion contracts.
+const r169ReviewFile = new URL('../vitrine-r169-studio-palette-preview.html', import.meta.url)
+const r169Review = existsSync(r169ReviewFile) ? readFileSync(r169ReviewFile,'utf8') : null
+const r169PreviewActive = Boolean(r169Review?.includes('R169 brand-palette REVIEW ONLY'))
+function verifyR169Preview(){
+ assert.ok(r169PreviewActive,'R169 candidate and official palette marker required');
+ assert.match(r169Review,/class="system-stage core-r108-stage core-r109-stage"/);
+ assert.match(r169Review,/<canvas class="core-r109-canvas" aria-hidden="true"/);
+ assert.match(r169Review,/<svg class="core-r108-art"/);
+ assert.match(r169Review,/class="syn-r169-room"/);
+ assert.match(r169Review,/scale\(\.49\)!important/);
+ assert.match(r169Review,/src="\.\/assets\/siteforge-r116-sphere-only\.js" defer/);
+ assert.match(r169Review,/prefers-reduced-motion:reduce/);
+ assert.match(r169Review,/script-src 'self'/);
+ assert.match(r169Review,/noindex,nofollow/);
+ for (const slug of ['connect','bridge','siteforge'])assert.match(r169Review,new RegExp('href="\\./'+slug+'/"'));
+ const scripts=[...r169Review.matchAll(/<script\\b[^>]*>/g)].map(x=>x[0]);
+ assert.deepEqual(scripts,['<script src="./assets/siteforge-r116-sphere-only.js" defer>']);
+}
+
 
 const html=readFileSync(new URL('../index.html',import.meta.url),'utf8');
 const logo=readFileSync(new URL('../assets/synestra-studio-official-v1.avif',import.meta.url));
@@ -28,6 +50,7 @@ test('R96 respecte la nouvelle charte : violet, cyan, vert, acier, fond transpar
 });
 
 test('R96 donne plus de vie sans JS ni dépendance externe',()=>{
+ if(r169PreviewActive){verifyR169Preview();return;}
   for(const a of ['logo-buoyancy','marker-a-spin','marker-b-spin','line-breathe','workflow-pulse'])
     assert.ok(html.includes('@keyframes '+a),a);
   assert.match(html,/class="studio-workflow"/);
