@@ -17,7 +17,7 @@ test('R152: old sphere implementation is not in the active runtime',()=>{
  assert.doesNotMatch(current,/R140 fixed|R116 source blob|shellThicknessRatio/);
  assert.equal((page.match(/data-sphere-control=/g)||[]).length,18);
  assert.equal((page.match(/<script src=/g)||[]).length,1);
- assert.match(page,/src="\.\.\/\.\.\/assets\/siteforge-r116-sphere-only\.js"/);
+ assert.match(page,/src="\.\.\/\.\.\/assets\/siteforge-lab-r166-flow\.js"/);
 });
 test('R152: blue-cyan-violet original plasma source is now independent of old effect controls',()=>{
  assert.match(current,/void main\(\)/);

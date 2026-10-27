@@ -1,0 +1,88 @@
+{
+  "schema": "synestra.siteforge.r166.lab_flow_dynamics.v1",
+  "date": "2026-10-27",
+  "mission_id": "SYN_SITEFORGE_R166_LAB_FLOW_DYNAMICS_20261027",
+  "owner": "ChatGPT isolated SiteForge lab",
+  "source": {
+    "repository": "inossarum/synestra-vitrine-preview",
+    "base_sha": "3033a102ab32370c77d2dae6713db147410fcc2e",
+    "branch": "task/SYN_SITEFORGE_R116_CLEAN_LAB_20261027"
+  },
+  "scope": {
+    "lab": "siteforge/core-3d-lab/index.html",
+    "experimental_engine": "assets/siteforge-lab-r166-flow.js",
+    "home_html_sha": "1413e30138ba1657f7056401818e697ddbd32ac8",
+    "home_js_sha": "dd63d75fdb966de2052595c95b7b6cb736d6c7cc",
+    "vitrine_mutated": false,
+    "production_mutated": false
+  },
+  "changes": [
+    "Standalone lab-only WebGL JS derived from R163, separate file from homepage runtime",
+    "XYZ depth advection, periodic shearing phase and asynchronous depth-specific pulses",
+    "Lab script and R166 label updated; home preserved bit-for-bit",
+    "All five volume material families and 18 JSON schema fields retained",
+    "No secondary renderer, no shell, no extra particle / lightning layers"
+  ],
+  "tests": {
+    "failure_first": {
+      "command": "node --test tests/siteforge_r166_isolated_motion.test.mjs",
+      "result": "EXPECTED_FAIL_ON_R165"
+    },
+    "contract": {
+      "command": "node --test tests/site_contract.test.mjs",
+      "total": 71,
+      "passed": 71,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "browser": {
+      "command": "node tests/siteforge_r166_live_materials_qa.mjs",
+      "status": "PASS",
+      "engine": "Chrome Headless ANGLE SwiftShader",
+      "webgl_get_error": 0,
+      "canvas_count": 1,
+      "material_matrix_passed": 5,
+      "controls": 18,
+      "desktop_size": [
+        1100,
+        800
+      ],
+      "mobile_viewport": 390,
+      "mobile_body_width": 390,
+      "animation_two_frames_differ": true,
+      "first_frame_bytes": 388396,
+      "second_frame_bytes": 389852,
+      "desktop_screenshot": "r166-browser-desktop.png",
+      "desktop_later_screenshot": "r166-browser-desktop-later.png",
+      "mobile_screenshot": "r166-browser-mobile.png"
+    },
+    "limits": {
+      "gpu_hardware_fps": "NOT_MEASURED",
+      "user_art_acceptance": "PENDING",
+      "cloudflare_siteforge_preview": "NOT_PUBLISHED",
+      "production_preview": "UNTOUCHED"
+    }
+  },
+  "rollback": {
+    "source_git_sha": "3033a102ab32370c77d2dae6713db147410fcc2e",
+    "method": "revert only lab JS reference and remove experimental engine; never modify approved homepage"
+  },
+  "planned_separate_vitrine_background": {
+    "requested_by_owner": true,
+    "status": "DESIGN_BRIEF_ONLY_NOT_IMPLEMENTED",
+    "intent": "futuristic subtle background accompanying validated Core; no edits until independent visual QA",
+    "palette": {
+      "violet": "#53318d",
+      "green": "#69dcb4",
+      "background": "#070c17"
+    },
+    "constraints": [
+      "approved central Core diameter and visual unchanged",
+      "no shell, no extra particle overlays, no second 3D engine",
+      "low-contrast noninteractive perspective grid / faint radial gradients / subtle circuit contours",
+      "mobile and prefers-reduced-motion graceful static",
+      "independent preview and owner visual review before site vitrine integration"
+    ]
+  },
+  "result": "R166_LOCAL_VERIFIED_PENDING_GITHUB_AND_SITEFORGE_PREVIEW"
+}
