@@ -1,0 +1,110 @@
+{
+  "schema": "synestra.vitrine.r169.industrial_chamber_review.v1",
+  "date": "2026-10-27",
+  "mission_id": "SYN_VITRINE_R169_ADVANCED_INDUSTRIAL_CHAMBER_20261027",
+  "source": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "base_review_sha": "9f160142d13b02a80b624ae96b06259e931192b3",
+    "parent_review_branch": "task/SYN_VITRINE_R168_ARCHITECTURAL_CHAMBER_REVIEW_20261027",
+    "target_branch": "task/SYN_VITRINE_R169_ADVANCED_CHAMBER_REVIEW_20261027"
+  },
+  "intent": {
+    "feedback": "R168 has a basic outlined futuristic room; user requests a more evolved architectural scene.",
+    "transformation_mode": "Adapt existing architectural SVG to a technically richer, deeper room; preserve approved Synestra Core.",
+    "core_constraints": [
+      "approved index.html SHA immutable",
+      "approved original WebGL JS SHA immutable",
+      "CSS sphere scale 0.49 unchanged",
+      "one canvas, 18 JSON fields, existing product links",
+      "no external network assets, payments or cloud rendering",
+      "do not publish to production before owner visual signoff"
+    ]
+  },
+  "result": {
+    "room_svg": "assets/vitrine-r169-room.svg",
+    "review_css": "assets/vitrine-r169-chamber.css",
+    "preview_html": "vitrine-r169-chamber-preview.html",
+    "rebuild_script": "r169_build_preview.py",
+    "architectural_layers": [
+      "r169-ceiling-machinery",
+      "r169-rear-console",
+      "r169-portal-mechanics",
+      "r169-left-equipment",
+      "r169-right-equipment",
+      "r169-floor-detail",
+      "r169-ambient-light",
+      "r169-fasteners"
+    ],
+    "style": "Procedural metallic gradient shading, pseudo-brushed surface motif, lighting gradients and realistic depth cues; static SVG, NOT true 3D geometry or physically based raytracing.",
+    "palette": {
+      "green": "#69dcb4",
+      "violet": "#53318d",
+      "dark": "#070d18",
+      "core": "#eaffff"
+    },
+    "svg_stats": {
+      "paths": 210,
+      "linear_gradients": 16
+    },
+    "static_assets": [
+      "r169-chamber-desktop.png",
+      "r169-chamber-mobile.png",
+      "r169-chamber-reduced-desktop.png",
+      "r169-chamber-reduced-mobile.png"
+    ]
+  },
+  "verification": {
+    "failure_first": "R169 contract failed against R168 before changes, then PASS after implementation and corrected XML namespace test exception",
+    "node_suite": {
+      "command": "node --test tests/site_contract.test.mjs",
+      "tests": 78,
+      "passed": 78,
+      "failed": 0,
+      "status": "PASS"
+    },
+    "real_chrome_desktop": {
+      "status": "PASS",
+      "width": 1280,
+      "bodyWidth": 1265,
+      "canvas": 1,
+      "controls": 18,
+      "glError": 0,
+      "scale": "matrix(0.49, 0, 0, 0.49, 0, 0)"
+    },
+    "real_chrome_mobile": {
+      "status": "PASS",
+      "width": 390,
+      "bodyWidth": 390,
+      "canvas": 1,
+      "controls": 18,
+      "glError": 0,
+      "scale": "matrix(0.49, 0, 0, 0.49, 0, 0)"
+    },
+    "reduced_motion": {
+      "desktop": "PASS",
+      "mobile": "PASS",
+      "oldShellAbsent": true,
+      "decorVisible": true
+    },
+    "git_source_immutability": {
+      "homepage_blob": "1413e30138ba1657f7056401818e697ddbd32ac8",
+      "webgl_blob": "dd63d75fdb966de2052595c95b7b6cb736d6c7cc",
+      "status": "PASS"
+    },
+    "performance_gpu_fps": "NOT_MEASURED",
+    "owner_aesthetic_approval": "PENDING"
+  },
+  "security": {
+    "production_changed": false,
+    "main_changed": false,
+    "cloudflare_deployment": false,
+    "preview_branch_only": true,
+    "cloudflare_access_untouched": true,
+    "free_only": true
+  },
+  "rollback": {
+    "review_base_sha": "9f160142d13b02a80b624ae96b06259e931192b3",
+    "procedure": "Discard isolated R169 review branch; approved homepage + renderer were not changed"
+  },
+  "status": "LOCAL_VERIFIED_PENDING_GITHUB_REVIEW"
+}
