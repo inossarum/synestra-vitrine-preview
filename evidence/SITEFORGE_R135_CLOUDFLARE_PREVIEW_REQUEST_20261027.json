@@ -1,0 +1,13 @@
+{
+  "schema": "synestra.siteforge.r135.preview-request.v1",
+  "date": "2026-10-27",
+  "mission": "SYN_SITEFORGE_R116_BLANK_LAB_20261027",
+  "owner_request": "Donne-moi un lien valide",
+  "intent": "Trigger isolated Cloudflare Pages preview on already-allowed R116 lab branch; no production deployment or main change.",
+  "root_base": "b602b60755bd31e3645045116ef2f0946c48c712",
+  "branch": "task/SYN_SITEFORGE_R116_CLEAN_LAB_20261027",
+  "route": "siteforge/core-3d-lab/",
+  "status": "GIT_PUSH_ONLY_DEPLOYMENT_PENDING",
+  "source_blob": "1e2a1e234f9f9f47266913b6512258eab1af2764",
+  "limits": "No Visual Observer activation; separate conversation owns it. HTTP/Chrome checks pending."
+}
