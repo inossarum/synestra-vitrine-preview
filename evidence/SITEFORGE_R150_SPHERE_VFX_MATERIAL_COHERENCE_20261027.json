@@ -1,0 +1,72 @@
+{
+  "schema": "synestra.siteforge.r150.material_and_vfx_coherence.evidence.v1",
+  "date": "2026-10-27",
+  "mission_id": "SYN_SITEFORGE_R150_SPHERE_VFX_VISUAL_INTEGRATION_20261027",
+  "owner": "Inos",
+  "goal": "Reharmonize original energetic orb with now-working R149 WebGL particles; no second graphics renderer or reset of owner-approved geometry",
+  "feedback": [
+    "User confirmed R149 particles function in their browser",
+    "Owner says standalone VFX appearance does not merge aesthetically with the original sphere"
+  ],
+  "source": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_SITEFORGE_R116_CLEAN_LAB_20261027",
+    "latest_tested_commit": "c58ba5f9fe4aea32369bca611f20e4e0f5096ecf",
+    "shader_sha": "bfe8755b1d78331eaee9018f7a5bae9ce7ef0dc7",
+    "html_sha": "20086ad22746ad55eca636be0142f10877dc256e",
+    "tests_sha": "4d814baec9f26b4447befbf33b3392a544875d2e"
+  },
+  "implementation": [
+    "Original R116 sphere GPU fragment program now receives particleMaterial (same VFX mode/intensity/density/speed) and receives correlated luminance changes within sphere material",
+    "VFX particle palettes derive dynamically from owner's chosen core, rim and secondary colors instead of unrelated fixed purple/orange",
+    "VFX fragment uses gl_FragCoord and actual resolution to match sphere center p.y+=.08 and radius .69; soft sphereEnvelope prevents luminous sprites floating outside original sphere volume",
+    "Particle radiance follows original sphere opacity via uGlobalOpacity and remains independent of optional shell visibility, restoring an energy-only aesthetic",
+    "Particle sprite size/halo reduced to luminous filaments rather than oversized confetti; existing double additive glow and seeded motion retained",
+    "Both shader programs still render through the same WebGL context and canvas; no server/broker/Observer changes; R149 mobile precision matching retained",
+    "Previous R148 static test brightness constants updated narrowly to R150 values after failure-first build"
+  ],
+  "real_browser": {
+    "tool": "Cloudflare Browser Rendering content endpoint",
+    "runtime": "Real Chromium browser under a mobile viewport 390x844 (not mock GL)",
+    "strategy": "Fetched exact branch HTML and shader from GitHub, inlined existing shader JS into page for isolated browser test; removed the CSP meta only to allow the inline test harness. Live Cloudflare Access-protected deployment was NOT inspected through an authenticated browsing session.",
+    "verified_conditions": [
+      "Rendered DOM stated 'WebGL actif — les réglages sont appliqués en direct.'",
+      "Rendered DOM stated 'VFX actif · Vortex énergétique · 360 particules GPU' after changing native select to mode 2 through actual change event",
+      "Main stage rendered as data-core-ready=true"
+    ],
+    "real_pixel_image_comparison": "NOT_PROVEN: screenshot bytes returned from Cloudflare Browser Rendering could not be forwarded as a valid untruncated image",
+    "ios_safari": "NOT_TESTED_IN_OWNER_SESSION",
+    "owner_aesthetic_acceptance": "PENDING"
+  },
+  "build_history": {
+    "initial_failed_deployment_id": "ec2a798b-ea37-4828-bd3f-ad0e31be5174",
+    "initial_tests": 75,
+    "initial_pass": 74,
+    "initial_fail": 1,
+    "initial_cause": "Legacy R148 asserted obsolete brightness coefficient uLayer<.5?halo*.38:hot*1.6+halo*.23",
+    "corrected_test_commit": "c58ba5f9fe4aea32369bca611f20e4e0f5096ecf",
+    "success_deployment_id": "b9b43885-bc26-41e5-b44e-7a0987ce4844",
+    "success_url": "https://b9b43885.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+    "status": "SUCCESS",
+    "node_tests": 75,
+    "node_pass": 75,
+    "node_fail": 0,
+    "static_export": "PASS",
+    "stages": [
+      "queued:success",
+      "initialize:success",
+      "clone_repo:success",
+      "build:success",
+      "deploy:success"
+    ]
+  },
+  "safety": {
+    "Cloudflare_production_deployments_enabled": false,
+    "preview_allowlisted": true,
+    "main_changed": false,
+    "production_changed": false,
+    "rollback": "https://c26521dc.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+    "Cloudflare_Access_not_bypassed": true
+  },
+  "status": "R150_PREVIEW_DEPLOYED_75_PASS_AND_REAL_CHROMIUM_WEBGL_ACTIVE__AESTHETIC_ACCEPTANCE_PENDING"
+}
