@@ -82,6 +82,7 @@ uniform float rimRatio;
 uniform float sphereAlpha;
 uniform float shellDiffusionRatio;
 uniform float shellThicknessRatio;
+uniform float luminanceRatio;
 uniform vec3 primaryColor;
 uniform vec3 secondaryColor;
 uniform vec3 coreColor;
@@ -173,13 +174,19 @@ void main(){
  float light=.20+.80*smoothstep(-.72,.84,dot(n,normalize(vec3(-.45,.58,1.))));
  float rim=pow(1.-max(n.z,0.),2.05);
  float soft=clamp(.18+v*.56+light*.47,0.,1.);
- // Independent optical depth and scattering of a controllable 3D shell.
- float frontDepth=sqrt(max(radius*radius-d*d,0.));
- float shellDepth=mix(.022,.29,clamp(shellThicknessRatio,0.,1.));
- float innerRadius=max(radius-shellDepth,.04);
- float innerDepth=sqrt(max(innerRadius*innerRadius-d*d,0.));
- float shellOptical=1.-exp(-max(frontDepth-innerDepth,0.)*8.5);
+ // Projected concentric shell: thickness changes its REAL visible inner edge.
+ // Outer radius stays fixed, unlike scaling or density-only implementations.
+ float shellDepth=mix(.012,.31,clamp(shellThicknessRatio,0.,1.));
+ float innerRadius=radius-shellDepth;
  float shellDiffuse=clamp(shellDiffusionRatio,0.,1.);
+ float pixelWidth=2.0/max(resolution.y,1.0);
+ float innerFeather=max(pixelWidth*1.5,mix(.004,.023,shellDiffuse));
+ float wallMask=smoothstep(innerRadius-innerFeather,innerRadius+innerFeather,d);
+ float innerEdge=exp(-pow((d-innerRadius)/max(innerFeather*1.8,.008),2.));
+ float innerShadow=exp(-pow((d-(innerRadius-.028))/.035,2.));
+ float frontDepth=sqrt(max(radius*radius-d*d,0.));
+ float innerDepth=sqrt(max(innerRadius*innerRadius-d*d,0.));
+ float shellOptical=1.-exp(-max(frontDepth-innerDepth,0.)*7.0);
  vec3 base=mix(navy,primaryColor,soft);
  base=mix(base,secondaryColor,smoothstep(.33,.82,v)*.42);
  base+=mix(primaryColor,secondaryColor,micro)*mineral;
@@ -194,12 +201,20 @@ void main(){
  float topRim=smoothstep(-.2,.8,p.y)*rim;
  base+=rimColor*topRim*.17*rimRatio;
  float centralSource=exp(-d*d*115.);
- float coreBloom=exp(-d*d*19.);
- base+=coreColor*(centralSource*.50+coreBloom*.23)*coreRatio;
+ float coreBloom=exp(-d*d*8.5);
+ base+=coreColor*(centralSource*.64+coreBloom*.62)*coreRatio;
  vec3 scatter=mix(primaryColor,secondaryColor,.4);
  base=mix(base,scatter*(.48+.44*shellOptical),shellDiffuse*.23);
- float shellHaze=exp(-pow((radius-d)/(.09+.10*shellThicknessRatio),2.));
- base+=mix(rimColor,scatter,.42)*shellHaze*shellDiffuse*(.09+.13*shellOptical);
+ // Inner-surface wall has a physical projected boundary which moves with
+ // thickness, a shaded body, a bright internal edge and interior occlusion.
+ vec3 wallMaterial=mix(secondaryColor*.75+rimColor*.12,
+                       primaryColor*.88+rimColor*.27,clamp(light,0.,1.));
+ float wallIllum=.62+.38*shellOptical;
+ base=mix(base,wallMaterial*wallIllum,wallMask*(.85-.15*shellDiffuse));
+ base*=1.-innerShadow*.37*(.35+.65*wallMask);
+ base+=rimColor*innerEdge*(.27+.26*(1.-shellDiffuse));
+ float shellHaze=exp(-pow((radius-d)/(.06+.04*shellDiffuse),2.));
+ base+=mix(rimColor,scatter,.42)*shellHaze*shellDiffuse*.095;
  base=(base-vec3(.3))*contrastRatio+vec3(.3);
  float arcA=r111Arc(p,1.,time);
  float arcB=r111Arc(p,2.,time);
@@ -213,12 +228,16 @@ void main(){
  base+=vec3(.78,.96,1.)*arcA*1.12+vec3(.39,.77,1.)*arcB*.91+vec3(.78,.69,1.)*arcC*.88;
  base+=vec3(.49,.96,.97)*arcD*.92+vec3(.83,.94,1.)*arcE*.84;
  base+=vec3(.46,.88,1.)*arcF*.91+vec3(.70,.59,1.)*arcG*.87+vec3(.90,.98,1.)*arcH*.89;
- // Distinct controls: thickness defines physical shell path; diffusion softens
- // its boundary and opacity distribution without changing the diameter.
+ // Opacity belongs solely to the opacity control. Thickness changes the
+ // annulus width, NOT the alpha of the shell or the whole sphere.
  float edgeSoftness=mix(.008,.063,shellDiffuse);
  float shellFade=1.-smoothstep(radius-edgeSoftness,radius-.001,d);
- float alpha=sphereAlpha*shellFade*mix(.98,.24+.72*shellOptical,shellDiffuse);
- gl_FragColor=vec4(clamp(base,0.,1.),alpha);
+ float alpha=sphereAlpha*shellFade;
+ // Exposure is independent of nuclear light, specularity and transparency.
+ float exposure=pow(max(luminanceRatio,0.),1.45);
+ vec3 radiance=max(base,vec3(0.))*exposure;
+ vec3 toneMapped=vec3(1.)-exp(-radiance*1.14);
+ gl_FragColor=vec4(clamp(toneMapped,0.,1.),alpha);
 }`;
 
   const shader = (type, code) => {
@@ -260,7 +279,7 @@ void main(){
   const tilt = gl.getUniformLocation(program, 'tilt');
   const parameters = Object.fromEntries([
     'speedRatio','detailRatio','agitationRatio','shineRatio','contrastRatio',
-    'coreRatio','rimRatio','sphereAlpha','shellDiffusionRatio','shellThicknessRatio',
+    'coreRatio','rimRatio','sphereAlpha','shellDiffusionRatio','shellThicknessRatio','luminanceRatio',
     'primaryColor','secondaryColor','coreColor','rimColor'
   ].map(key => [key, gl.getUniformLocation(program, key)]));
   if (res === null || time === null || tilt === null ||
@@ -270,7 +289,8 @@ void main(){
       speedRatio:'rotation',detailRatio:'details',agitationRatio:'agitation',
       shineRatio:'shine',contrastRatio:'contrast',coreRatio:'coreLight',
       rimRatio:'rimLight',sphereAlpha:'opacity',
-      shellDiffusionRatio:'diffusion',shellThicknessRatio:'thickness'
+      shellDiffusionRatio:'diffusion',shellThicknessRatio:'thickness',
+      luminanceRatio:'luminance'
     };
     for (const [name, control] of Object.entries(keys)) gl.uniform1f(parameters[name],numeric(control));
     for (const [name, control] of Object.entries({
