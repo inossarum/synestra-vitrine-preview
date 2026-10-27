@@ -10,6 +10,7 @@ import './siteforge_r163_angular_continuity.test.mjs'; // R163 periodic polar fi
 import './siteforge_r165_hero_fallback.test.mjs'; // R165 first-prototype fallback parity with WebGL.
 import './siteforge_r166_isolated_motion.test.mjs'; // R166 lab-only organic 3D dynamics and vitrine SHA invariant.
 import './siteforge_r168_architectural_room.test.mjs'; // R168 isolated architectural room and immutable approved vitrine.
+import './siteforge_r169_room_materials.test.mjs'; // R169 advanced room material, geometry and immutable Core contract.
 import './siteforge_r132_r116_clean_lab.test.mjs'; // R116 provenance and isolation.
 import './siteforge_r136_mobile_sticky_preview.test.mjs'; // Mobile sticky continuity.
 

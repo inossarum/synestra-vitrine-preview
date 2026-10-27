@@ -1,0 +1,22 @@
+/* R169 architectural room review; static, zero extra renderers, no touched home. */
+.core-r109-stage .syn-r169-room{
+ position:absolute;inset:0;width:100%;height:100%;z-index:0;
+ display:block;pointer-events:none;user-select:none;opacity:1;
+}
+.core-r109-stage .syn-r169-room .r169-ceiling-machinery,
+.core-r109-stage .syn-r169-room .r169-portal-mechanics,
+.core-r109-stage .syn-r169-room .r169-left-equipment,
+.core-r109-stage .syn-r169-room .r169-right-equipment,
+.core-r109-stage .syn-r169-room .r169-floor-detail{opacity:.93}
+.core-r109-stage .syn-r169-room .r169-ambient-light{opacity:.70}
+.core-r109-stage .core-r108-art{z-index:2}
+.core-r109-stage .core-r109-canvas{z-index:3}
+.core-r109-stage{background:#070d18!important}
+@media(max-width:620px){
+ .core-r109-stage .syn-r169-room{opacity:.96}
+ .core-r109-stage .syn-r169-room .r169-ambient-light{opacity:.52}
+}
+@media(prefers-reduced-motion:reduce){
+ .core-r109-stage .syn-r169-room,
+ .core-r109-stage .syn-r169-room *{animation:none!important;transition:none!important}
+}
