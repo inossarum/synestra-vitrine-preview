@@ -1,4 +1,4 @@
-/* SiteForge R141 — R116 procedural plasma sphere with perceptible, independent material agitation. Geometric normals remain fixed; rotation, shell, alpha, luminance and eight original arcs are unchanged. R116 source blob d78d7222a95fd080a408bba2237dd3b9dda05bd7. */
+/* SiteForge R142 — cinematic blue/cyan plasma material: nested cloud density, fine luminous flows, layered scatter. Retains R140 normal-safe silhouette and R141 agitation/16 live controls. Original R116 source blob d78d7222a95fd080a408bba2237dd3b9dda05bd7. */
 (() => {
   'use strict';
   const scene = document.querySelector('.core-r108-stage');
@@ -191,6 +191,18 @@ void main(){
  float foldA=pow(max(.5+.5*sin(flowN.x*17.+flowN.y*10.+v*6.-drift*5.3),0.),8.);
  float foldB=pow(max(.5+.5*sin(flowN.y*14.-flowN.z*15.+v2*6.+drift*3.7),0.),10.);
  float turbulenceGlow=agitation*(.24*foldA+.16*foldB);
+ // R142: layered gas, bright flowlines and softly shaded plasma clouds.
+ // Reuse sampled 3D noise for realistic nested structure on mobile GPUs.
+ float cloudDensity=clamp(v*.52+v2*.31+eddyA*.17,0.,1.);
+ float gasPocket=1.-smoothstep(.28,.69,cloudDensity);
+ float litCloud=smoothstep(.34,.82,cloudDensity);
+ float filamentPhase=angle*10.+flowN.z*19.+v*10.-drift*3.7;
+ float microThreads=pow(max(.5+.5*sin(filamentPhase),0.),13.);
+ float glowingVeins=pow(max(.5+.5*sin(filamentPhase*.57-v2*8.+drift*1.7),0.),11.);
+ float curlGlow=agitation*(microThreads*.48+glowingVeins*.32)*(.50+.50*litCloud);
+ float shimmer=.84+.16*sin(time*1.6+v2*11.);
+ // Cooler and warmer currents separate optically; thin dark pockets add depth.
+ vec3 fluidTint=mix(primaryColor,secondaryColor,clamp(.38+.62*v2,0.,1.));
  // Lighting is computed in screen/front hemisphere space, independent
  // of rotating texture coordinates and never based on back-facing normals.
  float light=.32+.68*smoothstep(-.90,.95,dot(geomN,normalize(vec3(-.45,.58,1.))));
@@ -207,11 +219,18 @@ void main(){
  float shellOptical=.45+.55*shellRim;
  vec3 base=mix(navy,primaryColor,soft);
  base=mix(base,secondaryColor,smoothstep(.33,.82,v)*.42);
+ // Dense cloud hollows and illuminated gaseous layers provide depth without
+ // introducing a fake inner disc or rotating the surface lighting normal.
+ base=mix(base,navy*.36+fluidTint*.30,gasPocket*.61);
+ base+=mix(primaryColor*.42,cyan*.72,litCloud)*litCloud*.36;
  base+=mix(primaryColor,secondaryColor,micro)*mineral;
  base*=.82+.18*pow(max(geomN.z,0.),.55);
  base+=cyan*currents*(.045+.19*light);
  base+=lavender*secondary*(.035+.10*v);
  base+=mix(cyan,lavender,clamp(v2,0.,1.))*turbulenceGlow;
+ // HDR-like emissive strand cores and lower-energy bloom are resolved by the
+ // existing tone mapper, preserving color and avoiding white clipping.
+ base+=mix(cyan,lavender,clamp(v2*.74,0.,1.))*(curlGlow*.76+microThreads*.10*detailRatio)*shimmer;
  base+=mix(primaryColor,cyan,.48)*agitation*.12*(eddyA-.5);
  base+=rimColor*rim*(.28+.30*shellOptical)*rimRatio;
  // Stable broad and sharp specular lobes, even at neutral rotation.
