@@ -1,0 +1,53 @@
+{
+  "schema": "synestra.siteforge.r139.luminance-real-shell-geometry.evidence.v1",
+  "date": "2026-10-27",
+  "mission_id": "SYN_SITEFORGE_R139_EXPOSURE_VISIBLE_SHELL_GEOMETRY_20261027",
+  "owner": "Inos",
+  "trigger": "User reports luminance has no effect and shell thickness only changes opacity",
+  "before": {
+    "R138_shader_blob": "9453fa1acae6f200bded751ccf4295f27892d1e8",
+    "R138_deployment": "ebf7671c-f011-4b6a-ba27-0b23f63bcfa6",
+    "issue": "R138 shellThicknessRatio changed optical density/alpha; no visible inner-boundary displacement. Only coreLight and rimLight existed, no global luminance control."
+  },
+  "after": {
+    "tested_commit": "3a02def61c3ca3efc082a3f1bee56a57d8c4ab14",
+    "shader_blob": "9daa54d53da7ab82424ce4ea75cd5cd12d8e013d",
+    "page_blob": "ad15561e7a1d569c8ce45278631d2fd69122623a",
+    "tests_blob": "6b421f527e60c73955d7eca6a3c5d075c1d666ba",
+    "changes": [
+      "New global luminance slider 0-250% default 100 affecting entire sphere radiance via pow + exponential tone mapping",
+      "Core light and core bloom boosted separately",
+      "Thickness 0-100% visibly moves procedural innerRadius from 0.678 to 0.380 within outer radius 0.690",
+      "Annular wallMask, innerEdge and innerShadow shade an observable interior border",
+      "Sphere alpha = sphereAlpha*shellFade; thickness no longer controls alpha",
+      "Still 16 controls including 4 color selectors; mobile sticky preview unchanged"
+    ]
+  },
+  "proof": {
+    "cloudflare_deployment_id": "f8efed02-0210-4d7e-a16d-f94d3a816a75",
+    "preview": "https://f8efed02.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+    "environment": "preview",
+    "stages": [
+      "queued:success",
+      "initialize:success",
+      "clone_repo:success",
+      "build:success",
+      "deploy:success"
+    ],
+    "node_tests_total": 60,
+    "node_tests_pass": 60,
+    "node_tests_fail": 0,
+    "node_static_export": "PASS",
+    "independent_http": "INACCESSIBLE_FROM_PUBLIC_WEB_TOOL",
+    "actual_gpu_screenshot": "NOT_VERIFIED",
+    "mobile_preview_scroll_e2e": "NOT_VERIFIED"
+  },
+  "boundaries": [
+    "No changes to production or main",
+    "Visual Observer maintained by a separate chat and not modified",
+    "Procedural concentric shell projection not a 3D polygonal mesh",
+    "No pay-as-you-go service used"
+  ],
+  "rollback": "https://ebf7671c.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+  "function_report": "PARTIAL_UNTIL_REAL_BROWSER_PIXELS_AND_OWNER_VISUAL_ACCEPTANCE"
+}
