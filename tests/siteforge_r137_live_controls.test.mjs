@@ -100,9 +100,9 @@ test('R152: only one WebGL shader program, canvas and source script',()=>{
 });
 test('R152: source plasma reference uses original cyan, white, violet, midnight',()=>{
  for(const hex of ['#08142e','#53318d','#eaffff','#51dfff'])assert.ok(html.includes(hex));
- assert.match(js,/float helix=theta\*6\.7\+warp\+d\*5\.2/);
- assert.match(js,/float nucleus=exp\(/);
- assert.match(js,/float cloud=clamp\(/);
+ assert.match(js,/float winding=angle\*5\.0\+5\.8\*log\(planar\+\.15\)/);
+ assert.match(js,/float core=exp\(-dot\(q,q\)\/\(nucleusRadius\*nucleusRadius\)/);
+ assert.match(js,/float volumeFog=clamp\(/);
  assert.match(js,/float noise3\(vec3 p\)/);
 });
 test('R152: native quick controls, safe defaults and accessible advanced settings',()=>{
@@ -178,22 +178,29 @@ test('R152: independently bounded mobile GPU work and narrow arc segments',()=>{
  assert.match(js,/float fork=step\(17\.,bead\)/);
 });
 
-test('R153: four presets change the volumetric plasma material itself, not only extra particles',()=>{
+test('R154: four presets affect real 3D plasma ray samples, not only optional particles',()=>{
  const field=js.slice(js.indexOf('if(uPass>3.5){',js.indexOf('const fragment=')),
                       js.indexOf('vec2 c=gl_PointCoord'));
  for(const key of [
-  'float warp=(f-.5)*7.2+(g-.5)*3.7;',
-  'float electric=0.,vortex=0.,fusion=0.;',
-  'if(uControls.x>.5&&uControls.x<1.5)',
-  'electric=pow(max(0.,.5+.5*sin(theta*23.+warp*2.4-t*1.4)),35.);',
-  'else if(uControls.x>1.5&&uControls.x<2.5)',
-  'vortex=pow(max(0.,.5+.5*sin(theta*5.8+d*18.+warp*.82-t*1.2)),12.);',
-  'else if(uControls.x>2.5&&uControls.x<3.5)',
-  'fusion=pow(max(0.,.5+.5*sin(theta*12.+warp*1.2-t*.38)),19.)',
-  'threads+=uCyan*electric*.76;',
-  'float excitation=.58+.55*emission;'
+  'float halfDepth=sqrt(max(0.,radius*radius-dot(p,p)));',
+  'float stride=(2.*halfDepth)/max(uVolumeSteps,1.);',
+  'for(int i=0;i<22;i++){',
+  'if(float(i)>=uVolumeSteps)break;',
+  'float z=halfDepth-(float(i)+.5)*stride;',
+  'vec3 q=vec3(p,z);',
+  'float winding=angle*5.0+5.8*log(planar+.15)',
+  'float electrical=0.,vortex=0.,fusion=0.;',
+  'electrical=pow(max(0.,.5+.5*cos(winding*2.2+detail*9.)),23.);',
+  'vortex=pow(max(0.,.5+.5*cos(winding*.72+q.z*8.)),9.);',
+  'fusion=pow(max(0.,.5+.5*cos(angle*10.+depthWarp*2.-t*.5)),14.)',
+  'float violetBand=.5+.5*sin(angle*2.7+q.z*4.0+broad*2.2);',
+  'accum+=trans*radiance*absorption;',
+  'trans*=1.-absorption;',
+  'float nucleusRadius=max(.018,radius*uShape.z*.105);'
  ])assert.ok(field.includes(key),key);
+ assert.doesNotMatch(field,/float helix=theta/,'do not regress to flat 2D marble');
  const x=fixture();x.frame(40);
+ assert.equal(x.uniforms.get('uVolumeSteps'),14);
  for(const i of [1,2,3,4]){
   x.controls.particlePreset.value=String(i);
   x.callbacks.change({target:x.controls.particlePreset});x.frame(50+i*45);
@@ -223,4 +230,28 @@ test('R153: failure-first and simple palette still intact after effect redesign'
  assert.match(x.mainStatus.textContent,/Échec liaison GPU/);
  const y=fixture();y.frame(40);
  assert.match(y.mainStatus.textContent,/Nouvelle sphère plasma WebGL active/);
+});
+
+
+test('R154: physically volumetric optical depth, quality budget and interactive 3D orientation',()=>{
+ for(const mark of [
+  'float halfDepth=sqrt(max(0.,radius*radius-dot(p,p)));',
+  'q=vec3(q.x*cy+q.z*sy,',
+  'float distance3D=length(q)/radius;',
+  'float coreHalo=exp(-dot(q,q)/(nucleusRadius*nucleusRadius)*.18);',
+  'vec3 result=accum*2.05+',
+  'result=vec3(1.)-exp(-max(result,vec3(0.))*1.15);',
+  'gl.uniform1f(U.uVolumeSteps,mobile?14:22);'
+ ])assert.ok(js.includes(mark),mark);
+ const x=fixture();x.frame(40);
+ assert.equal(x.uniforms.get('uVolumeSteps'),14,'mobile volume sampling bounded');
+ assert.equal((js.match(/gl.createProgram\(\)/g)||[]).length,1);
+ assert.equal((html.match(/<canvas /g)||[]).length,1);
+});
+test('R154: energy reference is legible on mobile and still shares palette and engine',()=>{
+ assert.match(html,/R154 · VOLUME 3D/);
+ assert.match(html,/transform:scale\(calc\(1\.22 \* var\(--sphere-zoom,1\)\)\)/);
+ assert.match(html,/transform:scale\(calc\(\.92 \* var\(--sphere-zoom,1\)\)\)/);
+ assert.match(js,/if\(uPass>\.5&&uPass<1\.5\)energy\*=\.28/);
+ assert.equal((html.match(/data-sphere-control=/g)||[]).length,16);
 });
