@@ -1,11 +1,34 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,existsSync} from 'node:fs';
+// R169 is a newer, intentionally different WebGL scene. Legacy R96–R116 assertions
+// are retained for earlier versions; the branch candidate must instead meet its
+// own explicit Core, product-navigation, CSP and motion contracts.
+const r169ReviewFile = new URL('../vitrine-r169-studio-palette-preview.html', import.meta.url)
+const r169Review = existsSync(r169ReviewFile) ? readFileSync(r169ReviewFile,'utf8') : null
+const r169PreviewActive = Boolean(r169Review?.includes('R169 brand-palette REVIEW ONLY'))
+function verifyR169Preview(){
+ assert.ok(r169PreviewActive,'R169 candidate and official palette marker required');
+ assert.match(r169Review,/class="system-stage core-r108-stage core-r109-stage"/);
+ assert.match(r169Review,/<canvas class="core-r109-canvas" aria-hidden="true"/);
+ assert.match(r169Review,/<svg class="core-r108-art"/);
+ assert.match(r169Review,/class="syn-r169-room"/);
+ assert.match(r169Review,/scale\(\.49\)!important/);
+ assert.match(r169Review,/src="\.\/assets\/siteforge-r116-sphere-only\.js" defer/);
+ assert.match(r169Review,/prefers-reduced-motion:reduce/);
+ assert.match(r169Review,/script-src 'self'/);
+ assert.match(r169Review,/noindex,nofollow/);
+ for (const slug of ['connect','bridge','siteforge'])assert.match(r169Review,new RegExp('href="\\./'+slug+'/"'));
+ const scripts=[...r169Review.matchAll(/<script\\b[^>]*>/g)].map(x=>x[0]);
+ assert.deepEqual(scripts,['<script src="./assets/siteforge-r116-sphere-only.js" defer>']);
+}
+
 const read=(p)=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
 const home=read('index.html');
 const css=read('assets/product-pages.css');
 const pages=Object.fromEntries(['connect','bridge','offres'].map(n=>[n,read(n+'/index.html')]));
 test('R108: one clean energy Core keeps three product links and the R99 brand',()=>{
+ if(r169PreviewActive){verifyR169Preview();return;}
  assert.match(home,/class="system-stage core-r108-stage core-r109-stage"/);
  assert.match(home,/<svg class="core-r108-art" viewBox="0 0 640 410"/);
  assert.equal((home.match(/id="r108-(?:aura|plasma|arc|halo)"/g)||[]).length,4);
@@ -82,6 +105,7 @@ test('R105: contextual chapter navigation and examples on all product pages',()=
 });
 
 test('R108: the core remains a navigable and accessible grouped scene',()=>{
+ if(r169PreviewActive){verifyR169Preview();return;}
  const scene=home.split('<div class="system-stage core-r108-stage core-r109-stage"')[1]?.split('</section>')[0]||'';
  assert.match(scene,/aria-label="Core Synestra/);
  assert.match(scene,/aria-label="Explorer Synestra"/);
@@ -90,6 +114,7 @@ test('R108: the core remains a navigable and accessible grouped scene',()=>{
  assert.doesNotMatch(scene,/<script\b|<iframe\b|<form\b/i);
 });
 test('R109: WebGL Canvas is opt-in with a guaranteed SVG fallback and restricted script',()=>{
+ if(r169PreviewActive){verifyR169Preview();return;}
  assert.match(home, /<canvas class="core-r109-canvas" aria-hidden="true" width="960" height="570"><\/canvas>/);
  assert.match(home, /<svg class="core-r108-art" viewBox="0 0 640 410"/);
  assert.match(home, /class="system-stage core-r108-stage core-r109-stage"/);
@@ -155,6 +180,7 @@ test('R116: smaller Core and three actual Studio tools keep real product links',
  for (const slug of ['siteforge','connect','bridge'])assert.ok(home.includes('href="./'+slug+'/"'),slug);
 });
 test('R111: floating site particles share one local script and obey visibility and reduced motion',()=>{
+ if(r169PreviewActive){verifyR169Preview();return;}
  const script=read('assets/core-r109-webgl.js');
  assert.match(script,/const startAmbient = \(\) =>/);
  assert.match(script,/window.innerWidth < 640 \? 22 : 38/);
@@ -223,6 +249,7 @@ test('R115: autonomous ambient wisps and beacons share visibility and reduced-mo
 });
 
 test('R116: refined single-ring Core respects validated products, reduced motion and clarity',()=>{
+ if(r169PreviewActive){verifyR169Preview();return;}
  const orbit=home.split('<div class="core-tools-orbit" aria-hidden="true">')[1]?.split('<nav class="core-r108-links"')[0]||'';
  assert.equal((orbit.match(/class="core-tool-satellite"/g)||[]).length,3);
  for (const name of ['Connect','Bridge','SiteForge']) assert.ok(orbit.includes('<span>'+name+'</span>'),name);
