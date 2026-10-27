@@ -55,6 +55,7 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
  .core-r108-art{top:50%;transform:translate(-50%,-50%) scale(calc(.8 * var(--sphere-zoom,1)))}
 }
 @media(prefers-reduced-motion:reduce){.core-r109-canvas,.core-r108-art{transition:none!important}}
+.vfx-advanced{border-top:1px solid #335a76;margin-top:10px;padding-top:8px}.vfx-advanced summary{cursor:pointer;min-height:42px;padding:10px 6px;color:#bfeeff;font-weight:600;list-style-position:inside}.vfx-advanced[open] summary{margin-bottom:12px}.vfx-advanced summary:focus-visible{outline:2px solid #7ce8fa;outline-offset:3px}
 </style>
 </head>
 <body>
@@ -76,8 +77,20 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 </svg>
 </div>
 <form class="lab-controls" aria-label="Réglages en direct de la sphère SiteForge" autocomplete="off">
-<div class="panel-head"><h2>Réglages de la sphère</h2><span class="preview-state">R145 · CANDIDATE</span></div>
+<div class="panel-head"><h2>Réglages de la sphère</h2><span class="preview-state">R147 · VFX LAB</span></div>
 <p class="help">Réglages appliqués à la matière 3D sans recharger. L'anneau extérieur et les arcs sont indépendants de la coque.</p>
+<fieldset class="control-group" aria-label="Studio d’effets de particules"><legend>✨ Effets de particules — accès rapide</legend>
+<div class="control-row"><label class="control-label" for="sf-particlePreset"><span>Style VFX</span></label>
+<select id="sf-particlePreset" data-sphere-control="particlePreset" data-default="0"><option value="0">Plasma vivant</option><option value="1">Étincelles électriques</option><option value="2">Vortex énergétique</option><option value="3">Éruption du noyau</option><option value="4">Désactivé</option></select></div>
+<div class="control-row"><label class="control-label" for="sf-particleIntensity"><span>Intensité des particules</span><output for="sf-particleIntensity" data-sphere-value="particleIntensity">100 %</output></label><input id="sf-particleIntensity" data-sphere-control="particleIntensity" type="range" min="0" max="200" value="100" step="1"></div>
+<p class="help">Un préréglage et un curseur suffisent. Les particules sont animées en 3D projetée, indépendamment de la taille du noyau.</p>
+<details class="vfx-advanced"><summary>Réglages avancés des particules</summary>
+<div class="control-row"><label class="control-label" for="sf-particleDensity"><span>Nombre de particules</span><output for="sf-particleDensity" data-sphere-value="particleDensity">100 %</output></label><input id="sf-particleDensity" data-sphere-control="particleDensity" type="range" min="0" max="250" value="100" step="1"></div>
+<div class="control-row"><label class="control-label" for="sf-particleSpeed"><span>Vitesse des particules</span><output for="sf-particleSpeed" data-sphere-value="particleSpeed">100 %</output></label><input id="sf-particleSpeed" data-sphere-control="particleSpeed" type="range" min="0" max="250" value="100" step="1"></div>
+<div class="control-row"><label class="control-label" for="sf-particleSize"><span>Taille des particules</span><output for="sf-particleSize" data-sphere-value="particleSize">100 %</output></label><input id="sf-particleSize" data-sphere-control="particleSize" type="range" min="20" max="200" value="100" step="1"></div>
+<div class="control-row"><label class="control-label" for="sf-particleSpread"><span>Dispersion spatiale</span><output for="sf-particleSpread" data-sphere-value="particleSpread">100 %</output></label><input id="sf-particleSpread" data-sphere-control="particleSpread" type="range" min="0" max="200" value="100" step="1"></div>
+<p class="help">Émetteur WebGL : points lumineux individuels, naissances, trajectoires et extinction progressive. Le nombre est plafonné pour préserver les mobiles.</p>
+</details></fieldset>
 <fieldset class="control-group"><legend>Forme et présence</legend><div class="control-row"><label class="control-label" for="sf-diameter"><span>Diamètre</span><output for="sf-diameter" data-sphere-value="diameter">100 %</output></label><input id="sf-diameter" data-sphere-control="diameter" type="range" min="50" max="150" value="100" step="1"></div>
 <div class="control-row"><label class="control-label" for="sf-opacity"><span>Opacité</span><output for="sf-opacity" data-sphere-value="opacity">100 %</output></label><input id="sf-opacity" data-sphere-control="opacity" type="range" min="0" max="100" value="100" step="1"></div></fieldset>
 <fieldset class="control-group"><legend>Coque · diffusion, épaisseur et visibilité</legend>
@@ -104,7 +117,7 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 <fieldset class="control-group"><legend>Lumière</legend>
 <div class="control-row"><label class="control-label" for="sf-luminance"><span>Luminance générale</span><output for="sf-luminance" data-sphere-value="luminance">100 %</output></label><input id="sf-luminance" data-sphere-control="luminance" type="range" min="0" max="250" value="100" step="1"></div>
 <div class="control-row"><label class="control-label" for="sf-coreSize"><span>Taille du noyau</span><output for="sf-coreSize" data-sphere-value="coreSize">100 %</output></label><input id="sf-coreSize" data-sphere-control="coreSize" type="range" min="0" max="200" value="100" step="1"></div>
-<div class="control-row"><label class="control-label" for="sf-coreLight"><span>Lumière du noyau</span><output for="sf-coreLight" data-sphere-value="coreLight">100 %</output></label><input id="sf-coreLight" data-sphere-control="coreLight" type="range" min="0" max="200" value="100" step="1"></div>
+<div class="control-row"><label class="control-label" for="sf-coreLight"><span>Puissance du noyau</span><output for="sf-coreLight" data-sphere-value="coreLight">100 %</output></label><input id="sf-coreLight" data-sphere-control="coreLight" type="range" min="0" max="500" value="100" step="1"></div>
 <div class="control-row"><label class="control-label" for="sf-rimLight"><span>Liseré lumineux</span><output for="sf-rimLight" data-sphere-value="rimLight">100 %</output></label><input id="sf-rimLight" data-sphere-control="rimLight" type="range" min="0" max="200" value="100" step="1"></div></fieldset>
 <fieldset class="control-group"><legend>Relief de surface</legend>
 <div class="control-row"><label class="control-label" for="sf-reliefMode"><span>Type de relief</span></label><select id="sf-reliefMode" data-sphere-control="reliefMode" data-default="0"><option value="0">Ondulé</option><option value="1">Veiné</option><option value="2">Craquelé</option><option value="3">Plasma turbulent</option><option value="4">Cristallin</option><option value="5">Lisse énergétique</option></select></div>
@@ -125,7 +138,7 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 <p class="help" data-render-status role="status" aria-live="polite">Initialisation du rendu WebGL…</p>
 <p class="help">Prévisualisation isolée. Aucun changement sur le site public ni sur Visual Observer.</p>
 </form>
-<p class="lab-footer">Moteur R116 · décharges ramifiées et relief visible R145 · aperçu expérimental SiteForge. Sur téléphone, le rendu reste fixé en haut pendant le défilement des réglages.</p>
+<p class="lab-footer">Moteur R116 · moteur de particules WebGL R147 · aperçu expérimental SiteForge. Sur téléphone, le rendu reste fixé en haut pendant le défilement des réglages.</p>
 </main>
 <script src="../../assets/siteforge-r116-sphere-only.js" defer></script>
 </body>
