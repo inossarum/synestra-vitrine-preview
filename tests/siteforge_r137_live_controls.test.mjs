@@ -340,7 +340,7 @@ test('R148: visible particle VFX use two distinct additive luminous passes, not 
   'gl.uniform1f(uniforms.layer,1);',
   'float hot=exp(-r2*15.);',
   'float halo=exp(-r2*3.2);',
-  'uLayer<.5?halo*.38:hot*1.6+halo*.23',
+  'uLayer<.5?halo*.29:hot*1.24+halo*.14',
   'VFX actif · '
  ])assert.ok(js.includes(signature),signature);
  assert.doesNotMatch(js,/gl\.blendFunc\(gl\.SRC_ALPHA,gl\.ONE\)/);
