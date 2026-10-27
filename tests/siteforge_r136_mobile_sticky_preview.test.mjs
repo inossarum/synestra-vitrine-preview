@@ -6,7 +6,7 @@ test('R152: mobile viewport remains sticky during simple plasma editor scrolling
  assert.match(html,/@media\(max-width:700px\)/);
  assert.match(html,/\.core-r108-stage\{position:sticky;top:env\(safe-area-inset-top,0px\);z-index:30/);
  assert.match(html,/height:clamp\(190px,34svh,290px\)/);
- assert.match(html,/\.core-r109-canvas\{height:100%;transform:scale\(calc\(\.8 \* var\(--sphere-zoom,1\)\)\)\}/);
+ assert.match(html,/\.core-r109-canvas\{height:100%;transform:scale\(calc\(1\.22 \* var\(--sphere-zoom,1\)\)\)\}/);
 });
 test('R152: one responsive canvas with simplified controls and no old slider groups',()=>{
  assert.equal((html.match(/<canvas /g)||[]).length,1);
