@@ -191,7 +191,7 @@ test('R154: four presets affect real 3D plasma ray samples, not only optional pa
   'float winding=angle*5.0+5.8*log(planar+.15)',
   'float electrical=0.,vortex=0.,fusion=0.;',
   'electrical=pow(max(0.,.5+.5*cos(winding*2.2+detail*9.)),23.);',
-  'vortex=pow(max(0.,.5+.5*cos(winding*.72+q.z*8.)),9.);',
+  'vortex=pow(max(0.,.5+.5*cos(winding*.8+q.z*8.)),9.);',
   'fusion=pow(max(0.,.5+.5*cos(angle*10.+depthWarp*2.-t*.5)),14.)',
   'float violetBand=.5+.5*sin(angle*3.0+q.z*4.0+broad*2.2);',
   'accum+=trans*radiance*absorption;',
