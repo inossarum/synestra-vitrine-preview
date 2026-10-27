@@ -33,7 +33,7 @@ function fixture({failLink=false,failCompile=false,noWebGL=false,reduceMotion=fa
  const gl={
   VERTEX_SHADER:35633,FRAGMENT_SHADER:35632,COMPILE_STATUS:35713,LINK_STATUS:35714,
   ARRAY_BUFFER:34962,STATIC_DRAW:35044,FLOAT:5126,
-  TRIANGLES:4,POINTS:0,BLEND:3042,ONE:1,COLOR_BUFFER_BIT:16384,
+  TRIANGLES:4,POINTS:0,LINES:1,BLEND:3042,ONE:1,COLOR_BUFFER_BIT:16384,
   createShader:()=>({}),shaderSource(){},compileShader(){},getShaderParameter:()=>!failCompile,
   getShaderInfoLog:()=> 'synthetic compile failure',deleteShader(){},
   createProgram:()=>({id:++programCount}),attachShader(){},linkProgram(){},
@@ -130,7 +130,7 @@ test('R152: native quick controls, safe defaults and accessible advanced setting
 test('R152: real draw submission structure in deterministic GPU fixture',()=>{
  const x=fixture();x.frame();
  assert.deepEqual(x.draws.map(d=>[d.mode,d.count]),[
-  [4,6],[0,540],[0,540],[0,340],[0,340]
+  [4,6],[0,340],[0,340]
  ]);
  assert.match(x.mainStatus.textContent,/Nouvelle sphère plasma WebGL active/);
  assert.match(x.vfxStatus.textContent,/Plasma GPU actif/);
@@ -139,16 +139,14 @@ test('R152: real draw submission structure in deterministic GPU fixture',()=>{
 test('R152: disabling supplemental particles keeps plasma shell, internal arcs and nucleus',()=>{
  const x=fixture();x.frame(40);
  x.controls.particlePreset.value='4';x.callbacks.change({target:x.controls.particlePreset});x.frame(90);
- assert.deepEqual(x.draws.slice(-3).map(d=>[d.mode,d.count]),[
-  [4,6],[0,540],[0,540]
- ]);
+ assert.deepEqual(x.draws.slice(-1).map(d=>[d.mode,d.count]),[[4,6]]);
  assert.match(x.vfxStatus.textContent,/particules additionnelles désactivées/);
 });
 test('R152: zero shell hides surface while keeping nucleus and internal lightning',()=>{
  const x=fixture();x.frame(40);
  x.controls.shellVisibility.value='0';x.callbacks.input({target:x.controls.shellVisibility});x.frame(90);
  assert.equal(x.uniforms.get('uShape')[1],0);
- assert.deepEqual(x.draws.slice(-5).map(d=>d.count),[6,540,540,340,340]);
+ assert.deepEqual(x.draws.slice(-3).map(d=>d.count),[6,340,340]);
 });
 test('R152: nucleus flux stays independent of nucleus radius',()=>{
  const x=fixture();x.frame(40);
@@ -182,9 +180,9 @@ test('R152: accessible reduced motion keeps static original plasma fallback',()=
 test('R152: independently bounded mobile GPU work and narrow arc segments',()=>{
  assert.match(js,/const MAX=2048/);
  assert.match(js,/mobile\?1480:MAX/);
- assert.match(js,/Math\.min\(mobile\?720:1200,/);
+ assert.match(js,/Math\.min\(mobile\?928:1740,/);
  assert.match(js,/const coreCount=mobile\?160:260/);
- assert.match(js,/float chain=floor\(i\/30\.\),bead=mod\(i,30\.\)/);
+ assert.match(js,/float segment=floor\(i\/2\.\)/);
  assert.match(js,/float fork=step\(17\.,bead\)/);
 });
 
@@ -229,7 +227,7 @@ test('R153: electrical bolt starts distributed inside volume, while points form 
   'p=vec3((origin+dir*reach+vec2(-dir.y,dir.x)*zig)*uShape.x,',
   'vAxis=dir;sizeFactor=.77;'
  ])assert.ok(v.includes(key),key);
- assert.ok(f.includes('r2=along*along*.19+cross*cross*11.6;'));
+ assert.ok(f.includes('if(uPass>1.5&&uPass<2.5){'));
  assert.ok(!v.includes('p=vec3((cos(ang)*reach-sin(ang)*zig)'),'old center-origin arcs must be removed');
 });
 test('R153: failure-first and simple palette still intact after effect redesign',()=>{
@@ -345,7 +343,7 @@ test('R157: flow family and structure independent of particle presets',()=>{
 });
 test('R157: five physically distinct volume materials share one GPU program',()=>{
  const fragment=js.slice(js.indexOf('const fragment='),js.indexOf('function compile('));
- for(const term of ['uniform vec2 uFlow;','if(uFlow.x<.5){','else if(uFlow.x<1.5){','else if(uFlow.x<2.5){','else if(uFlow.x<3.5){','float ribbonWidth=clamp(uFlow.y,.3,2.);','currents=flowCurrents;','fog*=flowFog;','float core=exp(-dot(q,q)/(nucleusRadius*nucleusRadius)*1.65);'])assert.ok(fragment.includes(term),term);
+ for(const term of ['uniform vec2 uFlow;','if(uFlow.x<.5){','else if(uFlow.x<1.5){','else if(uFlow.x<2.5){','else if(uFlow.x<3.5){','float ribbonWidth=clamp(uFlow.y,.3,2.);','currents=flowCurrents;','shellFog*=flowFog;','float core=exp(-dot(q,q)/(nucleusRadius*nucleusRadius)*1.65);'])assert.ok(fragment.includes(term),term);
  assert.equal((js.match(/gl.createProgram\(\)/g)||[]).length,1);
  assert.equal((html.match(/<canvas /g)||[]).length,1);
 });
@@ -382,10 +380,10 @@ test('R157: aurora and nebula material shader variables are scoped, regression o
 
 
 test('R158: material-only composition draws no duplicated shell/core sprites and honors disabled effects',()=>{
- const source=js.slice(js.indexOf('const emit=(pass,count)'),js.indexOf('gl.disable(gl.BLEND);',js.indexOf('const emit=(pass,count)')));
+ const source=js.slice(js.indexOf('const emit=(pass,count,mode=gl.POINTS)'),js.indexOf('gl.disable(gl.BLEND);',js.indexOf('const emit=(pass,count,mode=gl.POINTS)')));
  assert.doesNotMatch(source,/emit\(1,/);
  assert.doesNotMatch(source,/emit\(3,/);
- assert.match(source,/if\(num\('arcIntensity'\)>0&&num\('arcDensity'\)>0\)emit\(2,lightningCount\);/);
+ assert.match(source,/if\(lightningCount>0\)\{/);
  const x=fixture();x.controls.arcIntensity.value='0';x.controls.arcDensity.value='0';
  x.controls.particlePreset.value='4';x.frame(40);
  assert.deepEqual(x.draws.map(x=>[x.mode,x.count]),[[4,6]]);
