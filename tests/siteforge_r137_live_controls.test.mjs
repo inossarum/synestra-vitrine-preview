@@ -311,15 +311,15 @@ test('R147: actual GPU particle sprites have independent life, depth, birth, fad
 });
 test('R147: preset and intensity control the particle draw independently, safety cap and reset',()=>{
  const x=fixture();x.frame(40);
- assert.equal(x.drawCalls.filter(z=>z.mode===0).length,2,'separate halo and bright core sprite passes');
+ assert.equal(x.drawCalls.filter(z=>z.mode===0).length,8,'unified emitter draws 3 material passes plus optional particles, each halo/core');
  assert.equal(x.drawCalls.at(-1).count,360);
  let clock=40;
  x.controls.particleIntensity.value='0';x.events.input({target:x.controls.particleIntensity});x.frame(clock+=50);
- assert.equal(x.drawCalls.filter(z=>z.mode===0).length,2,'0 intensity turns emitter off');
+ assert.equal(x.drawCalls.filter(z=>z.mode===0).length,14,'0 particle intensity still preserves 3 material emitter passes');
  x.controls.particleIntensity.value='100';
  x.controls.particlePreset.value='4';
  x.events.change({target:x.controls.particlePreset});x.frame(clock+=50);
- assert.equal(x.drawCalls.filter(z=>z.mode===0).length,2,'disabled preset emits nothing');
+ assert.equal(x.drawCalls.filter(z=>z.mode===0).length,20,'disabled extra preset still renders material shell, internal arcs and core');
  x.controls.particlePreset.value='3';
  x.controls.particleDensity.value='250';
  x.events.change({target:x.controls.particlePreset});x.frame(clock+=50);
@@ -334,7 +334,7 @@ test('R147: preset and intensity control the particle draw independently, safety
 test('R148: visible particle VFX use two distinct additive luminous passes, not squared alpha',()=>{
  for(const signature of [
   'const MAX_PARTICLES=1024;',
-  'const capacity=mobile?640:MAX_PARTICLES;',
+  'const count=Math.min(mobile?640:MAX_PARTICLES,',
   'gl.blendFunc(gl.ONE,gl.ONE);',
   'gl.uniform1f(uniforms.layer,0);',
   'gl.uniform1f(uniforms.layer,1);',
@@ -346,8 +346,9 @@ test('R148: visible particle VFX use two distinct additive luminous passes, not 
  assert.doesNotMatch(js,/gl\.blendFunc\(gl\.SRC_ALPHA,gl\.ONE\)/);
  assert.match(html,/data-vfx-status role="status" aria-live="polite"/);
  const x=fixture();x.frame(40);
- assert.equal(x.drawCalls.filter(q=>q.mode===0).length,2);
- assert.equal(x.drawCalls.filter(q=>q.mode===0)[0].count,360);
+ assert.equal(x.drawCalls.filter(q=>q.mode===0).length,8);
+ assert.equal(x.drawCalls.filter(q=>q.mode===0)[0].count,640); // sphere shell
+ assert.equal(x.drawCalls.filter(q=>q.mode===0)[6].count,360); // auxiliary sprites
  assert.deepEqual(x.blendPairs.at(-1),[1,1]);
  assert.match(x.vfxStatus.textContent,/VFX actif/);
  assert.match(x.vfxStatus.textContent,/360 particules GPU/);
@@ -427,7 +428,7 @@ test('R150: particle fragments share sphere silhouette and opacity; no detached 
   'projected.x*=uResolution.x/max(uResolution.y,1.);',
   'projected.y+=.08;',
   'float sphereEnvelope=1.-smoothstep(.62,.702,length(projected));',
-  '*sphereEnvelope*innerLuminosity*clamp(uGlobalOpacity,0.,1.);'
+  '*sphereEnvelope*innerLuminosity*effectPower*coreRadiance'
  ]) assert.ok(js.includes(term),term);
  const x=fixture();x.frame(40);
  assert.equal(x.uniforms.get('uGlobalOpacity'),1);
@@ -449,4 +450,51 @@ test('R150: VFX colors follow sphere color editing without preset losing its ide
  assert.ok(js.includes('const core=color('), 'presets must sample core colors in real time');
  assert.ok(js.includes('const tint=core.map('));
  assert.ok(!js.includes("const palette=[[.23,.84,1.],[.78,.94,1.],[.69,.38,1.],[1.,.39,.10]]"));
+});
+
+
+test('R151: a single proven VFX shader generates sphere, internal lightning, nucleus and auxiliary sparks',()=>{
+ const required=[
+  'uniform float uPass; // 0 original sparks, 1 sphere matter, 2 internal lightning, 3 core volume',
+  'float polarZ=1.-2.*(i+.5)/1024.;',
+  'float spiral=i*2.39996323+uTime*.31*uEmitter.w;',
+  'float bolt=floor(i/24.);',
+  'float bead=mod(i,24.);',
+  'float fork=step(17.,bead);',
+  'float coreR=pow(particleRand(i*2.31+37.),1.5)*.13*max(uShape.z,.02);',
+  'emit(1,mobile?640:1024,',
+  'emit(2,mobile?312:480,',
+  'emit(3,mobile?112:160,',
+  'if(enableExtra)emit(0,count,tint);',
+  'gl.uniform1f(parameters.vfxEngineActive,particleEngine?1:0);',
+  'base=mix(base,plasmaUnderlight+nucleusUnderlight,'
+ ];
+ for(const item of required)assert.ok(js.includes(item),item);
+ assert.equal((js.match(/const emitterProgram=gl.createProgram\(\)/g)||[]).length,1,'one emitter GPU program');
+ assert.equal((html.match(/<canvas /g)||[]).length,1,'one canvas');
+ const x=fixture();x.frame(40);
+ const draws=x.drawCalls.filter(y=>y.mode===0);
+ assert.deepEqual(draws.map(y=>y.count),[640,640,312,312,112,112,360,360]);
+ assert.equal(x.uniforms.get('vfxEngineActive'),1);
+ assert.equal(x.uniforms.get('uPass'),0);
+});
+test('R151: disabled extra particles do not disable GPU sphere, core and internal lightning',()=>{
+ const x=fixture();x.frame(40);
+ x.controls.particlePreset.value='4';x.events.change({target:x.controls.particlePreset});x.frame(86);
+ const draws=x.drawCalls.filter(y=>y.mode===0);
+ assert.deepEqual(draws.slice(-6).map(y=>y.count),[640,640,312,312,112,112]);
+ assert.match(x.vfxStatus.textContent,/sphère et éclairs GPU actifs/);
+ x.controls.coreLight.value='500';x.events.input({target:x.controls.coreLight});x.frame(135);
+ assert.equal(x.arrays.get('uShape')[3],5,'core flux remains independent');
+ assert.equal(x.uniforms.get('coreRatio'),5);
+ x.controls.shellVisibility.value='0';x.events.input({target:x.controls.shellVisibility});x.frame(188);
+ assert.equal(x.uniforms.get('uShellVisibility'),0);
+ assert.equal(x.drawCalls.filter(y=>y.mode===0).length,26);
+});
+test('R151: GPU engine link failure leaves the sphere legacy fallback material intact',()=>{
+ const x=fixture(false,true);x.frame(40);
+ assert.equal(x.uniforms.get('vfxEngineActive'),0);
+ assert.equal(x.drawCalls.filter(y=>y.mode===0).length,0);
+ assert.equal(x.drawCalls.filter(y=>y.mode===4).length,1);
+ assert.match(x.vfxStatus.textContent,/liaison GPU échouée/);
 });
