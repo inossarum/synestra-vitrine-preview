@@ -1,0 +1,52 @@
+{
+  "schema": "synestra.siteforge.owner.plasma_reference_settings.v1",
+  "date": "2026-10-27",
+  "mission_id": "SYN_SITEFORGE_R156_OWNER_APPROVED_PLASMA_CALIBRATION_20261027",
+  "owner_feedback": "Avec ces paramètres-là, on commence à être pas mal, mais certains effets sont encore en trop et je les ai mis à 0.",
+  "input": {
+    "origin": "User-uploaded actual SiteForge JSON settings",
+    "filename": "synestra-siteforge-plasma-settings.json",
+    "sha256": "65fe1646ee0528ecee3219c575bc5ce2743a0294c71d87a4e963fa6d47c47b70",
+    "source_schema": "synestra.siteforge.plasma-settings.v1",
+    "mode": "Owner-selected candidate visual baseline, NOT final approved default"
+  },
+  "parameters": {
+    "particlePreset": 4,
+    "particleIntensity": 200,
+    "coreLight": 108,
+    "arcIntensity": 0,
+    "arcDensity": 0,
+    "diameter": 131,
+    "shellVisibility": 100,
+    "coreSize": 157,
+    "particleDensity": 250,
+    "particleSpeed": 250,
+    "particleSize": 80,
+    "opacity": 9,
+    "primary": "#08142e",
+    "secondary": "#53318d",
+    "core": "#eaffff",
+    "rim": "#51dfff"
+  },
+  "effects": {
+    "disabled": [
+      "Internal lightning arc GPU emitter: arcIntensity=0 and arcDensity=0",
+      "Extra particle emitter: particlePreset=4 disables extra even with density 250%"
+    ],
+    "active": [
+      "Ray-marched volumetric sphere: shellVisibility=100%",
+      "Compact core: coreLight=108%, coreSize=157%",
+      "Volumetric luminous energy: particleIntensity=200% controls its brightness even if extra particles disabled",
+      "Volumetric rotation/animation: particleSpeed=250%",
+      "Global transparency: opacity=9%"
+    ],
+    "note": "particleDensity=250% currently only affects extra emitter capacity and does not re-enable it while particlePreset=4."
+  },
+  "mutation": {
+    "shader": "NOT_MODIFIED",
+    "siteforge_controls": "NOT_MODIFIED",
+    "production": "NOT_MODIFIED",
+    "new_default_preset": "NOT_APPLIED"
+  },
+  "status": "BASELINE_RECORDED_ONLY_NOT_VISUAL_DONE"
+}
