@@ -88,23 +88,23 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 <fieldset class="control-group"><legend>✨ Création rapide</legend>
 <div class="control-row"><label class="control-label" for="sf-flowType"><span>Énergie qui traverse la sphère</span><output for="sf-flowType" data-sphere-value="flowType">Flux plasma</output></label>
 <select id="sf-flowType" data-sphere-control="flowType" data-default="0"><option value="0">Flux plasma</option><option value="1">Rubans magnétiques</option><option value="2">Voiles d’aurore</option><option value="3">Brume ionique</option><option value="4">Jets de fusion</option></select></div>
-<p class="help">Remplace le flux volumétrique sans modifier le noyau, les éclairs ni les particules supplémentaires.</p>
+<p class="help">Le noyau et les couleurs sont indépendants. Les éclairs n'apparaissent qu'en Flux plasma + Plasma électrique.</p>
 <div class="control-row"><label class="control-label" for="sf-particlePreset"><span>Style du plasma</span></label>
 <select id="sf-particlePreset" data-sphere-control="particlePreset" data-default="0"><option value="0">Plasma originel</option><option value="1">Plasma électrique</option><option value="2">Vortex ionique</option><option value="3">Fusion du noyau</option><option value="4">Plasma pur, sans particules supplémentaires</option></select></div>
 <div class="control-row"><label class="control-label" for="sf-particleIntensity"><span>Émission VFX</span><output for="sf-particleIntensity" data-sphere-value="particleIntensity">100 %</output></label><input id="sf-particleIntensity" data-sphere-control="particleIntensity" type="range" min="0" max="200" value="100" step="1"></div>
 <div class="control-row"><label class="control-label" for="sf-coreLight"><span>Puissance du noyau</span><output for="sf-coreLight" data-sphere-value="coreLight">135 %</output></label><input id="sf-coreLight" data-sphere-control="coreLight" type="range" min="0" max="500" value="135" step="1"></div>
 <p class="help" data-vfx-status role="status" aria-live="polite">Initialisation du moteur plasma…</p>
 </fieldset>
-<fieldset class="control-group"><legend>⚡ Éclairs intérieurs</legend>
+<fieldset class="control-group" data-electric-options hidden><legend>⚡ Éclairs électriques (uniquement en mode Plasma électrique)</legend>
 <div class="control-row"><label class="control-label" for="sf-arcIntensity"><span>Énergie des éclairs</span><output for="sf-arcIntensity" data-sphere-value="arcIntensity">140 %</output></label><input id="sf-arcIntensity" data-sphere-control="arcIntensity" type="range" min="0" max="300" value="140" step="1"></div>
 <div class="control-row"><label class="control-label" for="sf-arcDensity"><span>Nombre d’éclairs</span><output for="sf-arcDensity" data-sphere-value="arcDensity">100 %</output></label><input id="sf-arcDensity" data-sphere-control="arcDensity" type="range" min="0" max="200" value="100" step="1"></div>
 </fieldset>
 <fieldset class="control-group"><legend>🌐 Volume de plasma</legend>
 <div class="control-row"><label class="control-label" for="sf-flowStructure"><span>Largeur des courants</span><output for="sf-flowStructure" data-sphere-value="flowStructure">100 %</output></label><input id="sf-flowStructure" data-sphere-control="flowStructure" type="range" min="30" max="200" value="100" step="1"></div>
 <div class="control-row"><label class="control-label" for="sf-diameter"><span>Diamètre</span><output for="sf-diameter" data-sphere-value="diameter">100 %</output></label><input id="sf-diameter" data-sphere-control="diameter" type="range" min="50" max="150" value="100" step="1"></div>
-<div class="control-row"><label class="control-label" for="sf-shellVisibility"><span>Matière sphérique visible</span><output for="sf-shellVisibility" data-sphere-value="shellVisibility">100 %</output></label><input id="sf-shellVisibility" data-sphere-control="shellVisibility" type="range" min="0" max="100" value="100" step="1"></div>
+<div class="control-row"><label class="control-label" for="sf-shellVisibility"><span>Coque externe visible</span><output for="sf-shellVisibility" data-sphere-value="shellVisibility">100 %</output></label><input id="sf-shellVisibility" data-sphere-control="shellVisibility" type="range" min="0" max="100" value="100" step="1"></div>
 <div class="control-row"><label class="control-label" for="sf-coreSize"><span>Taille du noyau</span><output for="sf-coreSize" data-sphere-value="coreSize">70 %</output></label><input id="sf-coreSize" data-sphere-control="coreSize" type="range" min="0" max="200" value="70" step="1"></div>
-<p class="help">À 0 % de matière, les éclairs et le noyau restent visibles. La taille et la puissance du noyau sont indépendantes.</p>
+<p class="help">À 0 % la coque disparaît, sans atténuer les courants énergétiques intérieurs. La taille et la puissance du noyau restent indépendantes.</p>
 </fieldset>
 <details class="vfx-advanced"><summary>Réglages avancés</summary>
 <fieldset class="control-group"><legend>Émission et vitesse</legend>
