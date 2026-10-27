@@ -1,4 +1,4 @@
-/* SiteForge R150 — VFX visually integrated into original sphere: one material, linked colors, shared emission and volume-bound particles. R149 iOS precision fix retained. */
+/* SiteForge R151 — the ONE existing GPU particle emitter now generates sphere shell, internal lightning and compact core as passes of the same material system. Legacy sphere shader becomes graceful underpainting/fallback. R149 iOS precision contract preserved. */
 (() => {
   'use strict';
   const scene = document.querySelector('.core-r108-stage');
@@ -93,6 +93,7 @@ uniform vec4 flowSettings;    // filament density, flow speed, direction degrees
 uniform vec4 reliefSettings;  // type, height, scale, roughness
 uniform vec4 reliefDynamics;  // contrast, contour displacement, animation speed, reserved
 uniform vec4 particleMaterial; // preset/intensity/density/speed from the VFX emitter
+uniform float vfxEngineActive; // zero retains R150 material fallback if GPU emitter cannot link
 uniform vec3 primaryColor;
 uniform vec3 secondaryColor;
 uniform vec3 coreColor;
@@ -482,6 +483,15 @@ void main(){
  }
  float vfxEnvelope=1.-smoothstep(.45,.70,d);
  base+=vfxTint*vfxAmount*(vfxSignal*.20+centralSource*.075)*vfxEnvelope;
+ // R151: the detailed object is formed by VFX sphere-volume, electrical
+ // filaments and core emitters. Legacy marble becomes subtle underpainting
+ // only when the unified emitter has linked successfully (safe fallback).
+ float electricResponse=mix(.20,.54,clamp(agitation,0.,1.));
+ vec3 nucleusUnderlight=hotCore*centralSource*.52*coreFlux;
+ vec3 plasmaUnderlight=mix(primaryColor,secondaryColor,.42)*(.22+.24*litCloud)
+                      +rimColor*(.10+.16*energyMask);
+ base=mix(base,plasmaUnderlight+nucleusUnderlight,
+          clamp(vfxEngineActive*.67,0.,.75));
  base=(base-vec3(.3))*contrastRatio+vec3(.3);
  float arcA=r111Arc(p,1.,time);
  float arcB=r111Arc(p,2.,time);
@@ -492,9 +502,9 @@ void main(){
  float arcG=r111Arc(p,7.,time);
  float arcH=r111Arc(p,8.,time);
  // R114: eight independent centre-to-edge arcs, bounded by sphere mask.
- base+=(vec3(.78,.96,1.)*arcA*1.12+vec3(.39,.77,1.)*arcB*.91+vec3(.78,.69,1.)*arcC*.88)*mix(1.,2.9,dryElectric);
- base+=(vec3(.49,.96,.97)*arcD*.92+vec3(.83,.94,1.)*arcE*.84)*mix(1.,2.9,dryElectric);
- base+=(vec3(.46,.88,1.)*arcF*.91+vec3(.70,.59,1.)*arcG*.87+vec3(.90,.98,1.)*arcH*.89)*mix(1.,2.9,dryElectric);
+ base+=(vec3(.78,.96,1.)*arcA*1.12+vec3(.39,.77,1.)*arcB*.91+vec3(.78,.69,1.)*arcC*.88)*mix(1.,2.9,dryElectric)*mix(1.,.19,vfxEngineActive);
+ base+=(vec3(.49,.96,.97)*arcD*.92+vec3(.83,.94,1.)*arcE*.84)*mix(1.,2.9,dryElectric)*mix(1.,.19,vfxEngineActive);
+ base+=(vec3(.46,.88,1.)*arcF*.91+vec3(.70,.59,1.)*arcG*.87+vec3(.90,.98,1.)*arcH*.89)*mix(1.,2.9,dryElectric)*mix(1.,.19,vfxEngineActive);
  // Opacity belongs solely to opacity. Thickness changes only the narrow
  // grazing-angle wall shading, not alpha nor a second interior disk.
  float edgeSoftness=mix(.008,.063,shellDiffuse);
@@ -552,7 +562,7 @@ void main(){
   const parameters = Object.fromEntries([
     'speedRatio','detailRatio','agitationRatio','shineRatio','contrastRatio',
     'coreRatio','rimRatio','sphereAlpha','shellDiffusionRatio','shellThicknessRatio','luminanceRatio','shellVisibilityRatio',
-    'surfaceSettings','flowSettings','reliefSettings','reliefDynamics','particleMaterial',
+    'surfaceSettings','flowSettings','reliefSettings','reliefDynamics','particleMaterial','vfxEngineActive',
     'primaryColor','secondaryColor','coreColor','rimColor'
   ].map(key => [key, gl.getUniformLocation(program, key)]));
   if (res === null || time === null || tilt === null ||
@@ -581,6 +591,7 @@ void main(){
     gl.uniform4fv(parameters.particleMaterial,new Float32Array([
       ordinal('particlePreset'),numeric('particleIntensity'),numeric('particleDensity'),numeric('particleSpeed')
     ]));
+    gl.uniform1f(parameters.vfxEngineActive,particleEngine?1:0);
     for (const [name, control] of Object.entries({
       primaryColor:'primary',secondaryColor:'secondary',coreColor:'core',rimColor:'rim'
     })) gl.uniform3fv(parameters[name],new Float32Array(color(control)));
@@ -611,6 +622,7 @@ varying float vDepth;
 varying float vHot;
 varying vec2 vAxis;
 uniform float uLayer;
+uniform float uPass; // 0 original sparks, 1 sphere matter, 2 internal lightning, 3 core volume
 float particleRand(float n){return fract(sin(n*127.1)*43758.5453);}
 void main(){
  float i=floor(aSeed*1024.);
@@ -644,15 +656,63 @@ void main(){
                  -.08+age*.87*radiusScale,
                  depth*.25+cos(theta+age*7.)*.12);
  }
- pointPos.xy+=uTilt*.12*(.3+age);
+ // Sphere matter and internal discharge share this emitter and lifetime
+ // function with the existing particle stream; no extra WebGL programs.
+ float passOpacity=1.;
+ if(uPass>.5 && uPass<1.5){
+   // Golden-angle deterministic 3D surface points; slow rotation simulates
+   // moving energy on a coherent sphere, not flat marbled UV stripes.
+   float polarZ=1.-2.*(i+.5)/1024.;
+   float ringR=sqrt(max(0.,1.-polarZ*polarZ));
+   float spiral=i*2.39996323+uTime*.31*uEmitter.w;
+   vec3 shellN=vec3(cos(spiral)*ringR,sin(spiral)*ringR,polarZ);
+   float fold=sin(shellN.x*17.+uTime*.76)*sin(shellN.y*16.-uTime*.51);
+   pointPos=vec3(shellN.xy*(.665+.014*fold),shellN.z*.62);
+   passOpacity=mix(.18,1.,smoothstep(-.76,.62,shellN.z));
+   vAxis=vec2(cos(spiral),sin(spiral));
+ } else if(uPass>1.5 && uPass<2.5){
+   // Chain of 24 thin luminous beads per discharge, branching at segment
+   // 17; recurrent bursts originate throughout the internal volume.
+   float bolt=floor(i/24.);
+   float bead=mod(i,24.);
+   float stage=floor(uTime*.76+bolt*.31);
+   float phase=fract(uTime*.76+bolt*.31);
+   float direction=6.283185*particleRand(bolt*1.73+stage*23.);
+   float reach=(.32+.32*particleRand(bolt*7.+stage*13.))*bead/23.;
+   float bend=(particleRand(bolt*91.+floor(bead*.7)+stage*11.)-.5)*.050;
+   float fork=step(17.,bead);
+   float forkTurn=fork*(bead-17.)*.026*(particleRand(bolt+stage*5.)-.5);
+   float aa=direction+forkTurn;
+   pointPos=vec3(cos(aa)*reach-sin(aa)*bend,
+                 sin(aa)*reach+cos(aa)*bend,
+                 (particleRand(bolt*11.+stage*3.)-.5)*.55);
+   passOpacity=smoothstep(.02,.12,phase)*(1.-smoothstep(.64,.89,phase));
+   passOpacity*=mix(.29,1.,step(0.,pointPos.z));
+   vAxis=vec2(cos(aa),sin(aa));
+ } else if(uPass>2.5){
+   // Compact luminous nucleus, not an enlarged outer sphere.
+   float coreA=particleRand(i*7.1)*6.283185+uTime*.44;
+   float coreR=pow(particleRand(i*2.31+37.),1.5)*.13*max(uShape.z,.02);
+   pointPos=vec3(cos(coreA)*coreR,sin(coreA)*coreR,
+                 (particleRand(i*3.27+7.)-.5)*.20);
+   passOpacity=.65+.35*sin(uTime*2.2+i*.17);
+ }
+ pointPos.xy+=uTilt*.12*(.3+age)*step(uPass,.5);
  float fade=smoothstep(0.,.12,age)*(1.-smoothstep(.64,1.,age));
+ fade=mix(fade,1.,step(.5,uPass));
  float behind=mix(.38,1.,step(0.,pointPos.z));
- vFade=fade*behind*clamp(uEmitter.y,0.,2.)*(.60+.40*particleRand(i+91.));
+ vFade=fade*behind*clamp(uEmitter.y,0.,2.)*(.60+.40*particleRand(i+91.))*passOpacity;
+ if(uPass>.5) vFade=(.36+.64*particleRand(i+91.))*passOpacity*
+                      mix(.70,1.35,clamp(uEmitter.y*.5,0.,1.));
  vDepth=behind;
  vHot=particleRand(i+37.);
  // Finer luminous fragments are more coherent with the sphere's filaments.
+ float sizeFactor=1.;
+ if(uPass>.5 && uPass<1.5)sizeFactor=.53;
+ if(uPass>1.5 && uPass<2.5)sizeFactor=.62;
+ if(uPass>2.5)sizeFactor=1.5;
  gl_PointSize=clamp((2.8+4.9*particleRand(i+8.))*clamp(uShape.x,.2,2.)
-                  *uResolution.y/520.*mix(1.95,1.,uLayer),1.,25.);
+                  *uResolution.y/520.*mix(1.95,1.,uLayer)*sizeFactor,1.,25.);
  gl_Position=vec4(pointPos.x*uResolution.y/max(uResolution.x,1.),
                   pointPos.y-.08,0.,1.);
 }`;
@@ -671,10 +731,11 @@ uniform vec4 uEmitter;
 uniform float uLayer;
 uniform vec2 uResolution;
 uniform float uGlobalOpacity;
+uniform float uPass;
 void main(){
  vec2 p=gl_PointCoord*2.-1.;
  float r2=dot(p,p);
- if(uEmitter.x>.5&&uEmitter.x<1.5){
+ if((uPass<.5&&uEmitter.x>.5&&uEmitter.x<1.5)||(uPass>1.5&&uPass<2.5)){
    // Lightning sparks become thin animated directional streaks.
    float longitudinal=dot(p,vAxis);
    float transverse=p.x*vAxis.y-p.y*vAxis.x;
@@ -692,8 +753,10 @@ void main(){
  float innerLuminosity=mix(.74,1.25,exp(-dot(projected,projected)*8.));
  float halo=exp(-r2*3.2);
  float hot=exp(-r2*15.);
+ float effectPower=(uPass>.5 && uPass<1.5)?1.38:
+                   (uPass>1.5 && uPass<2.5)?2.15:(uPass>2.5)?2.4:1.;
  float radiance=(uLayer<.5?halo*.29:hot*1.24+halo*.14)*vFade
-                 *sphereEnvelope*innerLuminosity*clamp(uGlobalOpacity,0.,1.);
+                 *sphereEnvelope*innerLuminosity*effectPower*clamp(uGlobalOpacity,0.,1.);
  vec3 tint=mix(uParticleColor,vec3(1.),.14+.36*vHot);
  gl_FragColor=vec4(tint*radiance,clamp(radiance,0.,1.));
 }`;
@@ -721,7 +784,7 @@ void main(){
     const U=n=>gl.getUniformLocation(emitterProgram,n);
     const uniforms={
       resolution:U('uResolution'),clock:U('uTime'),emitter:U('uEmitter'),
-      shape:U('uShape'),tilt:U('uTilt'),tint:U('uParticleColor'),layer:U('uLayer'),opacity:U('uGlobalOpacity')
+      shape:U('uShape'),tilt:U('uTilt'),tint:U('uParticleColor'),layer:U('uLayer'),opacity:U('uGlobalOpacity'),pass:U('uPass')
     };
     if(attr<0||Object.values(uniforms).some(u=>u===null)){setParticleStatus('VFX indisponible : attribut GPU manquant.');return null;}
     gl.bindBuffer(gl.ARRAY_BUFFER,buffer);
