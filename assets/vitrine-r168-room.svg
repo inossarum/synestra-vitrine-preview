@@ -1,0 +1,88 @@
+<svg class="syn-r168-room" viewBox="0 0 800 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="r168-rear" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#0b1225"/><stop offset=".48" stop-color="#171b33"/><stop offset="1" stop-color="#070d18"/></linearGradient>
+    <linearGradient id="r168-left" x1="0" y1=".2" x2="1" y2=".8"><stop stop-color="#0a101c"/><stop offset=".52" stop-color="#25263e"/><stop offset="1" stop-color="#0c1423"/></linearGradient>
+    <linearGradient id="r168-right" x1="1" y1="0" x2="0" y2="1"><stop stop-color="#0c1621"/><stop offset=".48" stop-color="#25223b"/><stop offset="1" stop-color="#09111d"/></linearGradient>
+    <linearGradient id="r168-floor" x1=".5" y1="0" x2=".5" y2="1"><stop stop-color="#121b28"/><stop offset=".38" stop-color="#101627"/><stop offset="1" stop-color="#080c16"/></linearGradient>
+    <linearGradient id="r168-ceiling" x1=".5" y1="0" x2=".5" y2="1"><stop stop-color="#090f1d"/><stop offset="1" stop-color="#161a2d"/></linearGradient>
+    <linearGradient id="r168-green" x1="0" x2="1"><stop stop-color="#69dcb4" stop-opacity="0"/><stop offset=".5" stop-color="#69dcb4" stop-opacity=".72"/><stop offset="1" stop-color="#69dcb4" stop-opacity="0"/></linearGradient>
+    <linearGradient id="r168-violet" x1="0" x2="1"><stop stop-color="#53318d" stop-opacity="0"/><stop offset=".47" stop-color="#aa7de4" stop-opacity=".55"/><stop offset="1" stop-color="#53318d" stop-opacity="0"/></linearGradient>
+    <radialGradient id="r168-aura"><stop stop-color="#53318d" stop-opacity=".23"/><stop offset=".48" stop-color="#69dcb4" stop-opacity=".055"/><stop offset="1" stop-color="#081021" stop-opacity="0"/></radialGradient>
+    <linearGradient id="r168-metal"><stop stop-color="#111c2a"/><stop offset=".28" stop-color="#364051"/><stop offset=".53" stop-color="#192133"/><stop offset=".76" stop-color="#364354"/><stop offset="1" stop-color="#0e1927"/></linearGradient>
+    <linearGradient id="r168-reflect" x1=".5" y1="0" x2=".5" y2="1"><stop stop-color="#69dcb4" stop-opacity=".11"/><stop offset="1" stop-color="#53318d" stop-opacity="0"/></linearGradient>
+    <filter id="r168-softglow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="8"/></filter>
+    <clipPath id="r168-floorclip"><polygon points="172,413 628,413 800,640 0,640"/></clipPath>
+  </defs>
+  <rect width="800" height="640" fill="#070d18"/>
+  <g class="syn-r168-ceiling">
+    <polygon points="0,0 800,0 634,148 166,148" fill="url(#r168-ceiling)"/>
+    <polygon points="0,0 93,0 226,145 165,145" fill="url(#r168-metal)" opacity=".48"/>
+    <polygon points="707,0 800,0 635,145 574,145" fill="url(#r168-metal)" opacity=".48"/>
+    <path d="M94 0L228 147 M706 0L573 147 M226 0L314 146 M574 0L486 146" stroke="#7c7c9f" stroke-opacity=".22" stroke-width="3"/>
+    <path d="M110 66L690 66M174 118L626 118M202 137L598 137" stroke="#8e97b1" stroke-opacity=".17" stroke-width="3"/>
+    <path d="M230 30L570 30L586 42L213 42Z" fill="#0a1522" stroke="#657b9b" stroke-opacity=".26"/>
+    <path d="M293 39H510" stroke="url(#r168-violet)" stroke-width="4"/>
+    <path d="M197 119H603" stroke="url(#r168-green)" stroke-width="3"/>
+    <path d="M236 134H564" stroke="#bfd7fa" stroke-opacity=".10" stroke-width="2"/>
+  </g>
+  <g class="syn-r168-far-wall">
+    <polygon points="166,146 634,146 627,415 173,415" fill="url(#r168-rear)"/>
+    <path d="M170 170H630M170 399H630" stroke="#616e89" stroke-width="7" opacity=".33"/>
+    <path d="M185 183V390 M616 183V390" stroke="#b0b1d7" stroke-opacity=".17" stroke-width="5"/>
+    <path d="M190 197H236V365H190ZM566 197H610V365H566Z" fill="#111728" stroke="#74829a" stroke-opacity=".22"/>
+    <path d="M211 215V343M589 215V343" stroke="#69dcb4" stroke-opacity=".30" stroke-width="3"/>
+    <path d="M225 197V375M575 197V375" stroke="#53318d" stroke-opacity=".50" stroke-width="4"/>
+    <path d="M241 146V414M559 146V414" stroke="#767590" stroke-opacity=".26" stroke-width="5"/>
+    <path d="M264 386H536" stroke="#82acba" stroke-opacity=".13" stroke-width="3"/>
+  </g>
+  <g class="syn-r168-portal">
+    <path d="M291 167H509L554 209V403H246V209Z" fill="#08111e" stroke="url(#r168-metal)" stroke-width="18"/>
+    <path d="M294 179H506L543 214V402H257V214Z" fill="#10162a" stroke="#65578d" stroke-opacity=".32" stroke-width="4"/>
+    <path d="M311 185H489L526 220V386H274V220Z" fill="#0b1224" stroke="#65578d" stroke-opacity=".32" stroke-width="2"/>
+    <path d="M289 178H512M255 209V386M545 209V386" stroke="#c0acd9" stroke-opacity=".17" stroke-width="3"/>
+    <path d="M288 402H513" stroke="url(#r168-green)" stroke-width="4"/>
+    <path d="M282 206L304 183 M517 183L540 206" stroke="#69dcb4" stroke-opacity=".18" stroke-width="3"/>
+  </g>
+  <g class="syn-r168-left-wall">
+    <polygon points="0,64 166,146 173,415 0,565" fill="url(#r168-left)"/>
+    <path d="M0 110L152 178M0 273L163 268M0 430L171 380" stroke="#a6a9c1" stroke-opacity=".16" stroke-width="6"/>
+    <path d="M40 119L132 165L140 395L27 474" fill="none" stroke="#66728c" stroke-opacity=".26" stroke-width="7"/>
+    <path d="M53 155L106 181L110 370L50 416Z" fill="#101627" stroke="#424b67" stroke-opacity=".45" stroke-width="4"/>
+    <path d="M18 174L28 182L31 412L20 421Z" fill="#53318d" opacity=".53"/>
+    <path d="M123 165L131 169L138 398L131 406Z" fill="#69dcb4" opacity=".35"/>
+    <path d="M50 336L105 316" stroke="#aa7de4" stroke-opacity=".30" stroke-width="3"/>
+    <path d="M25 475L164 409" stroke="#69dcb4" stroke-opacity=".18" stroke-width="3"/>
+  </g>
+  <g class="syn-r168-right-wall">
+    <polygon points="800,64 634,146 627,415 800,565" fill="url(#r168-right)"/>
+    <path d="M800 110L648 178M800 273L637 268M800 430L629 380" stroke="#b9afce" stroke-opacity=".15" stroke-width="6"/>
+    <path d="M760 119L668 165L660 395L773 474" fill="none" stroke="#66728c" stroke-opacity=".26" stroke-width="7"/>
+    <path d="M747 155L694 181L690 370L750 416Z" fill="#111728" stroke="#424b67" stroke-opacity=".42" stroke-width="4"/>
+    <path d="M782 174L772 182L769 412L780 421Z" fill="#69dcb4" opacity=".43"/>
+    <path d="M677 165L669 169L662 398L669 406Z" fill="#53318d" opacity=".57"/>
+    <path d="M750 336L695 316" stroke="#69dcb4" stroke-opacity=".28" stroke-width="3"/>
+    <path d="M775 475L636 409" stroke="#9173d2" stroke-opacity=".23" stroke-width="3"/>
+  </g>
+  <g class="syn-r168-floor">
+    <polygon points="173,413 627,413 800,640 0,640" fill="url(#r168-floor)"/>
+    <g clip-path="url(#r168-floorclip)">
+      <path d="M173 414L-80 652M246 414L134 652M330 414L290 652M400 414V652M470 414L510 652M554 414L666 652M627 414L880 652" stroke="#728097" stroke-width="2" opacity=".27"/>
+      <path d="M-100 590H900M-40 528H840M75 472H725M145 433H655" stroke="#7b90ae" stroke-opacity=".22" stroke-width="3"/>
+      <path d="M173 415L0 635M627 415L800 635" stroke="#69dcb4" stroke-opacity=".22" stroke-width="5"/>
+      <path d="M305 419L201 640M495 419L599 640" stroke="#aa7de4" stroke-opacity=".13" stroke-width="7"/>
+      <path d="M290 425L510 425L560 568L240 568Z" fill="url(#r168-reflect)" opacity=".48"/>
+      <path d="M270 456H530" stroke="url(#r168-violet)" stroke-width="5" opacity=".40"/>
+      <path d="M184 556H616" stroke="url(#r168-green)" stroke-width="3" opacity=".3"/>
+      <path d="M80 612H720" stroke="#796db0" stroke-opacity=".13" stroke-width="7"/>
+    </g>
+  </g>
+  <g class="syn-r168-wall-lights">
+    <path d="M188 141H612" stroke="url(#r168-green)" stroke-width="5" filter="url(#r168-softglow)" opacity=".36"/>
+    <path d="M188 141H612" stroke="url(#r168-green)" stroke-width="2.2" opacity=".58"/>
+    <path d="M24 184L26 404 M776 184L774 404" stroke="#69dcb4" stroke-opacity=".3" stroke-width="5" filter="url(#r168-softglow)"/>
+    <path d="M24 184L26 404 M776 184L774 404" stroke="#69dcb4" stroke-opacity=".30" stroke-width="2"/>
+    <path d="M252 207V376 M548 207V376" stroke="#9674cb" stroke-opacity=".22" stroke-width="3"/>
+    <path d="M318 181H481" stroke="url(#r168-violet)" stroke-width="5" opacity=".50"/>
+    <rect x="0" y="0" width="800" height="640" fill="url(#r168-aura)" opacity=".8"/>
+  </g>
+</svg>

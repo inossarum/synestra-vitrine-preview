@@ -1,0 +1,23 @@
+/* Synestra R168 — architectural chamber prototype, isolated from approved homepage. */
+.core-r109-stage .syn-r168-room{
+ position:absolute;inset:0;width:100%;height:100%;z-index:0;
+ display:block;pointer-events:none;user-select:none;
+ opacity:.90;
+}
+.core-r109-stage .syn-r168-room .syn-r168-ceiling,
+.core-r109-stage .syn-r168-room .syn-r168-left-wall,
+.core-r109-stage .syn-r168-room .syn-r168-right-wall,
+.core-r109-stage .syn-r168-room .syn-r168-far-wall{opacity:.92}
+.core-r109-stage .syn-r168-room .syn-r168-floor{opacity:.86}
+.core-r109-stage .syn-r168-room .syn-r168-portal{opacity:.88}
+.core-r109-stage .core-r108-art{z-index:2}
+.core-r109-stage .core-r109-canvas{z-index:3}
+.core-r109-stage{background:#070d18!important}
+@media(max-width:620px){
+ .core-r109-stage .syn-r168-room{opacity:.83}
+ .core-r109-stage .syn-r168-room .syn-r168-wall-lights{opacity:.64}
+}
+@media(prefers-reduced-motion:reduce){
+ .core-r109-stage .syn-r168-room,
+ .core-r109-stage .syn-r168-room *{animation:none!important;transition:none!important}
+}
