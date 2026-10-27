@@ -76,14 +76,15 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 </svg>
 </div>
 <form class="lab-controls" aria-label="Réglages en direct de la sphère SiteForge" autocomplete="off">
-<div class="panel-head"><h2>Réglages de la sphère</h2><span class="preview-state">R143 · CANDIDATE</span></div>
+<div class="panel-head"><h2>Réglages de la sphère</h2><span class="preview-state">R144 · CANDIDATE</span></div>
 <p class="help">Réglages appliqués à la matière 3D sans recharger. L'anneau extérieur et les arcs sont indépendants de la coque.</p>
 <fieldset class="control-group"><legend>Forme et présence</legend><div class="control-row"><label class="control-label" for="sf-diameter"><span>Diamètre</span><output for="sf-diameter" data-sphere-value="diameter">100 %</output></label><input id="sf-diameter" data-sphere-control="diameter" type="range" min="50" max="150" value="100" step="1"></div>
 <div class="control-row"><label class="control-label" for="sf-opacity"><span>Opacité</span><output for="sf-opacity" data-sphere-value="opacity">100 %</output></label><input id="sf-opacity" data-sphere-control="opacity" type="range" min="0" max="100" value="100" step="1"></div></fieldset>
-<fieldset class="control-group"><legend>Coque · diffusion et épaisseur</legend>
+<fieldset class="control-group"><legend>Coque · diffusion, épaisseur et visibilité</legend>
+<div class="control-row"><label class="control-label" for="sf-shellVisibility"><span>Visibilité de la coque</span><output for="sf-shellVisibility" data-sphere-value="shellVisibility">100 %</output></label><input id="sf-shellVisibility" data-sphere-control="shellVisibility" type="range" min="0" max="100" value="100" step="1"></div>
 <div class="control-row"><label class="control-label" for="sf-diffusion"><span>Diffusion de la coque</span><output for="sf-diffusion" data-sphere-value="diffusion">65 %</output></label><input id="sf-diffusion" data-sphere-control="diffusion" type="range" min="0" max="100" value="65" step="1"></div>
 <div class="control-row"><label class="control-label" for="sf-thickness"><span>Épaisseur de la coque</span><output for="sf-thickness" data-sphere-value="thickness">45 %</output></label><input id="sf-thickness" data-sphere-control="thickness" type="range" min="0" max="100" value="45" step="1"></div>
-<p class="help">Diffusion : adoucit les bords. Épaisseur : renforce la profondeur de coque sur son pourtour, sans tracer de cercle au centre ni modifier l’opacité.</p>
+<p class="help">Visibilité de la coque : à 0 %, la sphère et son contour disparaissent, mais l’énergie animée reste visible. Diffusion et épaisseur restent indépendantes.</p>
 </fieldset>
 <fieldset class="control-group"><legend>Mouvement</legend><div class="control-row"><label class="control-label" for="sf-rotation"><span>Vitesse de rotation</span><output for="sf-rotation" data-sphere-value="rotation">100 %</output></label><input id="sf-rotation" data-sphere-control="rotation" type="range" min="0" max="300" value="100" step="1"></div>
 <div class="control-row"><label class="control-label" for="sf-agitation"><span>Agitation de la matière</span><output for="sf-agitation" data-sphere-value="agitation">100 %</output></label><input id="sf-agitation" data-sphere-control="agitation" type="range" min="0" max="200" value="100" step="1"></div>
@@ -124,7 +125,7 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 <p class="help" data-render-status role="status" aria-live="polite">Initialisation du rendu WebGL…</p>
 <p class="help">Prévisualisation isolée. Aucun changement sur le site public ni sur Visual Observer.</p>
 </form>
-<p class="lab-footer">Moteur R116 · éditeur de matière et relief R143 · aperçu expérimental SiteForge. Sur téléphone, le rendu reste fixé en haut pendant le défilement des réglages.</p>
+<p class="lab-footer">Moteur R116 · énergies différenciées et coque masquable R144 · aperçu expérimental SiteForge. Sur téléphone, le rendu reste fixé en haut pendant le défilement des réglages.</p>
 </main>
 <script src="../../assets/siteforge-r116-sphere-only.js" defer></script>
 </body>
