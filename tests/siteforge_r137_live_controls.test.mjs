@@ -149,7 +149,7 @@ test('R143: baseline R142 shader remains local and uses one context with bounded
 test('R144: six materials have distinct major shading profiles, not just a color-picker value',()=>{
  const shader=js.slice(js.indexOf('void main(){'),js.indexOf('  const shader = (type, code)'));
  for(const term of [
-  'float lightning=sin(filamentPhase*2.3',
+  'float electricA=r145ElectricBolt(flowN.xy,1.0,time);',
   'float flowing=sin(flowN.y*16.',
   'energyMask=smoothstep(.33,.77,cloudDensity)',
   'float solarCells=abs(sin(',
@@ -212,4 +212,62 @@ test('R144: mobile-native change events activate all energy and relief modes',()
  x.events.change({target:x.controls.surfaceMotion});
  x.frame(time+=45);
  assert.equal(x.arrays.get('surfaceSettings')[1],3);
+});
+
+
+test('R145: Electric is forked/angular and never falls back to watery liquid wave texture',()=>{
+ const shader=js.slice(js.indexOf('void main(){'),js.indexOf('  const shader = (type, code)'));
+ for(const signature of [
+  'float r145ElectricBolt(vec2 surface,float index,float seconds){',
+  'float segment=floor(along*17.);',
+  'float jagged=mix(node0,node1,mixNode)*.106-.053;',
+  'float fork=smoothstep(forkNode-.02,forkNode+.02,along)*exp(-forkPath*155.)*.68;',
+  'float electricA=r145ElectricBolt(flowN.xy,1.0,time);',
+  'float electricB=r145ElectricBolt(flowN.xy,2.7,time);',
+  'float electricC=r145ElectricBolt(flowN.xy,4.9,time);',
+  'float dryElectric=1.-step(.5,abs(surfaceSettings.x-1.));',
+  'base=mix(base,midnight,.80);',
+  'base+=energyTint*energyMask*1.95*surfaceSettings.w;',
+  'base+=cyan*currents*(.045+.19*light)*(1.-dryElectric*.97);',
+  'base+=vec3(.88,.96,1.)*(spec*.42+specFine*.28)*shineRatio*(1.-dryElectric*.95);',
+  'mix(1.,2.9,dryElectric)'
+ ])assert.ok(js.includes(signature),signature);
+ assert.ok(!shader.includes('float lightning=sin(filamentPhase*2.3'),'liquid-like electric waves must be removed');
+ assert.equal((shader.match(/=r111Arc\(p,/g)||[]).length,8);
+});
+test('R145: relief drives final material with mode-specific crests, cracks and crystal facets',()=>{
+ const signatures=[
+  'float sculptDepth=clamp(reliefStrength,0.,2.);',
+  'float grooves=pow(1.-clamp(reliefHeight,0.,1.),1.6);',
+  'float crests=pow(clamp(reliefHeight,0.,1.),2.6);',
+  'float contourShade=clamp(1.-grooves*.75*sculptDepth+',
+  'contourShade*=mix(.28,1.08,smoothstep(.08,.32,reliefHeight));',
+  'contourShade*=mix(.65,1.26,step(.13,fract(reliefHeight*4.)));',
+  'contourShade=mix(1.,contourShade,.035);',
+  'base*=mix(1.,contourShade,clamp(sculptDepth*.85,0.,1.));'
+ ];
+ for(const signature of signatures)assert.ok(js.includes(signature),signature);
+ const reliefAt=(height,strength)=>Math.max(.12,Math.min(2.4,
+   1-Math.pow(1-height,1.6)*.75*strength+Math.pow(height,2.6)*.65*strength));
+ const crack=reliefAt(.04,1.3),ridge=reliefAt(.94,1.3);
+ assert.ok(crack<.35,'cracks must visibly darken');
+ assert.ok(ridge>1.5,'raised ridges must be significantly brighter');
+ assert.equal(reliefAt(.15,0),1);
+ assert.equal(reliefAt(.85,0),1);
+});
+test('R145: energy and relief selected on native mobile change independently',()=>{
+ const x=fixture();x.frame(40);
+ let clock=40;
+ x.controls.energyMode.value='1';x.events.change({target:x.controls.energyMode});x.frame(clock+=45);
+ assert.equal(x.arrays.get('surfaceSettings')[0],1);
+ x.controls.reliefMode.value='2';x.events.change({target:x.controls.reliefMode});x.frame(clock+=45);
+ assert.equal(x.arrays.get('reliefSettings')[0],2);
+ assert.equal(x.arrays.get('surfaceSettings')[0],1);
+ x.controls.shellVisibility.value='0';x.events.input({target:x.controls.shellVisibility});x.frame(clock+=45);
+ assert.equal(x.uniforms.get('shellVisibilityRatio'),0);
+ assert.equal(x.arrays.get('surfaceSettings')[0],1);
+ x.events.reset({preventDefault(){}});x.frame(clock+=45);
+ assert.equal(x.arrays.get('surfaceSettings')[0],0);
+ assert.equal(x.arrays.get('reliefSettings')[0],0);
+ assert.equal(x.uniforms.get('shellVisibilityRatio'),1);
 });
