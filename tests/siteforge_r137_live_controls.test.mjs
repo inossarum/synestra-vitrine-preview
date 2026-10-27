@@ -301,7 +301,7 @@ test('R147: actual GPU particle sprites have independent life, depth, birth, fad
   '}else if(uEmitter.x<1.5)',
   '}else if(uEmitter.x<2.5)',
   'gl_PointCoord*2.-1.',
-  'gl.drawArrays(gl.POINTS,0,count);',
+  'gl.drawArrays(gl.POINTS,0,size);',
   'gl.drawArrays(gl.TRIANGLES,0,6);',
   'particleEngine?.draw(still?0:elapsed,rx,ry);'
  ];
@@ -351,7 +351,7 @@ test('R148: visible particle VFX use two distinct additive luminous passes, not 
  assert.equal(x.drawCalls.filter(q=>q.mode===0)[6].count,360); // auxiliary sprites
  assert.deepEqual(x.blendPairs.at(-1),[1,1]);
  assert.match(x.vfxStatus.textContent,/VFX actif/);
- assert.match(x.vfxStatus.textContent,/360 particules GPU/);
+ assert.match(x.vfxStatus.textContent,/360 particules · sphère et éclairs GPU/);
 });
 test('R148: visually distinct material palettes, GPU directions and ergonomic disabled mode',()=>{
  const x=fixture();x.frame(40);
@@ -369,7 +369,7 @@ test('R148: visually distinct material palettes, GPU directions and ergonomic di
  assert.match(x.vfxStatus.textContent,/désactivées/);
  const particles=x.drawCalls.filter(z=>z.mode===0).length;
  x.controls.particleIntensity.value='0';x.events.input({target:x.controls.particleIntensity});x.frame(clock+=48);
- assert.equal(x.drawCalls.filter(z=>z.mode===0).length,particles);
+ assert.equal(x.drawCalls.filter(z=>z.mode===0).length,particles+6,'internal GPU material remains active without auxiliary particles');
 });
 
 
