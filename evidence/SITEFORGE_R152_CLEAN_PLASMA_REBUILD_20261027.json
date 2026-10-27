@@ -1,0 +1,143 @@
+{
+  "schema": "synestra.siteforge.r152.plasma_rebuild.evidence.v1",
+  "date": "2026-10-27",
+  "mission_id": "SYN_SITEFORGE_R152_CLEAN_REBUILD_ORIGINAL_PLASMA_VFX_20261027",
+  "owner": "Inos",
+  "user_requirement": "Remove old sphere, its effects AND old sliders. Create a new energetic sphere using the VFX particles graphics engine and original plasma reference image.",
+  "reference": {
+    "type": "Existing SiteForge original plasma reference SVG in previous lab HTML",
+    "palette": [
+      "#ffffff",
+      "#c0ffff",
+      "#51dfff",
+      "#395bce",
+      "#53318d",
+      "#08142e"
+    ],
+    "external_image_unverified": false
+  },
+  "source": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_SITEFORGE_R116_CLEAN_LAB_20261027",
+    "build_commit": "de6263faef57ff21fc2f86f76a2e9d6949dfedb8",
+    "renderer_blob": "fc777c40753f1753d3b271c598890b6edc2c657f",
+    "page_blob": "e56289d96a1ba1e91ec0635259ce56921d4a7ca1",
+    "main_test_blob": "cae2caf1a26735936a107e75584376aa87a88a7c",
+    "historical_test_blob": "cd753e17b2401d78d3107c3693fb09e850edd68b",
+    "mobile_test_blob": "17625981cdd2c10ad2d35c068c73f83b45ec5bef"
+  },
+  "removed": [
+    "R116-R151 historical marbled sphere fragment shader removed from active JS",
+    "R111/R145 historical lightning functions removed",
+    "All inherited surface energy, relief, agitation, shell diffusion/thickness, shading and motion slider groups removed from active form",
+    "Old fallback SVG gradient, paths and IDs removed and replaced with new original-palette design",
+    "38 controls reduced to 16: one preset, 11 meaningful sliders, 4 direct colors",
+    "Old 38-control mock tests and legacy-effect expectations replaced with R152 engine tests"
+  ],
+  "new_engine": [
+    "ONE WebGL1 program draws a plasma volume field using GLSL three-dimensional noise and filaments on a full-screen quad plus plasma shell, branching internal arcs, compact core and optional sparks as GPU point emitters",
+    "WebGL precision highp/mediump matching branches in both shader stages, avoiding prior Safari link bug",
+    "New plasma reference composition uses bright white-cyan core, cyan filaments, blue/purple depth and transparent outer area",
+    "Sphere shell modeled as golden-angle seeded 3D points; internal arcs as independent thirty-bead jagged branches with time-gated flashes; compact core independent radius and power",
+    "One WebGL context and one canvas, bounded mobile seeds, native controls and collapse advanced settings",
+    "Static fallback plasma regenerated; reduce-motion and no-GPU fallback safe; no network or backend changes"
+  ],
+  "validation": {
+    "preview_project": "synestra-vitrine-preview",
+    "deployment_id": "e43b4e42-5d39-4b80-b816-461295e8a1a6",
+    "preview_url": "https://e43b4e42.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+    "deployment_sha": "de6263faef57ff21fc2f86f76a2e9d6949dfedb8",
+    "build_status": "SUCCESS",
+    "deploy_status": "SUCCESS",
+    "stages": [
+      "queued:success",
+      "initialize:success",
+      "clone_repo:success",
+      "build:success",
+      "deploy:success"
+    ],
+    "tests": 64,
+    "pass": 64,
+    "fail": 0,
+    "static_export": "PASS",
+    "real_chromium": {
+      "runtime": "Cloudflare Browser Rendering Chromium, 390x844 touch/mobile viewport",
+      "source": "GitHub exact HTML+JS at R152 branch in isolated HTML fixture; CSP meta removed to inline same checked-in script for browser test only. Access-protected preview was not bypassed.",
+      "webgl_link": "PASS",
+      "javascript_errors": [],
+      "sphere_status": "Nouvelle sphère plasma WebGL active.",
+      "emitter_status": "Plasma GPU actif · 340 particules · 18 éclairs",
+      "default_gpu_draw_counts": [
+        1480,
+        1480,
+        540,
+        540,
+        160,
+        160,
+        340,
+        340
+      ],
+      "extras_disabled_draw_counts": [
+        1480,
+        1480,
+        540,
+        540,
+        160,
+        160
+      ],
+      "actual_gl_readPixels_RGBA": {
+        "resolution": [
+          364,
+          285
+        ],
+        "center": [
+          255,
+          255,
+          255,
+          255
+        ],
+        "near_center": [
+          143,
+          231,
+          246,
+          255
+        ],
+        "blue_depth": [
+          54,
+          77,
+          109,
+          187
+        ],
+        "outside_1": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "outside_2": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "gl_error": 0
+      },
+      "pixel_evidence_scope": "Five GL readPixels sampled during an actual Chromium GPU frame; proves nontrivial rendered gradients/transparency, not a full reviewed screenshot."
+    },
+    "unverified": [
+      "Full visual pixel/image quality compared with the user's reference screenshot",
+      "Safari/iPhone frame-rate and final artistic approval",
+      "Production (intentionally unchanged)"
+    ]
+  },
+  "safety": {
+    "production_deployments_enabled": false,
+    "preview_branch_allowlisted": true,
+    "main_changed": false,
+    "production_changed": false,
+    "visual_observer_changed": false,
+    "free_only": true,
+    "rollback": "https://e49bc63f.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/"
+  },
+  "status": "R152_PREVIEW_DEPLOYED_64_PASS__REAL_CHROMIUM_GPU_PIXELS_VERIFIED__OWNER_IOS_VISUAL_APPROVAL_PENDING"
+}
