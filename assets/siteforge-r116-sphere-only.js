@@ -1,4 +1,4 @@
-/* SiteForge R137 — original R116 plasma sphere, with owner-requested uniform controls and refined native-resolution WebGL shading. No new model, metallic rings or Visual Observer backend. R116 source: d78d7222a95fd080a408bba2237dd3b9dda05bd7. */
+/* SiteForge R140 — R116 procedural plasma sphere. Geometric normals remain fixed while procedural texture rotates. Shell thickness shades only the grazing-angle periphery, never an interior circle or hemisphere. R116 source blob d78d7222a95fd080a408bba2237dd3b9dda05bd7. */
 (() => {
   'use strict';
   const scene = document.querySelector('.core-r108-stage');
@@ -159,8 +159,11 @@ void main(){
  float outsideA=clamp(aura*.065+ring*.43+ringBloom*.035
               +exteriorFog*shellDiffusionRatio*.12,0.,.75);
  if(d>radius){ gl_FragColor=vec4(outside,outsideA); return; }
- vec3 n=vec3(p,sqrt(max(radius*radius-dot(p,p),0.)))/radius;
- n=turn3(n,tilt+vec2(t*.55+sin(t*.23)*.15,cos(t*.18)*.08));
+ // Fixed front-facing geometric normal: rotating it previously swept a
+ // light/dark meridian across the sphere and made two hemispheres visible.
+ vec3 geomN=vec3(p,sqrt(max(radius*radius-dot(p,p),0.)))/radius;
+ // Rotate ONLY the procedural material coordinates, not lighting geometry.
+ vec3 n=turn3(geomN,tilt+vec2(t*.55+sin(t*.23)*.15,cos(t*.18)*.08));
  float v=noise3(n*3.7+vec3(drift*.65,drift*.22,-drift*.25));
  float v2=noise3(n*7.5+vec3(drift*.3,-drift*.6,drift*.47));
  // Fine-scale volumetric striations add depth without changing R116 silhouettes.
@@ -170,33 +173,30 @@ void main(){
  float filament=sin(angle*5.+n.z*9.5+v*5.0-drift*2.0);
  float currents=pow(max(0.,filament*.5+.5),7.0);
  float secondary=pow(max(0.,sin(angle*8.0-n.z*11.0+v2*4.+drift)*.5+.5),12.);
- // Wraparound lighting avoids a dark/bright hemisphere cut.
- float light=.20+.80*smoothstep(-.72,.84,dot(n,normalize(vec3(-.45,.58,1.))));
- float rim=pow(1.-max(n.z,0.),2.05);
- float soft=clamp(.18+v*.56+light*.47,0.,1.);
- // Projected concentric shell: thickness changes its REAL visible inner edge.
- // Outer radius stays fixed, unlike scaling or density-only implementations.
- float shellDepth=mix(.012,.31,clamp(shellThicknessRatio,0.,1.));
- float innerRadius=radius-shellDepth;
+ // Lighting is computed in screen/front hemisphere space, independent
+ // of rotating texture coordinates and never based on back-facing normals.
+ float light=.32+.68*smoothstep(-.90,.95,dot(geomN,normalize(vec3(-.45,.58,1.))));
+ float rim=pow(1.-clamp(geomN.z,0.,1.),2.05);
+ float soft=clamp(.24+v*.44+light*.36,0.,1.);
+ // Thickness exists near the silhouette only. A front-facing opaque shell
+ // cannot show a concentric inner circle without looking sliced in two.
  float shellDiffuse=clamp(shellDiffusionRatio,0.,1.);
- float pixelWidth=2.0/max(resolution.y,1.0);
- float innerFeather=max(pixelWidth*1.5,mix(.004,.023,shellDiffuse));
- float wallMask=smoothstep(innerRadius-innerFeather,innerRadius+innerFeather,d);
- float innerEdge=exp(-pow((d-innerRadius)/max(innerFeather*1.8,.008),2.));
- float innerShadow=exp(-pow((d-(innerRadius-.028))/.035,2.));
- float frontDepth=sqrt(max(radius*radius-d*d,0.));
- float innerDepth=sqrt(max(innerRadius*innerRadius-d*d,0.));
- float shellOptical=1.-exp(-max(frontDepth-innerDepth,0.)*7.0);
+ float grazing=1.-clamp(geomN.z,0.,1.);
+ float shellStart=mix(.98,.32,clamp(shellThicknessRatio,0.,1.));
+ float shellFeather=mix(.025,.14,shellDiffuse);
+ float shellRim=smoothstep(shellStart-shellFeather,shellStart+shellFeather,grazing);
+ float shellInnerEdge=4.*shellRim*(1.-shellRim);
+ float shellOptical=.45+.55*shellRim;
  vec3 base=mix(navy,primaryColor,soft);
  base=mix(base,secondaryColor,smoothstep(.33,.82,v)*.42);
  base+=mix(primaryColor,secondaryColor,micro)*mineral;
- base*=.82+.18*pow(max(n.z,0.),.55);
+ base*=.82+.18*pow(max(geomN.z,0.),.55);
  base+=cyan*currents*(.045+.19*light);
  base+=lavender*secondary*(.035+.10*v);
  base+=rimColor*rim*(.28+.30*shellOptical)*rimRatio;
  // Stable broad and sharp specular lobes, even at neutral rotation.
- float spec=pow(max(dot(n,normalize(vec3(-.38,.55,.92))),0.),12.);
- float specFine=pow(max(dot(n,normalize(vec3(.47,-.18,.91))),0.),34.);
+ float spec=pow(max(dot(geomN,normalize(vec3(-.38,.55,.92))),0.),12.);
+ float specFine=pow(max(dot(geomN,normalize(vec3(.47,-.18,.91))),0.),34.);
  base+=vec3(.88,.96,1.)*(spec*.42+specFine*.28)*shineRatio;
  float topRim=smoothstep(-.2,.8,p.y)*rim;
  base+=rimColor*topRim*.17*rimRatio;
@@ -205,14 +205,12 @@ void main(){
  base+=coreColor*(centralSource*.64+coreBloom*.62)*coreRatio;
  vec3 scatter=mix(primaryColor,secondaryColor,.4);
  base=mix(base,scatter*(.48+.44*shellOptical),shellDiffuse*.23);
- // Inner-surface wall has a physical projected boundary which moves with
- // thickness, a shaded body, a bright internal edge and interior occlusion.
- vec3 wallMaterial=mix(secondaryColor*.75+rimColor*.12,
-                       primaryColor*.88+rimColor*.27,clamp(light,0.,1.));
- float wallIllum=.62+.38*shellOptical;
- base=mix(base,wallMaterial*wallIllum,wallMask*(.85-.15*shellDiffuse));
- base*=1.-innerShadow*.37*(.35+.65*wallMask);
- base+=rimColor*innerEdge*(.27+.26*(1.-shellDiffuse));
+ // A shallow translucent layer at grazing angles implies wall depth without
+ // drawing an artificial inner hemisphere onto the front surface.
+ vec3 wallMaterial=mix(base*.72+secondaryColor*.28,
+                       base*.62+rimColor*.38,clamp(light,0.,1.));
+ base=mix(base,wallMaterial,shellRim*(.33+.20*(1.-shellDiffuse)));
+ base+=rimColor*shellInnerEdge*.10*(1.-shellDiffuse*.45);
  float shellHaze=exp(-pow((radius-d)/(.06+.04*shellDiffuse),2.));
  base+=mix(rimColor,scatter,.42)*shellHaze*shellDiffuse*.095;
  base=(base-vec3(.3))*contrastRatio+vec3(.3);
@@ -228,8 +226,8 @@ void main(){
  base+=vec3(.78,.96,1.)*arcA*1.12+vec3(.39,.77,1.)*arcB*.91+vec3(.78,.69,1.)*arcC*.88;
  base+=vec3(.49,.96,.97)*arcD*.92+vec3(.83,.94,1.)*arcE*.84;
  base+=vec3(.46,.88,1.)*arcF*.91+vec3(.70,.59,1.)*arcG*.87+vec3(.90,.98,1.)*arcH*.89;
- // Opacity belongs solely to the opacity control. Thickness changes the
- // annulus width, NOT the alpha of the shell or the whole sphere.
+ // Opacity belongs solely to opacity. Thickness changes only the narrow
+ // grazing-angle wall shading, not alpha nor a second interior disk.
  float edgeSoftness=mix(.008,.063,shellDiffuse);
  float shellFade=1.-smoothstep(radius-edgeSoftness,radius-.001,d);
  float alpha=sphereAlpha*shellFade;
@@ -372,7 +370,7 @@ void main(){
   scene.addEventListener('pointerleave',()=>{
     targetX=0;targetY=0;scheduleDraw();
   },{passive:true});
-  const resize = new ResizeObserver(()=>request());
+  const resize = new ResizeObserver(()=>scheduleDraw());
   resize.observe(canvas);
   document.addEventListener('visibilitychange',()=>{last=0;scheduleDraw();});
   reduceMotion.addEventListener('change',()=>{last=0;scheduleDraw();});
