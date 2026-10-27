@@ -76,7 +76,7 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 </svg>
 </div>
 <form class="lab-controls" aria-label="Réglages en direct de la sphère SiteForge" autocomplete="off">
-<div class="panel-head"><h2>Réglages de la sphère</h2><span class="preview-state">R144 · CANDIDATE</span></div>
+<div class="panel-head"><h2>Réglages de la sphère</h2><span class="preview-state">R145 · CANDIDATE</span></div>
 <p class="help">Réglages appliqués à la matière 3D sans recharger. L'anneau extérieur et les arcs sont indépendants de la coque.</p>
 <fieldset class="control-group"><legend>Forme et présence</legend><div class="control-row"><label class="control-label" for="sf-diameter"><span>Diamètre</span><output for="sf-diameter" data-sphere-value="diameter">100 %</output></label><input id="sf-diameter" data-sphere-control="diameter" type="range" min="50" max="150" value="100" step="1"></div>
 <div class="control-row"><label class="control-label" for="sf-opacity"><span>Opacité</span><output for="sf-opacity" data-sphere-value="opacity">100 %</output></label><input id="sf-opacity" data-sphere-control="opacity" type="range" min="0" max="100" value="100" step="1"></div></fieldset>
@@ -97,7 +97,7 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 <div class="control-row"><label class="control-label" for="sf-surfaceFlow"><span>Densité des filaments</span><output for="sf-surfaceFlow" data-sphere-value="surfaceFlow">100 %</output></label><input id="sf-surfaceFlow" data-sphere-control="surfaceFlow" type="range" min="0" max="200" value="100" step="1"></div>
 <div class="control-row"><label class="control-label" for="sf-surfaceSpeed"><span>Vitesse d’écoulement</span><output for="sf-surfaceSpeed" data-sphere-value="surfaceSpeed">100 %</output></label><input id="sf-surfaceSpeed" data-sphere-control="surfaceSpeed" type="range" min="0" max="200" value="100" step="1"></div>
 <div class="control-row"><label class="control-label" for="sf-surfaceDirection"><span>Direction du flux</span><output for="sf-surfaceDirection" data-sphere-value="surfaceDirection">0 °</output></label><input id="sf-surfaceDirection" data-sphere-control="surfaceDirection" type="range" min="0" max="360" value="0" step="1"></div>
-<p class="help">L’énergie définit la matière ; le mouvement définit sa circulation. Agitation et rotation restent indépendantes.</p></fieldset>
+<p class="help">Électrique : décharges anguleuses et ramifications sur fond sombre. Liquide : écoulements fluides. Agitation et rotation restent indépendantes.</p></fieldset>
 <fieldset class="control-group"><legend>Matière</legend><div class="control-row"><label class="control-label" for="sf-details"><span>Détails de surface</span><output for="sf-details" data-sphere-value="details">100 %</output></label><input id="sf-details" data-sphere-control="details" type="range" min="0" max="200" value="100" step="1"></div>
 <div class="control-row"><label class="control-label" for="sf-shine"><span>Brillance</span><output for="sf-shine" data-sphere-value="shine">100 %</output></label><input id="sf-shine" data-sphere-control="shine" type="range" min="0" max="200" value="100" step="1"></div>
 <div class="control-row"><label class="control-label" for="sf-contrast"><span>Contraste</span><output for="sf-contrast" data-sphere-value="contrast">100 %</output></label><input id="sf-contrast" data-sphere-control="contrast" type="range" min="50" max="150" value="100" step="1"></div></fieldset>
@@ -114,7 +114,7 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 <div class="control-row"><label class="control-label" for="sf-reliefContrast"><span>Contraste du relief</span><output for="sf-reliefContrast" data-sphere-value="reliefContrast">100 %</output></label><input id="sf-reliefContrast" data-sphere-control="reliefContrast" type="range" min="0" max="200" value="100" step="1"></div>
 <div class="control-row"><label class="control-label" for="sf-reliefDeform"><span>Déformation du contour</span><output for="sf-reliefDeform" data-sphere-value="reliefDeform">15 %</output></label><input id="sf-reliefDeform" data-sphere-control="reliefDeform" type="range" min="0" max="100" value="15" step="1"></div>
 <div class="control-row"><label class="control-label" for="sf-reliefSpeed"><span>Vitesse du relief</span><output for="sf-reliefSpeed" data-sphere-value="reliefSpeed">100 %</output></label><input id="sf-reliefSpeed" data-sphere-control="reliefSpeed" type="range" min="0" max="200" value="100" step="1"></div>
-<p class="help">Relief optique : bosses et creux éclairés. Déformation : légère irrégularité réelle du bord, sans découper la sphère.</p></fieldset>
+<p class="help">Le relief agit maintenant sur les creux, les arêtes et les ombres après l’émission lumineuse. Compare Lisse, Craquelé, Cristallin avec une forte intensité.</p></fieldset>
 <fieldset class="control-group"><legend>Couleurs de la sphère</legend><div class="color-grid">
 <div class="control-row"><label class="control-label" for="sf-primary"><span>Principale</span><output for="sf-primary" data-sphere-value="primary">#092B63</output></label><input id="sf-primary" data-sphere-control="primary" type="color" value="#092b63"></div>
 <div class="control-row"><label class="control-label" for="sf-secondary"><span>Secondaire</span><output for="sf-secondary" data-sphere-value="secondary">#1F174D</output></label><input id="sf-secondary" data-sphere-control="secondary" type="color" value="#1f174d"></div>
@@ -125,7 +125,7 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 <p class="help" data-render-status role="status" aria-live="polite">Initialisation du rendu WebGL…</p>
 <p class="help">Prévisualisation isolée. Aucun changement sur le site public ni sur Visual Observer.</p>
 </form>
-<p class="lab-footer">Moteur R116 · énergies différenciées et coque masquable R144 · aperçu expérimental SiteForge. Sur téléphone, le rendu reste fixé en haut pendant le défilement des réglages.</p>
+<p class="lab-footer">Moteur R116 · décharges ramifiées et relief visible R145 · aperçu expérimental SiteForge. Sur téléphone, le rendu reste fixé en haut pendant le défilement des réglages.</p>
 </main>
 <script src="../../assets/siteforge-r116-sphere-only.js" defer></script>
 </body>
