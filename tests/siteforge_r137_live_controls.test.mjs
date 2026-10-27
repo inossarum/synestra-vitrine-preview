@@ -7,9 +7,9 @@ const read=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
 const html=read('siteforge/core-3d-lab/index.html');
 const js=read('assets/siteforge-r116-sphere-only.js');
 const keys=['diameter','opacity','rotation','agitation','details','shine','contrast',
-  'coreLight','rimLight','diffusion','thickness','primary','secondary','core','rim'];
+  'coreLight','rimLight','diffusion','thickness','luminance','primary','secondary','core','rim'];
 
-test('R137: exactly 15 unique, labelled native browser controls, 4 colors and a reset',()=>{
+test('R137: exactly 16 unique, labelled native browser controls, 4 colors and a reset',()=>{
  const found=[...html.matchAll(/data-sphere-control="([^"]+)"/g)].map(x=>x[1]);
  assert.deepEqual(found.sort(),[...keys].sort());
  for(const key of keys) {
@@ -17,7 +17,7 @@ test('R137: exactly 15 unique, labelled native browser controls, 4 colors and a 
    assert.match(html,new RegExp('data-sphere-value="'+key+'"'));
  }
  assert.equal((html.match(/type="color"/g)||[]).length,4);
- assert.equal((html.match(/type="range"/g)||[]).length,11);
+ assert.equal((html.match(/type="range"/g)||[]).length,12);
  assert.match(html,/<button class="reset" type="reset">/);
  assert.equal((html.match(/<canvas /g)||[]).length,1);
  assert.match(html,/\.core-r108-stage\{position:sticky;top:env\(safe-area-inset-top,0px\)/);
@@ -25,7 +25,7 @@ test('R137: exactly 15 unique, labelled native browser controls, 4 colors and a 
 
 test('R137: real native WebGL shader uniforms and retina sampling replace CSS scaled resolution',()=>{
  for(const key of ['speedRatio','detailRatio','agitationRatio','shineRatio','contrastRatio',
-    'coreRatio','rimRatio','sphereAlpha','shellDiffusionRatio','shellThicknessRatio','primaryColor','secondaryColor','coreColor','rimColor']){
+    'coreRatio','rimRatio','sphereAlpha','shellDiffusionRatio','shellThicknessRatio','luminanceRatio','primaryColor','secondaryColor','coreColor','rimColor']){
    assert.match(js,new RegExp('uniform (?:vec3|float) '+key+';'));
  }
  assert.match(js,/canvas\.clientWidth, logicalHeight = canvas\.clientHeight/);
@@ -39,7 +39,7 @@ test('R137: real native WebGL shader uniforms and retina sampling replace CSS sc
 function buildFixture(){
  const u1=new Map(),u3=new Map(),events={},raf=[];
  const keysAndValues={diameter:'100',opacity:'100',rotation:'100',agitation:'100',
-   details:'100',shine:'100',contrast:'100',coreLight:'100',rimLight:'100',diffusion:'65',thickness:'45',
+   details:'100',shine:'100',contrast:'100',coreLight:'100',rimLight:'100',diffusion:'65',thickness:'45',luminance:'100',
    primary:'#092b63',secondary:'#1f174d',core:'#b8edff',rim:'#4fddff'};
  const controls=Object.fromEntries(Object.entries(keysAndValues).map(([key,value])=>
    [key,{dataset:{sphereControl:key},value,defaultValue:value,
@@ -99,6 +99,7 @@ test('R137: slider changes drive the GPU; reset returns exact UI defaults',()=>{
  assert.equal(fx.u1.get('sphereAlpha'),1);
  assert.equal(fx.u1.get('shellDiffusionRatio'),.65);
  assert.equal(fx.u1.get('shellThicknessRatio'),.45);
+ assert.equal(fx.u1.get('luminanceRatio'),1);
  assert.equal(fx.canvas.width,840);
  assert.equal(fx.css['--sphere-zoom'],'1');
  assert.match(fx.renderStatus.textContent,/WebGL actif/);
@@ -131,13 +132,13 @@ test('R137: slider changes drive the GPU; reset returns exact UI defaults',()=>{
 test('R138: all independent shader controls have shader consumers, not inert uniforms',()=>{
  const fragment=js.match(/const fragment = `([\s\S]*?)`;/)?.[1]??'';
  for(const name of ['speedRatio','detailRatio','agitationRatio','shineRatio','contrastRatio',
-  'coreRatio','rimRatio','sphereAlpha','shellDiffusionRatio','shellThicknessRatio',
+  'coreRatio','rimRatio','sphereAlpha','shellDiffusionRatio','shellThicknessRatio','luminanceRatio',
   'primaryColor','secondaryColor','coreColor','rimColor']) {
    assert.ok(fragment.includes(name),name);
    assert.ok(fragment.split(new RegExp('\\b'+name+'\\b')).length>=3,'unused shader parameter '+name);
  }
  assert.doesNotMatch(fragment,/base\+=ringCol\*\(ring\*/);
- assert.match(fragment,/float shellOptical=1\.-exp\(/);
+ assert.match(fragment,/float wallMask=smoothstep\(innerRadius-innerFeather,innerRadius\+innerFeather,d\);/);
  assert.match(fragment,/smoothstep\(-\.72,\.84/);
  assert.match(js,/scheduleDraw\(\)/);
 });
@@ -149,12 +150,12 @@ test('R138: every slider or color picker changes a distinct GPU uniform or the z
   opacity:'sphereAlpha',rotation:'speedRatio',agitation:'agitationRatio',
   details:'detailRatio',shine:'shineRatio',contrast:'contrastRatio',
   coreLight:'coreRatio',rimLight:'rimRatio',
-  diffusion:'shellDiffusionRatio',thickness:'shellThicknessRatio'
+  diffusion:'shellDiffusionRatio',thickness:'shellThicknessRatio',luminance:'luminanceRatio'
  };
  let clock=40;
  for(const [key,uniform] of Object.entries(scalar)){
    const before=fx.u1.get(uniform);
-   fx.controls[key].value=key==='diffusion'?'0':key==='thickness'?'100':key==='opacity'?'40':'150';
+   fx.controls[key].value=key==='diffusion'?'0':key==='thickness'?'100':key==='luminance'?'200':key==='opacity'?'40':'150';
    fx.events.input({target:fx.controls[key]});
    fx.next(clock+=45);
    assert.notEqual(fx.u1.get(uniform),before,key+' must update '+uniform);
@@ -176,4 +177,31 @@ test('R138: every slider or color picker changes a distinct GPU uniform or the z
  assert.equal(fx.css['--sphere-zoom'],'1');
  assert.equal(fx.u1.get('shellDiffusionRatio'),.65);
  assert.equal(fx.u1.get('shellThicknessRatio'),.45);
+});
+
+test('R139: wall thickness changes projected shell contour, not alpha or global exposure',()=>{
+ const fragment=js.match(/const fragment = `([\\s\\S]*?)`;/)?.[1]??'';
+ assert.match(fragment,/float innerRadius=radius-shellDepth;/);
+ assert.match(fragment,/float wallMask=smoothstep\\(innerRadius-innerFeather,innerRadius\\+innerFeather,d\\);/);
+ assert.match(fragment,/base=mix\\(base,wallMaterial\\*wallIllum,wallMask/);
+ assert.match(fragment,/float alpha=sphereAlpha\\*shellFade;/);
+ assert.doesNotMatch(fragment,/float alpha=[^;]*shellOptical/);
+ assert.doesNotMatch(fragment,/float alpha=[^;]*shellThicknessRatio/);
+ const r=.69, thin=r-(.012+.31*.0-.012*.0), thick=r-.31;
+ // Geometric edge position changes by almost 0.3 normalized projected units.
+ assert.ok(thin-thick>.28);
+ assert.match(fragment,/float exposure=pow\\(max\\(luminanceRatio,0\\.\\),1\\.45\\);/);
+ assert.match(fragment,/vec3 toneMapped=vec3\\(1\\.\\)-exp\\(-radiance\\*1\\.14\\);/);
+});
+test('R139: luminance can darken the whole sphere and brighten all radiance',()=>{
+ const f=buildFixture();f.next(40);
+ assert.equal(f.u1.get('luminanceRatio'),1);
+ f.controls.luminance.value='0';f.events.input({target:f.controls.luminance});
+ f.next(90);
+ assert.equal(f.u1.get('luminanceRatio'),0);
+ f.controls.luminance.value='250';f.events.input({target:f.controls.luminance});
+ f.next(140);
+ assert.equal(f.u1.get('luminanceRatio'),2.5);
+ f.events.reset({preventDefault(){}});f.next(190);
+ assert.equal(f.u1.get('luminanceRatio'),1);
 });
