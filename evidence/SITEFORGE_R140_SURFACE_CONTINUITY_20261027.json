@@ -1,0 +1,56 @@
+{
+  "schema": "synestra.siteforge.r140.surface-continuity.evidence.v1",
+  "date": "2026-10-27",
+  "mission_id": "SYN_SITEFORGE_R140_SURFACE_CONTINUITY_FIX_20261027",
+  "trigger": "Owner screenshot demonstrates apparent vertical hemisphere split on sphere surface, not outside orbit.",
+  "screenshot_sha256": "a97144296b9d88945ea1849369013b164df8880fc907c8ec0cf21132871050bc",
+  "source": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_SITEFORGE_R116_CLEAN_LAB_20261027",
+    "qa_commit": "f79b5c39518bc4549e5712cbe2a1012e8aab598a",
+    "js_sha": "426acee5ea1772631e516a411f8675a46d0a4fb7",
+    "html_sha": "e4ba5f6d613d89f2fe1a72a7fbb07517ac4943f6",
+    "test_sha": "5a960c8e04e79f8776b676058e0ca338a2835f97",
+    "baseline_commit": "3a02def61c3ca3efc082a3f1bee56a57d8c4ab14"
+  },
+  "root_cause_from_source": [
+    "R139 rotated the same projected sphere normal used for procedural texture and directional lighting, so animated hemisphere orientation also moved light and specular response on the camera-facing sphere.",
+    "R139 wallMask and innerEdge rendered a second projected interior circular boundary on the sphere's front surface."
+  ],
+  "delta": [
+    "Separately compute fixed front-facing geomN for light, rim, highlight and view-angle falloff; rotate procedural texture normal only.",
+    "Remove interior radial innerRadius/wallMask/innerEdge/innerShadow; replace with grazing-angle shellRim that vanishes from sphere front and enlarges only a smooth peripheral band as thickness increases.",
+    "Maintain opacity= sphereAlpha*shellFade and independent exposure, diffuse parameters, arcs and colors.",
+    "Fix resize handler callback from nonexistent request() to scheduleDraw()."
+  ],
+  "qa": {
+    "first_cloudflare_deployment": "e6a87552-725f-4490-9253-43cd4eced82d",
+    "first_tests": {
+      "total": 61,
+      "pass": 60,
+      "fail": 1,
+      "cause": "Outdated test expected previous light smoothstep(-.72,.84) despite new geometry lighting."
+    },
+    "corrected_commit": "f79b5c39518bc4549e5712cbe2a1012e8aab598a",
+    "second_cloudflare_deployment": "00fc92df-12d9-43de-8991-c995c237d617",
+    "second_tests": {
+      "total": 61,
+      "pass": 61,
+      "fail": 0
+    },
+    "static_export": "PASS",
+    "last_known_deployment_stage": "build_active_at_last_successful_read; final success unverified",
+    "final_deployment_read": "POLICY_DENIED by tool security controls; do not retry via alternate route to bypass",
+    "browser_webgl_screenshot": "NOT_VERIFIED",
+    "owner_acceptance": "PENDING"
+  },
+  "preview_url": "https://00fc92df.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+  "scope": [
+    "PREVIEW branch only",
+    "No production/main modification",
+    "Visual Observer in separate chat; unchanged",
+    "No paid service used"
+  ],
+  "status": "CODE_AND_CLOUDFLARE_BUILD_VERIFIED; PAGES_DEPLOY_END_AND_GPU_VISUAL_NOT_VERIFIED",
+  "function_report": "PARTIAL"
+}
