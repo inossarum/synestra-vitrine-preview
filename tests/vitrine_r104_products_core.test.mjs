@@ -117,7 +117,7 @@ test('R110: native-verified dimensional plasma shader, restrained orbit and boun
  const fragment=script.match(/const fragment = \`([\s\S]*?)\`;/)?.[1]?.trim();
  assert.ok(fragment,'R110 shader fragment absent');
  let hash=2166136261;
- for(const ch of fragment)hash=Math.imul(hash ^ ch.charCodeAt(0),16777619)>>>0;
+ for(const ch of fragment.replace(/\r\n/g,'\n'))hash=Math.imul(hash ^ ch.charCodeAt(0),16777619)>>>0;
  assert.equal(hash.toString(16),'a543602c','GLSL source fingerprint changed after R116 refined material');
  for(const term of ['noise3','turn3','ringBloom','ringFront','spiral']){
   if(term==='spiral')continue;
