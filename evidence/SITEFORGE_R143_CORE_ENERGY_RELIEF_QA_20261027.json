@@ -1,0 +1,89 @@
+{
+  "schema": "synestra.siteforge.r143.surface-energy-core-relief.evidence.v1",
+  "mission_id": "SYN_SITEFORGE_R143_SURFACE_ENERGY_RELIEF_20261027",
+  "owner": "Inos",
+  "date": "2026-10-27",
+  "objective": "Add adjustable core radius, coherent attractive 0%-agitation baseline, six energy families with independent motion and emissive controls, real optical relief and bounded silhouette displacement.",
+  "source": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_SITEFORGE_R116_CLEAN_LAB_20261027",
+    "cloudflare_tested_commit": "2f886879925455babb965f150c42498f6fb805c4",
+    "renderer_blob": "31899132587f7dcdf144dfb82ea078b128989253",
+    "html_blob": "dfe0792d7834c81bd2ad3e5de982fe8d57a998dd",
+    "tests_blob": "276e463e25c2501324b8f57d453fb917010a12a0"
+  },
+  "deliverables": {
+    "controls_total": 31,
+    "added": 15,
+    "energy_modes": [
+      "Plasma",
+      "Électrique",
+      "Liquide",
+      "Brume ionique",
+      "Fusion solaire",
+      "Cristalline"
+    ],
+    "surface_motion": [
+      "Tourbillons",
+      "Écoulement",
+      "Ondes",
+      "Courants magnétiques"
+    ],
+    "core_size": "0–200% independent of sphere radius and glow brightness",
+    "surface": [
+      "luminosité",
+      "émission",
+      "densité des filaments",
+      "vitesse",
+      "direction"
+    ],
+    "relief": [
+      "type",
+      "intensité",
+      "taille",
+      "rugosité",
+      "contraste",
+      "déformation silhouette",
+      "vitesse"
+    ],
+    "agitation_zero": "nonzero calm flow, base domain warp, slow luminous plasma veins independent of added agitation",
+    "relief_engine": "analytic optical bumpNormal changes local lighting/specular with slight silhouetteRadius displacement; not polygon mesh",
+    "retained": [
+      "one WebGL canvas",
+      "fixed geomN lighting from R140",
+      "eight original electrical arcs",
+      "Mobile sticky preview",
+      "No Visual Observer changes"
+    ]
+  },
+  "failure_first": {
+    "first_attempt_deployment": "0976f147-63aa-4748-818f-8d2e6f9cbacc",
+    "first_attempt_result": "FAIL: one mocked packed-GPU-vector test asserted exact Float32 values",
+    "correction": "float32 tolerance for scalar vector defaults",
+    "retest_deployment": "ee82b2c5-54ad-416e-88f5-1a7a50ba6ae2"
+  },
+  "verification": {
+    "deployment_id": "ee82b2c5-54ad-416e-88f5-1a7a50ba6ae2",
+    "url": "https://ee82b2c5.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+    "environment": "preview",
+    "cloudflare_build": "SUCCESS",
+    "cloudflare_deploy": "SUCCESS",
+    "node_tests": 58,
+    "node_pass": 58,
+    "node_fail": 0,
+    "static_export": "PASS",
+    "actual_browser_GPU_shader_compile": "NOT_VERIFIED",
+    "actual_mobile_pixel_quality": "NOT_VERIFIED",
+    "browser_frame_perf": "NOT_VERIFIED",
+    "real_relf_mesh": "NOT_IMPLEMENTED"
+  },
+  "authority": {
+    "production_deployments_enabled": false,
+    "preview_branch_allowlisted": true,
+    "free_only": true,
+    "main_unchanged": true,
+    "observer_owned_elsewhere": true
+  },
+  "rollback": "https://2af9bda5.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+  "status": "PREVIEW_DEPLOYED_TESTS_PASS; REAL_GPU_AND_FIDELITY_QA_PENDING"
+}
