@@ -141,3 +141,39 @@ test('R138: all independent shader controls have shader consumers, not inert uni
  assert.match(fragment,/smoothstep\(-\.72,\.84/);
  assert.match(js,/scheduleDraw\(\)/);
 });
+
+test('R138: every slider or color picker changes a distinct GPU uniform or the zoom',()=>{
+ const fx=buildFixture();
+ fx.next(40);
+ const scalar={
+  opacity:'sphereAlpha',rotation:'speedRatio',agitation:'agitationRatio',
+  details:'detailRatio',shine:'shineRatio',contrast:'contrastRatio',
+  coreLight:'coreRatio',rimLight:'rimRatio',
+  diffusion:'shellDiffusionRatio',thickness:'shellThicknessRatio'
+ };
+ let clock=40;
+ for(const [key,uniform] of Object.entries(scalar)){
+   const before=fx.u1.get(uniform);
+   fx.controls[key].value=key==='diffusion'?'0':key==='thickness'?'100':key==='opacity'?'40':'150';
+   fx.events.input({target:fx.controls[key]});
+   fx.next(clock+=45);
+   assert.notEqual(fx.u1.get(uniform),before,key+' must update '+uniform);
+ }
+ for(const [key,uniform] of Object.entries({
+  primary:'primaryColor',secondary:'secondaryColor',core:'coreColor',rim:'rimColor'
+ })){
+   const before=fx.u3.get(uniform).join(',');
+   fx.controls[key].value='#ffaa11';
+   fx.events.input({target:fx.controls[key]});
+   fx.next(clock+=45);
+   assert.notEqual(fx.u3.get(uniform).join(','),before,key+' must update '+uniform);
+ }
+ fx.controls.diameter.value='125';
+ fx.events.input({target:fx.controls.diameter});
+ assert.equal(fx.css['--sphere-zoom'],'1.25');
+ fx.events.reset({preventDefault(){}});
+ fx.next(clock+=45);
+ assert.equal(fx.css['--sphere-zoom'],'1');
+ assert.equal(fx.u1.get('shellDiffusionRatio'),.65);
+ assert.equal(fx.u1.get('shellThicknessRatio'),.45);
+});
