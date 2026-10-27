@@ -192,9 +192,9 @@ void main(){
     // Logarithmic spiral filaments in a rotating three-dimensional volume.
     float winding=angle*5.0+5.8*log(planar+.15)-t*.52
                   +q.z*2.6+depthWarp*1.35;
-    float spiral=pow(max(0.,.5+.5*cos(winding)),10.);
+    float spiral=pow(max(0.,.5+.5*cos(winding)),6.);
     float sideFilament=pow(max(0.,.5+.5*cos(winding*1.8+detail*3.2)),25.);
-    float stream=pow(max(0.,.5+.5*cos(winding*.78-q.z*7.2)),13.);
+    float stream=pow(max(0.,.5+.5*cos(winding*.78-q.z*7.2)),8.);
     float volumeFog=clamp(.23+.30*broad+.18*detail,0.,1.);
     float hollow=1.-smoothstep(.2,.83,abs(broad-detail)*2.0);
     float interior=1.-smoothstep(.83,1.0,distance3D);
@@ -216,7 +216,8 @@ void main(){
                    core*.69+coreHalo*.11)*interior;
     float absorption=clamp(density*stride*5.2,0.,.49);
     vec3 blue=mix(uDeep*.65,uViolet*.69,clamp(distance3D*.72+broad*.42,0.,1.));
-    vec3 ion=mix(uCyan,uViolet,.17+.48*clamp(detail*.65+distance3D*.28,0.,1.));
+    float violetBand=.5+.5*sin(angle*2.7+q.z*4.0+broad*2.2);
+    vec3 ion=mix(uCyan,uViolet,clamp(.12+.72*violetBand,0.,1.));
     vec3 filamentColor=mix(blue,ion,clamp(currents*.83+.11,0.,1.));
     vec3 radiance=filamentColor*(.50+currents*1.05)
                   +uCyan*coreHalo*.50
@@ -251,6 +252,7 @@ void main(){
  }
  float halo=exp(-r2*3.1),hot=exp(-r2*14.);
  float energy=(uLayer<.5?halo*.26:hot*1.13+halo*.13)*vLife*vGlint;
+ if(uPass>.5&&uPass<1.5)energy*=.28; // atmosphere, not dot noise
  float bound=1.-smoothstep(radius*.95,radius*1.035,length(p));
  energy*=bound*clamp(uEffects.w,0.,1.);
  if(uPass>2.5)energy*=pow(max(uShape.w,0.),1.55)*1.62;
