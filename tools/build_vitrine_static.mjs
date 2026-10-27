@@ -1,6 +1,6 @@
 // Synestra R102 — Cloudflare Pages build. Only approved static assets.
 // No shell, network, npm install, secrets or broad repository publication.
-import {lstatSync,existsSync,mkdirSync,readdirSync,copyFileSync} from 'node:fs';
+import {lstatSync,existsSync,mkdirSync,readdirSync,copyFileSync,readFileSync} from 'node:fs';
 import {join,resolve,extname} from 'node:path';
 import {fileURLToPath} from 'node:url';
 const root=resolve(fileURLToPath(new URL('../',import.meta.url)));
@@ -52,6 +52,17 @@ if(!checkOnly){
   mkdirSync(resolve(dest,'..'),{recursive:true});
   copyFileSync(file.abs,dest);
  }
+}
+// Isolated design-review preview: Cloudflare must serve the R169 palette candidate
+// at / only on its exact review branch. Never alter main or other preview branches.
+const studioReviewBranch='task/SYN_VITRINE_R169_OFFICIAL_PALETTE_REVIEW_20261028';
+if(process.env.CF_PAGES_BRANCH===studioReviewBranch){
+ const candidate=join(root,'vitrine-r169-studio-palette-preview.html');
+ if(!existsSync(candidate)||!lstatSync(candidate).isFile()||lstatSync(candidate).isSymbolicLink())throw Error('R169_REVIEW_SOURCE_MISSING');
+ const html=readFileSync(candidate,'utf8');
+ if(!html.includes('R169 brand-palette REVIEW ONLY')||!html.includes('syn-r169-room')||!html.includes('scale(.49)!important'))throw Error('R169_REVIEW_CONTRACT_FAILED');
+ if(!checkOnly)copyFileSync(candidate,join(output,'index.html'));
+ console.log('SYNESTRA_R169_STUDIO_BRAND_PREVIEW='+ (checkOnly?'CHECK_PASS':'PASS'));
 }
 console.log('SYNESTRA_STATIC_EXPORT='+(checkOnly?'CHECK_PASS':'PASS'));
 console.log('SYNESTRA_STATIC_FILE_COUNT='+files.length);
