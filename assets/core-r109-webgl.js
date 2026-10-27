@@ -137,40 +137,7 @@ float r111Arc(vec2 p,float index,float seconds) {
   return awake*envelope*(body*filament+fork+front);
 }
 
-// R119: each of the three inclined gyros rotates around its own fixed 3D axis.
-// Rodrigues rotations preserve the normal, producing stable front/back occlusion.
-vec4 metalGyro(vec2 p,float seconds,float slot,out float zpos) {
- float speed=slot<1.5?6.283185/13.:(slot<2.5?-6.283185/17.:6.283185/20.);
- float phase=slot<1.5?-.64:(slot<2.5?1.24:2.37);
- float spin=seconds*speed+phase;
- vec3 axis=normalize(slot<1.5?vec3(.90,.10,.42):(slot<2.5?vec3(-.45,.82,.35):vec3(.60,-.75,.29)));
- vec3 baseNormal=normalize(slot<1.5?vec3(.86,.22,.46):(slot<2.5?vec3(-.58,.71,.42):vec3(.72,-.62,.33)));
- vec3 plane=normalize(baseNormal*cos(spin)+cross(axis,baseNormal)*sin(spin)
-                       +axis*dot(axis,baseNormal)*(1.-cos(spin)));
- zpos=-(p.x*plane.x+p.y*plane.y)/plane.z;
- float nominal=slot<1.5?.87:(slot<2.5?.97:1.08);
- float edge=abs(length(vec3(p,zpos))-nominal);
- float tubeIn=slot<1.5?.029:(slot<2.5?.027:.024);
- float tubeOut=slot<1.5?.064:(slot<2.5?.061:.059);
- float body=1.-smoothstep(tubeIn,tubeOut,edge);
- float bevel=(1.-smoothstep(tubeOut*.83,tubeOut*1.31,edge))*.15;
- float opacity=clamp(body*.89+bevel,0.,.98);
- float brush=.5+.5*sin(atan(p.y,p.x)*37.+seconds*speed*3.2);
- float sheen=clamp(.34+.35*pow(brush,6.),0.,1.);
- vec3 darkMetal=slot<1.5?vec3(.20,.27,.34):(slot<2.5?vec3(.23,.28,.33):vec3(.22,.25,.29));
- vec3 lightMetal=slot<1.5?vec3(.66,.74,.79):(slot<2.5?vec3(.73,.79,.82):vec3(.67,.72,.76));
- vec3 titanium=mix(darkMetal,lightMetal,sheen);
- titanium+=vec3(.07,.08,.09)*(1.-smoothstep(tubeIn*.6,tubeOut,edge));
- return vec4(titanium,opacity);
-}
-// Three compare/swap passes sort every pixel back to front.
-void orderGyros(inout vec4 m0,inout vec4 m1,inout vec4 m2,
-                inout float z0,inout float z1,inout float z2) {
- if(z0>z1){float tz=z0;z0=z1;z1=tz;vec4 tm=m0;m0=m1;m1=tm;}
- if(z1>z2){float tz=z1;z1=z2;z2=tz;vec4 tm=m1;m1=m2;m2=tm;}
- if(z0>z1){float tz=z0;z0=z1;z1=tz;vec4 tm=m0;m0=m1;m1=tm;}
-}
-
+// R119: version électrique sans anneaux, huit décharges conservées.
 void main(){
  vec2 p=(uv-.5)*2.;
  p.x*=resolution.x/max(resolution.y,1.);
@@ -178,11 +145,6 @@ void main(){
  float radius=.53;
  float d=length(p);
  float t=time*.28;
- float metalDepthA=0.,metalDepthB=0.,metalDepthC=0.;
- vec4 metalA=metalGyro(p,time,1.,metalDepthA);
- vec4 metalB=metalGyro(p,time,2.,metalDepthB);
- vec4 metalC=metalGyro(p,time,3.,metalDepthC);
- orderGyros(metalA,metalB,metalC,metalDepthA,metalDepthB,metalDepthC);
  float aura=exp(-pow(d/.88,2.)*3.0);
  vec3 cyan=vec3(.31,.87,1.);
  vec3 lavender=vec3(.64,.47,1.);
@@ -191,12 +153,7 @@ void main(){
  vec3 outside=backdrop*aura*.055;
  float outsideA=clamp(aura*.065,0.,.22);
  if(d>radius){
-   // Gimbal fragments outside the sphere show both front and back metallic arcs.
-   outside=mix(outside,metalA.rgb,metalA.a);
-   outside=mix(outside,metalB.rgb,metalB.a);
-   outside=mix(outside,metalC.rgb,metalC.a);
-   outsideA=clamp(outsideA+metalA.a+metalB.a+metalC.a,0.,1.);
-   gl_FragColor=vec4(outside,outsideA);return;
+  gl_FragColor=vec4(outside,outsideA);return;
  }
  vec3 n=vec3(p,sqrt(max(radius*radius-dot(p,p),0.)))/radius;
  n=turn3(n,tilt+vec2(sin(t*.23)*.15,cos(t*.18)*.08));
@@ -235,16 +192,6 @@ void main(){
  base+=vec3(.46,.88,1.)*arcF*.91+vec3(.70,.59,1.)*arcG*.87+vec3(.90,.98,1.)*arcH*.89;
  float shellFade=1.-smoothstep(radius*.977,radius,d);
  float alpha=clamp(.96+rim*.04,0.,1.)*shellFade;
- // Only sections with z in front of the sphere are composited above the plasma.
- float sphereFrontZ=sqrt(max(radius*radius-d*d,0.));
- float frontA=metalA.a*step(sphereFrontZ+.01,metalDepthA);
- float frontB=metalB.a*step(sphereFrontZ+.01,metalDepthB);
- float frontC=metalC.a*step(sphereFrontZ+.01,metalDepthC);
- base=mix(base,metalA.rgb,frontA);
- base=mix(base,metalB.rgb,frontB);
- base=mix(base,metalC.rgb,frontC);
- // Foreground metal stays visible at the sphere rim rather than fading with shell alpha.
- alpha=clamp(alpha+max(max(frontA,frontB),frontC)*(1.-alpha),0.,1.);
  gl_FragColor=vec4(clamp(base,0.,1.),alpha);
 }`;
 
