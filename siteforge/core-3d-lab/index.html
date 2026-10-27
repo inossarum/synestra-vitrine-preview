@@ -2,143 +2,74 @@
 <html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self' blob:; base-uri 'none'; frame-ancestors 'none'; form-action 'none'">
-<title>Synestra — SiteForge 3D R129 · sphère électrique maillée</title>
+<title>Synestra — SiteForge · Atelier électrique R119 sans anneaux</title>
 <style>
-:root{color-scheme:dark;font-family:system-ui,Arial,sans-serif;background:#050b17;color:#d4e8fa}
-*{box-sizing:border-box}body{margin:0;padding:24px 14px;background:radial-gradient(ellipse at 50% 20%,#0c1b38,#050b17 65%);min-height:100vh}
-main{max-width:1080px;margin:auto}a{color:#9eeaff}a:focus-visible{outline:3px solid white;outline-offset:4px}
-h1{font-size:clamp(1.1rem,3vw,1.65rem);margin:1rem 0 .55rem}p{color:#aec3d8;line-height:1.55;margin:0 0 1rem}
-.status{font:.76rem/1.6 ui-monospace,monospace;color:#b0d9f0;text-transform:uppercase;letter-spacing:.08em}
-.core-r108-stage{position:relative;isolation:isolate;border:1px solid #294261;background:radial-gradient(circle at 50% 48%,#091b36,#040a15 70%);border-radius:20px;overflow:hidden;height:min(68vw,640px);min-height:320px}
-.core-r109-canvas,.core-r122-metal-canvas{position:absolute;inset:0;display:block;width:100%;height:100%;opacity:0;pointer-events:none;transition:opacity .25s linear}
+:root{color-scheme:dark;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#050b17;color:#e5f6ff}*{box-sizing:border-box}
+body{margin:0;min-height:100vh;padding:clamp(12px,3vw,34px);background:radial-gradient(ellipse at 50% 8%,#112348,#050b17 65%)}
+main{max-width:1120px;margin:0 auto}a{color:#a5ecff}a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid white;outline-offset:4px}
+h1{font-size:clamp(1.45rem,3vw,2.1rem);margin:.65rem 0}h2{font-size:1.2rem;margin:.15rem 0 .9rem}
+p{color:#afc9de;line-height:1.55}.eyebrow{letter-spacing:.14em;color:#8aeaff;text-transform:uppercase;font:700 .73rem ui-monospace,monospace}
+.stage-wrap{border:1px solid #294668;border-radius:20px;background:#040c1b;overflow:hidden}
+.core-r108-stage{height:clamp(340px,54vw,660px);min-height:340px;position:relative;overflow:hidden;background:radial-gradient(ellipse at center,#0e2445,#030816 73%);isolation:isolate}
+.core-r109-canvas{display:block;position:absolute;inset:0;width:100%;height:100%;opacity:0;transition:opacity .2s;pointer-events:none}
 .core-r108-stage[data-core-ready="true"] .core-r109-canvas{opacity:1}
-.core-r108-stage[data-core-ready="true"][data-metal-ready="true"] .core-r122-metal-canvas{opacity:1}
-/* Once R127 is ready, conceal obsolete and uneditable R121 screen-space arcs. */
-.core-r108-stage[data-metal-ready="true"] .core-r109-canvas{opacity:0}
 .fallback{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none}
-.fallback .orb{width:min(35%,220px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 48% 52%,white 0%,#a4faff 5%,#169dda 17%,#15378f 48%,#081535 75%);box-shadow:0 0 48px #125fbe50;border:1px solid #a8dfff}
+.fallback .orb{width:min(41%,230px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 37% 29%,#ffffff 0%,#a6f9ff 6%,#15a7e2 23%,#2a4b9a 52%,#0a1434 83%);border:1px solid #a8ecff;box-shadow:0 0 42px #1672d455}
 .core-r108-stage[data-core-ready="true"] .fallback{opacity:0}
-.fallback-note{text-align:center;margin:1rem auto;max-width:52rem;font-size:.9rem}
-@media(prefers-reduced-motion:reduce){.core-r109-canvas,.core-r122-metal-canvas{transition:none!important}}
-
-.sf3d-comparison{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;align-items:start}
-.sf3d-comparison:has(.sf3d-reference:not([hidden])){grid-template-columns:repeat(2,minmax(0,1fr))}
-.sf3d-reference[hidden],.sf3d-reference img[hidden]{display:none!important}
-.sf3d-preview-panel,.sf3d-reference{min-width:0;margin:0}
-.sf3d-reference{border:1px solid #294261;background:#09172a;border-radius:20px;overflow:hidden}
-.sf3d-reference img{width:100%;height:min(68vw,640px);min-height:320px;object-fit:contain;display:block}
-.sf3d-preview-caption{margin:.2rem;padding:.3rem;color:#b8ddf0;font:.78rem/1.5 ui-monospace,monospace}
-@media(max-width:760px){.sf3d-comparison:has(.sf3d-reference:not([hidden])){grid-template-columns:1fr}.sf3d-reference img{height:300px;min-height:0}}
-.sf3d-panel{margin:1.25rem 0;padding:clamp(1rem,3vw,1.5rem);border:1px solid #35516d;border-radius:18px;background:linear-gradient(155deg,#0b182d,#0e2039)}
-.sf3d-panel h2{margin:0 0 .6rem;font-size:1.28rem;color:#ebf7ff}.sf3d-panel p{color:#bdd1e2}
-.sf3d-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
-.sf3d-subpanel{grid-column:1/-1;border:1px solid #46607b;border-radius:14px;padding:1rem;min-width:0;background:#081629}.sf3d-subpanel legend{font-weight:750;color:#bfeeff;padding:0 .45rem}.sf3d-subfields{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem}.sf3d-fields label{display:flex;flex-direction:column;gap:.45rem;color:#e7f4ff;font-weight:650;font-size:.9rem}
-.sf3d-fields output{display:inline-block;align-self:start;padding:.15rem .5rem;border-radius:5px;background:#1a3550;font:600 .85rem ui-monospace,monospace;color:#bcf0ff}
-.sf3d-fields input[type=color]{width:100%;height:42px;min-height:42px;padding:2px;border:1px solid #667d9a;background:#142b43;border-radius:8px;cursor:pointer}.sf3d-fields input[type=range]{width:100%;accent-color:#83dfff;min-height:28px}
-.sf3d-fields select{background:#142b43;color:#fff;border:1px solid #647c92;border-radius:7px;padding:.65rem}
-.sf3d-actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.15rem;align-items:center}
-.sf3d-actions button,.sf3d-import{cursor:pointer;border:1px solid #5b7893;border-radius:8px;background:#1b3954;color:#e9f5ff;font:600 .86rem system-ui;padding:.75rem .95rem}
-.sf3d-actions button:hover,.sf3d-import:hover{background:#275574}
-.sf3d-import input{display:block;max-width:220px;font-size:.7rem;margin-top:.45rem}
-.sf3d-actions button:focus-visible,.sf3d-fields input:focus-visible,.sf3d-fields select:focus-visible,.sf3d-import:focus-within{outline:3px solid #e6fdff;outline-offset:3px}
-.sf3d-status{min-height:1.8em;font-size:.85rem}.sf3d-status[data-state=ready]{color:#a4eec8}.sf3d-status[data-state=error]{color:#ffb5b5}.sf3d-limit{font-size:.8rem}
-
-</style></head><body><main>
+.comparison{display:grid;grid-template-columns:minmax(0,1fr);gap:18px}.comparison:has(.reference:not([hidden])){grid-template-columns:repeat(2,minmax(0,1fr))}
+.reference[hidden],.reference img[hidden]{display:none!important}.reference{margin:0;border:1px solid #32506f;background:#07182c;border-radius:18px;overflow:hidden}
+.reference img{display:block;width:100%;height:clamp(340px,54vw,660px);object-fit:contain}.caption{padding:.6rem 1rem;background:#0c1b32;color:#abcee2;font:600 .78rem ui-monospace,monospace}
+.panel{margin:20px 0;border:1px solid #355470;border-radius:17px;padding:clamp(16px,2.6vw,25px);background:linear-gradient(150deg,#102038,#0a172a)}
+.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:17px}.controls label{display:flex;flex-direction:column;gap:9px;font-size:.87rem;font-weight:600}
+.controls output{color:#83dcf9;font:600 .8rem ui-monospace,monospace}.controls input[type=range]{width:100%;accent-color:#72d5fc;min-height:28px}
+.controls input[type=color]{width:100%;height:40px;background:#102942;border:1px solid #647f9b;border-radius:7px}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin:19px 0 0}.actions button,.actions label{display:inline-flex;flex-direction:column;justify-content:center;gap:5px;cursor:pointer;min-height:42px;border:1px solid #4e7191;border-radius:9px;background:#163957;color:#e4f6ff;font:600 .85rem system-ui;padding:9px 13px}
+.actions button:hover{background:#21557a}.actions input[type=file]{font-size:.7rem;max-width:215px}
+.status{font:.8rem/1.55 ui-monospace,monospace;color:#a3d9e8;min-height:1.8rem}.status[data-state=error]{color:#ffb5b5}
+.note{font-size:.82rem;color:#b1c2d2}
+@media(max-width:780px){.comparison:has(.reference:not([hidden])){grid-template-columns:1fr}.reference img{height:330px}}
+@media(prefers-reduced-motion:reduce){.core-r109-canvas{transition:none!important}}
+</style></head>
+<body><main>
 <a href="../../">Retour à SiteForge</a>
-<h1>SiteForge — Atelier 3D</h1>
-<p class="status">R129 · noyau électrique volumétrique 3D · éclairs ramifiés · trois anneaux métalliques · anneaux 360° · microfacet GGX anisotrope, métal imparfait · noyau lumineux et énergie éditable · QA visuelle en attente</p>
-<div class="sf3d-comparison">
- <div class="sf3d-preview-panel">
-  <p class="sf3d-preview-caption">Scène 3D construite</p>
-  <div class="core-r108-stage" role="img" aria-label="Laboratoire expérimental : trois anneaux métalliques tridimensionnels autour d'une sphère électrique.">
- <div class="fallback"><div class="orb"></div></div>
- <canvas class="core-r109-canvas" width="1100" height="720" aria-hidden="true"></canvas>
- <canvas class="core-r122-metal-canvas" width="1100" height="720" aria-hidden="true"></canvas>
-  </div>
- </div>
- <figure id="sf3d-reference" class="sf3d-reference" hidden>
-  <figcaption class="sf3d-preview-caption">Référence visuelle · image locale</figcaption>
-  <img id="sf3d-reference-image" alt="Image utilisée comme référence esthétique" hidden>
- </figure>
+<p class="eyebrow">SiteForge / laboratoire Web 3D / R131</p>
+<h1>Sphère électrique R119 — sans anneaux</h1>
+<p>Référence visuelle R119 conservée. Les huit décharges, leur trajectoire, la surface plasma et leur rythme sont ceux de la version originale. Aucun nouvel éclair ni shader électrique R129.</p>
+<div class="comparison"><div class="stage-wrap">
+<div class="caption">Scène · moteur électrique R119</div>
+<div class="core-r108-stage" role="img" aria-label="Sphère énergétique cyan et violette R119, huit décharges électriques animées, aucun anneau.">
+<div class="fallback"><div class="orb"></div></div>
+<canvas class="core-r109-canvas" width="1100" height="720" aria-hidden="true"></canvas>
+</div></div>
+<figure class="reference" id="sf3d-reference" hidden><figcaption class="caption">Image de référence locale</figcaption><img id="sf3d-reference-image" alt="Image de comparaison choisie sur cet appareil" hidden></figure>
 </div>
-<p class="sf3d-status" id="sf3d-status" role="status" aria-live="polite">Initialisation du moteur graphique…</p>
-<p class="sf3d-status">Le cœur comporte une enveloppe 3D de 9 216 triangles (27 648 sommets) et un petit émetteur maillé central. Huit éclairs fins se déploient dans le volume XYZ. Nature, couleur, nombre, vitesse et forme sont indépendants. Les trois anneaux font une rotation 360° sur trois axes (13/17/20 s). Métal microfacet GGX anisotrope, défauts procéduraux et éclairage central dépendant du noyau. La lueur est analytique : elle ne constitue pas une certification visuelle AAA.</p>
-<p class="fallback-note">Si seule la sphère apparaît, l'animation 3D est indisponible ou le mouvement réduit est activé sur cet appareil. Ce laboratoire n'est pas une validation du rendu final.</p>
-
-<section class="sf3d-panel" aria-labelledby="sf3d-panel-title">
- <h2 id="sf3d-panel-title">Atelier de scène 3D</h2>
- <p>Charge une image de référence, compare-la à la scène 3D, affine les matériaux et exporte la configuration. L'image n'est pas envoyée au serveur.</p>
- <form id="sf3d-controls" class="sf3d-fields">
-   <label>Largeur de la face (avant/arrière) <output id="sf3d-out-width" for="sf3d-width">1.00</output><input id="sf3d-width" type="range" name="width" min=".15" max="5" step=".05" value="1.00"></label>
-   <label>Épaisseur radiale du métal <output id="sf3d-out-depth" for="sf3d-depth">1.00</output><input id="sf3d-depth" type="range" name="depth" min=".15" max="5" step=".05" value="1.00"></label>
-   <label>Vitesse <output id="sf3d-out-speed" for="sf3d-speed">1.00</output><input id="sf3d-speed" type="range" name="speed" min="0" max="3" step="0.1" value="1"></label>
-   <label>Orientation horizontale <output id="sf3d-out-yaw" for="sf3d-yaw">0</output><input id="sf3d-yaw" type="range" name="yaw" min="-55" max="55" step="5" value="0"></label>
-   <label>Orientation verticale <output id="sf3d-out-pitch" for="sf3d-pitch">0</output><input id="sf3d-pitch" type="range" name="pitch" min="-55" max="55" step="5" value="0"></label>
-<fieldset class="sf3d-subpanel"><legend>Matériau des anneaux — microstructure et reflets</legend><div class="sf3d-subfields">
-   <label>Rugosité métallique <output id="sf3d-out-roughness" for="sf3d-roughness">0.30</output><input id="sf3d-roughness" type="range" name="roughness" min=".06" max="1" step=".02" value=".30"></label>
-   <label>Reflets dorés <output id="sf3d-out-warmth" for="sf3d-warmth">0.62</output><input id="sf3d-warmth" type="range" name="warmth" min="0" max="1" step=".02" value=".62"></label>
-   <label>Exposition <output id="sf3d-out-exposure" for="sf3d-exposure">1.00</output><input id="sf3d-exposure" type="range" name="exposure" min=".6" max="1.7" step=".05" value="1"></label>
-   <label>Finition métallique <output id="sf3d-out-material">steel</output>
-    <select name="material" id="sf3d-material"><option value="steel">Acier brossé</option><option value="graphite">Graphite</option><option value="gold">Or brossé</option></select>
-   </label>
-<label>Anisotropie / brossage <output id="sf3d-out-anisotropy" for="sf3d-anisotropy">.62</output><input id="sf3d-anisotropy" type="range" name="anisotropy" min="0" max="1" step=".02" value=".62"></label>
-<label>Imperfections micro-surface <output id="sf3d-out-imperfection" for="sf3d-imperfection">.38</output><input id="sf3d-imperfection" type="range" name="imperfection" min="0" max="1" step=".02" value=".38"></label>
-<label>Micro-rayures <output id="sf3d-out-scratches" for="sf3d-scratches">.42</output><input id="sf3d-scratches" type="range" name="scratches" min="0" max="1" step=".02" value=".42"></label>
-<label>Usure des chanfreins <output id="sf3d-out-edgeWear" for="sf3d-edgeWear">.24</output><input id="sf3d-edgeWear" type="range" name="edgeWear" min="0" max="1" step=".02" value=".24"></label>
-</div></fieldset>
- <fieldset class="sf3d-subpanel"><legend>Énergie — émission centrale et impulsions</legend><div class="sf3d-subfields">
-<label>Type d'énergie <output id="sf3d-out-energyType">electric</output><select name="energyType" id="sf3d-energyType"><option value="plasma">Plasma</option><option value="electric">Électricité</option><option value="arc">Arcs</option><option value="vortex">Vortex</option><option value="nebula">Nébuleuse</option><option value="flame">Flamme</option><option value="crystalline">Cristalline</option><option value="quantum">Quantique</option></select></label>
-
-<label>Nature des décharges <output id="sf3d-out-pulseNature">electric</output>
-<select name="pulseNature" id="sf3d-pulseNature">
-<option value="electric">Décharges électriques</option><option value="plasma">Jets de plasma</option><option value="filament">Filaments subtils</option>
-<option value="ribbon">Rubans lumineux</option><option value="particles">Essaim particulaire</option><option value="shockwave">Onde de choc</option>
-<option value="crystalline">Éclats cristallins</option><option value="wisps">Volutes diffuses</option></select></label>
-<label>Qualité graphique <output id="sf3d-out-quality">balanced</output><select name="quality" id="sf3d-quality">
-<option value="eco">Éco · mobile</option><option value="balanced" selected>Équilibrée · site web</option><option value="high">Détaillée · ordinateur</option></select></label>
-<label>Amplitude spatiale Z <output id="sf3d-out-depthSpread" for="sf3d-depthSpread">1</output><input id="sf3d-depthSpread" type="range" name="depthSpread" min=".15" max="1" step=".05" value="1"></label>
-<label>Dispersion <output id="sf3d-out-spread" for="sf3d-spread">.6</output><input id="sf3d-spread" type="range" name="spread" min="0" max="2" step=".05" value=".6"></label>
-<label>Ramifications <output id="sf3d-out-branching" for="sf3d-branching">.4</output><input id="sf3d-branching" type="range" name="branching" min="0" max="1" step=".05" value=".4"></label>
-<label>Torsion / hélice <output id="sf3d-out-twist" for="sf3d-twist">.5</output><input id="sf3d-twist" type="range" name="twist" min="0" max="3" step=".1" value=".5"></label>
-<label>Scintillement <output id="sf3d-out-flicker" for="sf3d-flicker">.25</output><input id="sf3d-flicker" type="range" name="flicker" min="0" max="1" step=".05" value=".25"></label>
-<label>Longueur des arcs <output id="sf3d-out-pulseLength" for="sf3d-pulseLength">1</output><input id="sf3d-pulseLength" type="range" name="pulseLength" min=".2" max="1.4" step=".05" value="1"></label>
-<label>Taille du cœur <output id="sf3d-out-coreRadius" for="sf3d-coreRadius">1</output><input id="sf3d-coreRadius" type="range" name="coreRadius" min=".55" max="1.18" step=".05" value="1"></label>
-<label>Variation de l’énergie (graine) <output id="sf3d-out-seed" for="sf3d-seed">7</output><input id="sf3d-seed" type="range" name="seed" min="0" max="999" step="1" value="7"></label>
-
-<label>Trajectoire des impulsions <output id="sf3d-out-pulseType">branching</output><select name="pulseType" id="sf3d-pulseType"><option value="radial">Radiale</option><option value="spiral">Spirale</option><option value="branching">Ramifiée</option><option value="wave">Onde</option><option value="burst">Salve</option><option value="orbiting">Orbitale</option></select></label>
-<label>Couleur primaire <output id="sf3d-out-primaryColor">#50deff</output><input id="sf3d-primaryColor" type="color" name="primaryColor" value="#50deff"></label>
-<label>Couleur secondaire <output id="sf3d-out-secondaryColor">#a378ff</output><input id="sf3d-secondaryColor" type="color" name="secondaryColor" value="#a378ff"></label>
-<label>Couleur des arcs <output id="sf3d-out-pulseColor">#d3f8ff</output><input id="sf3d-pulseColor" type="color" name="pulseColor" value="#d3f8ff"></label>
-<label>Lueur du noyau <output id="sf3d-out-glowColor">#c0f5ff</output><input id="sf3d-glowColor" type="color" name="glowColor" value="#c0f5ff"></label>
-<label>Nombre d'impulsions <output id="sf3d-out-pulseCount" for="sf3d-pulseCount">8</output><input id="sf3d-pulseCount" type="range" name="pulseCount" min="1" max="16" step="1" value="8"></label>
-<label>Vitesse énergétique <output id="sf3d-out-energySpeed" for="sf3d-energySpeed">1</output><input id="sf3d-energySpeed" type="range" name="energySpeed" min="0" max="3" step=".1" value="1"></label>
-<label>Amplitude <output id="sf3d-out-amplitude" for="sf3d-amplitude">1</output><input id="sf3d-amplitude" type="range" name="amplitude" min="0" max="2" step=".05" value="1"></label>
-<label>Épaisseur des arcs <output id="sf3d-out-thickness" for="sf3d-thickness">.65</output><input id="sf3d-thickness" type="range" name="thickness" min=".1" max="2" step=".05" value=".65"></label>
-<label>Turbulence <output id="sf3d-out-turbulence" for="sf3d-turbulence">.48</output><input id="sf3d-turbulence" type="range" name="turbulence" min="0" max="2" step=".05" value=".48"></label>
-<label>Chaos <output id="sf3d-out-chaos" for="sf3d-chaos">.25</output><input id="sf3d-chaos" type="range" name="chaos" min="0" max="1" step=".05" value=".25"></label>
-<label>Halo énergétique <output id="sf3d-out-glow" for="sf3d-glow">1.1</output><input id="sf3d-glow" type="range" name="glow" min="0" max="2" step=".05" value="1.1"></label>
-<label>Densité <output id="sf3d-out-density" for="sf3d-density">1</output><input id="sf3d-density" type="range" name="density" min="0.1" max="2" step=".05" value="1"></label>
-<label>Intensité du noyau <output id="sf3d-out-coreIntensity" for="sf3d-coreIntensity">1.35</output><input id="sf3d-coreIntensity" type="range" name="coreIntensity" min="0" max="3" step=".05" value="1.35"></label>
- </div></fieldset>
- </form>
- <div class="sf3d-actions">
-   <button type="button" data-sf3d-preset="electric">⚡ Orage spatial</button>
-   <button type="button" data-sf3d-preset="plasma">Plasma fluide</button>
-   <button type="button" data-sf3d-preset="quantum">Vortex quantique</button>
-   <button type="button" data-sf3d-preset="crystal">Cristal énergétique</button>
-   <label class="sf3d-import" for="sf3d-reference-input">Comparer avec une image<input id="sf3d-reference-input" type="file" accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp"></label>
-   <button type="button" id="sf3d-reference-remove">Retirer la référence</button>
-   <button type="button" id="sf3d-pause" aria-pressed="false">Mettre en pause</button>
-   <button type="button" id="sf3d-reset">Réinitialiser</button>
-   <button type="button" id="sf3d-export">Exporter JSON</button>
-   <label class="sf3d-import" for="sf3d-import">Importer une configuration<input id="sf3d-import" type="file" accept=".json,application/json"></label>
- </div>
- <p class="sf3d-status" id="sf3d-editor-status" role="status" aria-live="polite">Atelier prêt pour les réglages.</p>
- <p class="sf3d-limit">Statut : prototype de scène 3D. L'export est un preset JSON. Effets WebGL bornés pour un site web : travail GPU plafonné et repli en mode économie de mouvement, sans ambition de moteur de jeu.</p>
+<p class="status" id="sf3d-status" role="status" aria-live="polite">Initialisation R119...</p>
+<section class="panel" aria-labelledby="sf3d-panel-title"><h2 id="sf3d-panel-title">Paramètres du noyau R119</h2>
+<p>Ces réglages modifient uniquement les impulsions R119 existantes. Les valeurs initiales en conservent le rendu. La projection volumétrique sur une sphère maillée 3D reste une évolution séparée, non validée ici.</p>
+<form class="controls" id="sf3d-controls">
+<label for="sf3d-pulseCount">Nombre d’arcs <output id="sf3d-out-pulseCount">8</output><input id="sf3d-pulseCount" name="pulseCount" type="range" min="1" max="8" step="1" value="8"></label>
+<label for="sf3d-energySpeed">Vitesse énergétique <output id="sf3d-out-energySpeed">1</output><input id="sf3d-energySpeed" name="energySpeed" type="range" min="0" max="3" step="0.1" value="1"></label>
+<label for="sf3d-amplitude">Intensité des décharges <output id="sf3d-out-amplitude">1</output><input id="sf3d-amplitude" name="amplitude" type="range" min="0" max="2" step="0.05" value="1"></label>
+<label for="sf3d-thickness">Épaisseur des éclairs R119 <output id="sf3d-out-thickness">1</output><input id="sf3d-thickness" name="thickness" type="range" min="0.5" max="2" step="0.05" value="1"></label>
+<label for="sf3d-coreRadius">Taille du noyau <output id="sf3d-out-coreRadius">1</output><input id="sf3d-coreRadius" name="coreRadius" type="range" min="0.7" max="1.2" step="0.05" value="1"></label>
+<label for="sf3d-glow">Lueur centrale <output id="sf3d-out-glow">1</output><input id="sf3d-glow" name="glow" type="range" min="0" max="2" step="0.05" value="1"></label>
+<label for="sf3d-primaryColor">Surface cyan <output id="sf3d-out-primaryColor">#4fdeff</output><input id="sf3d-primaryColor" name="primaryColor" type="color"  value="#4fdeff"></label>
+<label for="sf3d-secondaryColor">Surface violette <output id="sf3d-out-secondaryColor">#a378ff</output><input id="sf3d-secondaryColor" name="secondaryColor" type="color"  value="#a378ff"></label>
+<label for="sf3d-pulseColor">Nuance des décharges <output id="sf3d-out-pulseColor">#ffffff</output><input id="sf3d-pulseColor" name="pulseColor" type="color"  value="#ffffff"></label>
+<label for="sf3d-glowColor">Émetteur central <output id="sf3d-out-glowColor">#b8edff</output><input id="sf3d-glowColor" name="glowColor" type="color"  value="#b8edff"></label>
+</form>
+<div class="actions">
+<button type="button" data-sf3d-preset="r119">Référence R119</button>
+<label for="sf3d-reference-input">Comparer avec une image<input id="sf3d-reference-input" type="file" accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp"></label>
+<button type="button" id="sf3d-reference-remove">Retirer la référence</button>
+<button type="button" id="sf3d-pause" aria-pressed="false">Mettre en pause</button>
+<button type="button" id="sf3d-reset">Réinitialiser</button>
+<button type="button" id="sf3d-export">Exporter JSON</button>
+<label for="sf3d-import">Importer un préréglage<input id="sf3d-import" type="file" accept=".json,application/json"></label>
+</div>
+<p class="status" id="sf3d-editor-status" role="status" aria-live="polite">Moteur de réglage prêt.</p>
+<p class="note">Un seul rendu WebGL, aucune dépendance réseau ni service payant, aucune mutation de la vitrine publique. Mode mouvement réduit : sphère fixe.</p>
 </section>
-<script src="../../assets/core-r109-webgl.js" defer></script>
-<script src="../../assets/siteforge-3d-pulse-geometry.js" defer></script>
-<script src="../../assets/siteforge-3d-sphere-shaders.js" defer></script>
-<script src="../../assets/core-r122-gyro.js" defer></script>
+<script src="../../assets/siteforge-r119-electric-engine.js" defer></script>
 <script src="../../assets/siteforge-3d-editor.js" defer></script>
 </main></body></html>
