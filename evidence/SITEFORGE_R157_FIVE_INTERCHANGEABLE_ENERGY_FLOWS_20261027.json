@@ -1,0 +1,124 @@
+{
+  "schema": "synestra.siteforge.r157.changeable_energy_flow.evidence.v1",
+  "date": "2026-10-27",
+  "mission_id": "SYN_SITEFORGE_R157_INTERCHANGEABLE_ENERGY_FLOW_20261027",
+  "owner_requirement": "Improve plasma flow and allow swapping it for a different type of volumetric energy. Preserve user-uploaded preferred 16-key JSON values; arcs=0 and extra particles off.",
+  "source": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_SITEFORGE_R116_CLEAN_LAB_20261027",
+    "code_commit": "8a7d9e9709da2da9631244103736a138c2d6bb8c",
+    "shader_blob": "788e9ff8c489180c74e658d99d5fe9636199b6bc",
+    "html_blob": "bdaea8e099ec4924fad4d994ed256b293f1a0cb5",
+    "r137_tests": "ca6aa81ca2e45ae4608d5a679f6c6cd58ffdbd00",
+    "r132_tests": "0c3545cfe0b5af6fb60edb66d690c7edc6fda043",
+    "r136_tests": "ca93643eb78915b61857253d90a3b2c5c42b1bbf"
+  },
+  "owner_baseline": {
+    "source_sha256": "65fe1646ee0528ecee3219c575bc5ce2743a0294c71d87a4e963fa6d47c47b70",
+    "baseline_document": "evidence/SITEFORGE_R156_OWNER_SELECTED_PLASMA_SETTINGS_20261027.json",
+    "behavior": "arcIntensity=0, arcDensity=0, particlePreset=4 preserved as independently disabled; new flowType=0 and flowStructure=100 defaults only for new controls. Existing defaults NOT overwritten."
+  },
+  "changes": {
+    "new_control_keys": [
+      "flowType",
+      "flowStructure"
+    ],
+    "new_control_count": 18,
+    "old_count": 16,
+    "flow_families": [
+      {
+        "id": 0,
+        "name": "Flux plasma",
+        "material": "Improved 3D continuous logarithmic spiral ribbons"
+      },
+      {
+        "id": 1,
+        "name": "Rubans magnétiques",
+        "material": "Nonspiral closed curved magnetosphere field loops"
+      },
+      {
+        "id": 2,
+        "name": "Voiles d’aurore",
+        "material": "Translucent vertical auroral curtains"
+      },
+      {
+        "id": 3,
+        "name": "Brume ionique",
+        "material": "Low-filament volumetric cloud turbulence"
+      },
+      {
+        "id": 4,
+        "name": "Jets de fusion",
+        "material": "Eight radial stellar jets"
+      }
+    ],
+    "controls": "Independent energy family select + 30..200% current width; optional particlePreset still governs optional sprites independently; core power/size, shell colors, arc controls unmodified.",
+    "render": "Reused existing raymarched WebGL1 full-screen pass, 14 mobile / 22 desktop ray samples, same one GPU program/canvas, no extra renderer/server or scripts.",
+    "json": "Original export schema synestra.siteforge.plasma-settings.v1 retained with 18 live values; status dynamically derives actual count."
+  },
+  "failure_first": {
+    "initial_deployment_id": "89d34824-28fe-4a5f-9a5c-5921bb3eeff6",
+    "first_build": "FAILED due legacy test expecting R154 in source header; corrected",
+    "subsequent_built_deployment_id": "e34f5255-b369-47fb-9565-d1b157515454",
+    "node_tests": 76,
+    "node_pass": 76,
+    "js_build": "SUCCESS",
+    "actual_gpu_runtime": "FAILED: Chromium shader compiler errors ERROR: 0:102 and 0:108 `wisps` undeclared identifier in aurora and nebula branches",
+    "repair": "Replace undefined `wisps` references by existing in-scope `sideFilament` and `hollow` respectively; added regression test verifying no undefined reference",
+    "repair_commit": "f0b71cf578b1919ee2156ebc6f4014d8976fa340"
+  },
+  "real_browser": {
+    "method": "Cloudflare Browser Rendering /content real Chromium WebGL with exact GitHub HTML+JS loaded into isolated HTML fixture, CSP meta omitted in test fixture only; no Access bypass",
+    "viewport": "390x844 mobile equivalent; actual GL context linked, framebuffer sampled via gl.readPixels, WebGL drawArrays instrumented",
+    "preserved_owner_state": "In browser test set particlePreset=4, arcIntensity=0, arcDensity=0, coreLight=108, coreSize=157, diameter=131, shellVisibility=100, particleIntensity=200, particleSpeed=250, density=250, particleSize=80, opacity=9.",
+    "modes_verified": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "rgb_l1_difference_from_plasma_baseline": {
+      "1": 818,
+      "2": 1280,
+      "3": 1080,
+      "4": 1619
+    },
+    "measurement_note": "Mode 1 compared across six fixed RGB samples in focused two-mode test; modes 2/3/4 across nine fixed samples in multi-mode test. These are NOT comparable cross-mode scores because sampling subsets differ, only verify each produces visible framebuffer delta.",
+    "gpu_error": "0 in all recorded modes",
+    "javascript_errors": [],
+    "draw_submissions_with_zero_arcs_and_no_extra_particles": [
+      1480,
+      1480,
+      160,
+      160
+    ],
+    "controls": "Native change events update actual flowType uniform and preserve prior sprite/arc conditions",
+    "limitation": "Authenticated hosted preview E2E and mobile Safari perceptual/performance acceptance not tested; 3D material families proved visibly different at sampled pixels but full-frame artistic quality requires review."
+  },
+  "deployment": {
+    "id": "5f56302f-a5ae-43a7-be3b-cd8ec928ce8d",
+    "preview_url": "https://5f56302f.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+    "commit": "8a7d9e9709da2da9631244103736a138c2d6bb8c",
+    "stages": [
+      "queued:success",
+      "initialize:success",
+      "clone_repo:success",
+      "build:success",
+      "deploy:success"
+    ],
+    "tests": 77,
+    "pass": 77,
+    "fail": 0,
+    "static_export": "PASS"
+  },
+  "safety": {
+    "production_deployments_enabled": false,
+    "preview_allowlisted": true,
+    "production_untouched": true,
+    "main_untouched": true,
+    "single_graphic_engine": true
+  },
+  "rollback": "https://f0a93f28.synestra-vitrine-preview.pages.dev/siteforge/core-3d-lab/",
+  "status": "R157_PREVIEW_DEPLOYED_77_PASS__REAL_CHROMIUM_5_MATERIALS_GPU_PASS__OWNER_ART_ACCEPTANCE_PENDING"
+}
