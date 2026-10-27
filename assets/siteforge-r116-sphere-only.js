@@ -272,12 +272,11 @@ void main(){
  float shapeFlow=sin(angle*6.+flowN.z*13.-flowClock*1.4+v*5.);
  if(surfaceSettings.x>.5 && surfaceSettings.x<1.5){
    // ELECTRIC: dry, broken high-voltage arcs, NOT sinuous liquid bands.
-   // Eight surface launch positions, spread over the curved plasma instead
-   // of all starting in the middle; staggered angular/time seeds keep them
-   // independently flashing. This intentionally changes count/length only.
-   float electricA=r145ElectricBolt(flowN.xy-vec2(-.56,.38),1.0,time);
-   float electricB=r145ElectricBolt(flowN.xy-vec2(.30,.55),2.7,time);
-   float electricC=r145ElectricBolt(flowN.xy-vec2(-.12,-.34),4.9,time);
+   // Preserve three original centered lines as real strikes and add five
+   // distant launch positions across the sphere. Thinness is unchanged.
+   float electricA=r145ElectricBolt(flowN.xy,1.0,time);
+   float electricB=r145ElectricBolt(flowN.xy,2.7,time);
+   float electricC=r145ElectricBolt(flowN.xy,4.9,time);
    float electricD=r145ElectricBolt(flowN.xy-vec2(.52,-.44),6.3,time);
    float electricE=r145ElectricBolt(flowN.xy-vec2(-.50,-.20),7.8,time);
    float electricF=r145ElectricBolt(flowN.xy-vec2(.03,.12),9.2,time);
@@ -480,7 +479,8 @@ void main(){
  // At shell visibility 0, transparent dark gaps reveal the background.
  // Only current filaments, mode-specific clouds and original arcs remain.
  float dischargeAlpha=clamp((arcA+arcB+arcC+arcD+arcE+arcF+arcG+arcH)*.29,0.,.64);
- float circulatingEnergyAlpha=clamp((energyMask*.58+energyCoverage*.65+innerLightning*.70+curlGlow*.27)*surfaceSettings.w+dischargeAlpha,0.,.98);
+ float circulatingEnergyAlpha=clamp((energyMask*.58+energyCoverage*.65+curlGlow*.27)*surfaceSettings.w+dischargeAlpha,0.,.98);
+ circulatingEnergyAlpha=clamp(circulatingEnergyAlpha+innerLightning*.70*surfaceSettings.w,0.,.98);
  float alpha=sphereAlpha*shellFade*mix(circulatingEnergyAlpha,1.,clamp(shellVisibilityRatio,0.,1.));
  // Exposure is independent of nuclear light, specularity and transparency.
  float exposure=pow(max(luminanceRatio,0.),1.45);
