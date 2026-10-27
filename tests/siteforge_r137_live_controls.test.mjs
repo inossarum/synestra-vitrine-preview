@@ -7,30 +7,30 @@ const load=path=>readFileSync(new URL('../'+path,import.meta.url),'utf8');
 const js=load('assets/siteforge-r116-sphere-only.js');
 const html=load('siteforge/core-3d-lab/index.html');
 const rangeDefaults={diameter:100,opacity:100,diffusion:65,thickness:45,shellVisibility:100,rotation:100,agitation:100,details:100,shine:100,contrast:100,
- luminance:100,coreSize:100,coreLight:100,rimLight:100,
+ luminance:100,coreSize:100,coreLight:100,rimLight:100,particleIntensity:100,particleDensity:100,particleSpeed:100,particleSize:100,particleSpread:100,
  surfaceGlow:100,surfaceEmission:100,surfaceFlow:100,surfaceSpeed:100,surfaceDirection:0,
  reliefIntensity:65,reliefScale:90,reliefRoughness:80,reliefContrast:100,reliefDeform:15,reliefSpeed:100};
-const selectors=['energyMode','surfaceMotion','reliefMode'];
+const selectors=['energyMode','surfaceMotion','reliefMode','particlePreset'];
 const colors=['primary','secondary','core','rim'];
-const defaults={...rangeDefaults,energyMode:0,surfaceMotion:0,reliefMode:0,
+const defaults={...rangeDefaults,energyMode:0,surfaceMotion:0,reliefMode:0,particlePreset:0,
  primary:'#092b63',secondary:'#1f174d',core:'#b8edff',rim:'#4fddff'};
 const keys=Object.keys(defaults);
 
 test('R143: labelled native controls and preserved single sticky WebGL scene',()=>{
  const found=[...html.matchAll(/data-sphere-control="([^"]+)"/g)].map(m=>m[1]);
- assert.equal(found.length,32);
+ assert.equal(found.length,38);
  assert.deepEqual(found.sort(),keys.sort());
  for(const key of keys)assert.match(html,new RegExp('for="sf-'+key+'"'));
- assert.equal((html.match(/type="range"/g)||[]).length,25);
+ assert.equal((html.match(/type="range"/g)||[]).length,30);
  assert.equal((html.match(/type="color"/g)||[]).length,4);
- assert.equal((html.match(/<select /g)||[]).length,3);
+ assert.equal((html.match(/<select /g)||[]).length,4);
  assert.equal((html.match(/<canvas /g)||[]).length,1);
  assert.equal((html.match(/<script src=/g)||[]).length,1);
  assert.match(html,/\.core-r108-stage\{position:sticky;top:env\(safe-area-inset-top,0px\)/);
 });
 
 function fixture(noWebGL=false){
- const events={},queue=[],uniforms=new Map(),arrays=new Map(),styles={};
+ const events={},queue=[],uniforms=new Map(),arrays=new Map(),styles={},drawCalls=[];
  const controls=Object.fromEntries(Object.entries(defaults).map(([key,val])=>{
   const value=String(val),type=selectors.includes(key)?'select-one':colors.includes(key)?'color':'range';
   return [key,{value,defaultValue:value,type,dataset:{sphereControl:key},
@@ -41,7 +41,7 @@ function fixture(noWebGL=false){
  const status={textContent:''};
  const gl={
   VERTEX_SHADER:35633,FRAGMENT_SHADER:35632,COMPILE_STATUS:35713,LINK_STATUS:35714,
-  ARRAY_BUFFER:34962,STATIC_DRAW:35044,FLOAT:5126,TRIANGLES:4,COLOR_BUFFER_BIT:16384,
+  ARRAY_BUFFER:34962,STATIC_DRAW:35044,FLOAT:5126,TRIANGLES:4,POINTS:0,BLEND:3042,SRC_ALPHA:770,ONE:1,COLOR_BUFFER_BIT:16384,
   createShader:()=>({}),shaderSource(){},compileShader(){},getShaderParameter:()=>true,deleteShader(){},
   createProgram:()=>({}),attachShader(){},linkProgram(){},getProgramParameter:()=>true,useProgram(){},
   createBuffer:()=>({}),bindBuffer(){},bufferData(){},getAttribLocation:()=>0,
@@ -49,7 +49,7 @@ function fixture(noWebGL=false){
   uniform1f:(name,val)=>uniforms.set(name,val),uniform2f(){},
   uniform3fv:(name,values)=>arrays.set(name,Array.from(values)),
   uniform4fv:(name,values)=>arrays.set(name,Array.from(values)),
-  viewport(){},clearColor(){},clear(){},drawArrays(){}
+  viewport(){},clearColor(){},clear(){},enable(){},disable(){},blendFunc(){},drawArrays:(mode,first,count)=>drawCalls.push({mode,count})
  };
  const canvas={clientWidth:420,clientHeight:260,width:960,height:570,getContext:()=>noWebGL?null:gl,addEventListener(){}};
  const scene={
@@ -68,7 +68,7 @@ function fixture(noWebGL=false){
  const RO=class{observe(){}disconnect(){}};
  runInNewContext(js,{document,window,Float32Array,IntersectionObserver:IO,ResizeObserver:RO,
   requestAnimationFrame:fn=>{queue.push(fn);return queue.length},cancelAnimationFrame:()=>{}});
- return {controls,events,uniforms,arrays,styles,status,canvas,
+ return {controls,events,uniforms,arrays,styles,status,canvas,drawCalls,
   frame:time=>{const fn=queue.shift();assert.equal(typeof fn,'function');fn(time)}};
 }
 
@@ -270,4 +270,61 @@ test('R145: energy and relief selected on native mobile change independently',()
  assert.equal(x.arrays.get('surfaceSettings')[0],0);
  assert.equal(x.arrays.get('reliefSettings')[0],0);
  assert.equal(x.uniforms.get('shellVisibilityRatio'),1);
+});
+
+
+test('R147: one-click VFX presets, independent core flux and collapsible advanced controls',()=>{
+ assert.match(html,/Effets de particules — accès rapide/);
+ assert.match(html,/<details class="vfx-advanced"><summary>Réglages avancés des particules<\/summary>/);
+ assert.match(html,/data-sphere-control="particlePreset"/);
+ assert.match(html,/data-sphere-control="particleIntensity"/);
+ assert.match(html,/max="500" value="100" step="1"/);
+ assert.ok(js.includes('float coreFlux=pow(max(coreRatio,0.),1.55);'));
+ assert.ok(js.includes('vec3 hotCore=mix(coreColor,vec3(1.),clamp((coreRatio-1.)/4.,0.,.72));'));
+ assert.ok(js.includes('base+=hotCore*(centralSource*.82+coreBloom*.42)*coreFlux;'));
+ assert.ok(!js.includes('base+=coreColor*(centralSource*.64+coreBloom*.62)*coreRatio;'));
+ const x=fixture();x.frame(40);
+ const base=x.arrays.get('flowSettings')[3];
+ x.controls.coreLight.value='500';x.events.input({target:x.controls.coreLight});x.frame(90);
+ assert.equal(x.uniforms.get('coreRatio'),5);
+ assert.equal(x.arrays.get('flowSettings')[3],base,'core size must not change when power increases');
+});
+test('R147: actual GPU particle sprites have independent life, depth, birth, fade and 4 trajectories',()=>{
+ const required=[
+  'const MAX_PARTICLES=240;',
+  'attribute float aSeed;',
+  'float age=fract(uTime*lifetime*',
+  'float depth=particleRand(i+42.)*2.-1.;',
+  'float fade=smoothstep(0.,.12,age)*(1.-smoothstep(.64,1.,age));',
+  'if(uEmitter.x<.5)',
+  '}else if(uEmitter.x<1.5)',
+  '}else if(uEmitter.x<2.5)',
+  'gl_PointCoord*2.-1.',
+  'gl.drawArrays(gl.POINTS,0,count);',
+  'gl.drawArrays(gl.TRIANGLES,0,6);',
+  'particleEngine?.draw(still?0:elapsed,rx,ry);'
+ ];
+ for(const signature of required)assert.ok(js.includes(signature),signature);
+ assert.equal((html.match(/<canvas /g)||[]).length,1,'same GL surface');
+ assert.doesNotMatch(js,/fetch\(|WebSocket|localStorage|sessionStorage/);
+});
+test('R147: preset and intensity control the particle draw independently, safety cap and reset',()=>{
+ const x=fixture();x.frame(40);
+ assert.equal(x.drawCalls.filter(z=>z.mode===0).length,1,'one sprite emission on the first frame');
+ assert.equal(x.drawCalls.at(-1).count,120);
+ let clock=40;
+ x.controls.particleIntensity.value='0';x.events.input({target:x.controls.particleIntensity});x.frame(clock+=50);
+ assert.equal(x.drawCalls.filter(z=>z.mode===0).length,1,'0 intensity turns emitter off');
+ x.controls.particleIntensity.value='100';
+ x.controls.particlePreset.value='4';
+ x.events.change({target:x.controls.particlePreset});x.frame(clock+=50);
+ assert.equal(x.drawCalls.filter(z=>z.mode===0).length,1,'disabled preset emits nothing');
+ x.controls.particlePreset.value='3';
+ x.controls.particleDensity.value='250';
+ x.events.change({target:x.controls.particlePreset});x.frame(clock+=50);
+ assert.equal(x.drawCalls.at(-1).count,240,'max particles bounded');
+ assert.equal(x.arrays.get('uEmitter')[0],3);
+ x.events.reset({preventDefault(){}});x.frame(clock+=50);
+ assert.equal(x.arrays.get('uEmitter')[0],0);
+ assert.equal(x.drawCalls.at(-1).count,120);
 });
