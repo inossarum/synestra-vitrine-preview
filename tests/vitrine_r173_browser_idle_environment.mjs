@@ -40,6 +40,18 @@ for(const vw of [1280,390,320]){
  }else if(navBefore.menuDisplay!=='none'||!navBefore.ctaVisible){
    throw Error('R175_DESKTOP_NAV_REGRESSION '+JSON.stringify(navBefore));
  }else console.log('R175_DESKTOP_NAV_1280=PASS '+JSON.stringify(navBefore));
+ if(vw===1280){
+  const heroExpr=`JSON.stringify((()=>{const copy=document.querySelector('.hero-v2 .hero-copy'),title=document.querySelector('#hero-title'),stage=document.querySelector('.hero-v2 .system-stage'),canvas=document.querySelector('.core-r109-canvas'),links=[...stage.querySelectorAll('.core-r108-links a')],r=e=>e.getBoundingClientRect();const c=r(copy),t=r(title),st=r(stage),css=getComputedStyle(canvas);return {copyWidth:c.width,titleWidth:t.width,titleHeight:t.height,font:getComputedStyle(title).fontSize,stageWidth:st.width,stageLeft:st.left,canvasTransform:css.transform,ready:stage.dataset.coreReady,links:links.map(x=>({height:r(x).height,bg:getComputedStyle(x).backgroundColor})),scrollWidth:document.documentElement.scrollWidth,viewport:innerWidth}})())`;
+  const hero=JSON.parse((await send('Runtime.evaluate',{expression:heroExpr,returnByValue:true})).result.value);
+  if(hero.copyWidth>580||hero.titleHeight>440||hero.stageWidth<730||hero.links.length!==3||hero.links.some(x=>x.height<50)||hero.scrollWidth>vw+2||hero.ready!=='true')throw Error('R182_HERO_GEOMETRY_FAIL '+JSON.stringify(hero));
+  if(capture){
+   await send('Runtime.evaluate',{expression:"window.scrollTo({top:0,behavior:'instant'})"});
+   await sleep(200);
+   const shot=await send('Page.captureScreenshot',{format:'png',fromSurface:true,captureBeyondViewport:false});
+   writeFileSync(join(root,'r182_hero_1280.png'),Buffer.from(shot.data,'base64'));
+  }
+  console.log('R182_HERO_REBALANCE_CDP_1280=PASS '+JSON.stringify(hero));
+ }
  const wayfinderEval=`JSON.stringify((()=>{const header=document.querySelector('body>.site-header.container'),dock=document.querySelector('.r178-wayfinder'),cards=[...dock.querySelectorAll('.r178-wayfinder-link')],hs=getComputedStyle(header),ds=getComputedStyle(dock);return {headerPosition:hs.position,headerTop:header.getBoundingClientRect().top,headerBottom:header.getBoundingClientRect().bottom,headerHeight:header.getBoundingClientRect().height,dockVisible:ds.display!=='none',columns:getComputedStyle(dock.querySelector('.r178-wayfinder-grid')).gridTemplateColumns,links:cards.map(x=>x.getAttribute('href')),cardWidths:cards.map(x=>x.getBoundingClientRect().width),scrollWidth:document.documentElement.scrollWidth,viewport:innerWidth}})())`;
  const getWayfinder=async()=>JSON.parse((await send('Runtime.evaluate',{expression:wayfinderEval,returnByValue:true})).result.value);
  const manifestExpression=`JSON.stringify((()=>{const section=document.querySelector('.r179-manifesto'),copy=document.querySelector('.r179-editorial-copy'),title=document.querySelector('#r179-manifesto-title'),panel=document.querySelector('.r179-system-index'),links=[...panel.querySelectorAll('a[href]')],r=x=>x.getBoundingClientRect(),h=r(title),c=r(copy),p=r(panel),s=r(section);return {title:title.innerText,links:links.map(x=>x.getAttribute('href')),columns:getComputedStyle(section).gridTemplateColumns,titleWidth:h.width,titleScrollWidth:title.scrollWidth,titleHeight:h.height,copyBottom:c.bottom,panelTop:p.top,panelWidth:p.width,sectionWidth:s.width,scrollWidth:document.documentElement.scrollWidth}})())`;
