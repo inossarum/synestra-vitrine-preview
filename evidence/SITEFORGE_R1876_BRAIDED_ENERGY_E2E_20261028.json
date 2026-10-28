@@ -1,0 +1,117 @@
+{
+  "schema": "synestra.siteforge.r1876.braided_energy_real_browser_qa.v1",
+  "date": "2026-10-28",
+  "mission_id": "SYN_SITEFORGE_R1876_BRAIDED_ENERGY_20261028",
+  "owner": "inossarum",
+  "repo": "inossarum/synestra-vitrine-preview",
+  "branch": "task/SYN_SITEFORGE_R1876_BRAIDED_ENERGY_20261028",
+  "base_commit": "4c19d276cb50f7a62ebf03929ea26f1f1050d84c",
+  "source_html": "siteforge-r1875-autonome.html",
+  "source_crlf_sha256": "7844b11d1df0654c14def2d2db8d2f0c990b4cd5b1db96fd47b3f39c6766a2ee",
+  "source_normalized_sha256": "d7250dc8323074d4da3f8558c9d0e5be4e6da3d82ea5b9e058d1c2ebf0894ec1",
+  "generated_html": "siteforge-r1876-autonome.html",
+  "generated_html_sha256": "365f8ceab01a40bc7f3fdd0501e77cb69f91c2316a2efe0b62d1b38b714ec4e2",
+  "builder": "tools/build_r1876_braided.py",
+  "art_request": "test R187.6: 2–3 thin attached satellite filaments per each of 5 prior zero-radius energy paths, moving pulses, pronounced front/back crossings, subtle center; keep cyan-magenta and no opaque pipes",
+  "implementation": [
+    "Exactly five original toroidal centerlines A-E, unchanged geometry and uLabTime independent of particleSpeed",
+    "Two counterphase moving slender orbital filament fields per centerline, total 10; transverse orbital radius .030 normalized (optical, no cylindrical opaque surfaces)",
+    "Animated flux packets on the primary lines; bounded brightness of satellite strands",
+    "Darker rear and brighter front using depth weighting; isolated crossing sparks only when centerline cores intersect",
+    "Subtle pulsating central core; no giant white glowing body",
+    "Strict CSP SHA-256 recomputed for changed inline script; no unsafe-inline; no external dependencies",
+    "Materials 0–5, 7 options, 18 sphere controls, 10 mote controls and JSON import/export untouched"
+  ],
+  "review": [
+    {
+      "pass": 1,
+      "result": "Technically PASS but visually underexposed, first screenshot retained only as superseded same-filename capture"
+    },
+    {
+      "pass": 2,
+      "result": "Restored baseline line halos/primary emission, retained tressage; still restrained and user acceptance PENDING"
+    }
+  ],
+  "tests": {
+    "static": {
+      "status": "PASS",
+      "count": 5,
+      "checks": [
+        "Exact inline script SHA-256 matches CSP, no unsafe-inline",
+        "Five centerlines and ten attached filaments; no pipe shell/body/cylinder",
+        "Front/rear attenuation, crossing spark, pulsing core",
+        "Exact R187.5 reconstruction outside material6 metadata/CSP",
+        "Seven materials, 18 scene controls, 10 mote controls, JSON retained"
+      ]
+    },
+    "chrome_desktop": {
+      "status": "PASS",
+      "browser": "Chrome Windows SwiftShader WebGL",
+      "viewport": [
+        1100,
+        800
+      ],
+      "material": 6,
+      "webgl_error": 0,
+      "particle_speed": "0",
+      "global_spin_unchanged": true,
+      "changed_pixels": 33010,
+      "total_pixels": 307840,
+      "changed_percent": 10.7231,
+      "second_material_diff_changed": 30676,
+      "second_material_diff_percent": 9.9649,
+      "ready_status": "Nouvelle sphère plasma WebGL active."
+    },
+    "chrome_mobile_emulated": {
+      "status": "PASS",
+      "viewport": [
+        390,
+        844
+      ],
+      "webgl_error": 0,
+      "particle_speed": "0",
+      "global_spin_unchanged": true,
+      "changed_pixels": 22595,
+      "total_pixels": 104676,
+      "changed_percent": 21.5857,
+      "switched_to_material6_changed_pixels": 28345,
+      "switched_to_material6_diff_percent": 27.0788
+    },
+    "local_http": {
+      "status": 200,
+      "bind": "127.0.0.1:19096",
+      "preview_url": "http://127.0.0.1:19096/siteforge-r1876-autonome.html?demo=energy"
+    }
+  },
+  "captures": [
+    {
+      "file": "evidence/r1876-first.png",
+      "sha256": "bb27a4fe9fe5b7005152f00cf9b6abe167d0147f0e4eac2627a1e2b7df77e927"
+    },
+    {
+      "file": "evidence/r1876-later.png",
+      "sha256": "0b74626a346eb6c21e1f949540921057692022620956cae605b89920cafa9ad6"
+    },
+    {
+      "file": "evidence/r1876-energy-ui.png",
+      "sha256": "4a38b7b6f853d03107769c8e5fe7468f97fd47ba963addc7be6b6911373a0975"
+    },
+    {
+      "file": "evidence/r1876-mobile-first.png",
+      "sha256": "6f79623e0869d9575a4448f9ae9b5e265f63cc7bc2e28ec016b44c07d24761d2"
+    },
+    {
+      "file": "evidence/r1876-mobile-later.png",
+      "sha256": "2ab3457cdf6bdf6af0e6f4a0c1554d1e5435183c32eeae7b6b451283f7c62430"
+    }
+  ],
+  "limits": [
+    "Screenshot pixel change proves motion only, not visual quality",
+    "R187.6 still subtle/dark; owner artistic validation not yet obtained",
+    "Physical GPU FPS and real mobile test not performed",
+    "No public publish/merge/push, worktree local",
+    "Inherited meta CSP frame-ancestors warning and favicon 404 unrelated"
+  ],
+  "status": "LOCAL_E2E_PASS_ART_PENDING",
+  "next": "Review R187.6 visually next to R187.5; accept or tune relative illumination under visual human gate; no publication before acceptance."
+}
