@@ -1729,24 +1729,6 @@ header.site-header nav.site-nav a.nav-cta:active {transform:translateY(0)}
  opacity:.55;
  animation:r173-grid-drift 17s linear infinite;
 }
-.r173-environment .r173-beam{position:absolute;display:block;pointer-events:none;will-change:transform,opacity;
- width:clamp(200px,27vw,475px);height:155vh;top:-30vh;
- background:linear-gradient(90deg,transparent,rgba(93,115,255,.035) 27%,
- rgba(110,196,255,.18) 49%,rgba(100,235,251,.07) 55%,transparent);
- filter:blur(14px);mix-blend-mode:screen;
- transform:skewX(-17deg) translateX(-65vw);opacity:.66;
-}
-.r173-environment .r173-beam-one{animation:r173-beam-sweep 14s linear -3s infinite}
-.r173-environment .r173-beam-two{
- background:linear-gradient(90deg,transparent,rgba(151,119,255,.06) 28%,rgba(166,138,245,.15) 52%,transparent);
- animation:r173-beam-sweep 21s linear -14s infinite reverse;opacity:.5;
-}
-.r173-environment .r173-scan {
- position:absolute;left:0;right:0;top:0;height:3px;pointer-events:none;opacity:.46;
- background:linear-gradient(90deg,transparent 2%,rgba(116,172,255,.19) 18%,rgba(134,224,240,.67) 50%,rgba(166,138,245,.23) 78%,transparent 98%);
- box-shadow:0 0 22px rgba(98,169,255,.42);
- animation:r173-scan-travel 11s ease-in-out -4s infinite;
-}
 /* The formerly faint top circle becomes a clearly legible holographic dial.
    Positioned in the typography zone, away from the standalone Core. */
 .hero-v2{position:relative;isolation:isolate;}
@@ -1782,49 +1764,19 @@ header.site-header nav.site-nav a.nav-cta:active {transform:translateY(0)}
 }
 .hero-v2 .hero-copy,.hero-v2 .system-stage {position:relative;z-index:2}
 .hero-v2 .hero-copy {text-shadow:0 2px 22px rgba(3,10,26,.62)}
-/* Persistent kinetic section connectors keep the complete page alive. */
-main>.section{position:relative}
-main>.section::before{
- content:"";display:block;position:absolute;top:0;left:0;right:0;height:2px;
- pointer-events:none;opacity:.72;
- background:linear-gradient(90deg,transparent 2%,rgba(166,138,245,.7) 19%,
- rgba(101,156,250,.75) 49%,rgba(134,224,240,.7) 76%,transparent 97%);
- background-size:240% 100%;
- animation:r173-section-current 9.5s linear infinite;
-}
-main>.section:nth-of-type(2n)::before {animation-duration:13s;animation-direction:reverse}
-.product-card{position:relative}
-.product-card::after{
- content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;
- background:linear-gradient(108deg,transparent 15%,rgba(134,224,240,.10) 48%,transparent 62%);
- background-size:260% 100%;opacity:.6;
- animation:r173-card-shimmer 9s linear infinite;
-}
-.product-card:nth-child(2)::after{animation-delay:-3s}
-.product-card:nth-child(3)::after{animation-delay:-6s}
 @keyframes r173-grid-drift{to{transform:translate3d(-78px,78px,0)}}
-@keyframes r173-beam-sweep{0%{transform:skewX(-17deg) translateX(-65vw);opacity:.04}18%{opacity:.62}80%{opacity:.7}100%{transform:skewX(-17deg) translateX(158vw);opacity:.02}}
-@keyframes r173-scan-travel{0%{transform:translateY(-10vh);opacity:0}12%{opacity:.45}70%{opacity:.5}100%{transform:translateY(110vh);opacity:0}}
 @keyframes r173-dial-spin{to{transform:rotate(360deg)}}
 @keyframes r173-dial-counterspin{to{transform:rotate(-360deg)}}
-@keyframes r173-section-current{to{background-position:240% 50%}}
-@keyframes r173-card-shimmer{to{background-position:260% 50%}}
 @media(max-width:720px){
  .hero-v2::before{top:-92px;left:-140px;width:390px;opacity:.77}
  .hero-v2::after{top:-52px;left:-95px;width:300px;opacity:.84}
  .r173-environment .r173-grid{opacity:.38;background-size:64px 64px}
- .r173-environment .r173-beam{opacity:.34;filter:blur(25px)}
- .r173-environment .r173-scan{opacity:.26}
- .product-card::after{opacity:.38}
 }
 @media(prefers-reduced-motion:reduce){
- .r173-environment .r173-grid,.r173-environment .r173-beam,.r173-environment .r173-scan,
- .hero-v2::before,.hero-v2::after,main>.section::before,.product-card::after {
+ .r173-environment .r173-grid,.hero-v2::before,.hero-v2::after {
    animation:none!important;will-change:auto!important;
  }
- .r173-environment .r173-beam,.r173-environment .r173-scan{display:none!important}
  .hero-v2::before,.hero-v2::after{opacity:.3}
- .product-card::after{opacity:0}
 }
 
 
@@ -1880,10 +1832,7 @@ main>.section:nth-of-type(2n)::before {animation-duration:13s;animation-directio
  .r173-hud-dial::before,.r173-hud-dial .r173-dial-arc,
  .r173-hud-dial .r173-dial-core,.r173-hud-dial .r173-dial-beacon{animation:none!important}
 }
-/* Lift atmospheric lighting enough to read even with the pointer stationary. */
-.r173-environment .r173-beam{filter:blur(10px);opacity:.90}
-.r173-environment .r173-scan{opacity:.64;height:4px}
-.r173-environment .r173-grid{opacity:.70}
+/* R174 CLEANUP: no sweeping light overlays, scanning bars or traveling card highlights. */
 
 
 /* R173 typography safety position — dial stays high in the hero, outside headline and lead. */
@@ -1903,9 +1852,6 @@ main>.section:nth-of-type(2n)::before {animation-duration:13s;animation-directio
   <a class="skip" href="#contenu">Aller au contenu</a>
   <div class="r173-environment" aria-hidden="true">
     <span class="r173-grid"></span>
-    <span class="r173-beam r173-beam-one"></span>
-    <span class="r173-beam r173-beam-two"></span>
-    <span class="r173-scan"></span>
   </div>
   <header class="container site-header">
     <a class="brand" href="./" aria-label="Accueil Synestra">
