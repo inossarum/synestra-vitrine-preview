@@ -141,7 +141,8 @@ void main(){
  vec2 p=(uv-.5)*2.;
  p.x*=resolution.x/max(resolution.y,1.);
  p.y+=.08;
- float radius=.69;
+ // R183: fit the complete orb within narrow portrait viewports without cropping its silhouette.
+ float radius=min(.69, .85*resolution.x/max(resolution.y,1.));
  float d=length(p);
  float t=time*.28;
  float ellipseAngle=-.30;
