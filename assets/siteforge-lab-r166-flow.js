@@ -36,6 +36,40 @@
  // R175: restrained real GPU motes, separate from the exported 18 controls.
  let motesEnabled=true,pointerX=9,pointerY=9,pointerForce=0,lastPointerX=null,lastPointerY=null;
  const moteToggle=document.querySelector('[data-mote-toggle]');
+ // R185: artistic recipes change ONLY the 10 mote inputs and visibility.
+ // Same plasma material, camera pose, render quality and shared spin clock.
+ const artButtons=[...document.querySelectorAll('[data-art-preset]')];
+ const artCaption=document.querySelector('[data-art-caption]');
+ let artPreset='custom';
+ const artRecipes=Object.freeze({
+  pure:{enabled:false,shape:0,count:0,distance:10,spread:31,size:60,brightness:65,roughness:35,reflection:95,primary:'#51dfff',secondary:'#53318d'},
+  organic:{enabled:true,shape:2,count:28,distance:20,spread:34,size:78,brightness:90,roughness:35,reflection:95,primary:'#51dfff',secondary:'#7760b4'},
+  crystal:{enabled:true,shape:1,count:14,distance:38,spread:24,size:88,brightness:78,roughness:30,reflection:120,primary:'#67e0ef',secondary:'#8064b9'}
+ });
+ const artText={
+  custom:'Composition personnalisée : réglages manuels ou JSON importé.',
+  pure:'A · Plasma pur — aucune particule additionnelle ; flux et noyau restent seuls visibles.',
+  organic:'B · Énergie organique — 28 orbes doux, répartis dans les flux.',
+  crystal:'C · Cristaux premium — 14 facettes rares, éclairées sans carrés opaques.'
+ };
+ const syncArtUI=()=>{
+  for(const btn of artButtons)btn.setAttribute('aria-pressed',String(btn.dataset.artPreset===artPreset));
+  if(artCaption)artCaption.textContent=artText[artPreset]||artText.custom;
+  stage.dataset.artPreset=artPreset;
+ };
+ const setCustomArt=()=>{artPreset='custom';syncArtUI();};
+ const applyArtPreset=id=>{
+  const recipe=artRecipes[id];if(!recipe)return;
+  const values={
+   moteShape:recipe.shape,moteCount:recipe.count,moteDistance:recipe.distance,
+   moteSpread:recipe.spread,moteSize:recipe.size,moteBrightness:recipe.brightness,
+   moteRoughness:recipe.roughness,moteReflectivity:recipe.reflection,
+   motePrimary:recipe.primary,moteSecondary:recipe.secondary
+  };
+  for(const [key,value] of Object.entries(values))moteControls[key].value=String(value);
+  motesEnabled=recipe.enabled;pointerForce=0;
+  artPreset=id;sync();syncArtUI();schedule();
+ };
  const syncMotes=()=>{
   for(const [key,input] of Object.entries(moteControls)){
    const output=document.querySelector('[data-mote-value="'+key+'"]');
@@ -97,20 +131,28 @@
   stage.style.setProperty('--fallback-opacity',String(num('opacity')));
  }
  const panel=document.querySelector('.lab-controls');
- const onChange=e=>{if(e.target?.hasAttribute('data-sphere-control')||e.target?.hasAttribute('data-mote-control')){sync();schedule();}};
+ const onChange=e=>{
+  if(e.target?.hasAttribute('data-sphere-control')||e.target?.hasAttribute('data-mote-control')){
+   // Plasma editing does not change art; editing mote settings does.
+   if(e.target?.hasAttribute('data-mote-control'))setCustomArt();
+   sync();schedule();
+  }
+ };
  panel?.addEventListener('input',onChange);
  panel?.addEventListener('change',onChange);
  qualitySelect?.addEventListener('change',()=>{
   if(qualitySelect.value==='balanced'||qualitySelect.value==='performance'||qualitySelect.value==='quality'||qualitySelect.value==='auto')schedule();
  });
  panel?.addEventListener('click',event=>{
+  const art=event.target.closest('[data-art-preset]');
+  if(art){applyArtPreset(art.dataset.artPreset);return;}
   const toggle=event.target.closest('[data-magnetic-compare]');
   if(toggle){compareVariant=toggle.dataset.magneticCompare==='r172'?1:0;syncCompareUI();schedule();}
   if(event.target.closest('[data-magnetic-demo]'))applyDemo();
   if(event.target.closest('[data-liquid-demo]'))applyLiquidDemo();
   if(event.target.closest('[data-mote-toggle]')){
    motesEnabled=!motesEnabled;
-   pointerForce=0;
+   pointerForce=0;setCustomArt();
    syncMotes();schedule();
   }
   const depthToggle=event.target.closest('[data-depth-compare]');
@@ -124,10 +166,11 @@
   e.preventDefault();for(const [key,input] of Object.entries(controls))input.value=defaults[key];
   for(const [key,input] of Object.entries(moteControls))input.value=moteDefaults[key];
   motesEnabled=true;
+  setCustomArt();
   if(qualitySelect)qualitySelect.value='balanced';
   compareVariant=1;depthVariant=1;sync();schedule();
  });
- sync();
+ sync();syncArtUI();
  const launchDemo=new URLSearchParams(window.location.search).get('demo');
  if(launchDemo==='magnetic')applyDemo();
  if(launchDemo==='liquid')applyLiquidDemo();
@@ -224,7 +267,7 @@
    const values=validateSettings(doc);
    for(const [k,v] of Object.entries(values.nextPlasma))controls[k].value=v;
    for(const [k,v] of Object.entries(values.nextMotes))moteControls[k].value=v;
-   motesEnabled=values.enabled;pointerForce=0;
+   motesEnabled=values.enabled;pointerForce=0;setCustomArt();
    sync();schedule();
    status(importStatus,'Paramètres importés et appliqués · '+Object.keys(values.nextPlasma).length+' plasma + '+Object.keys(values.nextMotes).length+' éclats.');
   }catch(err){

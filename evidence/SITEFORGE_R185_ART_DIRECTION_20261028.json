@@ -1,0 +1,90 @@
+{
+  "schema": "synestra.siteforge.r185.art-direction.evidence.v1",
+  "date": "2026-10-28",
+  "mission_id": "SYN_SITEFORGE_R185_ART_DIRECTION",
+  "owner": "Synestra owner",
+  "scope": {
+    "source_repo": "inossarum/synestra-vitrine-preview",
+    "baseline_branch": "task/SYN_SITEFORGE_R184_SPRITE_ALPHA_FIX_20261028",
+    "baseline_sha": "b72401b247ea01489797dabb1a4d80f6d9899d5c",
+    "target_branch": "task/SYN_SITEFORGE_R185_ART_DIRECTION_20261028",
+    "production_main_verified": "df67fcd5cc6b7cc0fb42fa86c8920d28b9427494",
+    "pages_repo": "inossarum/synestra-siteforge-r176-lab",
+    "pages_baseline": "66a76628ed1aee372272730822a72dddf776492a",
+    "preview": "https://inossarum.github.io/synestra-siteforge-r176-lab/r185.html"
+  },
+  "changes": [
+    "Three explicit artistically curated compositions selectable in editor: A pure plasma (no motes), B organic 28 ion orbs (subtle), C premium 14 faceted crystals",
+    "Preset updates only 10 existing mote settings and toggle state, not camera/material/quality/shared spin; no new WebGL program",
+    "Manual mote edits and v1 JSON imports return label to Custom; reset restores R184 default values",
+    "User-customized JSON export remains 18 original plasma + 10 optional mote properties; no added JSON schema field",
+    "ARIA-pressed states and visually restrained three-column responsive controls, mobile single-column"
+  ],
+  "visual_contract": {
+    "comparison": "same camera angle, same material values, particleSpeed=0 during captures, stage spin phase 0.1560",
+    "pure": {
+      "enabled": false,
+      "count": 0,
+      "shape": 0
+    },
+    "organic": {
+      "enabled": true,
+      "count": 28,
+      "shape": 2,
+      "brightness": 90,
+      "size": 78
+    },
+    "crystal": {
+      "enabled": true,
+      "count": 14,
+      "shape": 1,
+      "brightness": 78,
+      "size": 88
+    }
+  },
+  "tests": {
+    "node": "164/164 PASS",
+    "static": "SYNESTRA_STATIC_EXPORT=PASS ; 49 allowlisted files",
+    "chrome_local": {
+      "status": "PASS",
+      "exit": 0,
+      "device": "Inos-Cerebros",
+      "browser": "Chrome Windows ANGLE SwiftShader",
+      "webgl_error": 0,
+      "six_materials": "PASS",
+      "mouse_touch_orbit": "PASS",
+      "full_360_orbit": "PASS",
+      "mobile_390px": "PASS",
+      "same_material_and_phase_between_presets": "PASS",
+      "manual_custom_transition": "PASS",
+      "reset_old_defaults": "PASS",
+      "legacy_json_export_import": "PASS",
+      "sampled_pixels": 307840,
+      "pure_vs_organic_changed_pixels": 297,
+      "organic_vs_crystal_changed_pixels": 806,
+      "all_three_snapshots_sha": {
+        "pure": "e7e0625b20c56ed6519b96bc391f255399e0051a",
+        "organic": "8d6ed3027a11eb5cf8c17a7240b2ed8cd45fba0b",
+        "crystal": "5b8ce8e7c0b2d365e4a3d1abec020846fc3af7c4"
+      }
+    },
+    "public_chrome": "PENDING"
+  },
+  "artifact": {
+    "shader_sha": "49baa2104c4200f25ff9bde63b90fda4ba9d1c60",
+    "html_sha": "a76dbbbd16fcf9bb36b807413bab84c12d4adaaa",
+    "standalone_sha": "cc2a5fe40c98654a6588f88b9b24594d838e96e8"
+  },
+  "limitations": [
+    "Artistic approval by owner still pending; R185 is comparative direction study, not final AAA geometry",
+    "No physical mobile GPU FPS proof; existing browser checks only",
+    "The requested multi-image contact sheet was not generated: Pillow absent and Windows script execution policy refused it. Three original unmodified Chrome screenshots are retained instead."
+  ],
+  "security": {
+    "free_only": true,
+    "main_unchanged": true,
+    "old_previews_unchanged": true,
+    "rollback": "Remove only r185.html; R184 remains untouched"
+  },
+  "status": "LOCAL_CHROME_E2E_PASS_PUBLIC_PAGES_E2E_PENDING"
+}
