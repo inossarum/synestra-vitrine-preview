@@ -28,3 +28,17 @@ test('R174 removes page-wide scanning beams, traveling lines and card sweeps',()
  assert.match(html,/R171 accessible pilot CTA/);
  assert.equal((html.match(/<script\b/g)||[]).length,1);
 });
+
+test('R175 mobile navigation stays semantic, compact and keeps product links',()=>{
+ assert.match(html,/<details class="r175-mobile-menu">/);
+ assert.match(html,/<summary aria-label="Ouvrir le menu de navigation">/);
+ assert.match(css,/\.r175-mobile-menu\{display:none\}/);
+ assert.match(css,/@media\(max-width:720px\)\{/);
+ assert.match(css,/\.site-header\.container\{/);
+ assert.match(css,/\.r175-mobile-panel\{/);
+ assert.match(css,/\.r175-mobile-menu summary:focus-visible/);
+ assert.match(html,/class="nav-cta" href="https:\/\/synestra-client-portal\.synestra-studio\.workers\.dev\//);
+ for(const product of ['connect','bridge','siteforge','offres'])
+  assert.match(html,new RegExp('href="\\./'+product+'/".*?'+(product[0].toUpperCase()+product.slice(1)),'s'));
+ assert.doesNotMatch(html,/r173-beam|r173-scan-travel|r173-card-shimmer/);
+});
