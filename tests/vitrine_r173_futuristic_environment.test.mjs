@@ -42,3 +42,18 @@ test('R175 mobile navigation stays semantic, compact and keeps product links',()
   assert.match(html,new RegExp('href="\\./'+product+'/"','i'));
  assert.doesNotMatch(html,/r173-beam|r173-scan-travel|r173-card-shimmer/);
 });
+
+test('R178 navigation and premium wayfinding are semantic, responsive and motion-safe',()=>{
+ assert.match(html,/<nav class="container r178-wayfinder" aria-label="Parcourir le Studio">/);
+ assert.match(html,/class="r178-wayfinder-grid"/);
+ for(const fragment of ['plateforme','exemples','approche'])
+  assert.match(html,new RegExp('href="#'+fragment+'" class="r178-wayfinder-link"'));
+ assert.equal((html.match(/class="r178-wayfinder-link"/g)||[]).length,3);
+ assert.match(css,/body>\.site-header\.container\{[\s\S]*?position:sticky!important/);
+ assert.match(css,/html\{scroll-padding-top:/);
+ assert.match(css,/\.r178-wayfinder-link:focus-visible\{outline:3px/);
+ assert.match(css,/@media\(max-width:720px\)\{[\s\S]*?\.r178-wayfinder-grid\{grid-template-columns:1fr/);
+ assert.match(css,/@media\(prefers-reduced-motion:reduce\)\{[\s\S]*?\.r178-wayfinder-link\{transition:none!important/);
+ assert.doesNotMatch(html,/r173-beam-one|r173-scan-travel|r173-card-shimmer/);
+ assert.equal((html.match(/<script\b/g)||[]).length,1);
+});
