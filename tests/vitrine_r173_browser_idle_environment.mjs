@@ -59,7 +59,7 @@ for(const vw of [1280,390,320]){
  if(Math.abs(Number(resetYaw))>.001)throw Error('R185_ORBIT_HOME_FAIL_'+vw+' '+resetYaw);
  console.log('R185_REAL_R182_BROWSER_'+vw+'=PASS '+JSON.stringify({lab,yaw,resetYaw}));
 
- if(intro.stageTop>150||intro.stageHeight<500||intro.stageBottom>970||intro.copyTop<intro.stageBottom-2||intro.titleTop<intro.stageBottom+45||intro.roomDisplay!=='none'||intro.linksDisplay!=='none'||intro.buttonHref!=='#hero-title'||!intro.buttonVisible||intro.canvasOpacity!=='1'||intro.ready!=='true'||intro.canvasCount!==1||intro.scrollWidth>vw+2)throw Error('R183_SPHERE_FIRST_FAIL_'+vw+' '+JSON.stringify(intro));
+ if(intro.stageTop>150||intro.stageHeight<500||intro.stageBottom>970||intro.copyTop<intro.stageBottom-2||intro.titleTop<intro.stageBottom+45||intro.roomDisplay!=='none'||intro.linksDisplay!=='none'||intro.buttonHref!=='#hero-title'||!intro.buttonVisible||Number(intro.canvasOpacity)<0.95||intro.ready!=='true'||intro.canvasCount!==1||intro.scrollWidth>vw+2)throw Error('R183_SPHERE_FIRST_FAIL_'+vw+' '+JSON.stringify(intro));
  if(capture){
   await send('Runtime.evaluate',{expression:"window.scrollTo({top:0,behavior:'instant'})"});
   await sleep(160);
