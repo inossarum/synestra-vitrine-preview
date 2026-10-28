@@ -1,0 +1,99 @@
+{
+  "schema": "synestra.siteforge.r1874.five_thin_flux_qa.v1",
+  "date": "2026-10-28",
+  "mission_id": "SYN_SITEFORGE_R1874_FIVE_THIN_FLUX_20261028",
+  "owner": "inossarum",
+  "repository": "inossarum/synestra-vitrine-preview",
+  "branch": "task/SYN_SITEFORGE_R1874_FIVE_THIN_FLUX_20261028",
+  "base_commit": "5a0c16e10963d71676585c88cce3f8306b50d8f5",
+  "scope": "FlowType=6 shader only, page title, material option and LAB badge; no changes to original materials 0..5 or JSON controls",
+  "artifact": "siteforge-r1874-autonome.html",
+  "artifact_sha256": "58cfbd4aa4dd9bc5c7240502f2acee206b0988885b32312c839dfea12f9551fa",
+  "build_script": "tools/build_r1874_five_thin_flux.py",
+  "base_checkout_sha256_crlf": "ea74529ff4a5b402f8e0c90221d3a8111f75a2f52a8aadea549b5afa5db6dd37",
+  "base_normalized_sha256": "466ec3bf1305e465a77a1af7e3e690b92cda46a65f6996eb97cba60de19c3543",
+  "delta": [
+    "Reduce 3 historical cylinder outer shell radius peaks A .230→.158, B .250→.172, C .250→.165 and thin radial gaussians",
+    "Reduce diffuse core cross-section and narrow highlight ridges on A/B/C without SDF or opaque wall",
+    "Add D and E as two further separately inclined toroidal 3D flow families with independent time deformation, shell/body/shade/specular/filament & flux",
+    "Mix D cyan, E magenta with prior A/B/C; keep partial transparency and front/back depth shading",
+    "Bounded brightness refinement after underexposed first pass: total gain 6.15→8.25, filmic 1.20→1.28, alpha .70→.79; no geometry thickening"
+  ],
+  "tests": {
+    "static": {
+      "status": "PASS",
+      "count": 5,
+      "checks": [
+        "strict CSP exact hash without unsafe-inline",
+        "five distinct 3D family shell/body/spec fields and independent animation",
+        "exact R187.3 source reconstruction outside flowType6 and version labels/CSP",
+        "7 material options, 18 scene, 10 motes, JSON import/export",
+        "translucent volume and no opaque SDF"
+      ]
+    },
+    "chrome_desktop": {
+      "status": "PASS",
+      "environment": "Chrome/Windows WebGL SwiftShader",
+      "viewport": [
+        1100,
+        800
+      ],
+      "webgl_error": 0,
+      "spin_unchanged": true,
+      "particle_speed": 0,
+      "changed_pixels": 72411,
+      "total_pixels": 307840,
+      "percent": 23.5223,
+      "flow_type_direct_url": 6,
+      "flow_type_7th_option": true
+    },
+    "chrome_mobile_emulation": {
+      "status": "PASS",
+      "viewport": [
+        390,
+        844
+      ],
+      "webgl_error": 0,
+      "spin_unchanged": true,
+      "particle_speed": 0,
+      "changed_pixels": 40958,
+      "total_pixels": 104676,
+      "percent": 39.1284
+    },
+    "visual_review": "First output was too dim; second output retained for owner comparison after bounded brightness correction. Five narrower interlocking luminous paths remain, but user approval pending.",
+    "local_preview": {
+      "url": "http://127.0.0.1:19094/siteforge-r1874-autonome.html?demo=energy",
+      "http_status": 200,
+      "bind": "127.0.0.1 only"
+    }
+  },
+  "evidence_images": [
+    {
+      "file": "evidence/r1874-energy-ui.png",
+      "sha256": "a0789c2298390c3be5b99bf973fcae840ba35bbbdf61ab9f3c42d8b5ad61e97d"
+    },
+    {
+      "file": "evidence/r1874-first.png",
+      "sha256": "a44529b76da8ef0e8bb020a3cb4df31b36cf72b63ed6fc7b3471082533dc9681"
+    },
+    {
+      "file": "evidence/r1874-later.png",
+      "sha256": "8ff045f3d5494d445604a44f10bc773e5a76883aa025f112efd0c717755788f6"
+    },
+    {
+      "file": "evidence/r1874-mobile-first.png",
+      "sha256": "a939ea54a7cef8851540bea4811be912e7275528d2e65195b745f2adaef54129"
+    },
+    {
+      "file": "evidence/r1874-mobile-later.png",
+      "sha256": "93b0a172e1c521db2eee09bb814b0db68c8a019a14eec1f85732fbe485bcf669"
+    }
+  ],
+  "limits": [
+    "Physical hardware GPU and real mobile performance/FPS not measured",
+    "No public deployment or push/merge",
+    "Artistic approval pending",
+    "Chrome warns frame-ancestors unsupported in CSP meta; favicon 404 inherited"
+  ],
+  "outcome": "LOCAL_E2E_PASS_ART_ACCEPTANCE_PENDING"
+}
