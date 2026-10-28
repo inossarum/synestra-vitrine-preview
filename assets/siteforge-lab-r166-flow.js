@@ -250,6 +250,7 @@ uniform vec4 uEffects; // arc power, arc count, sprite size, opacity
 varying float vLife,vGlint;
 varying vec2 vAxis,vMoteCenter;
 varying float vMoteDepth;
+varying float vMoteSeed;
 uniform float uMoteCount;
 uniform vec4 uMoteStyle; // radiusBase, radialSpread, size, intensity
 uniform float uSpinPhase; // R178 shared phase: motes and plasma rotate in the same direction
@@ -269,7 +270,7 @@ vec3 orbitToLocal(vec3 view){
 }
 float rnd(float x){return fract(sin(x*127.1+49.6)*43758.5453);}
 void main(){
- vMoteDepth=0.;vMoteCenter=vec2(10.);
+ vMoteDepth=0.;vMoteCenter=vec2(10.);vMoteSeed=0.;
  if(uPass>3.5&&uPass<4.5){
   vLife=1.;vGlint=1.;vAxis=vec2(1.,0.);gl_PointSize=1.;
   gl_Position=vec4(aPosition,0.,1.);return;
@@ -317,6 +318,7 @@ void main(){
   float z=1.-2.*(i+.5)/max(1.,uMoteCount);
   float polar=i*2.39996323+.13*(rnd(i*19.1)-.5);
   float ring=sqrt(max(.0,1.-z*z));
+  vMoteSeed=rnd(i*11.87+3.1);
   float moteRadius=radius*(uMoteStyle.x+uMoteStyle.y*rnd(i*7.19+17.));
   vec3 local=vec3(cos(polar)*ring,z,sin(polar)*ring)*moteRadius;
   // R178: co-rotate the FULL XYZ shell around the local plasma Z axis.
@@ -381,6 +383,7 @@ precision mediump float;
 varying float vLife,vGlint;
 varying vec2 vAxis,vMoteCenter;
 varying float vMoteDepth;
+varying float vMoteSeed;
 uniform vec2 uResolution;
 uniform float uTime,uPass,uLayer;
 uniform vec4 uControls,uShape,uEffects;
@@ -389,6 +392,7 @@ uniform float uSpinPhase; // R178: same local angular phase as the floating mote
 uniform vec3 uCore,uCyan,uViolet,uDeep;
 uniform vec3 uMotePrimary,uMoteSecondary;
 uniform float uMoteShape; // R180: 0 spark, 1 faceted shard, 2 ion orb
+uniform vec2 uMoteFinish; // R182: surface roughness, crystal reflectance
 uniform vec2 uTilt;
 uniform float uVolumeSteps;
 uniform vec2 uFlow;
@@ -435,20 +439,34 @@ void main(){
    // Independent facet normals, pointing into the core's genuine centre.
    float faceSide=step(0.,facetXY.y);
    float faceTip=step(.27,axial);
+   // R182: bounded, deterministic microfacet imperfections per crystal.
+   // Material-space seed follows the 3D shard instead of tracking the screen.
+   float roughness=clamp(uMoteFinish.x,0.,1.);
+   float reflectionStrength=clamp(uMoteFinish.y,0.,2.);
+   vec2 grainCell=floor((facetXY+vMoteSeed*2.7)*24.);
+   float grain=fract(sin(dot(grainCell,vec2(127.1,311.7)))*43758.5453);
+   float hairline=1.-smoothstep(.016,.056,
+     abs(fract(facetXY.x*7.5+facetXY.y*3.1+grain*.42+vMoteSeed*8.)-.5));
    vec3 normal=normalize(vec3(mix(-.72,.68,faceSide),
                               mix(.18,-.52,faceTip),.90));
+   normal=normalize(normal+vec3((grain-.5)*roughness*.19,
+                    sin(facetXY.x*19.+vMoteSeed*11.)*roughness*.07,0.));
    vec3 sourceDir=normalize(vec3(-vMoteCenter*.95+.14,1.50));
    float diffuse=.30+.70*max(dot(normal,sourceDir),0.);
    vec3 reflected=reflect(-sourceDir,normal);
-   float specular=pow(max(reflected.z,0.),18.);
+   float specular=pow(max(reflected.z,0.),mix(34.,8.,roughness));
    // Edge bevel and core-facing rim are stable when the sphere is orbited.
    float bevel=smoothstep(.64,.78,sideCut)*(1.-smoothstep(.78,.90,sideCut));
    float rim=smoothstep(-.18,.62,dot(normal,sourceDir));
    float facetTone=mix(.61,1.04,faceSide)*mix(1.03,.73,faceTip);
-   lightCol=col*(.44+diffuse*.90)*facetTone+
-            hot*(specular*1.75+bevel*(.25+.52*rim));
-   // A crisp centre reflection, without turning the crystal into a flare.
-   lightCol+=hot*.16*(1.-smoothstep(.02,.42,r2));
+   float surfaceGrain=1.-roughness*(.065+hairline*.22);
+   lightCol=col*(.44+diffuse*.90)*facetTone*surfaceGrain+
+            hot*reflectionStrength*(specular*1.75+bevel*(.25+.52*rim));
+   // A restrained star-like core glint that follows each crystal orientation.
+   float streak=exp(-abs(facetXY.y+facetXY.x*.17)*24.)*
+       (1.-smoothstep(.12,.79,abs(facetXY.x)));
+   lightCol+=hot*reflectionStrength*(streak*.12+
+      .16*(1.-smoothstep(.02,.42,r2)));
   }else if(uMoteShape>1.5){
    float orb=exp(-r2*7.5),halo=exp(-r2*1.55);
    silhouette=clamp(orb*.86+halo*.22,0.,1.);
@@ -729,7 +747,7 @@ void main(){
  }
  gl.deleteShader(vert);gl.deleteShader(frag);
  const A=gl.getAttribLocation(program,'aPosition'),S=gl.getAttribLocation(program,'aSeed');
- const keys=['uResolution','uTime','uPass','uLayer','uTilt','uControls','uShape','uEffects','uCore','uCyan','uViolet','uDeep','uVolumeSteps','uFlow','uCompare','uDepthRefine','uPointer','uMoteCount','uSpinPhase','uMoteStyle','uMotePrimary','uMoteSecondary','uMoteShape'];
+ const keys=['uResolution','uTime','uPass','uLayer','uTilt','uControls','uShape','uEffects','uCore','uCyan','uViolet','uDeep','uVolumeSteps','uFlow','uCompare','uDepthRefine','uPointer','uMoteCount','uSpinPhase','uMoteStyle','uMotePrimary','uMoteSecondary','uMoteShape','uMoteFinish'];
  const U=Object.fromEntries(keys.map(k=>[k,gl.getUniformLocation(program,k)]));
  if(A<0||S<0||keys.some(k=>U[k]===null)){status(mainStatus,'GPU : paramètres incomplets.');return;}
  const quad=gl.createBuffer(),seeds=gl.createBuffer();if(!quad||!seeds)return;
@@ -796,6 +814,8 @@ void main(){
   gl.uniform3fv(U.uMotePrimary,new Float32Array(moteRGB('motePrimary')));
   gl.uniform3fv(U.uMoteSecondary,new Float32Array(moteRGB('moteSecondary')));
   gl.uniform1f(U.uMoteShape,moteVal('moteShape'));
+  gl.uniform2f(U.uMoteFinish,moteVal('moteRoughness')/100,
+                            moteVal('moteReflectivity')/100);
   gl.uniform2f(U.uFlow,sel('flowType'),num('flowStructure'));
   gl.uniform1f(U.uCompare,compareVariant);
   gl.uniform1f(U.uDepthRefine,depthVariant);

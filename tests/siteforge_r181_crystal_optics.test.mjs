@@ -9,7 +9,7 @@ test('R181 crystal has three planar normals and core-directed 3D lighting',()=>{
  assert.match(frag,/vec3 normal=normalize\(vec3\(mix\(-\.72,\.68,faceSide\)/);
  assert.match(frag,/vec3 sourceDir=normalize\(vec3\(-vMoteCenter\*\.95\+\.14,1\.50\)\)/);
  assert.match(frag,/float diffuse=\.30\+\.70\*max\(dot\(normal,sourceDir\),0\.\)/);
- assert.match(frag,/float specular=pow\(max\(reflected\.z,0\.\),18\.\)/);
+ assert.match(frag,/float specular=pow\(max\(reflected\.z,0\.\),mix\(34\.,8\.,roughness\)\)/);
  assert.match(frag,/float bevel=smoothstep\(\.64,\.78,sideCut\)/);
 });
 test('R181 old silhouettes and exact shared spin preserved',()=>{
@@ -30,7 +30,7 @@ test('R181 mobile adjusts volumetric sampling only when fill-rate heavy',()=>{
 });
 test('R181 compatibility: all 18 plasma and 8 mote controls unchanged',()=>{
  assert.equal((html.match(/data-sphere-control=/g)||[]).length,18);
- assert.equal((html.match(/data-mote-control=/g)||[]).length,8);
+ assert.equal((html.match(/data-mote-control=/g)||[]).length,10);
  assert.match(js,/schema:'synestra\.siteforge\.plasma-settings\.v1'/);
  assert.match(js,/version:1,/);
  assert.match(js,/motes\.enabled=motesEnabled/);

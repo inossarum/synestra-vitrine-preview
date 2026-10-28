@@ -1,0 +1,95 @@
+{
+  "schema": "synestra.siteforge.r182.microfacet-finish.evidence.v1",
+  "date": "2026-10-28",
+  "mission_id": "SYN_SITEFORGE_R182_CRYSTAL_MICROFACETS",
+  "owner": "Synestra owner",
+  "scope": {
+    "source_repo": "inossarum/synestra-vitrine-preview",
+    "source_branch": "task/SYN_SITEFORGE_R182_CRYSTAL_MICROFACETS_20261028",
+    "source_base_sha": "c10a99948a02a0ab11c9f31b7e318bc64a8b9157",
+    "production_main_verified_sha": "df67fcd5cc6b7cc0fb42fa86c8920d28b9427494",
+    "preview_repo": "inossarum/synestra-siteforge-r176-lab",
+    "preview_base_sha": "f194d783cd64dd3155db9058c717ca443be997e7",
+    "preview_path": "r182.html"
+  },
+  "preflight": {
+    "rules": "inossarum/studio-virtuel/AGENTS.md@e0f6df26edc9a45b7db1a5261e92b719d2dd66ce",
+    "immutable_rule15": "7a9235086852ea0f4ca69e481ade1657cf16498b",
+    "immutable_rule16": "fbb570833d365d135a4be9fec3c396eaf52a2ca3",
+    "memory_corpus_manifest": "00_DIRECTION/MEMORY_CORPUS_V1.json@2b1a02230f570aa153e01b686337a432e394f7ca",
+    "memory_relevant": "00_DIRECTION/DECISIONS_2026-09-04_CHAT_STUDIO_VISUAL_DIRECTION.md@ff6f5cfa61404e3e6739c5ecbb855f189b36cf5e",
+    "reasoning_baseline": "reasoning/SITEFORGE_R181_CRYSTAL_OPTICS_DECISION_20261028.md@0ab92bd9bebdb083fce93bec62f16e5f7b6cc009",
+    "skill_bundle": "human-intent-requirements-fidelity@87fe0910298c371b1defca10948b8f10af840a8b;visual-diff-iteration@c6d5fd0845d57f6d5ea7c3a632609689f29840d4",
+    "skill_execution": "CONTEXT_ADVISORY_ONLY",
+    "history_denials_revalidated": "Both Windows start_process and official GitHub create_branch succeeded this turn"
+  },
+  "change": {
+    "js_blob_sha": "8f6e4c8241eea569755f5c16759ea26b8e27fcba",
+    "html_blob_sha": "daf8d598b28ee0e866e091799a788a1103d6d562",
+    "standalone_blob_sha": "55f54b38fd56310faa20cd3217bfbeff1cd9100d",
+    "changes": [
+      "Each mote has stable vMoteSeed identity for procedural finish in local fragment coordinates",
+      "Crystal face normals receive bounded microfacet roughness; core-centred diffuse/specular lighting preserved",
+      "Controlled narrow hairline grain and crystal bevel reflection; no extra pass/context or screen light scanning",
+      "Added moteRoughness 0-100 default 35 and moteReflectivity 0-200 default 95",
+      "Old JSON schema and exactly 18 plasma parameters, previous eight mote settings and 3 shapes preserved"
+    ]
+  },
+  "tests": {
+    "node": {
+      "tested": 151,
+      "pass": 151,
+      "fail": 0
+    },
+    "static": {
+      "status": "PASS",
+      "allowlisted_files": 49
+    },
+    "chrome_local": {
+      "status": "PASS",
+      "exit_code": 0,
+      "engine": "Chrome Windows WebGL ANGLE SwiftShader",
+      "webgl_error": 0,
+      "materials": 6,
+      "mobile_390px": "PASS",
+      "full_180_360_orbit": "PASS",
+      "mouse_touch": "PASS",
+      "spin_equal_phase": "PASS",
+      "json_roundtrip": "PASS",
+      "legacy_json": "PASS",
+      "invalid_json_atomic": "PASS",
+      "mote_controls": 10,
+      "plasma_controls": 18,
+      "microfacet_shader_diff": {
+        "pixels": 307840,
+        "changed": 30449,
+        "changed_percent": 9.891177234927236,
+        "angle_and_animation_paused": true,
+        "roughness_before": 0,
+        "roughness_after": 100,
+        "reflection_before": 0,
+        "reflection_after": 200
+      },
+      "screen_shots": [
+        "r182-crystal-matte.png",
+        "r182-crystal-surface.png"
+      ],
+      "adaptive_mobile_96_motes_12_steps": "PASS",
+      "adaptive_mobile_back_to_14_steps": "PASS",
+      "plasma_wave_zero_diff_after_pointer_release": "PASS"
+    }
+  },
+  "limits": [
+    "No physical GPU FPS measurements",
+    "Visual acceptance by Synestra owner pending",
+    "Final public HTTPS E2E pending"
+  ],
+  "security": {
+    "only_isolated_branch": true,
+    "no_main_merge": true,
+    "no_cloudflare_access_change": true,
+    "free_only": true,
+    "rollback": "Keep R181 and earlier; remove only r182.html from gh-pages if necessary"
+  },
+  "status": "LOCAL_CHROME_E2E_PASS_PUBLIC_E2E_PENDING"
+}

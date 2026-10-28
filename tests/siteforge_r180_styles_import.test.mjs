@@ -6,7 +6,7 @@ const js=read('assets/siteforge-lab-r166-flow.js');
 const html=read('siteforge/core-3d-lab/index.html');
 const frag=js.split('const fragment=')[1].split('function compile(')[0];
 test('R180: 3 actual shader styles and 8 independent mote controls, original 18 plasma controls',()=>{
- assert.equal((html.match(/data-mote-control=/g)||[]).length,8);
+ assert.equal((html.match(/data-mote-control=/g)||[]).length,10);
  assert.equal((html.match(/data-sphere-control=/g)||[]).length,18);
  for(const n of ['Étincelles','Fragments cristallins','Orbes ioniques'])assert.ok(html.includes(n));
  assert.match(js,/uniform float uMoteShape/);

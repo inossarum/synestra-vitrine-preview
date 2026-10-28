@@ -121,7 +121,7 @@ test('R152: native quick controls, safe defaults and accessible advanced setting
  assert.match(html,/aria-live="polite"/);
  assert.match(html,/default-src 'none'; script-src 'self'/);
  assert.match(html,/noindex,nofollow/);
- assert.equal((html.match(/type="range"/g)||[]).length,14);
+ assert.equal((html.match(/type="range"/g)||[]).length,16);
  assert.equal((html.match(/type="color"/g)||[]).length,6);
  assert.equal((html.match(/<select /g)||[]).length,2);
  const keys=Object.keys(defaults);

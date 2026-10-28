@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex,nofollow">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
-<title>SiteForge — Laboratoire énergétique 3D R180</title>
+<title>SiteForge — Laboratoire énergétique 3D R182</title>
 <style>
 :root{color-scheme:dark;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#050a14;color:#e7f4ff}
 *{box-sizing:border-box}
@@ -85,8 +85,8 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 </svg>
 </div>
 <form class="lab-controls" aria-label="Création de la nouvelle sphère plasma VFX" autocomplete="off">
-<div class="panel-head"><h2>Plasma Studio</h2><span class="preview-state">R180 · STYLES & IMPORT JSON</span></div>
-<p class="help">R180 : éclats 3D à rotation synchronisée, styles énergétiques différents et rechargement des paramètres JSON sauvegardés. Toutes les commandes sont applicables en direct.</p>
+<div class="panel-head"><h2>Plasma Studio</h2><span class="preview-state">R182 · CRISTAUX MICROFACETTÉS</span></div>
+<p class="help">R182 : reflets directionnels et micro-imperfections ajustables sur les cristaux 3D. Les autres styles, le mouvement synchronisé et le rechargement des paramètres restent disponibles.</p>
 <fieldset class="control-group mote-panel"><legend>✨ Éclats d'énergie 3D</legend>
 <button type="button" class="reset mote-toggle" data-mote-toggle aria-pressed="true">Éclats 3D : activés</button>
 <p class="help">Rotation synchronisée avec le plasma · vitesse <output data-mote-linked-speed>100 %</output>. La commande « Vitesse des flux » ajuste les deux simultanément, jusqu’à l’arrêt complet.</p>
@@ -97,6 +97,8 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 <div class="control-row"><label class="control-label" for="sf-moteSpread"><span>Dispersion des orbites</span><output for="sf-moteSpread" data-mote-value="moteSpread">31 %</output></label><input id="sf-moteSpread" data-mote-control="moteSpread" data-default="31" type="range" min="0" max="100" value="31" step="1"></div>
 <div class="control-row"><label class="control-label" for="sf-moteSize"><span>Taille des éclats</span><output for="sf-moteSize" data-mote-value="moteSize">100 %</output></label><input id="sf-moteSize" data-mote-control="moteSize" data-default="100" type="range" min="40" max="220" value="100" step="1"></div>
 <div class="control-row"><label class="control-label" for="sf-moteBrightness"><span>Intensité lumineuse</span><output for="sf-moteBrightness" data-mote-value="moteBrightness">100 %</output></label><input id="sf-moteBrightness" data-mote-control="moteBrightness" data-default="100" type="range" min="20" max="200" value="100" step="1"></div>
+<div class="control-row"><label class="control-label" for="sf-moteRoughness"><span>Micro-imperfections des cristaux</span><output for="sf-moteRoughness" data-mote-value="moteRoughness">35 %</output></label><input id="sf-moteRoughness" data-mote-control="moteRoughness" data-default="35" type="range" min="0" max="100" value="35" step="1"></div>
+<div class="control-row"><label class="control-label" for="sf-moteReflectivity"><span>Réflectivité des facettes</span><output for="sf-moteReflectivity" data-mote-value="moteReflectivity">95 %</output></label><input id="sf-moteReflectivity" data-mote-control="moteReflectivity" data-default="95" type="range" min="0" max="200" value="95" step="1"></div>
 <div class="color-grid">
 <div class="control-row"><label class="control-label" for="sf-motePrimary"><span>Couleur principale</span><output for="sf-motePrimary" data-mote-value="motePrimary">#51DFFF</output></label><input id="sf-motePrimary" data-mote-control="motePrimary" data-default="#51dfff" type="color" value="#51dfff"></div>
 <div class="control-row"><label class="control-label" for="sf-moteSecondary"><span>Couleur secondaire</span><output for="sf-moteSecondary" data-mote-value="moteSecondary">#53318D</output></label><input id="sf-moteSecondary" data-mote-control="moteSecondary" data-default="#53318d" type="color" value="#53318d"></div>
@@ -157,7 +159,7 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 <button class="reset" type="reset">Restaurer le plasma d'origine</button>
 <div class="export-controls">
 <button class="reset" type="button" data-export-json aria-describedby="sf-export-description">Exporter les paramètres (.json)</button>
-<p class="help" id="sf-export-description">Conserve les 18 paramètres du plasma et les 8 réglages des éclats (formes comprises). Les anciens exports restent compatibles.</p>
+<p class="help" id="sf-export-description">Conserve les 18 paramètres du plasma et les 10 réglages des éclats (dont imperfections et réflectivité). Les anciens exports restent compatibles.</p>
 <p class="help" data-export-status role="status" aria-live="polite"></p>
 <button class="reset import-action" type="button" data-import-json aria-describedby="sf-import-description">Importer des paramètres (.json)</button>
 <input type="file" hidden data-import-file accept=".json,application/json" aria-label="Fichier de paramètres SiteForge JSON">
