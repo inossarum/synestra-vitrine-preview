@@ -94,3 +94,17 @@ test('R180 product concept tags are legible and secondary calls to action do not
  assert.match(css,/#plateforme \.product-card-body \.product-deep-link\{display:flex;align-items:center;width:fit-content/);
  assert.match(html,/class="product-deep-link product-deep-link-subtle"/);
 });
+
+test('R181 technology explorer is deep-linkable, genuinely interactive, and degrades gracefully',()=>{
+ assert.match(html,/class="r181-explorer" aria-label="Console d.exploration des technologies Synestra"/);
+ assert.match(html,/<nav class="r181-console-switcher" aria-label="Explorer les technologies">/);
+ assert.match(html,/href="#bridge" class="r181-console-choice r181-choice-bridge"/);
+ assert.match(html,/href="#connect" class="r181-console-choice r181-choice-connect"/);
+ assert.match(css,/@supports selector\(#plateforme:has\(#connect:target\)\)/);
+ assert.match(css,/#plateforme:not\(:has\(#connect:target\)\) \.r181-console-viewport \.product-card-connect\{display:none\}/);
+ assert.match(css,/#plateforme:has\(#connect:target\) \.r181-console-viewport \.product-card-bridge\{display:none\}/);
+ assert.match(css,/#plateforme \.r181-console-viewport \.product-visual\{[^}]*transform:perspective\(1200px\)/);
+ assert.match(css,/@media\(prefers-reduced-motion:reduce\)\{[^}]*#plateforme \.r181-console-choice/);
+ assert.equal((html.match(/<canvas\b/g)||[]).length,1);
+ assert.equal((html.match(/<script\b/g)||[]).length,1);
+});
