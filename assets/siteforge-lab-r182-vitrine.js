@@ -14,6 +14,9 @@
  const num=k=>Number(controls[k]?.value??defaults[k])/100;
  const sel=k=>Number(controls[k]?.value??defaults[k]);
  const rgb=k=>[1,3,5].map(i=>parseInt((controls[k]?.value||defaults[k]||'#ffffff').slice(i,i+2),16)/255);
+ // R187: independent current/stream palette. Base-orb material remains the R185 colors.
+ const flowColors=Object.fromEntries([...document.querySelectorAll('[data-flow-color]')].map(e=>[e.dataset.flowColor,e.value]));
+ const flowRGB=k=>[1,3,5].map(i=>parseInt((flowColors[k]||'#ffffff').slice(i,i+2),16)/255);
  // R179 controls remain separate: v1 plasma 'parameters' stays exactly 18 items.
  const moteControls=Object.fromEntries([...document.querySelectorAll('[data-mote-control]')]
   .map(e=>[e.dataset.moteControl,e]));
@@ -390,6 +393,7 @@ uniform vec4 uControls,uShape,uEffects;
 uniform vec4 uPointer; // R176: cursor displacement drives the actual volumetric waves
 uniform float uSpinPhase; // R178: same local angular phase as the floating motes
 uniform vec3 uCore,uCyan,uViolet,uDeep;
+uniform vec3 uFlowDeep,uFlowViolet,uFlowSilver,uFlowGreen,uFlowCyan,uFlowAccent;
 uniform vec3 uMotePrimary,uMoteSecondary;
 uniform float uMoteShape; // R180: 0 spark, 1 faceted shard, 2 ion orb
 uniform vec2 uMoteFinish; // R182: surface roughness, crystal reflectance
@@ -684,7 +688,17 @@ void main(){
     vec3 blue=mix(uDeep*.65,uViolet*.69,clamp(distance3D*.72+broad*.42,0.,1.));
     float violetBand=.5+.5*sin(angle*3.0+q.z*4.0+broad*2.2);
     vec3 ion=mix(uCyan,uViolet,clamp(.12+.72*violetBand,0.,1.));
-    vec3 filamentColor=mix(blue,ion,clamp(currents*.83+.11,0.,1.));
+    // R187: apply Studio colors ONLY where the moving streams exist.
+    // The underlying orb volume, nucleus and soft halo retain their original colors.
+    vec3 baseVolumeColor=mix(blue,ion,clamp(currents*.83+.11,0.,1.));
+    float flowPhase=.5+.5*sin(angle*3.7+q.z*2.6+t*.18);
+    vec3 darkStream=mix(uFlowDeep,uFlowViolet,clamp(.18+.64*flowPhase,0.,1.));
+    vec3 neonStream=mix(uFlowCyan,uFlowGreen,clamp(.25+.5*violetBand,0.,1.));
+    vec3 flowInk=mix(darkStream,neonStream,clamp(.44+.43*filamentPeak,0.,1.));
+    flowInk=mix(flowInk,uFlowAccent,clamp(.08+.18*(1.-flowPhase),0.,.3));
+    flowInk=mix(flowInk,uFlowSilver,clamp(.08+.19*filamentPeak,0.,.3));
+    float flowIsolation=smoothstep(.11,.65,currents)*clamp(.18+.82*filamentPeak,0.,1.);
+    vec3 filamentColor=mix(baseVolumeColor,flowInk,flowIsolation);
     float refinedRadianceScale=(.34+1.05*filamentPeak)*frontLayer;
     vec3 radiance=filamentColor*(.50+currents*1.30)
                   *mix(1.,refinedRadianceScale,uDepthRefine)
@@ -747,7 +761,7 @@ void main(){
  }
  gl.deleteShader(vert);gl.deleteShader(frag);
  const A=gl.getAttribLocation(program,'aPosition'),S=gl.getAttribLocation(program,'aSeed');
- const keys=['uResolution','uTime','uPass','uLayer','uTilt','uControls','uShape','uEffects','uCore','uCyan','uViolet','uDeep','uVolumeSteps','uFlow','uCompare','uDepthRefine','uPointer','uMoteCount','uSpinPhase','uMoteStyle','uMotePrimary','uMoteSecondary','uMoteShape','uMoteFinish'];
+ const keys=['uResolution','uTime','uPass','uLayer','uTilt','uControls','uShape','uEffects','uCore','uCyan','uViolet','uDeep','uVolumeSteps','uFlow','uCompare','uDepthRefine','uPointer','uMoteCount','uSpinPhase','uMoteStyle','uMotePrimary','uMoteSecondary','uMoteShape','uMoteFinish','uFlowDeep','uFlowViolet','uFlowSilver','uFlowGreen','uFlowCyan','uFlowAccent'];
  const U=Object.fromEntries(keys.map(k=>[k,gl.getUniformLocation(program,k)]));
  if(A<0||S<0||keys.some(k=>U[k]===null)){status(mainStatus,'GPU : paramètres incomplets.');return;}
  const quad=gl.createBuffer(),seeds=gl.createBuffer();if(!quad||!seeds)return;
@@ -839,6 +853,9 @@ void main(){
   ]));
   for(const [uniform,k] of [['uCore','core'],['uCyan','rim'],['uViolet','secondary'],['uDeep','primary']]){
    gl.uniform3fv(U[uniform],new Float32Array(rgb(k)));
+  }
+  for(const [uniform,k] of [['uFlowDeep','primary'],['uFlowViolet','secondary'],['uFlowSilver','core'],['uFlowGreen','rim'],['uFlowCyan','motePrimary'],['uFlowAccent','moteSecondary']]){
+   gl.uniform3fv(U[uniform],new Float32Array(flowRGB(k)));
   }
   gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);
   // Same emitter program and GPU context renders the material field and sprites.
