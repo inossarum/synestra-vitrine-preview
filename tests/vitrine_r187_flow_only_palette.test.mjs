@@ -42,7 +42,7 @@ test('R187 Studio palette is assigned to flowing filaments, not sphere base mate
  }
  assert.match(shader,/uniform vec3 uFlowDeep,uFlowViolet,uFlowSilver,uFlowGreen,uFlowCyan,uFlowAccent;/);
  assert.match(shader,/vec3 baseVolumeColor=mix\(blue,ion,/);
- assert.match(shader,/float flowIsolation=smoothstep\(\.11,\.65,currents\)/);
+ assert.match(shader,/float flowIsolation=smoothstep\(\.02,\.32,currents\)/);
  assert.match(shader,/vec3 filamentColor=mix\(baseVolumeColor,flowInk,flowIsolation\)/);
  assert.match(shader,/for\(const \[uniform,k\] of \[\['uCore','core'\],\['uCyan','rim'\],\['uViolet','secondary'\],\['uDeep','primary'\]\]\)/);
  assert.match(shader,/for\(const \[uniform,k\] of \[\['uFlowDeep','primary'\],\['uFlowViolet','secondary'\],\['uFlowSilver','core'\],\['uFlowGreen','rim'\],\['uFlowCyan','motePrimary'\],\['uFlowAccent','moteSecondary'\]\]\)/);
