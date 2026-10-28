@@ -2444,6 +2444,66 @@ body .product-card .product-deep-link:focus-visible{
  .hero-v2 .hero-actions{pointer-events:auto}
 }
 
+
+/* R182 / VISUAL HIERARCHY FIX after real owner screenshot: visual core leads; text supports.
+   Reuses approved copy and existing single WebGL canvas; never adds page scanning. */
+@media(min-width:1100px){
+ .hero-v2{
+  grid-template-rows:minmax(680px,auto);
+  padding-top:clamp(1.9rem,3vw,3.3rem);
+  padding-bottom:clamp(3.2rem,4.8vw,4.8rem);
+ }
+ .hero-v2 .hero-copy{
+  width:min(47%,570px);
+  max-width:570px;
+  padding:clamp(1.3rem,2.1vw,2rem) clamp(.75rem,1.5vw,1.5rem) clamp(1.3rem,2.1vw,2rem) 0;
+  background:linear-gradient(90deg,rgba(6,15,29,.96) 0%,rgba(6,15,29,.93) 37%,rgba(6,15,29,.62) 79%,rgba(6,15,29,0) 100%);
+ }
+ .hero-v2 h1{
+  max-width:570px;
+  font-size:clamp(3.55rem,4.65vw,5.45rem);
+  line-height:1.03;
+  letter-spacing:-.066em;
+ }
+ .hero-v2 .hero-topline{margin-top:1.25rem;margin-bottom:.45rem}
+ .hero-v2 .hero-lead{font-size:clamp(1rem,1.15vw,1.11rem);line-height:1.65;max-width:28rem}
+ .hero-v2 .hero-actions{gap:.65rem;flex-wrap:wrap}
+ .hero-v2 .pilot-caption{max-width:31rem;line-height:1.6}
+ .hero-v2 .system-stage{width:min(82%,1130px);min-height:680px}
+ .hero-v2 .system-stage .syn-r169-room{opacity:.78}
+ .hero-v2 .core-r109-stage .core-r109-canvas{
+  transform:translateX(11%) scale(.7)!important;
+  transform-origin:center center;
+ }
+ .hero-v2 .system-stage .core-r108-links{
+  left:clamp(1rem,2.1vw,2.2rem);
+  right:clamp(1rem,2.1vw,2.2rem);
+  bottom:2.9rem;
+  gap:.72rem;
+ }
+ .hero-v2 .system-stage .core-r108-links a{
+  min-height:52px;padding:.65rem .8rem;
+  border:1px solid rgba(145,205,230,.56);border-radius:.7rem;
+  background:rgba(8,25,46,.94);color:#f0f9ff;
+  box-shadow:0 10px 25px rgba(3,10,25,.2);
+ }
+ .hero-v2 .system-stage .core-r108-links a strong{
+  font-size:clamp(.88rem,1vw,1.05rem);letter-spacing:-.015em;
+ }
+ .hero-v2 .system-stage .core-r108-links a span:first-child{display:none}
+ .hero-v2 .system-stage .core-r108-note{
+  bottom:1rem;color:#afc7dc;font-size:.72rem;
+ }
+}
+@media(min-width:1100px) and (max-width:1299px){
+ .hero-v2 .hero-copy{width:min(48%,530px)}
+ .hero-v2 h1{font-size:clamp(3.45rem,4.4vw,4.5rem)}
+ .hero-v2 .core-r109-stage .core-r109-canvas{transform:translateX(12%) scale(.66)!important}
+}
+@media(prefers-reduced-motion:reduce){
+ .hero-v2 .core-r109-stage .core-r109-canvas{transition:none!important}
+}
+
 </style>
 </head>
 <body>
