@@ -1664,6 +1664,65 @@ body>header,body>main,body>footer{position:relative;z-index:1}
  .core-r109-stage .syn-r169-room .r169-portal-mechanics {animation:none!important;transform:none!important;}
 }
 
+
+/* R171 accessible pilot CTA: legibility, contrast, 48px target and consistent states.
+   Specificity prevents legacy R99 rules from silently recoloring this navigation action. */
+header.site-header nav.site-nav a.nav-cta {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:.5rem;
+  min-width:148px;
+  min-height:48px;
+  padding:.75rem 1.125rem;
+  box-sizing:border-box;
+  border:1px solid #a7d3f4;
+  border-radius:999px;
+  background:linear-gradient(120deg,#b0d5ff 0%,#90e0ec 100%);
+  color:#071523;
+  -webkit-text-fill-color:#071523;
+  font-size:.94rem;
+  line-height:1.35;
+  font-weight:750;
+  letter-spacing:.004em;
+  text-shadow:none;
+  opacity:1;
+  white-space:nowrap;
+  box-shadow:0 6px 20px rgba(40,138,221,.16);
+  transition:transform .2s ease,box-shadow .2s ease,background .2s ease;
+}
+header.site-header nav.site-nav a.nav-cta span {
+  color:#071523;
+  -webkit-text-fill-color:#071523;
+  font-weight:800;
+  opacity:1;
+}
+header.site-header nav.site-nav a.nav-cta:hover {
+  background:linear-gradient(120deg,#cae2ff 0%,#a7ecf3 100%);
+  border-color:#d2f3ff;
+  color:#071523;
+  -webkit-text-fill-color:#071523;
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(65,153,230,.23);
+}
+header.site-header nav.site-nav a.nav-cta:focus-visible {
+  outline:3px solid #c4efff;
+  outline-offset:4px;
+  box-shadow:0 0 0 2px #080e1a,0 0 0 6px rgba(196,239,255,.24);
+}
+header.site-header nav.site-nav a.nav-cta:active {transform:translateY(0)}
+@media(max-width:720px) {
+  header.site-header nav.site-nav a.nav-cta {
+    min-width:148px;
+    min-height:48px;
+    font-size:.94rem;
+    padding:.75rem 1rem;
+  }
+}
+@media(prefers-reduced-motion:reduce) {
+  header.site-header nav.site-nav a.nav-cta {transition:none!important;transform:none!important}
+}
+
 </style>
 </head>
 <body>
