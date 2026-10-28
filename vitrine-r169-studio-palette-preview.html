@@ -1059,7 +1059,6 @@
     .product-visual {border-color:rgba(114,173,222,.28);}
     .product-visual::after {content:"";position:absolute;inset:0;pointer-events:none;z-index:1;opacity:.22;
       background:repeating-linear-gradient(180deg,transparent 0,transparent 9px,rgba(131,202,230,.12) 10px,transparent 11px);}
-    .bridge-visual::after {animation:cin-scan 7s ease-in-out infinite alternate;}
     .visual-window {box-shadow:0 24px 55px rgba(0,2,14,.45),0 0 30px rgba(14,135,213,.08);}
     .visual-stamp {z-index:6;color:#afdced;}
     .connect-track {animation:cin-connect 32s linear infinite;transform-origin:50% 50%;}
@@ -1072,9 +1071,6 @@
     .example-card::before {content:"";position:absolute;left:0;top:0;width:45px;height:1px;background:#89deff;
       box-shadow:0 0 14px rgba(0,191,255,.45);}
     .siteforge-showcase {position:relative;overflow:hidden;}
-    .siteforge-showcase::after {content:"";position:absolute;inset:0;pointer-events:none;opacity:.13;
-      background:linear-gradient(115deg,transparent 30%,rgba(159,221,255,.25) 50%,transparent 64%);
-      background-size:260% 100%;animation:cin-glint 18s linear infinite;}
     .siteforge-preview {position:relative;z-index:1;}
     @keyframes cin-header {0%{transform:translateX(0);opacity:.55}100%{transform:translateX(215%);opacity:1}}
     @keyframes cin-aurora {0%{background-position:0 50%}100%{background-position:100% 50%}}
@@ -2212,6 +2208,65 @@ body .product-card .product-deep-link:focus-visible{
  .r179-system-list a:hover,.r179-system-list a:focus-visible{padding-left:clamp(1.3rem,2.3vw,2.1rem)}
 }
 
+
+/* R180: Synestra's editorial technology chapter; no new canvas, scripts or scans. */
+.r180-chapter-label{display:inline-flex;align-items:center;gap:.8rem;margin:0 0 1.6rem;color:#99b1cb;font:700 .69rem/1.4 ui-monospace,Consolas,monospace;letter-spacing:.15em}
+.r180-chapter-label span{display:inline-grid;place-items:center;width:2.25rem;height:2.25rem;border:1px solid rgba(146,202,241,.54);border-radius:.35rem;background:rgba(75,125,171,.12);color:#97e8fa}
+#plateforme .section-heading-split{gap:clamp(1rem,4vw,4rem);align-items:end;margin-bottom:clamp(2rem,4vw,3.25rem)}
+#plateforme #platform-title{max-width:920px;font-size:clamp(2.65rem,4.8vw,5.5rem);line-height:1.04;letter-spacing:-.065em;text-wrap:balance}
+#plateforme .section-intro{max-width:32rem}
+#plateforme .product-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(1.55rem,3.2vw,3.3rem)}
+#plateforme .product-card,#plateforme .product-card:nth-child(even){display:grid;grid-template-columns:minmax(0,1.03fr) minmax(0,.97fr);grid-template-areas:"meta meta" "visual copy";min-width:0;overflow:hidden;border:1px solid rgba(136,169,204,.34);border-radius:1.15rem;background:linear-gradient(145deg,rgba(19,33,56,.97),rgba(9,19,36,.98));box-shadow:0 28px 64px rgba(2,7,19,.24),inset 0 1px rgba(239,251,255,.06);transform:none}
+#plateforme .product-card:nth-child(even){grid-template-areas:"meta meta" "copy visual";background:linear-gradient(215deg,rgba(28,31,58,.98),rgba(9,19,36,.98))}
+#plateforme .product-card:hover{transform:none;border-color:rgba(146,214,243,.67)}
+#plateforme .product-card-top{grid-area:meta;min-width:0;padding:1rem clamp(1.1rem,2.5vw,2.2rem);border-bottom:1px solid rgba(137,171,207,.24)}
+#plateforme .product-card .product-visual{grid-area:visual;align-self:stretch;margin:clamp(1.05rem,2.1vw,1.8rem);height:auto;min-height:clamp(330px,33vw,485px);border-radius:.72rem;background-clip:padding-box}
+#plateforme .product-card .product-visual::after{content:none!important;animation:none!important}
+#plateforme .product-card .product-card-body{grid-area:copy;align-self:center;min-width:0;padding:clamp(1.4rem,3.3vw,3.8rem) clamp(1.3rem,3vw,3.4rem)}
+#plateforme .product-card-body .product-heading h3{font-size:clamp(2rem,3.4vw,3.8rem);line-height:1.05;letter-spacing:-.064em}
+#plateforme .product-card-body > p:not(.product-caveat){max-width:34rem;font-size:clamp(.98rem,1.14vw,1.15rem);line-height:1.75}
+#plateforme .product-card-body .product-caveat{font-size:.82rem;line-height:1.7}
+#plateforme .product-card-body .product-deep-link{display:inline-flex;align-items:center;min-height:44px;max-width:100%;text-underline-offset:4px}
+#plateforme .product-card-body .product-facts{margin:1.35rem 0 1.6rem}
+#plateforme .product-card-body .product-facts span{color:#c6d6e8;border-color:rgba(123,167,199,.42)}
+.siteforge-showcase::after{content:none!important;animation:none!important}
+#exemples{padding-top:clamp(4rem,8vw,8rem)}
+#exemples .section-heading{max-width:1100px;margin-bottom:clamp(2rem,4vw,3.5rem)}
+#exemples #examples-title{max-width:1040px;font-size:clamp(2.75rem,5vw,5.8rem);line-height:1.08;letter-spacing:-.062em;text-wrap:balance}
+#exemples .examples-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:0;counter-reset:r180-example;border-bottom:1px solid rgba(141,174,209,.31)}
+#exemples .example-card{position:relative;display:grid;grid-template-columns:minmax(50px,.15fr) minmax(0,1.1fr) minmax(0,.86fr);gap:.5rem clamp(1rem,3vw,3rem);align-items:start;min-width:0;min-height:0;padding:clamp(1.65rem,3vw,2.7rem) .5rem;border:0;border-top:1px solid rgba(141,174,209,.31);border-radius:0;background:transparent;box-shadow:none;transform:none;counter-increment:r180-example}
+#exemples .example-card:hover{transform:none;border-color:rgba(141,174,209,.31)}
+#exemples .example-card::before{position:static;grid-column:1;grid-row:1 / span 2;content:"0" counter(r180-example);width:auto;height:auto;background:none;box-shadow:none;color:#9eeaff;font:700 .72rem/1.4 ui-monospace,Consolas,monospace;letter-spacing:.12em}
+#exemples .example-card .card-label{grid-column:2;grid-row:1;margin:0;color:#9ebad6;font-size:.68rem;letter-spacing:.16em}
+#exemples .example-card h3{grid-column:2;grid-row:2;margin:0;max-width:640px;color:#f0f5ff;font-size:clamp(1.28rem,2.2vw,2.3rem);letter-spacing:-.045em;line-height:1.25}
+#exemples .example-card > p:last-child{grid-column:3;grid-row:1 / span 2;align-self:center;margin:0;max-width:32rem;color:#adbfda;line-height:1.75;font-size:clamp(.9rem,1.14vw,1.05rem)}
+#approche .section-heading{max-width:1030px}
+#approche #approach-title{font-size:clamp(2.65rem,4.6vw,5.35rem);line-height:1.075;letter-spacing:-.055em;text-wrap:balance}
+@media(max-width:980px){
+ #plateforme .product-card,#plateforme .product-card:nth-child(even){grid-template-columns:minmax(0,1fr);grid-template-areas:"meta" "visual" "copy"}
+ #plateforme .product-card .product-visual{min-height:340px;height:340px;margin:1rem 1rem 0}
+ #plateforme .product-card .product-card-body{padding:1.35rem 1.6rem 2rem}
+ #exemples .example-card{grid-template-columns:48px minmax(0,1fr)}
+ #exemples .example-card > p:last-child{grid-column:2;grid-row:3;align-self:auto}
+}
+@media(max-width:720px){
+ #plateforme .section-heading-split{align-items:start}
+ #plateforme #platform-title{font-size:clamp(2.5rem,8.6vw,3.8rem)}
+ #plateforme .product-card .product-visual{min-height:285px;height:285px;margin:.85rem .85rem 0}
+ #plateforme .product-card .product-card-body{padding:1.25rem 1.05rem 1.65rem}
+ #plateforme .product-card-body .product-heading h3{font-size:clamp(1.7rem,6.4vw,2.6rem)}
+ #plateforme .product-card-top{padding:.85rem 1rem;flex-wrap:wrap}
+ #exemples{padding-top:3.5rem}
+ #exemples #examples-title{font-size:clamp(2.3rem,8.7vw,3.8rem)}
+ #exemples .example-card{grid-template-columns:36px minmax(0,1fr);column-gap:.75rem}
+ #exemples .example-card h3{font-size:clamp(1.25rem,5.3vw,1.75rem)}
+ #exemples .example-card > p:last-child{font-size:.93rem}
+ #approche #approach-title{font-size:clamp(2.2rem,8vw,3.7rem)}
+}
+@media(prefers-reduced-motion:reduce){
+ #plateforme .product-card,#plateforme .product-card:hover,#exemples .example-card,#exemples .example-card:hover{animation:none!important;transition:none!important;transform:none!important}
+}
+
 </style>
 </head>
 <body>
@@ -2868,6 +2923,7 @@ body .product-card .product-deep-link:focus-visible{
     <section class="container section product-section" id="plateforme" aria-labelledby="platform-title">
       <div class="section-heading section-heading-split">
         <div>
+          <p class="r180-chapter-label"><span aria-hidden="true">02</span> / LES TECHNOLOGIES</p>
           <p class="section-kicker">Une idée, plusieurs savoir-faire</p>
           <h2 id="platform-title">Un Studio.<br><span class="soft-gradient">Des connexions.</span> De nouvelles possibilités.</h2>
         </div>
@@ -2926,6 +2982,7 @@ body .product-card .product-deep-link:focus-visible{
 
         <section class="container section" id="exemples" aria-labelledby="examples-title">
       <div class="section-heading">
+        <p class="r180-chapter-label"><span aria-hidden="true">03</span> / LES USAGES</p>
         <p class="section-kicker">Partir du quotidien</p>
         <h2 id="examples-title">Un projet commence par une situation concrète.</h2>
         <p class="section-intro">Les bons outils commencent par les tâches, les contraintes et les décisions de votre activité — pas par une technologie choisie d’avance.</p>
@@ -2952,6 +3009,7 @@ body .product-card .product-deep-link:focus-visible{
 
     <section class="container section" id="approche" aria-labelledby="approach-title">
       <div class="section-heading">
+        <p class="r180-chapter-label"><span aria-hidden="true">04</span> / LE PARCOURS</p>
         <p class="section-kicker">Une démarche lisible</p>
         <h2 id="approach-title">Décrire, préparer, construire, vérifier, livrer.</h2>
         <p class="section-intro">Un fil de travail simple aide à savoir ce qui est étudié, ce qui doit être validé et ce qui sera remis.</p>
