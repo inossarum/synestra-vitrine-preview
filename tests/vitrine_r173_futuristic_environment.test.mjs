@@ -88,3 +88,9 @@ test('R180 chapters use alternating product narratives, editorial cases, and no 
  assert.doesNotMatch(html,/r173-beam-one|r173-scan-travel|r173-card-shimmer/);
  assert.equal((html.match(/<canvas\b/g)||[]).length,1);
 });
+
+test('R180 product concept tags are legible and secondary calls to action do not collide',()=>{
+ assert.match(css,/#plateforme \.product-visual \.visual-stamp\{top:\.65rem;bottom:auto/);
+ assert.match(css,/#plateforme \.product-card-body \.product-deep-link\{display:flex;align-items:center;width:fit-content/);
+ assert.match(html,/class="product-deep-link product-deep-link-subtle"/);
+});
