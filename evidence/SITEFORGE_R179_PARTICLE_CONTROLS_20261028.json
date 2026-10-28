@@ -1,61 +1,99 @@
 {
-    "schema":  "synestra.siteforge.r179.motes.evidence.v1",
-    "date":  "2026-10-28",
-    "mission_id":  "SYN_SITEFORGE_R179_PARTICLE_CUSTOMIZATION",
-    "owner":  "Synestra owner",
-    "source":  {
-                   "repo":  "inossarum/synestra-vitrine-preview",
-                   "baseline_branch":  "task/SYN_SITEFORGE_R178_SHARED_SPIN_20261028",
-                   "baseline_sha":  "887ce2d868d22941d524f4645736b179a3a35b63",
-                   "target_branch":  "task/SYN_SITEFORGE_R179_CUSTOM_MOTES_20261028",
-                   "official_main_sha":  "df67fcd5cc6b7cc0fb42fa86c8920d28b9427494",
-                   "html_blob":  "de67ac519a73392ad4bc28367a84088172c3bf13",
-                   "shader_blob":  "88818266fed8c127e29ff6dc5e625e6651616585",
-                   "standalone_html_blob":  "b43d67f9c3713e896ff882126cb7d1b677d0b6fc"
-               },
-    "implementation":  {
-                           "spin":  "Exactly one uSpinPhase=elapsed*.104 used by both plasma and motes; existing particleSpeed (0-250%) controls elapsed and both effects. No independent mote speed.",
-                           "controls":  {
-                                            "moteCount":  "0-160, desktop max 160, mobile cap 96",
-                                            "moteDistance":  "0-160",
-                                            "moteSpread":  "0-100",
-                                            "moteSize":  "40-220",
-                                            "moteBrightness":  "20-200",
-                                            "motePrimary":  "hex color",
-                                            "moteSecondary":  "hex color"
-                                        },
-                           "gpu":  "uMoteStyle radius base/spread/point size/light strength; uMotePrimary, uMoteSecondary",
-                           "json":  "Existing schema synestra.siteforge.plasma-settings.v1 version=1 preserved, parameters 18 unchanged, optional motes sibling with seven values and enabled boolean",
-                           "rollback":  "Restore R178 source branch; publicly versioned r179.html removable without touching R178",
-                           "security":  "No production main mutation, no Cloudflare Access changes, FREE_ONLY"
-                       },
-    "tests":  {
-                  "node":  "137/137 PASS",
-                  "build":  "SYNESTRA_STATIC_EXPORT=PASS, 49 allowlisted files",
-                  "chrome_local_customization":  {
-                                                     "status":  "PASS",
-                                                     "mote_ui_controls":  7,
-                                                     "existing_plasma_controls":  18,
-                                                     "webgl_error":  0,
-                                                     "default_count":  46,
-                                                     "sparse_to_dense_changed_pixels":  3332,
-                                                     "recolor_changed_pixels":  3176,
-                                                     "distance_size_changed_pixels":  14149,
-                                                     "frame_pixels":  307840,
-                                                     "speed_dataset_link":  "250% common phase 0.0702",
-                                                     "json_motes_keys":  8,
-                                                     "reset_default_inputs":  "PASS"
-                                                 },
-                  "chrome_full_regression":  "PASS, actual Windows Chrome headless WebGL: 6 materials, mobile 390px, mouse/touch orbit, 180/360 yaw, common spin, pause, no GPU errors; exit 0",
-                  "chrome_public":  "PENDING"
-              },
-    "preview":  {
-                    "repo":  "inossarum/synestra-siteforge-r176-lab",
-                    "path":  "r179.html",
-                    "url":  "https://inossarum.github.io/synestra-siteforge-r176-lab/r179.html",
-                    "status":  "PENDING",
-                    "base_gh_pages_commit":  "c7284f7e0129846343b2a57ceec7adf49098afcc",
-                    "r178_preserved":  true
-                },
-    "status":  "LOCAL_REAL_CHROME_E2E_PASS; PUBLIC_PENDING"
+  "schema": "synestra.siteforge.r179.motes.evidence.v1",
+  "date": "2026-10-28",
+  "mission_id": "SYN_SITEFORGE_R179_PARTICLE_CUSTOMIZATION",
+  "owner": "Synestra owner",
+  "source": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "baseline_branch": "task/SYN_SITEFORGE_R178_SHARED_SPIN_20261028",
+    "baseline_sha": "887ce2d868d22941d524f4645736b179a3a35b63",
+    "target_branch": "task/SYN_SITEFORGE_R179_CUSTOM_MOTES_20261028",
+    "official_main_sha": "df67fcd5cc6b7cc0fb42fa86c8920d28b9427494",
+    "html_blob": "de67ac519a73392ad4bc28367a84088172c3bf13",
+    "shader_blob": "88818266fed8c127e29ff6dc5e625e6651616585",
+    "standalone_html_blob": "b43d67f9c3713e896ff882126cb7d1b677d0b6fc"
+  },
+  "implementation": {
+    "spin": "Exactly one uSpinPhase=elapsed*.104 used by both plasma and motes; existing particleSpeed (0-250%) controls elapsed and both effects. No independent mote speed.",
+    "controls": {
+      "moteCount": "0-160, desktop max 160, mobile cap 96",
+      "moteDistance": "0-160",
+      "moteSpread": "0-100",
+      "moteSize": "40-220",
+      "moteBrightness": "20-200",
+      "motePrimary": "hex color",
+      "moteSecondary": "hex color"
+    },
+    "gpu": "uMoteStyle radius base/spread/point size/light strength; uMotePrimary, uMoteSecondary",
+    "json": "Existing schema synestra.siteforge.plasma-settings.v1 version=1 preserved, parameters 18 unchanged, optional motes sibling with seven values and enabled boolean",
+    "rollback": "Restore R178 source branch; publicly versioned r179.html removable without touching R178",
+    "security": "No production main mutation, no Cloudflare Access changes, FREE_ONLY"
+  },
+  "tests": {
+    "node": "137/137 PASS",
+    "build": "SYNESTRA_STATIC_EXPORT=PASS, 49 allowlisted files",
+    "chrome_local_customization": {
+      "status": "PASS",
+      "mote_ui_controls": 7,
+      "existing_plasma_controls": 18,
+      "webgl_error": 0,
+      "default_count": 46,
+      "sparse_to_dense_changed_pixels": 3332,
+      "recolor_changed_pixels": 3176,
+      "distance_size_changed_pixels": 14149,
+      "frame_pixels": 307840,
+      "speed_dataset_link": "250% common phase 0.0702",
+      "json_motes_keys": 8,
+      "reset_default_inputs": "PASS"
+    },
+    "chrome_full_regression": "PASS local and public GitHub Pages, 6/6 materials, mobile 390px, full 180/360 Chrome, mouse/touch, WebGL error=0",
+    "chrome_public": "PASS exit 0; 7 mote controls, 18 old JSON schema, 6 materials, mobile, colors, distance, count, speed lock, export/reset, full orbit"
+  },
+  "preview": {
+    "repo": "inossarum/synestra-siteforge-r176-lab",
+    "path": "r179.html",
+    "url": "https://inossarum.github.io/synestra-siteforge-r176-lab/r179.html",
+    "status": "PASS",
+    "base_gh_pages_commit": "c7284f7e0129846343b2a57ceec7adf49098afcc",
+    "r178_preserved": true,
+    "pages_gh_head": "95462132a6af27f9b039026b85b8f646e7b83cba",
+    "public_http": 200,
+    "cloudflare_access_login": false,
+    "public_blob_sha": "b43d67f9c3713e896ff882126cb7d1b677d0b6fc",
+    "public_chrome_e2e": {
+      "status": "PASS",
+      "exit_code": 0,
+      "device": "Inos-Cerebros",
+      "browser": "Chrome ANGLE SwiftShader",
+      "webgl_gpu_error": 0,
+      "materials_6": "PASS",
+      "mobile_width": 390,
+      "mouse_touch_orbit": "PASS",
+      "full_orbit_180_360": "PASS",
+      "plasma_wave_recovered_pixels": 0,
+      "controls_18": "PASS",
+      "mote_controls_7": "PASS",
+      "json_export_v1_18_plus_motes": "PASS",
+      "reset_to_defaults": "PASS",
+      "speed_shared_phase_percent": 250,
+      "color_customization": "PASS",
+      "count_0_to_120": "PASS",
+      "distance_spread_size_intensity": "PASS",
+      "mote_orbit_mask_shift_pixels": 2385,
+      "public_count_changed_pixels": 3317,
+      "public_colors_changed_pixels": 3176,
+      "public_spatial_changed_pixels": 13881,
+      "public_image_pixels": 307840
+    }
+  },
+  "status": "PUBLIC_GITHUB_PAGES_REAL_CHROME_WEBGL_E2E_PASS; OWNER_AESTHETIC_ACCEPTANCE_PENDING",
+  "guardrails": {
+    "main_sha_verified": "df67fcd5cc6b7cc0fb42fa86c8920d28b9427494",
+    "old_r176_root_sha": "98088039212a1bb4dafd47732ad5dea4a1154302",
+    "old_r177_sha": "73126937af16cecf1aa965f5282ad4123346a3b0",
+    "old_r178_sha": "b70efde38a6b5835423f23d255c40d04d6f09518",
+    "no_main_commit": true,
+    "no_cloudflare_access_mutation": true,
+    "rollback": "Remove r179.html only; use unchanged r178.html"
+  }
 }
