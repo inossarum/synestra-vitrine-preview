@@ -1846,6 +1846,59 @@ header.site-header nav.site-nav a.nav-cta:active {transform:translateY(0)}
  .hero-v2 .r173-hud-dial{top:-236px;left:-190px;width:420px;opacity:.85}
 }
 
+/* R175 MOBILE NAVIGATION — compact native-details navigation, no full-page effects. */
+.r175-mobile-menu{display:none}
+@media(max-width:720px){
+ .site-header.container{
+   display:grid!important;grid-template-columns:minmax(0,1fr) max-content;
+   align-items:center;gap:.5rem;padding-top:.65rem;padding-bottom:.7rem;
+ }
+ .site-header .brand{min-width:0}
+ .site-header .brand-banner-r99{width:clamp(116px,32vw,165px)!important;max-height:44px}
+ .site-header .site-nav.nav-r105{
+   display:flex!important;flex:0 0 auto!important;flex-wrap:nowrap!important;
+   width:auto!important;max-width:none!important;min-width:0;
+   justify-content:flex-end!important;gap:.4rem!important;
+   overflow:visible!important;white-space:normal;padding:0!important;
+ }
+ .site-header .site-nav.nav-r105>a:not(.nav-cta),
+ .site-header .site-nav.nav-r105>.nav-explore{display:none!important}
+ header.site-header nav.site-nav a.nav-cta{
+   display:inline-flex!important;min-height:44px;min-width:0;
+   padding:.55rem .68rem;font-size:.75rem;line-height:1.25;margin:0!important;
+   white-space:nowrap;
+ }
+ .r175-mobile-menu{display:block;position:relative;z-index:60}
+ .r175-mobile-menu summary{
+   width:44px;height:44px;display:grid;place-items:center;list-style:none;
+   cursor:pointer;border-radius:.65rem;border:1px solid rgba(141,201,237,.50);
+   color:#e9f9ff;background:rgba(22,39,69,.90);font-size:1.45rem;
+ }
+ .r175-mobile-menu summary::-webkit-details-marker{display:none}
+ .r175-mobile-menu summary:focus-visible{outline:3px solid #a2e6ff;outline-offset:3px}
+ .r175-mobile-menu[open] summary{background:#223f62;border-color:#85d7f4}
+ .r175-mobile-panel{
+   position:absolute;top:calc(100% + .55rem);right:0;z-index:90;
+   display:grid;gap:.12rem;width:min(78vw,260px);max-height:76vh;overflow-y:auto;
+   padding:.55rem;border:1px solid rgba(120,177,221,.47);
+   border-radius:.85rem;background:#101d31;
+   box-shadow:0 18px 40px rgba(0,0,0,.48);
+ }
+ .r175-mobile-panel a{
+   display:block;padding:.62rem .77rem;border-radius:.42rem;
+   color:#dceafb;text-decoration:none;font-size:.90rem;line-height:1.4;
+ }
+ .r175-mobile-panel a[aria-current="page"]{color:#abedff;background:rgba(47,107,151,.24)}
+ .r175-mobile-panel a:hover,.r175-mobile-panel a:focus-visible{
+   color:#fff;background:rgba(64,132,195,.34);outline-color:#a2e6ff;
+ }
+}
+@media(max-width:380px){
+ .site-header .brand-banner-r99{width:112px!important}
+ header.site-header nav.site-nav a.nav-cta{font-size:.70rem;padding:.54rem .45rem;min-height:42px}
+ .r175-mobile-menu summary{width:42px;height:42px}
+}
+
 </style>
 </head>
 <body>
@@ -1874,6 +1927,21 @@ header.site-header nav.site-nav a.nav-cta:active {transform:translateY(0)}
         </div>
       </details>
       <a class="nav-cta" href="https://synestra-client-portal.synestra-studio.workers.dev/" rel="noreferrer">Espace pilote <span aria-hidden="true">↗</span></a>
+      <details class="r175-mobile-menu">
+        <summary aria-label="Ouvrir le menu de navigation"><span aria-hidden="true">☰</span></summary>
+        <div class="r175-mobile-panel">
+          <a href="./" aria-current="page">Studio</a>
+          <a href="./connect/">Connect</a>
+          <a href="./bridge/">Bridge</a>
+          <a href="./siteforge/">SiteForge</a>
+          <a href="./offres/">Offres</a>
+          <a href="#approche">Notre démarche</a>
+          <a href="#exemples">Exemples</a>
+          <a href="#realisations">Réalisations</a>
+          <a href="#questions">Questions</a>
+          <a href="#a-propos">À propos</a>
+        </div>
+      </details>
     </nav>
   </header>
 
