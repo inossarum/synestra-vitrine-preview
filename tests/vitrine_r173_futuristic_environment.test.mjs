@@ -57,3 +57,19 @@ test('R178 navigation and premium wayfinding are semantic, responsive and motion
  assert.doesNotMatch(html,/r173-beam-one|r173-scan-travel|r173-card-shimmer/);
  assert.equal((html.match(/<script\b/g)||[]).length,1);
 });
+
+test('R179 cinematic editorial has clear technology destinations and no duplicate render',()=>{
+ assert.match(html,/<section class="container r179-manifesto" aria-labelledby="r179-manifesto-title">/);
+ assert.match(html,/<h2 id="r179-manifesto-title">Du concept\./);
+ assert.match(html,/class="r179-system-index" aria-label="Les trois composants du Studio"/);
+ assert.equal((html.match(/class="r179-proto-num"/g)||[]).length,3);
+ for(const product of ['siteforge','connect','bridge'])
+  assert.match(html,new RegExp('href="\\./'+product+'/" aria-label="Explorer Synestra'));
+ assert.match(css,/\.r179-manifesto\{[\s\S]*?grid-template-columns:minmax\(0,1\.04fr\) minmax\(0,\.96fr\)/);
+ assert.match(css,/\.r179-editorial-copy h2\{[\s\S]*?font-size:clamp\(3\.7rem,6\.7vw,7\.5rem\)/);
+ assert.match(css,/@media\(max-width:840px\)\{[\s\S]*?\.r179-manifesto\{grid-template-columns:1fr/);
+ assert.match(css,/@media\(prefers-reduced-motion:reduce\)\{[\s\S]*?\.r179-editorial-link,\.r179-system-list a\{transition:none!important\}/);
+ assert.equal((html.match(/<canvas\b/g)||[]).length,1);
+ assert.equal((html.match(/<script\b/g)||[]).length,1);
+ assert.doesNotMatch(html,/r173-beam-one|r173-scan-travel|r173-card-shimmer/);
+});
