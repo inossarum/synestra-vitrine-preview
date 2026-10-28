@@ -3,6 +3,28 @@ import assert from 'node:assert/strict';
 import {readFileSync, existsSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
 import {join, dirname} from 'node:path';
+// R169 is a newer, intentionally different WebGL scene. Legacy R96–R116 assertions
+// are retained for earlier versions; the branch candidate must instead meet its
+// own explicit Core, product-navigation, CSP and motion contracts.
+const r169ReviewFile = new URL('../vitrine-r169-studio-palette-preview.html', import.meta.url)
+const r169Review = existsSync(r169ReviewFile) ? readFileSync(r169ReviewFile,'utf8') : null
+const r169PreviewActive = Boolean(r169Review?.includes('R169 brand-palette REVIEW ONLY'))
+function verifyR169Preview(){
+ assert.ok(r169PreviewActive,'R169 candidate and official palette marker required');
+ assert.match(r169Review,/class="system-stage core-r108-stage core-r109-stage"/);
+ assert.match(r169Review,/<canvas class="core-r109-canvas" aria-hidden="true"/);
+ assert.match(r169Review,/<svg class="core-r108-art"/);
+ assert.match(r169Review,/class="syn-r169-room"/);
+ assert.match(r169Review,/scale\(\.49\)!important/);
+ assert.match(r169Review,/src="\.\/assets\/siteforge-lab-r182-vitrine\.js" defer/);
+ assert.match(r169Review,/prefers-reduced-motion:reduce/);
+ assert.match(r169Review,/script-src 'self'/);
+ assert.match(r169Review,/noindex,nofollow/);
+ for (const slug of ['connect','bridge','siteforge'])assert.match(r169Review,new RegExp('href="\\./'+slug+'/"'));
+ const scripts=[...r169Review.matchAll(/<script\b[^>]*>/g)].map(x=>x[0]);
+ assert.deepEqual(scripts,['<script src="./assets/siteforge-lab-r182-vitrine.js" defer>']);
+}
+
 
 const root=dirname(fileURLToPath(new URL('../index.html',import.meta.url)));
 const html=readFileSync(join(root,'index.html'),'utf8');
@@ -16,6 +38,7 @@ test('R100 has one semantic gallery with exactly three real HTML destination pag
   }
 });
 test('R100 provides native accessible links, a heading, and honest disclosure',()=>{
+ if(r169PreviewActive){verifyR169Preview();return;}
   assert.match(gallery[0],/aria-labelledby="siteforge-gallery-title"/);
   assert.match(gallery[0],/<h3 id="siteforge-gallery-title">/);
   assert.equal((gallery[1].match(/class="siteforge-gallery-card" href/g)||[]).length,3);

@@ -1,0 +1,38 @@
+{
+  "schema": "synestra.siteforge.plasma-settings.v1",
+  "version": 1,
+  "engine": "siteforge-plasma-webgl1",
+  "parameters": {
+    "flowType": 0,
+    "particlePreset": 4,
+    "particleIntensity": 200,
+    "coreLight": 117,
+    "arcIntensity": 140,
+    "arcDensity": 100,
+    "flowStructure": 200,
+    "diameter": 100,
+    "shellVisibility": 0,
+    "coreSize": 157,
+    "particleDensity": 100,
+    "particleSpeed": 145,
+    "particleSize": 100,
+    "opacity": 0,
+    "primary": "#060b12",
+    "secondary": "#8a58ec",
+    "core": "#e9f0f7",
+    "rim": "#20dba9"
+  },
+  "motes": {
+    "moteShape": 0,
+    "moteCount": 0,
+    "moteDistance": 0,
+    "moteSpread": 0,
+    "moteSize": 106,
+    "moteBrightness": 200,
+    "moteRoughness": 100,
+    "moteReflectivity": 200,
+    "motePrimary": "#00c4f1",
+    "moteSecondary": "#8a58ec",
+    "enabled": false
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "schema": "synestra.vitrine.r173.futuristic_living_interface.evidence.v1",
+  "date": "2026-10-28",
+  "mission_id": "SYN_VITRINE_R173_CLEAN_CORE_FUTURISTIC_LIVING_BACKGROUND",
+  "user_intent": "Remove objects around the plasma sphere, increase visibility of upper-page circle, and add substantial self-running futuristic motion throughout website even when mouse and keyboard remain untouched",
+  "source": {
+    "repository": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_VITRINE_R169_OFFICIAL_PALETTE_REVIEW_20261028",
+    "base_commit": "ea0b798fb5355f29df8f318089aa6da1e3353271",
+    "deployed_application_commit": "24fa9c892b4356ee53e1178a5f95d474d3c5173a",
+    "file": "vitrine-r169-studio-palette-preview.html",
+    "main_changed": false
+  },
+  "removed": [
+    "R172 rotating energy halo",
+    "R172 SVG energy conduits/rails and beacon lights",
+    "R116 decorative product satellite orbit and labels (real product links preserved)",
+    "orphaned orbital CSS rules"
+  ],
+  "preserved": [
+    "single R157 plasma WebGL renderer via assets/siteforge-r116-sphere-only.js unchanged",
+    "sphere scale .49",
+    "one canvas",
+    "three real product navigation links",
+    "R171 CTA contrast/accessibility fix",
+    "CSP and no new external script",
+    "official Studio colors",
+    "responsive and reduced-motion accessibility"
+  ],
+  "added": {
+    "upper_page": "explicit painted holographic dial, clearly visible 2px light blue border, rotating glow arc, reverse rotating dotted inner dial and pulsing beacon",
+    "sitewide_background": "fixed pointer-events:none energy environment with moving architectural grid, two sweeping beams, traversing scanline",
+    "sections": "autonomous animated section connectors",
+    "cards": "independent gentle moving reflections",
+    "responsive": "reduced density and dial reflow below 720px",
+    "reduced_motion": "all new dial and atmosphere animations disabled if OS prefers reduced motion"
+  },
+  "browser_test": {
+    "environment": "real Chrome local on Inos-Cerebros authorized Windows device, isolated git checkout; source commit 24fa9c892b4356ee53e1178a5f95d474d3c5173a",
+    "script": "tests/vitrine_r173_browser_idle_environment.mjs",
+    "screen_sizes": [
+      1280,
+      390
+    ],
+    "source_checks": "PASS",
+    "webgl_ready": true,
+    "canvas_count": 1,
+    "decorations_around_sphere_count": 0,
+    "product_links_count": 3,
+    "desktop": {
+      "ring_animation": "r173-hud-dial-turn",
+      "inner_animation": "r173-hud-dial-reverse",
+      "outer_ring_size_px": 580,
+      "grid_transform_before": "matrix(1,0,0,1,0,0)",
+      "grid_transform_after_2_6s": "matrix(1,0,0,1,-14.0421,14.0421)",
+      "moving_screen_samples": 16300,
+      "moving_pixels_delta_rgb18": 6570,
+      "moving_percent": 40.31,
+      "strong_percent_delta_rgb75": 1.01
+    },
+    "mobile": {
+      "ring_animation": "r173-hud-dial-turn",
+      "inner_animation": "r173-hud-dial-reverse",
+      "outer_ring_size_px": 420,
+      "grid_transform_before": "matrix(1,0,0,1,-3.25808,3.25808)",
+      "grid_transform_after_2_6s": "matrix(1,0,0,1,-16.1997,16.1997)",
+      "moving_screen_samples": 8232,
+      "moving_pixels_delta_rgb18": 4093,
+      "moving_percent": 49.72,
+      "strong_percent_delta_rgb75": 0.95
+    },
+    "screenshot_method": "Page.captureScreenshot at t0 and t+2.6s, sample every fourth pixel, absolute RGB-channel delta sum>=18, top-of-page dial/text region (not including GPU stage); screenshots kept local only during test",
+    "reduced_motion_pass": true,
+    "mobile_overflow": false
+  },
+  "build": {
+    "local_node_test": "PASS",
+    "cloudflare_node_tests_passed": 119,
+    "cloudflare_node_tests_failed": 0,
+    "static_files": 49,
+    "static_export": "PASS"
+  },
+  "cloudflare": {
+    "preview_deployment_id": "d65ea362-8313-4dcb-950e-5391450572a0",
+    "url": "https://d65ea362.synestra-vitrine-preview.pages.dev/",
+    "environment": "preview",
+    "production_deployments_enabled": false,
+    "status_at_evidence": "BUILD_PASS_ASSETS_PUBLISHED_DEPLOY_ACTIVE",
+    "access": "protected_by_cloudflare_access"
+  },
+  "limitations": [
+    "Browser visual test runs on isolated local repository checkout, not authenticated live Cloudflare preview",
+    "User aesthetic approval pending",
+    "Never conflate Git source/Cloudflare preview with approved production",
+    "Pixel-difference percentages describe sampled screenshots in the upper hero region; they are not a UX quality score"
+  ],
+  "rollback": "Revert R173 CSS/markup and tests on this isolated preview branch; do not modify original R169 branch nor production main",
+  "status": "PREVIEW_BUILD_AND_LOCAL_BROWSER_PASS_CLOUDFLARE_DEPLOY_PENDING_FINAL_SUCCESS"
+}

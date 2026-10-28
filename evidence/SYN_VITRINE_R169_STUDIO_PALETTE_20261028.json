@@ -1,0 +1,39 @@
+{
+  "schema": "synestra.vitrine.r169.official_palette_review.v1",
+  "mission_id": "SYN_VITRINE_R169_STUDIO_PALETTE_20261028",
+  "source_branch": "task/SYN_VITRINE_R169_ADVANCED_CHAMBER_REVIEW_20261027",
+  "review_branch": "task/SYN_VITRINE_R169_OFFICIAL_PALETTE_REVIEW_20261028",
+  "official_logo_sha256": "ff08dcf6ceeefd3d628238049d93aa768c58528524f0c8b471781f2922960a84",
+  "file": "vitrine-r169-studio-palette-preview.html",
+  "verification": {
+    "source_sha": "4f356a804f0c6e2db66b0ef5de37020e4df0a8fd",
+    "candidate_sha": "2bb6dda45fc5577dc818aca861aa3dba4dac86de",
+    "scope": "ONLY_INLINE_CSS_APPEND_AFTER_ORIGINAL",
+    "exact_original_reconstructed": true,
+    "delta_is_CSS": true,
+    "source_len": 170551,
+    "review_len": 173730,
+    "added_chars": 3179,
+    "unchanged_body_and_scripts": true,
+    "CSP_identical": true,
+    "R169_architecture_preserved": true,
+    "core_preserved": true,
+    "motion_preserved": true,
+    "script_count": 1,
+    "contrast": {
+      "text_background": 17.48,
+      "muted_background": 11.49,
+      "violet_background": 6.96,
+      "button_ink_blue": 6.74,
+      "button_ink_cyan": 12.22
+    },
+    "source_pass": true
+  },
+  "limitations": [
+    "R169 design approval remains PENDING",
+    "No production merge or Cloudflare deployment",
+    "Browser visual E2E NOT RUN",
+    "No WebGL runtime test performed on reviewed palette"
+  ],
+  "rollback": "Remove isolated preview candidate or discard branch. Do not touch original R169 review, homepage, or core."
+}

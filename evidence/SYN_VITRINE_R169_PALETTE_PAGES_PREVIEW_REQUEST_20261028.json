@@ -1,0 +1,12 @@
+{
+  "schema": "synestra.vitrine.r169.preview_request.v1",
+  "request_date": "2026-10-28",
+  "branch": "task/SYN_VITRINE_R169_OFFICIAL_PALETTE_REVIEW_20261028",
+  "expected_output": "Cloudflare Pages preview '/' serves vitrine-r169-studio-palette-preview.html via guarded tools/build_vitrine_static.mjs",
+  "source_head_before_trigger": "7612ccd6e5c29375ecc6d00e964bd151925868a7",
+  "production_deployments_enabled": false,
+  "source_master_sha256": "ff08dcf6ceeefd3d628238049d93aa768c58528524f0c8b471781f2922960a84",
+  "status": "REQUESTED_NOT_YET_VERIFIED",
+  "e2e_status": "PENDING",
+  "rollback": "Restore Cloudflare preview_branch_includes and discard isolated branch. Main untouched."
+}

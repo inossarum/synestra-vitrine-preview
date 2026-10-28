@@ -1,0 +1,90 @@
+{
+  "schema": "synestra.vitrine.r171.pilot_cta_ux.evidence.v1",
+  "date": "2026-10-28",
+  "objective": "Restore legible pilot-space header CTA after owner screenshot: avoid cyan text on pale background, meet ergonomic mobile touch size, preserve accessible keyboard and hover states.",
+  "mission_id": "SYN_VITRINE_R171_PILOT_CTA_UX",
+  "scope": "R169 derived Studio-identity preview homepage header CTA only, no page structure or backend changes",
+  "file": "vitrine-r169-studio-palette-preview.html",
+  "selector": "header.site-header nav.site-nav a.nav-cta",
+  "css_change": "appended R171 specificity-safe CSS override",
+  "before_measured_chrome": {
+    "desktop_1280": {
+      "font_px": 12.8,
+      "button_height_px": 43.625,
+      "color": "#071523"
+    },
+    "mobile_390": {
+      "font_px": 12.8,
+      "button_height_px": 37.21875,
+      "color": "#071523"
+    }
+  },
+  "note": "Owner screenshot shows cyan low-contrast text in an earlier displayed state; local source baseline at verification already computed dark text. This fix strengthens CSS specificity, increases sizing and verifies the rendered states, without falsely ascribing screenshot to a specific deployed commit.",
+  "after_measured_chrome": {
+    "desktop_1280": {
+      "font_px": 15.04,
+      "height_px": 48,
+      "left_px": 1090.734375,
+      "right_px": 1241,
+      "foreground_rgb": "rgb(7, 21, 35)",
+      "focus_style": "solid",
+      "hover_changes_background": true
+    },
+    "mobile_390": {
+      "font_px": 15.04,
+      "height_px": 48,
+      "left_px": 205.59375,
+      "right_px": 353.59375,
+      "foreground_rgb": "rgb(7, 21, 35)",
+      "focus_style": "solid",
+      "hover_changes_background": true
+    },
+    "mobile_320": {
+      "font_px": 15.04,
+      "height_px": 48,
+      "left_px": 16,
+      "right_px": 164,
+      "foreground_rgb": "rgb(7, 21, 35)",
+      "focus_style": "solid",
+      "hover_changes_background": true
+    }
+  },
+  "foreground": "#071523",
+  "gradient_endpoints_contrast_WCAG": {
+    "#b0d5ff": 12.11,
+    "#90e0ec": 12.33,
+    "#cae2ff": 13.88,
+    "#a7ecf3": 13.97
+  },
+  "minimum_contrast": 12.11,
+  "accessibility": {
+    "WCAG_AA_normal_text": "PASS",
+    "WCAG_AAA_normal_text": "PASS (gradient endpoints)",
+    "touch_target_height_48px": "PASS",
+    "keyboard_focus_visible": "PASS",
+    "reduced_motion_style": "PASS_SOURCE"
+  },
+  "reproducible_tests": [
+    "tests/vitrine_r171_pilot_cta_accessibility.test.mjs",
+    "tests/vitrine_r171_pilot_cta_browser_cdp.mjs"
+  ],
+  "cloudflare": {
+    "deployment_id": "f175e0e6-a390-4784-b76e-7c0891c068b5",
+    "deployed_commit_sha": "7384cfb2e2546a2b783a25299ffad7b25cf67e1a",
+    "url": "https://f175e0e6.synestra-vitrine-preview.pages.dev/",
+    "environment": "preview",
+    "stage": "SUCCESS",
+    "tests": 115,
+    "passed": 115,
+    "failed": 0,
+    "static_files": 49,
+    "production_deployments_enabled": false
+  },
+  "limits": [
+    "Cloudflare Access protected preview; authenticated public URL browser E2E not performed.",
+    "Real browser tests use exact source branch checked out on Inos-Cerebros; owner-side screenshot after deployment not recorded.",
+    "This is a targeted CTA usability remediation, not certification of every interactive control on the site."
+  ],
+  "rollback": "Revert only R171 CSS and tests on isolated preview branch; leave other R170 branding and production settings intact.",
+  "status": "PREVIEW_DEPLOYED_STATIC_TESTS_PASS_LOCAL_CHROME_ALL_RESPONSIVE_CTA_PASS"
+}
