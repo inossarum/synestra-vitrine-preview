@@ -77,12 +77,41 @@
       "adaptive_mobile_96_motes_12_steps": "PASS",
       "adaptive_mobile_back_to_14_steps": "PASS",
       "plasma_wave_zero_diff_after_pointer_release": "PASS"
+    },
+    "chrome_public": {
+      "status": "PASS",
+      "process_exit_code": 0,
+      "browser": "Windows Chrome headless WebGL ANGLE SwiftShader",
+      "webgl_error": 0,
+      "materials_6_of_6": "PASS",
+      "touch_mouse": "PASS",
+      "full_orbit_180_360": "PASS",
+      "mobile_390px": "PASS",
+      "adaptive_mobile_96_motes_12_steps": "PASS",
+      "shared_spin_and_pause": "PASS",
+      "json_import_export_and_legacy": "PASS",
+      "json_invalid_atomic": "PASS",
+      "original_plasma_wave_recovery_pixels": 0,
+      "microfacet_diff_pixels": 30713,
+      "total_pixels": 307840,
+      "microfacet_diff_percent": 9.97693607068607,
+      "finish_before": {
+        "roughness": 0,
+        "reflectivity": 0
+      },
+      "finish_after": {
+        "roughness": 100,
+        "reflectivity": 200
+      },
+      "phase_equal": "0.0884 vs 0.0884",
+      "mote_controls": 10,
+      "plasma_controls": 18
     }
   },
   "limits": [
-    "No physical GPU FPS measurements",
-    "Visual acceptance by Synestra owner pending",
-    "Final public HTTPS E2E pending"
+    "No physical mobile GPU FPS measurements",
+    "Owner visual acceptance pending",
+    "Microfacet pixel difference measures combined roughness and reflectivity change"
   ],
   "security": {
     "only_isolated_branch": true,
@@ -91,5 +120,17 @@
     "free_only": true,
     "rollback": "Keep R181 and earlier; remove only r182.html from gh-pages if necessary"
   },
-  "status": "LOCAL_CHROME_E2E_PASS_PUBLIC_E2E_PENDING"
+  "status": "PUBLIC_HTTPS_CHROME_WEBGL_E2E_PASS; OWNER_VISUAL_ACCEPTANCE_PENDING",
+  "source_commit": "52085461e5766429ae09c05cb148db89c04c01c5",
+  "public_preview": {
+    "repository": "inossarum/synestra-siteforge-r176-lab",
+    "branch": "gh-pages",
+    "public_commit": "603f989a93c673ce78242e65973187b06d6eda55",
+    "url": "https://inossarum.github.io/synestra-siteforge-r176-lab/r182.html",
+    "http_status": 200,
+    "access_login": false,
+    "pages_status": "built",
+    "html_blob": "55f54b38fd56310faa20cd3217bfbeff1cd9100d",
+    "rollback": "Remove versioned r182.html only; R181 unchanged"
+  }
 }
