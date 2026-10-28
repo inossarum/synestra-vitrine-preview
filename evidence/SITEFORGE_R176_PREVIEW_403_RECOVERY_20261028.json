@@ -44,7 +44,43 @@
       "build_command_unchanged": true
     }
   },
-  "public_deployment": "QUEUED_BY_GIT_PUSH_NOT_YET_VERIFIED",
-  "browser_e2e": "PENDING",
-  "status": "CANDIDATE_NOT_RELEASE"
+  "public_deployment": "CLOUDFLARE_ACCESS_AUTH_REQUIRED_NOT_PUBLIC",
+  "browser_e2e": "OFFLINE_LOCAL_CHROME_PASS; GITHUB_DOWNLOADED_CHROME_E2E_RUNNING",
+  "status": "OFFLINE_ARTIFACT_AVAILABLE; PUBLIC_SITE_BLOCKED_BY_ACCESS",
+  "recovery": {
+    "readonly_diagnosis": {
+      "rawgithack": "USER_REPORTS_HTTP_403",
+      "pages_preview": "CLOUDFLARE_ACCESS_LOGIN_PRESENT",
+      "pages_project": "synestra-vitrine-preview",
+      "new_dedicated_project": "synestra-siteforge-lab",
+      "new_project_deployment_id": "a889f34a-2638-4e2e-a451-a05f62f0bb8a",
+      "new_project_deployment_status": "SUCCESS_BUT_ACCESS_LOGIN"
+    },
+    "security_guards": {
+      "old_pages_preview_allowlist": "RESTORED_3_ORIGINAL_BRANCHES",
+      "old_pages_production_deployments_enabled": false,
+      "new_project_production_deployments_enabled": false,
+      "cloudflare_access_not_modified": true,
+      "no_secret_access": true
+    },
+    "offline_artifact": {
+      "git_commit": "2d3083fccefb3f67a1809ce13b65b9b051e1d4ec",
+      "path": "siteforge-r176-autonome.html",
+      "git_blob_sha": "c665d6a3df7d03e927cf7980cb9f4427a6525f41",
+      "github_page": "https://github.com/inossarum/synestra-vitrine-preview/blob/2d3083fccefb3f67a1809ce13b65b9b051e1d4ec/siteforge-r176-autonome.html",
+      "raw_download": "https://raw.githubusercontent.com/inossarum/synestra-vitrine-preview/2d3083fccefb3f67a1809ce13b65b9b051e1d4ec/siteforge-r176-autonome.html",
+      "http_status_page": 200,
+      "http_status_download": 200,
+      "downloaded_git_blob_sha_verified": true,
+      "local_sha256_built": "88C1A29EBDCD34E9CCD8DDA18E6053C6DB4F6CDB957DEBE8094398D6A4AC62D7",
+      "download_on_windows_webgl_e2e": "PENDING"
+    },
+    "tests": {
+      "cloudflare_build_gate": "120/120 PASS",
+      "public_static_package": "3/3 PASS",
+      "local_standalone_browser": "PASS 6 materials and mouse/touch mobile",
+      "public_site_e2e": "BLOCKED_BY_ACCESS"
+    },
+    "owners_gate": "Explicit approval required before removing/exempting Cloudflare Access for public live URL."
+  }
 }
