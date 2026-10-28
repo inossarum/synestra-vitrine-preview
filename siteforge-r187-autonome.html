@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ji3Eu6hNacsZdArEuwpC1ZLBd9F+3fkPdAZv9/wCzss='; style-src 'unsafe-inline'; img-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-dgLE99nmgY1hU1AWsX2dWj1Z0OQgGJoyz2fLnA7QdAk='; style-src 'unsafe-inline'; img-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
 <title>SiteForge — Laboratoire énergétique 3D R187</title>
 <style>
 :root{color-scheme:dark;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#050a14;color:#e7f4ff}
@@ -742,14 +742,14 @@ void main(){
   if(uPass>3.5&&uPass<4.5&&uFlow.x>5.5){
    // R187 REFINED NEW MATERIAL ONLY. The six legacy materials below remain
    // byte-for-byte untouched. Three oblique, genuinely 3D toroidal rails.
-   float radiusNeon=.88*clamp(uShape.x,.5,1.5);
+   float radiusNeon=.98*clamp(uShape.x,.5,1.5);
    float srNeon=length(p);
    // Restrained atmospheric shafts, only for this extra material.
    float nearAngle=atan(p.y,p.x);
    float beam=pow(max(0.,.5+.5*cos(nearAngle*19.
                 +sin(nearAngle*4.)*.85-uSpinPhase*.4)),17.);
    float atmosphere=exp(-pow(srNeon/max(radiusNeon,0.01),2.)*1.8)
-                     *(.012+.036*beam);
+                     *(.010+.052*beam);
    vec3 skyNeon=(vec3(.025,.89,1.)*.46+vec3(1.,.11,.75)*.36)
                  *atmosphere;
    if(srNeon>=radiusNeon){
@@ -781,42 +781,42 @@ void main(){
     vec3 a=vec3(q.x,q.y*.83-q.z*.56,q.y*.56+q.z*.83);
     float ra=length(a.xy),thetaA=atan(a.z,ra-.52),turnA=atan(a.y,a.x);
     float tubeA=length(vec2(ra-.52,a.z));
-    float shellA=exp(-pow((tubeA-.23)*24.,2.));
-    float stripeA=pow(max(0.,.5+.5*cos(thetaA*3.-turnA*7.)),12.);
+    float shellA=exp(-pow((tubeA-.23)*25.,2.));
+    float stripeA=pow(max(0.,.5+.5*cos(thetaA*3.-turnA*7.)),10.);
     float railA=shellA*stripeA;
     // B: magenta ring crosses the cyan family's real front/back depth.
     vec3 b=vec3(q.z*.70+q.x*.71,q.y,q.z*.71-q.x*.70);
     float rb=length(b.yz),thetaB=atan(b.x,rb-.51),turnB=atan(b.z,b.y);
     float tubeB=length(vec2(rb-.51,b.x));
-    float shellB=exp(-pow((tubeB-.25)*24.,2.));
-    float stripeB=pow(max(0.,.5+.5*cos(thetaB*3.+turnB*6.)),13.);
+    float shellB=exp(-pow((tubeB-.25)*25.,2.));
+    float stripeB=pow(max(0.,.5+.5*cos(thetaB*3.+turnB*6.)),11.);
     float railB=shellB*stripeB;
     // C: independent tilted ring crosses the other two in 3D and
     // contributes high-frequency braiding, not an extra particle layer.
     vec3 c=vec3(q.x*.86-q.y*.51,q.x*.51+q.y*.86,q.z);
     float rc=length(c.xz),thetaC=atan(c.y,rc-.49),turnC=atan(c.z,c.x);
     float tubeC=length(vec2(rc-.49,c.y));
-    float shellC=exp(-pow((tubeC-.25)*21.,2.));
-    float railC=shellC*pow(max(0.,.5+.5*cos(thetaC*4.-turnC*9.)),11.);
-    float lineC=railC*pow(max(0.,.5+.5*cos(turnC*28.+thetaC*6.)),7.);
+    float shellC=exp(-pow((tubeC-.25)*23.,2.));
+    float railC=shellC*pow(max(0.,.5+.5*cos(thetaC*4.-turnC*9.)),9.);
+    float lineC=railC*pow(max(0.,.5+.5*cos(turnC*28.+thetaC*6.)),6.);
     // High-frequency accents deliberately remain on the 3D tubes.
-    float lineA=railA*pow(max(0.,.5+.5*cos(turnA*29.+thetaA*8.)),8.);
-    float lineB=railB*pow(max(0.,.5+.5*cos(turnB*31.-thetaB*8.)),8.);
+    float lineA=railA*pow(max(0.,.5+.5*cos(turnA*29.+thetaA*8.)),7.);
+    float lineB=railB*pow(max(0.,.5+.5*cos(turnB*31.-thetaB*8.)),7.);
     float lensFront=.50+.58*smoothstep(-.8,.8,q.z);
     float border=1.-smoothstep(.84,1.03,length(q));
-    float lightA=(railA*2.1+lineA*2.5+railC*1.1+lineC*1.2)*lensFront*border;
-    float lightB=(railB*2.2+lineB*2.7+railC*.9+lineC*1.0)*lensFront*border;
+    float lightA=(railA*3.0+lineA*3.3+railC*1.0+lineC*1.3)*lensFront*border;
+    float lightB=(railB*3.1+lineB*3.5+railC*.9+lineC*1.0)*lensFront*border;
     Lneon+=(cyanNeon*lightA+pinkNeon*lightB+
-              uCore*(lineA+lineB+lineC)*.12)*dzNeon*3.05;
-    Aneon+=(railA+railB+railC)*lensFront*border*dzNeon*4.7;
+              uCore*(lineA+lineB+lineC)*.12)*dzNeon*4.45;
+    Aneon+=(railA+railB+railC)*lensFront*border*dzNeon*5.15;
    }
    // Restrained white-hot nucleus and inward energetic glow.
    float coreNeon=exp(-dot(p,p)/(radiusNeon*radiusNeon)*28.);
    float haloNeon=exp(-dot(p,p)/(radiusNeon*radiusNeon)*5.2);
-   Lneon+=uCore*coreNeon*.42+
-         (cyanNeon*.14+pinkNeon*.1)*haloNeon;
-   vec3 outNeon=vec3(1.)-exp(-max(Lneon,vec3(0.))*1.20);
-   float alphaNeon=clamp(.016+Aneon*.56+coreNeon*.58+haloNeon*.06,0.,1.);
+   Lneon+=uCore*coreNeon*.35+
+         (cyanNeon*.12+pinkNeon*.09)*haloNeon;
+   vec3 outNeon=vec3(1.)-exp(-max(Lneon,vec3(0.))*1.42);
+   float alphaNeon=clamp(.016+Aneon*.60+coreNeon*.58+haloNeon*.06,0.,1.);
    float edgeNeon=1.-smoothstep(.89,1.,srNeon/radiusNeon);
    gl_FragColor=vec4(outNeon+skyNeon,alphaNeon*edgeNeon*uEffects.w);
    return;

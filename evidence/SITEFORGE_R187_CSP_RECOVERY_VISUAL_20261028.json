@@ -1,0 +1,64 @@
+{
+  "schema": "synestra.siteforge.r187.csp_recovery_visual_qa.v1",
+  "date": "2026-10-28",
+  "mission_id": "SYN_SITEFORGE_R187_NEON_VISUAL_REFINEMENT",
+  "source_owner": "inossarum/synestra-vitrine-preview",
+  "base_commit": "2b9677b839ef25db3bc21ea46e0784c579868802",
+  "previous_checkpoint_commit": "734d11f3bb633635f7d2b87a53c5bfb66e51cec5",
+  "branch": "task/SYN_SITEFORGE_R187_NEON_REFINE_20261028",
+  "source_r186_sha256": "af68da9b82ba3329720b630e166d8519dca83ec6ac46cad7a52058c51044e392",
+  "r187_sha256": "2c3a19a999cd36a7e3d4a601bf51468fbf1f298ca6e8956d910c51b83e5a13de",
+  "artifact": "siteforge-r187-autonome.html",
+  "tests": {
+    "csp_initial_failure": "INLINE_SCRIPT_BLOCKED_HASH_MISMATCH reproducible with browser console",
+    "csp_fix": "Exact SHA256 of modified inline script recomputed, script-src remains hash-only; unsafe-inline not introduced",
+    "csp_sha256_base64": "dgLE99nmgY1hU1AWsX2dWj1Z0OQgGJoyz2fLnA7QdAk=",
+    "node_isolation": "4/4 PASS",
+    "code_integrity": "R187 reconstructed after reverting only new material6 branch, R187 title/label, CSP hash exactly equals R186 byte-for-byte",
+    "local_web_server": "127.0.0.1:19087 HTTP 200, no public binding",
+    "chrome_http_e2e": {
+      "status": "PASS",
+      "exit_code": 0,
+      "software_renderer": "Chrome Windows SwiftShader",
+      "viewport": {
+        "width": 1100,
+        "height": 800
+      },
+      "material_options": 7,
+      "legacy_materials_tested": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "new_material": 6,
+      "controls": 18,
+      "canvas": {
+        "width": 591,
+        "height": 518
+      },
+      "webgl_error": 0,
+      "material6_vs_0_changed_pixels": 75575,
+      "material6_vs_0_total_pixels": 307840,
+      "comment": "different material pixels, not cross-version quality metric"
+    },
+    "screenshot": {
+      "path": "evidence/r187-neon-http-real.png",
+      "sha256": "ead7ba7e87f720a9e3e1ff7f5a7bbd12c6d18c5b93f3248c6f81b3a45a51e741",
+      "bytes": 235313
+    }
+  },
+  "release": {
+    "r186_public_url": "https://inossarum.github.io/synestra-siteforge-r176-lab/r186.html",
+    "r187_local_preview_url": "http://127.0.0.1:19087/siteforge-r187-autonome.html?demo=magnetic",
+    "main_modified": false,
+    "r187_public_published": false,
+    "owner_artistic_acceptance": "PENDING",
+    "physical_mobile_gpu": "NOT_TESTED",
+    "visual_review": "R187 captures show smaller bloom and discernible crossing rails; user has not accepted AAA quality"
+  },
+  "historical_diagnosis": "R187 prior failure was strict CSP hash mismatch, not a demonstrated GPU compiler fault",
+  "outcome": "LOCAL_PREVIEW_TESTED_ART_ACCEPTANCE_PENDING"
+}
