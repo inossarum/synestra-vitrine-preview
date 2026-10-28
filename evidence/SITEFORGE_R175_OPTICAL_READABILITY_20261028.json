@@ -1,0 +1,78 @@
+{
+  "schema": "synestra.siteforge.r175.readability-evidence.v1",
+  "date": "2026-10-28",
+  "mission_id": "SYN_SITEFORGE_R175_INTERACTIVE_ENERGY_MOTES_20261028",
+  "base_commit": "5ed671ca8fbb32b3a4ecabb412c23009871ff3c7",
+  "scope": "isolated SiteForge preview shader pass 5 and dedicated QA only",
+  "intent": "Make existing 3D cyan/violet sparks clearly visible without crowding or changing the plasma or 18 exported settings",
+  "changes": {
+    "gpu_motes_desktop": 46,
+    "gpu_motes_mobile": 28,
+    "mote_pass_only": true,
+    "directional_filament": true,
+    "hot_core": true,
+    "bicolour_cyan_violet": true,
+    "larger_local_pointer_repulsion": true,
+    "one_canvas": true,
+    "one_gpu_program": true,
+    "exported_parameter_count": 18
+  },
+  "validation": {
+    "siteforge_targeted_tests": {
+      "passed": 176,
+      "failed": 0
+    },
+    "node_qa_syntax": "PASS",
+    "git_diff_check": "PASS",
+    "chrome_headless": {
+      "status": "PASS",
+      "mode": "ANGLE SwiftShader WebGL real browser",
+      "webgl_errors": 0,
+      "materials": 6,
+      "keyboard_and_mouse_orbit": "PASS",
+      "touch_orbit": "PASS",
+      "pointer_repulsion_impulse": 1,
+      "toggle_off": "PASS",
+      "animation": "PASS",
+      "pause_resume": "PASS",
+      "mobile_width_css": 390,
+      "mobile_canvas": [
+        364,
+        285
+      ],
+      "baseline_comparators": "PASS"
+    },
+    "visual_diff": {
+      "screenshot": "1100x800",
+      "matched_frozen_time": true,
+      "pixels_examined": 880000,
+      "pixels_changed": 4222,
+      "changed_percent": 0.4797727272727273,
+      "major_percent": 0.4163636363636364,
+      "mean_max_delta": 0.4396988636363636,
+      "previous_r175_stage_metric": {
+        "pixels_examined": 308360,
+        "pixels_changed_ge_12": 669,
+        "percent_changed_ge_12": 0.21695420936567647
+      },
+      "metric_warning": "Previous and current pixel diff methods and crop scopes differ; do not claim directly interchangeable thresholds",
+      "QA_thresholds": {
+        "changed_percent_min": 0.35,
+        "major_percent_min": 0.25
+      }
+    },
+    "global_test_suite": "FAILED: includes unrelated outdated vitrine/header assertions; targeted SiteForge subset passed",
+    "owner_aesthetic_approval": "PENDING",
+    "hardware_GPU_FPS": "NOT_MEASURED",
+    "external_public_preview": "PENDING"
+  },
+  "protected": {
+    "approved_vitrine_unchanged": true,
+    "production_unchanged": true,
+    "main_branch_unchanged": true,
+    "approved_home_git_blob_sha": "1413e30138ba1657f7056401818e697ddbd32ac8",
+    "approved_sphere_git_blob_sha": "dd63d75fdb966de2052595c95b7b6cb736d6c7cc"
+  },
+  "rollback": "Use base R175 commit 5ed671ca8fbb32b3a4ecabb412c23009871ff3c7; do not modify main",
+  "status": "CANDIDATE, not production release"
+}

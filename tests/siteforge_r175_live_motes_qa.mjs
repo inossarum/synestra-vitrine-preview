@@ -62,6 +62,10 @@ try{
  const disabledShot=await call('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});
  writeFileSync(join(root,'r175-motes-off.png'),Buffer.from(disabledShot.data,'base64'));
  if(enabledShot.data===disabledShot.data)throw Error('R175_MOTES_NOT_VISIBLE');
+ const motePixelDiff=comparePngPixels(Buffer.from(disabledShot.data,'base64'),Buffer.from(enabledShot.data,'base64'));
+ console.log('R175_MOTES_READABILITY_DIFF '+JSON.stringify(motePixelDiff));
+ if(motePixelDiff.changedPercent<.35||motePixelDiff.majorPercent<.25)
+  throw Error('R175_MOTES_READABILITY_TOO_LOW '+JSON.stringify(motePixelDiff));
  await call('Runtime.evaluate',{expression:"document.querySelector('[data-mote-toggle]').click()"});
  const pos=await call('Runtime.evaluate',{expression:"JSON.stringify((()=>{const r=document.querySelector('.core-r109-stage').getBoundingClientRect();return {x:r.left+r.width*.28,y:r.top+r.height*.43}})())",returnByValue:true});
  const pointerPos=JSON.parse(pos.result.value);

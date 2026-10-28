@@ -218,9 +218,9 @@ void main(){
   // Parallax: near motes grow and drift faster than far motes.
   p.xy*=1.+.16*moteDepth;
   vec2 away=p.xy-uPointer.xy;
-  float proximity=1.-smoothstep(.06,.33,length(away));
-  p.xy+=away/max(length(away),.008)*proximity*.29*uPointer.z;
-  life=(.55+.38*rnd(i+11.))*(.78+.22*moteDepth*.5)*uPointer.w;
+  float proximity=1.-smoothstep(.07,.40,length(away));
+  p.xy+=away/max(length(away),.008)*proximity*.38*uPointer.z;
+  life=(.73+.27*rnd(i+11.))*(.81+.19*smoothstep(-1.,1.,moteDepth))*uPointer.w;
   vAxis=vec2(cos(polar),sin(polar));sizeFactor=.78+.35*moteDepth;
  }else if(uPass>2.5){
   float ang=a+t*.32;
@@ -249,7 +249,7 @@ void main(){
  vLife=life;vGlint=.65+.35*rnd(i*3.17+19.);
  gl_PointSize=clamp((3.2+4.5*rnd(i+8.))*uEffects.z*sizeFactor*
        uResolution.y/460.*mix(1.85,1.,uLayer),1.,29.);
- if(uPass>4.5)gl_PointSize=clamp((7.0+9.0*rnd(i+8.))*(.85+.23*depth)*uResolution.y/518.,5.,18.);
+ if(uPass>4.5)gl_PointSize=clamp((11.0+9.0*rnd(i+8.))*(.90+.14*depth)*uResolution.y/518.,6.,22.);
  gl_Position=vec4(p.x*uResolution.y/max(uResolution.x,1.),p.y-.08,0.,1.);
 }
 `;
@@ -283,13 +283,18 @@ void main(){
  p.x*=uResolution.x/max(uResolution.y,1.);p.y+=.08;
  float radius=.64*clamp(uShape.x,.5,1.5);
  if(uPass>4.5){
-  // Soft 3D ember, subtly colored; never a bright full-frame starfield.
+  // R175 optical pass: sparse but legible directional sparks, not a starfield.
   vec2 q=gl_PointCoord*2.-1.;
   float r2=dot(q,q);
-  float coreGlow=exp(-r2*13.0),aura=exp(-r2*4.4);
-  float alpha=(coreGlow*.92+aura*.40)*vLife*clamp(uEffects.w,0.,1.);
-  vec3 col=mix(uCyan,uViolet,.18+.68*vGlint);
-  gl_FragColor=vec4(col*(coreGlow*1.32+aura*.42)*vLife,alpha);
+  vec2 axis=normalize(vAxis);
+  float along=dot(q,axis),across=dot(q,vec2(-axis.y,axis.x));
+  float coreGlow=exp(-r2*29.0),aura=exp(-r2*4.7);
+  float filament=exp(-across*across*23.0-along*along*4.5);
+  float alpha=clamp(coreGlow*.82+filament*.45+aura*.33,0.,1.)*vLife*clamp(uEffects.w,0.,1.);
+  float hue=step(.5,fract(vGlint*7.73));
+  vec3 col=mix(uCyan,uViolet*1.50+uCyan*.10,hue);
+  vec3 hot=mix(col,vec3(.86,.97,1.),.24);
+  gl_FragColor=vec4(col*(aura*.55+filament*.58)+hot*coreGlow*1.44,alpha);
   return;
  }
  if(uPass>3.5&&uPass<4.5){
