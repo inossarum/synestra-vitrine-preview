@@ -1,0 +1,73 @@
+{
+  "schema": "synestra.siteforge.r198.chamber-light.evidence.v1",
+  "mission_id": "SYN_SITEFORGE_R198_CHAMBER_REALISTIC_BOUNCE_20261028",
+  "date_local": "2026-10-28",
+  "repository": "inossarum/synestra-vitrine-preview",
+  "branch": "task/SYN_SITEFORGE_R198_CHAMBER_REALISTIC_BOUNCE_20261028",
+  "base_commit": "a4ba52aa5e8f67ced91beb83406341bbf812a3f4",
+  "source_home_sha256": "5c726b9bb61236b82d899247f110a0cb60d93dbeb40327145f417a63c9ce4159",
+  "source_shader_sha256": "d551966abcce5bf862dddddd487b55629efa3eb4ad4258298c732976e1d75751",
+  "output_home_sha256": "776c14cc165836c5949f3670651ac2274e2ebbaa3edce0bf6e412ed518ff04f2",
+  "output_css_sha256": "1f1ed092514a718d45b4914746047a55382760d4702c89331b41d63ed3300370",
+  "output_shader_sha256": "a0f16d77d636e331b5011d68b2412767ec3b595f284a4d4283462f60f9f2c90b",
+  "summary": "Restore unrotated plasma orientation; add surrounding architectural depth and localized colored indirect illumination instead of a fake floor reflection.",
+  "features": [
+    "R197 time-varying field rotation removed, original R190 uTilt zero behavior restored; pointer only deflects flow.",
+    "R198 HTML adds rear and inner architectural metallic annuli, two internally illuminated side pillars, foreground rim, behind-scene colored wash and floor bounce pool.",
+    "R198 final visual review reduced ring dimensions and material thickness to avoid overwhelming sphere.",
+    "No new renderers, no image mirror, no expensive blurred layers; one WebGL context preserved."
+  ],
+  "tests": [
+    {
+      "name": "Node complete contracts",
+      "pass": 156,
+      "fail": 0,
+      "status": "PASS"
+    },
+    {
+      "name": "Chrome 5 routes x 1440/768/390",
+      "pass": 15,
+      "fail": 0,
+      "status": "PASS"
+    },
+    {
+      "name": "Chrome hover WebGL",
+      "status": "PASS",
+      "max_hover_strength": 0.7265884883733267,
+      "tilt_samples": "all [0,0]",
+      "rest_pointer_strength": 8.859108549434438e-11
+    },
+    {
+      "name": "Chrome reduced motion",
+      "status": "PASS"
+    },
+    {
+      "name": "Hardware FPS and other browsers",
+      "status": "NOT_TESTED"
+    }
+  ],
+  "evidence_files": [
+    "evidence/SITEFORGE_R198_BROWSER_20261028.json",
+    "evidence/SITEFORGE_R198_POINTER_CHROME_20261028.json",
+    "r198-studio-1440.png",
+    "r198-studio-390.png"
+  ],
+  "screenshots_sha256": {
+    "desktop": "d5c2cc8b745b6833e702920efa35926cf85e7ab508f8d00db81819007e0fbb1c",
+    "mobile": "27173b9eb75121d59dd120c1aee32e8376f0e0e75376b1f9f0ad4585ec57b189"
+  },
+  "rules": "I:/00_STUDIO_VIRTUEL/AGENTS.md#34cc2a8649bda4230bd2fa73d4a4de0edaf65dc1e3bdaf2b8b78ff58f4e4ea21",
+  "skills": [
+    "interaction-motion-design@1.0.0#c636a0c77eccb9004c56ce48bdd49684243b8790",
+    "visual-regression-testing@1.0.0#aa98fffe9149dfcc0e153f0d1b8b91f3c0a6b4ae",
+    "responsive-layout-engineering@1.0.0#12d091ca42195a1559e5a12c88b9a599560bd53c"
+  ],
+  "limitations": [
+    "Environment lighting is handcrafted CSS approximation, not light transport from the WebGL canvas or PBR-grade bounce.",
+    "User/owner visual review outstanding.",
+    "No GPU FPS benchmark or authenticated portal test.",
+    "No prod merge or deployment."
+  ],
+  "preview": "http://127.0.0.1:18850/r198/",
+  "status": "R198_LOCAL_VALIDATED_NOT_DEPLOYED"
+}
