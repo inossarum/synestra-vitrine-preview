@@ -38,9 +38,39 @@
     "screenshots": [
       "r177-motes-home.png",
       "r177-motes-turned.png"
-    ]
+    ],
+    "chrome_public_webgl": "PASS, actual HTTPS GitHub Pages navigation on Inos-Cerebros Chrome, exit code 0, 6 of 6 materials, mobile 390px, native mouse/touch orbit, WebGL error=0",
+    "chrome_public_mote_mask": {
+      "home_pixels": 3736,
+      "turned_pixels": 3785,
+      "changed_mask_pixels": 2341,
+      "overlap_pixels": 2590,
+      "yaw": 0.519,
+      "pitch": -0.181
+    },
+    "chrome_public_wave": {
+      "changed_pixels": 6675,
+      "frame_pixels": 307840,
+      "recovered_changed_pixels": 0
+    }
   },
-  "status": "LOCAL_PASS_PUBLIC_E2E_PENDING",
+  "status": "PUBLIC_GITHUB_PAGES_E2E_PASS; OWNER_AESTHETIC_ACCEPTANCE_PENDING",
   "public_url": "https://inossarum.github.io/synestra-siteforge-r176-lab/",
-  "security": "Separate public static lab; main unchanged; no Cloudflare Access changes; FREE_ONLY"
+  "security": "Separate public static lab; main unchanged; no Cloudflare Access changes; FREE_ONLY",
+  "delivery": {
+    "repository": "inossarum/synestra-siteforge-r176-lab",
+    "preview_source_branch": "gh-pages",
+    "preview_commit": "58c953bc3038c3e823aa9c02f648a500e4034e2e",
+    "path": "r177.html",
+    "https_url": "https://inossarum.github.io/synestra-siteforge-r176-lab/r177.html",
+    "https_status": 200,
+    "access_login": false,
+    "pages_build_status": "built",
+    "html_blob_sha": "73126937af16cecf1aa965f5282ad4123346a3b0",
+    "r176_root_preserved_sha": "98088039212a1bb4dafd47732ad5dea4a1154302",
+    "original_source_branch_sha": "0f531b9f65a1d6a15d61a56b5e1dc60ed1fcf910",
+    "original_main_unchanged": "df67fcd5cc6b7cc0fb42fa86c8920d28b9427494",
+    "rollback": "Remove versioned r177.html from gh-pages; original R176 index.html unchanged",
+    "limitations": "Actual pointer yaw UI remains bounded as R176; full 180/360 mathematical rotation can be checked separately; owner visual acceptance pending"
+  }
 }
