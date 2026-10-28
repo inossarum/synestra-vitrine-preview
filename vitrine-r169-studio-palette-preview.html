@@ -1827,6 +1827,64 @@ main>.section:nth-of-type(2n)::before {animation-duration:13s;animation-directio
  .product-card::after{opacity:0}
 }
 
+
+/* R173 visual QA delta: explicit painted holographic dial.
+   Previous masked pseudo-element was moving in Chrome but visually too dim. */
+.hero-v2::before,.hero-v2::after{display:none!important}
+.hero-v2 .r173-hud-dial{
+ position:absolute;left:clamp(-205px,-14vw,-110px);top:clamp(-175px,-12vw,-80px);
+ width:clamp(380px,49vw,630px);aspect-ratio:1;border-radius:50%;
+ z-index:1;pointer-events:none;contain:paint;
+ border:2px solid rgba(129,214,255,.77);
+ background:radial-gradient(circle at center,rgba(115,108,228,.065) 0 46%,rgba(71,174,248,.04) 51%,transparent 68%);
+ box-shadow:0 0 21px rgba(100,184,251,.26),0 0 54px rgba(72,120,232,.15),
+ inset 0 0 18px rgba(113,220,252,.20);
+}
+.r173-hud-dial::before{
+ content:"";position:absolute;inset:3.5%;border-radius:50%;
+ border:1px dashed rgba(166,138,245,.62);
+ box-shadow:inset 0 0 20px rgba(94,167,250,.07);
+ animation:r173-hud-dial-turn 25s linear infinite;
+}
+.r173-hud-dial::after{
+ content:"";position:absolute;inset:11%;border-radius:50%;
+ border:1px solid rgba(124,181,248,.31);
+ box-shadow:0 0 13px rgba(134,224,240,.11);
+}
+.r173-hud-dial .r173-dial-arc{
+ position:absolute;inset:-3px;border:4px solid transparent;border-top-color:#8eeaff;
+ border-left-color:rgba(166,138,245,.82);border-radius:50%;
+ filter:drop-shadow(0 0 10px rgba(134,224,240,.65));
+ animation:r173-hud-dial-turn 11s linear infinite;
+}
+.r173-hud-dial .r173-dial-core{
+ position:absolute;inset:18%;border-radius:50%;
+ border:2px dotted rgba(123,182,251,.34);
+ border-right:3px solid rgba(150,224,255,.76);
+ box-shadow:0 0 20px rgba(77,148,247,.09);
+ animation:r173-hud-dial-reverse 17s linear infinite;
+}
+.r173-hud-dial .r173-dial-beacon{
+ position:absolute;top:9%;left:50%;width:10px;height:10px;border-radius:50%;
+ background:#ddfbff;box-shadow:0 0 14px 7px rgba(134,224,240,.5);
+ transform-origin:0 0;animation:r173-hud-beacon-pulse 2.2s ease-in-out infinite;
+}
+@keyframes r173-hud-dial-turn{to{transform:rotate(360deg)}}
+@keyframes r173-hud-dial-reverse{to{transform:rotate(-360deg)}}
+@keyframes r173-hud-beacon-pulse{0%,100%{opacity:.45;filter:brightness(.9)}50%{opacity:1;filter:brightness(1.35)}}
+@media(max-width:720px){
+ .hero-v2 .r173-hud-dial{left:-200px;top:-118px;width:420px;opacity:.80}
+ .r173-hud-dial .r173-dial-arc{border-width:3px}
+}
+@media(prefers-reduced-motion:reduce){
+ .r173-hud-dial::before,.r173-hud-dial .r173-dial-arc,
+ .r173-hud-dial .r173-dial-core,.r173-hud-dial .r173-dial-beacon{animation:none!important}
+}
+/* Lift atmospheric lighting enough to read even with the pointer stationary. */
+.r173-environment .r173-beam{filter:blur(10px);opacity:.90}
+.r173-environment .r173-scan{opacity:.64;height:4px}
+.r173-environment .r173-grid{opacity:.70}
+
 </style>
 </head>
 <body>
@@ -1863,6 +1921,11 @@ main>.section:nth-of-type(2n)::before {animation-duration:13s;animation-directio
 
   <main id="contenu" tabindex="-1">
     <section class="container hero hero-v2" aria-labelledby="hero-title">
+      <div class="r173-hud-dial" aria-hidden="true">
+        <span class="r173-dial-arc"></span>
+        <span class="r173-dial-core"></span>
+        <span class="r173-dial-beacon"></span>
+      </div>
       <div class="hero-copy">
         <span class="eyebrow">Studio numérique <span class="eyebrow-separator">/</span> Phase pilote</span>
         <p class="hero-topline">L'atelier des idées qui prennent forme <span aria-hidden="true">✳</span></p>
