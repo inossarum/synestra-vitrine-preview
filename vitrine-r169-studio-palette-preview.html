@@ -2696,6 +2696,8 @@ body .hero-v2>.system-stage .core-r108-top{
 }
 
 
+/* R188 — Camera pullback: 26% smaller apparent orb on desktop and 25% on mobile.
+ * Presentation-only transforms; never alter shader, geometry, material or energy dynamics. */
 /* R185 — SiteForge R182: spatial plasma orb over a restrained receiving floor.
  * Floor uses CSS gradients only, driven by a low-frequency illumination pulse;
  * single canonical WebGL renderer from SiteForge R182, no second canvas. */
@@ -2729,7 +2731,7 @@ body .hero-v2>.system-stage .r185-floor-plane::after{
 }
 body .hero-v2>.system-stage.core-r109-stage .core-r109-canvas{
  z-index:3;width:100%!important;height:100%!important;top:0!important;left:0!important;
- transform:translate3d(0,-4%,0) scale(.88)!important;
+ transform:translate3d(0,-4%,0) scale(.65)!important;
  transform-origin:center center!important;
 }
 body .hero-v2>.system-stage .core-r108-top{z-index:5}
@@ -2738,7 +2740,7 @@ body .hero-v2>.system-stage .r183-intro-navigation{z-index:6}
  body .hero-v2>.system-stage.core-r109-stage .core-r109-canvas{
   width:100%!important;height:110vw!important;max-height:480px!important;
   top:50%!important;left:0!important;
-  transform:translateY(-50%) scale(1.17)!important;
+  transform:translateY(-50%) scale(.88)!important;
  }
  body .hero-v2>.system-stage .r185-floor-plane{inset:54% 0 0}
  body .hero-v2>.system-stage .r185-floor-plane::before{
