@@ -1,0 +1,1433 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Fv5kThqCH6vASEi+at1VPCJj5WkTP+Gyfka0hM/WAd8='; style-src 'unsafe-inline'; img-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
+<title>SiteForge — Laboratoire énergétique 3D R187</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#050a14;color:#e7f4ff}
+*{box-sizing:border-box}
+body{margin:0;min-height:100svh;padding:clamp(12px,3vw,30px);background:#050a14}
+main{width:min(100%,1240px);margin:0 auto;display:grid;grid-template-columns:minmax(0,1.18fr) minmax(320px,.82fr);align-items:start;gap:16px 20px}
+h1{grid-column:1/-1;font-size:clamp(1.15rem,2.4vw,1.5rem);font-weight:650;letter-spacing:.01em;margin:0}
+p{color:#9db3c8;font-size:.85rem;line-height:1.5;margin:13px 0 0}.lab-footer{grid-column:1/-1}
+.core-r108-stage{touch-action:none;cursor:grab;position:sticky;top:16px;isolation:isolate;overflow:hidden;min-width:0;height:clamp(395px,65svh,650px);border:1px solid rgba(129,186,231,.23);border-radius:23px;background:radial-gradient(ellipse 55% 60% at 50% 36%,rgba(33,62,119,.18),transparent 84%),linear-gradient(145deg,#0b1527,#050a14);box-shadow:0 30px 65px rgba(0,4,18,.29),inset 0 1px rgba(226,245,255,.08)}
+.core-r108-stage.orbit-dragging{cursor:grabbing}\n.core-r108-stage:focus-visible{outline:2px solid #69dcb4;outline-offset:3px}\n.core-r109-canvas{position:absolute;top:0;left:0;z-index:2;display:block;width:100%;height:100%;transform:scale(calc(.92 * var(--sphere-zoom,1)));transform-origin:center center;opacity:0;pointer-events:none;transition:opacity .5s ease}
+.core-r109-stage[data-core-ready="true"] .core-r109-canvas{opacity:1}
+.core-r108-art{opacity:var(--fallback-opacity,1);position:absolute;left:50%;top:5%;transform:translateX(-50%) scale(calc(.92 * var(--sphere-zoom,1)));transform-origin:center center;width:min(100%,760px);height:350px;overflow:visible;pointer-events:none;transition:opacity .35s ease}
+.core-r109-stage[data-core-ready="true"] .core-r108-art{opacity:0}
+/* One GPU canvas. The whole preview stays visible while the user edits sliders.
+   Colors are input type=color, not non-functional colored range controls. */
+.lab-controls{grid-column:2;grid-row:2;margin:0;display:grid;gap:14px;padding:17px 18px 20px;border:1px solid #294058;background:#0b1728;border-radius:20px}
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.panel-head h2{margin:0;font-size:1.16rem}
+.preview-state{font-size:.68rem;letter-spacing:.06em;padding:5px 8px;border:1px solid #376478;color:#a2eeff;border-radius:40px;white-space:nowrap}
+.control-group{margin:0;border:0;padding:0;min-width:0}
+.control-group legend{padding:0;margin-bottom:12px;font-weight:700;color:#b8d7f5;font-size:.9rem}
+.control-row{margin:0 0 17px;min-width:0}
+.control-row:last-child{margin-bottom:0}
+.control-label{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:4px;font-size:.85rem;color:#e8f4ff}
+.control-label output{color:#83edff;white-space:nowrap;font-variant-numeric:tabular-nums;font-weight:650}
+input[type=range]{width:100%;margin:0;accent-color:#66d9f7;cursor:pointer;height:25px}
+input[type=range]:focus-visible,input[type=color]:focus-visible,select:focus-visible,.reset:focus-visible{outline:3px solid #aff4ff;outline-offset:3px}
+.color-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.color-grid .control-row{margin:0}
+.color-grid .control-label{display:flex;flex-wrap:wrap;gap:4px}
+select[data-sphere-control],select[data-mote-control]{width:100%;min-height:43px;color:#eaf8ff;background:#132c44;border:1px solid #41627d;border-radius:10px;padding:9px;font:inherit}
+input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;border-radius:10px;cursor:pointer;background:#14263d}
+.reset{display:block;width:100%;background:#18354b;color:#e4f5ff;padding:13px;border:1px solid #55869d;border-radius:12px;font-weight:700;cursor:pointer}
+.help{font-size:.76rem;color:#90a8bd;margin:0}
+.control-group + .control-group{border-top:1px solid #21384e;padding-top:12px}
+@media(min-width:701px){.core-r109-canvas{transform:scale(calc(.92 * var(--sphere-zoom,1)))}.core-r108-art{transform:translateX(-50%) scale(calc(.75 * var(--sphere-zoom,1)))}}
+ /* Mobile: the sticky canvas is a sibling of the scrolling form, not nested inside a short wrapper. */
+@media(max-width:700px){
+ body{padding:12px 12px max(16px,env(safe-area-inset-bottom,0px))}
+ main{display:block}
+ h1{margin:0 0 10px;font-size:1.08rem}
+ .lab-controls{margin-top:14px;padding:14px 13px 20px}
+ .core-r108-stage{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;
+  height:clamp(190px,34svh,290px);border-radius:16px;
+  box-shadow:0 12px 30px rgba(0,4,18,.78),0 0 0 8px #050a14}
+ .core-r109-canvas{height:100%;transform:scale(calc(1.22 * var(--sphere-zoom,1)))}
+ .core-r108-art{top:50%;transform:translate(-50%,-50%) scale(calc(1.22 * var(--sphere-zoom,1)))}
+}
+@media(prefers-reduced-motion:reduce){.core-r109-canvas,.core-r108-art{transition:none!important}}
+.vfx-advanced{grid-column:1/-1;border-top:1px solid #335a76;margin-top:10px;padding-top:8px}.vfx-advanced summary{cursor:pointer;min-height:42px;padding:10px 6px;color:#bfeeff;font-weight:600;list-style-position:inside}.vfx-advanced[open] summary{margin-bottom:12px}.vfx-advanced .control-group{margin:10px 0 16px}.vfx-advanced summary:focus-visible{outline:2px solid #7ce8fa;outline-offset:3px}
+[data-vfx-status]{background:#10283b;border:1px solid #315574;border-radius:9px;padding:9px 12px;color:#bfe9f9;font-weight:600;min-height:42px;display:flex;align-items:center}
+.import-action{margin-top:12px;background:#1b4650;border-color:#68a9b1}.mote-panel .color-grid{margin:4px 0 13px}.mote-panel .control-row{margin-bottom:13px}.mote-toggle{margin:0 0 8px;background:#122b45;border-color:#3f6e8c}.mote-toggle[aria-pressed=true]{border-color:#65cbbb;box-shadow:inset 0 0 0 1px #244f6a}
+.art-direction{border:1px solid #2b475e;border-radius:14px;background:#0b2030;padding:12px}
+.art-direction legend{padding:0 6px}
+.art-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-bottom:10px}
+.art-options button{min-width:0;min-height:74px;text-align:left;padding:10px 8px;border:1px solid #3b6174;border-radius:10px;background:#122b40;color:#d9effa;cursor:pointer}
+.art-options button strong{display:block;font-size:.77rem;line-height:1.3}
+.art-options button small{display:block;font-size:.68rem;line-height:1.35;color:#93b3c4;margin-top:6px}
+.art-options button[aria-pressed="true"]{background:#154a57;border-color:#7bd6cb;box-shadow:inset 0 0 0 1px #4eada1}
+.art-options button:focus-visible{outline:2px solid #b4fcf3;outline-offset:3px}
+@media(max-width:440px){.art-options{grid-template-columns:1fr}.art-options button{min-height:52px}}
+.magnetic-compare{display:flex;gap:10px;margin-top:13px}.magnetic-compare[hidden]{display:none}.magnetic-compare button{flex:1;min-width:0;padding:11px 9px;border:1px solid #3b6281;border-radius:9px;background:#102339;color:#d4e9fc;cursor:pointer}.magnetic-compare button[aria-pressed=true]{background:#15536a;color:#f3ffff;border-color:#68dcb4;box-shadow:inset 0 0 0 1px #69dcb4}.magnetic-demo{margin-top:10px;width:100%;cursor:pointer}.liquid-demo{margin-top:8px;width:100%;background:#213652;border-color:#6d82ab}.magnetic-compare button:focus-visible,.magnetic-demo:focus-visible{outline:2px solid #69dcb4;outline-offset:2px}
+</style>
+</head>
+<body>
+<main>
+<h1>SiteForge <span aria-hidden="true">·</span> Plasma Studio</h1>
+<div class="core-r108-stage core-r109-stage" tabindex="0" role="group" aria-label="Aperçu 3D interactif. Glisser pour faire tourner la sphère ; flèches pour orienter ; Home ou double-clic pour recentrer.">
+<canvas class="core-r109-canvas" width="960" height="570" aria-hidden="true"></canvas>
+<svg class="core-r108-art" viewBox="0 0 640 410" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+<defs>
+<radialGradient id="sf152-aura"><stop offset="0" stop-color="#51dfff" stop-opacity=".37"/><stop offset=".42" stop-color="#395bce" stop-opacity=".16"/><stop offset="1" stop-color="#08142e" stop-opacity="0"/></radialGradient>
+<radialGradient id="sf152-plasma" cx=".38" cy=".34" r=".78"><stop offset="0" stop-color="#ffffff"/><stop offset=".12" stop-color="#c0ffff"/><stop offset=".34" stop-color="#51dfff"/><stop offset=".64" stop-color="#395bce"/><stop offset=".85" stop-color="#53318d"/><stop offset="1" stop-color="#08142e"/></radialGradient>
+<filter id="sf152-glow" x="-75%" y="-75%" width="250%" height="250%"><feGaussianBlur stdDeviation="16"/></filter>
+</defs>
+<circle cx="320" cy="191" r="164" fill="url(#sf152-aura)"/>
+<circle cx="320" cy="191" r="95" fill="#51dfff" opacity=".23" filter="url(#sf152-glow)"/>
+<!-- Fallback stays shell-free too: luminous energy curves and central glow only. -->
+<g fill="none" stroke-linecap="round">
+<path d="M274 151 Q295 130 315 150 T357 165 T381 202" stroke="#b6fcff" stroke-width="2.2" opacity=".72"/>
+<path d="M258 194 Q283 214 298 192 T333 171 T371 192" stroke="#89e9ff" stroke-width="1.9" opacity=".66"/>
+<path d="M310 244 Q329 225 345 238 T373 223" stroke="#e6ffff" stroke-width="1.8" opacity=".56"/>
+<path d="M288 176 L302 185 L312 169 L328 187 L341 180" stroke="#ffffff" stroke-width="1.5" opacity=".85"/>
+</g>
+<circle cx="305" cy="174" r="17" fill="#e5ffff" opacity=".27" filter="url(#sf152-glow)"/>
+</svg>
+</div>
+<form class="lab-controls" aria-label="Création de la nouvelle sphère plasma VFX" autocomplete="off">
+<div class="panel-head"><h2>Plasma Studio</h2><span class="preview-state">R187 · RUBANS GÉOMÉTRIQUES 3D</span></div>
+<p class="help">R185 : trois directions artistiques comparables, à plasma, caméra et vitesse inchangés. Le choix ajuste uniquement les éclats ; les réglages manuels restent libres.</p>
+<fieldset class="control-group art-direction" data-art-direction><legend>Direction artistique · R185</legend>
+<div class="art-options" role="group" aria-label="Comparer trois compositions sur la même sphère">
+<button type="button" data-art-preset="pure" aria-pressed="false"><strong>A · Plasma pur</strong><small>Flux seuls, noyau dominant</small></button>
+<button type="button" data-art-preset="organic" aria-pressed="false"><strong>B · Énergie organique</strong><small>Orbes subtils et éloignés</small></button>
+<button type="button" data-art-preset="crystal" aria-pressed="false"><strong>C · Cristaux premium</strong><small>Facettes rares, lumière maîtrisée</small></button>
+</div>
+<p class="help" data-art-caption role="status" aria-live="polite">Composition libre R184. Sélectionne A, B ou C pour comparer, sans bouger la caméra ni modifier la matière plasma.</p>
+<p class="help">Les réglages manuels ou l’import JSON ramènent au mode personnalisé. Exporte ton JSON avant de remplacer une composition personnalisée.</p>
+</fieldset>
+<fieldset class="control-group mote-panel"><legend>✨ Éclats d'énergie 3D</legend>
+<button type="button" class="reset mote-toggle" data-mote-toggle aria-pressed="true">Éclats 3D : activés</button>
+<p class="help">Rotation synchronisée avec le plasma · vitesse <output data-mote-linked-speed>100 %</output>. La commande « Vitesse des flux » ajuste les deux simultanément, jusqu’à l’arrêt complet.</p>
+<div class="control-row"><label class="control-label" for="sf-moteShape"><span>Forme des éclats</span><output for="sf-moteShape" data-mote-value="moteShape">Étincelles</output></label>
+<select id="sf-moteShape" data-mote-control="moteShape" data-default="0"><option value="0">Étincelles</option><option value="1">Fragments cristallins</option><option value="2">Orbes ioniques</option></select></div>
+<div class="control-row"><label class="control-label" for="sf-moteCount"><span>Nombre d’éclats</span><output for="sf-moteCount" data-mote-value="moteCount">30 éclats</output></label><input id="sf-moteCount" data-mote-control="moteCount" data-default="30" type="range" min="0" max="160" value="30" step="1"></div>
+<div class="control-row"><label class="control-label" for="sf-moteDistance"><span>Éloignement de la sphère</span><output for="sf-moteDistance" data-mote-value="moteDistance">10 %</output></label><input id="sf-moteDistance" data-mote-control="moteDistance" data-default="10" type="range" min="0" max="160" value="10" step="1"></div>
+<div class="control-row"><label class="control-label" for="sf-moteSpread"><span>Dispersion des orbites</span><output for="sf-moteSpread" data-mote-value="moteSpread">31 %</output></label><input id="sf-moteSpread" data-mote-control="moteSpread" data-default="31" type="range" min="0" max="100" value="31" step="1"></div>
+<div class="control-row"><label class="control-label" for="sf-moteSize"><span>Taille des éclats</span><output for="sf-moteSize" data-mote-value="moteSize">60 %</output></label><input id="sf-moteSize" data-mote-control="moteSize" data-default="60" type="range" min="40" max="220" value="60" step="1"></div>
+<div class="control-row"><label class="control-label" for="sf-moteBrightness"><span>Intensité lumineuse</span><output for="sf-moteBrightness" data-mote-value="moteBrightness">65 %</output></label><input id="sf-moteBrightness" data-mote-control="moteBrightness" data-default="65" type="range" min="20" max="200" value="65" step="1"></div>
+<div class="control-row"><label class="control-label" for="sf-moteRoughness"><span>Micro-imperfections des cristaux</span><output for="sf-moteRoughness" data-mote-value="moteRoughness">35 %</output></label><input id="sf-moteRoughness" data-mote-control="moteRoughness" data-default="35" type="range" min="0" max="100" value="35" step="1"></div>
+<div class="control-row"><label class="control-label" for="sf-moteReflectivity"><span>Réflectivité des facettes</span><output for="sf-moteReflectivity" data-mote-value="moteReflectivity">95 %</output></label><input id="sf-moteReflectivity" data-mote-control="moteReflectivity" data-default="95" type="range" min="0" max="200" value="95" step="1"></div>
+<div class="color-grid">
+<div class="control-row"><label class="control-label" for="sf-motePrimary"><span>Couleur principale</span><output for="sf-motePrimary" data-mote-value="motePrimary">#51DFFF</output></label><input id="sf-motePrimary" data-mote-control="motePrimary" data-default="#51dfff" type="color" value="#51dfff"></div>
+<div class="control-row"><label class="control-label" for="sf-moteSecondary"><span>Couleur secondaire</span><output for="sf-moteSecondary" data-mote-value="moteSecondary">#53318D</output></label><input id="sf-moteSecondary" data-mote-control="moteSecondary" data-default="#53318d" type="color" value="#53318d"></div>
+</div>
+<p class="help">Les éclats restent répartis dans l’espace 3D à 360°, passent derrière la sphère et réagissent à la souris. Ces options sont incluses séparément dans l’export JSON.</p>
+</fieldset>
+<fieldset class="control-group" data-depth-comparison><legend>🔬 Comparaison du relief volumétrique</legend>
+<div class="magnetic-compare" aria-label="Comparer la lumière R173.1 et R174">
+<button type="button" data-depth-compare="prior" aria-pressed="false">Avant · R173.1</button>
+<button type="button" data-depth-compare="r174" aria-pressed="true">Après · R174</button>
+</div>
+<p class="help">Même matière, même angle et même mouvement : seule la profondeur optique change. Aucun paramètre JSON supplémentaire.</p>
+</fieldset>
+<fieldset class="control-group"><legend>✨ Création rapide</legend>
+<div class="control-row"><label class="control-label" for="sf-flowType"><span>Énergie qui traverse la sphère</span><output for="sf-flowType" data-sphere-value="flowType">Flux plasma</output></label>
+<select id="sf-flowType" data-sphere-control="flowType" data-default="0"><option value="0">Flux plasma</option><option value="1">Rubans magnétiques</option><option value="2">Voiles d’aurore</option><option value="3">Brume ionique</option><option value="4">Jets de fusion</option><option value="5">Courants liquides</option><option value="6">Rubans néon 3D · R187</option></select></div>
+<p class="help">Le noyau, les couleurs et le volume restent indépendants du matériau énergétique choisi.</p>
+<div data-magnetic-compare-group class="magnetic-compare" aria-label="Comparer les rubans magnétiques R171 et R172.1">
+<button type="button" data-magnetic-compare="r171" aria-pressed="false">Avant · R171</button>
+<button type="button" data-magnetic-compare="r172" aria-pressed="true">Après · R172.1</button>
+</div>
+<button type="button" class="reset magnetic-demo" data-magnetic-demo>Afficher la démonstration magnétique (200 / 211 / 166 %)</button>
+<button type="button" class="reset liquid-demo" data-liquid-demo>Découvrir les courants liquides sphériques (R173.1)</button>
+<p class="help" data-magnetic-compare-hint hidden>Cliquez sur Avant / Après pour voir les différences sur la même sphère, à réglages et angle de caméra identiques.</p>
+
+<input id="sf-particlePreset" type="hidden" data-sphere-control="particlePreset" data-default="4" value="4">
+<p class="help">Flux pur, sans surcouche de particules. Le matériau énergétique sélectionné reste seul maître du rendu 3D.</p>
+<div class="control-row"><label class="control-label" for="sf-particleIntensity"><span>Émission VFX</span><output for="sf-particleIntensity" data-sphere-value="particleIntensity">100 %</output></label><input id="sf-particleIntensity" data-sphere-control="particleIntensity" type="range" min="0" max="200" value="100" step="1"></div>
+<div class="control-row"><label class="control-label" for="sf-coreLight"><span>Puissance du noyau</span><output for="sf-coreLight" data-sphere-value="coreLight">135 %</output></label><input id="sf-coreLight" data-sphere-control="coreLight" type="range" min="0" max="500" value="135" step="1"></div>
+<p class="help" data-vfx-status role="status" aria-live="polite">Initialisation du moteur plasma…</p>
+</fieldset>
+<fieldset class="control-group" data-electric-options hidden><legend>⚡ Éclairs électriques (uniquement en mode Plasma électrique)</legend>
+<div class="control-row"><label class="control-label" for="sf-arcIntensity"><span>Énergie des éclairs</span><output for="sf-arcIntensity" data-sphere-value="arcIntensity">140 %</output></label><input id="sf-arcIntensity" data-sphere-control="arcIntensity" type="range" min="0" max="300" value="140" step="1"></div>
+<div class="control-row"><label class="control-label" for="sf-arcDensity"><span>Nombre d’éclairs</span><output for="sf-arcDensity" data-sphere-value="arcDensity">100 %</output></label><input id="sf-arcDensity" data-sphere-control="arcDensity" type="range" min="0" max="200" value="100" step="1"></div>
+</fieldset>
+<fieldset class="control-group"><legend>🌐 Volume de plasma</legend>
+<div class="control-row"><label class="control-label" for="sf-flowStructure"><span>Largeur des courants</span><output for="sf-flowStructure" data-sphere-value="flowStructure">100 %</output></label><input id="sf-flowStructure" data-sphere-control="flowStructure" type="range" min="30" max="200" value="100" step="1"></div>
+<div class="control-row"><label class="control-label" for="sf-diameter"><span>Diamètre</span><output for="sf-diameter" data-sphere-value="diameter">100 %</output></label><input id="sf-diameter" data-sphere-control="diameter" type="range" min="50" max="150" value="100" step="1"></div>
+<input id="sf-shellVisibility" type="hidden" data-sphere-control="shellVisibility" data-default="0" value="0">
+<div class="control-row"><label class="control-label" for="sf-coreSize"><span>Taille du noyau</span><output for="sf-coreSize" data-sphere-value="coreSize">70 %</output></label><input id="sf-coreSize" data-sphere-control="coreSize" type="range" min="0" max="200" value="70" step="1"></div>
+<p class="help">La coque opaque est supprimée. Seuls restent les flux énergétiques, le noyau et leur lumière.</p>
+</fieldset>
+<details class="vfx-advanced"><summary>Réglages avancés</summary>
+<fieldset class="control-group"><legend>Émission et vitesse</legend>
+<input id="sf-particleDensity" type="hidden" data-sphere-control="particleDensity" data-default="100" value="100">
+<p class="help">0 % = pause réelle des courants ; reprise progressive de la vitesse.</p>
+<div class="control-row"><label class="control-label" for="sf-particleSpeed"><span>Vitesse des flux</span><output for="sf-particleSpeed" data-sphere-value="particleSpeed">100 %</output></label><input id="sf-particleSpeed" data-sphere-control="particleSpeed" type="range" min="0" max="250" value="100" step="1"></div>
+<input id="sf-particleSize" type="hidden" data-sphere-control="particleSize" data-default="100" value="100">
+<div class="control-row"><label class="control-label" for="sf-opacity"><span>Opacité générale</span><output for="sf-opacity" data-sphere-value="opacity">100 %</output></label><input id="sf-opacity" data-sphere-control="opacity" type="range" min="0" max="100" value="100" step="1"></div>
+</fieldset>
+<fieldset class="control-group"><legend>Palette plasma d’origine</legend><div class="color-grid">
+<div class="control-row"><label class="control-label" for="sf-primary"><span>Profondeur bleu nuit</span><output for="sf-primary" data-sphere-value="primary">#08142E</output></label><input id="sf-primary" data-sphere-control="primary" type="color" value="#08142e"></div>
+<div class="control-row"><label class="control-label" for="sf-secondary"><span>Violet énergétique</span><output for="sf-secondary" data-sphere-value="secondary">#53318D</output></label><input id="sf-secondary" data-sphere-control="secondary" type="color" value="#53318d"></div>
+<div class="control-row"><label class="control-label" for="sf-core"><span>Noyau blanc-bleu</span><output for="sf-core" data-sphere-value="core">#EAFFFF</output></label><input id="sf-core" data-sphere-control="core" type="color" value="#eaffff"></div>
+<div class="control-row"><label class="control-label" for="sf-rim"><span>Plasma cyan</span><output for="sf-rim" data-sphere-value="rim">#51DFFF</output></label><input id="sf-rim" data-sphere-control="rim" type="color" value="#51dfff"></div>
+</div></fieldset>
+<fieldset class="control-group" data-quality-panel><legend>Performance du rendu 3D</legend>
+<div class="control-row"><label class="control-label" for="sf-renderQuality"><span>Qualité volumétrique</span><output data-quality-steps>14 échantillons</output></label>
+<select id="sf-renderQuality" data-render-quality>
+<option value="balanced" selected>Équilibrée — rendu R182</option>
+<option value="auto">Adaptative — selon la cadence</option>
+<option value="performance">Économie GPU — moins d’échantillons</option>
+<option value="quality">Détaillée — maximum WebGL1</option>
+</select></div>
+<p class="help">Cadence observée : <output data-quality-fps>mesure en cours</output>. Mesure indicative des images calculées par Chrome, pas un benchmark du GPU physique. Les réglages de scène et la vitesse de rotation restent inchangés.</p>
+</fieldset>
+</details>
+<button class="reset" type="reset">Restaurer le plasma d'origine</button>
+<div class="export-controls">
+<button class="reset" type="button" data-export-json aria-describedby="sf-export-description">Exporter les paramètres (.json)</button>
+<p class="help" id="sf-export-description">Conserve les 18 paramètres du plasma et les 10 réglages des éclats (dont imperfections et réflectivité). Les anciens exports restent compatibles.</p>
+<p class="help" data-export-status role="status" aria-live="polite"></p>
+<button class="reset import-action" type="button" data-import-json aria-describedby="sf-import-description">Importer des paramètres (.json)</button>
+<input type="file" hidden data-import-file accept=".json,application/json" aria-label="Fichier de paramètres SiteForge JSON">
+<p class="help" id="sf-import-description">Recharge un export SiteForge R176–R180 depuis ton appareil. Une erreur ne modifiera aucun réglage.</p>
+<p class="help" data-import-status role="status" aria-live="polite"></p>
+</div>
+<p class="help" data-render-status role="status" aria-live="polite">Préparation du moteur WebGL…</p>
+<p class="help">Atelier de prévisualisation isolé. Aucun effet sur le site public ni Visual Observer.</p>
+</form>
+<p class="lab-footer">Ray marching WebGL 3D · noyau et flux pur sans particules additionnelles · aperçu expérimental SiteForge. Sur téléphone, le rendu reste fixé en haut pendant le défilement des réglages.</p>
+</main>
+<script>/* SiteForge LAB R175 (isolated from the approved Synestra vitrine) — replaceable 3D volume flow materials on ONE WebGL renderer: luminous central core, sweeping cyan-violet vortex arms and depth-resolved energy. Existing WebGL emitter retained; 18 controls total.
+ * One GPU VFX program: quad volumetric plasma + particle shell, branching arcs, nucleus.
+ * Historical marble shader, old arcs and their settings are REMOVED.
+ * WebGL1, iPhone precision parity, mobile bounded particles, no network.
+ */
+(() => {
+ 'use strict';
+ const stage=document.querySelector('.core-r108-stage'),canvas=stage?.querySelector('.core-r109-canvas');
+ if(!stage||!canvas)return;
+ const controls=Object.fromEntries([...document.querySelectorAll('[data-sphere-control]')]
+   .map(e=>[e.dataset.sphereControl,e]));
+ const defaults=Object.fromEntries(Object.entries(controls).map(([k,e])=>
+   [k,e.getAttribute('data-default')??e.defaultValue??e.value]));
+ const num=k=>Number(controls[k]?.value??defaults[k])/100;
+ const sel=k=>Number(controls[k]?.value??defaults[k]);
+ const rgb=k=>[1,3,5].map(i=>parseInt((controls[k]?.value||defaults[k]||'#ffffff').slice(i,i+2),16)/255);
+ // R179 controls remain separate: v1 plasma 'parameters' stays exactly 18 items.
+ const moteControls=Object.fromEntries([...document.querySelectorAll('[data-mote-control]')]
+  .map(e=>[e.dataset.moteControl,e]));
+ const moteDefaults=Object.fromEntries(Object.entries(moteControls).map(([k,e])=>
+  [k,e.getAttribute('data-default')??e.defaultValue??e.value]));
+ const moteVal=k=>Number(moteControls[k]?.value??moteDefaults[k]);
+ const moteRGB=k=>[1,3,5].map(i=>parseInt((moteControls[k]?.value||moteDefaults[k]||'#ffffff').slice(i,i+2),16)/255);
+ const mainStatus=document.querySelector('[data-render-status]');
+ const vfxStatus=document.querySelector('[data-vfx-status]');
+ const qualitySelect=document.querySelector('[data-render-quality]');
+ const fpsOutput=document.querySelector('[data-quality-fps]');
+ const samplesOutput=document.querySelector('[data-quality-steps]');
+ const arcPanel=document.querySelector('[data-electric-options]');
+ const status=(target,value)=>{if(target&&target.textContent!==value)target.textContent=value;};
+ let schedule=()=>{};
+ // Visual comparison is a lab-only display mode, NOT a 19th JSON setting.
+ let compareVariant=1;
+ // Non-exported A/B optical quality switch; the JSON schema remains 18 fields.
+ let depthVariant=1;
+ // R175: restrained real GPU motes, separate from the exported 18 controls.
+ let motesEnabled=true,pointerX=9,pointerY=9,pointerForce=0,lastPointerX=null,lastPointerY=null;
+ const moteToggle=document.querySelector('[data-mote-toggle]');
+ // R185: artistic recipes change ONLY the 10 mote inputs and visibility.
+ // Same plasma material, camera pose, render quality and shared spin clock.
+ const artButtons=[...document.querySelectorAll('[data-art-preset]')];
+ const artCaption=document.querySelector('[data-art-caption]');
+ let artPreset='custom';
+ const artRecipes=Object.freeze({
+  pure:{enabled:false,shape:0,count:0,distance:10,spread:31,size:60,brightness:65,roughness:35,reflection:95,primary:'#51dfff',secondary:'#53318d'},
+  organic:{enabled:true,shape:2,count:28,distance:20,spread:34,size:78,brightness:90,roughness:35,reflection:95,primary:'#51dfff',secondary:'#7760b4'},
+  crystal:{enabled:true,shape:1,count:14,distance:38,spread:24,size:88,brightness:78,roughness:30,reflection:120,primary:'#67e0ef',secondary:'#8064b9'}
+ });
+ const artText={
+  custom:'Composition personnalisée : réglages manuels ou JSON importé.',
+  pure:'A · Plasma pur — aucune particule additionnelle ; flux et noyau restent seuls visibles.',
+  organic:'B · Énergie organique — 28 orbes doux, répartis dans les flux.',
+  crystal:'C · Cristaux premium — 14 facettes rares, éclairées sans carrés opaques.'
+ };
+ const syncArtUI=()=>{
+  for(const btn of artButtons)btn.setAttribute('aria-pressed',String(btn.dataset.artPreset===artPreset));
+  if(artCaption)artCaption.textContent=artText[artPreset]||artText.custom;
+  stage.dataset.artPreset=artPreset;
+ };
+ const setCustomArt=()=>{artPreset='custom';syncArtUI();};
+ const applyArtPreset=id=>{
+  const recipe=artRecipes[id];if(!recipe)return;
+  const values={
+   moteShape:recipe.shape,moteCount:recipe.count,moteDistance:recipe.distance,
+   moteSpread:recipe.spread,moteSize:recipe.size,moteBrightness:recipe.brightness,
+   moteRoughness:recipe.roughness,moteReflectivity:recipe.reflection,
+   motePrimary:recipe.primary,moteSecondary:recipe.secondary
+  };
+  for(const [key,value] of Object.entries(values))moteControls[key].value=String(value);
+  motesEnabled=recipe.enabled;pointerForce=0;
+  artPreset=id;sync();syncArtUI();schedule();
+ };
+ const syncMotes=()=>{
+  for(const [key,input] of Object.entries(moteControls)){
+   const output=document.querySelector('[data-mote-value="'+key+'"]');
+   if(output)output.textContent=input.type==='color'?input.value.toUpperCase():
+    key==='moteCount'?input.value+' éclats':key==='moteSize'||key==='moteBrightness'?input.value+' %':
+    input.value+' %';
+  }
+  const styleSelector=moteControls.moteShape;
+  const styleName=document.querySelector('[data-mote-value="moteShape"]');
+  if(styleName&&styleSelector)styleName.textContent=styleSelector.selectedOptions[0]?.textContent||'';
+  const spinLabel=document.querySelector('[data-mote-linked-speed]');
+  if(spinLabel)spinLabel.textContent=(controls.particleSpeed?.value||'100')+' %';
+  if(moteToggle){
+   moteToggle.setAttribute('aria-pressed',String(motesEnabled));
+   moteToggle.textContent=motesEnabled?'Éclats 3D : activés':'Éclats 3D : désactivés';
+  }
+  stage.dataset.motesEnabled=String(motesEnabled);
+ };
+ const depthButtons=[...document.querySelectorAll('[data-depth-compare]')];
+ const syncDepthUI=()=>{
+  for(const button of depthButtons)button.setAttribute('aria-pressed',String((button.dataset.depthCompare==='r174'?1:0)===depthVariant));
+  stage.dataset.depthVariant=depthVariant?'r174':'prior';
+ };
+ const compareGroup=document.querySelector('[data-magnetic-compare-group]');
+ const compareHint=document.querySelector('[data-magnetic-compare-hint]');
+ const compareButtons=[...document.querySelectorAll('[data-magnetic-compare]')];
+ const syncCompareUI=()=>{
+  if(compareGroup)compareGroup.hidden=sel('flowType')!==1;
+  if(compareHint)compareHint.hidden=sel('flowType')!==1;
+  for(const button of compareButtons)button.setAttribute('aria-pressed',String((button.dataset.magneticCompare==='r172'?1:0)===compareVariant));
+  stage.dataset.magneticVariant=compareVariant?'r172':'r171';
+ };
+ const applyDemo=()=>{
+  for(const [key,value] of [['flowType','1'],['particleIntensity','200'],['coreLight','211'],['flowStructure','166']]){
+   if(controls[key])controls[key].value=value;
+  }
+  compareVariant=1;sync();schedule();
+ };
+ // R173 is a distinct material family, not an overlay or hidden JSON field.
+ const applyLiquidDemo=()=>{
+  for(const [key,value] of [['flowType','5'],['particleIntensity','160'],['coreLight','180'],['flowStructure','140'],['particleSpeed','100']]){
+   if(controls[key])controls[key].value=value;
+  }
+  compareVariant=1;sync();schedule();
+ };
+
+ function sync(){
+  for(const [key,e] of Object.entries(controls)){
+   const out=document.querySelector('[data-sphere-value="'+key+'"]');
+   if(out)out.textContent=e.type==='color'?e.value.toUpperCase():
+     e.type==='select-one'?e.selectedOptions[0]?.textContent:e.value+' %';
+  }
+  const electricMode=sel('flowType')===0&&sel('particlePreset')===1;
+  if(arcPanel)arcPanel.hidden=!electricMode;
+  syncCompareUI();
+  syncDepthUI();
+  syncMotes();
+  stage.style.setProperty('--sphere-zoom',String(num('diameter')));
+  stage.style.setProperty('--fallback-opacity',String(num('opacity')));
+ }
+ const panel=document.querySelector('.lab-controls');
+ const onChange=e=>{
+  if(e.target?.hasAttribute('data-sphere-control')||e.target?.hasAttribute('data-mote-control')){
+   // Plasma editing does not change art; editing mote settings does.
+   if(e.target?.hasAttribute('data-mote-control'))setCustomArt();
+   sync();schedule();
+  }
+ };
+ panel?.addEventListener('input',onChange);
+ panel?.addEventListener('change',onChange);
+ qualitySelect?.addEventListener('change',()=>{
+  if(qualitySelect.value==='balanced'||qualitySelect.value==='performance'||qualitySelect.value==='quality'||qualitySelect.value==='auto')schedule();
+ });
+ panel?.addEventListener('click',event=>{
+  const art=event.target.closest('[data-art-preset]');
+  if(art){applyArtPreset(art.dataset.artPreset);return;}
+  const toggle=event.target.closest('[data-magnetic-compare]');
+  if(toggle){compareVariant=toggle.dataset.magneticCompare==='r172'?1:0;syncCompareUI();schedule();}
+  if(event.target.closest('[data-magnetic-demo]'))applyDemo();
+  if(event.target.closest('[data-liquid-demo]'))applyLiquidDemo();
+  if(event.target.closest('[data-mote-toggle]')){
+   motesEnabled=!motesEnabled;
+   pointerForce=0;setCustomArt();
+   syncMotes();schedule();
+  }
+  const depthToggle=event.target.closest('[data-depth-compare]');
+  if(depthToggle){
+   depthVariant=depthToggle.dataset.depthCompare==='r174'?1:0;
+   syncDepthUI();schedule();
+  }
+ });
+
+ panel?.addEventListener('reset',e=>{
+  e.preventDefault();for(const [key,input] of Object.entries(controls))input.value=defaults[key];
+  for(const [key,input] of Object.entries(moteControls))input.value=moteDefaults[key];
+  motesEnabled=true;
+  setCustomArt();
+  if(qualitySelect)qualitySelect.value='balanced';
+  compareVariant=1;depthVariant=1;sync();schedule();
+ });
+ sync();syncArtUI();
+ const launchDemo=new URLSearchParams(window.location.search).get('demo');
+ if(launchDemo==='magnetic')applyDemo();
+ if(launchDemo==='liquid')applyLiquidDemo();
+ if(launchDemo==='neon187'){controls.flowType.value='6';motesEnabled=false;sync();syncMotes();}
+ // Export uses the actual live controls, not startup defaults or GPU uniforms.
+ // This stays available when reduced motion is enabled or WebGL is unavailable.
+ const exportButton=document.querySelector('[data-export-json]');
+ const exportStatus=document.querySelector('[data-export-status]');
+ exportButton?.addEventListener('click',()=>{
+  const parameters=Object.fromEntries(Object.entries(controls).map(([key,input])=>[
+   key,input.type==='color'?input.value.toLowerCase():Number(input.value)
+  ]));
+  const motes=Object.fromEntries(Object.entries(moteControls).map(([key,input])=>[
+   key,input.type==='color'?input.value.toLowerCase():Number(input.value)
+  ]));
+  motes.enabled=motesEnabled;
+  // Optional sibling field: old readers still receive exactly the 18 v1
+  // plasma settings in 'parameters' with unchanged schema and version.
+  const documentJSON={
+   schema:'synestra.siteforge.plasma-settings.v1',
+   version:1,
+   engine:'siteforge-plasma-webgl1',
+   parameters,
+   motes
+  };
+  const output=JSON.stringify(documentJSON,null,2)+'\n';
+  let objectURL;
+  try{
+   const blob=new Blob([output],{type:'application/json;charset=utf-8'});
+   objectURL=URL.createObjectURL(blob);
+   const link=document.createElement('a');
+   link.href=objectURL;
+   link.download='synestra-siteforge-plasma-settings.json';
+   document.body.appendChild(link);
+   link.click();
+   link.remove();
+   // Delay release so Safari/iOS can finish handling the download gesture.
+   window.setTimeout(()=>URL.revokeObjectURL(objectURL),1500);
+   status(exportStatus,'Export JSON demandé · '+Object.keys(parameters).length+' paramètres actuels.');
+  }catch(_error){
+   if(objectURL)URL.revokeObjectURL(objectURL);
+   status(exportStatus,'Export indisponible sur ce navigateur.');
+  }
+ });
+ // R180: locally reimport a previously exported v1 document, including
+ // legacy R176/R178 18-field files and R179 files without a style choice.
+ // Validate fully BEFORE any control value changes: invalid import is atomic.
+ const importButton=document.querySelector('[data-import-json]');
+ const importInput=document.querySelector('[data-import-file]');
+ const importStatus=document.querySelector('[data-import-status]');
+ const validateSettings=doc=>{
+  if(!doc||typeof doc!=='object'||Array.isArray(doc)||
+   doc.schema!=='synestra.siteforge.plasma-settings.v1'||doc.version!==1||
+   !doc.parameters||typeof doc.parameters!=='object'||Array.isArray(doc.parameters))
+   throw Error('Format ou version de paramètres non reconnu.');
+  const validateControl=(e,v)=>{
+   if(e.type==='color'){
+    if(typeof v!=='string'||!/^#[0-9a-f]{6}$/i.test(v))throw Error('Couleur invalide.');
+    return v.toLowerCase();
+   }
+   if(typeof v!=='number'||!Number.isFinite(v)||!Number.isInteger(v))throw Error('Valeur numérique invalide.');
+   if(e.type==='select-one'){
+    if(!Array.from(e.options).some(o=>o.value===String(v)))throw Error('Option de style inconnue.');
+   }else{
+    if(e.hasAttribute('min')&&v<Number(e.min))throw Error('Valeur inférieure au minimum.');
+    if(e.hasAttribute('max')&&v>Number(e.max))throw Error('Valeur supérieure au maximum.');
+    if(!e.hasAttribute('min')&&!e.hasAttribute('max')&&(v<0||v>500))throw Error('Valeur hors limites.');
+   }
+   return String(v);
+  };
+  const pkeys=Object.keys(controls);
+  if(Object.keys(doc.parameters).length!==pkeys.length||
+    pkeys.some(k=>!Object.prototype.hasOwnProperty.call(doc.parameters,k)))
+   throw Error('Les 18 paramètres du plasma sont requis.');
+  const nextPlasma=Object.fromEntries(pkeys.map(k=>[k,validateControl(controls[k],doc.parameters[k])]));
+  const values=doc.motes===undefined?{}:doc.motes;
+  if(!values||typeof values!=='object'||Array.isArray(values))
+   throw Error('Réglages des éclats invalides.');
+  if(Object.keys(values).some(k=>k!=='enabled'&&!Object.prototype.hasOwnProperty.call(moteControls,k)))
+   throw Error('Option d’éclat inconnue.');
+  if(values.enabled!==undefined&&typeof values.enabled!=='boolean')
+   throw Error('État des éclats invalide.');
+  const nextMotes=Object.fromEntries(Object.keys(moteControls).map(k=>
+   [k,validateControl(moteControls[k],Object.prototype.hasOwnProperty.call(values,k)?
+    values[k]:(moteControls[k].type==='color'?moteDefaults[k]:Number(moteDefaults[k])))]));
+  return {nextPlasma,nextMotes,enabled:values.enabled===undefined?true:values.enabled};
+ };
+ importButton?.addEventListener('click',()=>importInput?.click());
+ importInput?.addEventListener('change',async()=>{
+  const file=importInput.files?.[0];importInput.value='';
+  if(!file)return;
+  try{
+   if(file.size>65536)throw Error('Fichier trop volumineux (64 Ko maximum).');
+   const doc=JSON.parse(await file.text());
+   const values=validateSettings(doc);
+   for(const [k,v] of Object.entries(values.nextPlasma))controls[k].value=v;
+   for(const [k,v] of Object.entries(values.nextMotes))moteControls[k].value=v;
+   motesEnabled=values.enabled;pointerForce=0;setCustomArt();
+   sync();schedule();
+   status(importStatus,'Paramètres importés et appliqués · '+Object.keys(values.nextPlasma).length+' plasma + '+Object.keys(values.nextMotes).length+' éclats.');
+  }catch(err){
+   status(importStatus,'Import refusé : '+(err instanceof SyntaxError?'JSON illisible.':err.message));
+  }
+ });
+ const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
+ if(reduced.matches){status(mainStatus,'Animation réduite : plasma de référence statique.');return;}
+ const gl=canvas.getContext('webgl',{
+  alpha:true,antialias:false,depth:false,stencil:false,
+  premultipliedAlpha:false,preserveDrawingBuffer:false,powerPreference:'high-performance'
+ });
+ if(!gl){status(mainStatus,'GPU indisponible : plasma statique de secours.');return;}
+ const MAX=2048;
+ const vertex=`
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+attribute vec2 aPosition;
+attribute float aSeed;
+uniform vec2 uResolution;
+uniform float uTime,uPass,uLayer;
+uniform vec2 uTilt;
+uniform vec4 uControls; // style, emission, speed, density
+uniform vec4 uPointer; // cursor XY in 3D preview, impulse, enabled (R175)
+uniform vec4 uShape; // sphere radius, shell, core radius, core flux
+uniform vec4 uEffects; // arc power, arc count, sprite size, opacity
+varying float vLife,vGlint;
+varying vec2 vAxis,vMoteCenter;
+varying float vMoteDepth;
+varying float vMoteSeed;
+ varying vec3 vRibbonColor;
+ varying float vRibbonSide,vRibbonDepth;
+uniform float uMoteCount;
+uniform vec4 uMoteStyle; // radiusBase, radialSpread, size, intensity
+uniform float uSpinPhase; // R178 shared phase: motes and plasma rotate in the same direction
+// R177: fragment's volume uses local=Rx(pitch)*Ry(yaw)*view.
+// Embers must use its exact inverse: view=Ry(-yaw)*Rx(-pitch)*local.
+vec3 orbitToView(vec3 local){
+ float sy=sin(uTilt.x*1.5),cy=cos(uTilt.x*1.5);
+ float sx=sin(uTilt.y*1.5),cx=cos(uTilt.y*1.5);
+ vec3 v=vec3(local.x,local.y*cx+local.z*sx,-local.y*sx+local.z*cx);
+ return vec3(v.x*cy-v.z*sy,v.y,v.x*sy+v.z*cy);
+}
+vec3 orbitToLocal(vec3 view){
+ float sy=sin(uTilt.x*1.5),cy=cos(uTilt.x*1.5);
+ float sx=sin(uTilt.y*1.5),cx=cos(uTilt.y*1.5);
+ vec3 v=vec3(view.x*cy+view.z*sy,view.y,-view.x*sy+view.z*cy);
+ return vec3(v.x,v.y*cx-v.z*sx,v.y*sx+v.z*cx);
+}
+ vec3 ribbonPoint(float family,float lane,float t){
+   float group=floor(lane/5.),strand=mod(lane,5.);
+   float phase=group*1.57079633+(strand-2.)*.072+family*.29;
+   float roll=2.*t+phase+.35*sin(t*2.+family*1.8);
+   float ang=t+.12*sin(t*3.+family);
+   float big=.435+.013*sin(group*.9+family)+(strand-2.)*.004;
+   float tube=.21+.016*cos(group*.7+family*.4);
+   float rr=big+tube*cos(roll);
+   vec3 p=vec3(rr*cos(ang),rr*sin(ang),tube*sin(roll));
+   float ax=family<.5?.46:family<1.5?1.17:-.81;
+   float ay=family<.5?.26:family<1.5?-.67:.91;
+   float sx=sin(ax),cx=cos(ax),sy=sin(ay),cy=cos(ay);
+   return vec3(p.x*cx-p.z*sx,
+     p.y*cy+(p.x*sx+p.z*cx)*sy,
+     -p.y*sy+(p.x*sx+p.z*cx)*cy);
+ }
+ float rnd(float x){return fract(sin(x*127.1+49.6)*43758.5453);}
+void main(){
+   vMoteDepth=0.;vMoteCenter=vec2(10.);vMoteSeed=0.;
+  if(uPass>5.5&&uPass<6.5){
+   // R187: the same WebGL program renders a TRUE 3D ribbon mesh.
+   // aPosition encodes t and lane/side; no additional shader program.
+   float t=aPosition.x;
+   float index=floor(aPosition.y*.5);
+   float side=mod(aPosition.y,2.)*2.-1.;
+   float family=floor(index/20.),lane=mod(index,20.);
+   vec3 local=ribbonPoint(family,lane,t);
+   vec3 tangent=ribbonPoint(family,lane,t+.002)-
+                ribbonPoint(family,lane,t-.002);
+   float ca=cos(uSpinPhase),sa=sin(uSpinPhase);
+   local.xy=mat2(ca,-sa,sa,ca)*local.xy;
+   tangent.xy=mat2(ca,-sa,sa,ca)*tangent.xy;
+   vec3 view=orbitToView(local);
+   vec3 direction=orbitToView(tangent);
+   vec2 orthogonal=normalize(vec2(-direction.y,direction.x)+vec2(.0001));
+   float width=.008*(uLayer<.5?3.3:1.);
+   vec2 xy=view.xy+orthogonal*side*width;
+   gl_Position=vec4(xy.x*uResolution.y/max(uResolution.x,1.),xy.y-.08,0.,1.);
+   float strength=abs(mod(lane,5.)-2.)<.5?1.38:
+       abs(mod(lane,5.)-2.)<1.5?.72:.34;
+   vRibbonColor=(family<.5?vec3(.015,.94,1.):
+     family<1.5?vec3(1.,.09,.76):vec3(.16,.87,1.))*strength;
+   vRibbonSide=side;vRibbonDepth=view.z;
+   vLife=1.;vGlint=1.;vAxis=vec2(1.,0.);
+   return;
+  }
+
+ if(uPass>3.5&&uPass<4.5){
+  vLife=1.;vGlint=1.;vAxis=vec2(1.,0.);gl_PointSize=1.;
+  gl_Position=vec4(aPosition,0.,1.);return;
+ }
+ float i=floor(aSeed*2048.),a=rnd(i+27.)*6.283185;
+ float depth=rnd(i+41.)*2.-1.,t=uTime;
+ float radius=.64*clamp(uShape.x,.5,1.5);
+ vec3 p=vec3(0.);
+ float life=1.,sizeFactor=1.;
+ vAxis=vec2(cos(a),sin(a));
+ if(uPass>.5&&uPass<1.5){
+  // Coherent 3D plasma surface on golden-angle shell.
+  float z=1.-2.*(i+.5)/2048.;
+  float r=sqrt(max(0.,1.-z*z)),spin=i*2.39996323+t*.20;
+  float folds=sin(spin*5.+t*.85)*sin(z*13.-t*.54);
+  p=vec3(cos(spin)*r,sin(spin)*r,z);
+  p.xy*=radius*(.95+.025*folds);p.z*=radius;
+  life=mix(.18,1.,smoothstep(-.7,.55,z))*clamp(uShape.y,0.,1.);
+  vAxis=vec2(cos(spin),sin(spin));sizeFactor=.70;
+ }else if(uPass>1.5&&uPass<2.5){
+  // Connected GPU line segments: each neighbouring pair shares the same vertex.
+  float segment=floor(i/2.);
+  float chain=floor(segment/29.),bead=mod(segment,29.)+mod(i,2.);
+  float epoch=floor(t*.90+chain*.37),phase=fract(t*.90+chain*.37);
+  // Independent origins scattered through the whole plasma volume.
+  float originAngle=rnd(chain*13.+epoch*21.)*6.283185;
+  float originRadius=.025+.38*rnd(chain*19.+epoch*7.);
+  vec2 origin=vec2(cos(originAngle),sin(originAngle))*originRadius;
+  float aa=rnd(chain*7.+epoch*31.)*6.283185;
+  float reach=(.32+.34*rnd(chain*17.+epoch*3.))*bead/29.;
+  // Coherent short jagged turns, rather than isolated widely-spaced dots.
+  float stepNoise=rnd(chain*37.+floor(bead*.56)+epoch*11.)-.5;
+  float zig=stepNoise*.028+sin(bead*.92+chain*3.7)*.008;
+  float fork=step(17.,bead)*(bead-17.)/12.*(rnd(chain*13.+epoch*7.)-.5)*.42;
+  float ang=aa+fork;
+  vec2 dir=vec2(cos(ang),sin(ang));
+  p=vec3((origin+dir*reach+vec2(-dir.y,dir.x)*zig)*uShape.x,
+         (rnd(chain*9.+epoch*5.)-.5)*.78);
+  life=smoothstep(.015,.11,phase)*(1.-smoothstep(.71,.92,phase));
+  life*=mix(.28,1.,step(0.,p.z))*clamp(uEffects.x,0.,3.);
+  vAxis=dir;sizeFactor=.77;
+ }else if(uPass>4.5){
+  // R177: evenly distributed deterministic Fibonacci-shell embers on every
+  // hemisphere, with multi-radius layers and SMALL independent local drift.
+  float z=1.-2.*(i+.5)/max(1.,uMoteCount);
+  float polar=i*2.39996323+.13*(rnd(i*19.1)-.5);
+  float ring=sqrt(max(.0,1.-z*z));
+  vMoteSeed=rnd(i*11.87+3.1);
+  float moteRadius=radius*(uMoteStyle.x+uMoteStyle.y*rnd(i*7.19+17.));
+  vec3 local=vec3(cos(polar)*ring,z,sin(polar)*ring)*moteRadius;
+  // R178: co-rotate the FULL XYZ shell around the local plasma Z axis.
+  // Material phase winding=5*angle-5*uSpinPhase: advancing both +phase
+  // makes physical motes travel in the SAME direction as the plasma arms.
+  float spinCos=cos(uSpinPhase),spinSin=sin(uSpinPhase);
+  local.xy=vec2(local.x*spinCos-local.y*spinSin,
+                local.x*spinSin+local.y*spinCos);
+  local+=.022*vec3(sin(t*.39+i*2.11),cos(t*.33+i*.91),sin(t*.28+i*1.37));
+  // Cursor force is calculated AND applied in the rotating local frame.
+  // Reconstruct the local point on the pointer ray at this mote's view depth.
+  vec3 viewProbe=orbitToView(local);
+  vec3 cursorLocal=orbitToLocal(vec3(uPointer.xy,viewProbe.z));
+  vec3 away=local-cursorLocal;
+  float proximity=1.-smoothstep(.07,.42,length(viewProbe.xy-uPointer.xy));
+  local+=away/max(length(away),.01)*proximity*.34*uPointer.z;
+  // EXACT reciprocal transform of the volumetric plasma's camera tilt.
+  p=orbitToView(local);
+  vMoteDepth=p.z;vMoteCenter=p.xy;
+  life=(.78+.22*rnd(i+11.))*uPointer.w*uMoteStyle.w;
+  // Spark filament orientation follows the 3D orbit and the camera tilt.
+  vec2 tangent=orbitToView(vec3(-local.y,local.x,0.)).xy;
+  vAxis=normalize(tangent+vec2(.015,.005));
+  sizeFactor=.76+.39*smoothstep(-radius,radius,p.z);
+ }else if(uPass>2.5){
+  float ang=a+t*.32;
+  float r=pow(rnd(i*2.31+37.),1.5)*.13*clamp(uShape.z,.04,2.);
+  p=vec3(cos(ang)*r,sin(ang)*r,(rnd(i*3.27+7.)-.5)*.22);
+  life=.75+.25*sin(t*1.8+i*.12);sizeFactor=1.23;
+ }else{
+  float age=fract(rnd(i*5.+7.)+t*(.16+.24*rnd(i+29.)));
+  float ang=a+t*.36;
+  if(uControls.x<.5){
+   float r=(.06+age*.58)*uShape.x;
+   p=vec3(cos(ang+age*4.)*r,sin(ang+age*4.)*r,depth*.28);
+  }else if(uControls.x<1.5){
+   float r=(.04+age*.62)*uShape.x;
+   p=vec3(cos(a)*r,sin(a)*r,depth*.25);
+  }else if(uControls.x<2.5){
+   float r=(.18+.31*rnd(i+65.))*uShape.x;
+   p=vec3(cos(ang+age*5.)*r,sin(ang+age*5.)*r*.52,depth*.5);
+  }else{
+   p=vec3(cos(a)*age*.27*uShape.x,-.07+age*.63*uShape.x,depth*.24);
+  }
+  life=smoothstep(0.,.13,age)*(1.-smoothstep(.65,1.,age))*clamp(uControls.y,0.,2.);
+  sizeFactor=.90;
+ }
+ if(uPass>.5&&uPass<3.5)p.xy+=uTilt*.04;
+ vLife=life;vGlint=.65+.35*rnd(i*3.17+19.);
+ gl_PointSize=clamp((3.2+4.5*rnd(i+8.))*uEffects.z*sizeFactor*
+       uResolution.y/460.*mix(1.85,1.,uLayer),1.,29.);
+  if(uPass>4.5)gl_PointSize=clamp((9.0+7.0*rnd(i+8.))*sizeFactor*uMoteStyle.z*uResolution.y/518.,1.5,32.);
+ gl_Position=vec4(p.x*uResolution.y/max(uResolution.x,1.),p.y-.08,0.,1.);
+}
+`;
+ const fragment=`
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+varying float vLife,vGlint;
+varying vec2 vAxis,vMoteCenter;
+varying float vMoteDepth;
+varying float vMoteSeed;
+ varying vec3 vRibbonColor;
+ varying float vRibbonSide,vRibbonDepth;
+uniform vec2 uResolution;
+uniform float uTime,uPass,uLayer;
+uniform vec4 uControls,uShape,uEffects;
+uniform vec4 uPointer; // R176: cursor displacement drives the actual volumetric waves
+uniform float uSpinPhase; // R178: same local angular phase as the floating motes
+uniform vec3 uCore,uCyan,uViolet,uDeep;
+uniform vec3 uMotePrimary,uMoteSecondary;
+uniform float uMoteShape; // R180: 0 spark, 1 faceted shard, 2 ion orb
+uniform vec2 uMoteFinish; // R182: surface roughness, crystal reflectance
+uniform vec2 uTilt;
+uniform float uVolumeSteps;
+uniform vec2 uFlow;
+uniform float uCompare; // R171/R172.1 magnetic A/B
+uniform float uDepthRefine; // R174 optics A/B, not a JSON setting
+float hash3(vec3 v){v=fract(v*.1031);v+=dot(v,v.yzx+33.33);return fract((v.x+v.y)*v.z);}
+float noise3(vec3 p){
+ vec3 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
+ return mix(mix(mix(hash3(i),hash3(i+vec3(1,0,0)),f.x),
+                mix(hash3(i+vec3(0,1,0)),hash3(i+vec3(1,1,0)),f.x),f.y),
+            mix(mix(hash3(i+vec3(0,0,1)),hash3(i+vec3(1,0,1)),f.x),
+                mix(hash3(i+vec3(0,1,1)),hash3(i+vec3(1,1,1)),f.x),f.y),f.z);
+}
+void main(){
+  if(uPass>5.5&&uPass<6.5){
+   float e=abs(vRibbonSide),hot=1.-smoothstep(.25,1.,e);
+   float depth=mix(.23,1.,smoothstep(-.7,.7,vRibbonDepth));
+   float emission=(uLayer<.5?exp(-e*e*3.5)*.06:hot*.60)
+                  *depth*clamp(uEffects.w,0.,1.5);
+   if(emission<.002)discard;
+   gl_FragColor=vec4(vRibbonColor*emission,emission);
+   return;
+  }
+ vec2 p=(gl_FragCoord.xy/uResolution-.5)*2.;
+ p.x*=uResolution.x/max(uResolution.y,1.);p.y+=.08;
+ float radius=.64*clamp(uShape.x,.5,1.5);
+ if(uPass>4.5){
+  // R177: full 3D depth sorting by sphere silhouette. Rear embers are
+  // occluded by the volume, but appear again on its rim after orbiting.
+  if(vMoteDepth<-.02&&length(vMoteCenter)<radius*.985)discard;
+  // R175 optical pass: sparse but legible directional sparks, not a starfield.
+  vec2 q=gl_PointCoord*2.-1.;
+  float r2=dot(q,q);
+  vec2 axis=normalize(vAxis);
+  float along=dot(q,axis),across=dot(q,vec2(-axis.y,axis.x));
+  // R181: a single shader provides three genuinely distinct shapes.
+  // The faceted branch calculates its own normal and physically-directed
+  // highlights, while avoiding the old three exponential spark passes.
+  float hue=step(.5,fract(vGlint*7.73));
+  vec3 col=mix(uMotePrimary,uMoteSecondary*1.50+uMotePrimary*.10,hue);
+  vec3 hot=mix(col,vec3(.86,.97,1.),.24);
+  float silhouette=0.;
+  vec3 lightCol=vec3(0.);
+  if(uMoteShape>.5&&uMoteShape<1.5){
+   // Oblique six-sided crystal cut with three planar faces and a thin bevel.
+   // The local tangent vAxis was already rotated with the camera.
+   float crystalAngle=(vGlint-.82)*2.3+uSpinPhase*.16;
+   float cs=cos(crystalAngle),sn=sin(crystalAngle);
+   vec2 facetXY=vec2(along*cs-across*sn,along*sn+across*cs);
+   float axial=abs(facetXY.x),lateral=abs(facetXY.y);
+   // R184: the old horizontal tip reached the point-sprite square edge.
+   // Keep the entire beveled crystal INSIDE its sprite and feather the cut.
+   float sideCut=max(lateral*1.13+axial*.48,axial*.98);
+   silhouette=1.-smoothstep(.67,.85,sideCut);
+   // Independent facet normals, pointing into the core's genuine centre.
+   float faceSide=step(0.,facetXY.y);
+   float faceTip=step(.27,axial);
+   // R182: bounded, deterministic microfacet imperfections per crystal.
+   // Material-space seed follows the 3D shard instead of tracking the screen.
+   float roughness=clamp(uMoteFinish.x,0.,1.);
+   float reflectionStrength=clamp(uMoteFinish.y,0.,2.);
+   vec2 grainCell=floor((facetXY+vMoteSeed*2.7)*24.);
+   float grain=fract(sin(dot(grainCell,vec2(127.1,311.7)))*43758.5453);
+   float hairline=1.-smoothstep(.016,.056,
+     abs(fract(facetXY.x*7.5+facetXY.y*3.1+grain*.42+vMoteSeed*8.)-.5));
+   vec3 normal=normalize(vec3(mix(-.72,.68,faceSide),
+                              mix(.18,-.52,faceTip),.90));
+   normal=normalize(normal+vec3((grain-.5)*roughness*.19,
+                    sin(facetXY.x*19.+vMoteSeed*11.)*roughness*.07,0.));
+   vec3 sourceDir=normalize(vec3(-vMoteCenter*.95+.14,1.50));
+   float diffuse=.30+.70*max(dot(normal,sourceDir),0.);
+   vec3 reflected=reflect(-sourceDir,normal);
+   float specular=pow(max(reflected.z,0.),mix(34.,8.,roughness));
+   // Edge bevel and core-facing rim are stable when the sphere is orbited.
+   float bevel=smoothstep(.64,.78,sideCut)*(1.-smoothstep(.78,.90,sideCut));
+   float rim=smoothstep(-.18,.62,dot(normal,sourceDir));
+   float facetTone=mix(.61,1.04,faceSide)*mix(1.03,.73,faceTip);
+   float surfaceGrain=1.-roughness*(.065+hairline*.22);
+   lightCol=col*(.44+diffuse*.90)*facetTone*surfaceGrain+
+            hot*reflectionStrength*(specular*1.75+bevel*(.25+.52*rim));
+   // A restrained star-like core glint that follows each crystal orientation.
+   float streak=exp(-abs(facetXY.y+facetXY.x*.17)*24.)*
+       (1.-smoothstep(.12,.79,abs(facetXY.x)));
+   lightCol+=hot*reflectionStrength*(streak*.12+
+      .16*(1.-smoothstep(.02,.42,r2)));
+  }else if(uMoteShape>1.5){
+   float orb=exp(-r2*7.5),halo=exp(-r2*1.55);
+   silhouette=clamp(orb*.86+halo*.22,0.,1.);
+   lightCol=col*silhouette*.68+hot*exp(-r2*29.)*.82;
+  }else{
+   float coreGlow=exp(-r2*29.0),aura=exp(-r2*4.7);
+   float filament=exp(-across*across*23.0-along*along*4.5);
+   silhouette=clamp(coreGlow*.82+filament*.45+aura*.33,0.,1.);
+   lightCol=col*(aura*.55+filament*.58)+hot*coreGlow*1.44;
+  }
+   // R184 critical bugfix: gl.blendFunc(ONE, ONE) ignores alpha entirely.
+   // Previously even alpha-zero sprite corners added their RGB to the scene,
+   // producing opaque cyan/violet rectangles and giant X-shaped highlights.
+   float alpha=clamp(silhouette,0.,1.)*vLife*clamp(uEffects.w,0.,1.);
+   if(alpha<.012)discard;
+   // Premultiplied emission is mandatory with additive ONE/ONE blending.
+   gl_FragColor=vec4(lightCol*alpha,alpha);
+  return;
+ }
+  if(uPass>3.5&&uPass<4.5&&uFlow.x>5.5){
+   // R186 ADDITIVE MATERIAL ONLY. The six legacy materials below remain
+   // byte-for-byte untouched. Three oblique, genuinely 3D toroidal rails.
+   float radiusNeon=.88*clamp(uShape.x,.5,1.5);
+   float srNeon=length(p);
+   // Restrained atmospheric shafts, only for this extra material.
+   float nearAngle=atan(p.y,p.x);
+   float beam=pow(max(0.,.5+.5*cos(nearAngle*19.
+                +sin(nearAngle*4.)*.85-uSpinPhase*.4)),17.);
+   float atmosphere=exp(-pow(srNeon/max(radiusNeon,0.01),2.)*1.8)
+                     *(.025+.10*beam);
+   vec3 skyNeon=(vec3(.025,.89,1.)*.46+vec3(1.,.11,.75)*.36)
+                 *atmosphere;
+   if(srNeon>=radiusNeon){
+    gl_FragColor=vec4(skyNeon,clamp(atmosphere*.45,0.,.15)*uEffects.w);
+    return;
+   }
+   float halfNeon=sqrt(max(0.,radiusNeon*radiusNeon-dot(p,p)));
+   float dzNeon=(2.*halfNeon)/max(uVolumeSteps,1.);
+   float syNeon=sin(uTilt.x*1.5),cyNeon=cos(uTilt.x*1.5);
+   float sxNeon=sin(uTilt.y*1.5),cxNeon=cos(uTilt.y*1.5);
+   float caNeon=cos(uSpinPhase),saNeon=sin(uSpinPhase);
+   vec3 cyanNeon=mix(uCyan,vec3(.025,.93,1.),.84);
+   vec3 pinkNeon=mix(uViolet,vec3(1.,.08,.76),.94);
+   vec3 Lneon=vec3(0.);
+   float Aneon=0.;
+   for(int i=0;i<22;i++){
+    if(float(i)>=uVolumeSteps)break;
+    float zNeon=halfNeon-(float(i)+.5)*dzNeon;
+    vec3 q=vec3(p,zNeon)/radiusNeon;
+    q=vec3(q.x*cyNeon+q.z*syNeon,
+           q.y*cxNeon-(q.z*cyNeon-q.x*syNeon)*sxNeon,
+           q.y*sxNeon+(q.z*cyNeon-q.x*syNeon)*cxNeon);
+    q.xy=mat2(caNeon,-saNeon,saNeon,caNeon)*q.xy;
+    // Same cursor ripple acts on all components without altering old modes.
+    vec2 pointerWarp=q.xy-uPointer.xy/radiusNeon;
+    q.xy+=pointerWarp*uPointer.z*.11*
+       (1.-smoothstep(.12,.70,length(pointerWarp)));
+    // A: cyan ring inclined 34 degrees.
+    vec3 a=vec3(q.x,q.y*.83-q.z*.56,q.y*.56+q.z*.83);
+    float ra=length(a.xy),thetaA=atan(a.z,ra-.52),turnA=atan(a.y,a.x);
+    float tubeA=length(vec2(ra-.52,a.z));
+    float shellA=exp(-pow((tubeA-.23)*16.,2.));
+    float stripeA=pow(max(0.,.5+.5*cos(thetaA*3.-turnA*7.)),9.);
+    float railA=shellA*stripeA;
+    // B: magenta ring crosses the cyan family's real front/back depth.
+    vec3 b=vec3(q.z*.70+q.x*.71,q.y,q.z*.71-q.x*.70);
+    float rb=length(b.yz),thetaB=atan(b.x,rb-.51),turnB=atan(b.z,b.y);
+    float tubeB=length(vec2(rb-.51,b.x));
+    float shellB=exp(-pow((tubeB-.25)*16.,2.));
+    float stripeB=pow(max(0.,.5+.5*cos(thetaB*3.+turnB*6.)),10.);
+    float railB=shellB*stripeB;
+    // C: independent tilted ring crosses the other two in 3D and
+    // contributes high-frequency braiding, not an extra particle layer.
+    vec3 c=vec3(q.x*.86-q.y*.51,q.x*.51+q.y*.86,q.z);
+    float rc=length(c.xz),thetaC=atan(c.y,rc-.49),turnC=atan(c.z,c.x);
+    float tubeC=length(vec2(rc-.49,c.y));
+    float shellC=exp(-pow((tubeC-.25)*14.,2.));
+    float railC=shellC*pow(max(0.,.5+.5*cos(thetaC*4.-turnC*9.)),8.);
+    float lineC=railC*pow(max(0.,.5+.5*cos(turnC*28.+thetaC*6.)),4.);
+    // High-frequency accents deliberately remain on the 3D tubes.
+    float lineA=railA*pow(max(0.,.5+.5*cos(turnA*29.+thetaA*8.)),5.);
+    float lineB=railB*pow(max(0.,.5+.5*cos(turnB*31.-thetaB*8.)),5.);
+    float lensFront=.50+.58*smoothstep(-.8,.8,q.z);
+    float border=1.-smoothstep(.84,1.03,length(q));
+    float lightA=(railA*3.5+lineA*1.9+railC*1.5+lineC*.8)*lensFront*border;
+    float lightB=(railB*3.8+lineB*2.1+railC*.85+lineC*.6)*lensFront*border;
+    Lneon+=(cyanNeon*lightA+pinkNeon*lightB+
+              uCore*(lineA+lineB+lineC)*.12)*dzNeon*3.9;
+    Aneon+=(railA+railB+railC)*lensFront*border*dzNeon*5.4;
+   }
+   // Restrained white-hot nucleus and inward energetic glow.
+   float coreNeon=exp(-dot(p,p)/(radiusNeon*radiusNeon)*28.);
+   float haloNeon=exp(-dot(p,p)/(radiusNeon*radiusNeon)*5.2);
+   Lneon+=uCore*coreNeon*.95+
+         (cyanNeon*.24+pinkNeon*.18)*haloNeon;
+   vec3 outNeon=vec3(1.)-exp(-max(Lneon,vec3(0.))*.15);
+   float alphaNeon=clamp(.015+Aneon*.12+coreNeon*.20+haloNeon*.035,0.,.45);
+   float edgeNeon=1.-smoothstep(.89,1.,srNeon/radiusNeon);
+   gl_FragColor=vec4(outNeon*.50+skyNeon*.35,alphaNeon*edgeNeon*uEffects.w);
+   return;
+  }
+ if(uPass>3.5&&uPass<4.5){
+  // True 3D ray integration. The image reference is a luminous white-blue
+  // central star enclosed in translucent indigo space, with five broad
+  // cyan/violet plasma arms winding through front and rear depth layers.
+  float xy=length(p);
+  if(xy>=radius*1.025)discard;
+  float halfDepth=sqrt(max(0.,radius*radius-dot(p,p)));
+  float stride=(2.*halfDepth)/max(uVolumeSteps,1.);
+  float t=uTime;
+  float rotY=uTilt.x*1.5,rotX=uTilt.y*1.5;
+  float sy=sin(rotY),cy=cos(rotY),sx=sin(rotX),cx=cos(rotX);
+  vec3 accum=vec3(0.);
+  float trans=1.;
+  float sceneDensity=0.;
+  float emission=clamp(uControls.y,0.,2.);
+  // Compact core size independent of its radiance. Power never widens the core.
+  float nucleusRadius=max(.018,radius*uShape.z*.105);
+  // R176: an impulse bends the existing 3D flow, with no extra light layer.
+  // Compute once per ray, rather than adding trigonometry to every depth step.
+  vec2 cursorDelta=p-uPointer.xy;
+  float cursorDistance=length(cursorDelta);
+  vec2 radial=cursorDelta/max(cursorDistance,.015);
+  vec2 tangent=vec2(-radial.y,radial.x);
+  float influence=uPointer.z*(1.-smoothstep(.05,.53,cursorDistance));
+  float centreGuard=smoothstep(.075,.20,length(p));
+  float ripplePhase=cursorDistance*22.0-t*6.0;
+  vec2 waveWarp=(radial*cos(ripplePhase)*.13+
+                 tangent*sin(ripplePhase*.81)*.105)*influence*centreGuard;
+  for(int i=0;i<22;i++){
+    if(float(i)>=uVolumeSteps)break;
+    float z=halfDepth-(float(i)+.5)*stride;
+    vec3 q=vec3(p,z);
+    // The camera tilt rotates the full volumetric field, not a flat UV plane.
+    q=vec3(q.x*cy+q.z*sy,
+           q.y*cx-(q.z*cy-q.x*sy)*sx,
+           q.y*sx+(q.z*cy-q.x*sy)*cx);
+    vec3 undisturbedQ=q;
+    q.xy+=waveWarp*(.72+.28*(1.-smoothstep(0.,radius,abs(z))));
+    float distance3D=length(undisturbedQ)/radius;
+    float planar=length(q.xy)/radius;
+    float angle=atan(q.y,q.x);
+    float broad=noise3(q*3.8+vec3(t*.12,-t*.11,t*.08));
+    float detail=.5+.5*sin(dot(q,vec3(18.,-13.,11.))+t*.45+(broad-.5)*4.);
+    float depthWarp=(broad-.5)*1.05+(detail-.5)*.35;
+    // Logarithmic spiral filaments in a rotating three-dimensional volume.
+    float winding=angle*5.0+5.8*log(planar+.15)-uSpinPhase*5.
+                  +q.z*2.6+depthWarp*1.35;
+    float spiral=pow(max(0.,.5+.5*cos(winding)),6.);
+    float sideFilament=pow(max(0.,.5+.5*cos(winding*1.8+detail*3.2)),25.);
+    float stream=pow(max(0.,.5+.5*cos(winding*.8-q.z*7.2)),8.);
+    float volumeFog=clamp(.23+.30*broad+.18*detail,0.,1.);
+    float hollow=1.-smoothstep(.2,.83,abs(broad-detail)*2.0);
+    float interior=1.-smoothstep(.92,1.02,distance3D);
+    float core=exp(-dot(undisturbedQ,undisturbedQ)/(nucleusRadius*nucleusRadius)*1.65);
+    float coreHalo=exp(-dot(undisturbedQ,undisturbedQ)/(nucleusRadius*nucleusRadius)*.18);
+    float electrical=0.,vortex=0.,fusion=0.;
+    if(uControls.x>.5&&uControls.x<1.5){
+      electrical=pow(max(0.,.5+.5*cos(winding*2.2+detail*9.)),23.);
+    }else if(uControls.x>1.5&&uControls.x<2.5){
+      vortex=pow(max(0.,.5+.5*cos(winding*.8+q.z*8.)),9.);
+    }else if(uControls.x>2.5&&uControls.x<3.5){
+      fusion=pow(max(0.,.5+.5*cos(angle*10.+depthWarp*2.-t*.5)),14.)
+             *exp(-distance3D*2.5);
+    }
+    // R157: only this flow material changes. Nucleus/core halo, electric arcs,
+    // extra particle presets and alpha stay in their original independent passes.
+    float ribbonWidth=clamp(uFlow.y,.3,2.);
+    float flowCurrents=0.;
+    float flowFog=1.;
+    if(uFlow.x<.5){
+      // R162: asymmetric, multi-scale filament topology within the SAME ray-marched volume.
+      // Depth offset, low-frequency wandering, strand breakup and travelling pulses.
+      float wander=.32*sin(angle*2.+q.z*3.1+t*.21)
+                  +.22*sin(q.y*6.7-q.z*4.5-t*.17)+(broad-.5)*.65;
+      float depthTwist=q.z*(2.8+.7*sin(t*.23+planar*5.))
+                      +.35*sin(q.x*5.1+q.z*3.1-t*.25);
+      // The angular part must contain only integer winding numbers at +/-PI.
+      // Keep all irregular distortion in a strictly periodic phase offset.
+      // Advect local filaments in actual XYZ depth instead of rigid rotation.
+      float flowAge=t*.22;
+      vec3 drifted=q+vec3(.11*sin(q.z*2.7+flowAge*1.1),
+                          .08*cos(q.x*3.9-flowAge*.8),
+                          .09*sin((q.x-q.y)*2.3+flowAge*.7));
+      float internalShear=.43*sin(q.z*4.3+drifted.y*3.1+flowAge*1.7)
+                         +.21*cos(q.x*4.1-drifted.z*2.2-flowAge*.9);
+      // R170: spatially bent lanes; only periodic integer angle harmonics remain.
+      float streamBend=.44*sin(drifted.x*4.7+drifted.z*5.2-t*.18)
+                      +.24*cos(drifted.y*6.3-drifted.z*3.8+t*.14);
+      // Depth-layer energy envelopes prevent all six principal streams from
+      // reaching the rim at identical strength (the old pinwheel silhouette).
+      float depthEnvelope=.60+.40*smoothstep(.16,.84,
+          .5+.5*sin(q.z*5.7+q.x*3.2-q.y*2.8+t*.11));
+      float filamentContrast=.68+.32*smoothstep(.23,.76,
+          noise3(drifted*2.8+vec3(.31,-.27,.19)));
+      float basePhase=4.3*log(planar+.23)-t*.27+wander*2.2+depthTwist+internalShear+streamBend
+                    +.75*sin(q.z*2.9+planar*6.1)*sin(angle*3.+q.z*1.7);
+      float organicLane=angle*6.+basePhase;
+      float localPhase=sin(angle*2.+basePhase*.33+q.x*3.4+q.z*2.1-t*.17);
+      float primaryVein=pow(max(0.,.5+.5*cos(organicLane+localPhase*.55)),
+                            max(5.,11.4/ribbonWidth));
+      float tributary=pow(max(0.,.5+.5*cos(angle*9.+basePhase*1.63+wander+depthTwist*.33)),
+                          max(9.,18./ribbonWidth));
+      float hairline=pow(max(0.,.5+.5*cos(angle*19.+basePhase*3.17+q.z*8.1-q.y*5.6)),
+                         max(16.,35./ribbonWidth));
+      float wisp=pow(max(0.,.5+.5*cos(angle*3.+basePhase*.57-q.x*4.7+depthTwist*1.4)),
+                     max(6.,11./ribbonWidth));
+      // Unsynchronized travelling pulses at different depth layers.
+      float pulse=.76+.24*sin(t*2.1+planar*11.+q.z*5.+wander*3.+internalShear);
+      float shearEnvelope=.78+.22*sin(t*.78+q.x*2.1-q.z*3.5);
+      float breakup=.64+.36*smoothstep(.23,.72,broad+.19*sin(q.z*8.+t*.3));
+      // Sustain thin currents without restoring surface haze or opaque shell.
+      flowCurrents=(primaryVein*.91+tributary*.48+hairline*.50+wisp*.22)
+                   *pulse*breakup*shearEnvelope*depthEnvelope*filamentContrast*2.10;
+    }else if(uFlow.x<1.5){
+      // R172.1: visible material relief; R171 baseline can be shown A/B.
+      // Main four magnetic loops and center remain strictly unchanged.
+      float fieldAngle=angle*4.+q.z*6.5+sin(planar*9.+broad*2.2-t*.65)*2.;
+      float fieldLoop=pow(max(0.,.5+.5*cos(fieldAngle)),max(2.,7./ribbonWidth));
+      float layering=pow(max(0.,.5+.5*cos(q.z*11.+planar*7.-t*.43)),3.);
+      float r171Currents=fieldLoop*(.40+.68*layering);
+      // The outer envelope still comes from the same magnetic field.
+      // Bright sculpted rails and internal braids replace uniform soft ribbons.
+      float ridgeA=pow(max(0.,.5+.5*cos(fieldAngle+.62)),max(4.,11./ribbonWidth));
+      float ridgeB=pow(max(0.,.5+.5*cos(fieldAngle-.73)),max(4.,11./ribbonWidth));
+      float braidTrace=pow(max(0.,.5+.5*cos(fieldAngle*3.+q.z*4.3-t*.41)),
+                            max(8.,20./ribbonWidth));
+      float volumetricContrast=.48+.52*smoothstep(-.64,.68,q.z/max(radius,.01));
+      float r172Currents=fieldLoop*(.27+.43*layering)*volumetricContrast
+                  +fieldLoop*(ridgeA*.88+ridgeB*.70+braidTrace*.86)*volumetricContrast;
+      flowCurrents=mix(r171Currents,r172Currents,uCompare);
+      flowFog=.54;
+    }else if(uFlow.x<2.5){
+      // Aurora: flowing translucent vertical sheets, not spiralling plasma.
+      float curtainPhase=q.x*9.+q.z*8.+
+                         sin(q.y*5.+t*.24)*1.8+broad*3.2-t*.55;
+      float veil=pow(max(0.,.5+.5*cos(curtainPhase)),max(1.8,5.2/ribbonWidth));
+      float feather=.5+.5*sin(q.y*9.-t*.38+detail*4.);
+      flowCurrents=veil*(.38+.67*feather);
+      flowFog=.46;
+    }else if(uFlow.x<3.5){
+      // Ionized nebula: broad, turbulent luminous clouds, minimal filaments.
+      float densityCloud=smoothstep(.17,.69,broad*.70+detail*.30);
+      float swirls=.5+.5*cos(q.z*5.+planar*4.-t*.22+depthWarp*2.);
+      flowCurrents=densityCloud*(.28+.28*swirls);
+      flowFog=1.55+.55*ribbonWidth;
+    }else if(uFlow.x<4.5){
+      // Fusion jets retained bit-for-bit from R172.1.
+      float radialPhase=angle*8.+q.z*3.4+depthWarp*2.3-t*.42;
+      float jets=pow(max(0.,.5+.5*cos(radialPhase)),max(2.,9./ribbonWidth));
+      float outward=smoothstep(.08,.36,planar)*exp(-distance3D*1.2);
+      flowCurrents=jets*(.50+.86*outward);
+      flowFog=.40;
+    }else{
+      // R173.1: spherical, coherent liquid field. Four broad currents form
+      // a 360-degree sphere instead of the earlier single detached sheet.
+      // Integer angular harmonics remain seamless across atan +/-PI.
+      float liquidFlowAngle=angle*4.+q.z*5.3
+           +2.18*sin(planar*7.2+q.y*1.7-t*.30)
+           +.92*sin(q.x*4.0-q.z*3.2-t*.24)
+           +.63*cos(q.y*4.4+q.z*2.7+t*.28);
+      float liquidPhase=liquidFlowAngle;
+      float liquidMain=pow(max(0.,.5+.5*cos(liquidPhase)),
+                            max(2.6,5.6/ribbonWidth));
+      float liquidSheet=liquidMain;
+      float liquidCurl=angle*8.+q.z*8.5-t*.34
+           +2.1*sin(planar*8.5-q.y*2.4+t*.24)
+           +.45*sin(q.x*3.7+q.z*3.8);
+      float curlingWake=pow(max(0.,.5+.5*cos(liquidCurl)),
+                             max(6.,13./ribbonWidth));
+      float liquidCrest=pow(max(0.,.5+.5*cos(liquidPhase+.48
+                             +.40*sin(q.z*3.5-t*.27))),
+                             max(5.,12./ribbonWidth));
+      float liquidEdge=liquidCrest;
+      float liquidTributary=pow(max(0.,.5+.5*cos(angle*12.
+               +q.z*10.0+2.0*sin(planar*8.5+t*.15)-t*.25)),
+               max(9.,23./ribbonWidth));
+      float liquidRim=liquidTributary;
+      float depthSeparation=.70+.30*smoothstep(-.75,.75,q.z/max(radius,.01));
+      float depthTide=depthSeparation;
+      float travellingCrest=.83+.17*sin(planar*8.5-q.z*2.2+t*.53);
+      float centreBridge=.78+.22*(1.-smoothstep(.12,.49,planar));
+      flowCurrents=(liquidMain*(.60+.34*curlingWake)
+                 +liquidCrest*.46*liquidMain
+                 +liquidTributary*.24*liquidMain)
+                 *depthTide*travellingCrest*centreBridge*2.12;
+      flowFog=.36;
+    }
+    float currents=0.;
+    currents=flowCurrents;
+    // Only the selected volumetric flow remains active: no legacy energy overlays.
+    // Shell-free emission: only flow currents and nucleus contribute to optical density.
+    float density=(currents*.43*emission+
+                   core*.69+coreHalo*.11)*interior;
+    // R174: quality pass inside the SAME ray, emphasizing near filaments
+    // and cutting near/far optical crowding without a shell or new GPU pass.
+    float frontLayer=.27+1.13*smoothstep(-.72,.80,q.z/max(radius,.01));
+    float filamentPeak=smoothstep(.30,1.45,currents);
+    float refinedDensity=(currents*(.16+.34*filamentPeak)*emission
+                          *frontLayer+core*.69+coreHalo*.11)*interior;
+    float absorption=clamp(mix(density,refinedDensity,uDepthRefine)*stride*5.2,0.,.49);
+    vec3 blue=mix(uDeep*.65,uViolet*.69,clamp(distance3D*.72+broad*.42,0.,1.));
+    float violetBand=.5+.5*sin(angle*3.0+q.z*4.0+broad*2.2);
+    vec3 ion=mix(uCyan,uViolet,clamp(.12+.72*violetBand,0.,1.));
+    vec3 filamentColor=mix(blue,ion,clamp(currents*.83+.11,0.,1.));
+    float refinedRadianceScale=(.34+1.05*filamentPeak)*frontLayer;
+    vec3 radiance=filamentColor*(.50+currents*1.30)
+                  *mix(1.,refinedRadianceScale,uDepthRefine)
+                  +uCyan*coreHalo*.50
+                  +uCore*core*pow(max(uShape.w,0.),1.35)*2.4;
+    accum+=trans*radiance*absorption;
+    trans*=1.-absorption;
+    sceneDensity+=absorption;
+  }
+  // Borderless energy: radial mask only fades the currents at the limit.
+  float silhouette=xy/radius;
+  float edge=1.-smoothstep(.92,1.0,silhouette);
+  float coreScreen=exp(-dot(p,p)/(nucleusRadius*nucleusRadius)*1.8);
+  vec3 result=accum*2.05+
+              uCore*coreScreen*pow(max(uShape.w,0.),1.26)*.56;
+  // HDR-inspired, smooth light mapping; no clipped flat cyan marble.
+  result=vec3(1.)-exp(-max(result,vec3(0.))*1.15);
+  float alpha=(1.-trans)+coreScreen*.69;
+  gl_FragColor=vec4(result,clamp(alpha*edge*uEffects.w,0.,1.));
+  return;
+ }
+ if(uPass>1.5&&uPass<2.5){
+  // Thin, continuous high-voltage traces (GL.LINES), never a bead cloud.
+  if(length(p)>=radius*.98)discard;
+  float flash=clamp(vLife,0.,1.)*clamp(uEffects.w,0.,1.);
+  vec3 boltColor=mix(uCyan,uCore,uLayer>.5?.88:.34);
+  float intensity=flash*(uLayer>.5?.87:.24);
+  gl_FragColor=vec4(boltColor*intensity,clamp(intensity,0.,1.));
+  return;
+ }
+ vec2 c=gl_PointCoord*2.-1.;
+ float r2=dot(c,c);
+ float halo=exp(-r2*3.1),hot=exp(-r2*14.);
+ float energy=(uLayer<.5?halo*.26:hot*1.13+halo*.13)*vLife*vGlint;
+ if(uPass>.5&&uPass<1.5)energy*=.025; // restrained shell: no starfield over the material
+ float bound=1.-smoothstep(radius*.95,radius*1.035,length(p));
+ energy*=bound*clamp(uEffects.w,0.,1.);
+ if(uPass>2.5)energy*=pow(max(uShape.w,0.),1.55)*1.62;
+ vec3 color=uPass>2.5?uCore:uPass>1.5?mix(uCyan,uCore,.61):
+            uPass>.5?mix(uCyan,uViolet,.25):mix(uCyan,uCore,.36);
+ color=mix(color,vec3(1.),vGlint*.26);
+ gl_FragColor=vec4(color*energy,clamp(energy,0.,1.));
+}
+`;
+ function compile(type,src){
+  const shader=gl.createShader(type);if(!shader)return null;
+  gl.shaderSource(shader,src);gl.compileShader(shader);
+  if(!gl.getShaderParameter(shader,gl.COMPILE_STATUS)){
+   status(mainStatus,'Échec compilation GPU : '+String(gl.getShaderInfoLog?.(shader)||'').replace(/[\r\n\t]+/g,' ').slice(0,145));
+   gl.deleteShader(shader);return null;
+  }return shader;
+ }
+ const vert=compile(gl.VERTEX_SHADER,vertex),frag=compile(gl.FRAGMENT_SHADER,fragment);
+ if(!vert||!frag){status(vfxStatus,'GPU indisponible · référence plasma affichée.');return;}
+ const program=gl.createProgram();if(!program)return;
+ gl.attachShader(program,vert);gl.attachShader(program,frag);gl.linkProgram(program);
+ if(!gl.getProgramParameter(program,gl.LINK_STATUS)){
+  status(mainStatus,'Échec liaison GPU : '+String(gl.getProgramInfoLog?.(program)||'').replace(/[\r\n\t]+/g,' ').slice(0,145));
+  status(vfxStatus,'GPU indisponible · référence plasma affichée.');return;
+ }
+ gl.deleteShader(vert);gl.deleteShader(frag);
+ const A=gl.getAttribLocation(program,'aPosition'),S=gl.getAttribLocation(program,'aSeed');
+ const keys=['uResolution','uTime','uPass','uLayer','uTilt','uControls','uShape','uEffects','uCore','uCyan','uViolet','uDeep','uVolumeSteps','uFlow','uCompare','uDepthRefine','uPointer','uMoteCount','uSpinPhase','uMoteStyle','uMotePrimary','uMoteSecondary','uMoteShape','uMoteFinish'];
+ const U=Object.fromEntries(keys.map(k=>[k,gl.getUniformLocation(program,k)]));
+ if(A<0||S<0||keys.some(k=>U[k]===null)){status(mainStatus,'GPU : paramètres incomplets.');return;}
+ const quad=gl.createBuffer(),seeds=gl.createBuffer();if(!quad||!seeds)return;
+ gl.bindBuffer(gl.ARRAY_BUFFER,quad);
+ gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,-1,1,1,-1,1,1]),gl.STATIC_DRAW);
+ gl.bindBuffer(gl.ARRAY_BUFFER,seeds);
+   gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(Array.from({length:MAX},(_,i)=>(i+.5)/MAX)),gl.STATIC_DRAW);
+  const ribbonBuffer=gl.createBuffer();
+  let ribbonCount=0;
+  if(ribbonBuffer){
+   const mesh=[],lanes=60,steps=144,T=Math.PI*2;
+   const put=(time,lane,side)=>mesh.push(time,lane*2+side);
+   for(let lane=0;lane<lanes;lane++)for(let i=0;i<steps;i++){
+    const t=i*T/steps,n=(i+1)*T/steps;
+    put(t,lane,0);put(t,lane,1);put(n,lane,0);
+    put(n,lane,0);put(t,lane,1);put(n,lane,1);
+   }
+   ribbonCount=mesh.length/2;
+   gl.bindBuffer(gl.ARRAY_BUFFER,ribbonBuffer);
+   gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(mesh),gl.STATIC_DRAW);
+  }
+  stage.dataset.ribbonVertices=String(ribbonCount);
+
+
+ let active=true,visible=true,frame=0,last=0,lastFrame=0,elapsed=0,tiltX=0,tiltY=0;
+ // R183: CPU/browser frame cadence, not an unproven physical GPU timer.
+ // This affects only uVolumeSteps: no animation speed, no particle count.
+ let cadenceMs=0,cadenceSamples=0,autoPenalty=0,lastQualityChange=0,lastTelemetry=0,priorQualityMode='balanced';
+ const chooseVolumeSteps=(mobile,baseline,mode,penalty)=>{
+  if(mode==='performance')return mobile?10:16;
+  if(mode==='quality')return mobile?18:22; // shader loop hard maximum = 22
+  if(mode==='auto')return Math.max(mobile?8:14,baseline-penalty*(mobile?2:3));
+  return baseline;
+ };
+ // Hysteresis and cooldown prevent toggling on one slow frame.
+ const nextAutoPenalty=(old,avgMs,validSamples,now,lastChange)=>{
+  if(validSamples<24||now-lastChange<3500)return old;
+  if(avgMs>62)return Math.min(2,old+1);
+  if(avgMs<42&&now-lastChange>8500)return Math.max(0,old-1);
+  return old;
+ };
+ function resize(){
+  // The WebGL canvas must follow the actual sticky preview panel size. Its
+  // HTML width/height attributes (960x570) are only a pre-init fallback.
+  const w=stage.clientWidth,h=stage.clientHeight;if(w<10||h<10)return false;
+  if(canvas.style.width!==w+'px')canvas.style.width=w+'px';
+  if(canvas.style.height!==h+'px')canvas.style.height=h+'px';
+  const mobile=window.innerWidth<=700;
+  const scale=Math.min(window.devicePixelRatio||1,mobile?1.5:2.25,
+    Math.sqrt((mobile?650000:1500000)/(w*h)));
+  const W=Math.max(1,Math.floor(w*scale)),H=Math.max(1,Math.floor(h*scale));
+  if(canvas.width!==W||canvas.height!==H){canvas.width=W;canvas.height=H;}
+  gl.viewport(0,0,W,H);return true;
+ }
+ function draw(now){
+  frame=0;if(!active||!visible||document.visibilityState!=='visible')return;
+  if(lastFrame&&now-lastFrame<32){frame=requestAnimationFrame(draw);return;}
+  const frameDelta=lastFrame?now-lastFrame:0;
+  const frameStep=lastFrame?Math.min(.15,Math.max(0,frameDelta/1000)):.033;
+  if(frameDelta>=32&&frameDelta<250){
+   cadenceMs=cadenceSamples===0?frameDelta:cadenceMs*.88+frameDelta*.12;
+   cadenceSamples=Math.min(240,cadenceSamples+1);
+  }else if(frameDelta>=250){
+   cadenceMs=0;cadenceSamples=0;lastQualityChange=now;
+  }
+  if(!resize())return;lastFrame=now;
+  if(last)elapsed+=Math.min((now-last)/1000,.15)*Math.max(0,num('particleSpeed'));last=now;
+  const mobile=window.innerWidth<=700,preset=sel('particlePreset');
+  const extra=preset!==4&&num('particleIntensity')>0&&num('particleDensity')>0;
+  const sphereCount=mobile?1480:MAX;
+  const electricalMode=sel('flowType')===0&&preset===1;
+  const lightningCount=electricalMode&&num('arcIntensity')>0&&num('arcDensity')>0
+    ?Math.min(mobile?928:1740,Math.floor((mobile?11:20)*num('arcDensity'))*58):0;
+  const coreCount=mobile?160:260;
+  // GPU point count stays bounded (the same one WebGL context and buffers).
+  // Mobile scales the chosen count but preserves the requested distribution.
+  const moteCount=Math.min(mobile?96:160,
+   Math.max(0,Math.round(moteVal('moteCount')*(mobile?28/46:1))));
+  stage.dataset.moteCount=String(moteCount);
+  const extraCount=Math.min(mobile?650:MAX,Math.round((mobile?340:560)*num('particleDensity')));
+  gl.useProgram(program);
+  gl.uniform2f(U.uResolution,canvas.width,canvas.height);
+  gl.uniform1f(U.uTime,elapsed);gl.uniform2f(U.uTilt,tiltX,tiltY);
+  // One and only phase source for the spiral material and the 3D embers.
+  const spinPhase=elapsed*.104; // exact R176 plasma angular rate: .52 / 5
+  gl.uniform1f(U.uSpinPhase,spinPhase);
+  stage.dataset.syncedSpinPhase=spinPhase.toFixed(4);
+  stage.dataset.moteSpinPhase=spinPhase.toFixed(4);
+  stage.dataset.moteSpinLinkedSpeed=(controls.particleSpeed?.value||'100');
+  // R181 mobile fill-rate safeguard: retain 14 slices normally; reduce to
+  // 12 only when both high framebuffer load or dense 3D motes demand it.
+  // Both modes use the same volumetric material and the same temporal phase.
+  const mobileDense=mobile&&(canvas.width*canvas.height>240000||moteCount>75);
+  const baselineSteps=mobile?(mobileDense?12:14):22;
+  const qualityMode=qualitySelect?.value||'balanced';
+  if(qualityMode!==priorQualityMode){
+   priorQualityMode=qualityMode;autoPenalty=0;
+   // Mode changes must not inherit slow frames from a former quality level.
+   cadenceMs=0;cadenceSamples=0;lastQualityChange=now;
+  }
+  if(qualityMode==='auto'){
+   const adjusted=nextAutoPenalty(autoPenalty,cadenceMs,cadenceSamples,now,lastQualityChange);
+   if(adjusted!==autoPenalty){autoPenalty=adjusted;lastQualityChange=now;}
+  }else autoPenalty=0;
+  const volumeSteps=chooseVolumeSteps(mobile,baselineSteps,qualityMode,autoPenalty);
+  gl.uniform1f(U.uVolumeSteps,volumeSteps);
+  stage.dataset.volumeSteps=String(volumeSteps);
+  stage.dataset.mobileQuality=qualityMode==='balanced'?(mobile?(mobileDense?'adaptive':'balanced'):'desktop'):qualityMode;
+  stage.dataset.qualityMode=qualityMode;
+  stage.dataset.qualityPenalty=String(autoPenalty);
+  stage.dataset.renderCadenceMs=cadenceMs.toFixed(1);
+  if(now-lastTelemetry>650){
+   const cadenceFps=cadenceSamples>=3?Math.min(60,1000/Math.max(1,cadenceMs)):0;
+   stage.dataset.renderFps=cadenceFps.toFixed(1);
+   if(fpsOutput)fpsOutput.textContent=cadenceFps?cadenceFps.toFixed(0)+' img/s (Chrome)':'mesure en cours';
+   if(samplesOutput)samplesOutput.textContent=volumeSteps+' échantillons';
+   lastTelemetry=now;
+  }
+  gl.uniform1f(U.uMoteCount,Math.max(1,moteCount));
+  gl.uniform4f(U.uMoteStyle,
+   1+.35*moteVal('moteDistance')/100,
+   moteVal('moteSpread')/100,
+   moteVal('moteSize')/100,
+   moteVal('moteBrightness')/100);
+  gl.uniform3fv(U.uMotePrimary,new Float32Array(moteRGB('motePrimary')));
+  gl.uniform3fv(U.uMoteSecondary,new Float32Array(moteRGB('moteSecondary')));
+  gl.uniform1f(U.uMoteShape,moteVal('moteShape'));
+  gl.uniform2f(U.uMoteFinish,moteVal('moteRoughness')/100,
+                            moteVal('moteReflectivity')/100);
+  gl.uniform2f(U.uFlow,sel('flowType'),num('flowStructure'));
+  gl.uniform1f(U.uCompare,compareVariant);
+  gl.uniform1f(U.uDepthRefine,depthVariant);
+  gl.uniform4f(U.uPointer,pointerX,pointerY,pointerForce,motesEnabled?1:0);
+  stage.dataset.waveStrength=pointerForce.toFixed(3);
+  // Time-based damping: identical recovery on fast GPUs and slower SwiftShader.
+  pointerForce*=Math.exp(-3.6*frameStep);
+  if(pointerForce<.004)pointerForce=0;
+  gl.uniform4fv(U.uControls,new Float32Array([
+    preset,num('particleIntensity'),num('particleSpeed'),num('particleDensity')
+  ]));
+  gl.uniform4fv(U.uShape,new Float32Array([
+    num('diameter'),num('shellVisibility'),num('coreSize'),num('coreLight')
+  ]));
+  gl.uniform4fv(U.uEffects,new Float32Array([
+    num('arcIntensity'),num('arcDensity'),num('particleSize'),num('opacity')
+  ]));
+  for(const [uniform,k] of [['uCore','core'],['uCyan','rim'],['uViolet','secondary'],['uDeep','primary']]){
+   gl.uniform3fv(U[uniform],new Float32Array(rgb(k)));
+  }
+  gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);
+  // Same emitter program and GPU context renders the material field and sprites.
+  gl.bindBuffer(gl.ARRAY_BUFFER,quad);
+  gl.enableVertexAttribArray(A);gl.vertexAttribPointer(A,2,gl.FLOAT,false,0,0);
+  gl.disableVertexAttribArray(S);gl.vertexAttrib1f(S,0);
+  gl.uniform1f(U.uPass,4);gl.uniform1f(U.uLayer,1);
+   gl.disable(gl.BLEND);gl.drawArrays(gl.TRIANGLES,0,6);
+   // R187: one original shader program, one canvas, additive geometry
+   // active only for the newly-added seventh material.
+   if(sel('flowType')===6&&ribbonBuffer&&ribbonCount>0){
+    gl.bindBuffer(gl.ARRAY_BUFFER,ribbonBuffer);
+    gl.enableVertexAttribArray(A);
+    gl.vertexAttribPointer(A,2,gl.FLOAT,false,0,0);
+    gl.disableVertexAttribArray(S);gl.vertexAttrib1f(S,0);
+    gl.uniform1f(U.uPass,6);
+    gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE);
+    gl.uniform1f(U.uLayer,0);gl.drawArrays(gl.TRIANGLES,0,ribbonCount);
+    gl.uniform1f(U.uLayer,1);gl.drawArrays(gl.TRIANGLES,0,ribbonCount);
+    gl.disable(gl.BLEND);
+    stage.dataset.ribbonDrawError=String(gl.getError());
+   }
+   gl.bindBuffer(gl.ARRAY_BUFFER,quad);
+   gl.enableVertexAttribArray(A);gl.vertexAttribPointer(A,2,gl.FLOAT,false,0,0);
+   gl.disableVertexAttribArray(A);gl.vertexAttrib2f(A,0,0);
+  gl.bindBuffer(gl.ARRAY_BUFFER,seeds);
+  gl.enableVertexAttribArray(S);gl.vertexAttribPointer(S,1,gl.FLOAT,false,0,0);
+  gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE);
+  const emit=(pass,count,mode=gl.POINTS)=>{
+   if(!count)return;
+   gl.uniform1f(U.uPass,pass);
+   gl.uniform1f(U.uLayer,0);gl.drawArrays(mode,0,count);
+   gl.uniform1f(U.uLayer,1);gl.drawArrays(mode,0,count);
+  };
+  // Volumetric quad already renders the shell; omit decorative point overlay entirely.
+  if(lightningCount>0){
+   gl.uniform1f(U.uPass,2);gl.uniform1f(U.uLayer,0);gl.drawArrays(gl.LINES,0,lightningCount);
+   gl.uniform1f(U.uLayer,1);gl.drawArrays(gl.LINES,0,lightningCount);
+  }
+  // The ray-marched nucleus is authoritative; avoid a second speckled core.
+  if(extra)emit(0,extraCount);
+  if(motesEnabled&&moteCount>0){
+   gl.uniform1f(U.uPass,5);
+   gl.uniform1f(U.uLayer,0);
+   gl.drawArrays(gl.POINTS,0,moteCount);
+  }
+  gl.disable(gl.BLEND);
+  status(vfxStatus,'Plasma GPU actif · '+(extra?extraCount+' particules':'particules additionnelles désactivées')+
+    ' · '+Math.floor(lightningCount/58)+' éclairs');
+  if(!stage.hasAttribute('data-core-ready')){
+   stage.setAttribute('data-core-ready','true');
+   status(mainStatus,'Nouvelle sphère plasma WebGL active.');
+  }
+  if(active&&visible)frame=requestAnimationFrame(draw);
+ }
+ schedule=()=>{if(active&&visible&&!frame&&document.visibilityState==='visible')frame=requestAnimationFrame(draw);};
+ const observer=new IntersectionObserver(entries=>{
+  visible=entries[0]?.isIntersecting??false;last=0;
+  if(visible)schedule();else if(frame){cancelAnimationFrame(frame);frame=0;}
+ },{threshold:.01});observer.observe(stage);
+ const resizeObserver=new ResizeObserver(()=>schedule());resizeObserver.observe(canvas);
+ document.addEventListener('visibilitychange',()=>{last=0;schedule();});
+ // R171: persistent bounded volume orbit. Touch gestures start only on the
+ // preview; form sliders, scrolling elsewhere and exported JSON remain independent.
+ const orbit={pointerId:null,x:0,y:0};
+ // R178: allow complete 360-degree horizontal orbit while keeping the
+ // original pointer sensitivity; wrapping is modulo the shader's 1.5 factor.
+ const fullYawTurn=2*Math.PI/1.5;
+ const wrapYaw=value=>((value+fullYawTurn/2)%fullYawTurn+fullYawTurn)%fullYawTurn-fullYawTurn/2;
+ const updateOrbit=()=>{
+  stage.dataset.orbitYaw=tiltX.toFixed(3);
+  stage.dataset.orbitPitch=tiltY.toFixed(3);
+  stage.dataset.orbitRadians=(tiltX*1.5).toFixed(3);
+  schedule();
+ };
+ const resetOrbit=()=>{tiltX=0;tiltY=0;updateOrbit();};
+ stage.addEventListener('pointerdown',event=>{
+  if(orbit.pointerId!==null||!event.isPrimary||event.pointerType==='mouse'&&event.button!==0)return;
+  orbit.pointerId=event.pointerId;orbit.x=event.clientX;orbit.y=event.clientY;
+  stage.setPointerCapture(event.pointerId);
+  stage.classList.add('orbit-dragging');
+  stage.focus({preventScroll:true});
+ });
+ stage.addEventListener('pointermove',event=>{
+  if(event.isPrimary){
+   const rect=stage.getBoundingClientRect();
+   const x=((event.clientX-rect.left)/Math.max(rect.width,1)-.5)*2*rect.width/Math.max(rect.height,1);
+   const y=(.5-(event.clientY-rect.top)/Math.max(rect.height,1))*2+.08;
+   if(lastPointerX!==null){
+    const moved=Math.hypot(event.clientX-lastPointerX,event.clientY-lastPointerY);
+    pointerForce=Math.max(pointerForce,Math.min(1,moved/32));
+   }
+   pointerX=x;pointerY=y;lastPointerX=event.clientX;lastPointerY=event.clientY;
+   stage.dataset.pointerImpulse=pointerForce.toFixed(3);
+  }
+  if(event.pointerId!==orbit.pointerId)return;
+  const r=stage.getBoundingClientRect();
+  tiltX=wrapYaw(tiltX+(event.clientX-orbit.x)/Math.max(r.width,1)*2.2);
+  tiltY=Math.max(-.72,Math.min(.72,tiltY+(event.clientY-orbit.y)/Math.max(r.height,1)*1.45));
+  orbit.x=event.clientX;orbit.y=event.clientY;updateOrbit();
+ });
+ const stopOrbit=event=>{
+  if(event.pointerId!==orbit.pointerId)return;
+  if(stage.hasPointerCapture(event.pointerId))stage.releasePointerCapture(event.pointerId);
+  orbit.pointerId=null;stage.classList.remove('orbit-dragging');
+ };
+ stage.addEventListener('pointerleave',()=>{
+  // Keep the last contact point until the wave naturally dissipates.
+  lastPointerX=null;lastPointerY=null;
+ });
+ stage.addEventListener('pointerup',stopOrbit);
+ stage.addEventListener('pointercancel',stopOrbit);
+ stage.addEventListener('dblclick',resetOrbit);
+ stage.addEventListener('keydown',event=>{
+  const delta=.12;
+  if(event.key==='Home'){event.preventDefault();resetOrbit();return;}
+  if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key))return;
+  event.preventDefault();
+  if(event.key==='ArrowLeft')tiltX=wrapYaw(tiltX-delta);
+  if(event.key==='ArrowRight')tiltX=wrapYaw(tiltX+delta);
+  if(event.key==='ArrowUp')tiltY=Math.max(-.72,tiltY-delta);
+  if(event.key==='ArrowDown')tiltY=Math.min(.72,tiltY+delta);
+  updateOrbit();
+ });
+ updateOrbit();
+ canvas.addEventListener('webglcontextlost',event=>{
+  event.preventDefault();active=false;
+  if(frame)cancelAnimationFrame(frame);frame=0;
+  stage.removeAttribute('data-core-ready');
+  status(mainStatus,'GPU perdu : recharge la page.');
+  observer.disconnect();resizeObserver.disconnect();
+ },{once:true});
+ schedule();
+})();
+</script>
+</body>
+</html>

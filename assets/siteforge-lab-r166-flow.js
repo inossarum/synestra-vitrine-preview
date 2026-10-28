@@ -174,6 +174,7 @@
  const launchDemo=new URLSearchParams(window.location.search).get('demo');
  if(launchDemo==='magnetic')applyDemo();
  if(launchDemo==='liquid')applyLiquidDemo();
+ if(launchDemo==='neon187'){controls.flowType.value='6';motesEnabled=false;sync();syncMotes();}
  // Export uses the actual live controls, not startup defaults or GPU uniforms.
  // This stays available when reduced motion is enabled or WebGL is unavailable.
  const exportButton=document.querySelector('[data-export-json]');
@@ -301,6 +302,8 @@ varying float vLife,vGlint;
 varying vec2 vAxis,vMoteCenter;
 varying float vMoteDepth;
 varying float vMoteSeed;
+ varying vec3 vRibbonColor;
+ varying float vRibbonSide,vRibbonDepth;
 uniform float uMoteCount;
 uniform vec4 uMoteStyle; // radiusBase, radialSpread, size, intensity
 uniform float uSpinPhase; // R178 shared phase: motes and plasma rotate in the same direction
@@ -318,9 +321,53 @@ vec3 orbitToLocal(vec3 view){
  vec3 v=vec3(view.x*cy+view.z*sy,view.y,-view.x*sy+view.z*cy);
  return vec3(v.x,v.y*cx-v.z*sx,v.y*sx+v.z*cx);
 }
-float rnd(float x){return fract(sin(x*127.1+49.6)*43758.5453);}
+ vec3 ribbonPoint(float family,float lane,float t){
+   float group=floor(lane/5.),strand=mod(lane,5.);
+   float phase=group*1.57079633+(strand-2.)*.072+family*.29;
+   float roll=2.*t+phase+.35*sin(t*2.+family*1.8);
+   float ang=t+.12*sin(t*3.+family);
+   float big=.435+.013*sin(group*.9+family)+(strand-2.)*.004;
+   float tube=.21+.016*cos(group*.7+family*.4);
+   float rr=big+tube*cos(roll);
+   vec3 p=vec3(rr*cos(ang),rr*sin(ang),tube*sin(roll));
+   float ax=family<.5?.46:family<1.5?1.17:-.81;
+   float ay=family<.5?.26:family<1.5?-.67:.91;
+   float sx=sin(ax),cx=cos(ax),sy=sin(ay),cy=cos(ay);
+   return vec3(p.x*cx-p.z*sx,
+     p.y*cy+(p.x*sx+p.z*cx)*sy,
+     -p.y*sy+(p.x*sx+p.z*cx)*cy);
+ }
+ float rnd(float x){return fract(sin(x*127.1+49.6)*43758.5453);}
 void main(){
- vMoteDepth=0.;vMoteCenter=vec2(10.);vMoteSeed=0.;
+   vMoteDepth=0.;vMoteCenter=vec2(10.);vMoteSeed=0.;
+  if(uPass>5.5&&uPass<6.5){
+   // R187: the same WebGL program renders a TRUE 3D ribbon mesh.
+   // aPosition encodes t and lane/side; no additional shader program.
+   float t=aPosition.x;
+   float index=floor(aPosition.y*.5);
+   float side=mod(aPosition.y,2.)*2.-1.;
+   float family=floor(index/20.),lane=mod(index,20.);
+   vec3 local=ribbonPoint(family,lane,t);
+   vec3 tangent=ribbonPoint(family,lane,t+.002)-
+                ribbonPoint(family,lane,t-.002);
+   float ca=cos(uSpinPhase),sa=sin(uSpinPhase);
+   local.xy=mat2(ca,-sa,sa,ca)*local.xy;
+   tangent.xy=mat2(ca,-sa,sa,ca)*tangent.xy;
+   vec3 view=orbitToView(local);
+   vec3 direction=orbitToView(tangent);
+   vec2 orthogonal=normalize(vec2(-direction.y,direction.x)+vec2(.0001));
+   float width=.008*(uLayer<.5?3.3:1.);
+   vec2 xy=view.xy+orthogonal*side*width;
+   gl_Position=vec4(xy.x*uResolution.y/max(uResolution.x,1.),xy.y-.08,0.,1.);
+   float strength=abs(mod(lane,5.)-2.)<.5?1.38:
+       abs(mod(lane,5.)-2.)<1.5?.72:.34;
+   vRibbonColor=(family<.5?vec3(.015,.94,1.):
+     family<1.5?vec3(1.,.09,.76):vec3(.16,.87,1.))*strength;
+   vRibbonSide=side;vRibbonDepth=view.z;
+   vLife=1.;vGlint=1.;vAxis=vec2(1.,0.);
+   return;
+  }
+
  if(uPass>3.5&&uPass<4.5){
   vLife=1.;vGlint=1.;vAxis=vec2(1.,0.);gl_PointSize=1.;
   gl_Position=vec4(aPosition,0.,1.);return;
@@ -434,6 +481,8 @@ varying float vLife,vGlint;
 varying vec2 vAxis,vMoteCenter;
 varying float vMoteDepth;
 varying float vMoteSeed;
+ varying vec3 vRibbonColor;
+ varying float vRibbonSide,vRibbonDepth;
 uniform vec2 uResolution;
 uniform float uTime,uPass,uLayer;
 uniform vec4 uControls,uShape,uEffects;
@@ -457,6 +506,15 @@ float noise3(vec3 p){
                 mix(hash3(i+vec3(0,1,1)),hash3(i+vec3(1,1,1)),f.x),f.y),f.z);
 }
 void main(){
+  if(uPass>5.5&&uPass<6.5){
+   float e=abs(vRibbonSide),hot=1.-smoothstep(.25,1.,e);
+   float depth=mix(.23,1.,smoothstep(-.7,.7,vRibbonDepth));
+   float emission=(uLayer<.5?exp(-e*e*3.5)*.06:hot*.60)
+                  *depth*clamp(uEffects.w,0.,1.5);
+   if(emission<.002)discard;
+   gl_FragColor=vec4(vRibbonColor*emission,emission);
+   return;
+  }
  vec2 p=(gl_FragCoord.xy/uResolution-.5)*2.;
  p.x*=uResolution.x/max(uResolution.y,1.);p.y+=.08;
  float radius=.64*clamp(uShape.x,.5,1.5);
@@ -614,10 +672,10 @@ void main(){
    float haloNeon=exp(-dot(p,p)/(radiusNeon*radiusNeon)*5.2);
    Lneon+=uCore*coreNeon*.95+
          (cyanNeon*.24+pinkNeon*.18)*haloNeon;
-   vec3 outNeon=vec3(1.)-exp(-max(Lneon,vec3(0.))*1.32);
-   float alphaNeon=clamp(.025+Aneon*.54+coreNeon*.72+haloNeon*.11,0.,1.);
+   vec3 outNeon=vec3(1.)-exp(-max(Lneon,vec3(0.))*.15);
+   float alphaNeon=clamp(.015+Aneon*.12+coreNeon*.20+haloNeon*.035,0.,.45);
    float edgeNeon=1.-smoothstep(.89,1.,srNeon/radiusNeon);
-   gl_FragColor=vec4(outNeon+skyNeon,alphaNeon*edgeNeon*uEffects.w);
+   gl_FragColor=vec4(outNeon*.50+skyNeon*.35,alphaNeon*edgeNeon*uEffects.w);
    return;
   }
  if(uPass>3.5&&uPass<4.5){
@@ -893,7 +951,24 @@ void main(){
  gl.bindBuffer(gl.ARRAY_BUFFER,quad);
  gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,-1,1,1,-1,1,1]),gl.STATIC_DRAW);
  gl.bindBuffer(gl.ARRAY_BUFFER,seeds);
- gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(Array.from({length:MAX},(_,i)=>(i+.5)/MAX)),gl.STATIC_DRAW);
+   gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(Array.from({length:MAX},(_,i)=>(i+.5)/MAX)),gl.STATIC_DRAW);
+  const ribbonBuffer=gl.createBuffer();
+  let ribbonCount=0;
+  if(ribbonBuffer){
+   const mesh=[],lanes=60,steps=144,T=Math.PI*2;
+   const put=(time,lane,side)=>mesh.push(time,lane*2+side);
+   for(let lane=0;lane<lanes;lane++)for(let i=0;i<steps;i++){
+    const t=i*T/steps,n=(i+1)*T/steps;
+    put(t,lane,0);put(t,lane,1);put(n,lane,0);
+    put(n,lane,0);put(t,lane,1);put(n,lane,1);
+   }
+   ribbonCount=mesh.length/2;
+   gl.bindBuffer(gl.ARRAY_BUFFER,ribbonBuffer);
+   gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(mesh),gl.STATIC_DRAW);
+  }
+  stage.dataset.ribbonVertices=String(ribbonCount);
+
+
  let active=true,visible=true,frame=0,last=0,lastFrame=0,elapsed=0,tiltX=0,tiltY=0;
  // R183: CPU/browser frame cadence, not an unproven physical GPU timer.
  // This affects only uVolumeSteps: no animation speed, no particle count.
@@ -1025,8 +1100,24 @@ void main(){
   gl.enableVertexAttribArray(A);gl.vertexAttribPointer(A,2,gl.FLOAT,false,0,0);
   gl.disableVertexAttribArray(S);gl.vertexAttrib1f(S,0);
   gl.uniform1f(U.uPass,4);gl.uniform1f(U.uLayer,1);
-  gl.disable(gl.BLEND);gl.drawArrays(gl.TRIANGLES,0,6);
-  gl.disableVertexAttribArray(A);gl.vertexAttrib2f(A,0,0);
+   gl.disable(gl.BLEND);gl.drawArrays(gl.TRIANGLES,0,6);
+   // R187: one original shader program, one canvas, additive geometry
+   // active only for the newly-added seventh material.
+   if(sel('flowType')===6&&ribbonBuffer&&ribbonCount>0){
+    gl.bindBuffer(gl.ARRAY_BUFFER,ribbonBuffer);
+    gl.enableVertexAttribArray(A);
+    gl.vertexAttribPointer(A,2,gl.FLOAT,false,0,0);
+    gl.disableVertexAttribArray(S);gl.vertexAttrib1f(S,0);
+    gl.uniform1f(U.uPass,6);
+    gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE);
+    gl.uniform1f(U.uLayer,0);gl.drawArrays(gl.TRIANGLES,0,ribbonCount);
+    gl.uniform1f(U.uLayer,1);gl.drawArrays(gl.TRIANGLES,0,ribbonCount);
+    gl.disable(gl.BLEND);
+    stage.dataset.ribbonDrawError=String(gl.getError());
+   }
+   gl.bindBuffer(gl.ARRAY_BUFFER,quad);
+   gl.enableVertexAttribArray(A);gl.vertexAttribPointer(A,2,gl.FLOAT,false,0,0);
+   gl.disableVertexAttribArray(A);gl.vertexAttrib2f(A,0,0);
   gl.bindBuffer(gl.ARRAY_BUFFER,seeds);
   gl.enableVertexAttribArray(S);gl.vertexAttribPointer(S,1,gl.FLOAT,false,0,0);
   gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE);

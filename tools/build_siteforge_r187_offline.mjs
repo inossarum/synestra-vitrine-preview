@@ -1,0 +1,22 @@
+// R177 offline review copy: original SHA-pinned HTML and GPU shader, one file.
+import {readFileSync,writeFileSync,existsSync} from 'node:fs';
+import {join,resolve} from 'node:path';
+import {createHash} from 'node:crypto';
+import {fileURLToPath} from 'node:url';
+const root=resolve(fileURLToPath(new URL('../',import.meta.url)));
+const html=readFileSync(join(root,'siteforge/core-3d-lab/index.html'),'utf8');
+const shader=readFileSync(join(root,'assets/siteforge-lab-r166-flow.js'),'utf8');
+const norm=s=>Buffer.from(s.replace(/\r\n/g,'\n'));
+const gitBlob=s=>{const b=norm(s);return createHash('sha1').update('blob '+b.length+'\0').update(b).digest('hex');};
+if(gitBlob(html)!=='94b1375bb5195eb4c8eb24b5ed036ed5bad9b01b')throw Error('HTML_SOURCE_SHA_INVALID');
+if(gitBlob(shader)!=='151913d0a20083fecd946c232358de5cdaa32d4e')throw Error('GPU_SOURCE_SHA_INVALID');
+const entry='<script src="../../assets/siteforge-lab-r166-flow.js" defer></script>';
+if(!html.includes(entry)||!html.includes("script-src 'self';"))throw Error('EXPECTED_CSP_OR_SCRIPT_ABSENT');
+const inline=shader.replace(/\r\n/g,'\n').replace(/<\/script/gi,'<\\/script');
+const hash=createHash('sha256').update(inline,'utf8').digest('base64');
+const page=html.replace("script-src 'self';","script-src 'sha256-"+hash+"';").replace(entry,'<script>'+inline+'</script>');
+const dest=join(root,'siteforge-r187-autonome.html');
+if(existsSync(dest))throw Error('REFUSE_OUTPUT_OVERWRITE');
+writeFileSync(dest,page,'utf8');
+if(page.includes(entry)||page.includes("script-src 'self';"))throw Error('OFFLINE_BUNDLE_INCOMPLETE');
+console.log('R187_OFFLINE_BUNDLE_PASS bytes='+Buffer.byteLength(page)+' source_html='+gitBlob(html)+' shader='+gitBlob(shader));
