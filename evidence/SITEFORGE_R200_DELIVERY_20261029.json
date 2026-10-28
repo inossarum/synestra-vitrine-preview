@@ -1,0 +1,152 @@
+{
+  "schema": "synestra.siteforge.r200.unified-3d.evidence.v1",
+  "mission_id": "SYN_SITEFORGE_R200_UNIFIED_WEBGL_SCENE_20261029",
+  "date_local": "2026-10-29",
+  "owner": "Synestra Studio",
+  "repository": "inossarum/synestra-vitrine-preview",
+  "branch": "task/SYN_SITEFORGE_R200_UNIFIED_WEBGL_SCENE_20261029",
+  "base_commit": "e13050cb5d5cf6bda7c4648141899306dc44efe4",
+  "base_home_sha256": "6f0dde1f7df804cfce38313e976cb691d0496059acf9edc3f6d9a59ba63e45d8",
+  "base_shader_sha256": "a0f16d77d636e331b5011d68b2412767ec3b595f284a4d4283462f60f9f2c90b",
+  "r200_home_sha256": "00f54dcc6212fa4c80391b80f814f25346ccd795f691d150c771a758e6d2acf1",
+  "r200_shader_sha256": "b067b8d9d223502e4d4e5ec9d6bde35c4b7cc8e64db40dbad33f32ed9657994f",
+  "r200_css_sha256": "e0302ece61f40a72698b2f6603e0f90782b38785dec694114abc5130043f776c",
+  "objective": "Create a real shared WebGL1 perspective scene for sphere+environment, with Core-derived lighting and adaptive performance, not a collection of CSS effects. Reuse full website and existing shader.",
+  "steps": [
+    {
+      "n": 1,
+      "result": "PASS",
+      "proof": "R199 SHA pinned, isolated R200 directory, five pages generated; one WebGL canvas"
+    },
+    {
+      "n": 2,
+      "result": "PASS",
+      "proof": "GLSL shader draws world-coordinate floor/ceiling/walls/recess/plinth using perspective ray intersections and Core point-light normal/distance shading"
+    },
+    {
+      "n": 3,
+      "result": "PASS",
+      "proof": "uSceneScroll changes viewpoint, plasma continues independently with uTilt hardcoded [0,0] and responsive mouse flow"
+    },
+    {
+      "n": 4,
+      "result": "PASS",
+      "proof": "Adaptive pixel budgets 720k desktop /260k mobile, 18/12 volume steps, 1 context, no extra GPU; room and core in single program"
+    },
+    {
+      "n": 5,
+      "result": "PASS",
+      "proof": "172 Node tests, 15 Chrome route/viewport tests, pointer E2E, desktop+mobile cadence checks"
+    },
+    {
+      "n": 6,
+      "result": "PENDING",
+      "proof": "Commit and post-commit readback pending when this evidence packet was authored"
+    }
+  ],
+  "tests": [
+    {
+      "name": "Node contracts R189–R200 incl failure-first",
+      "pass": 172,
+      "fail": 0,
+      "status": "PASS"
+    },
+    {
+      "name": "Chrome 5 routes x widths 1440 768 390",
+      "pass": 15,
+      "fail": 0,
+      "status": "PASS"
+    },
+    {
+      "name": "Chrome WebGL runtime",
+      "status": "PASS",
+      "canvas": 1,
+      "shader_compilation": true
+    },
+    {
+      "name": "Chrome pointer real",
+      "status": "PASS",
+      "tilt_samples": "all [0,0]",
+      "max_hover_strength": 0.7310319592465592,
+      "return_to_rest": 4.440003209479348e-11
+    },
+    {
+      "name": "Chrome scroll camera",
+      "status": "PASS",
+      "scrollY": 430,
+      "sceneScroll": 0.478
+    },
+    {
+      "name": "Chrome headless fps (not user GPU)",
+      "status": "PASS_OBSERVATION",
+      "desktop_fps": 25.1,
+      "mobile_fps": 25.7,
+      "quality": 1,
+      "buffers_desktop": [
+        1067,
+        674
+      ],
+      "buffers_mobile": [
+        335,
+        774
+      ]
+    },
+    {
+      "name": "Reduced motion",
+      "status": "PASS",
+      "fallback_present": true
+    },
+    {
+      "name": "Hardware RTX 3090 FPS",
+      "status": "NOT_TESTED"
+    },
+    {
+      "name": "Safari/Firefox",
+      "status": "NOT_TESTED"
+    },
+    {
+      "name": "Owner aesthetic approval AAA++",
+      "status": "NOT_APPROVED"
+    },
+    {
+      "name": "Public deployment",
+      "status": "NOT_PERFORMED"
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "r200-studio-1440.png",
+      "sha256": "e8c9c931dbc405b185eaa6b825ffc3577fdd81f855c5d175bc921e55e36a7969"
+    },
+    {
+      "path": "r200-studio-390.png",
+      "sha256": "f35aac52cc930c8a8233cc3cad5807df77b38c9194eca8a579e37dbc338c18a3"
+    }
+  ],
+  "evidence_files": [
+    "evidence/SITEFORGE_R200_BROWSER_20261029.json",
+    "evidence/SITEFORGE_R200_PERF_CHROME_20261029.json",
+    "evidence/SITEFORGE_R200_POINTER_CHROME_20261029.json"
+  ],
+  "rules": "I:/00_STUDIO_VIRTUEL/AGENTS.md#34cc2a8649bda4230bd2fa73d4a4de0edaf65dc1e3bdaf2b8b78ff58f4e4ea21",
+  "skills": [
+    "interaction-motion-design@1.0.0#c636a0c77eccb9004c56ce48bdd49684243b8790",
+    "visual-regression-testing@1.0.0#aa98fffe9149dfcc0e153f0d1b8b91f3c0a6b4ae",
+    "responsive-layout-engineering@1.0.0#12d091ca42195a1559e5a12c88b9a599560bd53c",
+    "web-accessibility-engineering@1.0.0#172c442525351804e89e7b273346f03df34bdd89",
+    "browser-compatibility-progressive-enhancement@1.0.0#715ca40f6c98104983fc7bddaac017f94a776c81",
+    "e2e-testing@1.0.0#3fcb7196816ed91c4773ec8004a508b7e288a015"
+  ],
+  "limitations": [
+    "GLSL ray intersections make a true unified 3D projected scene, but lighting is local diffuse/rough-specular approximation, not physically-based global illumination or true shadow rays.",
+    "Visible atmosphere is distance fog; no heavy volumetric scattering or GI.",
+    "Headless measurement 25 FPS is below a 60 FPS experience; real GPU benchmark and quality profiling are still required.",
+    "Shader chroma and depth visual quality still awaiting owner approval, not AAA++ certified.",
+    "Existing page CSP warning: frame-ancestors in meta ignored; only valid in response header, pre-existing from R199.",
+    "Legacy local preview 18850 returned empty reply; dedicated free 18852 preview launched, unrelated production unchanged.",
+    "Preview is local, no push, no merge, no Worker or portal deployment.",
+    "Full Studio corpus Memory V1/Supervisor sources and hooks are UNKNOWN/MANQUANTE for this bounded UI task."
+  ],
+  "preview": "http://127.0.0.1:18852/r200/",
+  "status": "LOCAL_R200_TECHNICAL_CANDIDATE_VISUAL_APPROVAL_PENDING"
+}

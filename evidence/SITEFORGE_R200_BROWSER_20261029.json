@@ -1,0 +1,327 @@
+{
+  "schema": "synestra.siteforge.r200.browser.v1",
+  "base": "http://127.0.0.1:18852/r200/",
+  "checks": 15,
+  "scroll": {
+    "before": {
+      "scroll": 0,
+      "ready": "true"
+    },
+    "after": {
+      "scroll": 460,
+      "ready": "true",
+      "progress": "4.65%"
+    }
+  },
+  "reduced": {
+    "matches": true,
+    "buttons": 3,
+    "fallback": true,
+    "hasContent": true
+  },
+  "errors": [
+    "The Content Security Policy directive 'frame-ancestors' is ignored when delivered via a <meta> element.",
+    "The Content Security Policy directive 'frame-ancestors' is ignored when delivered via a <meta> element.",
+    "The Content Security Policy directive 'frame-ancestors' is ignored when delivered via a <meta> element.",
+    "The Content Security Policy directive 'frame-ancestors' is ignored when delivered via a <meta> element.",
+    "The Content Security Policy directive 'frame-ancestors' is ignored when delivered via a <meta> element.",
+    "The Content Security Policy directive 'frame-ancestors' is ignored when delivered via a <meta> element.",
+    "The Content Security Policy directive 'frame-ancestors' is ignored when delivered via a <meta> element.",
+    "The Content Security Policy directive 'frame-ancestors' is ignored when delivered via a <meta> element.",
+    "The Content Security Policy directive 'frame-ancestors' is ignored when delivered via a <meta> element.",
+    "The Content Security Policy directive 'frame-ancestors' is ignored when delivered via a <meta> element.",
+    "The Content Security Policy directive 'frame-ancestors' is ignored when delivered via a <meta> element.",
+    "The Content Security Policy directive 'frame-ancestors' is ignored when delivered via a <meta> element.",
+    "The Content Security Policy directive 'frame-ancestors' is ignored when delivered via a <meta> element.",
+    "The Content Security Policy directive 'frame-ancestors' is ignored when delivered via a <meta> element.",
+    "The Content Security Policy directive 'frame-ancestors' is ignored when delivered via a <meta> element.",
+    "The Content Security Policy directive 'frame-ancestors' is ignored when delivered via a <meta> element.",
+    "The Content Security Policy directive 'frame-ancestors' is ignored when delivered via a <meta> element.",
+    "The Content Security Policy directive 'frame-ancestors' is ignored when delivered via a <meta> element."
+  ],
+  "results": [
+    {
+      "path": "studio",
+      "width": 1440,
+      "ready": true,
+      "v": {
+        "ready": "true",
+        "status": "Nouvelle sphère plasma WebGL active.",
+        "canvases": 1,
+        "sceneCanvas": {
+          "width": 1067,
+          "height": 674,
+          "cssWidth": 1425,
+          "cssHeight": 900,
+          "styleTransform": "none"
+        },
+        "room": false,
+        "floor": false,
+        "title": "Une idée.Des possibles.",
+        "overflow": 1425,
+        "heroHeight": 900,
+        "heroTop": 0,
+        "logo": true,
+        "scrollTop": 0
+      },
+      "screenshot": "r200-studio-1440.png"
+    },
+    {
+      "path": "connect/",
+      "width": 1440,
+      "ready": true,
+      "v": {
+        "status": null,
+        "canvases": 0,
+        "sceneCanvas": null,
+        "room": false,
+        "floor": false,
+        "title": "Les outils se parlent.Vous gardez la main.",
+        "overflow": 1425,
+        "logo": true,
+        "scrollTop": 0
+      },
+      "screenshot": "r200-connect-1440.png"
+    },
+    {
+      "path": "bridge/",
+      "width": 1440,
+      "ready": true,
+      "v": {
+        "status": null,
+        "canvases": 0,
+        "sceneCanvas": null,
+        "room": false,
+        "floor": false,
+        "title": "Votre PC.Sous votre contrôle.",
+        "overflow": 1425,
+        "logo": true,
+        "scrollTop": 0
+      },
+      "screenshot": "r200-bridge-1440.png"
+    },
+    {
+      "path": "siteforge/",
+      "width": 1440,
+      "ready": true,
+      "v": {
+        "status": null,
+        "canvases": 0,
+        "sceneCanvas": null,
+        "room": false,
+        "floor": false,
+        "title": "Des idées claires.Des expériences vivantes.",
+        "overflow": 1425,
+        "logo": true,
+        "scrollTop": 0
+      },
+      "screenshot": "r200-siteforge-1440.png"
+    },
+    {
+      "path": "offres/",
+      "width": 1440,
+      "ready": true,
+      "v": {
+        "status": null,
+        "canvases": 0,
+        "sceneCanvas": null,
+        "room": false,
+        "floor": false,
+        "title": "Le bon accès.Sans surprise.",
+        "overflow": 1425,
+        "logo": true,
+        "scrollTop": 0
+      },
+      "screenshot": "r200-offres-1440.png"
+    },
+    {
+      "path": "studio",
+      "width": 768,
+      "ready": true,
+      "v": {
+        "ready": "true",
+        "status": "Nouvelle sphère plasma WebGL active.",
+        "canvases": 1,
+        "sceneCanvas": {
+          "width": 753,
+          "height": 900,
+          "cssWidth": 753,
+          "cssHeight": 900,
+          "styleTransform": "none"
+        },
+        "room": false,
+        "floor": false,
+        "title": "Une idée.Des possibles.",
+        "overflow": 753,
+        "heroHeight": 900,
+        "heroTop": 0,
+        "logo": true,
+        "scrollTop": 0
+      },
+      "screenshot": "r200-studio-768.png"
+    },
+    {
+      "path": "connect/",
+      "width": 768,
+      "ready": true,
+      "v": {
+        "status": null,
+        "canvases": 0,
+        "sceneCanvas": null,
+        "room": false,
+        "floor": false,
+        "title": "Les outils se parlent.Vous gardez la main.",
+        "overflow": 753,
+        "logo": true,
+        "scrollTop": 0
+      },
+      "screenshot": "r200-connect-768.png"
+    },
+    {
+      "path": "bridge/",
+      "width": 768,
+      "ready": true,
+      "v": {
+        "status": null,
+        "canvases": 0,
+        "sceneCanvas": null,
+        "room": false,
+        "floor": false,
+        "title": "Votre PC.Sous votre contrôle.",
+        "overflow": 753,
+        "logo": true,
+        "scrollTop": 0
+      },
+      "screenshot": "r200-bridge-768.png"
+    },
+    {
+      "path": "siteforge/",
+      "width": 768,
+      "ready": true,
+      "v": {
+        "status": null,
+        "canvases": 0,
+        "sceneCanvas": null,
+        "room": false,
+        "floor": false,
+        "title": "Des idées claires.Des expériences vivantes.",
+        "overflow": 753,
+        "logo": true,
+        "scrollTop": 0
+      },
+      "screenshot": "r200-siteforge-768.png"
+    },
+    {
+      "path": "offres/",
+      "width": 768,
+      "ready": true,
+      "v": {
+        "status": null,
+        "canvases": 0,
+        "sceneCanvas": null,
+        "room": false,
+        "floor": false,
+        "title": "Le bon accès.Sans surprise.",
+        "overflow": 753,
+        "logo": true,
+        "scrollTop": 0
+      },
+      "screenshot": "r200-offres-768.png"
+    },
+    {
+      "path": "studio",
+      "width": 390,
+      "ready": true,
+      "v": {
+        "ready": "true",
+        "status": "Nouvelle sphère plasma WebGL active.",
+        "canvases": 1,
+        "sceneCanvas": {
+          "width": 335,
+          "height": 774,
+          "cssWidth": 390,
+          "cssHeight": 900,
+          "styleTransform": "none"
+        },
+        "room": false,
+        "floor": false,
+        "title": "Une idée.Des possibles.",
+        "overflow": 390,
+        "heroHeight": 900,
+        "heroTop": 0,
+        "logo": true,
+        "scrollTop": 0
+      },
+      "screenshot": "r200-studio-390.png"
+    },
+    {
+      "path": "connect/",
+      "width": 390,
+      "ready": true,
+      "v": {
+        "status": null,
+        "canvases": 0,
+        "sceneCanvas": null,
+        "room": false,
+        "floor": false,
+        "title": "Les outils se parlent.Vous gardez la main.",
+        "overflow": 390,
+        "logo": true,
+        "scrollTop": 0
+      },
+      "screenshot": "r200-connect-390.png"
+    },
+    {
+      "path": "bridge/",
+      "width": 390,
+      "ready": true,
+      "v": {
+        "status": null,
+        "canvases": 0,
+        "sceneCanvas": null,
+        "room": false,
+        "floor": false,
+        "title": "Votre PC.Sous votre contrôle.",
+        "overflow": 390,
+        "logo": true,
+        "scrollTop": 0
+      },
+      "screenshot": "r200-bridge-390.png"
+    },
+    {
+      "path": "siteforge/",
+      "width": 390,
+      "ready": true,
+      "v": {
+        "status": null,
+        "canvases": 0,
+        "sceneCanvas": null,
+        "room": false,
+        "floor": false,
+        "title": "Des idées claires.Des expériences vivantes.",
+        "overflow": 390,
+        "logo": true,
+        "scrollTop": 0
+      },
+      "screenshot": "r200-siteforge-390.png"
+    },
+    {
+      "path": "offres/",
+      "width": 390,
+      "ready": true,
+      "v": {
+        "status": null,
+        "canvases": 0,
+        "sceneCanvas": null,
+        "room": false,
+        "floor": false,
+        "title": "Le bon accès.Sans surprise.",
+        "overflow": 390,
+        "logo": true,
+        "scrollTop": 0
+      },
+      "screenshot": "r200-offres-390.png"
+    }
+  ],
+  "phase": "initial"
+}

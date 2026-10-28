@@ -1,0 +1,59 @@
+{
+  "schema": "synestra.siteforge.r200.performance.chrome.v1",
+  "status": "PASS_HEADLESS",
+  "note": "Chrome headless cadence is indicative, not a target Windows hardware FPS benchmark",
+  "results": [
+    {
+      "width": 1440,
+      "before": {
+        "fps": 25.1,
+        "quality": 1,
+        "scroll": 0,
+        "buffer": [
+          1067,
+          674
+        ],
+        "css": [
+          1425,
+          900
+        ],
+        "ready": "true"
+      },
+      "after": {
+        "fps": 25,
+        "quality": 1,
+        "scroll": 0.478,
+        "y": 430
+      }
+    },
+    {
+      "width": 390,
+      "before": {
+        "fps": 25.7,
+        "quality": 1,
+        "scroll": 0,
+        "buffer": [
+          335,
+          774
+        ],
+        "css": [
+          390,
+          900
+        ],
+        "ready": "true"
+      },
+      "after": {
+        "fps": 25,
+        "quality": 1,
+        "scroll": 0.478,
+        "y": 430
+      }
+    }
+  ],
+  "reduced": {
+    "prefersReducedMotion": true,
+    "canvas": 1,
+    "fallback": true,
+    "heading": "Une idée.\nDes possibles."
+  }
+}

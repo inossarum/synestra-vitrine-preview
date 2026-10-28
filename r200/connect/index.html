@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="fr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark"><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; img-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
+<title>Synestra Connect — Synestra Studio</title><meta name="description" content="Comprendre les intégrations Synestra Connect, les outils MCP, les autorisations et la traçabilité.">
+<link rel="stylesheet" href="../../assets/product-pages.css"><link rel="stylesheet" href="../../assets/r191-system.css"><link rel="stylesheet" href="../../assets/r193-experience.css"><link rel="stylesheet" href="../../assets/r194-editorial.css"><link rel="stylesheet" href="../../assets/r195-interactions.css"><link rel="stylesheet" href="../../assets/r196-refinements.css"></head>
+<body class="syn-r191 syn-r191-product syn-r194-product syn-r195-product syn-r196-product syn-r191-connect syn-r192-product syn-r194-connect"><a class="skip" href="#contenu">Aller au contenu</a>
+<header class="topbar wrap"><a class="logo" href="../" aria-label="Accueil Synestra"><img src="../../assets/synestra-studio-official-header.webp" width="540" height="132" alt="Synestra Studio — logo officiel"></a>
+<nav class="site-nav" aria-label="Navigation principale">
+<a href="../">Studio</a><a href="../connect/" aria-current="page">Connect</a><a href="../bridge/" >Bridge</a><a href="../siteforge/">SiteForge</a><a href="../offres/" >Offres</a>
+<a class="nav-action" href="https://synestra-client-portal.synestra-studio.workers.dev/" rel="noreferrer">Espace pilote ↗</a></nav></header>
+<main class="wrap" id="contenu" tabindex="-1"><p class="breadcrumb"><a href="../">Studio</a><span aria-hidden="true">/</span>Synestra Connect</p><nav class="product-chapters" aria-label="Dans cette page"><strong>01 / CONNECT</strong><a href="#fonctionnement"><span aria-hidden="true">01</span>Ce que fait Connect</a><a href="#process-title"><span aria-hidden="true">02</span>Parcours</a><a href="#faq-title"><span aria-hidden="true">03</span>Questions</a><a href="../bridge/"><span aria-hidden="true">04</span>Bridge</a></nav>
+<div class="r194-page-index" aria-hidden="true"><span>SYNESTRA / FLUX D'OUTILS</span><span>02 / 04</span></div>
+<div class="r194-page-spectrum" aria-hidden="true"><span>UN CHEMIN. DES PERMISSIONS.</span><i></i><b>RELIER</b></div>
+<section class="intro r194-product-intro" aria-labelledby="connect-heading">
+<div><p class="eyebrow">01 / Intégrations contrôlées</p>
+<h1 id="connect-heading">Les outils se parlent.<br><span class="accent">Vous gardez la main.</span></h1>
+<p class="lead">Synestra Connect fait le lien entre le Studio et les capacités autorisées : catalogues d’outils, Central Skills, environnements connectés et résultats vérifiables. Il ne remplace pas les applications, il coordonne des appels à leurs interfaces dans un périmètre défini.</p>
+<div class="actions"><a class="cta primary" href="#fonctionnement">Comprendre le parcours <span aria-hidden="true">↘</span></a><a class="cta secondary" href="../bridge/">Voir le rôle de Bridge →</a></div>
+<p class="micro">Schéma illustratif : les modules représentés ne correspondent pas à des sessions actives ni à des permissions accordées.</p></div>
+<div class="visual" role="img" aria-label="Schéma conceptuel : Connect au centre des outils, autorisations, savoir-faire et preuves, sans état opérationnel en temps réel">
+<span class="visual-label">SYNESTRA / CONNECTION FIELD</span><div class="connect-graph" aria-hidden="true">
+<div class="connect-center"><strong>CONNECT</strong><small>PASSERELLE MCP</small></div>
+<span class="graph-node a"><i></i> OUTILS</span><span class="graph-node b"><i></i> AUTORISATIONS</span>
+<span class="graph-node c"><i></i> CENTRAL SKILLS</span><span class="graph-node d"><i></i> PREUVES</span>
+</div><span class="visual-bottom">SIMULATION GRAPHIQUE · AUCUN FLUX LIVE</span></div></section>
+<hr class="divider">
+<section class="r194-product-principle" aria-label="Architecture conceptuelle connect">
+   <div class="r194-principle-head"><span>02 / ARCHITECTURE</span><strong>Un parcours compréhensible.</strong></div>
+   <div class="r194-principle-graph" aria-hidden="true"><span>SELECTED TOOLS</span><b>→</b><span>AUTHORIZATION</span><b>→</b><span>VALIDATION</span></div>
+   <p>Schéma conceptuel. Les fonctions disponibles et les autorisations sont définies au cas par cas pendant la phase pilote.</p>
+ </section>
+<section class="section" id="fonctionnement" aria-labelledby="features-title">
+<div class="section-heading"><p class="eyebrow">Architecture utile</p><h2 id="features-title">Un seul point de passage. <span class="accent">Des contrôles explicites.</span></h2><p>Connect expose des fonctions sélectionnées, traite une demande dans le contexte des permissions disponibles puis restitue le résultat de l’outil concerné.</p></div>
+<div class="grid"><article class="tile"><span class="num">01 / CATALOGUE</span><h3>Découvrir les outils</h3><p>Repérer les fonctionnalités existantes et leurs exigences avant de tenter une action. Les capacités dépendent des connexions réellement autorisées.</p></article>
+<article class="tile"><span class="num">02 / AUTORISATIONS</span><h3>Définir le périmètre</h3><p>L’authentification, les droits et les validations restent distincts. Une capacité visible dans un catalogue n’est pas automatiquement exécutable.</p></article>
+<article class="tile"><span class="num">03 / RÉSULTATS</span><h3>Vérifier et tracer</h3><p>Les réponses peuvent être rapprochées des commandes et de leurs preuves. Un appel accepté ne garantit pas qu’une opération métier est terminée.</p></article></div>
+</section>
+<section class="section" aria-labelledby="process-title"><div class="section-heading"><p class="eyebrow">Du besoin au résultat</p><h2 id="process-title">Le parcours d’un outil Connect.</h2></div>
+<div class="process"><article><strong>Identifier</strong><p>Choisir une fonction existante et son périmètre.</p></article><article><strong>Autoriser</strong><p>Vérifier l’identité et les droits applicables.</p></article><article><strong>Exécuter</strong><p>Transmettre la demande à l’intégration disponible.</p></article><article><strong>Constater</strong><p>Interpréter le résultat et conserver une preuve utile.</p></article></div>
+<p class="micro">Les fonctionnalités en phase pilote peuvent être indisponibles, limitées ou soumises à une validation complémentaire.</p></section>
+<section class="product-example" aria-labelledby="connect-case">
+<div><p class="eyebrow">Exemple pédagogique</p><h3 id="connect-case">Une demande. Plusieurs contrôles.</h3><p>Une personne souhaite consulter un fichier de projet à travers une intégration. Connect identifie l'outil disponible, vérifie le périmètre de l'autorisation et transmet la demande. Le résultat doit encore être confirmé par l'outil source.</p><p class="note">Exemple conceptuel : aucune consultation réelle ni accès automatique à votre ordinateur.</p></div>
+<ul><li><b>01 / DÉCOUVERTE</b> L'intégration et la fonction existent-elles ?</li><li><b>02 / AUTORISATION</b> L'utilisateur et la portée sont-ils validés ?</li><li><b>03 / EXÉCUTION</b> L'outil distant a-t-il effectivement répondu ?</li><li><b>04 / TRAÇABILITÉ</b> Peut-on établir ce qui a été fait et ses limites ?</li></ul>
+</section>
+<section class="section" aria-labelledby="faq-title"><div class="section-heading"><p class="eyebrow">Questions essentielles</p><h2 id="faq-title">Ce que Connect fait — et ne fait pas.</h2></div><div class="details">
+<details><summary>Connect donne-t-il automatiquement accès à toutes mes applications ?</summary><p>Non. Chaque intégration doit être disponible et autorisée. Les identités, consentements et restrictions propres aux applications restent applicables.</p></details>
+<details><summary>Quelle différence avec Bridge ?</summary><p>Connect expose et contrôle des capacités du Studio ; Bridge est le composant Windows chargé d’actions locales sur un poste appairé, sous les autorisations correspondantes.</p></details>
+<details><summary>Connect peut-il garantir qu’une action est terminée ?</summary><p>Non. L’état réel dépend de la réponse de l’outil et, pour les opérations asynchrones, d’un contrôle de fin d’exécution distinct.</p></details></div></section>
+<aside class="callout"><div><p class="eyebrow">Le lien avec Windows</p><h2>Connect orchestre. Bridge agit sur le poste.</h2><p>Deux rôles complémentaires : d’un côté les outils du Studio, de l’autre les opérations locales autorisées.</p></div><a class="cta primary" href="../bridge/">Découvrir Bridge ↗</a></aside>
+</main><footer class="wrap footer"><span>© Synestra Studio · Présentation en phase pilote</span><nav aria-label="Liens secondaires"><a href="../">Studio</a> · <a href="../connect/">Connect</a> · <a href="../bridge/">Bridge</a> · <a href="../offres/">Offres</a></nav></footer><script src="../../assets/r191-ambient.js" defer></script><script src="../../assets/r194-scroll.js" defer></script><script src="../../assets/r195-interactions.js" defer></script></body></html>

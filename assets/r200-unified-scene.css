@@ -1,0 +1,35 @@
+/* R200: Core + chamber + physically positioned light share ONE WebGL1 fragment program.
+   Previous CSS room/floor is not merely hidden visually; it has been removed in R200 DOM.
+   Accessibility and page CTA remain HTML. */
+.syn-r200-home .r192-scene{
+ background:#060b16!important;
+ overflow:hidden;
+}
+.syn-r200-home .r192-scene .core-r109-canvas,
+.syn-r200-home .core-r109-stage .core-r109-canvas{
+ position:absolute!important;
+ left:0!important;top:0!important;
+ width:100%!important;height:100%!important;
+ transform:none!important;transform-origin:50% 50%!important;
+ pointer-events:none!important;
+ z-index:2!important;display:block!important;
+}
+.syn-r200-home .r192-scene[data-core-ready="true"] .core-r109-canvas{opacity:1!important}
+.syn-r200-home .r192-scene .core-r108-art{
+ opacity:.2!important;pointer-events:none!important;z-index:1!important;
+}
+/* Legacy environmental painting cannot leak into the new 3D scene. */
+.syn-r200-home .r192-depth-haze,
+.syn-r200-home .r192-floor,
+.syn-r200-home .r199-architecture,
+.syn-r200-home .r196-core-apparatus,
+.syn-r200-home .r198-chamber{display:none!important}
+/* The introduction remains clear and independent of animation/renderer failure. */
+.syn-r200-home .r192-scene .core-r108-top{z-index:8}
+.syn-r200-home .r192-scene-caption{z-index:8}
+.syn-r200-home .r192-hero-outro{z-index:10}
+/* Preserve original chapter interactions below the fold */
+@media(prefers-reduced-motion:reduce){
+ .syn-r200-home .r192-scene .core-r109-canvas{transition:none!important}
+ .syn-r200-home .r192-scene .core-r108-art{opacity:.6!important}
+}
