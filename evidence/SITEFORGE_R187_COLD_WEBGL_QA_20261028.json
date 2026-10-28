@@ -1,0 +1,48 @@
+{
+  "schema": "synestra.siteforge.r187.experimental_checkpoint.v1",
+  "date": "2026-10-28",
+  "mission_id": "SYN_SITEFORGE_R187_NEON_VISUAL_REFINEMENT",
+  "scope": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "base_branch": "task/SYN_SITEFORGE_R186_NEON_RIBBONS_ADD_ONLY_20261028",
+    "base_head": "2b9677b839ef25db3bc21ea46e0784c579868802",
+    "worktree": "I:/_STUDIO_STAGING/siteforge_r187_neon_20261028",
+    "branch": "task/SYN_SITEFORGE_R187_NEON_REFINE_20261028",
+    "material_only": 6,
+    "legacy_materials": "0..5 unchanged"
+  },
+  "baseline": {
+    "preview_url": "https://inossarum.github.io/synestra-siteforge-r176-lab/r186.html",
+    "current_http_status": 200,
+    "lab": true,
+    "baseline_r186_chrome_smoke": "PASS",
+    "baseline_sha256": "af68da9b82ba3329720b630e166d8519dca83ec6ac46cad7a52058c51044e392"
+  },
+  "candidate": {
+    "file": "siteforge-r187-autonome.html",
+    "sha256": "82c7cf088e9f3e3d993696588be434131f402c8a663c67dbed8af8927e05dd95",
+    "generator": "tools/build_siteforge_r187_neon.py",
+    "generator_result": "R187_ADD_ONLY_BUILD_PASS",
+    "js_syntax": "PASS",
+    "shader_differences": "Only isolated material6 branch and option label/title",
+    "real_chrome_webgl": "FAIL_INITIALIZATION_READY_NULL",
+    "candidates_tested": [
+      "R187 broad refactor failed",
+      "R187 bounded tune failed",
+      "R187 bounded tune after 24s failed",
+      "Chrome d3d11 mode failed",
+      "one constant change in material6 failed"
+    ],
+    "failure_message": "R175_REAL_BROWSER_FAIL ready=null; status='Préparation du moteur WebGL…'; WebGL context present, getError=0; no actual R187 render",
+    "owner_visual_acceptance": "PENDING",
+    "release": "NOT_PUBLISHED",
+    "functional_status": "BLOCKED"
+  },
+  "diagnosis": {
+    "finding": "Even single literal change of old R186 material shader reproduces non-ready startup; R186 unchanged control file passes.",
+    "cause": "UNKNOWN; cold shader compile or startup resource gate suspected, not proven",
+    "next": "Investigate shader compilation stage with GPU and browser logs before any R187 render claim; keep R186 public preview online.",
+    "main_mutated": false,
+    "publish_mutated": false
+  }
+}
