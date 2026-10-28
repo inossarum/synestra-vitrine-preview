@@ -16,13 +16,13 @@ function verifyR169Preview(){
  assert.match(r169Review,/<svg class="core-r108-art"/);
  assert.match(r169Review,/class="syn-r169-room"/);
  assert.match(r169Review,/scale\(\.49\)!important/);
- assert.match(r169Review,/src="\.\/assets\/siteforge-r116-sphere-only\.js" defer/);
+ assert.match(r169Review,/src="\.\/assets\/siteforge-lab-r182-vitrine\.js" defer/);
  assert.match(r169Review,/prefers-reduced-motion:reduce/);
  assert.match(r169Review,/script-src 'self'/);
  assert.match(r169Review,/noindex,nofollow/);
  for (const slug of ['connect','bridge','siteforge'])assert.match(r169Review,new RegExp('href="\\./'+slug+'/"'));
  const scripts=[...r169Review.matchAll(/<script\b[^>]*>/g)].map(x=>x[0]);
- assert.deepEqual(scripts,['<script src="./assets/siteforge-r116-sphere-only.js" defer>']);
+ assert.deepEqual(scripts,['<script src="./assets/siteforge-lab-r182-vitrine.js" defer>']);
 }
 
 
