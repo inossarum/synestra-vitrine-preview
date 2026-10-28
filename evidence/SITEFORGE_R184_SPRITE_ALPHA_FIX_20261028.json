@@ -1,0 +1,55 @@
+{
+    "schema":  "synestra.siteforge.r184.alpha-masking.evidence.v1",
+    "date":  "2026-10-28",
+    "mission_id":  "SYN_SITEFORGE_R184_FIX_OPAQUE_SQUARE_MOTES",
+    "source":  {
+                   "repository":  "inossarum/synestra-vitrine-preview",
+                   "base_branch":  "task/SYN_SITEFORGE_R183_ADAPTIVE_FRAMEBUDGET_20261028",
+                   "base_commit":  "f64b3786ac629e2a035a234606cb189f5ea95250",
+                   "branch":  "task/SYN_SITEFORGE_R184_SPRITE_ALPHA_FIX_20261028",
+                   "production_main":  "df67fcd5cc6b7cc0fb42fa86c8920d28b9427494",
+                   "preview_head_baseline":  "7621ef142e66cecacdd165f676514277ea39dc0b",
+                   "engine_blob":  "e8a07dc56c4a32df1143647d85faa50a5b16266d",
+                   "html_blob":  "d67ed534bb56cf10d5aa67615c3775d817604ed7",
+                   "standalone_blob":  "036fd345de6324bd700b8ff3eafc1a66f2e0a792"
+               },
+    "input_visual":  {
+                         "user_reference":  "User-supplied image(20261028-171636).png",
+                         "observed":  "Many cyan and violet opaque square sprites with internal X-shaped faceting conceal the plasma. User rejects visual treatment."
+                     },
+    "diagnosis":  {
+                      "root_cause":  "Fragment shader gl_FragColor=vec4(lightCol,alpha) under additive gl.blendFunc(gl.ONE,gl.ONE) ignores alpha for RGB, so even 0-opacity corners add sprite colors, producing visible square quads and X highlights.",
+                      "secondary":  "Facet sideCut lets tips reach sprite bounds; prior particle defaults count46 size100 brightness100 amplify artifacts."
+                  },
+    "changes":  [
+                    "Use premultiplied sprite emission gl_FragColor=vec4(lightCol*alpha,alpha) with discard below alpha .012",
+                    "Constrain facets with sideCut=max(lateral*1.13+axial*.48,axial*.98), silhouette soft edges",
+                    "Reduce sprite raster footprint (9+7*random instead of 11+9)",
+                    "New soft defaults: 30 motes, 60% size, 65% brightness; all sliders still fully adjustable",
+                    "Preserve one WebGL program, all 3 mote styles, source plasma ray marching, shared speed/3D orbit, quality mode, old v1 JSON schema and 18+10 controls"
+                ],
+    "tests":  {
+                  "node":  "160/160 PASS",
+                  "static":  "49 allowlisted files PASS",
+                  "focused_shader":  "4/4 PASS",
+                  "chrome_local":  "PASS real Chrome Windows WebGL exit 0; six materials, 390px mobile, mouse/touch, full 360 yaw, shared spin, JSON import/export, GL 0",
+                  "chrome_public":  "PENDING",
+                  "visual_smoke":  "WebGL screenshot shows small colored sparks, no opaque square sprite boundaries; high-density faceted test shows clipped polygons and glowing edges.",
+                  "crystal_high_density":  "PASS high density clipped polygons without squares",
+                  "mote_visibility":  "PASS default 30 motes, size60, brightness65; 2647 pixels changed in 880000 screenshot"
+              },
+    "preview":  {
+                    "repo":  "inossarum/synestra-siteforge-r176-lab",
+                    "path":  "r184.html",
+                    "url":  "https://inossarum.github.io/synestra-siteforge-r176-lab/r184.html",
+                    "state":  "PENDING"
+                },
+    "safety":  {
+                   "main_unchanged":  true,
+                   "previous_r183_untouched":  true,
+                   "no_cloudflare_access_mutation":  true,
+                   "free_only":  true,
+                   "rollback":  "Remove only r184.html, keep r183.html"
+               },
+    "status":  "LOCAL_E2E_PASS_PUBLIC_HTTPS_E2E_PENDING"
+}

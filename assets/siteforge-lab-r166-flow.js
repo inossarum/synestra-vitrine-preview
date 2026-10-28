@@ -377,7 +377,7 @@ void main(){
  vLife=life;vGlint=.65+.35*rnd(i*3.17+19.);
  gl_PointSize=clamp((3.2+4.5*rnd(i+8.))*uEffects.z*sizeFactor*
        uResolution.y/460.*mix(1.85,1.,uLayer),1.,29.);
- if(uPass>4.5)gl_PointSize=clamp((11.0+9.0*rnd(i+8.))*sizeFactor*uMoteStyle.z*uResolution.y/518.,2.,38.);
+  if(uPass>4.5)gl_PointSize=clamp((9.0+7.0*rnd(i+8.))*sizeFactor*uMoteStyle.z*uResolution.y/518.,1.5,32.);
  gl_Position=vec4(p.x*uResolution.y/max(uResolution.x,1.),p.y-.08,0.,1.);
 }
 `;
@@ -441,8 +441,10 @@ void main(){
    float cs=cos(crystalAngle),sn=sin(crystalAngle);
    vec2 facetXY=vec2(along*cs-across*sn,along*sn+across*cs);
    float axial=abs(facetXY.x),lateral=abs(facetXY.y);
-   float sideCut=max(lateral*.94+axial*.46,axial*.67);
-   silhouette=1.-smoothstep(.74,.86,sideCut);
+   // R184: the old horizontal tip reached the point-sprite square edge.
+   // Keep the entire beveled crystal INSIDE its sprite and feather the cut.
+   float sideCut=max(lateral*1.13+axial*.48,axial*.98);
+   silhouette=1.-smoothstep(.67,.85,sideCut);
    // Independent facet normals, pointing into the core's genuine centre.
    float faceSide=step(0.,facetXY.y);
    float faceTip=step(.27,axial);
@@ -484,8 +486,13 @@ void main(){
    silhouette=clamp(coreGlow*.82+filament*.45+aura*.33,0.,1.);
    lightCol=col*(aura*.55+filament*.58)+hot*coreGlow*1.44;
   }
-  float alpha=clamp(silhouette,0.,1.)*vLife*clamp(uEffects.w,0.,1.);
-  gl_FragColor=vec4(lightCol,alpha);
+   // R184 critical bugfix: gl.blendFunc(ONE, ONE) ignores alpha entirely.
+   // Previously even alpha-zero sprite corners added their RGB to the scene,
+   // producing opaque cyan/violet rectangles and giant X-shaped highlights.
+   float alpha=clamp(silhouette,0.,1.)*vLife*clamp(uEffects.w,0.,1.);
+   if(alpha<.012)discard;
+   // Premultiplied emission is mandatory with additive ONE/ONE blending.
+   gl_FragColor=vec4(lightCol*alpha,alpha);
   return;
  }
  if(uPass>3.5&&uPass<4.5){
