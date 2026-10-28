@@ -113,8 +113,12 @@ try{
  await mutate({moteShape:2,moteCount:120,motePrimary:'#ff6600'});
  console.log('R180_JSON_IMPORT_SECURITY_COMPAT_PASS '+JSON.stringify({roundtrip:true,invalidAtomic:true,legacyNoMotes:true}));
  await mutate({particleSpeed:250});
- await sleep(180);
- const speed=JSON.parse((await call('Runtime.evaluate',{expression:"JSON.stringify((()=>{const s=document.querySelector('.core-r109-stage');return {phase:s.dataset.syncedSpinPhase,motePhase:s.dataset.moteSpinPhase,linked:s.dataset.moteSpinLinkedSpeed,label:document.querySelector('[data-mote-linked-speed]').textContent,gl:s.querySelector('canvas').getContext('webgl').getError()}})())",returnByValue:true})).result.value);
+ let speed={};
+ for(let attempt=0;attempt<35;attempt++){
+  speed=JSON.parse((await call('Runtime.evaluate',{expression:"JSON.stringify((()=>{const s=document.querySelector('.core-r109-stage');return {phase:s.dataset.syncedSpinPhase,motePhase:s.dataset.moteSpinPhase,linked:s.dataset.moteSpinLinkedSpeed,label:document.querySelector('[data-mote-linked-speed]').textContent,gl:s.querySelector('canvas').getContext('webgl').getError()}})())",returnByValue:true})).result.value);
+  if(speed.phase===speed.motePhase&&speed.linked==='250'&&speed.label==='250 %'&&speed.gl===0)break;
+  await sleep(200);
+ }
  if(speed.phase!==speed.motePhase||speed.linked!=='250'||speed.label!=='250 %'||speed.gl!==0)throw Error('R179_SPEED_DESYNCHRONIZED '+JSON.stringify(speed));
  await call('Runtime.evaluate',{expression:"document.querySelector('.lab-controls').dispatchEvent(new Event('reset',{bubbles:true,cancelable:true}))"});
  await sleep(180);
