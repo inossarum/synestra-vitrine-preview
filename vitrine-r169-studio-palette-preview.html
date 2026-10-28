@@ -2625,6 +2625,76 @@ body .hero-v2>.system-stage .core-r108-note{display:none!important}
 
 /* R183 portrait canvas is centered, no shader mutation. */
 
+
+/* R184: FULL BLEED CORE — owner screenshot 2026-10-28. No floating frame.
+   Chrome viewport is covered edge-to-edge; only existing GPU Core is scaled down. */
+.hero-v2.container{
+ width:100vw!important;max-width:none!important;
+ margin-left:calc(50% - 50vw)!important;margin-right:0!important;
+ margin-top:-104px!important;
+ padding:0 0 clamp(4rem,7vw,6.8rem)!important;
+ gap:0!important;
+}
+body .hero-v2>.system-stage.core-r109-stage{
+ width:100vw!important;max-width:none!important;
+ height:100svh!important;min-height:100svh!important;
+ border:0!important;border-radius:0!important;
+ box-shadow:none!important;
+ margin:0!important;
+ background:#040711!important;
+}
+body .hero-v2>.system-stage.core-r109-stage .core-r109-canvas{
+ width:100%!important;height:100%!important;top:0!important;left:0!important;
+ transform:translate3d(0,0,0) scale(.72)!important;
+ transform-origin:center center!important;
+}
+body .hero-v2>.system-stage .core-r108-top{
+ top:clamp(6.8rem,9.3vw,8rem)!important;
+ left:clamp(1.5rem,4vw,5rem)!important;right:clamp(1.5rem,4vw,5rem)!important;
+}
+.r183-intro-navigation{
+ bottom:clamp(1.5rem,3vw,3rem)!important;
+ left:clamp(1.5rem,4vw,5rem)!important;right:clamp(1.5rem,4vw,5rem)!important;
+}
+.hero-v2>.hero-copy{
+ width:min(88vw,1120px)!important;
+ max-width:1120px!important;
+ margin-inline:auto!important;
+ padding-top:clamp(4rem,8vw,8rem)!important;
+}
+@media(max-width:1099px){
+ body .hero-v2>.system-stage.core-r109-stage{
+  height:100svh!important;min-height:100svh!important;
+ }
+ body .hero-v2>.system-stage.core-r109-stage .core-r109-canvas{
+  transform:translate3d(0,0,0) scale(.75)!important;
+ }
+}
+@media(max-width:720px){
+ .hero-v2.container{
+  width:100vw!important;margin-left:calc(50% - 50vw)!important;
+  margin-top:-78px!important;
+  padding-top:0!important;
+ }
+ body .hero-v2>.system-stage.core-r109-stage{
+  width:100vw!important;height:100svh!important;min-height:100svh!important;
+  border-radius:0!important;
+ }
+ body .hero-v2>.system-stage.core-r109-stage .core-r109-canvas{
+  width:100%!important;height:min(96vw,420px)!important;
+  left:0!important;top:50%!important;
+  transform:translateY(-50%) scale(1)!important;
+ }
+ body .hero-v2>.system-stage .core-r108-top{
+  top:clamp(5.2rem,17vw,6.8rem)!important;left:1.15rem!important;right:1.15rem!important;
+ }
+ .r183-intro-navigation{bottom:1.1rem!important;left:1rem!important;right:1rem!important}
+ .hero-v2>.hero-copy{width:calc(100% - 2rem)!important;padding-top:3.8rem!important}
+}
+@media(prefers-reduced-motion:reduce){
+ body .hero-v2>.system-stage.core-r109-stage .core-r109-canvas{transition:none!important}
+}
+
 </style>
 </head>
 <body>
