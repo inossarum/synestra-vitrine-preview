@@ -1,0 +1,74 @@
+{
+  "schema": "synestra.siteforge.r190.chrome-pointer-qa.v1",
+  "url": "http://127.0.0.1:18850/r190-hero-hover-flux.html",
+  "viewport": "1440x900",
+  "webgl_ready": true,
+  "canvas": {
+    "x": 712,
+    "y": 474,
+    "w": 678.6499633789062,
+    "h": 358.6799621582031
+  },
+  "initial_pointer": [
+    0,
+    0,
+    0
+  ],
+  "hover_pointer": [
+    0.11988419581663826,
+    0.17871256612546765,
+    0.39622288705500935
+  ],
+  "max_hover_strength": 0.692149479451724,
+  "rest_pointer": [
+    0.11988419581663826,
+    0.17871256612546765,
+    9.01651272050257e-11
+  ],
+  "tilt_samples": [
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ]
+  ],
+  "effect_local_decay": true,
+  "screen_before": "r190-before-hover.png",
+  "screen_after": "r190-after-hover.png",
+  "assertions": "PASS"
+}

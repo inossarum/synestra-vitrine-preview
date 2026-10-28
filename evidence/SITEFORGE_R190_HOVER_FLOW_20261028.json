@@ -1,0 +1,84 @@
+{
+  "schema": "synestra.siteforge.r190.hoverflow.evidence.v1",
+  "date_local": "2026-10-28",
+  "mission_id": "SYN_SITEFORGE_R190_POINTER_FLOW_20261028",
+  "base_branch": "task/SYN_SITEFORGE_R189_HERO_CONSTELLATION_20261028",
+  "base_head": "578ab54a5652656a208d2374ee38e1839a71199f",
+  "new_branch": "task/SYN_SITEFORGE_R190_POINTER_FLOW_20261028",
+  "source_engine": {
+    "path": "assets/siteforge-r116-sphere-only.js",
+    "sha256": "4aae64e2128d40a8fffa675ce12223a00c3d508b33f19b807c8b50145a197fd0",
+    "preserved": true
+  },
+  "source_visual": {
+    "path": "r189-hero-candidate.html",
+    "sha256": "15d4d14c351674ba7505864e42db2fc7fb4cfb52d96f7ec6d0f87aae1e1512df",
+    "preserved": true
+  },
+  "result_engine": {
+    "path": "assets/siteforge-r190-hover-flux.js",
+    "sha256": "d5b64dfccba2096d6cc6f1198a4656c6320569ff627caf11f84fb5eb0e493eae"
+  },
+  "result_page": {
+    "path": "r190-hero-hover-flux.html",
+    "sha256": "9aebbcce220b9aef506a95b30e01c631f2f70fe64c5a35654865db1b8f5f4faf"
+  },
+  "visual_change": "Pointer changes local flow phase (Gaussian field with timed decay) without changing uTilt/camera; auto plasma flow retained. Touch remains no-op; reduced-motion fallback retained.",
+  "tests": [
+    {
+      "name": "R190 static failure-first + R189 + site contracts",
+      "result": "PASS",
+      "passed": 99,
+      "failed": 0
+    },
+    {
+      "name": "Chrome CDP with actual WebGL uniform interception",
+      "result": "PASS",
+      "browser_width": 1440,
+      "browser_height": 900,
+      "camera_tilt_sample": [
+        0,
+        0
+      ],
+      "hover_max": 0.692149479451724,
+      "hover_after_movement": 0.39622288705500935,
+      "hover_after_leave": 9.01651272050257e-11,
+      "decays": true
+    },
+    {
+      "name": "Chrome real mobile viewport",
+      "result": "CAPTURED",
+      "browser_width": 390,
+      "browser_height": 844
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "r190-before-hover.png",
+      "sha256": "e374fcb386cdd89049011cdcc27b887f95421e1a40fdb92186f367fb9ff64e2a"
+    },
+    {
+      "path": "r190-after-hover.png",
+      "sha256": "226f6000e5dbe98fbcf98340d6c74468cd7365d6814b0a063284923d8e3b9c1"
+    },
+    {
+      "path": "r190-mobile.png",
+      "sha256": "2761ba7642666ffc397cab0a39eec5796822cece96047c462080177cd057e998"
+    }
+  ],
+  "preflight": {
+    "rules": "AGENTS.md previously consulted; isolated branch; FREE_ONLY",
+    "skills": [
+      "interaction-motion-design@1.0.0#c636a0c77eccb9004c56ce48bdd49684243b8790",
+      "visual-regression-testing@1.0.0#aa98fffe9149dfcc0e153f0d1b8b91f3c0a6b4ae",
+      "failure-first@1.0.0#373c5f508b3ef91d1ffc1fc5afec7007a643d590"
+    ]
+  },
+  "preview_url": "http://127.0.0.1:18850/r190-hero-hover-flux.html",
+  "limits": [
+    "Local HTTP only; no deployment",
+    "R188 source exact remains unverified",
+    "Aesthetic owner review pending",
+    "No public production E2E"
+  ]
+}
