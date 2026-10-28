@@ -1,0 +1,82 @@
+/* R197 depth study — volumetric shading in shader, intentionally unlit metal floor.
+   One WebGL canvas. No reflected image, no bloom strips, no CSS blur animation. */
+.syn-r197-home .r192-scene{
+ background:linear-gradient(180deg,#050913 0%,#070b17 66%,#09101b 100%)!important;
+}
+/* Remove accumulated wide projected light from all ancestral versions. */
+.syn-r197-home .r192-floor-sheen,
+.syn-r197-home .r192-floor-light,
+.syn-r197-home .r192-light-falloff{display:none!important}
+.syn-r197-home .r192-depth-haze{background:none!important}
+.syn-r197-home .r192-floor{
+ top:76%!important;
+ background:linear-gradient(180deg,#101827 0%,#0a1320 41%,#070e1b 100%)!important;
+ border-top:1px solid rgba(134,159,187,.115)!important;
+ box-shadow:inset 0 12px 22px rgba(0,0,0,.14)!important;
+}
+.syn-r197-home .r192-floor:before{
+ background:linear-gradient(180deg,rgba(137,163,187,.022),transparent 70%)!important;
+ border-top:0!important;opacity:.55
+}
+.syn-r197-home .r192-floor-grid{
+ opacity:.12!important;
+ background:
+ repeating-linear-gradient(90deg,transparent 0 116px,rgba(133,161,183,.07) 117px,transparent 118px),
+ repeating-linear-gradient(0deg,transparent 0 67px,rgba(124,158,182,.06) 68px,transparent 69px)!important;
+}
+/* Dark occlusion in the plane under a suspended volume, no emissive fake reflection. */
+.r197-contact-shadow{position:absolute;left:50%;top:0;
+ transform:translateX(-50%);
+ width:min(30%,520px);height:26%;
+ background:radial-gradient(ellipse 50% 45% at 50% 12%,
+ rgba(0,0,0,.49) 0%,rgba(0,0,0,.20) 40%,transparent 100%);
+ pointer-events:none;opacity:.75;
+}
+/* A shaded, very low-alpha body behind the ray-marched currents helps the viewer
+   read the 3D volume without replacing the energy with a chrome sphere. */
+.r197-volume-backdrop{
+ position:absolute;left:50%;top:49%;z-index:3;pointer-events:none;
+ width:min(31vw,420px);aspect-ratio:1;
+ transform:translate(-50%,-50%);
+ border-radius:50%;opacity:.36;
+ background:
+ radial-gradient(circle at 24% 23%,rgba(161,126,210,.055),transparent 47%),
+ radial-gradient(circle at 76% 71%,rgba(64,152,118,.04),transparent 53%),
+ radial-gradient(circle at center,rgba(14,21,43,.045),transparent 78%);
+ box-shadow:none;
+}
+/* Separate foreground ring segment crosses IN FRONT of the plasma for parallax.
+   Its rear half remains hidden; original R196 arcs still live behind the canvas. */
+.r197-foreground-arc{
+ position:absolute;z-index:6;pointer-events:none;
+ left:50%;top:51%;
+ width:min(40vw,540px);height:min(37vw,500px);
+ transform:translate(-50%,-50%) rotate(-24deg) rotateY(62deg) rotateX(17deg);
+ transform-style:preserve-3d;
+ border:2px solid rgba(146,177,199,.32);
+ border-right-color:rgba(101,188,155,.49);
+ border-bottom-color:rgba(184,153,221,.44);
+ border-radius:50%;
+ box-shadow:inset -1px -1px 0 rgba(87,176,140,.065);
+ -webkit-mask-image:linear-gradient(to bottom,transparent 0%,transparent 45%,#000 66%,#000 84%,transparent 97%);
+ mask-image:linear-gradient(to bottom,transparent 0%,transparent 45%,#000 66%,#000 84%,transparent 97%);
+ opacity:.55;
+}
+.syn-r197-home .r196-core-arc{opacity:.34}
+.syn-r197-home .r196-core-arc-b{opacity:.39}
+.syn-r197-home .r196-core-equator{opacity:.33}
+.syn-r197-home .r196-core-beacon{opacity:.27}
+@media(max-width:900px){
+ .r197-volume-backdrop{width:min(49vw,365px);top:49%}
+ .r197-foreground-arc{width:68vw;height:55vw;top:50%}
+ .syn-r197-home .r196-core-arc{opacity:.24}
+}
+@media(max-width:540px){
+ .r197-volume-backdrop{width:71vw;top:49%}
+ .r197-foreground-arc{width:94vw;height:84vw;top:50%;opacity:.34}
+ .r197-contact-shadow{width:60%;height:30%;opacity:.62}
+ .syn-r197-home .r192-floor{top:76%!important}
+}
+@media(prefers-reduced-motion:reduce){
+ .r197-foreground-arc,.r197-volume-backdrop,.r197-contact-shadow{animation:none!important}
+}

@@ -1,0 +1,107 @@
+{
+  "schema": "synestra.siteforge.r197.volume-depth.evidence.v1",
+  "mission_id": "SYN_SITEFORGE_R197_VOLUME_DEPTH_LIGHTING_20261028",
+  "date_local": "2026-10-28",
+  "source": "inossarum/synestra-vitrine-preview",
+  "owner": "Synestra Studio",
+  "branch": "task/SYN_SITEFORGE_R197_VOLUME_DEPTH_LIGHTING_20261028",
+  "base_commit": "fe595e760e351e38482e97ff9f6e690aeaf2731d",
+  "base_home_sha256": "43c2fa3845b2b0cdc7072dcd369c30df442e8c4fa3a8e882ce2fce5853773574",
+  "base_shader_sha256": "d5b64dfccba2096d6cc6f1198a4656c6320569ff627caf11f84fb5eb0e493eae",
+  "new_home_sha256": "5c726b9bb61236b82d899247f110a0cb60d93dbeb40327145f417a63c9ce4159",
+  "new_shader_sha256": "d551966abcce5bf862dddddd487b55629efa3eb4ad4258298c732976e1d75751",
+  "new_css_sha256": "24ce95e8dcd421cf535b4ac24f5f6f150457defcebdd7c2228bcdfc6e458f021",
+  "visuals": [
+    {
+      "path": "r197-studio-1440.png",
+      "sha256": "8731f0cb18d8cd2925d055bd1fa92186a0ab2436f86be3d9beb9ec3617c24e6c"
+    },
+    {
+      "path": "r197-studio-390.png",
+      "sha256": "1c558e847c5a321845968c59cd12119f730482d7556b8aba3353e81ec6b25206"
+    }
+  ],
+  "features": [
+    "Remove all R192 floor sheen/light/falloff DOM overlays; no fake luminous reflection.",
+    "Unlit brushed-metal ground with subtle elliptical dark contact occlusion, no animated blur.",
+    "Copy original WebGL emitter and shade true raymarch 3D samples by front/back depth factor and directional light.",
+    "Slow autonomous field rotation by shader time (not pointer); uTilt remains fixed zero.",
+    "Foreground masked metallic elliptical segment and behind arcs for 3D occlusion, faint unlit backdrop; one WebGL renderer.",
+    "R196 and earlier sources unchanged, route assets resolve."
+  ],
+  "tests": [
+    {
+      "name": "Node inherited + R197 failure-first",
+      "pass": 149,
+      "fail": 0,
+      "status": "PASS"
+    },
+    {
+      "name": "Chrome 5 routes by 3 widths",
+      "pass": 15,
+      "fail": 0,
+      "status": "PASS"
+    },
+    {
+      "name": "Chrome WebGL pointer/tilt",
+      "status": "PASS",
+      "core_ready": true,
+      "peak_hover": 0.7266046269454365,
+      "after_release": 7.316843579009345e-11,
+      "tilt": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Chrome reduced motion",
+      "status": "PASS",
+      "ambient": false
+    },
+    {
+      "name": "Additional WebGL contexts",
+      "status": "NO",
+      "count": 1
+    },
+    {
+      "name": "GL volumetric steps",
+      "status": "UNCHANGED",
+      "desktop": 22,
+      "mobile": 14
+    },
+    {
+      "name": "Browser engines Firefox/Safari",
+      "status": "NOT_TESTED"
+    },
+    {
+      "name": "Physical GPU benchmark",
+      "status": "NOT_TESTED",
+      "note": "Unchanged context and steps do not guarantee unchanged FPS."
+    },
+    {
+      "name": "Public deployment",
+      "status": "NOT_PERFORMED"
+    }
+  ],
+  "skills": [
+    "interaction-motion-design@1.0.0#c636a0c77eccb9004c56ce48bdd49684243b8790",
+    "visual-regression-testing@1.0.0#aa98fffe9149dfcc0e153f0d1b8b91f3c0a6b4ae",
+    "responsive-layout-engineering@1.0.0#12d091ca42195a1559e5a12c88b9a599560bd53c"
+  ],
+  "rules_read": "I:/00_STUDIO_VIRTUEL/AGENTS.md#34cc2a8649bda4230bd2fa73d4a4de0edaf65dc1e3bdaf2b8b78ff58f4e4ea21",
+  "constraints": [
+    "FREE_ONLY",
+    "No GPU duplicate or costly reflection",
+    "No main merge",
+    "No public deploy",
+    "Existing R196 rollback preserved"
+  ],
+  "limits": [
+    "Volume shading is artistic raymarch, not a physically based 3D scene with real-world photometry",
+    "Visual approval by owner pending",
+    "No independent non-Chrome E2E or hardware FPS measured",
+    "Memory V1 and Supervisor not independently qualified"
+  ],
+  "preview_url": "http://127.0.0.1:18850/r197/",
+  "status": "R197_LOCAL_CANDIDATE_VALIDATED"
+}
