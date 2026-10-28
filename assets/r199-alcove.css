@@ -1,0 +1,169 @@
+/* Synestra R199 — minimalist architectural alcove.
+   User rejected R198 rings, pillars, fake bloom. Keep 1 unchanged R198 plasma canvas.
+   Ambient illumination is simulated on physically plausible matte surfaces only. */
+.syn-r199-home .r192-scene{
+ background:linear-gradient(180deg,#050915 0%,#070b16 69%,#080f1c 100%)!important;
+}
+/* Kill all decorative concentric structures inherited from R196–198. */
+.syn-r199-home .r196-core-apparatus,
+.syn-r199-home .r197-foreground-arc,
+.syn-r199-home .r198-chamber,
+.syn-r199-home .r198-foreground-rim,
+.syn-r199-home .r197-volume-backdrop{display:none!important}
+/* Environmental geometry belongs BEHIND the plasma rendering, not over it. */
+.r199-architecture{
+ position:absolute;inset:0;overflow:hidden;z-index:1;pointer-events:none;
+ perspective:1050px;perspective-origin:50% 49%;
+}
+.r199-back-wall{
+ position:absolute;left:12%;right:12%;top:13%;bottom:24%;
+ border-radius:4px;
+ background:
+ radial-gradient(ellipse 27% 53% at 50% 49%,rgba(40,42,70,.056),transparent 100%),
+ linear-gradient(90deg,rgba(12,20,34,.04) 0%,rgba(13,20,37,.14) 20%,rgba(11,18,34,.055) 50%,rgba(11,25,33,.13) 80%,rgba(11,19,32,.04));
+ box-shadow:inset 0 0 110px rgba(1,5,13,.15);
+}
+/* Two plausible metal wall surfaces recede toward a black central stage.
+   No round frame, no posts, no neon outlines. */
+.r199-panel{
+ position:absolute;top:12%;bottom:24%;width:29%;
+ opacity:.77;transform-style:preserve-3d;
+ border:1px solid rgba(104,129,155,.075);
+ box-shadow:inset 0 0 45px rgba(0,0,0,.26);
+}
+.r199-panel-left{
+ left:-3%;
+ clip-path:polygon(0 0,100% 17%,100% 83%,0 100%);
+ transform:rotateY(18deg);
+ background:
+ linear-gradient(95deg,rgba(10,18,31,.87) 0%,rgba(19,27,46,.68) 57%,rgba(34,29,53,.53) 86%,rgba(74,44,102,.20) 100%),
+ repeating-linear-gradient(90deg,transparent 0 108px,rgba(138,152,183,.045) 109px,transparent 110px);
+}
+.r199-panel-right{
+ right:-3%;
+ clip-path:polygon(0 17%,100% 0,100% 100%,0 83%);
+ transform:rotateY(-18deg);
+ background:
+ linear-gradient(265deg,rgba(10,18,31,.87) 0%,rgba(18,29,40,.65) 57%,rgba(24,45,46,.51) 86%,rgba(42,111,82,.18) 100%),
+ repeating-linear-gradient(90deg,transparent 0 108px,rgba(133,166,153,.045) 109px,transparent 110px);
+}
+.r199-face-light{
+ position:absolute;top:20%;height:46%;width:16%;pointer-events:none;
+ opacity:.88;transform:perspective(900px) rotateY(13deg);
+}
+.r199-face-light-left{
+ left:13%;
+ background:radial-gradient(ellipse 33% 59% at 85% 52%,
+ rgba(157,109,214,.27),rgba(103,70,153,.085) 52%,transparent 95%);
+}
+.r199-face-light-right{
+ right:13%;
+ background:radial-gradient(ellipse 33% 59% at 15% 52%,
+ rgba(91,196,151,.24),rgba(56,118,101,.07) 52%,transparent 95%);
+ transform:perspective(900px) rotateY(-13deg);
+}
+.r199-joint{
+ position:absolute;top:24%;height:42%;width:1px;
+ background:linear-gradient(180deg,transparent,rgba(170,189,214,.07) 38%,rgba(147,169,201,.1) 52%,transparent);
+ opacity:.75;
+}
+.r199-joint-left{left:24.5%}.r199-joint-right{right:24.5%}
+.r199-ceiling{
+ position:absolute;left:10%;width:80%;top:8%;height:16%;
+ clip-path:polygon(0 0,100% 0,92% 100%,8% 100%);
+ background:linear-gradient(180deg,rgba(19,27,44,.24),rgba(10,15,28,0));
+ border-bottom:1px solid rgba(108,136,164,.045);
+}
+.syn-r199-home .r192-floor{
+ top:76%!important;
+ background:
+ linear-gradient(180deg,#111b2a 0%,#0b1524 39%,#07101d 100%)!important;
+ border-top:1px solid rgba(125,145,165,.12)!important;
+ box-shadow:inset 0 14px 29px rgba(0,0,0,.18)!important;
+}
+.syn-r199-home .r192-floor:before{background:none!important;opacity:0!important}
+.syn-r199-home .r192-floor-grid{
+ opacity:.17!important;
+ background:
+ repeating-linear-gradient(90deg,transparent 0 96px,rgba(129,151,172,.07) 97px,transparent 98px),
+ repeating-linear-gradient(0deg,transparent 0 79px,rgba(129,151,172,.055) 80px,transparent 81px)!important;
+}
+/* Narrow, colored irradiance footprint without mirrored sphere texture.
+   Color reaches metal just under the object, with near-white central energy. */
+.r199-material-light{
+ position:absolute;left:50%;top:-1%;transform:translateX(-50%);
+ width:min(45%,610px);height:35%;pointer-events:none;opacity:.86;
+ background:
+ radial-gradient(ellipse 12% 24% at 50% 0%,rgba(217,240,228,.18),transparent 100%),
+ radial-gradient(ellipse 23% 39% at 36% 2%,rgba(142,85,198,.18),transparent 100%),
+ radial-gradient(ellipse 23% 39% at 65% 2%,rgba(79,178,135,.17),transparent 100%);
+}
+.r199-inlay{
+ position:absolute;left:50%;top:-11%;width:min(36%,520px);height:88px;
+ transform:translateX(-50%) perspective(650px) rotateX(70deg);
+ border:1px solid rgba(122,161,167,.16);border-radius:50%;
+ box-shadow:inset 0 0 0 8px rgba(8,17,29,.11),0 7px 18px rgba(0,0,0,.14);
+ pointer-events:none;opacity:.58;
+}
+.r199-inlay:before{
+ content:"";position:absolute;inset:12px;border:1px solid rgba(120,161,149,.06);
+ border-radius:50%;
+}
+@media(max-width:900px){
+ .r199-panel{width:32%;opacity:.6}
+ .r199-panel-left{left:-10%}.r199-panel-right{right:-10%}
+ .r199-face-light-left{left:10%}.r199-face-light-right{right:10%}
+ .r199-joint-left{left:21%}.r199-joint-right{right:21%}
+ .r199-material-light{width:59%}
+ .r199-inlay{width:46%}
+}
+@media(max-width:620px){
+ .r199-architecture{opacity:.86}
+ .r199-panel{width:31%;opacity:.45;top:23%;bottom:25%}
+ .r199-panel-left{left:-11%}.r199-panel-right{right:-11%}
+ .r199-face-light{top:30%;height:35%;width:22%}
+ .r199-face-light-left{left:6%}.r199-face-light-right{right:6%}
+ .r199-joint{display:none}
+ .r199-ceiling{opacity:.33}
+ .r199-material-light{width:75%;height:38%;opacity:.75}
+ .r199-inlay{width:58%;opacity:.36}
+}
+@media(prefers-reduced-motion:reduce){
+ .r199-architecture *,.r199-inlay,.r199-material-light{animation:none!important}
+}
+
+/* R199 refinement — illumination only on inward-facing metal; side-specific bevel. */
+.r199-panel:before{
+ content:"";position:absolute;inset:0;pointer-events:none;
+ background:repeating-linear-gradient(90deg,transparent 0 79px,rgba(169,182,207,.055) 80px,transparent 81px);
+ opacity:.42;
+}
+.r199-panel-left:after,.r199-panel-right:after{
+ content:"";position:absolute;top:12%;bottom:12%;width:3px;pointer-events:none;
+ border-radius:3px;
+}
+.r199-panel-left:after{
+ right:0;background:linear-gradient(180deg,transparent,rgba(193,141,232,.23) 32%,rgba(193,141,232,.43) 50%,rgba(115,76,171,.14) 75%,transparent);
+ box-shadow:-7px 0 19px rgba(131,77,179,.12);
+}
+.r199-panel-right:after{
+ left:0;background:linear-gradient(180deg,transparent,rgba(143,215,173,.20) 32%,rgba(143,215,173,.40) 50%,rgba(68,150,112,.13) 75%,transparent);
+ box-shadow:7px 0 19px rgba(83,174,126,.11);
+}
+.r199-face-light-left{
+ background:radial-gradient(ellipse 55% 65% at 92% 52%,rgba(160,107,208,.32),rgba(104,71,154,.11) 49%,transparent 97%);
+}
+.r199-face-light-right{
+ background:radial-gradient(ellipse 55% 65% at 8% 52%,rgba(100,195,151,.29),rgba(49,117,94,.11) 49%,transparent 97%);
+}
+.r199-material-light{
+ background:
+ radial-gradient(ellipse 11% 24% at 50% 0%,rgba(223,239,236,.24),transparent 100%),
+ radial-gradient(ellipse 24% 43% at 35% 2%,rgba(142,85,198,.21),transparent 100%),
+ radial-gradient(ellipse 24% 43% at 65% 2%,rgba(79,178,135,.21),transparent 100%);
+}
+@media(max-width:620px){
+ .r199-panel:after{opacity:.55}
+ .r199-face-light-left{opacity:.65}
+ .r199-face-light-right{opacity:.65}
+}

@@ -1,0 +1,91 @@
+{
+  "schema": "synestra.siteforge.r199.design-rejection-recovery.evidence.v1",
+  "mission_id": "SYN_SITEFORGE_R199_CINEMATIC_ALCOVE_20261028",
+  "date_local": "2026-10-28",
+  "owner": "Synestra Studio",
+  "source_repository": "inossarum/synestra-vitrine-preview",
+  "branch": "task/SYN_SITEFORGE_R199_CINEMATIC_ALCOVE_20261028",
+  "parent_commit": "ea514eece49c2c1fa9dc862199ec918591d0ab2b",
+  "input_sha256": {
+    "r198_home": "776c14cc165836c5949f3670651ac2274e2ebbaa3edce0bf6e412ed518ff04f2",
+    "r198_shader": "a0f16d77d636e331b5011d68b2412767ec3b595f284a4d4283462f60f9f2c90b"
+  },
+  "output_sha256": {
+    "r199_home": "6f0dde1f7df804cfce38313e976cb691d0496059acf9edc3f6d9a59ba63e45d8",
+    "css": "e335aeb9b388aed3fe5299e0657a80b6cb6063c55d27e8893bd6cac6610bb768"
+  },
+  "reason_for_change": "R198 explicitly rejected by owner. Its annuli, posts and discrete CSS rings produced clutter and contradictory perspectives, while light was not perceived as realistic. No production approval.",
+  "changed": [
+    "Remove R198 decorative metal annuli/pillars, R196 circles/equator, R197 ring/backdrop; no new DOM canvas.",
+    "Create cinematic architectural alcove: dark metal side walls receding in perspective, sparse joins, matte back wall and ceiling.",
+    "Directional violet/green color bleed only onto inward-facing panel edges and immediate floor under sphere. No mirrored image/huge floor halo.",
+    "Reuse unmodified R198 WebGL shader: original fixed sphere orientation, flow perturbation independent of camera.",
+    "Preserve five routes, no publication or portal deployment."
+  ],
+  "validation": [
+    {
+      "name": "Node contracts inherited+R199 failure-first",
+      "pass": 164,
+      "fail": 0,
+      "status": "PASS"
+    },
+    {
+      "name": "Chrome five routes × 1440/768/390",
+      "pass": 15,
+      "fail": 0,
+      "status": "PASS"
+    },
+    {
+      "name": "Chrome WebGL hover",
+      "status": "PASS",
+      "tilt": "[0,0] all samples",
+      "max_hover_strength": 0.726626198441677,
+      "rest_pointer_strength": 8.027389547999959e-11
+    },
+    {
+      "name": "Chrome reduced motion",
+      "status": "PASS"
+    },
+    {
+      "name": "Additional WebGL context",
+      "count": 0,
+      "status": "PASS"
+    },
+    {
+      "name": "Production FPS",
+      "status": "UNTESTED"
+    },
+    {
+      "name": "Human visual approval",
+      "status": "PENDING"
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "r199-studio-1440.png",
+      "sha256": "f554ba5a110a5cc198f48e1e3b09346369b974f02972175669d544625e5e2ca4"
+    },
+    {
+      "path": "r199-studio-390.png",
+      "sha256": "c07391516c06398f68bb6fca71cde80029039597ff4365a16b44253b8cc74a0e"
+    }
+  ],
+  "evidence_files": [
+    "evidence/SITEFORGE_R199_BROWSER_20261028.json",
+    "evidence/SITEFORGE_R199_POINTER_CHROME_20261028.json"
+  ],
+  "rules": "AGENTS.md@34cc2a8649bda4230bd2fa73d4a4de0edaf65dc1e3bdaf2b8b78ff58f4e4ea21",
+  "skills": [
+    "interaction-motion-design@1.0.0#c636a0c77eccb9004c56ce48bdd49684243b8790",
+    "visual-regression-testing@1.0.0#aa98fffe9149dfcc0e153f0d1b8b91f3c0a6b4ae",
+    "responsive-layout-engineering@1.0.0#12d091ca42195a1559e5a12c88b9a599560bd53c"
+  ],
+  "limitations": [
+    "R199 architecture and lighting are CSS approximations, not true irradiance computed from plasma WebGL.",
+    "No independent hardware FPS benchmark or browser coverage outside Chrome.",
+    "Studio Memory V1/Reasoning global not consulted for this bounded UI mission.",
+    "Owner has rejected R198, R199 is strictly unapproved proposed alternative, no deployment."
+  ],
+  "preview": "http://127.0.0.1:18850/r199/",
+  "status": "CANDIDATE_TESTED_OWNER_APPROVAL_PENDING"
+}
