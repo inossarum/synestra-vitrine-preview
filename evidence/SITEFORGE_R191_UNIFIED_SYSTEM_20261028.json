@@ -1,0 +1,112 @@
+{
+  "schema": "synestra.siteforge.r191.unified.digital-system.v1",
+  "mission": "SYN_SITEFORGE_R191_UNIFIED_DIGITAL_SYSTEM_20261028",
+  "date_local": "2026-10-28",
+  "source_repo": "inossarum/synestra-vitrine-preview",
+  "source_branch": "task/SYN_SITEFORGE_R190_POINTER_FLOW_20261028",
+  "source_commit": "6dbd42453e98abd3c71d45c1a8a1e2d72f8e688a",
+  "work_branch": "task/SYN_SITEFORGE_R191_UNIFIED_DIGITAL_SYSTEM_20261028",
+  "design": "digital minimal restrained cyan mint lavender; five principal marketing routes; shared header/typography/spacing/soft surfaces; background ambient reused from Connect Bridge",
+  "scope": [
+    "r191/index.html",
+    "r191/connect/index.html",
+    "r191/bridge/index.html",
+    "r191/siteforge/index.html",
+    "r191/offres/index.html"
+  ],
+  "reusable_assets": {
+    "ambient": "assets/r191-ambient.js",
+    "ambient_sha256": "49911b509c46dadbc795c0048531dcfbf30d136298b8a4837e6ea73f76f5320e",
+    "css": "assets/r191-system.css",
+    "css_sha256": "1ad0bf9f56c715b64c4ed955357dbe4408938222eda3f7b2a610482f1a5028a9"
+  },
+  "preserved": [
+    "r190-hero-hover-flux.html",
+    "assets/siteforge-r190-hover-flux.js",
+    "index.html",
+    "connect/index.html",
+    "bridge/index.html",
+    "siteforge/index.html",
+    "offres/index.html"
+  ],
+  "checks": [
+    {
+      "name": "Node original 99 + R191 static 5",
+      "passed": 104,
+      "failed": 0,
+      "status": "PASS"
+    },
+    {
+      "name": "Chrome desktop/mobile 5x2",
+      "passed": 10,
+      "failed": 0,
+      "status": "PASS",
+      "viewports": [
+        1440,
+        390
+      ]
+    },
+    {
+      "name": "Ambient creation",
+      "status": "PASS",
+      "desktop_nodes": 44,
+      "mobile_nodes": 26
+    },
+    {
+      "name": "Reduced motion native Chrome",
+      "status": "PASS",
+      "ambient": false
+    },
+    {
+      "name": "Local links/assets anchors",
+      "status": "PASS"
+    },
+    {
+      "name": "HTML strict CSP SiteForge",
+      "status": "PASS",
+      "inline_styles": 0
+    },
+    {
+      "name": "No second WebGL",
+      "status": "PASS",
+      "studio_canvas_count": 1,
+      "product_canvas_count": 0
+    },
+    {
+      "name": "Local HTTP",
+      "status": "PASS",
+      "origin": "http://127.0.0.1:18850"
+    }
+  ],
+  "browser_evidence": "evidence/SITEFORGE_R191_BROWSER_20261028.json",
+  "screenshots": [
+    "r191-studio-1440.png",
+    "r191-studio-390.png",
+    "r191-connect-1440.png",
+    "r191-connect-390.png",
+    "r191-bridge-1440.png",
+    "r191-bridge-390.png",
+    "r191-siteforge-1440.png",
+    "r191-siteforge-390.png",
+    "r191-offres-1440.png",
+    "r191-offres-390.png"
+  ],
+  "rules": {
+    "source": "I:\\00_STUDIO_VIRTUEL\\AGENTS.md",
+    "sha256": "34cc2a8649bda4230bd2fa73d4a4de0edaf65dc1e3bdaf2b8b78ff58f4e4ea21"
+  },
+  "skills": [
+    "ui-ux@1.0.0#0a362a0938401674166c7a8b871192fbde602c1a",
+    "interaction-motion-design@1.0.0#c636a0c77eccb9004c56ce48bdd49684243b8790",
+    "responsive-layout-engineering@1.0.0#12d091ca42195a1559e5a12c88b9a599560bd53c"
+  ],
+  "limitations": [
+    "Original SiteForge artistic demos and 3D labs intentionally unchanged, accessible via links",
+    "Local preview only; not published, no merge",
+    "Exact R188 original not recovered; R190 candidate is inherited",
+    "Studio Memory V1 mission snapshot unavailable; no Supervisor runtime execution attested",
+    "No authenticated portal E2E"
+  ],
+  "preview": "http://127.0.0.1:18850/r191/",
+  "release_gate": "HOLD"
+}

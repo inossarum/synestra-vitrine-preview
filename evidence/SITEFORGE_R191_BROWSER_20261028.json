@@ -1,0 +1,403 @@
+{
+  "schema": "synestra.siteforge.r191.browser.qa.v1",
+  "results": [
+    {
+      "path": "studio",
+      "width": 1440,
+      "url": "/r191/",
+      "viewport": 1440,
+      "docWidth": 1425,
+      "bodyWidth": 1425,
+      "background": {
+        "childCount": 44,
+        "hidden": "true",
+        "pointerEvents": "none"
+      },
+      "css": [
+        "http://127.0.0.1:18850/assets/r191-system.css"
+      ],
+      "scripts": [
+        "http://127.0.0.1:18850/assets/siteforge-r190-hover-flux.js",
+        "http://127.0.0.1:18850/assets/r191-ambient.js"
+      ],
+      "title": "Imaginez plus grand.\nConstruisez autrement.",
+      "canvasCount": 1,
+      "logo": {
+        "loaded": true,
+        "src": "http://127.0.0.1:18850/assets/synestra-studio-official-header.webp"
+      },
+      "navigation": [
+        "Studio",
+        "Connect",
+        "Bridge",
+        "SiteForge",
+        "Offres",
+        "Notre démarche",
+        "Exemples",
+        "Réalisations",
+        "Questions",
+        "À propos",
+        "Espace pilote ↗"
+      ],
+      "links": 27,
+      "firstSection": 1385,
+      "screenshot": "r191-studio-1440.png",
+      "pass": true
+    },
+    {
+      "path": "connect/",
+      "width": 1440,
+      "url": "/r191/connect/",
+      "viewport": 1440,
+      "docWidth": 1425,
+      "bodyWidth": 1425,
+      "background": {
+        "childCount": 44,
+        "hidden": "true",
+        "pointerEvents": "none"
+      },
+      "css": [
+        "http://127.0.0.1:18850/assets/product-pages.css",
+        "http://127.0.0.1:18850/assets/r191-system.css"
+      ],
+      "scripts": [
+        "http://127.0.0.1:18850/assets/r191-ambient.js"
+      ],
+      "title": "Les outils se parlent.\nVous gardez la main.",
+      "canvasCount": 0,
+      "logo": {
+        "loaded": true,
+        "src": "http://127.0.0.1:18850/assets/synestra-studio-official-header.webp"
+      },
+      "navigation": [
+        "Studio",
+        "Connect",
+        "Bridge",
+        "SiteForge",
+        "Offres",
+        "Espace pilote ↗"
+      ],
+      "links": 20,
+      "firstSection": 1184,
+      "screenshot": "r191-connect-1440.png",
+      "pass": true
+    },
+    {
+      "path": "bridge/",
+      "width": 1440,
+      "url": "/r191/bridge/",
+      "viewport": 1440,
+      "docWidth": 1425,
+      "bodyWidth": 1425,
+      "background": {
+        "childCount": 44,
+        "hidden": "true",
+        "pointerEvents": "none"
+      },
+      "css": [
+        "http://127.0.0.1:18850/assets/product-pages.css",
+        "http://127.0.0.1:18850/assets/r191-system.css"
+      ],
+      "scripts": [
+        "http://127.0.0.1:18850/assets/r191-ambient.js"
+      ],
+      "title": "Votre PC.\nSous votre contrôle.",
+      "canvasCount": 0,
+      "logo": {
+        "loaded": true,
+        "src": "http://127.0.0.1:18850/assets/synestra-studio-official-header.webp"
+      },
+      "navigation": [
+        "Studio",
+        "Connect",
+        "Bridge",
+        "SiteForge",
+        "Offres",
+        "Espace pilote ↗"
+      ],
+      "links": 22,
+      "firstSection": 1184,
+      "screenshot": "r191-bridge-1440.png",
+      "pass": true
+    },
+    {
+      "path": "siteforge/",
+      "width": 1440,
+      "url": "/r191/siteforge/",
+      "viewport": 1440,
+      "docWidth": 1425,
+      "bodyWidth": 1425,
+      "background": {
+        "childCount": 44,
+        "hidden": "true",
+        "pointerEvents": "none"
+      },
+      "css": [
+        "http://127.0.0.1:18850/assets/product-pages.css",
+        "http://127.0.0.1:18850/assets/r191-system.css"
+      ],
+      "scripts": [
+        "http://127.0.0.1:18850/assets/r191-ambient.js"
+      ],
+      "title": "Des idées claires.\nDes expériences vivantes.",
+      "canvasCount": 0,
+      "logo": {
+        "loaded": true,
+        "src": "http://127.0.0.1:18850/assets/synestra-studio-official-header.webp"
+      },
+      "navigation": [
+        "Studio",
+        "Connect",
+        "Bridge",
+        "SiteForge",
+        "Offres",
+        "Espace pilote ↗"
+      ],
+      "links": 23,
+      "firstSection": 1184,
+      "screenshot": "r191-siteforge-1440.png",
+      "pass": true
+    },
+    {
+      "path": "offres/",
+      "width": 1440,
+      "url": "/r191/offres/",
+      "viewport": 1440,
+      "docWidth": 1425,
+      "bodyWidth": 1425,
+      "background": {
+        "childCount": 44,
+        "hidden": "true",
+        "pointerEvents": "none"
+      },
+      "css": [
+        "http://127.0.0.1:18850/assets/product-pages.css",
+        "http://127.0.0.1:18850/assets/r191-system.css"
+      ],
+      "scripts": [
+        "http://127.0.0.1:18850/assets/r191-ambient.js"
+      ],
+      "title": "Le bon accès.\nSans surprise.",
+      "canvasCount": 0,
+      "logo": {
+        "loaded": true,
+        "src": "http://127.0.0.1:18850/assets/synestra-studio-official-header.webp"
+      },
+      "navigation": [
+        "Studio",
+        "Connect",
+        "Bridge",
+        "SiteForge",
+        "Offres",
+        "Espace pilote ↗"
+      ],
+      "links": 23,
+      "firstSection": 1184,
+      "screenshot": "r191-offres-1440.png",
+      "pass": true
+    },
+    {
+      "path": "studio",
+      "width": 390,
+      "url": "/r191/",
+      "viewport": 390,
+      "docWidth": 390,
+      "bodyWidth": 390,
+      "background": {
+        "childCount": 26,
+        "hidden": "true",
+        "pointerEvents": "none"
+      },
+      "css": [
+        "http://127.0.0.1:18850/assets/r191-system.css"
+      ],
+      "scripts": [
+        "http://127.0.0.1:18850/assets/siteforge-r190-hover-flux.js",
+        "http://127.0.0.1:18850/assets/r191-ambient.js"
+      ],
+      "title": "Imaginez plus grand.\nConstruisez autrement.",
+      "canvasCount": 1,
+      "logo": {
+        "loaded": true,
+        "src": "http://127.0.0.1:18850/assets/synestra-studio-official-header.webp"
+      },
+      "navigation": [
+        "Studio",
+        "Connect",
+        "Bridge",
+        "SiteForge",
+        "Offres",
+        "Notre démarche",
+        "Exemples",
+        "Réalisations",
+        "Questions",
+        "À propos",
+        "Espace pilote ↗"
+      ],
+      "links": 27,
+      "firstSection": 390,
+      "screenshot": "r191-studio-390.png",
+      "pass": true
+    },
+    {
+      "path": "connect/",
+      "width": 390,
+      "url": "/r191/connect/",
+      "viewport": 390,
+      "docWidth": 390,
+      "bodyWidth": 390,
+      "background": {
+        "childCount": 26,
+        "hidden": "true",
+        "pointerEvents": "none"
+      },
+      "css": [
+        "http://127.0.0.1:18850/assets/product-pages.css",
+        "http://127.0.0.1:18850/assets/r191-system.css"
+      ],
+      "scripts": [
+        "http://127.0.0.1:18850/assets/r191-ambient.js"
+      ],
+      "title": "Les outils se parlent.\nVous gardez la main.",
+      "canvasCount": 0,
+      "logo": {
+        "loaded": true,
+        "src": "http://127.0.0.1:18850/assets/synestra-studio-official-header.webp"
+      },
+      "navigation": [
+        "Studio",
+        "Connect",
+        "Bridge",
+        "SiteForge",
+        "Offres",
+        "Espace pilote ↗"
+      ],
+      "links": 20,
+      "firstSection": 350,
+      "screenshot": "r191-connect-390.png",
+      "pass": true
+    },
+    {
+      "path": "bridge/",
+      "width": 390,
+      "url": "/r191/bridge/",
+      "viewport": 390,
+      "docWidth": 390,
+      "bodyWidth": 390,
+      "background": {
+        "childCount": 26,
+        "hidden": "true",
+        "pointerEvents": "none"
+      },
+      "css": [
+        "http://127.0.0.1:18850/assets/product-pages.css",
+        "http://127.0.0.1:18850/assets/r191-system.css"
+      ],
+      "scripts": [
+        "http://127.0.0.1:18850/assets/r191-ambient.js"
+      ],
+      "title": "Votre PC.\nSous votre contrôle.",
+      "canvasCount": 0,
+      "logo": {
+        "loaded": true,
+        "src": "http://127.0.0.1:18850/assets/synestra-studio-official-header.webp"
+      },
+      "navigation": [
+        "Studio",
+        "Connect",
+        "Bridge",
+        "SiteForge",
+        "Offres",
+        "Espace pilote ↗"
+      ],
+      "links": 22,
+      "firstSection": 350,
+      "screenshot": "r191-bridge-390.png",
+      "pass": true
+    },
+    {
+      "path": "siteforge/",
+      "width": 390,
+      "url": "/r191/siteforge/",
+      "viewport": 390,
+      "docWidth": 390,
+      "bodyWidth": 390,
+      "background": {
+        "childCount": 26,
+        "hidden": "true",
+        "pointerEvents": "none"
+      },
+      "css": [
+        "http://127.0.0.1:18850/assets/product-pages.css",
+        "http://127.0.0.1:18850/assets/r191-system.css"
+      ],
+      "scripts": [
+        "http://127.0.0.1:18850/assets/r191-ambient.js"
+      ],
+      "title": "Des idées claires.\nDes expériences vivantes.",
+      "canvasCount": 0,
+      "logo": {
+        "loaded": true,
+        "src": "http://127.0.0.1:18850/assets/synestra-studio-official-header.webp"
+      },
+      "navigation": [
+        "Studio",
+        "Connect",
+        "Bridge",
+        "SiteForge",
+        "Offres",
+        "Espace pilote ↗"
+      ],
+      "links": 23,
+      "firstSection": 350,
+      "screenshot": "r191-siteforge-390.png",
+      "pass": true
+    },
+    {
+      "path": "offres/",
+      "width": 390,
+      "url": "/r191/offres/",
+      "viewport": 390,
+      "docWidth": 390,
+      "bodyWidth": 390,
+      "background": {
+        "childCount": 26,
+        "hidden": "true",
+        "pointerEvents": "none"
+      },
+      "css": [
+        "http://127.0.0.1:18850/assets/product-pages.css",
+        "http://127.0.0.1:18850/assets/r191-system.css"
+      ],
+      "scripts": [
+        "http://127.0.0.1:18850/assets/r191-ambient.js"
+      ],
+      "title": "Le bon accès.\nSans surprise.",
+      "canvasCount": 0,
+      "logo": {
+        "loaded": true,
+        "src": "http://127.0.0.1:18850/assets/synestra-studio-official-header.webp"
+      },
+      "navigation": [
+        "Studio",
+        "Connect",
+        "Bridge",
+        "SiteForge",
+        "Offres",
+        "Espace pilote ↗"
+      ],
+      "links": 23,
+      "firstSection": 350,
+      "screenshot": "r191-offres-390.png",
+      "pass": true
+    }
+  ],
+  "reduced": {
+    "ambient": false,
+    "prefers": true
+  },
+  "passed": 10,
+  "failed": 0,
+  "source": "Chrome CDP 18851/local HTTP 18850",
+  "status": "PASS"
+}
