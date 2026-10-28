@@ -45,8 +45,8 @@
     }
   },
   "public_deployment": "CLOUDFLARE_ACCESS_AUTH_REQUIRED_NOT_PUBLIC",
-  "browser_e2e": "OFFLINE_LOCAL_CHROME_PASS; GITHUB_DOWNLOADED_CHROME_E2E_RUNNING",
-  "status": "OFFLINE_ARTIFACT_AVAILABLE; PUBLIC_SITE_BLOCKED_BY_ACCESS",
+  "browser_e2e": "GITHUB_DOWNLOADED_STANDALONE_CHROME_ANGLE_WEBGL_E2E_PASS",
+  "status": "OFFLINE_FILE_DELIVERED_AND_SHA_VERIFIED_E2E_PASS; PUBLIC_LINK_NOT_LIVE_DUE_CLOUDFLARE_ACCESS",
   "recovery": {
     "readonly_diagnosis": {
       "rawgithack": "USER_REPORTS_HTTP_403",
@@ -73,13 +73,20 @@
       "http_status_download": 200,
       "downloaded_git_blob_sha_verified": true,
       "local_sha256_built": "88C1A29EBDCD34E9CCD8DDA18E6053C6DB4F6CDB957DEBE8094398D6A4AC62D7",
-      "download_on_windows_webgl_e2e": "PENDING"
+      "download_on_windows_webgl_e2e": "PASS exit_code=0"
     },
     "tests": {
       "cloudflare_build_gate": "120/120 PASS",
       "public_static_package": "3/3 PASS",
       "local_standalone_browser": "PASS 6 materials and mouse/touch mobile",
-      "public_site_e2e": "BLOCKED_BY_ACCESS"
+      "public_site_e2e": "BLOCKED_BY_ACCESS",
+      "downloaded_standalone_e2e": "PASS WebGL, 6 materials, pointer hover and full recovery, mouse/touch and mobile, JSON 18, no GPU errors",
+      "wave_diff_downloaded": {
+        "pixels_examined": 307840,
+        "changed_pixels": 10413,
+        "changed_percent": 3.3826013513513513,
+        "recovered_changed_pixels": 0
+      }
     },
     "owners_gate": "Explicit approval required before removing/exempting Cloudflare Access for public live URL."
   }
