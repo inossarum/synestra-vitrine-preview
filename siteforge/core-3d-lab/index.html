@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex,nofollow">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
-<title>SiteForge — Core énergétique 3D R163</title>
+<title>SiteForge — Laboratoire énergétique 3D R173.1</title>
 <style>
 :root{color-scheme:dark;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#050a14;color:#e7f4ff}
 *{box-sizing:border-box}
@@ -14,8 +14,8 @@ body{margin:0;min-height:100svh;padding:clamp(12px,3vw,30px);background:#050a14}
 main{width:min(100%,1240px);margin:0 auto;display:grid;grid-template-columns:minmax(0,1.18fr) minmax(320px,.82fr);align-items:start;gap:16px 20px}
 h1{grid-column:1/-1;font-size:clamp(1.15rem,2.4vw,1.5rem);font-weight:650;letter-spacing:.01em;margin:0}
 p{color:#9db3c8;font-size:.85rem;line-height:1.5;margin:13px 0 0}.lab-footer{grid-column:1/-1}
-.core-r108-stage{position:sticky;top:16px;isolation:isolate;overflow:hidden;min-width:0;height:clamp(395px,65svh,650px);border:1px solid rgba(129,186,231,.23);border-radius:23px;background:radial-gradient(ellipse 55% 60% at 50% 36%,rgba(33,62,119,.18),transparent 84%),linear-gradient(145deg,#0b1527,#050a14);box-shadow:0 30px 65px rgba(0,4,18,.29),inset 0 1px rgba(226,245,255,.08)}
-.core-r109-canvas{position:absolute;top:0;left:0;z-index:2;display:block;width:100%;height:100%;transform:scale(calc(.92 * var(--sphere-zoom,1)));transform-origin:center center;opacity:0;pointer-events:none;transition:opacity .5s ease}
+.core-r108-stage{touch-action:none;cursor:grab;position:sticky;top:16px;isolation:isolate;overflow:hidden;min-width:0;height:clamp(395px,65svh,650px);border:1px solid rgba(129,186,231,.23);border-radius:23px;background:radial-gradient(ellipse 55% 60% at 50% 36%,rgba(33,62,119,.18),transparent 84%),linear-gradient(145deg,#0b1527,#050a14);box-shadow:0 30px 65px rgba(0,4,18,.29),inset 0 1px rgba(226,245,255,.08)}
+.core-r108-stage.orbit-dragging{cursor:grabbing}\n.core-r108-stage:focus-visible{outline:2px solid #69dcb4;outline-offset:3px}\n.core-r109-canvas{position:absolute;top:0;left:0;z-index:2;display:block;width:100%;height:100%;transform:scale(calc(.92 * var(--sphere-zoom,1)));transform-origin:center center;opacity:0;pointer-events:none;transition:opacity .5s ease}
 .core-r109-stage[data-core-ready="true"] .core-r109-canvas{opacity:1}
 .core-r108-art{opacity:var(--fallback-opacity,1);position:absolute;left:50%;top:5%;transform:translateX(-50%) scale(calc(.92 * var(--sphere-zoom,1)));transform-origin:center center;width:min(100%,760px);height:350px;overflow:visible;pointer-events:none;transition:opacity .35s ease}
 .core-r109-stage[data-core-ready="true"] .core-r108-art{opacity:0}
@@ -57,22 +57,14 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 @media(prefers-reduced-motion:reduce){.core-r109-canvas,.core-r108-art{transition:none!important}}
 .vfx-advanced{grid-column:1/-1;border-top:1px solid #335a76;margin-top:10px;padding-top:8px}.vfx-advanced summary{cursor:pointer;min-height:42px;padding:10px 6px;color:#bfeeff;font-weight:600;list-style-position:inside}.vfx-advanced[open] summary{margin-bottom:12px}.vfx-advanced .control-group{margin:10px 0 16px}.vfx-advanced summary:focus-visible{outline:2px solid #7ce8fa;outline-offset:3px}
 [data-vfx-status]{background:#10283b;border:1px solid #315574;border-radius:9px;padding:9px 12px;color:#bfe9f9;font-weight:600;min-height:42px;display:flex;align-items:center}
-
-/* R170: Studio ambient shell only; the existing Core VFX shader, canvas and controls are untouched. */
-:root{--studio-violet:#a68af5;--studio-blue:#659cfa;--studio-cyan:#86e0f0;--studio-green:#42cb93}
-h1{position:relative;color:#eef4ff;text-shadow:0 0 12px rgba(101,156,250,.15)}
-h1::after{content:"";display:inline-block;width:48px;height:2px;vertical-align:middle;margin-left:14px;background:linear-gradient(90deg,var(--studio-violet),var(--studio-blue),var(--studio-cyan),var(--studio-green));background-size:220% 100%;animation:r170-lab-current 13s linear infinite}
-.core-r108-stage{animation:r170-lab-shell 16s ease-in-out infinite}
-@keyframes r170-lab-current{to{background-position:220% 50%}}
-@keyframes r170-lab-shell{0%,100%{box-shadow:0 30px 65px rgba(0,4,18,.29),inset 0 1px rgba(226,245,255,.08)}50%{box-shadow:0 30px 65px rgba(60,40,138,.26),inset 0 1px rgba(226,245,255,.13)}}
-@media(prefers-reduced-motion:reduce){h1::after,.core-r108-stage{animation:none!important}}
-
+.mote-toggle{margin:0 0 8px;background:#122b45;border-color:#3f6e8c}.mote-toggle[aria-pressed=true]{border-color:#65cbbb;box-shadow:inset 0 0 0 1px #244f6a}
+.magnetic-compare{display:flex;gap:10px;margin-top:13px}.magnetic-compare[hidden]{display:none}.magnetic-compare button{flex:1;min-width:0;padding:11px 9px;border:1px solid #3b6281;border-radius:9px;background:#102339;color:#d4e9fc;cursor:pointer}.magnetic-compare button[aria-pressed=true]{background:#15536a;color:#f3ffff;border-color:#68dcb4;box-shadow:inset 0 0 0 1px #69dcb4}.magnetic-demo{margin-top:10px;width:100%;cursor:pointer}.liquid-demo{margin-top:8px;width:100%;background:#213652;border-color:#6d82ab}.magnetic-compare button:focus-visible,.magnetic-demo:focus-visible{outline:2px solid #69dcb4;outline-offset:2px}
 </style>
 </head>
 <body>
 <main>
 <h1>SiteForge <span aria-hidden="true">·</span> Plasma Studio</h1>
-<div class="core-r108-stage core-r109-stage" role="img" aria-label="Nouvelle sphère énergétique plasma bleu-cyan-violet produite par le moteur VFX WebGL.">
+<div class="core-r108-stage core-r109-stage" tabindex="0" role="group" aria-label="Aperçu 3D interactif. Glisser pour faire tourner la sphère ; flèches pour orienter ; Home ou double-clic pour recentrer.">
 <canvas class="core-r109-canvas" width="960" height="570" aria-hidden="true"></canvas>
 <svg class="core-r108-art" viewBox="0 0 640 410" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
 <defs>
@@ -93,12 +85,31 @@ h1::after{content:"";display:inline-block;width:48px;height:2px;vertical-align:m
 </svg>
 </div>
 <form class="lab-controls" aria-label="Création de la nouvelle sphère plasma VFX" autocomplete="off">
-<div class="panel-head"><h2>Plasma Studio</h2><span class="preview-state">R166 · DYNAMIQUE ORGANIQUE</span></div>
-<p class="help">Prototype expérimental isolé R166 : courants animés en profondeur, pulsations décalées et énergie sans coque. La vitrine Synestra conserve sa version approuvée.</p>
+<div class="panel-head"><h2>Plasma Studio</h2><span class="preview-state">R175 · ÉCLATS INTERACTIFS</span></div>
+<p class="help">R175 : même plasma volumétrique, avec quelques éclats d'énergie 3D réagissant à la souris. Effet désactivable. Comparateurs R174 et R172.1 conservés, vitrine inchangée.</p>
+<fieldset class="control-group"><legend>✨ Éclats d'énergie 3D</legend>
+<button type="button" class="reset mote-toggle" data-mote-toggle aria-pressed="true">Éclats 3D : activés</button>
+<p class="help">De rares braises cyan/violet gravitent autour du Core. Effleurez-les avec la souris : elles s'écartent, puis reprennent leur orbite. Désactivable sans modifier les 18 réglages exportés.</p>
+</fieldset>
+<fieldset class="control-group" data-depth-comparison><legend>🔬 Comparaison du relief volumétrique</legend>
+<div class="magnetic-compare" aria-label="Comparer la lumière R173.1 et R174">
+<button type="button" data-depth-compare="prior" aria-pressed="false">Avant · R173.1</button>
+<button type="button" data-depth-compare="r174" aria-pressed="true">Après · R174</button>
+</div>
+<p class="help">Même matière, même angle et même mouvement : seule la profondeur optique change. Aucun paramètre JSON supplémentaire.</p>
+</fieldset>
 <fieldset class="control-group"><legend>✨ Création rapide</legend>
 <div class="control-row"><label class="control-label" for="sf-flowType"><span>Énergie qui traverse la sphère</span><output for="sf-flowType" data-sphere-value="flowType">Flux plasma</output></label>
-<select id="sf-flowType" data-sphere-control="flowType" data-default="0"><option value="0">Flux plasma</option><option value="1">Rubans magnétiques</option><option value="2">Voiles d’aurore</option><option value="3">Brume ionique</option><option value="4">Jets de fusion</option></select></div>
+<select id="sf-flowType" data-sphere-control="flowType" data-default="0"><option value="0">Flux plasma</option><option value="1">Rubans magnétiques</option><option value="2">Voiles d’aurore</option><option value="3">Brume ionique</option><option value="4">Jets de fusion</option><option value="5">Courants liquides</option></select></div>
 <p class="help">Le noyau, les couleurs et le volume restent indépendants du matériau énergétique choisi.</p>
+<div data-magnetic-compare-group class="magnetic-compare" aria-label="Comparer les rubans magnétiques R171 et R172.1">
+<button type="button" data-magnetic-compare="r171" aria-pressed="false">Avant · R171</button>
+<button type="button" data-magnetic-compare="r172" aria-pressed="true">Après · R172.1</button>
+</div>
+<button type="button" class="reset magnetic-demo" data-magnetic-demo>Afficher la démonstration magnétique (200 / 211 / 166 %)</button>
+<button type="button" class="reset liquid-demo" data-liquid-demo>Découvrir les courants liquides sphériques (R173.1)</button>
+<p class="help" data-magnetic-compare-hint hidden>Cliquez sur Avant / Après pour voir les différences sur la même sphère, à réglages et angle de caméra identiques.</p>
+
 <input id="sf-particlePreset" type="hidden" data-sphere-control="particlePreset" data-default="4" value="4">
 <p class="help">Flux pur, sans surcouche de particules. Le matériau énergétique sélectionné reste seul maître du rendu 3D.</p>
 <div class="control-row"><label class="control-label" for="sf-particleIntensity"><span>Émission VFX</span><output for="sf-particleIntensity" data-sphere-value="particleIntensity">100 %</output></label><input id="sf-particleIntensity" data-sphere-control="particleIntensity" type="range" min="0" max="200" value="100" step="1"></div>
@@ -119,6 +130,7 @@ h1::after{content:"";display:inline-block;width:48px;height:2px;vertical-align:m
 <details class="vfx-advanced"><summary>Réglages avancés</summary>
 <fieldset class="control-group"><legend>Émission et vitesse</legend>
 <input id="sf-particleDensity" type="hidden" data-sphere-control="particleDensity" data-default="100" value="100">
+<p class="help">0 % = pause réelle des courants ; reprise progressive de la vitesse.</p>
 <div class="control-row"><label class="control-label" for="sf-particleSpeed"><span>Vitesse des flux</span><output for="sf-particleSpeed" data-sphere-value="particleSpeed">100 %</output></label><input id="sf-particleSpeed" data-sphere-control="particleSpeed" type="range" min="0" max="250" value="100" step="1"></div>
 <input id="sf-particleSize" type="hidden" data-sphere-control="particleSize" data-default="100" value="100">
 <div class="control-row"><label class="control-label" for="sf-opacity"><span>Opacité générale</span><output for="sf-opacity" data-sphere-value="opacity">100 %</output></label><input id="sf-opacity" data-sphere-control="opacity" type="range" min="0" max="100" value="100" step="1"></div>

@@ -1,4 +1,4 @@
-/* SiteForge LAB R166 (isolated from the approved Synestra vitrine) — replaceable 3D volume flow materials on ONE WebGL renderer: luminous central core, sweeping cyan-violet vortex arms and depth-resolved energy. Existing WebGL emitter retained; 18 controls total.
+/* SiteForge LAB R175 (isolated from the approved Synestra vitrine) — replaceable 3D volume flow materials on ONE WebGL renderer: luminous central core, sweeping cyan-violet vortex arms and depth-resolved energy. Existing WebGL emitter retained; 18 controls total.
  * One GPU VFX program: quad volumetric plasma + particle shell, branching arcs, nucleus.
  * Historical marble shader, old arcs and their settings are REMOVED.
  * WebGL1, iPhone precision parity, mobile bounded particles, no network.
@@ -19,6 +19,48 @@
  const arcPanel=document.querySelector('[data-electric-options]');
  const status=(target,value)=>{if(target&&target.textContent!==value)target.textContent=value;};
  let schedule=()=>{};
+ // Visual comparison is a lab-only display mode, NOT a 19th JSON setting.
+ let compareVariant=1;
+ // Non-exported A/B optical quality switch; the JSON schema remains 18 fields.
+ let depthVariant=1;
+ // R175: restrained real GPU motes, separate from the exported 18 controls.
+ let motesEnabled=true,pointerX=9,pointerY=9,pointerForce=0,lastPointerX=null,lastPointerY=null;
+ const moteToggle=document.querySelector('[data-mote-toggle]');
+ const syncMotes=()=>{
+  if(moteToggle){
+   moteToggle.setAttribute('aria-pressed',String(motesEnabled));
+   moteToggle.textContent=motesEnabled?'Éclats 3D : activés':'Éclats 3D : désactivés';
+  }
+  stage.dataset.motesEnabled=String(motesEnabled);
+ };
+ const depthButtons=[...document.querySelectorAll('[data-depth-compare]')];
+ const syncDepthUI=()=>{
+  for(const button of depthButtons)button.setAttribute('aria-pressed',String((button.dataset.depthCompare==='r174'?1:0)===depthVariant));
+  stage.dataset.depthVariant=depthVariant?'r174':'prior';
+ };
+ const compareGroup=document.querySelector('[data-magnetic-compare-group]');
+ const compareHint=document.querySelector('[data-magnetic-compare-hint]');
+ const compareButtons=[...document.querySelectorAll('[data-magnetic-compare]')];
+ const syncCompareUI=()=>{
+  if(compareGroup)compareGroup.hidden=sel('flowType')!==1;
+  if(compareHint)compareHint.hidden=sel('flowType')!==1;
+  for(const button of compareButtons)button.setAttribute('aria-pressed',String((button.dataset.magneticCompare==='r172'?1:0)===compareVariant));
+  stage.dataset.magneticVariant=compareVariant?'r172':'r171';
+ };
+ const applyDemo=()=>{
+  for(const [key,value] of [['flowType','1'],['particleIntensity','200'],['coreLight','211'],['flowStructure','166']]){
+   if(controls[key])controls[key].value=value;
+  }
+  compareVariant=1;sync();schedule();
+ };
+ // R173 is a distinct material family, not an overlay or hidden JSON field.
+ const applyLiquidDemo=()=>{
+  for(const [key,value] of [['flowType','5'],['particleIntensity','160'],['coreLight','180'],['flowStructure','140'],['particleSpeed','100']]){
+   if(controls[key])controls[key].value=value;
+  }
+  compareVariant=1;sync();schedule();
+ };
+
  function sync(){
   for(const [key,e] of Object.entries(controls)){
    const out=document.querySelector('[data-sphere-value="'+key+'"]');
@@ -27,6 +69,9 @@
   }
   const electricMode=sel('flowType')===0&&sel('particlePreset')===1;
   if(arcPanel)arcPanel.hidden=!electricMode;
+  syncCompareUI();
+  syncDepthUI();
+  syncMotes();
   stage.style.setProperty('--sphere-zoom',String(num('diameter')));
   stage.style.setProperty('--fallback-opacity',String(num('opacity')));
  }
@@ -34,11 +79,31 @@
  const onChange=e=>{if(e.target?.hasAttribute('data-sphere-control')){sync();schedule();}};
  panel?.addEventListener('input',onChange);
  panel?.addEventListener('change',onChange);
+ panel?.addEventListener('click',event=>{
+  const toggle=event.target.closest('[data-magnetic-compare]');
+  if(toggle){compareVariant=toggle.dataset.magneticCompare==='r172'?1:0;syncCompareUI();schedule();}
+  if(event.target.closest('[data-magnetic-demo]'))applyDemo();
+  if(event.target.closest('[data-liquid-demo]'))applyLiquidDemo();
+  if(event.target.closest('[data-mote-toggle]')){
+   motesEnabled=!motesEnabled;
+   pointerForce=0;
+   syncMotes();schedule();
+  }
+  const depthToggle=event.target.closest('[data-depth-compare]');
+  if(depthToggle){
+   depthVariant=depthToggle.dataset.depthCompare==='r174'?1:0;
+   syncDepthUI();schedule();
+  }
+ });
+
  panel?.addEventListener('reset',e=>{
   e.preventDefault();for(const [key,input] of Object.entries(controls))input.value=defaults[key];
-  sync();schedule();
+  compareVariant=1;depthVariant=1;sync();schedule();
  });
  sync();
+ const launchDemo=new URLSearchParams(window.location.search).get('demo');
+ if(launchDemo==='magnetic')applyDemo();
+ if(launchDemo==='liquid')applyLiquidDemo();
  // Export uses the actual live controls, not startup defaults or GPU uniforms.
  // This stays available when reduced motion is enabled or WebGL is unavailable.
  const exportButton=document.querySelector('[data-export-json]');
@@ -92,18 +157,19 @@ uniform vec2 uResolution;
 uniform float uTime,uPass,uLayer;
 uniform vec2 uTilt;
 uniform vec4 uControls; // style, emission, speed, density
+uniform vec4 uPointer; // cursor XY in 3D preview, impulse, enabled (R175)
 uniform vec4 uShape; // sphere radius, shell, core radius, core flux
 uniform vec4 uEffects; // arc power, arc count, sprite size, opacity
 varying float vLife,vGlint;
 varying vec2 vAxis;
 float rnd(float x){return fract(sin(x*127.1+49.6)*43758.5453);}
 void main(){
- if(uPass>3.5){
+ if(uPass>3.5&&uPass<4.5){
   vLife=1.;vGlint=1.;vAxis=vec2(1.,0.);gl_PointSize=1.;
   gl_Position=vec4(aPosition,0.,1.);return;
  }
  float i=floor(aSeed*2048.),a=rnd(i+27.)*6.283185;
- float depth=rnd(i+41.)*2.-1.,t=uTime*max(.05,uControls.z);
+ float depth=rnd(i+41.)*2.-1.,t=uTime;
  float radius=.64*clamp(uShape.x,.5,1.5);
  vec3 p=vec3(0.);
  float life=1.,sizeFactor=1.;
@@ -139,6 +205,23 @@ void main(){
   life=smoothstep(.015,.11,phase)*(1.-smoothstep(.71,.92,phase));
   life*=mix(.28,1.,step(0.,p.z))*clamp(uEffects.x,0.,3.);
   vAxis=dir;sizeFactor=.77;
+ }else if(uPass>4.5){
+  // R175: three-dimensional orbiting energy embers, outside the core.
+  float moteDepth=rnd(i*5.23+13.)*2.-1.;
+  float moteRadius=radius*(.99+.24*rnd(i*7.19+17.));
+  float polar=i*2.39996323+t*(.055+.038*rnd(i+47.));
+  float ring=sqrt(max(.0,1.-moteDepth*moteDepth));
+  p=vec3(cos(polar)*ring*moteRadius,
+         sin(polar)*ring*moteRadius,
+         moteDepth*moteRadius);
+  p.xy+=.028*vec2(sin(t*.41+i*2.11),cos(t*.36+i*.91));
+  // Parallax: near motes grow and drift faster than far motes.
+  p.xy*=1.+.16*moteDepth;
+  vec2 away=p.xy-uPointer.xy;
+  float proximity=1.-smoothstep(.07,.40,length(away));
+  p.xy+=away/max(length(away),.008)*proximity*.38*uPointer.z;
+  life=(.73+.27*rnd(i+11.))*(.81+.19*smoothstep(-1.,1.,moteDepth))*uPointer.w;
+  vAxis=vec2(cos(polar),sin(polar));sizeFactor=.78+.35*moteDepth;
  }else if(uPass>2.5){
   float ang=a+t*.32;
   float r=pow(rnd(i*2.31+37.),1.5)*.13*clamp(uShape.z,.04,2.);
@@ -166,6 +249,7 @@ void main(){
  vLife=life;vGlint=.65+.35*rnd(i*3.17+19.);
  gl_PointSize=clamp((3.2+4.5*rnd(i+8.))*uEffects.z*sizeFactor*
        uResolution.y/460.*mix(1.85,1.,uLayer),1.,29.);
+ if(uPass>4.5)gl_PointSize=clamp((11.0+9.0*rnd(i+8.))*(.90+.14*depth)*uResolution.y/518.,6.,22.);
  gl_Position=vec4(p.x*uResolution.y/max(uResolution.x,1.),p.y-.08,0.,1.);
 }
 `;
@@ -180,10 +264,13 @@ varying vec2 vAxis;
 uniform vec2 uResolution;
 uniform float uTime,uPass,uLayer;
 uniform vec4 uControls,uShape,uEffects;
+uniform vec4 uPointer; // R176: cursor displacement drives the actual volumetric waves
 uniform vec3 uCore,uCyan,uViolet,uDeep;
 uniform vec2 uTilt;
 uniform float uVolumeSteps;
-uniform vec2 uFlow; // material family 0..4, ribbon width 0.3..2
+uniform vec2 uFlow;
+uniform float uCompare; // R171/R172.1 magnetic A/B
+uniform float uDepthRefine; // R174 optics A/B, not a JSON setting
 float hash3(vec3 v){v=fract(v*.1031);v+=dot(v,v.yzx+33.33);return fract((v.x+v.y)*v.z);}
 float noise3(vec3 p){
  vec3 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
@@ -196,7 +283,22 @@ void main(){
  vec2 p=(gl_FragCoord.xy/uResolution-.5)*2.;
  p.x*=uResolution.x/max(uResolution.y,1.);p.y+=.08;
  float radius=.64*clamp(uShape.x,.5,1.5);
- if(uPass>3.5){
+ if(uPass>4.5){
+  // R175 optical pass: sparse but legible directional sparks, not a starfield.
+  vec2 q=gl_PointCoord*2.-1.;
+  float r2=dot(q,q);
+  vec2 axis=normalize(vAxis);
+  float along=dot(q,axis),across=dot(q,vec2(-axis.y,axis.x));
+  float coreGlow=exp(-r2*29.0),aura=exp(-r2*4.7);
+  float filament=exp(-across*across*23.0-along*along*4.5);
+  float alpha=clamp(coreGlow*.82+filament*.45+aura*.33,0.,1.)*vLife*clamp(uEffects.w,0.,1.);
+  float hue=step(.5,fract(vGlint*7.73));
+  vec3 col=mix(uCyan,uViolet*1.50+uCyan*.10,hue);
+  vec3 hot=mix(col,vec3(.86,.97,1.),.24);
+  gl_FragColor=vec4(col*(aura*.55+filament*.58)+hot*coreGlow*1.44,alpha);
+  return;
+ }
+ if(uPass>3.5&&uPass<4.5){
   // True 3D ray integration. The image reference is a luminous white-blue
   // central star enclosed in translucent indigo space, with five broad
   // cyan/violet plasma arms winding through front and rear depth layers.
@@ -204,7 +306,7 @@ void main(){
   if(xy>=radius*1.025)discard;
   float halfDepth=sqrt(max(0.,radius*radius-dot(p,p)));
   float stride=(2.*halfDepth)/max(uVolumeSteps,1.);
-  float t=uTime*max(.04,uControls.z);
+  float t=uTime;
   float rotY=uTilt.x*1.5,rotX=uTilt.y*1.5;
   float sy=sin(rotY),cy=cos(rotY),sx=sin(rotX),cx=cos(rotX);
   vec3 accum=vec3(0.);
@@ -213,6 +315,17 @@ void main(){
   float emission=clamp(uControls.y,0.,2.);
   // Compact core size independent of its radiance. Power never widens the core.
   float nucleusRadius=max(.018,radius*uShape.z*.105);
+  // R176: an impulse bends the existing 3D flow, with no extra light layer.
+  // Compute once per ray, rather than adding trigonometry to every depth step.
+  vec2 cursorDelta=p-uPointer.xy;
+  float cursorDistance=length(cursorDelta);
+  vec2 radial=cursorDelta/max(cursorDistance,.015);
+  vec2 tangent=vec2(-radial.y,radial.x);
+  float influence=uPointer.z*(1.-smoothstep(.05,.53,cursorDistance));
+  float centreGuard=smoothstep(.075,.20,length(p));
+  float ripplePhase=cursorDistance*22.0-t*6.0;
+  vec2 waveWarp=(radial*cos(ripplePhase)*.13+
+                 tangent*sin(ripplePhase*.81)*.105)*influence*centreGuard;
   for(int i=0;i<22;i++){
     if(float(i)>=uVolumeSteps)break;
     float z=halfDepth-(float(i)+.5)*stride;
@@ -221,7 +334,9 @@ void main(){
     q=vec3(q.x*cy+q.z*sy,
            q.y*cx-(q.z*cy-q.x*sy)*sx,
            q.y*sx+(q.z*cy-q.x*sy)*cx);
-    float distance3D=length(q)/radius;
+    vec3 undisturbedQ=q;
+    q.xy+=waveWarp*(.72+.28*(1.-smoothstep(0.,radius,abs(z))));
+    float distance3D=length(undisturbedQ)/radius;
     float planar=length(q.xy)/radius;
     float angle=atan(q.y,q.x);
     float broad=noise3(q*3.8+vec3(t*.12,-t*.11,t*.08));
@@ -236,8 +351,8 @@ void main(){
     float volumeFog=clamp(.23+.30*broad+.18*detail,0.,1.);
     float hollow=1.-smoothstep(.2,.83,abs(broad-detail)*2.0);
     float interior=1.-smoothstep(.92,1.02,distance3D);
-    float core=exp(-dot(q,q)/(nucleusRadius*nucleusRadius)*1.65);
-    float coreHalo=exp(-dot(q,q)/(nucleusRadius*nucleusRadius)*.18);
+    float core=exp(-dot(undisturbedQ,undisturbedQ)/(nucleusRadius*nucleusRadius)*1.65);
+    float coreHalo=exp(-dot(undisturbedQ,undisturbedQ)/(nucleusRadius*nucleusRadius)*.18);
     float electrical=0.,vortex=0.,fusion=0.;
     if(uControls.x>.5&&uControls.x<1.5){
       electrical=pow(max(0.,.5+.5*cos(winding*2.2+detail*9.)),23.);
@@ -268,7 +383,16 @@ void main(){
                           .09*sin((q.x-q.y)*2.3+flowAge*.7));
       float internalShear=.43*sin(q.z*4.3+drifted.y*3.1+flowAge*1.7)
                          +.21*cos(q.x*4.1-drifted.z*2.2-flowAge*.9);
-      float basePhase=4.3*log(planar+.23)-t*.27+wander*2.2+depthTwist+internalShear
+      // R170: spatially bent lanes; only periodic integer angle harmonics remain.
+      float streamBend=.44*sin(drifted.x*4.7+drifted.z*5.2-t*.18)
+                      +.24*cos(drifted.y*6.3-drifted.z*3.8+t*.14);
+      // Depth-layer energy envelopes prevent all six principal streams from
+      // reaching the rim at identical strength (the old pinwheel silhouette).
+      float depthEnvelope=.60+.40*smoothstep(.16,.84,
+          .5+.5*sin(q.z*5.7+q.x*3.2-q.y*2.8+t*.11));
+      float filamentContrast=.68+.32*smoothstep(.23,.76,
+          noise3(drifted*2.8+vec3(.31,-.27,.19)));
+      float basePhase=4.3*log(planar+.23)-t*.27+wander*2.2+depthTwist+internalShear+streamBend
                     +.75*sin(q.z*2.9+planar*6.1)*sin(angle*3.+q.z*1.7);
       float organicLane=angle*6.+basePhase;
       float localPhase=sin(angle*2.+basePhase*.33+q.x*3.4+q.z*2.1-t*.17);
@@ -286,13 +410,24 @@ void main(){
       float breakup=.64+.36*smoothstep(.23,.72,broad+.19*sin(q.z*8.+t*.3));
       // Sustain thin currents without restoring surface haze or opaque shell.
       flowCurrents=(primaryVein*.91+tributary*.48+hairline*.50+wisp*.22)
-                   *pulse*breakup*shearEnvelope*1.72;
+                   *pulse*breakup*shearEnvelope*depthEnvelope*filamentContrast*2.10;
     }else if(uFlow.x<1.5){
-      // Magnetic flux tubes: closed, strongly curved field-loop bands.
+      // R172.1: visible material relief; R171 baseline can be shown A/B.
+      // Main four magnetic loops and center remain strictly unchanged.
       float fieldAngle=angle*4.+q.z*6.5+sin(planar*9.+broad*2.2-t*.65)*2.;
       float fieldLoop=pow(max(0.,.5+.5*cos(fieldAngle)),max(2.,7./ribbonWidth));
       float layering=pow(max(0.,.5+.5*cos(q.z*11.+planar*7.-t*.43)),3.);
-      flowCurrents=fieldLoop*(.40+.68*layering);
+      float r171Currents=fieldLoop*(.40+.68*layering);
+      // The outer envelope still comes from the same magnetic field.
+      // Bright sculpted rails and internal braids replace uniform soft ribbons.
+      float ridgeA=pow(max(0.,.5+.5*cos(fieldAngle+.62)),max(4.,11./ribbonWidth));
+      float ridgeB=pow(max(0.,.5+.5*cos(fieldAngle-.73)),max(4.,11./ribbonWidth));
+      float braidTrace=pow(max(0.,.5+.5*cos(fieldAngle*3.+q.z*4.3-t*.41)),
+                            max(8.,20./ribbonWidth));
+      float volumetricContrast=.48+.52*smoothstep(-.64,.68,q.z/max(radius,.01));
+      float r172Currents=fieldLoop*(.27+.43*layering)*volumetricContrast
+                  +fieldLoop*(ridgeA*.88+ridgeB*.70+braidTrace*.86)*volumetricContrast;
+      flowCurrents=mix(r171Currents,r172Currents,uCompare);
       flowFog=.54;
     }else if(uFlow.x<2.5){
       // Aurora: flowing translucent vertical sheets, not spiralling plasma.
@@ -308,13 +443,47 @@ void main(){
       float swirls=.5+.5*cos(q.z*5.+planar*4.-t*.22+depthWarp*2.);
       flowCurrents=densityCloud*(.28+.28*swirls);
       flowFog=1.55+.55*ribbonWidth;
-    }else{
-      // Fusion jets: eight radial stellar emission cones with local ripples.
+    }else if(uFlow.x<4.5){
+      // Fusion jets retained bit-for-bit from R172.1.
       float radialPhase=angle*8.+q.z*3.4+depthWarp*2.3-t*.42;
       float jets=pow(max(0.,.5+.5*cos(radialPhase)),max(2.,9./ribbonWidth));
       float outward=smoothstep(.08,.36,planar)*exp(-distance3D*1.2);
       flowCurrents=jets*(.50+.86*outward);
       flowFog=.40;
+    }else{
+      // R173.1: spherical, coherent liquid field. Four broad currents form
+      // a 360-degree sphere instead of the earlier single detached sheet.
+      // Integer angular harmonics remain seamless across atan +/-PI.
+      float liquidFlowAngle=angle*4.+q.z*5.3
+           +2.18*sin(planar*7.2+q.y*1.7-t*.30)
+           +.92*sin(q.x*4.0-q.z*3.2-t*.24)
+           +.63*cos(q.y*4.4+q.z*2.7+t*.28);
+      float liquidPhase=liquidFlowAngle;
+      float liquidMain=pow(max(0.,.5+.5*cos(liquidPhase)),
+                            max(2.6,5.6/ribbonWidth));
+      float liquidSheet=liquidMain;
+      float liquidCurl=angle*8.+q.z*8.5-t*.34
+           +2.1*sin(planar*8.5-q.y*2.4+t*.24)
+           +.45*sin(q.x*3.7+q.z*3.8);
+      float curlingWake=pow(max(0.,.5+.5*cos(liquidCurl)),
+                             max(6.,13./ribbonWidth));
+      float liquidCrest=pow(max(0.,.5+.5*cos(liquidPhase+.48
+                             +.40*sin(q.z*3.5-t*.27))),
+                             max(5.,12./ribbonWidth));
+      float liquidEdge=liquidCrest;
+      float liquidTributary=pow(max(0.,.5+.5*cos(angle*12.
+               +q.z*10.0+2.0*sin(planar*8.5+t*.15)-t*.25)),
+               max(9.,23./ribbonWidth));
+      float liquidRim=liquidTributary;
+      float depthSeparation=.70+.30*smoothstep(-.75,.75,q.z/max(radius,.01));
+      float depthTide=depthSeparation;
+      float travellingCrest=.83+.17*sin(planar*8.5-q.z*2.2+t*.53);
+      float centreBridge=.78+.22*(1.-smoothstep(.12,.49,planar));
+      flowCurrents=(liquidMain*(.60+.34*curlingWake)
+                 +liquidCrest*.46*liquidMain
+                 +liquidTributary*.24*liquidMain)
+                 *depthTide*travellingCrest*centreBridge*2.12;
+      flowFog=.36;
     }
     float currents=0.;
     currents=flowCurrents;
@@ -322,12 +491,20 @@ void main(){
     // Shell-free emission: only flow currents and nucleus contribute to optical density.
     float density=(currents*.43*emission+
                    core*.69+coreHalo*.11)*interior;
-    float absorption=clamp(density*stride*5.2,0.,.49);
+    // R174: quality pass inside the SAME ray, emphasizing near filaments
+    // and cutting near/far optical crowding without a shell or new GPU pass.
+    float frontLayer=.27+1.13*smoothstep(-.72,.80,q.z/max(radius,.01));
+    float filamentPeak=smoothstep(.30,1.45,currents);
+    float refinedDensity=(currents*(.16+.34*filamentPeak)*emission
+                          *frontLayer+core*.69+coreHalo*.11)*interior;
+    float absorption=clamp(mix(density,refinedDensity,uDepthRefine)*stride*5.2,0.,.49);
     vec3 blue=mix(uDeep*.65,uViolet*.69,clamp(distance3D*.72+broad*.42,0.,1.));
     float violetBand=.5+.5*sin(angle*3.0+q.z*4.0+broad*2.2);
     vec3 ion=mix(uCyan,uViolet,clamp(.12+.72*violetBand,0.,1.));
     vec3 filamentColor=mix(blue,ion,clamp(currents*.83+.11,0.,1.));
+    float refinedRadianceScale=(.34+1.05*filamentPeak)*frontLayer;
     vec3 radiance=filamentColor*(.50+currents*1.30)
+                  *mix(1.,refinedRadianceScale,uDepthRefine)
                   +uCyan*coreHalo*.50
                   +uCore*core*pow(max(uShape.w,0.),1.35)*2.4;
     accum+=trans*radiance*absorption;
@@ -387,7 +564,7 @@ void main(){
  }
  gl.deleteShader(vert);gl.deleteShader(frag);
  const A=gl.getAttribLocation(program,'aPosition'),S=gl.getAttribLocation(program,'aSeed');
- const keys=['uResolution','uTime','uPass','uLayer','uTilt','uControls','uShape','uEffects','uCore','uCyan','uViolet','uDeep','uVolumeSteps','uFlow'];
+ const keys=['uResolution','uTime','uPass','uLayer','uTilt','uControls','uShape','uEffects','uCore','uCyan','uViolet','uDeep','uVolumeSteps','uFlow','uCompare','uDepthRefine','uPointer'];
  const U=Object.fromEntries(keys.map(k=>[k,gl.getUniformLocation(program,k)]));
  if(A<0||S<0||keys.some(k=>U[k]===null)){status(mainStatus,'GPU : paramètres incomplets.');return;}
  const quad=gl.createBuffer(),seeds=gl.createBuffer();if(!quad||!seeds)return;
@@ -397,7 +574,11 @@ void main(){
  gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(Array.from({length:MAX},(_,i)=>(i+.5)/MAX)),gl.STATIC_DRAW);
  let active=true,visible=true,frame=0,last=0,lastFrame=0,elapsed=0,tiltX=0,tiltY=0;
  function resize(){
-  const w=canvas.clientWidth,h=canvas.clientHeight;if(w<10||h<10)return false;
+  // The WebGL canvas must follow the actual sticky preview panel size. Its
+  // HTML width/height attributes (960x570) are only a pre-init fallback.
+  const w=stage.clientWidth,h=stage.clientHeight;if(w<10||h<10)return false;
+  if(canvas.style.width!==w+'px')canvas.style.width=w+'px';
+  if(canvas.style.height!==h+'px')canvas.style.height=h+'px';
   const mobile=window.innerWidth<=700;
   const scale=Math.min(window.devicePixelRatio||1,mobile?1.5:2.25,
     Math.sqrt((mobile?650000:1500000)/(w*h)));
@@ -408,8 +589,9 @@ void main(){
  function draw(now){
   frame=0;if(!active||!visible||document.visibilityState!=='visible')return;
   if(lastFrame&&now-lastFrame<32){frame=requestAnimationFrame(draw);return;}
+  const frameStep=lastFrame?Math.min(.15,Math.max(0,(now-lastFrame)/1000)):.033;
   if(!resize())return;lastFrame=now;
-  if(last)elapsed+=Math.min((now-last)/1000,.06);last=now;
+  if(last)elapsed+=Math.min((now-last)/1000,.06)*Math.max(0,num('particleSpeed'));last=now;
   const mobile=window.innerWidth<=700,preset=sel('particlePreset');
   const extra=preset!==4&&num('particleIntensity')>0&&num('particleDensity')>0;
   const sphereCount=mobile?1480:MAX;
@@ -417,12 +599,20 @@ void main(){
   const lightningCount=electricalMode&&num('arcIntensity')>0&&num('arcDensity')>0
     ?Math.min(mobile?928:1740,Math.floor((mobile?11:20)*num('arcDensity'))*58):0;
   const coreCount=mobile?160:260;
+  const moteCount=mobile?28:46;
   const extraCount=Math.min(mobile?650:MAX,Math.round((mobile?340:560)*num('particleDensity')));
   gl.useProgram(program);
   gl.uniform2f(U.uResolution,canvas.width,canvas.height);
   gl.uniform1f(U.uTime,elapsed);gl.uniform2f(U.uTilt,tiltX,tiltY);
   gl.uniform1f(U.uVolumeSteps,mobile?14:22);
   gl.uniform2f(U.uFlow,sel('flowType'),num('flowStructure'));
+  gl.uniform1f(U.uCompare,compareVariant);
+  gl.uniform1f(U.uDepthRefine,depthVariant);
+  gl.uniform4f(U.uPointer,pointerX,pointerY,pointerForce,motesEnabled?1:0);
+  stage.dataset.waveStrength=pointerForce.toFixed(3);
+  // Time-based damping: identical recovery on fast GPUs and slower SwiftShader.
+  pointerForce*=Math.exp(-3.6*frameStep);
+  if(pointerForce<.004)pointerForce=0;
   gl.uniform4fv(U.uControls,new Float32Array([
     preset,num('particleIntensity'),num('particleSpeed'),num('particleDensity')
   ]));
@@ -459,6 +649,11 @@ void main(){
   }
   // The ray-marched nucleus is authoritative; avoid a second speckled core.
   if(extra)emit(0,extraCount);
+  if(motesEnabled){
+   gl.uniform1f(U.uPass,5);
+   gl.uniform1f(U.uLayer,0);
+   gl.drawArrays(gl.POINTS,0,moteCount);
+  }
   gl.disable(gl.BLEND);
   status(vfxStatus,'Plasma GPU actif · '+(extra?extraCount+' particules':'particules additionnelles désactivées')+
     ' · '+Math.floor(lightningCount/58)+' éclairs');
@@ -475,13 +670,64 @@ void main(){
  },{threshold:.01});observer.observe(stage);
  const resizeObserver=new ResizeObserver(()=>schedule());resizeObserver.observe(canvas);
  document.addEventListener('visibilitychange',()=>{last=0;schedule();});
+ // R171: persistent bounded volume orbit. Touch gestures start only on the
+ // preview; form sliders, scrolling elsewhere and exported JSON remain independent.
+ const orbit={pointerId:null,x:0,y:0};
+ const updateOrbit=()=>{
+  stage.dataset.orbitYaw=tiltX.toFixed(3);
+  stage.dataset.orbitPitch=tiltY.toFixed(3);
+  schedule();
+ };
+ const resetOrbit=()=>{tiltX=0;tiltY=0;updateOrbit();};
+ stage.addEventListener('pointerdown',event=>{
+  if(orbit.pointerId!==null||!event.isPrimary||event.pointerType==='mouse'&&event.button!==0)return;
+  orbit.pointerId=event.pointerId;orbit.x=event.clientX;orbit.y=event.clientY;
+  stage.setPointerCapture(event.pointerId);
+  stage.classList.add('orbit-dragging');
+  stage.focus({preventScroll:true});
+ });
  stage.addEventListener('pointermove',event=>{
-  if(event.pointerType==='touch')return;
+  if(event.isPrimary){
+   const rect=stage.getBoundingClientRect();
+   const x=((event.clientX-rect.left)/Math.max(rect.width,1)-.5)*2*rect.width/Math.max(rect.height,1);
+   const y=(.5-(event.clientY-rect.top)/Math.max(rect.height,1))*2+.08;
+   if(lastPointerX!==null){
+    const moved=Math.hypot(event.clientX-lastPointerX,event.clientY-lastPointerY);
+    pointerForce=Math.max(pointerForce,Math.min(1,moved/32));
+   }
+   pointerX=x;pointerY=y;lastPointerX=event.clientX;lastPointerY=event.clientY;
+   stage.dataset.pointerImpulse=pointerForce.toFixed(3);
+  }
+  if(event.pointerId!==orbit.pointerId)return;
   const r=stage.getBoundingClientRect();
-  tiltX=Math.max(-.28,Math.min(.28,(event.clientX-r.left)/r.width-.5));
-  tiltY=Math.max(-.22,Math.min(.22,(event.clientY-r.top)/r.height-.5));
- },{passive:true});
- stage.addEventListener('pointerleave',()=>{tiltX=0;tiltY=0;},{passive:true});
+  tiltX=Math.max(-1.05,Math.min(1.05,tiltX+(event.clientX-orbit.x)/Math.max(r.width,1)*2.2));
+  tiltY=Math.max(-.72,Math.min(.72,tiltY+(event.clientY-orbit.y)/Math.max(r.height,1)*1.45));
+  orbit.x=event.clientX;orbit.y=event.clientY;updateOrbit();
+ });
+ const stopOrbit=event=>{
+  if(event.pointerId!==orbit.pointerId)return;
+  if(stage.hasPointerCapture(event.pointerId))stage.releasePointerCapture(event.pointerId);
+  orbit.pointerId=null;stage.classList.remove('orbit-dragging');
+ };
+ stage.addEventListener('pointerleave',()=>{
+  // Keep the last contact point until the wave naturally dissipates.
+  lastPointerX=null;lastPointerY=null;
+ });
+ stage.addEventListener('pointerup',stopOrbit);
+ stage.addEventListener('pointercancel',stopOrbit);
+ stage.addEventListener('dblclick',resetOrbit);
+ stage.addEventListener('keydown',event=>{
+  const delta=.12;
+  if(event.key==='Home'){event.preventDefault();resetOrbit();return;}
+  if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key))return;
+  event.preventDefault();
+  if(event.key==='ArrowLeft')tiltX=Math.max(-1.05,tiltX-delta);
+  if(event.key==='ArrowRight')tiltX=Math.min(1.05,tiltX+delta);
+  if(event.key==='ArrowUp')tiltY=Math.max(-.72,tiltY-delta);
+  if(event.key==='ArrowDown')tiltY=Math.min(.72,tiltY+delta);
+  updateOrbit();
+ });
+ updateOrbit();
  canvas.addEventListener('webglcontextlost',event=>{
   event.preventDefault();active=false;
   if(frame)cancelAnimationFrame(frame);frame=0;

@@ -1,0 +1,41 @@
+{
+  "schema": "synestra.siteforge.preview_delivery_recovery.v1",
+  "date": "2026-10-28",
+  "mission_id": "SYN_SITEFORGE_R176_PREVIEW_403_RECOVERY",
+  "issue": "User reports HTTP 403 on supplied raw.githack previews.",
+  "root_cause": [
+    "RawGitHack external HTML proxy is not an accountable delivery channel, may show notice/403.",
+    "Cloudflare Pages existing project synestra-vitrine-preview has preview branch allowlist excluding R176 branches.",
+    "R176 branch was based on earlier independent lab and fails current Pages build due 10 stale vitrine assertions.",
+    "Latest successfully deployed R169 preview can serve as isolated preview base, with only R176 lab shader/UI transferred."
+  ],
+  "source": {
+    "cloudflare_project": "synestra-vitrine-preview",
+    "source_type": "github",
+    "preview_base_commit": "bd6f159a5d58f1c05bcfd37b5f778614563724b4",
+    "siteforge_source_commit": "0cc71d8cc270395009e4c62e049bc54942c328c4",
+    "R176_shader_blob": "364091e19605de48e63d079178c52e626018d847",
+    "R176_lab_html_blob": "c2924ebdf6ecfd4ad56f4312ea5a1dc1d7718589",
+    "new_preview_branch": "task/SYN_SITEFORGE_R176_PAGES_DELIVERY_20261028"
+  },
+  "remediation": {
+    "only_two_lab_runtime_files_transferred": true,
+    "test_assertions_updated": 4,
+    "historical_test_changes": "Replace obsolete R166 badge and R170 decorative shell assertions with R175 real interactive lab UI; pin the R169 official preview shader's independently observed current FNV fingerprint. No production runtime code changed.",
+    "cloudflare_build_command": "node --check assets/core-r109-webgl.js && node --test tests/site_contract.test.mjs tests/vitrine_r96_official_logo_kinetic.test.mjs tests/vitrine_r98_brand_restraint.test.mjs tests/vitrine_r99_corrected_y_banner.test.mjs tests/vitrine_r100_gallery.test.mjs tests/vitrine_r104_products_core.test.mjs && node tools/build_vitrine_static.mjs",
+    "build_local": {
+      "passed": 120,
+      "total": 120,
+      "fail": 0,
+      "static_export": "PASS",
+      "file_count": 49,
+      "html_exists": true,
+      "shader_exists": true
+    },
+    "scope": "preview branch only; main and production settings unchanged",
+    "notes": "Avoid rawgithack links; requires Pages git preview allowlist branch-specific inclusion and actual public URL E2E."
+  },
+  "public_deployment": "PENDING",
+  "browser_e2e": "PENDING",
+  "status": "CANDIDATE_NOT_RELEASE"
+}

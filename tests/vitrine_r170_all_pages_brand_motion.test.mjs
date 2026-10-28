@@ -72,6 +72,6 @@ test('R170 Signal and the two labs retain their runtimes and reduced-motion cont
   const core=read('siteforge/core-3d-lab/index.html');
   assert.match(lab,/synestra-studio-official-symbol\.webp/);
   assert.match(lab,/animation:r170-lab-mark 10s ease-in-out infinite/);
-  assert.match(core,/@keyframes r170-lab-shell/);
+  assert.match(core,/data-mote-toggle/); // R175/R176 interactive energy replaces R170 decorative shell
   assert.match(core,/<canvas class="core-r109-canvas"/);
 });

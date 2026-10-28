@@ -1,0 +1,5 @@
+# Recovery — R176 403
+
+La prévisualisation RawGitHack était un mauvais canal : 403 signalés par le propriétaire. Cloudflare Pages existant (`synestra-vitrine-preview`) est le bon canal, mais sa liste blanche exclut les branches R176. La branche source R176 avait 10 échecs des tests de vitrine; sa publication directe était donc impossible sans changer des invariants historiques. Réparation ciblée : nouvelle branche de prévisualisation à partir du dernier déploiement Cloudflare R169 vert `bd6f159a`, import des deux fichiers R176 de moteur et interface, adaptation ciblée de quatre assertions obsolètes aux comportements réellement présents. Commande de build Pages inchangée : 120/120 tests PASS, export 49 fichiers PASS. Ne pas mettre à jour `main`, ne pas activer production. Ajouter uniquement la branche de preview au projet. Effectuer E2E HTTP puis Chrome avant de fournir lien.
+
+Git R176 provenance : `0cc71d8cc270395009e4c62e049bc54942c328c4`. Rollback : retirer la branche de preview de l'allowlist et supprimer aucun contenu automatiquement; conserver base R169 `bd6f159a5d58f1c05bcfd37b5f778614563724b4`.
