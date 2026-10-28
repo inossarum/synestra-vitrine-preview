@@ -71,6 +71,21 @@ footer{border-top:1px solid #dce3ea;padding:2rem 0}
 .sf-atelier .panel h1{font-size:clamp(2.7rem,7vw,6rem)}.sf-atelier .sf-kicker{color:#9f3e28}
 .sf-atelier .action{background:#943a24;color:white}.sf-atelier .action:hover{box-shadow:0 12px 32px #973e2f50}
 .sf-atelier footer{color:#655d52;border-color:#d8c6b2}
+
+/* R170 Synestra global brand framing; each SiteForge visual theme stays intentionally independent. */
+:root{--syn-studio-violet:#a68af5;--syn-studio-blue:#659cfa;--syn-studio-cyan:#86e0f0;--syn-studio-green:#42cb93;}
+header .top strong{position:relative;display:inline-flex;align-items:center;gap:.6rem;animation:r170-brand-drift 12s ease-in-out infinite;}
+header .top strong::before{content:"";display:inline-block;width:24px;height:5px;border-radius:999px;
+background:linear-gradient(95deg,var(--syn-studio-violet),var(--syn-studio-blue),var(--syn-studio-cyan),var(--syn-studio-green));
+background-size:240% 100%;animation:r170-brand-spectrum 10s linear infinite;}
+.sf-demo-bar{position:relative}
+.sf-demo-bar::after{content:"";position:absolute;inset:auto 0 0;height:2px;pointer-events:none;opacity:.66;
+background:linear-gradient(90deg,var(--syn-studio-violet),var(--syn-studio-blue),var(--syn-studio-cyan),var(--syn-studio-green));
+background-size:220% 100%;animation:r170-brand-spectrum 18s linear infinite;}
+@keyframes r170-brand-spectrum{0%{background-position:0% 50%}100%{background-position:220% 50%}}
+@keyframes r170-brand-drift{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-2px,0)}}
+@media(prefers-reduced-motion:reduce){header .top strong,header .top strong::before,.sf-demo-bar::after{animation:none!important;transform:none!important}}
+
 </style><style>.sf-demo-bar{position:relative;z-index:4;background:#061c28;color:#dcf6f1;box-shadow:0 6px 25px #00101624}.sf-demo-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.8rem;padding:.8rem 0}.sf-demo-label{font-weight:800;font-size:.76rem;letter-spacing:.1em;text-transform:uppercase}.sf-demo-bar nav{display:flex;gap:.5rem;flex-wrap:wrap;width:auto}.sf-demo-bar nav a,.sf-demo-back{font-weight:750;color:#dbf7f0;text-decoration:none;padding:.45rem .8rem;border-radius:99px;font-size:.86rem}.sf-demo-bar nav a:hover,.sf-demo-bar nav a.chosen{background:#86f1d7;color:#042323}.sf-demo-bar a:focus-visible{outline:3px solid #ffd67c;outline-offset:3px}.sf-demo-back{border:1px solid #83a9af}@media(max-width:48rem){.sf-demo-row{align-items:flex-start}.sf-demo-bar nav{display:flex;gap:.2rem}.sf-demo-back{display:none}}</style></head><body class="sf-designed sf-atelier">
 <a class="skip" href="#main">Aller au contenu</a>
 <header><div class="wrap top"><strong>Synestra SiteForge</strong>
