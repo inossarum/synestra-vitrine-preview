@@ -19,3 +19,15 @@ The first prototype used a second GPU program and caused 9 legacy assertions to 
 
 ## Artistic limit and next iteration
 This is a **prototype**, not an AAA match. It improves crisp lines and removes the overexposed fog, but still has spaghetti-like visible linework and lacks substantial metallic shaded cable surfaces, coherent nested wrapping and true self-occlusion. Next iteration should introduce volumetric thickness, specular highlights and organized nested rings exclusively within material 7. Do not modify flows 0–5, original art presets or main. Rollback: remove versioned r187.html only.
+
+## Public E2E closing evidence
+
+- GitHub Pages isolated version: https://inossarum.github.io/synestra-siteforge-r176-lab/r187.html?demo=neon187 ; HTTP 200, no Access login, Pages commit `f14561f27e2de5efcd0eb5c0a72cbad5f611327e`, HTML blob `beabe03a32a41f5faba7872f246cb040da6e57d1`.
+- Real public Chrome direct-link desktop and mobile E2E exit **0**; material 6 selected; 51,840 3D vertices, zero WebGL and draw error, shared spin equal, motes suppressed for the preview only, 18 old material inputs and 10 particle inputs unchanged.
+- Previous complete local Chrome E2E for six old materials and touch/orbit/mobile also exit **0**. Node **168/168 PASS**, static 49 assets PASS, one WebGL program proved.
+- Public captures archived in Git commit `5e553d622418298c1812f03bc598b12767c66392`:
+  - `r187-public-demo-desktop.png` blob `ea4317758f53e8da3f043e6636e494f06f4e8019`;
+  - `r187-public-demo-mobile.png` blob `deb873d39222a1d26ad3b13398e1f09da2a4863e`.
+- Updated durable Evidence blob: `13af8eaec3cda625091fbaabcc69e0862bfe737d`.
+- R186 remains a separate versioned page and `main` unchanged. No release to production.
+- **Visual acceptance still FAIL/PENDING** against the supplied reference: sharp thin wireframe/filament lines are not shaded thick metallic interlaced ribbons. Implement this as an R188 addition to material 6 only; do not claim AAA final.
