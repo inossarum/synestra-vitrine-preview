@@ -1,0 +1,44 @@
+{
+  "schema": "synestra.siteforge.r193.raf-pacing.v1",
+  "viewport": "1440x900",
+  "duration_each_ms": 1900,
+  "environment": "same local headless Chromium, alternating order, indicative only",
+  "results": [
+    {
+      "route": "r192/",
+      "n": 94,
+      "elapsedMs": 1900.4,
+      "observedFps": 49.5,
+      "p50Ms": 20,
+      "p95Ms": 20.100000000000364,
+      "slowFrames30Ms": 0
+    },
+    {
+      "route": "r193/",
+      "n": 190,
+      "elapsedMs": 1900.3000000000002,
+      "observedFps": 100,
+      "p50Ms": 10,
+      "p95Ms": 10.100000000000136,
+      "slowFrames30Ms": 0
+    },
+    {
+      "route": "r193/",
+      "n": 190,
+      "elapsedMs": 1900.3,
+      "observedFps": 100,
+      "p50Ms": 10,
+      "p95Ms": 10.100000000000023,
+      "slowFrames30Ms": 0
+    },
+    {
+      "route": "r192/",
+      "n": 94,
+      "elapsedMs": 1900.3,
+      "observedFps": 49.5,
+      "p50Ms": 20,
+      "p95Ms": 20.100000000000136,
+      "slowFrames30Ms": 0
+    }
+  ]
+}

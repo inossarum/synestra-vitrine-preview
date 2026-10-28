@@ -1,0 +1,139 @@
+{
+  "schema": "synestra.siteforge.r193.fullscreen-logo-light.evidence.v1",
+  "mission_id": "SYN_SITEFORGE_R193_FULLSCREEN_LIGHT_20261028",
+  "date_local": "2026-10-28",
+  "source_repository": "inossarum/synestra-vitrine-preview",
+  "base_ref": "task/SYN_SITEFORGE_R192_ARCHITECTURE_METALLIC_SCENE_20261028",
+  "base_sha": "659865069fb67bbd63491b035edd54e960a0ce3a",
+  "new_branch": "task/SYN_SITEFORGE_R193_FULLSCREEN_LIGHT_20261028",
+  "source_unchanged_sha256": "3f1774eced877fd688d6423fef572b316a904bc367d1edcd508dff01f61c2416",
+  "source_shader_sha256": "d5b64dfccba2096d6cc6f1198a4656c6320569ff627caf11f84fb5eb0e493eae",
+  "new_css_sha256": "27aaf999a97637f7241e24d2787d962f4162547c8ab73e19370661a06e3d6d1e",
+  "new_home_sha256": "3d5981b20171a6d4bbf45d8356d33c3d24af638b122c6e354c8d0313d6293dca",
+  "palette_source": "assets/synestra-studio-official-header.webp",
+  "palette_sampling": "Chromium canvas median of saturated visible logo pixels, sampled on same PC with independent Chrome renderer",
+  "palette_medial_rgb": {
+    "violet": [
+      85,
+      42,
+      157
+    ],
+    "green": [
+      45,
+      156,
+      110
+    ],
+    "cyan": [
+      42,
+      131,
+      169
+    ]
+  },
+  "logo_palette_used": {
+    "purple": "#552a9d",
+    "green": "#2d9c6e",
+    "highlight_green": "#55d49a"
+  },
+  "scope": [
+    "First screen 100svh at 1440, 768, and 390 px; header overlays scene; title moved into second chapter",
+    "Removed WebGL CSS box reflection and floor mirror from final generated CSS and DOM",
+    "Static radial light falloff on metallic plane based on source logo purple and green; no GPU readback, no duplicate canvas",
+    "Native R190 WebGL shader, pointer perturbation, fixed camera and R192 scroll JS unchanged",
+    "Skip link restored to absolute positioning with visible keyboard focus (prevents 21px layout shift)"
+  ],
+  "qa": [
+    {
+      "kind": "Node",
+      "name": "All existing tests and R193 additions",
+      "passed": 118,
+      "failed": 0
+    },
+    {
+      "kind": "Chrome",
+      "name": "Five site pages by three viewport widths",
+      "passed": 15,
+      "failed": 0,
+      "widths": [
+        1440,
+        768,
+        390
+      ]
+    },
+    {
+      "kind": "Chrome",
+      "name": "Full-screen hero and below-fold editorial text",
+      "passed": 3,
+      "failed": 0
+    },
+    {
+      "kind": "Chrome",
+      "name": "No reflection CSS/DOM, radial ground light",
+      "passed": 3,
+      "failed": 0
+    },
+    {
+      "kind": "Chrome",
+      "name": "R192 scroll progress and accessibility reduced-motion",
+      "status": "PASS"
+    },
+    {
+      "kind": "Chrome WebGL uniforms",
+      "name": "Fixed camera and interactive plasma",
+      "status": "PASS",
+      "uTilt": [
+        0,
+        0
+      ],
+      "maxHoverStrength": 0.7528690446325988,
+      "restStrength": 9.195382517335856e-11
+    },
+    {
+      "kind": "Chrome rAF local paired",
+      "status": "INDICATIVE_ONLY",
+      "conditions": "1440x900 local same browser, alternating R192/R193/R193/R192, 1900ms each",
+      "r192_observed_fps": [
+        49.5,
+        49.5
+      ],
+      "r193_observed_fps": [
+        100,
+        100
+      ],
+      "caveat": "Not a physical GPU benchmark, uncontrolled browser/driver effects, cannot generalize to client hardware"
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "r193-studio-1440.png",
+      "sha256": "1fe83b3e3034058c69e4a9333bc7f134a01671be0ae0611a5e3298a6e6841890"
+    },
+    {
+      "path": "r193-studio-768.png",
+      "sha256": "83ad55c903e93da4864f2f6c51859a067baa81dbc96fa90154945c9754ea2015"
+    },
+    {
+      "path": "r193-studio-390.png",
+      "sha256": "a356bbc769feabe801ea387c8e1b1c2ffa04e82baaf96c2d8b42a73b726ba922f"
+    }
+  ],
+  "preview_url": "http://127.0.0.1:18850/r193/",
+  "skills": [
+    "interaction-motion-design@1.0.0#c636a0c77eccb9004c56ce48bdd49684243b8790",
+    "responsive-layout-engineering@1.0.0#12d091ca42195a1559e5a12c88b9a599560bd53c",
+    "visual-regression-testing@1.0.0#aa98fffe9149dfcc0e153f0d1b8b91f3c0a6b4ae"
+  ],
+  "constraints": [
+    "FREE_ONLY",
+    "NO_MAIN_MERGE",
+    "NO_PUBLIC_DEPLOY",
+    "NO_SECRETS"
+  ],
+  "limitations": [
+    "Ground glow is a color-matched radial light falloff approximation, not ground-truth photometry",
+    "rAF benchmark is indicative and may not map to user monitor FPS",
+    "Production website not modified; source R188 historical state not recovered",
+    "Owner art approval and production E2E not performed",
+    "Full Synestra Memory V1 and Supervisor state not available in this operation"
+  ],
+  "status": "LOCAL_CANDIDATE_VALIDATED"
+}
