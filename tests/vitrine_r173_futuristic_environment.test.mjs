@@ -155,3 +155,16 @@ test('R183 portrait framing preserves immutable shader and shows complete orb in
  assert.match(css,/top:50%!important/);
  assert.match(css,/transform:translateY\(-50%\) scale\(1\)!important/);
 });
+
+test('R184 immersive stage is edge to edge and orb is deliberately smaller with canonical GPU source',()=>{
+ assert.match(css,/\/\* R184: FULL BLEED CORE/);
+ assert.match(css,/\.hero-v2\.container\{[^}]*width:100vw!important;max-width:none!important/);
+ assert.match(css,/body \.hero-v2>\.system-stage\.core-r109-stage\{[^}]*height:100svh!important;min-height:100svh!important/);
+ assert.match(css,/border:0!important;border-radius:0!important/);
+ assert.match(css,/transform:translate3d\(0,0,0\) scale\(\.72\)!important/);
+ assert.match(css,/height:min\(96vw,420px\)!important/);
+ assert.match(css,/\.hero-v2>\.hero-copy\{\s*width:min\(88vw,1120px\)!important/);
+ const gpu=readFileSync(new URL('../assets/core-r109-webgl.js',import.meta.url),'utf8');
+ assert.match(gpu,/float radius=\.69;/);
+ assert.equal((html.match(/<canvas\b/g)||[]).length,1);
+});
