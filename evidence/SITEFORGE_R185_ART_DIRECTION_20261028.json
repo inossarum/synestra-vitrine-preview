@@ -68,7 +68,42 @@
         "crystal": "5b8ce8e7c0b2d365e4a3d1abec020846fc3af7c4"
       }
     },
-    "public_chrome": "PENDING"
+    "public_chrome": {
+      "status": "PASS",
+      "exit_code": 0,
+      "browser": "Windows Chrome WebGL ANGLE SwiftShader",
+      "plasma_materials": "6/6 PASS",
+      "mobile_width": 390,
+      "full_360_orbit": "PASS",
+      "touch_mouse": "PASS",
+      "shared_spin_equal_phase": "PASS",
+      "json_v1_backward_compatibility": "PASS",
+      "existing_controls": {
+        "plasma": 18,
+        "motes": 10
+      },
+      "webgl_error": 0,
+      "art_direction_same_camera_material_and_phase": "PASS",
+      "pure_vs_organic_changed_pixels": 259,
+      "organic_vs_crystal_changed_pixels": 784,
+      "comparison_image_pixels": 307840,
+      "preset_user_controls": "PASS",
+      "preset_manual_edit_resets_custom_label": "PASS",
+      "screenshots": [
+        {
+          "name": "r185-public-art-pure.png",
+          "sha": "4e2366d5a9fb1e39a2cffc9d2db4238061b33e88"
+        },
+        {
+          "name": "r185-public-art-organic.png",
+          "sha": "211c16ccd554fb5d5cb7eb8b5c5c6a2dbccbb7bb"
+        },
+        {
+          "name": "r185-public-art-crystal.png",
+          "sha": "e50195d668c88999519d8af9a2ef5e1149a52ebf"
+        }
+      ]
+    }
   },
   "artifact": {
     "shader_sha": "49baa2104c4200f25ff9bde63b90fda4ba9d1c60",
@@ -86,5 +121,16 @@
     "old_previews_unchanged": true,
     "rollback": "Remove only r185.html; R184 remains untouched"
   },
-  "status": "LOCAL_CHROME_E2E_PASS_PUBLIC_PAGES_E2E_PENDING"
+  "status": "PUBLIC_GITHUB_PAGES_REAL_CHROME_E2E_PASS; OWNER_ARTISTIC_ACCEPTANCE_PENDING",
+  "source_implementation_commit": "79e453f510c4bd50549f00384b8edb8da50647db",
+  "source_public_captures_commit": "45cb721491e28e72016df8c67b217813d0ba129c",
+  "preview": {
+    "url": "https://inossarum.github.io/synestra-siteforge-r176-lab/r185.html",
+    "public_commit": "96ad88fb07c7dc390540d1c4e1a06262830303bd",
+    "http_status": 200,
+    "access_login": false,
+    "html_blob": "cc2a5fe40c98654a6588f88b9b24594d838e96e8",
+    "status": "PASS"
+  },
+  "next": "Owner selects or revises A/B/C visual direction; R186 geometry instancing after artistic decision."
 }
