@@ -27,7 +27,7 @@ test('R172: improve only existing magnetic field with subtle 3D braiding, preser
 });
 test('R172: 5 material paths kept and UI labels magnetic prototype, no new shell or particles',()=>{
  for(const n of [".5","1.5","2.5","3.5"])assert.ok(lab.includes('uFlow.x<'+n));
- assert.match(html,/R174 · RELIEF VOLUMÉTRIQUE/);
+ assert.match(html,/R175 · ÉCLATS INTERACTIFS/);
  assert.match(html,/Rubans magnétiques/);
  assert.match(html,/Le noyau, les couleurs et le volume restent indépendants/);
 });

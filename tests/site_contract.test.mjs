@@ -16,6 +16,7 @@ import './siteforge_r1721_visual_compare.test.mjs'; // R172.1 A/B native compari
 import './siteforge_r173_liquid_material.test.mjs'; // R173 separate liquid-energy family + R172.1 magnetic baseline.
 import './siteforge_r1731_spherical_liquid.test.mjs'; // R173.1 four-arm spherical liquid, regression against detached ribbons.
 import './siteforge_r174_depth_optics.test.mjs'; // R174 volumetric depth lighting A/B, same renderer and JSON ABI.
+import './siteforge_r175_motes.test.mjs'; // R175 one-program floating 3D motes, hover repulsion and control.
 import './siteforge_r132_r116_clean_lab.test.mjs'; // R116 provenance and isolation.
 import './siteforge_r136_mobile_sticky_preview.test.mjs'; // Mobile sticky continuity.
 

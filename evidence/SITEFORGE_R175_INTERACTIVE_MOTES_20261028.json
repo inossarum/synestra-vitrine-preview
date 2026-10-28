@@ -1,0 +1,86 @@
+{
+  "schema": "synestra.siteforge.r175.interactive_energy_motes.evidence.v1",
+  "date": "2026-10-28",
+  "mission_id": "SYN_SITEFORGE_R175_INTERACTIVE_ENERGY_MOTES_20261028",
+  "user_reference": "Uploaded luminous cyan/violet plasma with bright nucleus; preserve it while adding original 3D responsive effects",
+  "owner_intent": "Add 3D scene effects like windblown leaves or floating particles, creative, without destroying sphere",
+  "design_decision": "Sparse three-dimensional orbiting cyan/violet energy motes rather than unrelated leaves; pointer repulsion and slow drift; reversible toggle",
+  "source": {
+    "repository": "inossarum/synestra-vitrine-preview",
+    "remote_parent": "917ed2a3f4629889a1b0e2a822dd831d261ae853",
+    "local_parent": "d6c74553426e7948f685ad777a65035e466d9b8d",
+    "parent_tree": "9920a7ebc1a309710039bd265a3dfed996310bb8",
+    "branch": "task/SYN_SITEFORGE_R175_MOTES_20261028"
+  },
+  "changes": {
+    "shader": "single existing WebGL1 vertex+fragment program, pass 5 for 3D motes",
+    "desktop_count": 46,
+    "mobile_count": 28,
+    "geometry": "depth and golden-angle based 3D sphere shell, subtle parallax, point glows",
+    "interaction": "mouse/touch movement creates bounded local repulsion impulse which decays",
+    "ui": "Accessible enable/disable toggle; not an exported parameter",
+    "json_parameters": 18,
+    "core_changed": false,
+    "additional_canvas": 0,
+    "additional_program": 0,
+    "network_dependencies": 0
+  },
+  "validation": {
+    "unit": {
+      "pass": 96,
+      "total": 96,
+      "fail": 0
+    },
+    "browser": {
+      "status": "PASS",
+      "real": "Chrome headless ANGLE SwiftShader WebGL",
+      "gpu_errors": 0,
+      "materials": 6,
+      "controls": 18,
+      "canvas_count": 1,
+      "desktop_canvas": [
+        591,
+        518
+      ],
+      "mobile_canvas": [
+        364,
+        285
+      ],
+      "mobile_viewport": 390,
+      "toggle_off": true,
+      "hover_impulse": 1,
+      "old_magnetic_ab": true,
+      "old_depth_ab": true,
+      "mouse_tilt": true,
+      "touch_orbit": true,
+      "pause_resume": true
+    },
+    "pixel_evidence": {
+      "reference": "r175-motes-off.png",
+      "candidate": "r175-motes-on.png",
+      "pointer": "r175-motes-pointer.png",
+      "stage_pixels": 308360,
+      "changed_ge_12": 669,
+      "changed_ge_28": 400,
+      "changed_percent_ge_12": 0.21695420936567647,
+      "metric": "actual pixel RGB channel max difference in stage region, same frozen phase; small coverage intentional; screenshot A/B visually reviewed"
+    },
+    "limitations": {
+      "owner_visual_approval": "PENDING",
+      "hardware_gpu_fps": "NOT_MEASURED",
+      "rendering_motion_reduced": "existing static fallback retained"
+    }
+  },
+  "protected": {
+    "approved_home_sha": "1413e30138ba1657f7056401818e697ddbd32ac8",
+    "approved_engine_sha": "dd63d75fdb966de2052595c95b7b6cb736d6c7cc",
+    "vitrine_changed": false,
+    "production_deployed": false,
+    "main_unchanged": true
+  },
+  "rollback": "R174 base commit 917ed2a3f4629889a1b0e2a822dd831d261ae853 on GitHub, local d6c74553426e7948f685ad777a65035e466d9b8d",
+  "publication": {
+    "github": "PENDING",
+    "preview": "PENDING"
+  }
+}

@@ -27,7 +27,7 @@ test('R174 per-depth optical shaping rather than additional shell passes',()=>{
 test('R174 instant before/after for any family, magnetic A/B preserved and no JSON drift',()=>{
  assert.match(html,/data-depth-compare="prior"/);
  assert.match(html,/data-depth-compare="r174"/);
- assert.match(html,/R174 · RELIEF VOLUMÉTRIQUE/);
+ assert.match(html,/R175 · ÉCLATS INTERACTIFS/);
  assert.match(js,/stage\.dataset\.depthVariant/);
  assert.match(js,/depthVariant=depthToggle\.dataset\.depthCompare==='r174'\?1:0/);
  assert.match(html,/data-magnetic-compare="r171"/);
