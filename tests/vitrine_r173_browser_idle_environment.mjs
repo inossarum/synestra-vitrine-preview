@@ -40,18 +40,23 @@ for(const vw of [1280,390,320]){
  }else if(navBefore.menuDisplay!=='none'||!navBefore.ctaVisible){
    throw Error('R175_DESKTOP_NAV_REGRESSION '+JSON.stringify(navBefore));
  }else console.log('R175_DESKTOP_NAV_1280=PASS '+JSON.stringify(navBefore));
- if(vw===1280){
-  const heroExpr=`JSON.stringify((()=>{const copy=document.querySelector('.hero-v2 .hero-copy'),title=document.querySelector('#hero-title'),stage=document.querySelector('.hero-v2 .system-stage'),canvas=document.querySelector('.core-r109-canvas'),links=[...stage.querySelectorAll('.core-r108-links a')],r=e=>e.getBoundingClientRect();const c=r(copy),t=r(title),st=r(stage),css=getComputedStyle(canvas);return {copyWidth:c.width,titleWidth:t.width,titleHeight:t.height,font:getComputedStyle(title).fontSize,stageWidth:st.width,stageLeft:st.left,canvasTransform:css.transform,ready:stage.dataset.coreReady,links:links.map(x=>({height:r(x).height,bg:getComputedStyle(x).backgroundColor})),scrollWidth:document.documentElement.scrollWidth,viewport:innerWidth}})())`;
-  const hero=JSON.parse((await send('Runtime.evaluate',{expression:heroExpr,returnByValue:true})).result.value);
-  if(hero.copyWidth>580||hero.titleHeight>440||hero.stageWidth<730||hero.links.length!==3||hero.links.some(x=>x.height<50)||hero.scrollWidth>vw+2||hero.ready!=='true')throw Error('R182_HERO_GEOMETRY_FAIL '+JSON.stringify(hero));
-  if(capture){
-   await send('Runtime.evaluate',{expression:"window.scrollTo({top:0,behavior:'instant'})"});
-   await sleep(200);
-   const shot=await send('Page.captureScreenshot',{format:'png',fromSurface:true,captureBeyondViewport:false});
-   writeFileSync(join(root,'r182_hero_1280.png'),Buffer.from(shot.data,'base64'));
-  }
-  console.log('R182_HERO_REBALANCE_CDP_1280=PASS '+JSON.stringify(hero));
+ const introExpr=`JSON.stringify((()=>{const stage=document.querySelector('.hero-v2>.system-stage'),copy=document.querySelector('.hero-v2>.hero-copy'),title=document.querySelector('#hero-title'),canvas=stage.querySelector('canvas'),room=stage.querySelector('.syn-r169-room'),links=stage.querySelector('.core-r108-links'),button=stage.querySelector('.r183-enter-studio'),r=e=>e.getBoundingClientRect(),st=r(stage),cp=r(copy),bt=r(button);return {stageTop:st.top,stageBottom:st.bottom,stageHeight:st.height,stageWidth:st.width,copyTop:cp.top,titleTop:r(title).top,canvasTransform:getComputedStyle(canvas).transform,canvasOpacity:getComputedStyle(canvas).opacity,ready:stage.dataset.coreReady,roomDisplay:getComputedStyle(room).display,linksDisplay:getComputedStyle(links).display,buttonVisible:bt.height>=44&&bt.width>=150,buttonHref:button.getAttribute('href'),canvasCount:document.querySelectorAll('canvas').length,scrollWidth:document.documentElement.scrollWidth,viewport:innerWidth}})())`;
+ const intro=JSON.parse((await send('Runtime.evaluate',{expression:introExpr,returnByValue:true})).result.value);
+ if(intro.stageTop>150||intro.stageHeight<500||intro.stageBottom>970||intro.copyTop<intro.stageBottom+40||intro.roomDisplay!=='none'||intro.linksDisplay!=='none'||intro.buttonHref!=='#hero-title'||!intro.buttonVisible||intro.canvasOpacity!=='1'||intro.ready!=='true'||intro.canvasCount!==1||intro.scrollWidth>vw+2)throw Error('R183_SPHERE_FIRST_FAIL_'+vw+' '+JSON.stringify(intro));
+ if(capture){
+  await send('Runtime.evaluate',{expression:"window.scrollTo({top:0,behavior:'instant'})"});
+  await sleep(160);
+  const shot=await send('Page.captureScreenshot',{format:'png',fromSurface:true,captureBeyondViewport:false});
+  writeFileSync(join(root,'r183_first_fold_'+vw+'.png'),Buffer.from(shot.data,'base64'));
  }
+ await send('Runtime.evaluate',{expression:"document.querySelector('.r183-enter-studio').focus()"});
+ await send('Input.dispatchKeyEvent',{type:'keyDown',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});
+ await send('Input.dispatchKeyEvent',{type:'keyUp',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});
+ await sleep(140);
+ const navResult=JSON.parse((await send('Runtime.evaluate',{expression:"JSON.stringify({hash:location.hash,titleTop:document.querySelector('#hero-title').getBoundingClientRect().top,scrollY:scrollY})",returnByValue:true})).result.value);
+ if(navResult.hash!=='#hero-title'||navResult.scrollY<300)throw Error('R183_INTRO_KEYBOARD_NAV_FAIL_'+vw+' '+JSON.stringify(navResult));
+ await send('Runtime.evaluate',{expression:"window.scrollTo({top:0,behavior:'instant'});history.replaceState(null,'',location.pathname)"});
+ console.log('R183_FIRST_FOLD_CDP_'+vw+'=PASS '+JSON.stringify({intro,keyboard:navResult}));
  const wayfinderEval=`JSON.stringify((()=>{const header=document.querySelector('body>.site-header.container'),dock=document.querySelector('.r178-wayfinder'),cards=[...dock.querySelectorAll('.r178-wayfinder-link')],hs=getComputedStyle(header),ds=getComputedStyle(dock);return {headerPosition:hs.position,headerTop:header.getBoundingClientRect().top,headerBottom:header.getBoundingClientRect().bottom,headerHeight:header.getBoundingClientRect().height,dockVisible:ds.display!=='none',columns:getComputedStyle(dock.querySelector('.r178-wayfinder-grid')).gridTemplateColumns,links:cards.map(x=>x.getAttribute('href')),cardWidths:cards.map(x=>x.getBoundingClientRect().width),scrollWidth:document.documentElement.scrollWidth,viewport:innerWidth}})())`;
  const getWayfinder=async()=>JSON.parse((await send('Runtime.evaluate',{expression:wayfinderEval,returnByValue:true})).result.value);
  const manifestExpression=`JSON.stringify((()=>{const section=document.querySelector('.r179-manifesto'),copy=document.querySelector('.r179-editorial-copy'),title=document.querySelector('#r179-manifesto-title'),panel=document.querySelector('.r179-system-index'),links=[...panel.querySelectorAll('a[href]')],r=x=>x.getBoundingClientRect(),h=r(title),c=r(copy),p=r(panel),s=r(section);return {title:title.innerText,links:links.map(x=>x.getAttribute('href')),columns:getComputedStyle(section).gridTemplateColumns,titleWidth:h.width,titleScrollWidth:title.scrollWidth,titleHeight:h.height,copyBottom:c.bottom,panelTop:p.top,panelWidth:p.width,sectionWidth:s.width,scrollWidth:document.documentElement.scrollWidth}})())`;
@@ -116,8 +121,8 @@ for(const vw of [1280,390,320]){
  if(capture){const img=await send('Page.captureScreenshot',{format:'png',fromSurface:true,captureBeyondViewport:false});writeFileSync(join(root,'r173_hero_'+vw+'_t0.png'),Buffer.from(img.data,'base64'));}
  await sleep(2600);const second=await evalState();
  if(capture){const img=await send('Page.captureScreenshot',{format:'png',fromSurface:true,captureBeyondViewport:false});writeFileSync(join(root,'r173_hero_'+vw+'_t1.png'),Buffer.from(img.data,'base64'));}
- const ok=first.satelliteCount===0&&first.linkCount===3&&first.stage.canvasCount===1&&first.dial.display!=='none'&&first.dial.width>=300&&first.dial.border==='rgba(129, 214, 255, 0.77)'&&first.ring.animation==='r173-hud-dial-turn'&&first.counter.animation==='r173-hud-dial-reverse'&&first.environment.gridAnimation==='r173-grid-drift'&&first.environment.beamCount===0&&first.environment.scanCount===0&&first.sectionAnimation==='none'&&first.cardAnimation==='none'&&first.ring.transform!==second.ring.transform&&first.counter.transform!==second.counter.transform&&first.environment.gridTransform!==second.environment.gridTransform&&first.scrollWidth<=vw+2;
- if(!ok)throw Error('R174_IDLE_E2E_FAIL_'+vw+' '+JSON.stringify({first,second}));
+ const ok=first.satelliteCount===0&&first.linkCount===3&&first.stage.canvasCount===1&&first.dial.display==='none'&&first.environment.beamCount===0&&first.environment.scanCount===0&&first.sectionAnimation==='none'&&first.cardAnimation==='none'&&first.scrollWidth<=vw+2;
+ if(!ok)throw Error('R183_NO_HUD_NO_SCANS_E2E_FAIL_'+vw+' '+JSON.stringify({first,second}));
  await send('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'reduce'}]});await sleep(100);const reduced=await evalState();
  if(reduced.ring.animation!=='none'||reduced.counter.animation!=='none'||reduced.environment.gridAnimation!=='none')throw Error('REDUCED_MOTION_FAIL_'+vw+' '+JSON.stringify(reduced));
  console.log('R174_NO_SCANS_CDP_'+vw+'=PASS '+JSON.stringify({before:first,after:{ringTransform:second.ring.transform,counterTransform:second.counter.transform,gridTransform:second.environment.gridTransform},reduced:'PASS'}));
