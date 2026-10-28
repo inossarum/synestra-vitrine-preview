@@ -1,0 +1,96 @@
+{
+  "schema": "synestra.siteforge.r1871.energy_movement_restored.v1",
+  "date": "2026-10-28",
+  "mission": "SYN_SITEFORGE_R1871_ENERGY_MOTION_20261028",
+  "owner": "inossarum",
+  "repository": "inossarum/synestra-vitrine-preview",
+  "branch": "task/SYN_SITEFORGE_R1871_ENERGY_MOTION_20261028",
+  "base_commit": "80d2a4c47bbcee8813a1161b81f79acc3e1c8c4b",
+  "art_reference": "User preferred R187 cyan/magenta luminous coherent rings over R188/R188.1 opaque SDF tubes or R188.2 chaotic electric line network",
+  "diff_scope": "Only material 6 GLSL branch, new uniform uLabTime and its JS binding, UI version/title, exact CSP hash",
+  "sources": {
+    "r187_source_sha256": "2c3a19a999cd36a7e3d4a601bf51468fbf1f298ca6e8956d910c51b83e5a13de",
+    "r1871_sha256": "d685f27c12ee48358b2d1b1fcef4884bb2a4ac17072145689d94135bff66738a",
+    "builder": "tools/build_r1871_energy_motion.py"
+  },
+  "visual_changes": [
+    "Retain three translucent oblique R187 toroidal envelope families; no opaque SDF or free spaghetti arcs",
+    "Dynamic small 3D centerline bends (~0.02-0.03 normalized) and moving helix stripes, independent on uLabTime",
+    "Travelling line sparks and pulsing envelope brightness in cyan/magenta; optical front/back depth attenuation",
+    "Restore visually distinct volumetric presence with bounded +50% emission and moderate alpha, smaller central hot spot"
+  ],
+  "tests": {
+    "node_isolation": {
+      "status": "PASS",
+      "pass": 3,
+      "fail": 0,
+      "checks": [
+        "7 material options and independent clock",
+        "strict SHA256 CSP without unsafe-inline",
+        "Exact normalized R187 restoration outside material6, uniform/binding and metadata"
+      ]
+    },
+    "chrome_desktop": {
+      "status": "PASS",
+      "browser": "Chrome on Windows via SwiftShader",
+      "viewport": [
+        1100,
+        800
+      ],
+      "material_options": 7,
+      "legacy_materials_checked": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "material7": "Rubans énergétiques 3D · R187.1",
+      "webgl_error": 0,
+      "particle_speed": 0,
+      "spin_before": "0.5252",
+      "spin_after": "0.5252",
+      "motion_pixels_changed": 85381,
+      "motion_total_pixels": 307840,
+      "motion_percent": 27.7355,
+      "capture_first": "evidence/r1871-first.png",
+      "capture_later": "evidence/r1871-later.png"
+    },
+    "chrome_mobile_emulation": {
+      "status": "PASS",
+      "viewport": [
+        390,
+        844
+      ],
+      "webgl_error": 0,
+      "particle_speed": 0,
+      "spin_before": "1.1359",
+      "spin_after": "1.1359",
+      "motion_pixels_changed": 43115,
+      "motion_total_pixels": 104676,
+      "motion_percent": 41.189,
+      "capture_first": "evidence/r1871-mobile-first.png",
+      "capture_later": "evidence/r1871-mobile-later.png"
+    },
+    "local_preview": {
+      "url": "http://127.0.0.1:19091/siteforge-r1871-autonome.html?demo=magnetic",
+      "http_status": 200,
+      "bind": "127.0.0.1 only"
+    },
+    "screenshot_sha256": {
+      "desktop_first": "d7bce4378dc80abc1ed6aa48a9ece35a30f68d1021291b564eb9571d3c1b3d59",
+      "desktop_later": "cde79d747d28fbdbc0b36eb7372d1dbffb5d1a559bed68a73507c32570e6841b",
+      "mobile_first": "c564997e13d17ed205e22547c66065abd9a6143b3e674376885c9b5c785d8f83",
+      "mobile_later": "a60eeec4576a99ea2c4fa9bd8f1d764cf7353af3372310753d9e874cf1e2716e"
+    }
+  },
+  "gates": {
+    "owner_visual_approval": "PENDING",
+    "physical_mobile_gpu": "NOT_TESTED",
+    "production_deployment": "NOT_DONE",
+    "studio_supervisor_exec": "NOT_RUN"
+  },
+  "outcome": "LOCAL_E2E_PASS_VISUAL_PENDING",
+  "rollback": "Original R187 commit and all R188 variants unchanged; isolated worktree; no push/merge."
+}
