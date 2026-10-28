@@ -108,3 +108,11 @@ test('R181 technology explorer is deep-linkable, genuinely interactive, and degr
  assert.equal((html.match(/<canvas\b/g)||[]).length,1);
  assert.equal((html.match(/<script\b/g)||[]).length,1);
 });
+
+test('R181 portal hero overlaps a single WebGL stage on wide screens and preserves mobile flow',()=>{
+ assert.match(css,/@media\(min-width:1100px\)\{/);
+ assert.match(css,/\.hero-v2\{[^}]*display:grid;grid-template-columns:minmax\(0,1fr\);grid-template-rows:minmax\(690px,auto\)/);
+ assert.match(css,/\.hero-v2 \.system-stage\{[^}]*grid-area:1 \/ 1;justify-self:end;align-self:stretch/);
+ assert.match(css,/\.hero-v2 \.hero-copy\{[^}]*grid-area:1 \/ 1;align-self:center;justify-self:start/);
+ assert.equal((html.match(/<canvas\b/g)||[]).length,1);
+});
