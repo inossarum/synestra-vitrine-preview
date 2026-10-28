@@ -52,9 +52,10 @@
       "changed_pixels": 6675,
       "frame_pixels": 307840,
       "recovered_changed_pixels": 0
-    }
+    },
+    "rotation_180_360_geometry": "PASS exact algebraic transforms at 180 and 360 degrees, no real browser full-turn test; R176 pointer yaw remains bounded"
   },
-  "status": "PUBLIC_GITHUB_PAGES_E2E_PASS; OWNER_AESTHETIC_ACCEPTANCE_PENDING",
+  "status": "PUBLIC_GITHUB_PAGES_E2E_PASS_FOR_EXISTING_ORBIT_RANGE; OWNER_AESTHETIC_ACCEPTANCE_PENDING; FULL_UI_180_360_NOT_TESTED",
   "public_url": "https://inossarum.github.io/synestra-siteforge-r176-lab/",
   "security": "Separate public static lab; main unchanged; no Cloudflare Access changes; FREE_ONLY",
   "delivery": {
