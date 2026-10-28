@@ -23,10 +23,10 @@ test('R181 old silhouettes and exact shared spin preserved',()=>{
 });
 test('R181 mobile adjusts volumetric sampling only when fill-rate heavy',()=>{
  assert.match(js,/const mobileDense=mobile&&\(canvas\.width\*canvas\.height>240000\|\|moteCount>75\)/);
- assert.match(js,/const volumeSteps=mobile\?\(mobileDense\?12:14\):22/);
+ assert.match(js,/const baselineSteps=mobile\?\(mobileDense\?12:14\):22/);
  assert.match(js,/gl\.uniform1f\(U\.uVolumeSteps,volumeSteps\)/);
  assert.match(js,/stage\.dataset\.volumeSteps=String\(volumeSteps\)/);
- assert.match(js,/stage\.dataset\.mobileQuality=mobile\?\(mobileDense\?'adaptive':'balanced'\):'desktop'/);
+ assert.match(js,/stage\.dataset\.mobileQuality=qualityMode==='balanced'\?\(mobile\?\(mobileDense\?'adaptive':'balanced'\):'desktop'\):qualityMode/);
 });
 test('R181 compatibility: all 18 plasma and 8 mote controls unchanged',()=>{
  assert.equal((html.match(/data-sphere-control=/g)||[]).length,18);

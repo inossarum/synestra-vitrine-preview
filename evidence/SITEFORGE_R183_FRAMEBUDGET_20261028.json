@@ -1,0 +1,106 @@
+{
+  "schema": "synestra.siteforge.r183.adaptive_framebudget.evidence.v1",
+  "date": "2026-10-28",
+  "mission_id": "SYN_SITEFORGE_R183_ADAPTIVE_FRAMEBUDGET",
+  "owner": "Synestra owner",
+  "source": {
+    "repository": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_SITEFORGE_R183_ADAPTIVE_FRAMEBUDGET_20261028",
+    "base_sha": "1bce19caf7296740a0dcd796cda534721ec12c42",
+    "main_sha": "df67fcd5cc6b7cc0fb42fa86c8920d28b9427494",
+    "engine_blob": "f3016c8decd9de278b065b67b06fa5bdee678381",
+    "html_blob": "b6c961bec23c0876a57261ece7216bad623df446",
+    "standalone_blob": "d919163a3a9f3e1c95e6912dc8251dd2602e1ddb"
+  },
+  "preflight": {
+    "rules": "AGENTS.md@e0f6df26edc9a45b7db1a5261e92b719d2dd66ce",
+    "rule15": "7a9235086852ea0f4ca69e481ade1657cf16498b",
+    "rule16": "fbb570833d365d135a4be9fec3c396eaf52a2ca3",
+    "memory_manifest": "00_DIRECTION/MEMORY_CORPUS_V1.json@2b1a02230f570aa153e01b686337a432e394f7ca",
+    "visual_memory": "00_DIRECTION/DECISIONS_2026-09-04_CHAT_STUDIO_VISUAL_DIRECTION.md@ff6f5cfa61404e3e6739c5ecbb855f189b36cf5e",
+    "delivery_rule": "00_DIRECTION/DECISIONS_2026-10-28_SYNESTRA_DELIVERY_FIRST.md@6839edce6ba85475ee2d488e6e7fe2a1d8b3d10a",
+    "r182_reasoning": "0b0e480fb343943c7c55a5bf8b0151439e4150aa",
+    "r182_evidence": "d60f3034fe5ea46129118b36da26274550fb63e9",
+    "skills": "human-intent-requirements-fidelity@1.0.0#87fe0910298c371b1defca10948b8f10af840a8b;visual-diff-iteration@1.0.0#c6d5fd0845d57f6d5ea7c3a632609689f29840d4",
+    "skill_runtime": "CONTEXT_ADVISORY_ONLY"
+  },
+  "features": [
+    "New optional isolated renderer quality menu: balanced/auto/performance/quality; not a material setting and not added to JSON schema",
+    "Frame-rate telemetry from Chrome rAF wall-clock rendered frames, clear physical GPU disclaimer",
+    "Robust cadence EMA, rejection of >250 ms inactive tab gaps, hysteresis (24 samples, 3.5 seconds down/8.5 seconds up), max 2 adaptive steps",
+    "Volume sample limits: baseline mobile 14/12 under existing dense condition, desktop 22; manual performance 10 mobile/16 desktop; manual detailed 18 mobile/22 desktop; auto bounds 8..baseline mobile and 14..baseline desktop",
+    "One WebGL context/program, original 18 material fields, 10 mote fields, all 6 material families, shared rotation and 360-degree orbit unchanged",
+    "Quality reset defaults to balanced; mode is view-only, not included in exported R182 scene settings"
+  ],
+  "tests": {
+    "node": {
+      "pass": 156,
+      "tests": 156,
+      "fail": 0
+    },
+    "static": {
+      "status": "PASS",
+      "files": 49
+    },
+    "chrome_local_complete": {
+      "status": "PASS",
+      "exit_code": 0,
+      "desktop_modes": "22 balanced / 16 performance / 22 quality / 22 auto initial",
+      "mobile_modes": "14 balanced / 10 performance / 18 quality / 14 auto initial",
+      "materials": 6,
+      "control_material": 18,
+      "control_motes": 10,
+      "webgl_errors": 0,
+      "mobile_width": 390,
+      "full_180_360": "PASS",
+      "mouse_touch": "PASS",
+      "json_roundtrip_and_invalid": "PASS",
+      "shared_spin": "PASS"
+    },
+    "chrome_real_auto": {
+      "status": "PASS",
+      "exit_code": 0,
+      "device": "Inos-Cerebros",
+      "browser": "Chrome headless SwiftShader 390px",
+      "before": {
+        "steps": 14,
+        "penalty": 0,
+        "frame_ms": 79.8,
+        "reported_fps": 14.1
+      },
+      "after": {
+        "steps": 12,
+        "penalty": 1,
+        "frame_ms": 74.2,
+        "reported_fps": 13.3
+      },
+      "recovery": {
+        "steps": 14,
+        "penalty": 0
+      },
+      "real_time_reduction": "observed after 5 * 750ms probe polls",
+      "spin_equal": true,
+      "webgl_error": 0
+    },
+    "chrome_public": "PENDING"
+  },
+  "preview": {
+    "repo": "inossarum/synestra-siteforge-r176-lab",
+    "branch": "gh-pages",
+    "existing_head": "603f989a93c673ce78242e65973187b06d6eda55",
+    "new_path": "r183.html",
+    "url": "https://inossarum.github.io/synestra-siteforge-r176-lab/r183.html",
+    "state": "PENDING"
+  },
+  "constraints": {
+    "main_unchanged": true,
+    "no_main_merge": true,
+    "free_only": true,
+    "access_unchanged": true,
+    "old_previews_untouched": true,
+    "rollback": "Delete only r183.html; return to r182.html",
+    "physical_mobile_fps": "NOT_MEASURED",
+    "owner_visual_acceptance": "PENDING"
+  },
+  "status": "LOCAL_E2E_PASS_PUBLIC_E2E_PENDING"
+}

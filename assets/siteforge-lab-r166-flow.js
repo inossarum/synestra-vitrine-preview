@@ -23,6 +23,9 @@
  const moteRGB=k=>[1,3,5].map(i=>parseInt((moteControls[k]?.value||moteDefaults[k]||'#ffffff').slice(i,i+2),16)/255);
  const mainStatus=document.querySelector('[data-render-status]');
  const vfxStatus=document.querySelector('[data-vfx-status]');
+ const qualitySelect=document.querySelector('[data-render-quality]');
+ const fpsOutput=document.querySelector('[data-quality-fps]');
+ const samplesOutput=document.querySelector('[data-quality-steps]');
  const arcPanel=document.querySelector('[data-electric-options]');
  const status=(target,value)=>{if(target&&target.textContent!==value)target.textContent=value;};
  let schedule=()=>{};
@@ -97,6 +100,9 @@
  const onChange=e=>{if(e.target?.hasAttribute('data-sphere-control')||e.target?.hasAttribute('data-mote-control')){sync();schedule();}};
  panel?.addEventListener('input',onChange);
  panel?.addEventListener('change',onChange);
+ qualitySelect?.addEventListener('change',()=>{
+  if(qualitySelect.value==='balanced'||qualitySelect.value==='performance'||qualitySelect.value==='quality'||qualitySelect.value==='auto')schedule();
+ });
  panel?.addEventListener('click',event=>{
   const toggle=event.target.closest('[data-magnetic-compare]');
   if(toggle){compareVariant=toggle.dataset.magneticCompare==='r172'?1:0;syncCompareUI();schedule();}
@@ -118,6 +124,7 @@
   e.preventDefault();for(const [key,input] of Object.entries(controls))input.value=defaults[key];
   for(const [key,input] of Object.entries(moteControls))input.value=moteDefaults[key];
   motesEnabled=true;
+  if(qualitySelect)qualitySelect.value='balanced';
   compareVariant=1;depthVariant=1;sync();schedule();
  });
  sync();
@@ -756,6 +763,22 @@ void main(){
  gl.bindBuffer(gl.ARRAY_BUFFER,seeds);
  gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(Array.from({length:MAX},(_,i)=>(i+.5)/MAX)),gl.STATIC_DRAW);
  let active=true,visible=true,frame=0,last=0,lastFrame=0,elapsed=0,tiltX=0,tiltY=0;
+ // R183: CPU/browser frame cadence, not an unproven physical GPU timer.
+ // This affects only uVolumeSteps: no animation speed, no particle count.
+ let cadenceMs=0,cadenceSamples=0,autoPenalty=0,lastQualityChange=0,lastTelemetry=0,priorQualityMode='balanced';
+ const chooseVolumeSteps=(mobile,baseline,mode,penalty)=>{
+  if(mode==='performance')return mobile?10:16;
+  if(mode==='quality')return mobile?18:22; // shader loop hard maximum = 22
+  if(mode==='auto')return Math.max(mobile?8:14,baseline-penalty*(mobile?2:3));
+  return baseline;
+ };
+ // Hysteresis and cooldown prevent toggling on one slow frame.
+ const nextAutoPenalty=(old,avgMs,validSamples,now,lastChange)=>{
+  if(validSamples<24||now-lastChange<3500)return old;
+  if(avgMs>62)return Math.min(2,old+1);
+  if(avgMs<42&&now-lastChange>8500)return Math.max(0,old-1);
+  return old;
+ };
  function resize(){
   // The WebGL canvas must follow the actual sticky preview panel size. Its
   // HTML width/height attributes (960x570) are only a pre-init fallback.
@@ -772,7 +795,14 @@ void main(){
  function draw(now){
   frame=0;if(!active||!visible||document.visibilityState!=='visible')return;
   if(lastFrame&&now-lastFrame<32){frame=requestAnimationFrame(draw);return;}
-  const frameStep=lastFrame?Math.min(.15,Math.max(0,(now-lastFrame)/1000)):.033;
+  const frameDelta=lastFrame?now-lastFrame:0;
+  const frameStep=lastFrame?Math.min(.15,Math.max(0,frameDelta/1000)):.033;
+  if(frameDelta>=32&&frameDelta<250){
+   cadenceMs=cadenceSamples===0?frameDelta:cadenceMs*.88+frameDelta*.12;
+   cadenceSamples=Math.min(240,cadenceSamples+1);
+  }else if(frameDelta>=250){
+   cadenceMs=0;cadenceSamples=0;lastQualityChange=now;
+  }
   if(!resize())return;lastFrame=now;
   if(last)elapsed+=Math.min((now-last)/1000,.15)*Math.max(0,num('particleSpeed'));last=now;
   const mobile=window.innerWidth<=700,preset=sel('particlePreset');
@@ -801,10 +831,31 @@ void main(){
   // 12 only when both high framebuffer load or dense 3D motes demand it.
   // Both modes use the same volumetric material and the same temporal phase.
   const mobileDense=mobile&&(canvas.width*canvas.height>240000||moteCount>75);
-  const volumeSteps=mobile?(mobileDense?12:14):22;
+  const baselineSteps=mobile?(mobileDense?12:14):22;
+  const qualityMode=qualitySelect?.value||'balanced';
+  if(qualityMode!==priorQualityMode){
+   priorQualityMode=qualityMode;autoPenalty=0;
+   // Mode changes must not inherit slow frames from a former quality level.
+   cadenceMs=0;cadenceSamples=0;lastQualityChange=now;
+  }
+  if(qualityMode==='auto'){
+   const adjusted=nextAutoPenalty(autoPenalty,cadenceMs,cadenceSamples,now,lastQualityChange);
+   if(adjusted!==autoPenalty){autoPenalty=adjusted;lastQualityChange=now;}
+  }else autoPenalty=0;
+  const volumeSteps=chooseVolumeSteps(mobile,baselineSteps,qualityMode,autoPenalty);
   gl.uniform1f(U.uVolumeSteps,volumeSteps);
   stage.dataset.volumeSteps=String(volumeSteps);
-  stage.dataset.mobileQuality=mobile?(mobileDense?'adaptive':'balanced'):'desktop';
+  stage.dataset.mobileQuality=qualityMode==='balanced'?(mobile?(mobileDense?'adaptive':'balanced'):'desktop'):qualityMode;
+  stage.dataset.qualityMode=qualityMode;
+  stage.dataset.qualityPenalty=String(autoPenalty);
+  stage.dataset.renderCadenceMs=cadenceMs.toFixed(1);
+  if(now-lastTelemetry>650){
+   const cadenceFps=cadenceSamples>=3?Math.min(60,1000/Math.max(1,cadenceMs)):0;
+   stage.dataset.renderFps=cadenceFps.toFixed(1);
+   if(fpsOutput)fpsOutput.textContent=cadenceFps?cadenceFps.toFixed(0)+' img/s (Chrome)':'mesure en cours';
+   if(samplesOutput)samplesOutput.textContent=volumeSteps+' échantillons';
+   lastTelemetry=now;
+  }
   gl.uniform1f(U.uMoteCount,Math.max(1,moteCount));
   gl.uniform4f(U.uMoteStyle,
    1+.35*moteVal('moteDistance')/100,

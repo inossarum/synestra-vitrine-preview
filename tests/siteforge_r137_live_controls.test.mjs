@@ -123,7 +123,7 @@ test('R152: native quick controls, safe defaults and accessible advanced setting
  assert.match(html,/noindex,nofollow/);
  assert.equal((html.match(/type="range"/g)||[]).length,16);
  assert.equal((html.match(/type="color"/g)||[]).length,6);
- assert.equal((html.match(/<select /g)||[]).length,2);
+ assert.equal((html.match(/<select /g)||[]).length,3);
  const keys=Object.keys(defaults);
  for(const key of keys)assert.match(html,new RegExp('data-sphere-control="'+key+'"'));
 });

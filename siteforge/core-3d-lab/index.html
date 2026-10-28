@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex,nofollow">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
-<title>SiteForge — Laboratoire énergétique 3D R182</title>
+<title>SiteForge — Laboratoire énergétique 3D R183</title>
 <style>
 :root{color-scheme:dark;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#050a14;color:#e7f4ff}
 *{box-sizing:border-box}
@@ -85,8 +85,8 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 </svg>
 </div>
 <form class="lab-controls" aria-label="Création de la nouvelle sphère plasma VFX" autocomplete="off">
-<div class="panel-head"><h2>Plasma Studio</h2><span class="preview-state">R182 · CRISTAUX MICROFACETTÉS</span></div>
-<p class="help">R182 : reflets directionnels et micro-imperfections ajustables sur les cristaux 3D. Les autres styles, le mouvement synchronisé et le rechargement des paramètres restent disponibles.</p>
+<div class="panel-head"><h2>Plasma Studio</h2><span class="preview-state">R183 · QUALITÉ ADAPTATIVE</span></div>
+<p class="help">R183 : contrôle de la fidélité volumétrique et cadence de rendu observée. Le mode Auto réduit la charge du shader en cas de lenteur, sans modifier les matériaux, les réglages ni la rotation des éclats.</p>
 <fieldset class="control-group mote-panel"><legend>✨ Éclats d'énergie 3D</legend>
 <button type="button" class="reset mote-toggle" data-mote-toggle aria-pressed="true">Éclats 3D : activés</button>
 <p class="help">Rotation synchronisée avec le plasma · vitesse <output data-mote-linked-speed>100 %</output>. La commande « Vitesse des flux » ajuste les deux simultanément, jusqu’à l’arrêt complet.</p>
@@ -155,6 +155,16 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 <div class="control-row"><label class="control-label" for="sf-core"><span>Noyau blanc-bleu</span><output for="sf-core" data-sphere-value="core">#EAFFFF</output></label><input id="sf-core" data-sphere-control="core" type="color" value="#eaffff"></div>
 <div class="control-row"><label class="control-label" for="sf-rim"><span>Plasma cyan</span><output for="sf-rim" data-sphere-value="rim">#51DFFF</output></label><input id="sf-rim" data-sphere-control="rim" type="color" value="#51dfff"></div>
 </div></fieldset>
+<fieldset class="control-group" data-quality-panel><legend>Performance du rendu 3D</legend>
+<div class="control-row"><label class="control-label" for="sf-renderQuality"><span>Qualité volumétrique</span><output data-quality-steps>14 échantillons</output></label>
+<select id="sf-renderQuality" data-render-quality>
+<option value="balanced" selected>Équilibrée — rendu R182</option>
+<option value="auto">Adaptative — selon la cadence</option>
+<option value="performance">Économie GPU — moins d’échantillons</option>
+<option value="quality">Détaillée — maximum WebGL1</option>
+</select></div>
+<p class="help">Cadence observée : <output data-quality-fps>mesure en cours</output>. Mesure indicative des images calculées par Chrome, pas un benchmark du GPU physique. Les réglages de scène et la vitesse de rotation restent inchangés.</p>
+</fieldset>
 </details>
 <button class="reset" type="reset">Restaurer le plasma d'origine</button>
 <div class="export-controls">
