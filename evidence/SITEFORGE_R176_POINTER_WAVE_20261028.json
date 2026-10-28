@@ -1,0 +1,78 @@
+{
+  "schema": "synestra.siteforge.r176.cursor_wave.evidence.v1",
+  "date": "2026-10-28",
+  "mission_id": "SYN_SITEFORGE_R176_POINTER_PERTURBED_PLASMA_20261028",
+  "owner_intent": "Au passage de la souris, les ondes énergétiques elles-mêmes doivent être perturbées",
+  "source": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "base_branch": "task/SYN_SITEFORGE_R175_READABILITY_20261028",
+    "base_commit": "76e84d98438555842395a9284ffbfe052fe16edb"
+  },
+  "implementation": {
+    "scope": "WebGL fragment pass 4 volumetric flow, shared existing uPointer uniform from R175",
+    "effect": "Bounded radial and tangential wave field bends existing 3D plasma sampling, not a sprite overlay",
+    "cursor_data": "screen-space position with movement impulse, shared across all six existing materials",
+    "recovery": "time-based exponential damping e^(-3.6*dt), preserved last pointer coordinate on pointerleave until decay",
+    "protected_core": "nucleus and halo computed from undisturbedQ, material-only warp",
+    "no_additional_canvas": true,
+    "no_additional_program": true,
+    "exported_json_controls": 18,
+    "mote_toggle_independent": true
+  },
+  "validation": {
+    "targeted_node_tests": {
+      "pass": 179,
+      "fail": 0
+    },
+    "chrome_headless": {
+      "engine": "ANGLE SwiftShader WebGL",
+      "status": "PASS",
+      "exit_code": 0,
+      "webgl_error": 0,
+      "materials": 6,
+      "mobile_viewport_width": 390,
+      "desktop_orbit": "PASS",
+      "touch_orbit": "PASS",
+      "mote_toggle": "PASS",
+      "prior_magnetic_AB": "PASS",
+      "prior_depth_AB": "PASS",
+      "pause_resume": "PASS"
+    },
+    "wave_impact": {
+      "motes_enabled": false,
+      "paused_material": true,
+      "stage_size": [
+        592,
+        520
+      ],
+      "pixels": 307840,
+      "changed_pixels": 14106,
+      "changed_percent": 4.58225051975052,
+      "major_percent": 2.9632276507276507,
+      "pointer_strength_at_capture": 0.34
+    },
+    "wave_recovery": {
+      "after_ms": 2650,
+      "changed_pixels": 0,
+      "changed_percent": 0,
+      "strength": 0,
+      "rest_and_recovered_same_git_blob": true
+    },
+    "pictures": [
+      "r176-wave-rest.png",
+      "r176-wave-impact.png",
+      "r176-wave-recovered.png"
+    ],
+    "external_public_preview": "PENDING",
+    "owner_aesthetic_acceptance": "PENDING",
+    "hardware_gpu_fps": "NOT_MEASURED"
+  },
+  "protected": {
+    "official_vitrine_changed": false,
+    "main_unchanged": true,
+    "approved_home_blob": "1413e30138ba1657f7056401818e697ddbd32ac8",
+    "approved_core_blob": "dd63d75fdb966de2052595c95b7b6cb736d6c7cc"
+  },
+  "rollback": "R175 readability baseline 76e84d98438555842395a9284ffbfe052fe16edb",
+  "status": "LAB_CANDIDATE"
+}

@@ -264,6 +264,7 @@ varying vec2 vAxis;
 uniform vec2 uResolution;
 uniform float uTime,uPass,uLayer;
 uniform vec4 uControls,uShape,uEffects;
+uniform vec4 uPointer; // R176: cursor displacement drives the actual volumetric waves
 uniform vec3 uCore,uCyan,uViolet,uDeep;
 uniform vec2 uTilt;
 uniform float uVolumeSteps;
@@ -314,6 +315,17 @@ void main(){
   float emission=clamp(uControls.y,0.,2.);
   // Compact core size independent of its radiance. Power never widens the core.
   float nucleusRadius=max(.018,radius*uShape.z*.105);
+  // R176: an impulse bends the existing 3D flow, with no extra light layer.
+  // Compute once per ray, rather than adding trigonometry to every depth step.
+  vec2 cursorDelta=p-uPointer.xy;
+  float cursorDistance=length(cursorDelta);
+  vec2 radial=cursorDelta/max(cursorDistance,.015);
+  vec2 tangent=vec2(-radial.y,radial.x);
+  float influence=uPointer.z*(1.-smoothstep(.05,.53,cursorDistance));
+  float centreGuard=smoothstep(.075,.20,length(p));
+  float ripplePhase=cursorDistance*22.0-t*6.0;
+  vec2 waveWarp=(radial*cos(ripplePhase)*.13+
+                 tangent*sin(ripplePhase*.81)*.105)*influence*centreGuard;
   for(int i=0;i<22;i++){
     if(float(i)>=uVolumeSteps)break;
     float z=halfDepth-(float(i)+.5)*stride;
@@ -322,7 +334,9 @@ void main(){
     q=vec3(q.x*cy+q.z*sy,
            q.y*cx-(q.z*cy-q.x*sy)*sx,
            q.y*sx+(q.z*cy-q.x*sy)*cx);
-    float distance3D=length(q)/radius;
+    vec3 undisturbedQ=q;
+    q.xy+=waveWarp*(.72+.28*(1.-smoothstep(0.,radius,abs(z))));
+    float distance3D=length(undisturbedQ)/radius;
     float planar=length(q.xy)/radius;
     float angle=atan(q.y,q.x);
     float broad=noise3(q*3.8+vec3(t*.12,-t*.11,t*.08));
@@ -337,8 +351,8 @@ void main(){
     float volumeFog=clamp(.23+.30*broad+.18*detail,0.,1.);
     float hollow=1.-smoothstep(.2,.83,abs(broad-detail)*2.0);
     float interior=1.-smoothstep(.92,1.02,distance3D);
-    float core=exp(-dot(q,q)/(nucleusRadius*nucleusRadius)*1.65);
-    float coreHalo=exp(-dot(q,q)/(nucleusRadius*nucleusRadius)*.18);
+    float core=exp(-dot(undisturbedQ,undisturbedQ)/(nucleusRadius*nucleusRadius)*1.65);
+    float coreHalo=exp(-dot(undisturbedQ,undisturbedQ)/(nucleusRadius*nucleusRadius)*.18);
     float electrical=0.,vortex=0.,fusion=0.;
     if(uControls.x>.5&&uControls.x<1.5){
       electrical=pow(max(0.,.5+.5*cos(winding*2.2+detail*9.)),23.);
@@ -575,6 +589,7 @@ void main(){
  function draw(now){
   frame=0;if(!active||!visible||document.visibilityState!=='visible')return;
   if(lastFrame&&now-lastFrame<32){frame=requestAnimationFrame(draw);return;}
+  const frameStep=lastFrame?Math.min(.15,Math.max(0,(now-lastFrame)/1000)):.033;
   if(!resize())return;lastFrame=now;
   if(last)elapsed+=Math.min((now-last)/1000,.06)*Math.max(0,num('particleSpeed'));last=now;
   const mobile=window.innerWidth<=700,preset=sel('particlePreset');
@@ -594,8 +609,10 @@ void main(){
   gl.uniform1f(U.uCompare,compareVariant);
   gl.uniform1f(U.uDepthRefine,depthVariant);
   gl.uniform4f(U.uPointer,pointerX,pointerY,pointerForce,motesEnabled?1:0);
-  pointerForce*=.88;
-  if(pointerForce<.006)pointerForce=0;
+  stage.dataset.waveStrength=pointerForce.toFixed(3);
+  // Time-based damping: identical recovery on fast GPUs and slower SwiftShader.
+  pointerForce*=Math.exp(-3.6*frameStep);
+  if(pointerForce<.004)pointerForce=0;
   gl.uniform4fv(U.uControls,new Float32Array([
     preset,num('particleIntensity'),num('particleSpeed'),num('particleDensity')
   ]));
@@ -693,7 +710,8 @@ void main(){
   orbit.pointerId=null;stage.classList.remove('orbit-dragging');
  };
  stage.addEventListener('pointerleave',()=>{
-  pointerX=9;pointerY=9;pointerForce=0;lastPointerX=null;lastPointerY=null;
+  // Keep the last contact point until the wave naturally dissipates.
+  lastPointerX=null;lastPointerY=null;
  });
  stage.addEventListener('pointerup',stopOrbit);
  stage.addEventListener('pointercancel',stopOrbit);

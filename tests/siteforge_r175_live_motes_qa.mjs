@@ -66,6 +66,28 @@ try{
  console.log('R175_MOTES_READABILITY_DIFF '+JSON.stringify(motePixelDiff));
  if(motePixelDiff.changedPercent<.35||motePixelDiff.majorPercent<.25)
   throw Error('R175_MOTES_READABILITY_TOO_LOW '+JSON.stringify(motePixelDiff));
+ // R176: isolate the actual volumetric flow from decorative motes at paused time.
+ const waveBounds=await call('Runtime.evaluate',{expression:"JSON.stringify((()=>{const r=document.querySelector('.core-r109-stage').getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height}})())",returnByValue:true});
+ const b=JSON.parse(waveBounds.result.value);
+ const clipWave={x:b.x,y:b.y,width:b.width,height:b.height,scale:1};
+ const waveStill=await call('Page.captureScreenshot',{format:'png',clip:clipWave,captureBeyondViewport:false});
+ writeFileSync(join(root,'r176-wave-rest.png'),Buffer.from(waveStill.data,'base64'));
+ await call('Input.dispatchMouseEvent',{type:'mouseMoved',x:b.x+b.width*.43,y:b.y+b.height*.38});
+ await call('Input.dispatchMouseEvent',{type:'mouseMoved',x:b.x+b.width*.57,y:b.y+b.height*.47});
+ await sleep(45);
+ const waveImpact=await call('Page.captureScreenshot',{format:'png',clip:clipWave,captureBeyondViewport:false});
+ writeFileSync(join(root,'r176-wave-impact.png'),Buffer.from(waveImpact.data,'base64'));
+ const waveDiff=comparePngPixels(Buffer.from(waveStill.data,'base64'),Buffer.from(waveImpact.data,'base64'));
+ const waveState=await call('Runtime.evaluate',{expression:"JSON.stringify({strength:document.querySelector('.core-r109-stage').dataset.waveStrength,motes:document.querySelector('.core-r109-stage').dataset.motesEnabled,parameters:document.querySelectorAll('[data-sphere-control]').length})",returnByValue:true});
+ console.log('R176_REAL_PLASMA_WAVE_IMPACT '+JSON.stringify({waveDiff,state:JSON.parse(waveState.result.value)}));
+ if(waveDiff.changedPercent<.7)throw Error('R176_PLASMA_WAVE_IMPACT_INVISIBLE '+JSON.stringify(waveDiff));
+ await sleep(2650);
+ const waveRecovered=await call('Page.captureScreenshot',{format:'png',clip:clipWave,captureBeyondViewport:false});
+ writeFileSync(join(root,'r176-wave-recovered.png'),Buffer.from(waveRecovered.data,'base64'));
+ const recoveredDiff=comparePngPixels(Buffer.from(waveStill.data,'base64'),Buffer.from(waveRecovered.data,'base64'));
+ const waveAfter=await call('Runtime.evaluate',{expression:"document.querySelector('.core-r109-stage').dataset.waveStrength",returnByValue:true});
+ console.log('R176_REAL_PLASMA_WAVE_RECOVERED '+JSON.stringify({recoveredDiff,strength:waveAfter.result.value}));
+ if(recoveredDiff.changedPercent>.15)throw Error('R176_PLASMA_WAVE_NOT_RECOVERED '+JSON.stringify(recoveredDiff));
  await call('Runtime.evaluate',{expression:"document.querySelector('[data-mote-toggle]').click()"});
  const pos=await call('Runtime.evaluate',{expression:"JSON.stringify((()=>{const r=document.querySelector('.core-r109-stage').getBoundingClientRect();return {x:r.left+r.width*.28,y:r.top+r.height*.43}})())",returnByValue:true});
  const pointerPos=JSON.parse(pos.result.value);
