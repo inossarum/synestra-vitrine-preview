@@ -16,14 +16,15 @@ test('R173 physically painted holographic dial is clearly visible, rotates, and 
  assert.doesNotMatch(html,/class="r172-energy-halo"|class="core-tools-orbit"|class="r172-energy-conduits"/);
  assert.equal((html.match(/<canvas\b/g)||[]).length,1);
 });
-test('R173 active architecture has no pointer-dependency or external render process',()=>{
- for(const name of ['r173-environment','r173-grid','r173-beam-one','r173-beam-two','r173-scan'])assert.ok(html.includes('class="'+name+'"')||html.includes(' '+name+'"'),name);
- for(const name of ['r173-grid-drift','r173-beam-sweep','r173-scan-travel','r173-section-current','r173-card-shimmer'])assert.match(css,new RegExp('@keyframes '+name+'\\{'),name);
- assert.match(css,/animation:r173-beam-sweep 14s linear -3s infinite/);
- assert.match(css,/animation:r173-section-current 9\.5s linear infinite/);
- assert.match(css,/animation:r173-card-shimmer 9s linear infinite/);
+test('R174 removes page-wide scanning beams, traveling lines and card sweeps',()=>{
+ assert.match(html,/class="r173-environment"/);
+ assert.match(html,/class="r173-grid"/);
+ assert.match(css,/@keyframes r173-grid-drift\{/);
+ for(const forbidden of ['r173-beam','r173-scan','r173-section-current','r173-card-shimmer'])
+   assert.doesNotMatch(html,new RegExp(forbidden),forbidden);
+ assert.doesNotMatch(css,/main>\.section::before\s*\{/);
+ assert.doesNotMatch(css,/\.product-card::after\s*\{/);
  assert.match(css,/@media\(prefers-reduced-motion:reduce\)\{/);
- assert.match(css,/\.r173-environment \.r173-grid,\.r173-environment \.r173-beam/);
  assert.match(html,/R171 accessible pilot CTA/);
  assert.equal((html.match(/<script\b/g)||[]).length,1);
 });
