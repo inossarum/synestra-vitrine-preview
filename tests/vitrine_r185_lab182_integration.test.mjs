@@ -19,7 +19,7 @@ test('R185 carries all 18 plasma controls and 10 microfacet controls',()=>{
  assert.equal((html.match(/data-sphere-control="/g)||[]).length,18);
  assert.equal((html.match(/data-mote-control="/g)||[]).length,10);
  assert.match(html,/data-lab-engine="R182"/);
- assert.match(html,/data-sphere-control="diameter" data-default="83" value="83"/);
+ assert.match(html,/data-sphere-control="diameter" data-default="100" value="100"/);
  assert.match(html,/data-mote-control="moteCount" data-default="0" value="0"/);
  assert.match(html,/tabindex="0" role="group" data-lab-engine="R182"/);
 });
