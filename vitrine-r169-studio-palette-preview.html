@@ -1723,6 +1723,55 @@ header.site-header nav.site-nav a.nav-cta:active {transform:translateY(0)}
   header.site-header nav.site-nav a.nav-cta {transition:none!important;transform:none!important}
 }
 
+
+/* R172 autonomous chamber energy: continuous, legible visual activity with no mouse.
+   Visual hierarchy: one calm orbit + flowing architectural rails, no extra canvas/WebGL.
+   CSS-only timers; never alter the verified core shader or particle configuration. */
+.r172-energy-halo {
+ position:absolute;z-index:2;pointer-events:none;left:50%;top:43%;
+ width:clamp(205px,26vw,305px);aspect-ratio:1;
+ transform:translate(-50%,-50%);
+ border-radius:50%;
+ filter:drop-shadow(0 0 11px rgba(101,156,250,.31));
+}
+.r172-energy-halo::before {
+ content:"";position:absolute;inset:0;border-radius:50%;
+ background:conic-gradient(from 0deg,
+ transparent 0deg 31deg,rgba(156,139,245,.09) 44deg,#b1a4ff 54deg,rgba(134,224,240,.64) 62deg,
+ transparent 80deg 170deg,#63b9ff 184deg,rgba(132,228,249,.73) 193deg,transparent 218deg 360deg);
+ -webkit-mask:radial-gradient(farthest-side,transparent 72%,#000 74%,#000 77%,transparent 80%);
+ mask:radial-gradient(farthest-side,transparent 72%,#000 74%,#000 77%,transparent 80%);
+ animation:r172-energy-orbit 8.5s linear infinite;
+}
+.r172-energy-halo::after {
+ content:"";position:absolute;inset:14%;border-radius:50%;
+ border:1px solid rgba(127,205,251,.17);
+ box-shadow:0 0 24px rgba(56,156,249,.13),inset 0 0 20px rgba(75,113,224,.10);
+ animation:r172-energy-breath 4.2s ease-in-out infinite;
+}
+.core-r109-stage .syn-r169-room .r172-rail-current,
+.core-r109-stage .syn-r169-room .r172-rail-glow {animation:r172-rail-travel 4.8s linear infinite;}
+.core-r109-stage .syn-r169-room .r172-rail-glow {animation-delay:-.12s;}
+.core-r109-stage .syn-r169-room .r172-rail-top {animation:r172-top-travel 6.3s linear infinite;}
+.core-r109-stage .syn-r169-room .r172-beacon {animation:r172-beacon-beat 2.6s ease-in-out infinite;}
+.core-r109-stage .syn-r169-room .r172-beacon-right{animation-delay:-1.3s;}
+@keyframes r172-energy-orbit {to{transform:rotate(360deg)}}
+@keyframes r172-energy-breath {0%,100%{opacity:.38;transform:scale(.975)}50%{opacity:.94;transform:scale(1.025)}}
+@keyframes r172-rail-travel {to{stroke-dashoffset:-708}}
+@keyframes r172-top-travel {to{stroke-dashoffset:-464}}
+@keyframes r172-beacon-beat {0%,100%{opacity:.36;filter:drop-shadow(0 0 2px #86e0f0)}
+ 55%{opacity:1;filter:drop-shadow(0 0 7px #86e0f0)}}
+/* Responsive: preserve space for the three public product satellites. */
+@media(max-width:620px){.r172-energy-halo{width:216px;top:43%}}
+@media(prefers-reduced-motion:reduce){
+ .r172-energy-halo::before,.r172-energy-halo::after,
+ .core-r109-stage .syn-r169-room .r172-energy-conduits * {animation:none!important}
+ .r172-energy-halo::before{opacity:.22}
+ .core-r109-stage .syn-r169-room .r172-rail-current,
+ .core-r109-stage .syn-r169-room .r172-rail-glow,
+ .core-r109-stage .syn-r169-room .r172-rail-top {stroke-dasharray:none;stroke-opacity:.12}
+}
+
 </style>
 </head>
 <body>
@@ -2204,6 +2253,15 @@ header.site-header nav.site-nav a.nav-cta:active {transform:translateY(0)}
     <path d="M318 181H481" stroke="url(#r168-violet)" stroke-width="5" opacity=".50"/>
     <rect x="0" y="0" width="800" height="640" fill="url(#r168-aura)" opacity=".8"/>
   </g>
+<!-- R172 autonomous chamber energy — guided rails with no pointer or JS dependency. -->
+<g class="r172-energy-conduits" aria-hidden="true" fill="none">
+  <path class="r172-rail-base" d="M237 407V218L282 166H518L563 218V407" stroke="#72b8ff" stroke-width="2.1" stroke-opacity=".19"/>
+  <path class="r172-rail-glow" d="M237 407V218L282 166H518L563 218V407" stroke="#87e8ff" stroke-width="6" stroke-opacity=".8" stroke-dasharray="58 650" filter="url(#r169-light-bloom)"/>
+  <path class="r172-rail-current" d="M237 407V218L282 166H518L563 218V407" stroke="#a8f2ff" stroke-width="2.8" stroke-dasharray="58 650" stroke-linecap="round"/>
+  <path class="r172-rail-top" d="M190 141H610" stroke="#9c89ff" stroke-width="3.2" stroke-dasharray="34 430" stroke-linecap="round"/>
+  <circle class="r172-beacon r172-beacon-left" cx="237" cy="407" r="3.8" fill="#8fe9fa" stroke="#4757a8" stroke-width="1.5"/>
+  <circle class="r172-beacon r172-beacon-right" cx="563" cy="407" r="3.8" fill="#8fe9fa" stroke="#4757a8" stroke-width="1.5"/>
+</g>
 <g class="r169-ambient-light">
 <ellipse cx="400" cy="320" rx="190" ry="180" fill="url(#r169-portal-halo)" opacity=".78"/>
 <ellipse cx="400" cy="72" rx="260" ry="120" fill="url(#r169-overhead)" opacity=".45"/>
@@ -2225,6 +2283,7 @@ header.site-header nav.site-nav a.nav-cta:active {transform:translateY(0)}
 <circle cx="550" cy="395" r="2.3" fill="#7a8099"/><circle cx="550" cy="395" r=".8" fill="#121727"/>
 </g>
 </svg>
+        <div class="r172-energy-halo" aria-hidden="true"></div>
         <canvas class="core-r109-canvas" aria-hidden="true" width="960" height="570"></canvas>
         <div class="synestra-core-prototype-controls" hidden aria-hidden="true">
 <input type="hidden" data-sphere-control="flowType" data-default="0" value="0">
