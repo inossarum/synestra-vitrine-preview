@@ -1,51 +1,90 @@
 {
-    "schema":  "synestra.siteforge.r181.crystal-optics-mobile.evidence.v1",
-    "date":  "2026-10-28",
-    "mission_id":  "SYN_SITEFORGE_R181_CRYSTAL_OPTICS_MOBILE",
-    "scope":  {
-                  "repo":  "inossarum/synestra-vitrine-preview",
-                  "branch":  "task/SYN_SITEFORGE_R181_CRYSTAL_OPTICS_MOBILE_20261028",
-                  "base":  "11bf5e13ac281aec49526a40d87b764bc444fe9a",
-                  "main_unchanged":  "df67fcd5cc6b7cc0fb42fa86c8920d28b9427494",
-                  "preview_repo":  "inossarum/synestra-siteforge-r176-lab",
-                  "previous_pages_head":  "990821f07e1274b06fbbb29fcd5fbe4a300a4871",
-                  "new_preview_path":  "r181.html"
-              },
-    "patch":  {
-                  "engine_blob_sha":  "e08a1fc3992fc5463b583b4845892b2450c5b250",
-                  "html_blob_sha":  "694ceaa38b06a016d9b2350a9102b5a348ed686c",
-                  "bundle_blob_sha":  "85c7a6df2ac79d482d4886ecbca20f68fdfda6db"
-              },
-    "improvements":  [
-                         "GPU crystal outline changed to six-sided oblique cut rather than a single flat diamond",
-                         "Fragment face normals determine diffuse lighting from the plasma centre; bevel and specular reflection on separate facets",
-                         "Old spark/orb looks remain in branch-separated shader code; the old exponentials need not run in crystal branch",
-                         "Mobile volume sample budget: 14 normally, 12 for heavy pixel load \u003e240000 pixels or \u003e75 motes, 22 on desktop; preserves one WebGL program and common spin phase",
-                         "All 18 plasma settings, eight mote settings and v1 JSON schema preserved"
-                     ],
-    "tests":  {
-                  "node":  "146/146 PASS",
-                  "static":  "SYNESTRA_STATIC_EXPORT PASS 49 files",
-                  "chrome_local":  "PASS real Chrome Windows WebGL, exit 0, six materials, 390px mobile, full 180/360 orbit, touch and mouse, 3D faceted optics, JSON compatibility, GL error=0",
-                  "chrome_public":  "PENDING",
-                  "new_crystal_comparison":  {
-                                                 "compared_pixels":  307840,
-                                                 "changed_pixels":  49025,
-                                                 "changed_percent":  15.92548076923077,
-                                                 "limitation":  "Full captured region difference, not pixel-isolated crystal-only claim"
-                                             },
-                  "mobile_adaptive":  "PASS: mobile 390px 14 samples default, 160 user motes -\u003e 96 rendered / 12 samples, then 46 -\u003e 28 rendered / 14 samples, gl error 0"
-              },
-    "preview":  {
-                    "url":  "https://inossarum.github.io/synestra-siteforge-r176-lab/r181.html",
-                    "state":  "PENDING",
-                    "rollback":  "Remove only r181.html; R176/R177/R178/R179/R180 untouched"
-                },
-    "guardrails":  {
-                       "main_no_mutation":  true,
-                       "access_no_mutation":  true,
-                       "free_only":  true,
-                       "user_visual_acceptance":  "PENDING"
-                   },
-    "status":  "LOCAL_CHROME_PASS_PUBLIC_E2E_PENDING"
+  "schema": "synestra.siteforge.r181.crystal-optics-mobile.evidence.v1",
+  "date": "2026-10-28",
+  "mission_id": "SYN_SITEFORGE_R181_CRYSTAL_OPTICS_MOBILE",
+  "scope": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_SITEFORGE_R181_CRYSTAL_OPTICS_MOBILE_20261028",
+    "base": "11bf5e13ac281aec49526a40d87b764bc444fe9a",
+    "main_unchanged": "df67fcd5cc6b7cc0fb42fa86c8920d28b9427494",
+    "preview_repo": "inossarum/synestra-siteforge-r176-lab",
+    "previous_pages_head": "990821f07e1274b06fbbb29fcd5fbe4a300a4871",
+    "new_preview_path": "r181.html"
+  },
+  "patch": {
+    "engine_blob_sha": "e08a1fc3992fc5463b583b4845892b2450c5b250",
+    "html_blob_sha": "694ceaa38b06a016d9b2350a9102b5a348ed686c",
+    "bundle_blob_sha": "85c7a6df2ac79d482d4886ecbca20f68fdfda6db"
+  },
+  "improvements": [
+    "GPU crystal outline changed to six-sided oblique cut rather than a single flat diamond",
+    "Fragment face normals determine diffuse lighting from the plasma centre; bevel and specular reflection on separate facets",
+    "Old spark/orb looks remain in branch-separated shader code; the old exponentials need not run in crystal branch",
+    "Mobile volume sample budget: 14 normally, 12 for heavy pixel load >240000 pixels or >75 motes, 22 on desktop; preserves one WebGL program and common spin phase",
+    "All 18 plasma settings, eight mote settings and v1 JSON schema preserved"
+  ],
+  "tests": {
+    "node": "146/146 PASS",
+    "static": "SYNESTRA_STATIC_EXPORT PASS 49 files",
+    "chrome_local": "PASS (exit 0), 146 Node tests, 49 static files; 3 GPU styles, six materials, mobile 390px, JSON roundtrip, 180/360, zero WebGL errors",
+    "chrome_public": {
+      "status": "PASS",
+      "exit_code": 0,
+      "url": "https://inossarum.github.io/synestra-siteforge-r176-lab/r181.html",
+      "pages_status": "built",
+      "http_status": 200,
+      "access_login": false,
+      "webgl_error": 0,
+      "all_six_materials": "PASS",
+      "mobile_390px": "PASS",
+      "orbit_mouse_touch_360": "PASS",
+      "rotation_shared_speed": "PASS",
+      "import_export_json": "PASS",
+      "mote_controls": 8,
+      "plasma_controls": 18,
+      "faceted_vs_r180_capture": {
+        "changed_pixels": 70203,
+        "total_pixels": 307840,
+        "changed_percent": 22.805028586278585,
+        "limitation": "Captures across separate runs, includes animation/runtime variation; not a crystal-only metric"
+      },
+      "mobile_adaptive": {
+        "default_slices": 14,
+        "dense_slices": 12,
+        "high_density_motes": 96,
+        "mobile_390": true,
+        "gl_error": 0,
+        "back_to_default_slices": 14,
+        "verified": true
+      },
+      "original_plasma_wave_reset_changed_pixels": 0
+    },
+    "new_crystal_comparison": {
+      "compared_pixels": 307840,
+      "changed_pixels": 49025,
+      "changed_percent": 15.92548076923077,
+      "limitation": "Full captured region difference, not pixel-isolated crystal-only claim"
+    },
+    "mobile_adaptive": "PASS on real Chrome 390px, 14 sample standard, 12 adaptive for 96 motes, then 14 restored; WebGL error 0; no physical GPU FPS measurement"
+  },
+  "preview": {
+    "url": "https://inossarum.github.io/synestra-siteforge-r176-lab/r181.html",
+    "state": "PENDING",
+    "rollback": "Remove only r181.html; R176/R177/R178/R179/R180 untouched"
+  },
+  "guardrails": {
+    "main_no_mutation": true,
+    "access_no_mutation": true,
+    "free_only": true,
+    "user_visual_acceptance": "PENDING"
+  },
+  "status": "PUBLIC_GITHUB_PAGES_REAL_CHROME_E2E_PASS; OWNER_VISUAL_ACCEPTANCE_PENDING",
+  "public_preview": {
+    "url": "https://inossarum.github.io/synestra-siteforge-r176-lab/r181.html",
+    "state": "PASS",
+    "rollback": "Remove only r181.html; R176/R177/R178/R179/R180 untouched",
+    "pages_head": "f194d783cd64dd3155db9058c717ca443be997e7",
+    "public_blob_sha": "85c7a6df2ac79d482d4886ecbca20f68fdfda6db",
+    "verification": "HTTP 200 + Chrome public URL E2E PASS"
+  }
 }
