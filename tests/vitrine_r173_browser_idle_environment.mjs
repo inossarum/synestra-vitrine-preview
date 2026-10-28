@@ -54,6 +54,26 @@ for(const vw of [1280,390,320]){
   await send('Runtime.evaluate',{expression:"window.scrollTo({top:0,behavior:'instant'})"});
  }
  console.log('R179_EDITORIAL_CDP_'+vw+'=PASS '+JSON.stringify(manifest));
+ const r180Expr = `JSON.stringify((()=>{const cards=[...document.querySelectorAll('#plateforme .product-card')];const examples=[...document.querySelectorAll('#exemples .example-card')];const r=(x)=>x.getBoundingClientRect();const bounds=cards.map(c=>({visual:{left:r(c.querySelector('.product-visual')).left,top:r(c.querySelector('.product-visual')).top,width:r(c.querySelector('.product-visual')).width},copy:{left:r(c.querySelector('.product-card-body')).left,top:r(c.querySelector('.product-card-body')).top},cols:getComputedStyle(c).gridTemplateColumns}));return {cards:cards.length,examples:examples.length,gridCols:getComputedStyle(document.querySelector('#plateforme .product-grid')).gridTemplateColumns,caseCols:getComputedStyle(document.querySelector('#exemples .example-card')).gridTemplateColumns,bounds,bridgeSweep:getComputedStyle(document.querySelector('.bridge-visual'),'::after').animationName,siteforgeSweep:getComputedStyle(document.querySelector('.siteforge-showcase'),'::after').animationName,scrollWidth:document.documentElement.scrollWidth}})())`;
+ const r180=JSON.parse((await send('Runtime.evaluate',{expression:r180Expr,returnByValue:true})).result.value);
+ const isWide=vw>980;
+ const positionsOk=isWide
+ ?r180.bounds[0].visual.left<r180.bounds[0].copy.left && r180.bounds[1].copy.left<r180.bounds[1].visual.left
+ :r180.bounds.every(b=>b.visual.top<b.copy.top);
+ if(r180.cards!==2||r180.examples!==3||!positionsOk||r180.bridgeSweep!=='none'||r180.siteforgeSweep!=='none'||r180.scrollWidth>vw+2)
+  throw Error('R180_EDITORIAL_REGRESSION_'+vw+' '+JSON.stringify(r180));
+ if(capture&&vw!==320){
+  await send('Runtime.evaluate',{expression:"document.querySelector('#plateforme .product-card').scrollIntoView({block:'start',behavior:'instant'})"});
+  await sleep(150);
+  const productShot=await send('Page.captureScreenshot',{format:'png',fromSurface:true,captureBeyondViewport:false});
+  writeFileSync(join(root,'r180_product_'+vw+'.png'),Buffer.from(productShot.data,'base64'));
+  await send('Runtime.evaluate',{expression:"document.querySelector('#exemples').scrollIntoView({block:'start',behavior:'instant'})"});
+  await sleep(150);
+  const examplesShot=await send('Page.captureScreenshot',{format:'png',fromSurface:true,captureBeyondViewport:false});
+  writeFileSync(join(root,'r180_examples_'+vw+'.png'),Buffer.from(examplesShot.data,'base64'));
+  await send('Runtime.evaluate',{expression:"window.scrollTo({top:0,behavior:'instant'})"});
+ }
+ console.log('R180_EDITORIAL_CDP_'+vw+'=PASS '+JSON.stringify(r180));
  const wfBefore=await getWayfinder();
  if(wfBefore.headerPosition!=='sticky'||wfBefore.headerHeight>130||!wfBefore.dockVisible||wfBefore.links.join(',')!=='#plateforme,#exemples,#approche'||wfBefore.cardWidths.some(n=>n<150)||wfBefore.scrollWidth>vw+2)throw Error('R178_NAV_INITIAL_FAIL_'+vw+' '+JSON.stringify(wfBefore));
  if(capture){
