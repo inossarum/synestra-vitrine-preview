@@ -1,0 +1,46 @@
+{
+  "schema": "synestra.siteforge.r177.volumetric-motes.evidence.v1",
+  "date": "2026-10-28",
+  "mission_id": "SYN_SITEFORGE_R177_VOLUMETRIC_MOTES_ORBIT",
+  "scope": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_SITEFORGE_R177_VOLUMETRIC_MOTES_20261028",
+    "base_sha": "0518d941a713983ec8d4d3ff0565c66d0f1c8d8a",
+    "official_main": "df67fcd5cc6b7cc0fb42fa86c8920d28b9427494",
+    "public_preview_repo": "inossarum/synestra-siteforge-r176-lab",
+    "rollback_public_preview_commit": "270d587b1eeb7191b1346793e0f8f270cb7062ca"
+  },
+  "cause": "Old GPU mote pass has 3D XYZ positions but only projects XY, ignoring the exact inverse of the volumetric plasma camera tilt. Artificial Z parallax cannot produce coherent orbit or real depth masking.",
+  "fix": [
+    "Fibonacci XYZ shell, 46 desktop/28 mobile, multi-radius and slow independent local drift",
+    "Inverse volumetric camera rotation Ry(-yaw)*Rx(-pitch) with same uTilt",
+    "Pointer transformed into local coordinates and local force applied before rendering rotation",
+    "Rear shards masked behind sphere silhouette, visible when orbit brings them to rim",
+    "One WebGL program, 18 JSON settings and six materials preserved"
+  ],
+  "tests": {
+    "node_build_gate": "120/120 PASS",
+    "new_orbit_geometry": "5/5 PASS",
+    "chrome_local_webgl": "PASS exit 0; 6 materials; 390px mobile; mouse and touch orbit; pause/resume; 18 settings; no WebGL errors",
+    "chrome_mote_mask": {
+      "home_pixels": 3743,
+      "turned_pixels": 3817,
+      "changed_mask_pixels": 2380,
+      "overlap_pixels": 2590,
+      "yaw": 0.519,
+      "pitch": -0.181
+    },
+    "plasma_warp": {
+      "changed_pixels": 7118,
+      "frame_pixels": 307840,
+      "recovered_changed_pixels": 0
+    },
+    "screenshots": [
+      "r177-motes-home.png",
+      "r177-motes-turned.png"
+    ]
+  },
+  "status": "LOCAL_PASS_PUBLIC_E2E_PENDING",
+  "public_url": "https://inossarum.github.io/synestra-siteforge-r176-lab/",
+  "security": "Separate public static lab; main unchanged; no Cloudflare Access changes; FREE_ONLY"
+}

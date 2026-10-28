@@ -161,9 +161,26 @@ uniform vec4 uPointer; // cursor XY in 3D preview, impulse, enabled (R175)
 uniform vec4 uShape; // sphere radius, shell, core radius, core flux
 uniform vec4 uEffects; // arc power, arc count, sprite size, opacity
 varying float vLife,vGlint;
-varying vec2 vAxis;
+varying vec2 vAxis,vMoteCenter;
+varying float vMoteDepth;
+uniform float uMoteCount;
+// R177: fragment's volume uses local=Rx(pitch)*Ry(yaw)*view.
+// Embers must use its exact inverse: view=Ry(-yaw)*Rx(-pitch)*local.
+vec3 orbitToView(vec3 local){
+ float sy=sin(uTilt.x*1.5),cy=cos(uTilt.x*1.5);
+ float sx=sin(uTilt.y*1.5),cx=cos(uTilt.y*1.5);
+ vec3 v=vec3(local.x,local.y*cx+local.z*sx,-local.y*sx+local.z*cx);
+ return vec3(v.x*cy-v.z*sy,v.y,v.x*sy+v.z*cy);
+}
+vec3 orbitToLocal(vec3 view){
+ float sy=sin(uTilt.x*1.5),cy=cos(uTilt.x*1.5);
+ float sx=sin(uTilt.y*1.5),cx=cos(uTilt.y*1.5);
+ vec3 v=vec3(view.x*cy+view.z*sy,view.y,-view.x*sy+view.z*cy);
+ return vec3(v.x,v.y*cx-v.z*sx,v.y*sx+v.z*cx);
+}
 float rnd(float x){return fract(sin(x*127.1+49.6)*43758.5453);}
 void main(){
+ vMoteDepth=0.;vMoteCenter=vec2(10.);
  if(uPass>3.5&&uPass<4.5){
   vLife=1.;vGlint=1.;vAxis=vec2(1.,0.);gl_PointSize=1.;
   gl_Position=vec4(aPosition,0.,1.);return;
@@ -206,22 +223,27 @@ void main(){
   life*=mix(.28,1.,step(0.,p.z))*clamp(uEffects.x,0.,3.);
   vAxis=dir;sizeFactor=.77;
  }else if(uPass>4.5){
-  // R175: three-dimensional orbiting energy embers, outside the core.
-  float moteDepth=rnd(i*5.23+13.)*2.-1.;
-  float moteRadius=radius*(.99+.24*rnd(i*7.19+17.));
-  float polar=i*2.39996323+t*(.055+.038*rnd(i+47.));
-  float ring=sqrt(max(.0,1.-moteDepth*moteDepth));
-  p=vec3(cos(polar)*ring*moteRadius,
-         sin(polar)*ring*moteRadius,
-         moteDepth*moteRadius);
-  p.xy+=.028*vec2(sin(t*.41+i*2.11),cos(t*.36+i*.91));
-  // Parallax: near motes grow and drift faster than far motes.
-  p.xy*=1.+.16*moteDepth;
-  vec2 away=p.xy-uPointer.xy;
-  float proximity=1.-smoothstep(.07,.40,length(away));
-  p.xy+=away/max(length(away),.008)*proximity*.38*uPointer.z;
-  life=(.73+.27*rnd(i+11.))*(.81+.19*smoothstep(-1.,1.,moteDepth))*uPointer.w;
-  vAxis=vec2(cos(polar),sin(polar));sizeFactor=.78+.35*moteDepth;
+  // R177: evenly distributed deterministic Fibonacci-shell embers on every
+  // hemisphere, with multi-radius layers and SMALL independent local drift.
+  float z=1.-2.*(i+.5)/max(1.,uMoteCount);
+  float polar=i*2.39996323+.13*(rnd(i*19.1)-.5);
+  float ring=sqrt(max(.0,1.-z*z));
+  float moteRadius=radius*(1.035+.31*rnd(i*7.19+17.));
+  vec3 local=vec3(cos(polar)*ring,z,sin(polar)*ring)*moteRadius;
+  local+=.022*vec3(sin(t*.39+i*2.11),cos(t*.33+i*.91),sin(t*.28+i*1.37));
+  // Cursor force is calculated AND applied in the rotating local frame.
+  // Reconstruct the local point on the pointer ray at this mote's view depth.
+  vec3 viewProbe=orbitToView(local);
+  vec3 cursorLocal=orbitToLocal(vec3(uPointer.xy,viewProbe.z));
+  vec3 away=local-cursorLocal;
+  float proximity=1.-smoothstep(.07,.42,length(viewProbe.xy-uPointer.xy));
+  local+=away/max(length(away),.01)*proximity*.34*uPointer.z;
+  // EXACT reciprocal transform of the volumetric plasma's camera tilt.
+  p=orbitToView(local);
+  vMoteDepth=p.z;vMoteCenter=p.xy;
+  life=(.78+.22*rnd(i+11.))*uPointer.w;
+  vAxis=vec2(cos(polar),sin(polar));
+  sizeFactor=.76+.39*smoothstep(-radius,radius,p.z);
  }else if(uPass>2.5){
   float ang=a+t*.32;
   float r=pow(rnd(i*2.31+37.),1.5)*.13*clamp(uShape.z,.04,2.);
@@ -249,7 +271,7 @@ void main(){
  vLife=life;vGlint=.65+.35*rnd(i*3.17+19.);
  gl_PointSize=clamp((3.2+4.5*rnd(i+8.))*uEffects.z*sizeFactor*
        uResolution.y/460.*mix(1.85,1.,uLayer),1.,29.);
- if(uPass>4.5)gl_PointSize=clamp((11.0+9.0*rnd(i+8.))*(.90+.14*depth)*uResolution.y/518.,6.,22.);
+ if(uPass>4.5)gl_PointSize=clamp((11.0+9.0*rnd(i+8.))*sizeFactor*uResolution.y/518.,6.,22.);
  gl_Position=vec4(p.x*uResolution.y/max(uResolution.x,1.),p.y-.08,0.,1.);
 }
 `;
@@ -260,7 +282,8 @@ precision highp float;
 precision mediump float;
 #endif
 varying float vLife,vGlint;
-varying vec2 vAxis;
+varying vec2 vAxis,vMoteCenter;
+varying float vMoteDepth;
 uniform vec2 uResolution;
 uniform float uTime,uPass,uLayer;
 uniform vec4 uControls,uShape,uEffects;
@@ -284,6 +307,9 @@ void main(){
  p.x*=uResolution.x/max(uResolution.y,1.);p.y+=.08;
  float radius=.64*clamp(uShape.x,.5,1.5);
  if(uPass>4.5){
+  // R177: full 3D depth sorting by sphere silhouette. Rear embers are
+  // occluded by the volume, but appear again on its rim after orbiting.
+  if(vMoteDepth<-.02&&length(vMoteCenter)<radius*.985)discard;
   // R175 optical pass: sparse but legible directional sparks, not a starfield.
   vec2 q=gl_PointCoord*2.-1.;
   float r2=dot(q,q);
@@ -564,7 +590,7 @@ void main(){
  }
  gl.deleteShader(vert);gl.deleteShader(frag);
  const A=gl.getAttribLocation(program,'aPosition'),S=gl.getAttribLocation(program,'aSeed');
- const keys=['uResolution','uTime','uPass','uLayer','uTilt','uControls','uShape','uEffects','uCore','uCyan','uViolet','uDeep','uVolumeSteps','uFlow','uCompare','uDepthRefine','uPointer'];
+ const keys=['uResolution','uTime','uPass','uLayer','uTilt','uControls','uShape','uEffects','uCore','uCyan','uViolet','uDeep','uVolumeSteps','uFlow','uCompare','uDepthRefine','uPointer','uMoteCount'];
  const U=Object.fromEntries(keys.map(k=>[k,gl.getUniformLocation(program,k)]));
  if(A<0||S<0||keys.some(k=>U[k]===null)){status(mainStatus,'GPU : paramètres incomplets.');return;}
  const quad=gl.createBuffer(),seeds=gl.createBuffer();if(!quad||!seeds)return;
@@ -605,6 +631,7 @@ void main(){
   gl.uniform2f(U.uResolution,canvas.width,canvas.height);
   gl.uniform1f(U.uTime,elapsed);gl.uniform2f(U.uTilt,tiltX,tiltY);
   gl.uniform1f(U.uVolumeSteps,mobile?14:22);
+  gl.uniform1f(U.uMoteCount,moteCount);
   gl.uniform2f(U.uFlow,sel('flowType'),num('flowStructure'));
   gl.uniform1f(U.uCompare,compareVariant);
   gl.uniform1f(U.uDepthRefine,depthVariant);
