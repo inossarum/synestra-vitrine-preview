@@ -41,26 +41,76 @@
       "capture": "r186-real-neon-material.png",
       "vs_original_material_0_changed_pixels": 70944,
       "vs_original_material_0_total_pixels": 307840,
-      "webgl_error": 0
+      "webgl_error": 0,
+      "final_tuned_shader": true
     },
     "chrome_legacy_regression": {
       "status": "PASS",
       "exit_code": 0,
-      "materials_0_through_5": "PASS",
+      "materials_0_to_5": "PASS on public R186",
       "mobile_390px": "PASS",
       "mouse_touch_orbit": "PASS",
       "shared_rotation": "PASS",
       "json_compatibility": "PASS",
-      "note": "Legacy regression completed on preceding shader tuning, which differs only within new guarded R186 branch. Source preservation independently verified on final shader."
+      "webgl_error": 0
     },
-    "chrome_public": "PENDING"
+    "chrome_public": {
+      "status": "PASS",
+      "url": "https://inossarum.github.io/synestra-siteforge-r176-lab/r186.html",
+      "full_e2e_exit_code": 0,
+      "smoke_exit_code": 0,
+      "mobile_exit_code": 0,
+      "webgl_error": 0,
+      "full_orbit_mouse_touch": "PASS",
+      "legacy_materials_0_to_5": "PASS",
+      "new_material_6": "PASS",
+      "six_original_materials_unmodified_sha": "PASS",
+      "old_defaults_colors_and_abc_presets": "PASS",
+      "json_v1_compatibility": "PASS",
+      "new_material_vs_material0": {
+        "changed_pixels": 71248,
+        "total_pixels": 307840,
+        "changed_percent": 23.14
+      },
+      "mobile_new_material": {
+        "width": 390,
+        "flow_type": "6",
+        "volume_steps": 14,
+        "shared_spin": true,
+        "webgl_error": 0
+      },
+      "screenshots": [
+        {
+          "file": "r186-public-real-neon-material.png",
+          "git_sha": "b09ab3b8ac4c91bbc6cbcd96b736377b3e989823",
+          "commit": "1e9cb8c9d30deede028f45b645aac7111da83a73"
+        },
+        {
+          "file": "r186-public-neon-mobile.png",
+          "git_sha": "0f247234184443534de3051028517da9ecb77b4e",
+          "commit": "5fda71d8d406dc3faa9498b6725a9c8f8a4b4b7b"
+        }
+      ]
+    }
   },
   "release": {
-    "state": "CANDIDATE_PUBLIC_E2E_PENDING",
+    "state": "PUBLIC_PREVIEW_VERIFIED",
     "owner_visual_acceptance": "PENDING",
     "physical_mobile_gpu": "NOT_TESTED",
     "rollback": "Remove only new r186.html; R185 remains unchanged",
     "main_mutated": false,
-    "free_only": true
-  }
+    "free_only": true,
+    "pages_commit": "918ab6212340b0c2f4aef515b5945744324137a4",
+    "url": "https://inossarum.github.io/synestra-siteforge-r176-lab/r186.html",
+    "http_status": 200,
+    "access_login": false,
+    "pages_status": "built",
+    "public_html_blob": "50f88eef0a10c8509618e587398d3d3a6994885a",
+    "old_r185_html_blob_unchanged": "cc2a5fe40c98654a6588f88b9b24594d838e96e8",
+    "source_main_unchanged": "df67fcd5cc6b7cc0fb42fa86c8920d28b9427494"
+  },
+  "status": "PUBLIC_HTTPS_CHROME_E2E_PASS; ARTISTIC_REFERENCE_ACCEPTANCE_PENDING",
+  "source_final_qa_commit": "5fda71d8d406dc3faa9498b6725a9c8f8a4b4b7b",
+  "artistic_reference_fidelity": "NOT_ACCEPTED: new material is visibly softer and less intricate than owner-supplied rendered reference; further refinement required",
+  "next": "Artistic R187 iteration should improve neon rail sharpness, intertwined 3D geometry and controlled reflections ONLY inside material 6; preserve R185 and materials 0-5."
 }
