@@ -116,3 +116,14 @@ test('R181 portal hero overlaps a single WebGL stage on wide screens and preserv
  assert.match(css,/\.hero-v2 \.hero-copy\{[^}]*grid-area:1 \/ 1;align-self:center;justify-self:start/);
  assert.equal((html.match(/<canvas\b/g)||[]).length,1);
 });
+
+test('R182 owner-screenshot corrections prioritize the animated Core over typography and make stage links legible',()=>{
+ assert.match(css,/R182 \/ VISUAL HIERARCHY FIX after real owner screenshot/);
+ assert.match(css,/@media\(min-width:1100px\)\{/);
+ assert.match(css,/\.hero-v2 \.hero-copy\{[^}]*width:min\(47%,570px\)/);
+ assert.match(css,/\.hero-v2 h1\{[^}]*font-size:clamp\(3\.55rem,4\.65vw,5\.45rem\)/);
+ assert.match(css,/\.hero-v2 \.core-r109-stage \.core-r109-canvas\{[^}]*transform:translateX\(11%\) scale\(\.7\)!important/);
+ assert.match(css,/\.hero-v2 \.system-stage \.core-r108-links a\{[^}]*min-height:52px/);
+ assert.equal((html.match(/<canvas\b/g)||[]).length,1);
+ assert.doesNotMatch(html,/r173-beam-one|r173-scan-travel|r173-card-shimmer/);
+});
