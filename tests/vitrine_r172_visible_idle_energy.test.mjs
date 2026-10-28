@@ -9,7 +9,7 @@ test('R173 supersedes R172: decorative rings and conduits around sphere removed 
  assert.doesNotMatch(html,/class="core-tools-orbit"|class="core-tool-satellite"/);
  assert.doesNotMatch(css,/@keyframes r172-|@keyframes core-tools-turn|@keyframes core-tools-upright/);
  assert.match(html,/<canvas class="core-r109-canvas" aria-hidden="true"/);
- assert.match(html,/src="\.\/assets\/siteforge-r116-sphere-only\.js" defer/);
+ assert.match(html,/src="\.\/assets\/siteforge-lab-r182-vitrine\.js" defer/);
  for(const slug of ['siteforge','connect','bridge'])assert.match(html,new RegExp('href="\\./'+slug+'/"'));
 });
 test('R174 removes page scanning while retaining animated grid, HUD and a singular WebGL renderer',()=>{
