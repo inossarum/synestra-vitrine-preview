@@ -21,21 +21,21 @@ send=(method,params={})=>new Promise((resolve,reject)=>{const id=++seq;pending.s
 await send('Page.enable');await send('Runtime.enable');
 const expr=`JSON.stringify((()=>{const hero=document.querySelector('.hero-v2'),stage=document.querySelector('.core-r109-stage'),env=document.querySelector('.r173-environment'),dial=document.querySelector('.r173-hud-dial'),arc=document.querySelector('.r173-dial-arc'),core=document.querySelector('.r173-dial-core'),grid=document.querySelector('.r173-grid'),beam=document.querySelector('.r173-beam-one'),scan=document.querySelector('.r173-scan'),sections=[...document.querySelectorAll('main>.section')],nav=document.querySelector('.core-r108-links');let b=hero.getBoundingClientRect(),st=stage.getBoundingClientRect(),dl=dial?.getBoundingClientRect();const e=(el)=>el?getComputedStyle(el):null;return {ready:document.readyState,viewport:innerWidth,scrollWidth:document.documentElement.scrollWidth,hero:{top:b.top,left:b.left,width:b.width,height:b.height},stage:{top:st.top,left:st.left,width:st.width,height:st.height,webglReady:stage?.dataset.coreReady,canvasCount:document.querySelectorAll('canvas').length},satelliteCount:stage?.querySelectorAll('.core-tool-satellite,.r172-energy-halo,.r172-energy-conduits').length,linkCount:nav?.querySelectorAll('a[href]').length,dial:{display:e(dial)?.display,border:e(dial)?.borderTopColor,width:dl?.width,top:dl?.top,left:dl?.left,opacity:e(dial)?.opacity},ring:{display:e(arc)?.display,z:e(dial)?.zIndex,animation:e(arc)?.animationName,transform:e(arc)?.transform},counter:{display:e(core)?.display,animation:e(core)?.animationName,transform:e(core)?.transform},environment:{present:!!env,beamCount:document.querySelectorAll('.r173-beam').length,scanCount:document.querySelectorAll('.r173-scan').length,gridAnimation:e(grid)?.animationName,gridTransform:e(grid)?.transform},sectionCount:sections.length,sectionAnimation:sections[0]?getComputedStyle(sections[0],'::before').animationName:'',cardAnimation:getComputedStyle(document.querySelector('.product-card'),'::after').animationName}})())`;
 const evalState=async()=>JSON.parse((await send('Runtime.evaluate',{expression:expr,returnByValue:true})).result.value);
-for(const vw of [1280,390]){
- await send('Emulation.setDeviceMetricsOverride',{width:vw,height:900,deviceScaleFactor:1,mobile:vw===390});
+for(const vw of [1280,390,320]){
+ await send('Emulation.setDeviceMetricsOverride',{width:vw,height:900,deviceScaleFactor:1,mobile:vw<=390});
  await send('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'no-preference'}]});
  await send('Page.reload',{ignoreCache:true});await sleep(900);
  const first=await evalState();
  const navExpression=`JSON.stringify((()=>{const header=document.querySelector('.site-header'),menu=document.querySelector('.r175-mobile-menu'),panel=document.querySelector('.r175-mobile-panel'),cta=document.querySelector('.site-nav .nav-cta');return {height:Math.round(header?.getBoundingClientRect().height||0),menuDisplay:menu&&getComputedStyle(menu).display,menuOpen:!!menu?.open,panelVisible:!!panel?.getClientRects().length,menuLinkCount:panel?.querySelectorAll('a[href]').length||0,ctaVisible:!!cta?.getClientRects().length,scrollWidth:document.documentElement.scrollWidth}})())`;
  const getNav=async()=>JSON.parse((await send('Runtime.evaluate',{expression:navExpression,returnByValue:true})).result.value);
  const navBefore=await getNav();
- if(vw===390){
+ if(vw<=390){
    if(navBefore.height>135||navBefore.menuDisplay==='none'||navBefore.menuOpen||navBefore.panelVisible||!navBefore.ctaVisible||navBefore.scrollWidth>vw+2)throw Error('R175_MOBILE_NAV_CLOSED_FAIL '+JSON.stringify(navBefore));
    await send('Runtime.evaluate',{expression:"document.querySelector('.r175-mobile-menu summary').click()"});
    await sleep(80);
    const navOpened=await getNav();
    if(!navOpened.menuOpen||!navOpened.panelVisible||navOpened.menuLinkCount!==10||navOpened.scrollWidth>vw+2)throw Error('R175_MOBILE_NAV_OPEN_FAIL '+JSON.stringify(navOpened));
-   console.log('R175_MOBILE_NAV_390=PASS '+JSON.stringify({closed:navBefore,opened:navOpened}));
+   console.log('R175_MOBILE_NAV_'+vw+'=PASS '+JSON.stringify({closed:navBefore,opened:navOpened}));
    await send('Runtime.evaluate',{expression:"document.querySelector('.r175-mobile-menu summary').click()"});
  }else if(navBefore.menuDisplay!=='none'||!navBefore.ctaVisible){
    throw Error('R175_DESKTOP_NAV_REGRESSION '+JSON.stringify(navBefore));
@@ -49,6 +49,7 @@ for(const vw of [1280,390]){
  const wfAfter=await getWayfinder();
  const target=JSON.parse((await send('Runtime.evaluate',{expression:`JSON.stringify({hash:location.hash,top:document.querySelector('#plateforme').getBoundingClientRect().top,scrollY:scrollY})`,returnByValue:true})).result.value);
  if(target.hash!=='#plateforme'||target.scrollY<200||Math.abs(wfAfter.headerTop)>3||target.top<wfAfter.headerBottom-15||wfAfter.scrollWidth>vw+2)throw Error('R178_STICKY_ANCHOR_FAIL_'+vw+' '+JSON.stringify({wfAfter,target}));
+ if(capture){const screenshot=await send('Page.captureScreenshot',{format:'png',fromSurface:true,captureBeyondViewport:false});writeFileSync(join(root,'r178_wayfinder_'+vw+'.png'),Buffer.from(screenshot.data,'base64'));}
  console.log('R178_WAYFINDER_CDP_'+vw+'=PASS '+JSON.stringify({headerHeight:wfAfter.headerHeight,dockLinks:wfBefore.links,columns:wfBefore.columns,anchorTop:target.top,headerBottom:wfAfter.headerBottom,scrollWidth:wfAfter.scrollWidth}));
  await send('Runtime.evaluate',{expression:"window.scrollTo({top:0,behavior:'instant'})"});
  if(capture){const img=await send('Page.captureScreenshot',{format:'png',fromSurface:true,captureBeyondViewport:false});writeFileSync(join(root,'r173_hero_'+vw+'_t0.png'),Buffer.from(img.data,'base64'));}
