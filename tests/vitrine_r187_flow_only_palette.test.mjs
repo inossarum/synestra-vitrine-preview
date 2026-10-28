@@ -4,7 +4,7 @@ import {readFileSync} from 'node:fs';
 const read=path=>readFileSync(new URL('../'+path,import.meta.url),'utf8');
 const html=read('vitrine-r169-studio-palette-preview.html');
 const shader=read('assets/siteforge-lab-r182-vitrine.js');
-const preset=JSON.parse(read('assets/synestra-studio-plasma-preset-18.json'));
+const preset=JSON.parse(read('tests/fixtures/synestra-studio-plasma-preset-18.json'));
 const extract=(kind,key)=>html.match(new RegExp('data-'+kind+'-control="'+key+'" data-default="([^"]+)" value="([^"]+)"'));
 test('R187 preserves all preset geometry and dynamics with one explicitly approved opacity exception',()=>{
  for(const [key,v] of Object.entries(preset.parameters)){
