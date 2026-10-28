@@ -64,7 +64,32 @@
     "global_test_suite": "FAILED: includes unrelated outdated vitrine/header assertions; targeted SiteForge subset passed",
     "owner_aesthetic_approval": "PENDING",
     "hardware_GPU_FPS": "NOT_MEASURED",
-    "external_public_preview": "PENDING"
+    "external_public_preview": {
+      "status": "PASS",
+      "tested_url": "https://raw.githack.com/inossarum/synestra-vitrine-preview/834c7165f7c3bc52a5dd6f1f4ed9ea36b60e3770/siteforge/core-3d-lab/index.html?demo=magnetic",
+      "tested_commit": "834c7165f7c3bc52a5dd6f1f4ed9ea36b60e3770",
+      "html_http": 200,
+      "shader_http": 200,
+      "rawgithack_notice": "Expected External Content Notice; clicked Open the page through Chrome DOM as directed in user-supplied report",
+      "chrome_webgl": "PASS",
+      "webgl_error": 0,
+      "six_materials": "PASS",
+      "mobile_390px": "PASS",
+      "mouse_and_touch_orbit": "PASS",
+      "pointer_repulsion": "PASS",
+      "motes_off_toggle": "PASS",
+      "mote_visible_diff": {
+        "screenshot": [
+          1100,
+          800
+        ],
+        "changed_pixels": 4208,
+        "changed_percent": 0.4781818181818182,
+        "major_percent": 0.4146590909090909
+      },
+      "animation_frames_distinct": true,
+      "public_e2e_exit_code": 0
+    }
   },
   "protected": {
     "approved_vitrine_unchanged": true,
@@ -74,5 +99,5 @@
     "approved_sphere_git_blob_sha": "dd63d75fdb966de2052595c95b7b6cb736d6c7cc"
   },
   "rollback": "Use base R175 commit 5ed671ca8fbb32b3a4ecabb412c23009871ff3c7; do not modify main",
-  "status": "CANDIDATE, not production release"
+  "status": "LAB_FUNCTIONAL_E2E_PASS; OWNER_AESTHETIC_ACCEPTANCE_PENDING; NOT_PRODUCTION_DEPLOYED"
 }
