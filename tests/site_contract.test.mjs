@@ -41,7 +41,7 @@ test('la FAQ utilise les composants natifs et reste sans JavaScript', () => {
   assert.equal((html.match(/<details class="faq-item">[\s\S]*?<\/details>/g)||[]).length,5);
   assert.equal((html.match(/<details class="faq-item">\s*<summary>/g)||[]).length,5);
   assert.equal((html.match(/<details class="faq-item">\s*<summary>[\s\S]*?<\/summary>/g)||[]).length,5);
-  assert.deepEqual([...html.matchAll(/<script\b[^>]*>/g)].map(x=>x[0]),['<script src="./assets/siteforge-r116-sphere-only.js" defer>']);
+  assert.deepEqual([...html.matchAll(/<script\b[^>]*>/g)].map(x=>x[0]),['<script src="./assets/siteforge-lab-r182-vitrine.js" defer>']);
 });
 
 test('la vitrine ne crée ni formulaire identifiant ni dépendance tierce', () => {
@@ -84,7 +84,7 @@ test('toutes les FAQ restent accessibles avec la sémantique native', () => {
   assert.equal(count('<details class="faq-item">'), 5);
   assert.equal((html.match(/<details class="faq-item">\s*<summary>/g)||[]).length,5);
   assert.doesNotMatch(html, /<summary[^>]*tabindex/);
-  assert.deepEqual([...html.matchAll(/<script\b[^>]*>/g)].map(x=>x[0]),['<script src="./assets/siteforge-r116-sphere-only.js" defer>']);
+  assert.deepEqual([...html.matchAll(/<script\b[^>]*>/g)].map(x=>x[0]),['<script src="./assets/siteforge-lab-r182-vitrine.js" defer>']);
 });
 
 test('le script CDP évite les profils périmés et transmet les touches complètes', () => {
@@ -111,7 +111,7 @@ test('SiteForge ne presente pas la maquette comme un client livre ou un E2E cert
   assert.match(html, /Un aperçu public du travail de présentation web, distinct d’un projet client terminé/);
   assert.match(html, /composition CSS indicative, pas une capture certifiée du prototype/);
   assert.match(html, /sans résultat client revendiqué/);
-  assert.deepEqual([...html.matchAll(/<script\b[^>]*>/g)].map(x=>x[0]),['<script src="./assets/siteforge-r116-sphere-only.js" defer>']);
+  assert.deepEqual([...html.matchAll(/<script\b[^>]*>/g)].map(x=>x[0]),['<script src="./assets/siteforge-lab-r182-vitrine.js" defer>']);
   assert.doesNotMatch(html, /<iframe\b|<form\b/i);
 });
 
@@ -126,7 +126,7 @@ test('SiteForge conserve le responsive, le clavier et aucun chargement de ressou
 test('la navigation publique garde une connexion visible, sans authentification locale', () => {
   assert.match(html, /<a class="nav-cta" href="https:\/\/synestra-client-portal\.synestra-studio\.workers\.dev\/" rel="noreferrer">Espace pilote <span/);
   assert.match(html, /L’accès au portail et son parcours de connexion sont encore en cours de qualification/);
-  assert.deepEqual([...html.matchAll(/<script\b[^>]*>/g)].map(x=>x[0]),['<script src="./assets/siteforge-r116-sphere-only.js" defer>']);
+  assert.deepEqual([...html.matchAll(/<script\b[^>]*>/g)].map(x=>x[0]),['<script src="./assets/siteforge-lab-r182-vitrine.js" defer>']);
   assert.doesNotMatch(html, /<form\b/i);
 });
 
