@@ -72,8 +72,57 @@
     "static_asset_count": 49,
     "deploy": "SUCCESS",
     "dedicated_test": "tests/vitrine_r170_all_pages_brand_motion.test.mjs",
-    "runtime_browser_animated_computed_style": "NOT_TESTED",
-    "authenticated_visual_e2e": "NOT_TESTED"
+    "runtime_browser_animated_computed_style": "PASS_REAL_CHROME_LOCAL",
+    "authenticated_visual_e2e": "NOT_TESTED: CLOUDFARE_ACCESS_AUTH_REQUIRED",
+    "real_browser_e2e": {
+      "device": "Inos-Cerebros",
+      "browser": "Google Chrome headless desktop real rendering",
+      "source": "isolated clone I:\\00_STUDIO_VIRTUEL\\10_TEMP\\R170_browser_smoke_20261028",
+      "source_commit": "772e37c686c9bbaa21a188a8ecbc1a40f2a23931",
+      "runner": "r170_browser_idle_probe.mjs (local isolated untracked test script)",
+      "desktop": {
+        "viewport": [
+          1280,
+          900
+        ],
+        "idle_motion": "PASS",
+        "reduced_motion": "PASS",
+        "logo_image_load": "PASS",
+        "one_canvas": "PASS",
+        "root_scroll_width_px": 1265,
+        "logo_transform_before": "translateY(-0.017px)",
+        "logo_transform_after_2_2s": "translateY(-1.281px)",
+        "hero_gradient_pos_before": "0.156%",
+        "hero_gradient_pos_after": "7.104%",
+        "room_ambient_opacity_before": 0.422939,
+        "room_ambient_opacity_after": 0.624416
+      },
+      "mobile": {
+        "viewport": [
+          390,
+          844
+        ],
+        "idle_motion": "PASS",
+        "reduced_motion": "PASS",
+        "logo_image_load": "PASS",
+        "one_canvas": "PASS",
+        "root_scroll_width_px": 390,
+        "logo_transform_before": "translateY(-0.028px)",
+        "logo_transform_after_2_2s": "translateY(-1.344px)",
+        "hero_gradient_pos_before": "0.213%",
+        "hero_gradient_pos_after": "7.386%",
+        "room_ambient_opacity_before": 0.424837,
+        "room_ambient_opacity_after": 0.632821
+      },
+      "other_pages": {
+        "count": 26,
+        "passed": 26,
+        "failed": 0,
+        "coverage": "All 20 SiteForge demo pages, Connect, Bridge, Offres, SiteForge lab, SiteForge Core 3D lab, Signal",
+        "assertions": "DOM loaded, computed animationName active without input, official logo or brand accents present for relevant routes"
+      },
+      "limits": "Tested with local file URLs on the exact isolated checkout; Cloudflare Access protected public preview prevented authenticated live HTML inspection."
+    }
   },
   "deployment": {
     "environment": "preview",
@@ -86,5 +135,5 @@
     "main_modified": false
   },
   "rollback": "Reset only review branch and remove corresponding branch from Cloudflare Pages preview_branch_includes; preserve preexisting preview branches and production configuration.",
-  "status": "DEPLOYED_PREVIEW_TESTS_PASS_USER_VISUAL_ACCEPTANCE_PENDING"
+  "status": "PREVIEW_DEPLOYED_ALL_SOURCE_TESTS_PASS_LOCAL_BROWSER_E2E_PASS_OWNER_VISUAL_ACCEPTANCE_PENDING"
 }
