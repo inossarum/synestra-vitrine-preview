@@ -538,6 +538,88 @@ void main(){
    gl_FragColor=vec4(lightCol*alpha,alpha);
   return;
  }
+  if(uPass>3.5&&uPass<4.5&&uFlow.x>5.5){
+   // R186 ADDITIVE MATERIAL ONLY. The six legacy materials below remain
+   // byte-for-byte untouched. Three oblique, genuinely 3D toroidal rails.
+   float radiusNeon=.88*clamp(uShape.x,.5,1.5);
+   float srNeon=length(p);
+   // Restrained atmospheric shafts, only for this extra material.
+   float nearAngle=atan(p.y,p.x);
+   float beam=pow(max(0.,.5+.5*cos(nearAngle*19.
+                +sin(nearAngle*4.)*.85-uSpinPhase*.4)),17.);
+   float atmosphere=exp(-pow(srNeon/max(radiusNeon,0.01),2.)*1.8)
+                     *(.025+.10*beam);
+   vec3 skyNeon=(vec3(.025,.89,1.)*.46+vec3(1.,.11,.75)*.36)
+                 *atmosphere;
+   if(srNeon>=radiusNeon){
+    gl_FragColor=vec4(skyNeon,clamp(atmosphere*.45,0.,.15)*uEffects.w);
+    return;
+   }
+   float halfNeon=sqrt(max(0.,radiusNeon*radiusNeon-dot(p,p)));
+   float dzNeon=(2.*halfNeon)/max(uVolumeSteps,1.);
+   float syNeon=sin(uTilt.x*1.5),cyNeon=cos(uTilt.x*1.5);
+   float sxNeon=sin(uTilt.y*1.5),cxNeon=cos(uTilt.y*1.5);
+   float caNeon=cos(uSpinPhase),saNeon=sin(uSpinPhase);
+   vec3 cyanNeon=mix(uCyan,vec3(.025,.93,1.),.84);
+   vec3 pinkNeon=mix(uViolet,vec3(1.,.08,.76),.94);
+   vec3 Lneon=vec3(0.);
+   float Aneon=0.;
+   for(int i=0;i<22;i++){
+    if(float(i)>=uVolumeSteps)break;
+    float zNeon=halfNeon-(float(i)+.5)*dzNeon;
+    vec3 q=vec3(p,zNeon)/radiusNeon;
+    q=vec3(q.x*cyNeon+q.z*syNeon,
+           q.y*cxNeon-(q.z*cyNeon-q.x*syNeon)*sxNeon,
+           q.y*sxNeon+(q.z*cyNeon-q.x*syNeon)*cxNeon);
+    q.xy=mat2(caNeon,-saNeon,saNeon,caNeon)*q.xy;
+    // Same cursor ripple acts on all components without altering old modes.
+    vec2 pointerWarp=q.xy-uPointer.xy/radiusNeon;
+    q.xy+=pointerWarp*uPointer.z*.11*
+       (1.-smoothstep(.12,.70,length(pointerWarp)));
+    // A: cyan ring inclined 34 degrees.
+    vec3 a=vec3(q.x,q.y*.83-q.z*.56,q.y*.56+q.z*.83);
+    float ra=length(a.xy),thetaA=atan(a.z,ra-.52),turnA=atan(a.y,a.x);
+    float tubeA=length(vec2(ra-.52,a.z));
+    float shellA=exp(-pow((tubeA-.23)*16.,2.));
+    float stripeA=pow(max(0.,.5+.5*cos(thetaA*3.-turnA*7.)),9.);
+    float railA=shellA*stripeA;
+    // B: magenta ring crosses the cyan family's real front/back depth.
+    vec3 b=vec3(q.z*.70+q.x*.71,q.y,q.z*.71-q.x*.70);
+    float rb=length(b.yz),thetaB=atan(b.x,rb-.51),turnB=atan(b.z,b.y);
+    float tubeB=length(vec2(rb-.51,b.x));
+    float shellB=exp(-pow((tubeB-.25)*16.,2.));
+    float stripeB=pow(max(0.,.5+.5*cos(thetaB*3.+turnB*6.)),10.);
+    float railB=shellB*stripeB;
+    // C: independent tilted ring crosses the other two in 3D and
+    // contributes high-frequency braiding, not an extra particle layer.
+    vec3 c=vec3(q.x*.86-q.y*.51,q.x*.51+q.y*.86,q.z);
+    float rc=length(c.xz),thetaC=atan(c.y,rc-.49),turnC=atan(c.z,c.x);
+    float tubeC=length(vec2(rc-.49,c.y));
+    float shellC=exp(-pow((tubeC-.25)*14.,2.));
+    float railC=shellC*pow(max(0.,.5+.5*cos(thetaC*4.-turnC*9.)),8.);
+    float lineC=railC*pow(max(0.,.5+.5*cos(turnC*28.+thetaC*6.)),4.);
+    // High-frequency accents deliberately remain on the 3D tubes.
+    float lineA=railA*pow(max(0.,.5+.5*cos(turnA*29.+thetaA*8.)),5.);
+    float lineB=railB*pow(max(0.,.5+.5*cos(turnB*31.-thetaB*8.)),5.);
+    float lensFront=.50+.58*smoothstep(-.8,.8,q.z);
+    float border=1.-smoothstep(.84,1.03,length(q));
+    float lightA=(railA*3.5+lineA*1.9+railC*1.5+lineC*.8)*lensFront*border;
+    float lightB=(railB*3.8+lineB*2.1+railC*.85+lineC*.6)*lensFront*border;
+    Lneon+=(cyanNeon*lightA+pinkNeon*lightB+
+              uCore*(lineA+lineB+lineC)*.12)*dzNeon*3.9;
+    Aneon+=(railA+railB+railC)*lensFront*border*dzNeon*5.4;
+   }
+   // Restrained white-hot nucleus and inward energetic glow.
+   float coreNeon=exp(-dot(p,p)/(radiusNeon*radiusNeon)*28.);
+   float haloNeon=exp(-dot(p,p)/(radiusNeon*radiusNeon)*5.2);
+   Lneon+=uCore*coreNeon*.95+
+         (cyanNeon*.24+pinkNeon*.18)*haloNeon;
+   vec3 outNeon=vec3(1.)-exp(-max(Lneon,vec3(0.))*1.32);
+   float alphaNeon=clamp(.025+Aneon*.54+coreNeon*.72+haloNeon*.11,0.,1.);
+   float edgeNeon=1.-smoothstep(.89,1.,srNeon/radiusNeon);
+   gl_FragColor=vec4(outNeon+skyNeon,alphaNeon*edgeNeon*uEffects.w);
+   return;
+  }
  if(uPass>3.5&&uPass<4.5){
   // True 3D ray integration. The image reference is a luminous white-blue
   // central star enclosed in translucent indigo space, with five broad

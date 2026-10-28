@@ -1,0 +1,66 @@
+{
+  "schema": "synestra.siteforge.r186.additive_neon_material.evidence.v1",
+  "date": "2026-10-28",
+  "mission_id": "SYN_SITEFORGE_R186_ADD_NEON_RIBBON_MATERIAL",
+  "user_constraint": "Ne modifie pas ce qui existe déjà, ajoute le",
+  "scope": {
+    "source_repo": "inossarum/synestra-vitrine-preview",
+    "base_branch": "task/SYN_SITEFORGE_R185_ART_DIRECTION_20261028",
+    "base_sha": "6de5bee6a1bec0f3161a695a498ad9cdddb2ba69",
+    "target_branch": "task/SYN_SITEFORGE_R186_NEON_RIBBONS_ADD_ONLY_20261028",
+    "main_unchanged_expected": "df67fcd5cc6b7cc0fb42fa86c8920d28b9427494",
+    "preview_repo": "inossarum/synestra-siteforge-r176-lab",
+    "preview_path": "r186.html",
+    "preview_url": "https://inossarum.github.io/synestra-siteforge-r176-lab/r186.html"
+  },
+  "source_integrity": {
+    "original_shader_sha": "49baa2104c4200f25ff9bde63b90fda4ba9d1c60",
+    "original_html_sha": "a76dbbbd16fcf9bb36b807413bab84c12d4adaaa",
+    "additive_shader_sha": "dd155974d2b63f199059f740bf08bcc69dea63cb",
+    "additive_html_sha": "81a444bc668b7ca56688dbccc6798a87433ac873",
+    "standalone_sha": "50f88eef0a10c8509618e587398d3d3a6994885a",
+    "reverse_diff_proof": "Removing precisely the inserted R186 uFlow.x>5.5 branch and HTML value=6 option recreates both original R185 Git blobs exactly; verified 4 dedicated Node tests."
+  },
+  "changes": [
+    "Only a new seventh flowType option value 6 appended; original values 0..5, default value 0, colors, core light, motesEnabled and three A/B/C presets byte-identical",
+    "Additional guarded WebGL1 ray-marched branch only when uPass 4 and uFlow.x>5.5; three inclined toroidal flow rails with cyan/magenta palette, no new engine, WebGL program or point-sprite",
+    "Shared uSpinPhase, existing mouse wave, material controls and mobile quality budget reused; one bounded 22-step march",
+    "User reference visual goal: densely interwoven neon tubular ribbons inside a 3D sphere; current result is a first exploration, not AAA-approved"
+  ],
+  "tests": {
+    "node": "168/168 PASS",
+    "static": "49 allowlisted files PASS",
+    "focused_add_only": "4/4 PASS; reverse SHA exact",
+    "chrome_local_new_material": {
+      "status": "PASS",
+      "exit_code": 0,
+      "renderer": "Chrome Windows WebGL SwiftShader",
+      "flow_options": 7,
+      "legacy_default": "0 in HTML; demo=magnetic overrides to 1 during E2E",
+      "prior_colors_unchanged": true,
+      "capture": "r186-real-neon-material.png",
+      "vs_original_material_0_changed_pixels": 70944,
+      "vs_original_material_0_total_pixels": 307840,
+      "webgl_error": 0
+    },
+    "chrome_legacy_regression": {
+      "status": "PASS",
+      "exit_code": 0,
+      "materials_0_through_5": "PASS",
+      "mobile_390px": "PASS",
+      "mouse_touch_orbit": "PASS",
+      "shared_rotation": "PASS",
+      "json_compatibility": "PASS",
+      "note": "Legacy regression completed on preceding shader tuning, which differs only within new guarded R186 branch. Source preservation independently verified on final shader."
+    },
+    "chrome_public": "PENDING"
+  },
+  "release": {
+    "state": "CANDIDATE_PUBLIC_E2E_PENDING",
+    "owner_visual_acceptance": "PENDING",
+    "physical_mobile_gpu": "NOT_TESTED",
+    "rollback": "Remove only new r186.html; R185 remains unchanged",
+    "main_mutated": false,
+    "free_only": true
+  }
+}
