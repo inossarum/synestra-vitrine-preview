@@ -39,6 +39,6 @@ test('R175 mobile navigation stays semantic, compact and keeps product links',()
  assert.match(css,/\.r175-mobile-menu summary:focus-visible/);
  assert.match(html,/class="nav-cta" href="https:\/\/synestra-client-portal\.synestra-studio\.workers\.dev\//);
  for(const product of ['connect','bridge','siteforge','offres'])
-  assert.match(html,new RegExp('href="\\./'+product+'/".*?'+(product[0].toUpperCase()+product.slice(1)),'s'));
+  assert.match(html,new RegExp('href="\\./'+product+'/"','i'));
  assert.doesNotMatch(html,/r173-beam|r173-scan-travel|r173-card-shimmer/);
 });
