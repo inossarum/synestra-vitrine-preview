@@ -1642,13 +1642,35 @@ body>header,body>main,body>footer{position:relative;z-index:1}
     .product-card-connect .product-heading h3 em { color: var(--studio-violet); }
     .product-card-bridge .product-heading h3 em { color: var(--studio-cyan); }
 
-  </style>
+  
+/* R170 continuous ambient design — CSS-only, no mouse dependencies, no additional WebGL canvas.
+   Logo derivative SHA 78c6e7b9…  verified official transparent master ff08dcf6….
+   Low-frequency compositor effects are paused on reduced motion. */
+@keyframes r170-logo-hover { 0%,100%{transform:translate3d(0,0,0)} 50%{transform:translate3d(0,-3px,0)} }
+@keyframes r170-ambient-breathe { 0%,100%{opacity:.51} 50%{opacity:.82} }
+@keyframes r170-spectrum-flow { 0%{background-position:0% 50%} 100%{background-position:100% 50%} }
+@keyframes r170-room-glow { 0%,100%{opacity:.42} 50%{opacity:.76} }
+@keyframes r170-border-current { 0%{opacity:.4;transform:scaleX(.85)} 50%{opacity:.88;transform:scaleX(1)} 100%{opacity:.4;transform:scaleX(.85)} }
+.brand-banner-r99 { animation:r170-logo-hover 11s ease-in-out infinite !important; transform-origin:center; }
+.hero-v2::before { animation:r170-ambient-breathe 13s ease-in-out infinite !important; }
+.hero-accent { background-size:240% 100% !important; animation:r170-spectrum-flow 14s ease-in-out infinite alternate !important; }
+.site-header::after { transform-origin:left center; animation:r170-border-current 10s ease-in-out infinite !important; }
+.core-r109-stage .syn-r169-room .r169-ambient-light { animation:r170-room-glow 9s ease-in-out infinite !important; }
+.core-r109-stage .syn-r169-room .r169-portal-mechanics { animation:r170-ambient-breathe 19s ease-in-out infinite !important; }
+/* Preserve the visually intentional fixed engineering shell and GPU renderer. */
+@media (prefers-reduced-motion: reduce) {
+ .brand-banner-r99,.hero-v2::before,.hero-accent,.site-header::after,
+ .core-r109-stage .syn-r169-room .r169-ambient-light,
+ .core-r109-stage .syn-r169-room .r169-portal-mechanics {animation:none!important;transform:none!important;}
+}
+
+</style>
 </head>
 <body>
   <a class="skip" href="#contenu">Aller au contenu</a>
   <header class="container site-header">
     <a class="brand" href="./" aria-label="Accueil Synestra">
-      <img class="brand-banner-r99" src="./assets/synestra-studio-header-y-r99.webp" width="785" height="168" alt="Synestra Studio numérique" decoding="async">
+      <img class="brand-banner-r99" src="./assets/synestra-studio-official-header.webp" width="540" height="132" alt="Synestra Studio — logo officiel" decoding="async">
     </a>
     <nav class="site-nav nav-r105" aria-label="Navigation principale">
       <a class="nav-current" href="./" aria-current="page">Studio</a>
