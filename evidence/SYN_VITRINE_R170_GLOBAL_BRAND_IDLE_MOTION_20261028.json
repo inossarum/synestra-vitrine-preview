@@ -1,0 +1,90 @@
+{
+  "schema": "synestra.vitrine.r170.global_brand_idle_motion.v1",
+  "date": "2026-10-28",
+  "mission": "SYN_VITRINE_R170_GLOBAL_BRAND_IDLE_MOTION",
+  "owner": "Inos",
+  "source_branch": "task/SYN_VITRINE_R169_OFFICIAL_PALETTE_REVIEW_20261028",
+  "business_goal": "Apply approved transparent Synestra Studio palette across all vitrine pages and add ambient motion not requiring mouse or keyboard input.",
+  "master": {
+    "library_path": "/Synestra/Identite_visuelle/Studio/Officiel/20261027/SYNESTRA_STUDIO_LOGO_OFFICIEL_FOND_TRANSPARENT_20261027.png",
+    "sha256": "ff08dcf6ceeefd3d628238049d93aa768c58528524f0c8b471781f2922960a84",
+    "immutable": true
+  },
+  "derivatives": [
+    {
+      "asset": "assets/synestra-studio-official-header.webp",
+      "sha256": "78c6e7b987a1938f3e8b4d64c7d21a2d1a8907b78fdf536bedd0f302103d3acb"
+    },
+    {
+      "asset": "assets/synestra-studio-official-symbol.webp",
+      "sha256": "b6173d9d43f0ca602258e658c29afa7df9619aa672219f9abd5f66156880407f"
+    },
+    {
+      "asset": "assets/synestra-studio-official-full.webp",
+      "sha256": "eb404f75f8016421038e239f4e83e19aa091a37a39c34927b1f2a9565a7a6185"
+    }
+  ],
+  "design": "Chrome, violet, electric blue, cyan, restrained green. Creative SiteForge demonstrations keep their own content palettes, but common site framing uses Studio colors.",
+  "coverage": {
+    "total_pages": 27,
+    "homepage": "R169 chamber palette candidate",
+    "products": [
+      "connect",
+      "bridge",
+      "offres"
+    ],
+    "siteforge_themes": [
+      "root",
+      "atelier",
+      "aurora",
+      "mono",
+      "signature"
+    ],
+    "siteforge_theme_pages_each": 4,
+    "siteforge_labs": [
+      "lab",
+      "core-3d-lab"
+    ],
+    "independent_lab": [
+      "signal"
+    ]
+  },
+  "motion": {
+    "mechanism": "CSS keyframes and compositor transitions, no new external assets, scripts, canvas or Cloudflare video pipelines",
+    "idle_autonomous": true,
+    "examples": [
+      "logo drift",
+      "background gradient drift",
+      "Core R169 ambient room breathing",
+      "SiteForge page header spectrum current",
+      "Signal hero motion coordinated with existing pause state"
+    ],
+    "reduced_motion": "prefers-reduced-motion:reduce disables new animations",
+    "accessibility": "no new keyboard interaction; original CSP and semantic status paths preserved"
+  },
+  "test": {
+    "source": "Cloudflare Pages build logs for deployment d6f460b9-d9c3-4499-8a96-2f1e7ac52162",
+    "commit_sha": "7049b5503eb85b20cca3218085d291813b7fa6f3",
+    "tests": 113,
+    "passed": 113,
+    "failed": 0,
+    "export": "PASS",
+    "static_asset_count": 49,
+    "deploy": "SUCCESS",
+    "dedicated_test": "tests/vitrine_r170_all_pages_brand_motion.test.mjs",
+    "runtime_browser_animated_computed_style": "NOT_TESTED",
+    "authenticated_visual_e2e": "NOT_TESTED"
+  },
+  "deployment": {
+    "environment": "preview",
+    "url": "https://d6f460b9.synestra-vitrine-preview.pages.dev/",
+    "id": "d6f460b9-d9c3-4499-8a96-2f1e7ac52162",
+    "CloudflareAccess": "PROTECTED",
+    "anonymous_http": "Cloudflare Access redirect; not proof of page HTML",
+    "production_branch": "main",
+    "production_deployments_enabled": false,
+    "main_modified": false
+  },
+  "rollback": "Reset only review branch and remove corresponding branch from Cloudflare Pages preview_branch_includes; preserve preexisting preview branches and production configuration.",
+  "status": "DEPLOYED_PREVIEW_TESTS_PASS_USER_VISUAL_ACCEPTANCE_PENDING"
+}
