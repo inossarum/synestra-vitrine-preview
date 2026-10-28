@@ -22,7 +22,7 @@ test('R160: legacy preset value 4 stays in the 18-field JSON and reset defaults'
 });
 
 test('R160: energy materials remain selectable and electric overlay stays absent in pure mode',()=>{
- assert.equal((html.match(/<select /g)||[]).length,1);
+ assert.equal((html.match(/<select /g)||[]).length,2);
  for(const material of ['Flux plasma','Rubans magnétiques','Voiles d’aurore','Brume ionique','Jets de fusion']){
   assert.ok(html.includes('>'+material+'</option>'),material);
  }

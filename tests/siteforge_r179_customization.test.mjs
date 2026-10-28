@@ -6,7 +6,7 @@ const html=readFileSync(new URL('../siteforge/core-3d-lab/index.html',import.met
 const required=['moteCount','moteDistance','moteSpread','moteSize','moteBrightness','motePrimary','moteSecondary'];
 test('R179 seven independent interactive controls, preserving exactly 18 plasma fields',()=>{
  assert.equal((html.match(/data-sphere-control=/g)||[]).length,18);
- assert.equal((html.match(/data-mote-control=/g)||[]).length,7);
+ assert.equal((html.match(/data-mote-control=/g)||[]).length,8);
  for(const key of required)assert.match(html,new RegExp('data-mote-control="'+key+'"'));
  assert.match(html,/data-mote-linked-speed/);
  assert.match(js,/e\.target\?\.hasAttribute\('data-mote-control'\)/);

@@ -1,0 +1,61 @@
+{
+  "schema": "synestra.siteforge.r180.styles-json-import.evidence.v1",
+  "date": "2026-10-28",
+  "mission_id": "SYN_SITEFORGE_R180_PARTICLE_STYLES_JSON_IMPORT",
+  "source": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "branch": "task/SYN_SITEFORGE_R180_STYLES_JSON_IMPORT_20261028",
+    "base_branch": "task/SYN_SITEFORGE_R179_CUSTOM_MOTES_20261028",
+    "base_sha": "ba8ea38b211d805290df0acf2f5c28e827eff258",
+    "official_main_sha": "df67fcd5cc6b7cc0fb42fa86c8920d28b9427494",
+    "shader_sha": "f7b780e1d81791b4cfb4bf2f327fb24e56494bb7",
+    "html_sha": "694ceaa38b06a016d9b2350a9102b5a348ed686c",
+    "offline_html_sha": "369c7724c35f7cec9b2164f222571401668a92ac"
+  },
+  "changes": [
+    "Eight mote controls, adds shape 0 sparks / 1 crystalline facets / 2 ion orbs with live WebGL sprite shading",
+    "Original plasma/material shape and shared uSpinPhase unaffected; one GPU program",
+    "Export remains SiteForge v1 schema with 18 original plasma parameters and optional motes (now 8 settings plus enabled)",
+    "Import local JSON file <= 64KB, validates schema/version/all 18 values and bounds, optional legacy motes; applies only after complete validation; no network",
+    "Legacy v1 imports from R176/R178 and R179 without shape handled with default"
+  ],
+  "tests": {
+    "node": "142/142 PASS",
+    "build": "STATIC_EXPORT PASS 49 files",
+    "chrome_local": {
+      "status": "PASS",
+      "exit_code": 0,
+      "webgl_error": 0,
+      "six_materials": "PASS",
+      "mobile_390": "PASS",
+      "mouse_touch_180_360": "PASS",
+      "spin_pause": "PASS",
+      "three_gpu_styles": "PASS, 14677 pixels changed on 307840 (4.768%)",
+      "json_roundtrip": "PASS",
+      "invalid_atomic_refusal": "PASS",
+      "legacy_without_motes": "PASS",
+      "eight_controls": "PASS",
+      "eighteen_original_controls": "PASS",
+      "screenshots": [
+        "r180-style-crystal.png",
+        "r180-style-orbs.png"
+      ]
+    },
+    "public_chrome": "PENDING"
+  },
+  "public_preview": {
+    "repository": "inossarum/synestra-siteforge-r176-lab",
+    "path": "r180.html",
+    "url": "https://inossarum.github.io/synestra-siteforge-r176-lab/r180.html",
+    "state": "PENDING",
+    "baseline_pages_head": "95462132a6af27f9b039026b85b8f646e7b83cba"
+  },
+  "restrictions": {
+    "main_untouched": true,
+    "access_unchanged": true,
+    "public_static_no_secrets": true,
+    "rollback": "remove r180.html only or open r179.html",
+    "user_visual_acceptance": "PENDING"
+  },
+  "status": "LOCAL_CHROME_PASS_PUBLIC_E2E_PENDING"
+}

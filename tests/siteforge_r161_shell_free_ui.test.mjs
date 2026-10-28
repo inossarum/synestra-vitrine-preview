@@ -20,7 +20,7 @@ test('R161: particles density and luminous sprite size controls hidden but JSON 
 });
 test('R161: one WebGL engine, one canvas, five energy families, no altered GPU geometry',()=>{
  assert.equal((html.match(/<canvas /g)||[]).length,1);
- assert.equal((html.match(/<select /g)||[]).length,1);
+ assert.equal((html.match(/<select /g)||[]).length,2);
  assert.match(js,/gl\.drawArrays\(gl\.TRIANGLES,0,6\)/);
  for(const x of ['Flux plasma','Rubans magnétiques','Voiles d’aurore','Brume ionique','Jets de fusion'])assert.ok(html.includes('>'+x+'</option>'));
 });

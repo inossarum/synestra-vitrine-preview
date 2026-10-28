@@ -123,7 +123,7 @@ test('R152: native quick controls, safe defaults and accessible advanced setting
  assert.match(html,/noindex,nofollow/);
  assert.equal((html.match(/type="range"/g)||[]).length,14);
  assert.equal((html.match(/type="color"/g)||[]).length,6);
- assert.equal((html.match(/<select /g)||[]).length,1);
+ assert.equal((html.match(/<select /g)||[]).length,2);
  const keys=Object.keys(defaults);
  for(const key of keys)assert.match(html,new RegExp('data-sphere-control="'+key+'"'));
 });
@@ -257,7 +257,7 @@ test('R154: physically volumetric optical depth, quality budget and interactive 
  assert.equal((html.match(/<canvas /g)||[]).length,1);
 });
 test('R154: energy reference is legible on mobile and still shares palette and engine',()=>{
- assert.match(html,/R179/);
+ assert.match(html,/R180/);
  assert.match(html,/transform:scale\(calc\(1\.22 \* var\(--sphere-zoom,1\)\)\)/);
  assert.match(html,/transform:scale\(calc\(\.92 \* var\(--sphere-zoom,1\)\)\)/);
  assert.match(js,/if\(uPass>\.5&&uPass<1\.5\)energy\*=\.025/);

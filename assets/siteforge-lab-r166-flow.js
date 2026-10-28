@@ -40,6 +40,9 @@
     key==='moteCount'?input.value+' éclats':key==='moteSize'||key==='moteBrightness'?input.value+' %':
     input.value+' %';
   }
+  const styleSelector=moteControls.moteShape;
+  const styleName=document.querySelector('[data-mote-value="moteShape"]');
+  if(styleName&&styleSelector)styleName.textContent=styleSelector.selectedOptions[0]?.textContent||'';
   const spinLabel=document.querySelector('[data-mote-linked-speed]');
   if(spinLabel)spinLabel.textContent=(controls.particleSpeed?.value||'100')+' %';
   if(moteToggle){
@@ -159,6 +162,66 @@
   }catch(_error){
    if(objectURL)URL.revokeObjectURL(objectURL);
    status(exportStatus,'Export indisponible sur ce navigateur.');
+  }
+ });
+ // R180: locally reimport a previously exported v1 document, including
+ // legacy R176/R178 18-field files and R179 files without a style choice.
+ // Validate fully BEFORE any control value changes: invalid import is atomic.
+ const importButton=document.querySelector('[data-import-json]');
+ const importInput=document.querySelector('[data-import-file]');
+ const importStatus=document.querySelector('[data-import-status]');
+ const validateSettings=doc=>{
+  if(!doc||typeof doc!=='object'||Array.isArray(doc)||
+   doc.schema!=='synestra.siteforge.plasma-settings.v1'||doc.version!==1||
+   !doc.parameters||typeof doc.parameters!=='object'||Array.isArray(doc.parameters))
+   throw Error('Format ou version de paramètres non reconnu.');
+  const validateControl=(e,v)=>{
+   if(e.type==='color'){
+    if(typeof v!=='string'||!/^#[0-9a-f]{6}$/i.test(v))throw Error('Couleur invalide.');
+    return v.toLowerCase();
+   }
+   if(typeof v!=='number'||!Number.isFinite(v)||!Number.isInteger(v))throw Error('Valeur numérique invalide.');
+   if(e.type==='select-one'){
+    if(!Array.from(e.options).some(o=>o.value===String(v)))throw Error('Option de style inconnue.');
+   }else{
+    if(e.hasAttribute('min')&&v<Number(e.min))throw Error('Valeur inférieure au minimum.');
+    if(e.hasAttribute('max')&&v>Number(e.max))throw Error('Valeur supérieure au maximum.');
+    if(!e.hasAttribute('min')&&!e.hasAttribute('max')&&(v<0||v>500))throw Error('Valeur hors limites.');
+   }
+   return String(v);
+  };
+  const pkeys=Object.keys(controls);
+  if(Object.keys(doc.parameters).length!==pkeys.length||
+    pkeys.some(k=>!Object.prototype.hasOwnProperty.call(doc.parameters,k)))
+   throw Error('Les 18 paramètres du plasma sont requis.');
+  const nextPlasma=Object.fromEntries(pkeys.map(k=>[k,validateControl(controls[k],doc.parameters[k])]));
+  const values=doc.motes===undefined?{}:doc.motes;
+  if(!values||typeof values!=='object'||Array.isArray(values))
+   throw Error('Réglages des éclats invalides.');
+  if(Object.keys(values).some(k=>k!=='enabled'&&!Object.prototype.hasOwnProperty.call(moteControls,k)))
+   throw Error('Option d’éclat inconnue.');
+  if(values.enabled!==undefined&&typeof values.enabled!=='boolean')
+   throw Error('État des éclats invalide.');
+  const nextMotes=Object.fromEntries(Object.keys(moteControls).map(k=>
+   [k,validateControl(moteControls[k],Object.prototype.hasOwnProperty.call(values,k)?
+    values[k]:(moteControls[k].type==='color'?moteDefaults[k]:Number(moteDefaults[k])))]));
+  return {nextPlasma,nextMotes,enabled:values.enabled===undefined?true:values.enabled};
+ };
+ importButton?.addEventListener('click',()=>importInput?.click());
+ importInput?.addEventListener('change',async()=>{
+  const file=importInput.files?.[0];importInput.value='';
+  if(!file)return;
+  try{
+   if(file.size>65536)throw Error('Fichier trop volumineux (64 Ko maximum).');
+   const doc=JSON.parse(await file.text());
+   const values=validateSettings(doc);
+   for(const [k,v] of Object.entries(values.nextPlasma))controls[k].value=v;
+   for(const [k,v] of Object.entries(values.nextMotes))moteControls[k].value=v;
+   motesEnabled=values.enabled;pointerForce=0;
+   sync();schedule();
+   status(importStatus,'Paramètres importés et appliqués · '+Object.keys(values.nextPlasma).length+' plasma + '+Object.keys(values.nextMotes).length+' éclats.');
+  }catch(err){
+   status(importStatus,'Import refusé : '+(err instanceof SyntaxError?'JSON illisible.':err.message));
   }
  });
  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -325,6 +388,7 @@ uniform vec4 uPointer; // R176: cursor displacement drives the actual volumetric
 uniform float uSpinPhase; // R178: same local angular phase as the floating motes
 uniform vec3 uCore,uCyan,uViolet,uDeep;
 uniform vec3 uMotePrimary,uMoteSecondary;
+uniform float uMoteShape; // R180: 0 spark, 1 faceted shard, 2 ion orb
 uniform vec2 uTilt;
 uniform float uVolumeSteps;
 uniform vec2 uFlow;
@@ -353,11 +417,24 @@ void main(){
   float along=dot(q,axis),across=dot(q,vec2(-axis.y,axis.x));
   float coreGlow=exp(-r2*29.0),aura=exp(-r2*4.7);
   float filament=exp(-across*across*23.0-along*along*4.5);
-  float alpha=clamp(coreGlow*.82+filament*.45+aura*.33,0.,1.)*vLife*clamp(uEffects.w,0.,1.);
+  // Three genuinely different GPU silhouettes; no second particle engine.
+  float silhouette=clamp(coreGlow*.82+filament*.45+aura*.33,0.,1.);
+  if(uMoteShape>.5&&uMoteShape<1.5){
+   float facet=abs(along)*.55+abs(across)*1.8;
+   silhouette=clamp((1.-smoothstep(.16,.67,facet))*.88+coreGlow*.28,0.,1.);
+  }else if(uMoteShape>1.5){
+   float orb=exp(-r2*7.5);
+   float halo=exp(-r2*1.55);
+   silhouette=clamp(orb*.86+halo*.22,0.,1.);
+  }
+  float alpha=silhouette*vLife*clamp(uEffects.w,0.,1.);
   float hue=step(.5,fract(vGlint*7.73));
   vec3 col=mix(uMotePrimary,uMoteSecondary*1.50+uMotePrimary*.10,hue);
   vec3 hot=mix(col,vec3(.86,.97,1.),.24);
-  gl_FragColor=vec4(col*(aura*.55+filament*.58)+hot*coreGlow*1.44,alpha);
+  vec3 lightCol=col*(aura*.55+filament*.58)+hot*coreGlow*1.44;
+  if(uMoteShape>.5&&uMoteShape<1.5)lightCol=col*silhouette*1.36+hot*coreGlow*.58;
+  if(uMoteShape>1.5)lightCol=col*(silhouette*.68)+hot*coreGlow*.82;
+  gl_FragColor=vec4(lightCol,alpha);
   return;
  }
  if(uPass>3.5&&uPass<4.5){
@@ -626,7 +703,7 @@ void main(){
  }
  gl.deleteShader(vert);gl.deleteShader(frag);
  const A=gl.getAttribLocation(program,'aPosition'),S=gl.getAttribLocation(program,'aSeed');
- const keys=['uResolution','uTime','uPass','uLayer','uTilt','uControls','uShape','uEffects','uCore','uCyan','uViolet','uDeep','uVolumeSteps','uFlow','uCompare','uDepthRefine','uPointer','uMoteCount','uSpinPhase','uMoteStyle','uMotePrimary','uMoteSecondary'];
+ const keys=['uResolution','uTime','uPass','uLayer','uTilt','uControls','uShape','uEffects','uCore','uCyan','uViolet','uDeep','uVolumeSteps','uFlow','uCompare','uDepthRefine','uPointer','uMoteCount','uSpinPhase','uMoteStyle','uMotePrimary','uMoteSecondary','uMoteShape'];
  const U=Object.fromEntries(keys.map(k=>[k,gl.getUniformLocation(program,k)]));
  if(A<0||S<0||keys.some(k=>U[k]===null)){status(mainStatus,'GPU : paramètres incomplets.');return;}
  const quad=gl.createBuffer(),seeds=gl.createBuffer();if(!quad||!seeds)return;
@@ -685,6 +762,7 @@ void main(){
    moteVal('moteBrightness')/100);
   gl.uniform3fv(U.uMotePrimary,new Float32Array(moteRGB('motePrimary')));
   gl.uniform3fv(U.uMoteSecondary,new Float32Array(moteRGB('moteSecondary')));
+  gl.uniform1f(U.uMoteShape,moteVal('moteShape'));
   gl.uniform2f(U.uFlow,sel('flowType'),num('flowStructure'));
   gl.uniform1f(U.uCompare,compareVariant);
   gl.uniform1f(U.uDepthRefine,depthVariant);
