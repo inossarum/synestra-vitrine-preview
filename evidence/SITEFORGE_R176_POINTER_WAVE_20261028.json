@@ -63,7 +63,35 @@
       "r176-wave-impact.png",
       "r176-wave-recovered.png"
     ],
-    "external_public_preview": "PENDING",
+    "external_public_preview": {
+      "status": "PASS",
+      "tested_url": "https://raw.githack.com/inossarum/synestra-vitrine-preview/5805d518b68aafd6d685829a9267e9afd6d1fbf1/siteforge/core-3d-lab/index.html?demo=magnetic",
+      "tested_commit": "5805d518b68aafd6d685829a9267e9afd6d1fbf1",
+      "public_html_http": 200,
+      "public_shader_http": 200,
+      "external_content_notice": "PASS - Open the page clicked in real Chrome",
+      "browser": "Chrome headless ANGLE SwiftShader",
+      "webgl_error": 0,
+      "wave_impact": {
+        "motes_enabled": false,
+        "changed_pixels": 10735,
+        "pixels": 307840,
+        "changed_percent": 3.4872011434511436,
+        "major_percent": 1.814254158004158
+      },
+      "wave_recovered": {
+        "changed_pixels": 0,
+        "changed_percent": 0,
+        "strength": 0
+      },
+      "materials": "6/6 PASS",
+      "mobile_390px": "PASS",
+      "mouse_orbit": "PASS",
+      "touch_orbit": "PASS",
+      "mote_toggle": "PASS",
+      "pause_resume": "PASS",
+      "process_exit_code": 0
+    },
     "owner_aesthetic_acceptance": "PENDING",
     "hardware_gpu_fps": "NOT_MEASURED"
   },
@@ -74,5 +102,5 @@
     "approved_core_blob": "dd63d75fdb966de2052595c95b7b6cb736d6c7cc"
   },
   "rollback": "R175 readability baseline 76e84d98438555842395a9284ffbfe052fe16edb",
-  "status": "LAB_CANDIDATE"
+  "status": "LAB_PUBLIC_E2E_PASS_NOT_PRODUCTION; OWNER_AESTHETIC_ACCEPTANCE_PENDING"
 }
