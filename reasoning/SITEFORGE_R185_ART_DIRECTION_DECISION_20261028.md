@@ -34,3 +34,15 @@ Source candidate : `task/SYN_SITEFORGE_R185_ART_DIRECTION_20261028` issue de R18
 ## Point d'attention
 
 La composition B reste discrète volontairement : l'augmentation de la taille et du nombre peut devenir artificielle. Le vrai prochain chantier R186 (géométries 3D instanciées) doit partir de la composition choisie, pas du principe qu'il faut toujours plus d'éclats.
+
+## Qualification publique finale — 2026-10-28
+
+- R185 publiée sous https://inossarum.github.io/synestra-siteforge-r176-lab/r185.html, HTTP 200, pas de Cloudflare Access, Pages commit `96ad88fb07c7dc390540d1c4e1a06262830303bd`.
+- Browser Chrome **sur l'adresse GitHub Pages réelle**, processus exit 0 : contrôle des trois presets, 6 matériaux, 390 px mobile, souris/tactile, orbite 360°, phase de rotation commune, JSON v1 rétrocompatible et WebGL sans erreur.
+- Compositions A/B/C capturées avec **même caméra, matériau, couleur plasma et phase figée**. Pixels différents : A↔B 259/307840, B↔C 784/307840. Les trois images publiques sont archivées sur le commit source `45cb721491e28e72016df8c67b217813d0ba129c` :
+  - `r185-public-art-pure.png`
+  - `r185-public-art-organic.png`
+  - `r185-public-art-crystal.png`
+- 164/164 tests Node PASS, export statique 49 fichiers PASS ; tests locaux et publics complets exit 0 ; les anciennes versions restent intactes, production `main` inchangée.
+- Evidence finale : `evidence/SITEFORGE_R185_ART_DIRECTION_20261028.json` blob `a9c73d403cabe137ad2e044077aadbbc2938985e`.
+- **Statut de validation** : technique pour prévisualisation R185 = PASS ; approbation artistique du propriétaire = PENDING. R186 (vraies géométries 3D instanciées) ne doit pas être confondu avec l'ajout prématuré de détails sans choix d'une direction.
