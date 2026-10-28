@@ -48,7 +48,7 @@ test('R104: Connect, Bridge and offers are linked from homepage and exist',()=>{
   assert.ok(existsSync(new URL('../'+slug+'/index.html',import.meta.url)));
   assert.equal((pages[slug].match(/<h1\b/g)||[]).length,1,slug);
   assert.match(pages[slug],/\.\.\/assets\/product-pages.css/);
-  assert.match(pages[slug],/\.\.\/assets\/synestra-studio-header-y-r99.webp/);
+  assert.match(pages[slug],/\.\.\/assets\/synestra-studio-official-header.webp/);
   assert.match(pages[slug],/noindex,nofollow/);
   assert.match(pages[slug],/default-src 'none'; style-src 'self'; img-src 'self'/);
   assert.deepEqual([...pages[slug].matchAll(/<script\b[^>]*>/g)].map(m=>m[0]),['<script src="../assets/core-r109-webgl.js" defer>']);
