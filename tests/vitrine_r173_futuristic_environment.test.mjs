@@ -73,3 +73,18 @@ test('R179 cinematic editorial has clear technology destinations and no duplicat
  assert.equal((html.match(/<script\b/g)||[]).length,1);
  assert.doesNotMatch(html,/r173-beam-one|r173-scan-travel|r173-card-shimmer/);
 });
+
+test('R180 chapters use alternating product narratives, editorial cases, and no inherited sweeps',()=>{
+ for(const chapter of ['02','03','04'])
+  assert.match(html,new RegExp('class="r180-chapter-label"><span aria-hidden="true">'+chapter+'</span>'));
+ assert.match(css,/#plateforme \.product-grid\{display:grid;grid-template-columns:minmax\(0,1fr\)/);
+ assert.match(css,/#plateforme \.product-card:nth-child\(even\)\{grid-template-areas:"meta meta" "copy visual"/);
+ assert.match(css,/#exemples \.examples-grid\{display:grid;grid-template-columns:minmax\(0,1fr\)/);
+ assert.match(css,/#exemples \.example-card::before\{[^}]*counter\(r180-example\)/);
+ assert.match(css,/@media\(max-width:980px\)\{[^}]*grid-template-areas:"meta" "visual" "copy"/);
+ assert.match(css,/\.siteforge-showcase::after\{content:none!important;animation:none!important\}/);
+ assert.doesNotMatch(css,/\.bridge-visual::after \{animation:cin-scan/);
+ assert.doesNotMatch(css,/animation:cin-glint 18s/);
+ assert.doesNotMatch(html,/r173-beam-one|r173-scan-travel|r173-card-shimmer/);
+ assert.equal((html.match(/<canvas\b/g)||[]).length,1);
+});
