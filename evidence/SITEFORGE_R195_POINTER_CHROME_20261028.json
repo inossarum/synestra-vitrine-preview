@@ -1,0 +1,74 @@
+{
+  "schema": "synestra.siteforge.r195.chrome-pointer-qa.v1",
+  "url": "http://127.0.0.1:18850/r195/",
+  "viewport": "1440x900",
+  "webgl_ready": true,
+  "canvas": {
+    "x": 713,
+    "y": 422,
+    "w": 798,
+    "h": 504.0000305175781
+  },
+  "initial_pointer": [
+    0,
+    0,
+    0
+  ],
+  "hover_pointer": [
+    0.08928571428571441,
+    0.15253973385403746,
+    0.38071808748491875
+  ],
+  "max_hover_strength": 0.7354092301110124,
+  "rest_pointer": [
+    0.08928571428571441,
+    0.15253973385403746,
+    9.768275271274452e-11
+  ],
+  "tilt_samples": [
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ]
+  ],
+  "effect_local_decay": true,
+  "screen_before": "r195-hover-before.png",
+  "screen_after": "r195-hover-after.png",
+  "assertions": "PASS"
+}

@@ -1,0 +1,264 @@
+/* SYNESTRA R195 — precise interaction, light dimensionality, native accessible disclosure.
+  Violet #552a9d → green #2d9c6e; zero extra GPU canvas/renderer. */
+:root{
+  --r195-ease:cubic-bezier(.2,.75,.2,1);
+  --r195-spring:cubic-bezier(.16,1,.3,1);
+  --r195-fast:220ms;
+  --r195-medium:420ms;
+  --r195-depth:0 20px 45px rgba(1,6,17,.25);
+  --r195-edge:rgba(149,194,183,.27);
+}
+.syn-r195-home .r195-prologue{background:
+  radial-gradient(ellipse 35% 50% at 78% 50%,rgba(57,92,111,.095),transparent 90%),
+  linear-gradient(155deg,#080d19 5%,#090e1e 60%,#080e19)}
+.syn-r195-home .r195-prologue .r194-index{margin-bottom:clamp(55px,8vw,115px)}
+.syn-r195-home .r195-prologue .r194-prologue-grid{
+ grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr);
+ gap:clamp(35px,6.2vw,105px)}
+.syn-r195-home .r195-prologue .r194-prologue-copy h1{
+ font-size:clamp(3.5rem,6vw,7.8rem);max-width:12ch;line-height:1.04;margin:24px 0 26px}
+.syn-r195-home .r195-prologue .r194-prologue-copy .r194-lead{
+ max-width:45ch;font-size:clamp(15px,1.18vw,18px)}
+/* First chapter is not a static badge/orbit: it is a navigable architecture. */
+.r195-vision-system{position:relative;min-height:540px;padding:clamp(24px,3vw,48px);
+ isolation:isolate;display:flex;flex-direction:column;justify-content:space-between;
+ border-radius:24px;border:1px solid rgba(154,181,207,.18);
+ background:linear-gradient(155deg,rgba(27,37,62,.76),rgba(11,23,39,.8) 46%,rgba(18,29,48,.85));
+ box-shadow:inset 0 1px rgba(212,229,247,.09),0 42px 94px rgba(2,7,20,.24);
+ overflow:hidden;perspective:1100px}
+.r195-vision-system:before{content:"";position:absolute;pointer-events:none;inset:0;z-index:-1;
+ background:
+  linear-gradient(105deg,transparent 49.9%,rgba(176,205,226,.045) 50%,transparent 50.1%),
+  repeating-linear-gradient(0deg,transparent 0 73px,rgba(157,198,215,.035) 74px,transparent 75px);
+ mask-image:linear-gradient(to right,transparent,black 50%,transparent 96%)}
+.r195-vision-system:after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+ background:radial-gradient(ellipse 62% 52% at var(--r195-x,50%) var(--r195-y,46%),rgba(131,96,193,.09),transparent 77%);
+ transition:opacity .45s ease;opacity:.3}
+.r195-vision-system:hover:after,.r195-vision-system:focus-within:after{opacity:1}
+.r195-vision-halo{position:absolute;z-index:0;top:6%;right:5%;width:min(75%,410px);aspect-ratio:1;
+ transform:perspective(750px) rotateX(63deg) rotateZ(-21deg);pointer-events:none;
+ transform-style:preserve-3d;opacity:.67}
+.r195-vision-ring{position:absolute;inset:9%;border:1px solid rgba(171,131,229,.35);
+ border-radius:27%;transform:rotate(25deg) translateZ(20px);
+ box-shadow:inset 0 0 40px rgba(85,42,157,.045);transition:transform 1.2s var(--r195-spring)}
+.r195-ring-second{border-color:rgba(108,196,150,.25);inset:24%;
+ transform:rotate(-17deg) translateZ(45px)}
+.r195-vision-symbol{position:absolute;inset:0;display:grid;place-items:center;
+ color:rgba(193,167,228,.12);font-weight:750;font-size:clamp(9rem,16vw,17rem);
+ letter-spacing:-.09em;transform:translateZ(55px)}
+.r195-vision-system:is(:hover,:focus-within) .r195-vision-ring{transform:rotate(35deg) translateZ(32px)}
+.r195-vision-system:is(:hover,:focus-within) .r195-ring-second{transform:rotate(-27deg) translateZ(60px)}
+.r195-vision-head{display:flex;justify-content:space-between;gap:15px;position:relative;z-index:2;
+ font:740 10px/1.3 ui-monospace,Consolas,monospace;letter-spacing:.13em;color:#a4bdd0}
+.r195-vision-head span:last-child{color:#8ed5b2}
+.r195-vision-links{position:relative;z-index:3;display:grid;gap:9px;margin:110px 0 16px}
+.r195-vision-link{position:relative;isolation:isolate;display:grid;
+ grid-template-columns:1fr auto;grid-template-rows:auto auto auto;align-items:center;
+ border:1px solid rgba(158,186,215,.2);background:rgba(12,27,47,.73);
+ backdrop-filter:blur(2px);padding:15px clamp(17px,2vw,25px);
+ border-radius:12px;color:#eaf4ff;text-decoration:none;
+ transform-style:preserve-3d;transform:perspective(900px) rotateX(var(--r195-rx,0deg)) rotateY(var(--r195-ry,0deg));
+ box-shadow:0 5px 14px rgba(0,0,0,.11);
+ transition:transform var(--r195-medium) var(--r195-spring),border-color var(--r195-fast),
+ background var(--r195-medium),box-shadow var(--r195-medium);
+}
+.r195-vision-link:after,.r194-lab-card:after,.r194-product-art:after,
+.r194-product-principle:after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+ background:radial-gradient(circle at var(--r195-x,50%) var(--r195-y,50%),rgba(215,246,233,.13),transparent 56%);
+ opacity:0;transition:opacity .4s ease}
+.r195-vision-link:hover:after,.r195-vision-link:focus-visible:after,
+.r194-lab-card:hover:after,.r194-lab-card:focus-visible:after,
+.r194-product:hover .r194-product-art:after,.r194-product-principle:hover:after{opacity:1}
+.r195-vision-link:is(:hover,:focus-visible){
+ border-color:rgba(129,211,166,.52);background:rgba(24,45,67,.9);
+ box-shadow:0 16px 34px rgba(1,8,22,.38),inset 0 1px rgba(230,245,255,.05);
+}
+.r195-vision-link :is(strong,small,span,b){position:relative;z-index:1}
+.r195-vision-order{font:710 9px ui-monospace,monospace;letter-spacing:.12em;color:#94c2b5;
+ grid-column:1;margin-bottom:4px}
+.r195-vision-link strong{font-size:clamp(20px,2vw,28px);letter-spacing:-.04em;grid-column:1}
+.r195-vision-link small{font-size:11px;color:#b1c3d4;grid-column:1;margin-top:3px}
+.r195-vision-link b{grid-row:1/4;grid-column:2;font-size:19px;color:#8bd4b0;
+ transition:transform var(--r195-medium) var(--r195-spring)}
+.r195-vision-link:is(:hover,:focus-visible) b{transform:translate(4px,-4px)}
+.r195-vision-foot{position:relative;z-index:2;color:#8aa5b6!important;letter-spacing:.12em;
+ font:700 9px/1.5 ui-monospace,monospace!important}
+/* Responsive first chapter: left text intact, graphic still interactive. */
+@media(max-width:1080px){
+ .syn-r195-home .r195-prologue .r194-prologue-grid{grid-template-columns:1fr 1fr;gap:26px}
+ .syn-r195-home .r195-prologue .r194-prologue-copy h1{font-size:clamp(3rem,5.2vw,5.2rem)}
+ .r195-vision-system{min-height:470px}
+}
+@media(max-width:790px){
+ .syn-r195-home .r195-prologue .r194-prologue-grid{grid-template-columns:1fr;gap:34px}
+ .syn-r195-home .r195-prologue .r194-prologue-copy h1{font-size:clamp(3rem,10.3vw,5.5rem)}
+ .r195-vision-system{min-height:410px;padding:21px;border-radius:15px}
+ .r195-vision-links{margin-top:90px}
+ .r195-vision-halo{width:70%;right:11%;top:-12%}
+}
+/* Interactive elements share a restrained material language. */
+.syn-r195-home :is(.r194-button,.r194-text-link,.r194-product-copy a,.r192-primary-link),
+.syn-r195-product :is(.cta,.nav-action,.site-nav a,.product-chapters a){
+ position:relative;isolation:isolate;
+ transition:transform var(--r195-medium) var(--r195-spring),background-color var(--r195-fast),
+ color var(--r195-fast),border-color var(--r195-fast),box-shadow var(--r195-medium) var(--r195-spring);
+}
+.syn-r195-home .r194-button,.syn-r195-product .cta.primary{overflow:hidden}
+.syn-r195-home .r194-button:before,.syn-r195-product .cta.primary:before{
+ content:"";position:absolute;inset:-100% -40%;pointer-events:none;z-index:-1;
+ background:linear-gradient(110deg,transparent 42%,rgba(255,255,255,.23) 50%,transparent 58%);
+ transform:translateX(-80%) rotate(8deg);transition:transform .72s var(--r195-spring)
+}
+.syn-r195-home .r194-button:is(:hover,:focus-visible):before,
+.syn-r195-product .cta.primary:is(:hover,:focus-visible):before{transform:translateX(84%) rotate(8deg)}
+.syn-r195-home .r194-button:is(:hover,:focus-visible),
+.syn-r195-product .cta.primary:is(:hover,:focus-visible){
+ transform:translateY(-4px);box-shadow:0 13px 24px rgba(37,119,90,.18),0 4px 13px rgba(49,48,90,.18)
+}
+.syn-r195-home :is(.r194-text-link,.r194-product-copy a):is(:hover,:focus-visible){transform:translateX(5px)}
+.syn-r195-product :is(.nav-action,.site-nav a,.product-chapters a):is(:hover,:focus-visible){
+ transform:translateY(-2px);color:#d9f9ea!important
+}
+/* Product modules: quiet parallax and translation, no camera tilt over plasma. */
+.syn-r195-home .r194-product{
+ transition:border-color .42s,box-shadow .52s,background .52s;
+}
+.syn-r195-home .r194-product:is(:hover,:focus-within){
+ border-color:rgba(156,209,179,.35);
+ box-shadow:0 20px 55px rgba(0,6,18,.21),inset 0 1px rgba(203,241,219,.05)
+}
+.syn-r195-home .r194-product-art{
+ transform:translateZ(0);transition:filter .62s ease,transform .72s var(--r195-spring);
+}
+.syn-r195-home .r194-product:is(:hover,:focus-within) .r194-product-art{
+ transform:perspective(1000px) rotateY(-2deg) scale(1.018);filter:brightness(1.08)
+}
+.syn-r195-home .r194-product:nth-child(even):is(:hover,:focus-within) .r194-product-art{
+ transform:perspective(1000px) rotateY(2deg) scale(1.018)
+}
+.syn-r195-home .r194-product :is(.r194-forge-pane,.r194-graph,.r194-connect-heart,.r194-bridge-shell){
+ transition:transform .7s var(--r195-spring),box-shadow .7s var(--r195-spring)
+}
+.syn-r195-home .r194-product-forge:is(:hover,:focus-within) .r194-forge-pane-a{transform:rotate(-9deg) translate(-5px,-6px)}
+.syn-r195-home .r194-product-forge:is(:hover,:focus-within) .r194-forge-pane-b{transform:rotate(13deg) translate(8px,4px)}
+.syn-r195-home .r194-product-connect:is(:hover,:focus-within) .r194-graph-a{transform:translate(-6px,-5px)}
+.syn-r195-home .r194-product-connect:is(:hover,:focus-within) .r194-graph-b{transform:translate(6px,-5px)}
+.syn-r195-home .r194-product-connect:is(:hover,:focus-within) .r194-graph-c{transform:translateY(8px)}
+.syn-r195-home .r194-product-bridge:is(:hover,:focus-within) .r194-bridge-shell{transform:rotateY(-3deg) translateY(-5px)}
+/* Every chapter has its own response pattern, not a repeated card animation. */
+.r194-lab-mosaic{perspective:1000px}
+.syn-r195-home .r194-lab-card{
+ transform:perspective(1000px) translateY(0) rotateX(0) rotateY(0);
+ transition:transform .55s var(--r195-spring),border-color .4s,box-shadow .5s;
+ backface-visibility:hidden;
+}
+.syn-r195-home .r194-lab-card:is(:hover,:focus-visible){
+ transform:perspective(1000px) translateY(-7px) rotateX(var(--r195-rx,0deg)) rotateY(var(--r195-ry,0deg));
+ border-color:rgba(191,185,236,.39);box-shadow:0 24px 39px rgba(0,6,20,.3);
+}
+.syn-r195-home .r194-lab-card strong{transition:transform .45s var(--r195-spring)}
+.syn-r195-home .r194-lab-card:is(:hover,:focus-visible) strong{transform:translateY(-5px)}
+.syn-r195-home .r194-method-steps li{transition:background .45s,border-color .5s,padding-left .45s var(--r195-spring)}
+.syn-r195-home .r194-method-steps li:is(:hover,.is-current){
+ background:linear-gradient(90deg,rgba(96,71,148,.08),transparent 70%);
+ padding-left:clamp(10px,1.7vw,22px);border-color:rgba(161,139,216,.35)
+}
+.syn-r195-home .r194-method-steps li:is(:hover,.is-current) h3{
+ text-shadow:0 5px 20px rgba(140,132,203,.13)
+}
+.syn-r195-home .r194-needs-list article{
+ border-radius:8px;transition:padding-left .48s var(--r195-spring),background .42s,border-color .42s;
+}
+.syn-r195-home .r194-needs-list article:hover{
+ padding-left:clamp(10px,1.4vw,23px);
+ background:linear-gradient(90deg,rgba(65,115,88,.095),transparent);
+ border-color:rgba(125,195,151,.36)
+}
+.syn-r195-home .r194-needs-list article h3{transition:color .4s}
+.syn-r195-home .r194-needs-list article:hover h3{color:#b3e5ca}
+.syn-r195-home .r194-trust-stack article{
+ border-radius:8px;transition:background .35s,padding-left .45s var(--r195-spring),border-color .4s;
+}
+.syn-r195-home .r194-trust-stack article:hover{
+ padding-left:15px;background:linear-gradient(90deg,rgba(97,70,151,.095),transparent);
+ border-color:rgba(180,151,219,.38)
+}
+.syn-r195-home .r194-end-art span{transition:transform .8s var(--r195-spring),color .6s}
+.syn-r195-home .r194-end:is(:hover,:focus-within) .r194-end-art span{
+ transform:perspective(950px) rotateY(-10deg) translateY(-5px);color:#b49ed7
+}
+/* Native details: smooth height+opacity when engine supports intrinsic interpolation.
+   Fallback is native instant opening, never content clipping or inaccessible toggling. */
+@supports (interpolate-size:allow-keywords){
+ .syn-r195-home .r194-faq-list,
+ .syn-r195-product .details{interpolate-size:allow-keywords}
+ .syn-r195-home .r194-faq-list details::details-content,
+ .syn-r195-product .details details::details-content{
+  display:block;block-size:0;overflow:hidden;opacity:0;
+  transition:block-size .54s var(--r195-spring),opacity .4s ease,content-visibility .54s allow-discrete;
+ }
+ .syn-r195-home .r194-faq-list details[open]::details-content,
+ .syn-r195-product .details details[open]::details-content{block-size:auto;opacity:1}
+}
+.syn-r195-home .r194-faq-list details,
+.syn-r195-product .details details{
+ transition:background-color .4s,border-color .35s,padding-inline .45s var(--r195-spring);
+}
+.syn-r195-home .r194-faq-list details:is(:hover,[open],:focus-within),
+.syn-r195-product .details details:is(:hover,[open],:focus-within){
+ border-color:rgba(132,200,160,.42);background:rgba(36,66,61,.045);
+ padding-inline:clamp(5px,.9vw,14px)
+}
+.syn-r195-home .r194-faq-list summary,
+.syn-r195-product .details summary{transition:color .3s ease}
+.syn-r195-home .r194-faq-list summary:hover,
+.syn-r195-product .details summary:hover{color:#b1efd4}
+.syn-r195-home .r194-faq-list summary::after,
+.syn-r195-product .details summary::after{transition:transform .45s var(--r195-spring),color .25s}
+/* Product routes: layered panels and controls with distinct hover dimensions. */
+.syn-r195-product .intro .visual,
+.syn-r195-product .r194-product-principle,
+.syn-r195-product .tile,
+.syn-r195-product .product-example{
+ transition:transform .48s var(--r195-spring),border-color .4s,background .4s,box-shadow .6s;
+}
+.syn-r195-product .intro .visual:is(:hover,:focus-within){
+ transform:perspective(1100px) rotateX(1.2deg) rotateY(-1.6deg) translateY(-4px);
+ box-shadow:0 20px 48px rgba(0,7,22,.25)!important;border-color:rgba(154,218,191,.34)!important
+}
+.syn-r195-product .r194-product-principle:is(:hover,:focus-within),
+.syn-r195-product .tile:is(:hover,:focus-within){
+ transform:perspective(1200px) translateY(-4px);
+ border-color:rgba(154,205,175,.33)!important;
+ box-shadow:0 19px 32px rgba(0,6,17,.22)
+}
+.syn-r195-product .r194-principle-graph span{transition:transform .48s var(--r195-spring),border-color .5s}
+.syn-r195-product .r194-product-principle:hover .r194-principle-graph span:nth-of-type(1){transform:translateY(-6px)}
+.syn-r195-product .r194-product-principle:hover .r194-principle-graph span:nth-of-type(2){transform:translateY(5px)}
+.syn-r195-product .r194-product-principle:hover .r194-principle-graph span:nth-of-type(3){transform:translateY(-4px)}
+/* Product pages and Studio CTA focus is visible even without hover. */
+.syn-r195-home :is(a,summary):focus-visible,
+.syn-r195-product :is(a,summary,button):focus-visible{
+ outline:2px solid #a5e6c4;outline-offset:4px
+}
+.r195-pilot-status{display:flex;gap:12px;align-items:center;margin:22px 0!important;
+ color:#c5dfd3!important;letter-spacing:.08em;font:720 10px/1.6 ui-monospace,Consolas,monospace!important}
+.r195-pilot-status span{width:7px;height:7px;border-radius:50%;background:#78bb98;box-shadow:0 0 0 4px rgba(102,188,143,.09)}
+@media (hover:none),(pointer:coarse){
+ .r195-vision-link,.syn-r195-home .r194-lab-card{transform:none!important}
+ .syn-r195-home .r194-product:is(:hover,:focus-within) .r194-product-art{transform:none}
+ .r195-vision-system:after{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+ .syn-r195-home *, .syn-r195-product *{
+  scroll-behavior:auto!important;animation-duration:0.01ms!important;animation-iteration-count:1!important;
+ }
+ .syn-r195-home :is(a,.r194-lab-card,.r194-product-art,.r194-method-steps li),
+ .syn-r195-product :is(a,.visual,.tile,.details details,.r194-product-principle),
+ .r195-vision-system :is(.r195-vision-ring,.r195-vision-link){
+  transform:none!important;transition:none!important;filter:none!important;
+ }
+ .syn-r195-home .r194-faq-list details::details-content,
+ .syn-r195-product .details details::details-content{transition:none!important}
+ .r195-vision-system:after{display:none!important}
+}

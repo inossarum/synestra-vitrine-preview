@@ -1,0 +1,32 @@
+{
+  "schema": "synestra.siteforge.r195.portal.public-observation.v1",
+  "status": "OBSERVATION_ONLY",
+  "result": [
+    {
+      "name": "synestra-client-portal",
+      "navigateError": null,
+      "document": {
+        "url": "https://late-silence-f620.cloudflareaccess.com/cdn-cgi/access/login/synestra-client-portal.synestra-studio.workers.dev",
+        "title": "Sign in ・ Cloudflare Access",
+        "headings": [
+          "Log in to synestra-client-portal - Cloudflare Workers"
+        ],
+        "needsAuthentication": true,
+        "visibleText": "late-silence-f620.cloudflareaccess.com\nLog in to synestra-client-portal - Cloudflare Workers\nSign in with:\nCloudflare\nor\nEmail\nSend login code"
+      }
+    },
+    {
+      "name": "synestra-client-portal-staging",
+      "navigateError": null,
+      "document": {
+        "url": "https://late-silence-f620.cloudflareaccess.com/cdn-cgi/access/login/synestra-client-portal-staging.synestra-studio.workers.dev",
+        "title": "Sign in ・ Cloudflare Access",
+        "headings": [
+          "Log in to Synestra Bridge Pairing - Portal Staging Owner Only"
+        ],
+        "needsAuthentication": true,
+        "visibleText": "late-silence-f620.cloudflareaccess.com\nLog in to Synestra Bridge Pairing - Portal Staging Owner Only\nSign in with:\nCloudflare\nor\nEmail\nSend login code"
+      }
+    }
+  ]
+}

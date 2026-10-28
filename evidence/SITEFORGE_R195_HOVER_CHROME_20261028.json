@@ -1,0 +1,69 @@
+{
+  "schema": "synestra.siteforge.r195.hover.chrome.v1",
+  "checks": [
+    {
+      "type": "vision-hover",
+      "status": "PASS",
+      "hover": {
+        "hover": true,
+        "cssRx": "0.19deg",
+        "cssRy": "-0.70deg",
+        "pointer": true,
+        "background": "rgba(18, 36, 57, 0.804)",
+        "transform": "matrix3d(0.999947, -2.85546e-05, 0.0102566, -1.13963e-05, 0, 0.999996, 0.002784, -3.09333e-06, -0.0102567, -0.00278385, 0.999944, -0.00111105, 0, 0, 0, 1)"
+      }
+    },
+    {
+      "type": "vision-reset",
+      "status": "PASS",
+      "away": {
+        "hover": false,
+        "rx": "",
+        "pointer": false
+      }
+    },
+    {
+      "type": "lab-3d",
+      "status": "PASS",
+      "card": {
+        "active": true,
+        "rx": "0.97deg",
+        "ry": "0.44deg"
+      }
+    },
+    {
+      "type": "details-motion",
+      "status": "PASS",
+      "supportsIntrinsic": true,
+      "closed": {
+        "open": false,
+        "height": 69,
+        "content": "0px"
+      },
+      "partial": {
+        "open": true,
+        "height": 132.046875,
+        "content": "63.0469px"
+      },
+      "opened": {
+        "open": true,
+        "height": 175.71875,
+        "content": "106.719px"
+      }
+    },
+    {
+      "type": "reduced",
+      "status": "PASS",
+      "reduced": {
+        "reduced": true,
+        "heading": "Une idée.Des possibles.",
+        "motion": false,
+        "links": 3,
+        "visible": "visible"
+      }
+    }
+  ],
+  "viewport": "1440x900",
+  "source": "Chrome CDP local",
+  "status": "PASS"
+}

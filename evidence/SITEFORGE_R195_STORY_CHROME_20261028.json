@@ -1,0 +1,122 @@
+{
+  "schema": "synestra.siteforge.r195.story.chrome.v1",
+  "records": [
+    {
+      "width": 1440,
+      "y": 1035,
+      "visible": true,
+      "railActive": "#vision",
+      "chapter": "vision",
+      "docWidth": 1425,
+      "originalTop": 900,
+      "screenshot": "r195-story-vision-1440.png"
+    },
+    {
+      "width": 1440,
+      "y": 2081,
+      "visible": true,
+      "railActive": "#systeme",
+      "chapter": "systeme",
+      "docWidth": 1425,
+      "originalTop": 911.46875,
+      "screenshot": "r195-story-systeme-1440.png"
+    },
+    {
+      "width": 1440,
+      "y": 4222,
+      "visible": true,
+      "railActive": "#siteforge",
+      "chapter": "siteforge",
+      "docWidth": 1425,
+      "originalTop": 2006.46875,
+      "screenshot": "r195-story-siteforge-1440.png"
+    },
+    {
+      "width": 1440,
+      "y": 5269,
+      "visible": true,
+      "railActive": "#approche",
+      "chapter": "approche",
+      "docWidth": 1425,
+      "originalTop": 911.859375,
+      "screenshot": "r195-story-approche-1440.png"
+    },
+    {
+      "width": 1440,
+      "y": 8111,
+      "visible": true,
+      "railActive": "#confiance",
+      "chapter": "confiance",
+      "docWidth": 1425,
+      "originalTop": 2707.3125,
+      "screenshot": "r195-story-confiance-1440.png"
+    },
+    {
+      "methodStep": {
+        "counter": "03",
+        "progress": "269.375px",
+        "current": [
+          "3"
+        ]
+      }
+    },
+    {
+      "width": 390,
+      "y": 1035,
+      "visible": true,
+      "railActive": "#vision",
+      "chapter": "vision",
+      "docWidth": 390,
+      "originalTop": 900,
+      "screenshot": "r195-story-vision-390.png"
+    },
+    {
+      "width": 390,
+      "y": 2192,
+      "visible": true,
+      "railActive": "#systeme",
+      "chapter": "systeme",
+      "docWidth": 390,
+      "originalTop": 1022.046875,
+      "screenshot": "r195-story-systeme-390.png"
+    },
+    {
+      "width": 390,
+      "y": 4613,
+      "visible": true,
+      "railActive": "#siteforge",
+      "chapter": "siteforge",
+      "docWidth": 390,
+      "originalTop": 2286.078125,
+      "screenshot": "r195-story-siteforge-390.png"
+    },
+    {
+      "width": 390,
+      "y": 5708,
+      "visible": true,
+      "railActive": "#approche",
+      "chapter": "approche",
+      "docWidth": 390,
+      "originalTop": 959.90625,
+      "screenshot": "r195-story-approche-390.png"
+    },
+    {
+      "width": 390,
+      "y": 8852,
+      "visible": true,
+      "railActive": "#confiance",
+      "chapter": "confiance",
+      "docWidth": 390,
+      "originalTop": 3008.984375,
+      "screenshot": "r195-story-confiance-390.png"
+    }
+  ],
+  "reduced": {
+    "prefers": true,
+    "enhanced": false,
+    "h1": "Une idée.Des possibles.",
+    "hidden": false
+  },
+  "status": "PASS",
+  "base": "http://127.0.0.1:18850/r195/"
+}

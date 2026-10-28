@@ -1,0 +1,136 @@
+{
+  "schema": "synestra.siteforge.r195.interactive-site.evidence.v1",
+  "mission_id": "SYN_SITEFORGE_R195_HOVER_CHAPTERS_PILOT_20261028",
+  "date_local": "2026-10-28",
+  "owner": "Synestra Studio",
+  "source_repository": "inossarum/synestra-vitrine-preview",
+  "base_commit": "f873f123cd920e8e09de2f6391e37003e99515aa",
+  "branch": "task/SYN_SITEFORGE_R195_HOVER_CHAPTERS_PILOT_20261028",
+  "source_r194_sha256": "ff5c2e1276fb39d73623a47ecb7afb24e0b679679a04e6d667f7f07ea1ddc44d",
+  "r195_home_sha256": "a7fa506400c2f36d47b59d5a1e9d44c2efe050bf577f6eacb14c48e50adb9f30",
+  "r195_css_sha256": "2d660c9e50611d9fa6d42b7a280d4f15831f9db88281c586c061bbe2e51d96ed",
+  "r195_js_sha256": "fca69e4f7d5303a7fc5994ed4bb2a1746fd841ddbcfa5f964c364b0bed66eb25",
+  "changes": [
+    "Replace R194 static chapter-one S/orbit with 3 actual product links in layered digital editorial interface; revised hierarchy/copy.",
+    "Separate chapter-specific affordances in product composition, laboratory mosaic, timeline steps, needs rows, trust rows and CTA.",
+    "CSS micro-hover and focus animations: subtle 3D transform, directional sheen, bounded pointer tracking and reset; no sphere displacement.",
+    "Native HTML details progressive expansion with CSS intrinsic interpolation and fallback.",
+    "Shared hover/motion CSS/JS on five pages; reduced motion and coarse pointer fallback.",
+    "Public site copy updated to explicitly present pilot as protected Access portal; original production URL retained.",
+    "Cloudflare live GET showed production Worker 100% R80 Oct 24, staging Worker different version Oct 27, no promotion without E2E."
+  ],
+  "tests": [
+    {
+      "name": "Node inherited + R195",
+      "passed": 135,
+      "failed": 0,
+      "status": "PASS"
+    },
+    {
+      "name": "Chrome 5 routes x 3 widths",
+      "passed": 15,
+      "failed": 0,
+      "status": "PASS"
+    },
+    {
+      "name": "Chrome story 5 sections x 2 devices + step03",
+      "passed": 11,
+      "failed": 0,
+      "status": "PASS"
+    },
+    {
+      "name": "Chrome interactive hover/FAQ/reduced",
+      "passed": 5,
+      "failed": 0,
+      "status": "PASS",
+      "hover_css_rx": "0.19deg",
+      "hover_css_ry": "-0.70deg",
+      "detail_closed_px": 69,
+      "detail_partial_px": 132.046875,
+      "detail_open_px": 175.71875
+    },
+    {
+      "name": "WebGL fixed camera",
+      "status": "PASS",
+      "tilt": [
+        0,
+        0
+      ],
+      "peak_hover_strength": 0.7354092301110124,
+      "rest": 9.768275271274452e-11
+    },
+    {
+      "name": "Cloudflare Access unauthenticated navigation",
+      "status": "PASS",
+      "production": "Cloudflare Access login",
+      "staging": "Cloudflare Access login / Owner Only"
+    },
+    {
+      "name": "Cloudflare portal authenticated E2E",
+      "status": "NOT_PERFORMED",
+      "reason": "No authorized Access session"
+    },
+    {
+      "name": "Portal deployment",
+      "status": "NOT_PERFORMED",
+      "reason": "Staging release not qualified, security and authorization gate"
+    },
+    {
+      "name": "Public production site deploy",
+      "status": "NOT_PERFORMED"
+    }
+  ],
+  "portal": {
+    "prod_script": "synestra-client-portal",
+    "prod_last_modified": "2026-10-24T16:04:37.82071Z",
+    "prod_deployment_id": "5aded867-c338-42e9-85fc-1ee28c03a822",
+    "prod_version_id": "2ee6a737-af2d-40d6-bb8a-5bad710c1ad0",
+    "prod_percent": 100,
+    "prod_deployment_message": "R80: restore Cloudflare Access JWT verification by supported manual JWKS redirect; preflight old version rollback",
+    "staging_script": "synestra-client-portal-staging",
+    "staging_last_deployed": "2026-10-27T13:44:26.184849Z",
+    "staging_deployment_id": "2d1ba83d-2541-43f0-a7ce-f52b9ac28c5a",
+    "staging_version_id": "ac18371b-3745-45eb-bc98-5e9deeae3d10",
+    "staging_percent": 100,
+    "no_promote_reason": "Different Cloudflare Access gate and version; no authenticated functionality or acceptance verification."
+  },
+  "preview_url": "http://127.0.0.1:18850/r195/",
+  "visuals": [
+    {
+      "path": "r195-story-vision-1440.png",
+      "sha256": "8b95938654d3c4f8df1e6b238c3896d95804e83ef5943692a4de6cded16e80aa"
+    },
+    {
+      "path": "r195-story-vision-390.png",
+      "sha256": "83dee17a1365a073f8999b3d49e4f0ec27d17bf63c55039ed5f40516a978d16d"
+    }
+  ],
+  "qa_files": [
+    "evidence/SITEFORGE_R195_BROWSER_20261028.json",
+    "evidence/SITEFORGE_R195_STORY_CHROME_20261028.json",
+    "evidence/SITEFORGE_R195_HOVER_CHROME_20261028.json",
+    "evidence/SITEFORGE_R195_POINTER_CHROME_20261028.json",
+    "evidence/SITEFORGE_R195_PORTAL_OBSERVATION_20261028.json"
+  ],
+  "skills": [
+    "interaction-motion-design@1.0.0#c636a0c77eccb9004c56ce48bdd49684243b8790",
+    "ui-ux@1.0.0#0a362a0938401674166c7a8b871192fbde602c1a",
+    "web-accessibility-engineering@1.0.0#172c442525351804e89e7b273346f03df34bdd89",
+    "cloudflare plugin skill:cloudflare"
+  ],
+  "rules": "AGENTS.md#34cc2a8649bda4230bd2fa73d4a4de0edaf65dc1e3bdaf2b8b78ff58f4e4ea21",
+  "constraints": [
+    "FREE_ONLY",
+    "No Git main merge",
+    "No public release",
+    "No Access bypass",
+    "No credentials stored"
+  ],
+  "limitations": [
+    "R195 CSS 3D and motion validated Chrome only; other browser engines unverified",
+    "No production visual update to portal; currently only site copy, pilot staging cannot be promoted without Access test",
+    "Visual approval by owner outstanding",
+    "Full Memory V1/Reasoning corpus not fully validated"
+  ],
+  "status": "LOCAL_R195_VALIDATED; PORTAL_UPDATE_HUMAN_GATE"
+}
