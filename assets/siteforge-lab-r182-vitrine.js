@@ -31,7 +31,7 @@
  // Non-exported A/B optical quality switch; the JSON schema remains 18 fields.
  let depthVariant=1;
  // R175: restrained real GPU motes, separate from the exported 18 controls.
- let motesEnabled=stage.dataset.motesEnabled!=='false',pointerX=9,pointerY=9,pointerForce=0,lastPointerX=null,lastPointerY=null;
+ let motesEnabled=true,pointerX=9,pointerY=9,pointerForce=0,lastPointerX=null,lastPointerY=null;
  const moteToggle=document.querySelector('[data-mote-toggle]');
  const syncMotes=()=>{
   for(const [key,input] of Object.entries(moteControls)){
