@@ -1,0 +1,181 @@
+/* SYNESTRA R192 — suspended energy / grounded metal / progressive chapters.
+   All additions additive to R191, CSS-only floor, no new WebGL renderer. */
+:root{
+  --r192-accent:#99e8e5;--r192-line:rgba(149,184,208,.18);
+  --r192-progress:0%;--r192-ink:#edf4fb;
+}
+html{scroll-padding-top:72px}
+.syn-r192-home{background:#050915}
+.syn-r192-home .site-header{position:relative;z-index:20}
+.syn-r192-home .hero-v2{display:none}
+.syn-r192-home .r192-hero{position:relative;max-width:1560px;margin:0 auto;padding:clamp(48px,5vw,75px) 28px 0;overflow:clip}
+.r192-hero-intro{position:relative;z-index:7;text-align:center;margin:auto;max-width:1000px}
+.r192-eyebrow{font:730 10px/1.4 ui-monospace,Consolas,monospace;letter-spacing:.24em;color:#9bb1c8;display:flex;align-items:center;justify-content:center;gap:14px}
+.r192-signal{width:5px;height:5px;border-radius:50%;background:#96efd5;box-shadow:0 0 14px rgba(133,225,228,.52)}
+.r192-hero-intro h1{font-size:clamp(3.15rem,6vw,6rem);letter-spacing:-.07em;line-height:1.06;font-weight:750;margin:22px auto 16px;max-width:17ch;color:#e9f1fb;text-wrap:balance}
+.r192-hero-intro h1 span{background:linear-gradient(105deg,#c7ccf6,#8dcbe7 55%,#9ce9ca);color:transparent;-webkit-background-clip:text;background-clip:text}
+.r192-subtitle{font-size:clamp(.82rem,1.15vw,1.05rem);font-weight:430;line-height:1.8;letter-spacing:.005em;color:#9baec4;max-width:54ch;margin:0 auto 0}
+.r192-scene-shell{position:relative;margin:0 auto;width:100%;min-height:570px;isolation:isolate}
+.syn-r192-home .r192-scene{position:relative;min-height:560px;height:clamp(560px,63svh,690px);width:100%;background:
+ radial-gradient(ellipse 31% 30% at 50% 43%,rgba(76,72,137,.13),transparent 82%),
+ radial-gradient(ellipse 53% 44% at 50% 79%,rgba(62,91,134,.095),transparent 85%),
+ #050a16;overflow:hidden;border:0;border-radius:0;box-shadow:none;transform:none!important}
+.r192-scene .core-r108-top{z-index:8;top:17px;left:clamp(15px,4vw,65px);right:clamp(15px,4vw,65px);font-size:9px;color:#66819f}
+.r192-scene .core-tools-orbit,.r192-scene .r189-geometry,.r192-scene .r189-system-map,.r192-scene .core-r108-links,.r192-scene .core-r108-note{display:none!important}
+.r192-scene .core-r109-canvas{
+ top:0;left:0;z-index:5;width:100%;height:88%;
+ transform:scale(.68);transform-origin:center 45%;
+ opacity:0;pointer-events:none;transition:opacity .45s ease;
+ /* Chromium reflects the same live WebGL raster; no second context or texture copies. */
+ -webkit-box-reflect:below -29% linear-gradient(to bottom,rgba(0,0,0,.06),rgba(0,0,0,.11) 28%,transparent 74%);
+}
+.r192-scene[data-core-ready="true"] .core-r109-canvas{opacity:1}
+.r192-scene .core-r108-art{top:9%;width:min(100%,760px);height:330px;transform:translateX(-50%) scale(.65);z-index:4}
+.r192-depth-haze{position:absolute;z-index:0;inset:0;pointer-events:none;
+ background:radial-gradient(ellipse 25% 34% at 50% 47%,rgba(114,108,206,.09),transparent 85%),
+ radial-gradient(ellipse 31% 25% at 50% 64%,rgba(55,135,172,.1),transparent 78%)}
+.r192-floor{position:absolute;left:-35%;width:170%;top:69%;height:92%;z-index:2;pointer-events:none;
+ transform:perspective(720px) rotateX(66deg) scale(1.08);transform-origin:center top;
+ background:linear-gradient(180deg,rgba(21,31,46,.90),rgba(16,27,41,.99) 18%,#070e1c 78%),
+ repeating-linear-gradient(90deg,rgba(151,177,206,.065) 0 1px,transparent 1px 72px);
+ border-top:1px solid rgba(153,194,229,.31);
+ box-shadow:0 -19px 38px rgba(65,85,113,.12),inset 0 32px 50px rgba(152,176,220,.07)}
+.r192-floor:before{content:"";position:absolute;left:0;right:0;top:0;height:14%;
+ background:linear-gradient(180deg,rgba(169,195,221,.13),transparent);
+ border-top:1px solid rgba(208,231,249,.12)}
+.r192-floor-grid{position:absolute;inset:0;
+ background:
+  repeating-linear-gradient(90deg,transparent 0 95px,rgba(173,209,233,.065) 96px,transparent 97px),
+  repeating-linear-gradient(0deg,transparent 0 45px,rgba(144,186,219,.072) 46px,transparent 47px),
+  repeating-linear-gradient(92deg,transparent 0 6px,rgba(221,237,250,.018) 7px,transparent 8px);
+ mask-image:linear-gradient(#000,rgba(0,0,0,.72) 52%,transparent 98%)}
+.r192-floor-sheen{position:absolute;inset:-4% 0 0;
+ background:
+ radial-gradient(ellipse 16% 20% at 50% 7%,rgba(221,255,255,.66),transparent 75%),
+ radial-gradient(ellipse 28% 31% at 44% 19%,rgba(66,220,221,.3),transparent 71%),
+ radial-gradient(ellipse 28% 36% at 56% 20%,rgba(167,128,244,.32),transparent 76%),
+ radial-gradient(ellipse 48% 42% at 50% 33%,rgba(74,137,189,.13),transparent 85%);
+ filter:blur(18px);opacity:.93;animation:r192-reflected-light 10s ease-in-out infinite alternate}
+.r192-floor-reflection{position:absolute;left:50%;top:0;width:40%;height:80%;transform:translateX(-50%);
+ background:
+ repeating-linear-gradient(95deg,transparent 0 13px,rgba(204,247,254,.12) 14px,transparent 16px),
+ linear-gradient(180deg,rgba(161,224,244,.14),rgba(138,107,225,.08) 28%,transparent 87%);
+ clip-path:polygon(43% 0,57% 0,89% 84%,96% 100%,4% 100%,11% 84%);
+ filter:blur(11px);opacity:.62}
+.r192-floor-light{position:absolute;left:50%;top:-3%;width:min(46%,670px);height:15%;transform:translateX(-50%);
+ border-radius:50%;background:radial-gradient(ellipse,rgba(227,255,255,.82),rgba(113,237,237,.4) 28%,rgba(122,101,231,.13) 63%,transparent 78%);
+ filter:blur(18px);box-shadow:0 0 65px 20px rgba(125,181,231,.17);animation:r192-reflected-light 9s ease-in-out infinite alternate-reverse}
+.r192-light-falloff{position:absolute;z-index:3;left:50%;top:69%;width:min(60%,780px);height:14%;transform:translateX(-50%);
+ background:radial-gradient(ellipse,rgba(119,222,240,.2),rgba(127,123,220,.11) 45%,transparent 72%);
+ filter:blur(25px);pointer-events:none}
+.r192-scene-caption{position:absolute;left:clamp(24px,5vw,80px);right:clamp(24px,5vw,80px);bottom:19px;
+ display:flex;justify-content:space-between;gap:20px;z-index:8;pointer-events:none;
+ font:700 9px/1.5 ui-monospace,Consolas,monospace;letter-spacing:.2em;color:#7b95b1}
+.r192-hero-outro{display:flex;align-items:center;justify-content:center;gap:clamp(20px,5vw,85px);padding:0 0 70px}
+.r192-primary-link{display:inline-flex;align-items:center;justify-content:space-between;gap:38px;
+ padding:15px 21px;border-radius:10px;border:1px solid rgba(140,208,223,.34);color:#e5f4fd;
+ font-size:13px;font-weight:710;text-decoration:none;background:rgba(14,34,52,.75);
+ transition:background .2s,transform .2s}
+.r192-primary-link:hover{background:rgba(35,74,91,.7);transform:translateY(-2px)}
+.r192-scroll-hint{font:700 10px/1.5 ui-monospace,Consolas,monospace;letter-spacing:.17em;color:#7e99b2}
+.r192-scroll-hint b{font-size:16px;margin-left:18px;color:#9bdfdc;display:inline-block;animation:r192-scroll-arrow 2.4s ease-in-out infinite}
+@keyframes r192-scroll-arrow{0%,100%{transform:translateY(-3px)}55%{transform:translateY(6px)}}
+@keyframes r192-reflected-light{0%{opacity:.67;filter:blur(18px) hue-rotate(-5deg)}100%{opacity:1;filter:blur(20px) hue-rotate(9deg)}}
+.r192-chapter-intro{max-width:1240px;margin:0 auto;padding:clamp(72px,9vw,140px) clamp(22px,4vw,58px) 55px;
+ border-top:1px solid var(--r192-line)}
+.r192-chapter-head{display:flex;justify-content:space-between;color:#8fa8c1;letter-spacing:.16em;font:700 10px/1.4 ui-monospace,monospace}
+.r192-chapter-layout{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:45px;align-items:end;margin:38px 0 55px}
+.r192-chapter-layout h2{font-size:clamp(2.9rem,5vw,5.7rem);line-height:1.1;letter-spacing:-.065em;margin:0}
+.r192-chapter-layout h2 em{font-style:normal;background:linear-gradient(100deg,#ab9ce3,#80cced,#92e5cb);color:transparent;-webkit-background-clip:text;background-clip:text}
+.r192-chapter-layout p{max-width:34ch;color:#abbdd1;font-size:clamp(.86rem,1.2vw,1.02rem);line-height:1.8;margin:0 0 5px}
+.r192-product-rail{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--r192-line);border-bottom:1px solid var(--r192-line)}
+.r192-product-rail a{position:relative;display:flex;flex-direction:column;gap:13px;min-height:175px;padding:30px 35px;
+ text-decoration:none;color:#e9f1fa;border-right:1px solid var(--r192-line);transition:background .22s}
+.r192-product-rail a:last-child{border-right:0}
+.r192-product-rail a:hover{background:linear-gradient(150deg,rgba(95,167,211,.085),rgba(43,58,104,.055))}
+.r192-product-rail a span{color:#75b6cc;font:700 10px ui-monospace,Consolas,monospace;letter-spacing:.13em}
+.r192-product-rail a strong{font-size:clamp(1.6rem,2.4vw,2.2rem);letter-spacing:-.04em}
+.r192-product-rail a small{color:#92abc1;font-size:12px}
+.r192-product-rail a b{position:absolute;top:30px;right:27px;font-size:18px;color:#93e5d5}
+/* Page sections: deliberate chapter rhythm, large whitespace, transparent panels. */
+.syn-r192-home #plateforme{padding-top:clamp(80px,9vw,145px)}
+.syn-r192-home #plateforme .product-grid{gap:17px}
+.syn-r192-home .product-card,.syn-r192-home .trust-card,.syn-r192-home .proof-card,
+.syn-r192-home .siteforge-showcase,.syn-r192-home .about-panel{
+ background:rgba(10,25,43,.3)!important;border-color:rgba(146,179,213,.15)!important;
+ border-radius:16px!important;box-shadow:none!important}
+.syn-r192-home .product-card:hover{transform:none}
+.syn-r192-home .section{padding-block:clamp(70px,9vw,128px)}
+.syn-r192-home .section-heading h2{letter-spacing:-.062em}
+.syn-r192-home #approche,.syn-r192-home #siteforge,.syn-r192-home #confiance{
+ background:linear-gradient(180deg,transparent,rgba(37,64,98,.06) 45%,transparent)}
+.syn-r192-product .section{scroll-margin-top:100px}
+.syn-r192-product .intro{padding-block:clamp(72px,7vw,104px)}
+.syn-r192-product .section:not(.intro):nth-of-type(even){background:linear-gradient(90deg,transparent,rgba(54,91,137,.03),transparent)}
+.syn-r192-product .tile,.syn-r192-product .process article{transition:background-color .3s ease}
+.syn-r192-product .tile:hover,.syn-r192-product .process article:hover{background:rgba(45,91,134,.08)!important}
+/* Fixed scroll progress conveys location; decorative, never intercepts input. */
+.r192-progress{position:fixed;top:0;left:0;right:0;height:2px;z-index:100;pointer-events:none;
+ background:rgba(127,176,212,.04)}
+.r192-progress>span{display:block;width:var(--r192-progress);height:100%;
+ background:linear-gradient(90deg,#8cc9e6,#b3a6ed,#8ce3cb);
+ box-shadow:0 0 12px rgba(154,209,241,.36);transition:width .08s linear}
+/* Motion becomes an enhancement only after IntersectionObserver is ready. */
+html.r192-motion-ready [data-r192-reveal]:not(.is-visible){
+ opacity:0;transform:translate3d(0,26px,0)}
+html.r192-motion-ready [data-r192-reveal]{transition:opacity .82s cubic-bezier(.2,.75,.2,1),transform .82s cubic-bezier(.2,.75,.2,1);
+ transition-delay:var(--r192-delay,0s)}
+html.r192-motion-ready [data-r192-reveal].is-visible{opacity:1;transform:translate3d(0,0,0)}
+[data-r192-reveal] .section-heading,.r192-chapter-layout{will-change:auto}
+@media(max-width:1100px){
+ .r192-chapter-layout{grid-template-columns:1fr;gap:25px}
+ .r192-chapter-layout p{max-width:60ch}
+}
+@media(max-width:720px){
+ .syn-r192-home .r192-hero{padding:33px 0 0}
+ .r192-hero-intro{padding:0 20px}
+ .r192-hero-intro h1{font-size:clamp(2.35rem,9.2vw,4.7rem);max-width:13ch;line-height:1.08}
+ .r192-subtitle{max-width:30ch;font-size:.82rem}
+ .r192-scene-shell{min-height:430px}
+ .syn-r192-home .r192-scene{height:450px;min-height:450px}
+ .syn-r192-home .r192-scene .core-r109-canvas{height:78%!important;transform:scale(.66)!important;transform-origin:center 46%!important}
+ .r192-scene .core-r108-art{top:2%;height:260px;transform:translateX(-50%) scale(.7)}
+ .r192-floor{top:67%;width:210%;left:-55%;height:99%;transform:perspective(500px) rotateX(70deg) scale(1.06)}
+ .r192-floor-light{width:75%}
+ .r192-light-falloff{top:67%;width:80%}
+ .r192-scene-caption{font-size:7px;left:14px;right:14px;bottom:16px}
+ .r192-hero-outro{padding:0 20px 62px;flex-direction:column;gap:18px}
+ .r192-scroll-hint{font-size:9px}
+ .r192-chapter-intro{padding:70px 22px 45px}
+ .r192-chapter-layout{margin:32px 0 35px}
+ .r192-chapter-layout h2{font-size:clamp(2.8rem,10vw,4.8rem)}
+ .r192-product-rail{grid-template-columns:minmax(0,1fr)}
+ .r192-product-rail a{min-height:132px;padding:22px 13px;border-right:0;border-bottom:1px solid var(--r192-line)}
+ .r192-product-rail a:last-child{border-bottom:0}
+ .r192-product-rail a b{top:26px;right:15px}
+}
+@media(prefers-reduced-motion:reduce){
+ .r192-floor-light,.r192-floor-sheen,.r192-scroll-hint b{animation:none!important}
+ .r192-progress>span{transition:none}
+ html.r192-motion-ready [data-r192-reveal]{opacity:1!important;transform:none!important;transition:none!important}
+ .r192-primary-link:hover{transform:none}
+}
+
+/* R192 art-direction pass: keep the three physical elements in the first desktop viewport. */
+@media(min-width:721px){
+ .syn-r192-home .r192-hero{padding-top:25px}
+ .r192-hero-intro h1{font-size:clamp(3.3rem,4.7vw,4.75rem);margin:12px auto 9px;max-width:22ch}
+ .r192-subtitle{font-size:.9rem;line-height:1.5;max-width:74ch}
+ .syn-r192-home .r192-scene{height:590px;min-height:590px}
+ .syn-r192-home .r192-scene .core-r109-canvas{transform:scale(.71)!important;transform-origin:center 45%!important;height:88%!important}
+ .r192-scene .core-r108-art{transform:translateX(-50%) scale(.75)}
+}
+/* Active chapter indicator: a quiet instrument, not an interactive HUD. */
+.r192-chapter-marker{position:fixed;z-index:31;right:clamp(14px,2vw,33px);top:52%;
+ display:grid;gap:6px;justify-items:end;pointer-events:none;
+ opacity:0;transform:translateX(8px);transition:opacity .4s,transform .4s}
+.r192-chapter-marker.is-active{opacity:.83;transform:translateX(0)}
+.r192-chapter-marker span{color:#84d5d6;font:750 11px/1.3 ui-monospace,Consolas,monospace}
+.r192-chapter-marker small{color:#a2b7c9;writing-mode:vertical-rl;font:680 9px/1.4 ui-monospace,Consolas,monospace;letter-spacing:.14em}
+@media(max-width:900px){.r192-chapter-marker{display:none}}
+@media(prefers-reduced-motion:reduce){.r192-chapter-marker{transition:none}}

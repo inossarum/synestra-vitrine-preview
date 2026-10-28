@@ -1,0 +1,125 @@
+{
+  "schema": "synestra.siteforge.r192.design-delivery.v1",
+  "mission_id": "SYN_SITEFORGE_R192_ARCHITECTURE_METALLIC_SCENE_20261028",
+  "date_local": "2026-10-28",
+  "repository": "inossarum/synestra-vitrine-preview",
+  "base_branch": "task/SYN_SITEFORGE_R191_UNIFIED_DIGITAL_SYSTEM_20261028",
+  "base_commit": "2ece8c113d5154708bef9f9aa9dae31130b46ec0",
+  "branch": "task/SYN_SITEFORGE_R192_ARCHITECTURE_METALLIC_SCENE_20261028",
+  "source": "r191/ all 5 pages (immutable)",
+  "routes": [
+    "r192/",
+    "r192/connect/",
+    "r192/bridge/",
+    "r192/siteforge/",
+    "r192/offres/"
+  ],
+  "new_assets": {
+    "scene_css": "assets/r192-experience.css",
+    "scene_css_sha256": "b89ecaa504b5fdb1f495ef0589c1a18cdf00e432696d83a5ab1faa95223b82c3",
+    "scroll_js": "assets/r192-experience.js",
+    "scroll_js_sha256": "1fe3745d8fe59ee3baeb6d902f4ae091e79f8c6db3ada3fdd8355b052e73e777",
+    "home_sha256": "3f1774eced877fd688d6423fef572b316a904bc367d1edcd508dff01f61c2416",
+    "original_plasma_sha256": "d5b64dfccba2096d6cc6f1198a4656c6320569ff627caf11f84fb5eb0e493eae"
+  },
+  "outcomes": [
+    "Home restructured as minimal editorial top, suspended plasma hero over perspective metallic plane, and separate chapter product rail",
+    "Single original WebGL shader canvas; no extra GPU context, no camera tilt on mouse",
+    "Metal floor uses CSS gradients, subtle horizontal brushed texture and Chromium reflected live canvas image, with shadow and cyan/violet luminance",
+    "All five marketing pages share scroll revelation, chapter indicator, and fixed scroll progress; reduced-motion fallback",
+    "R191 original pages and SiteForge labs untouched",
+    "Original home CSP upgraded to allow same-origin linked stylesheets while continuing to forbid external style origins; product policies unchanged"
+  ],
+  "validation": [
+    {
+      "test": "Node original contracts + R192",
+      "passed": 111,
+      "failed": 0,
+      "status": "PASS"
+    },
+    {
+      "test": "Chrome 15 routes x widths",
+      "passed": 15,
+      "failed": 0,
+      "widths": [
+        1440,
+        768,
+        390
+      ],
+      "status": "PASS"
+    },
+    {
+      "test": "Chrome scroll at Y=2400",
+      "status": "PASS",
+      "progress": "25.29%",
+      "revealed": 4,
+      "chapter_marker": true
+    },
+    {
+      "test": "Chrome reduced motion",
+      "status": "PASS",
+      "ambient_present": false
+    },
+    {
+      "test": "Actual WebGL pointer uniforms",
+      "status": "PASS",
+      "tilt": [
+        0,
+        0
+      ],
+      "max_hover": 0.6862214722878023,
+      "rest": 4.6898114549595366e-11
+    },
+    {
+      "test": "Original R191 and R190 unchanged",
+      "status": "PASS"
+    },
+    {
+      "test": "Local preview HTTP",
+      "status": "PASS",
+      "url": "http://127.0.0.1:18850/r192/"
+    }
+  ],
+  "visual_evidence": [
+    {
+      "path": "r192-studio-1440.png",
+      "sha256": "37ca07f647345f6e874efbabf28a643c4c94bba1fc45605118ee42fca501b519"
+    },
+    {
+      "path": "r192-studio-390.png",
+      "sha256": "405f12fefbe6403301c00322aa2cbc0dd17515333380750205405beb46c56ccf"
+    },
+    {
+      "path": "r192-scene-1440.png"
+    },
+    {
+      "path": "r192-connect-1440.png"
+    },
+    {
+      "path": "r192-siteforge-1440.png"
+    }
+  ],
+  "qa_files": [
+    "evidence/SITEFORGE_R192_BROWSER_20261028.json",
+    "evidence/SITEFORGE_R192_POINTER_CHROME_20261028.json"
+  ],
+  "rules_source": "I:\\00_STUDIO_VIRTUEL\\AGENTS.md",
+  "rules_sha256": "34cc2a8649bda4230bd2fa73d4a4de0edaf65dc1e3bdaf2b8b78ff58f4e4ea21",
+  "skills": [
+    "ui-ux@1.0.0#0a362a0938401674166c7a8b871192fbde602c1a",
+    "interaction-motion-design@1.0.0#c636a0c77eccb9004c56ce48bdd49684243b8790",
+    "responsive-layout-engineering@1.0.0#12d091ca42195a1559e5a12c88b9a599560bd53c",
+    "visual-regression-testing@1.0.0#aa98fffe9149dfcc0e153f0d1b8b91f3c0a6b4ae",
+    "web-accessibility-engineering@1.0.0#172c442525351804e89e7b273346f03df34bdd89",
+    "browser-compatibility-progressive-enhancement@1.0.0#715ca40f6c98104983fc7bddaac017f94a776c81"
+  ],
+  "limitations": [
+    "Floor reflection is screen-space CSS approximation, NOT true physically based shading or measured photometry",
+    "WebKit CSS reflection is progressive enhancement; Chromium validated, other browser engines not E2E verified",
+    "Owner visual approval pending",
+    "Exact R188 deployed source not recovered; staging candidate based on R191",
+    "No production deploy, no Git push/merge, no authenticated portal E2E",
+    "Memory V1 Git corpus current snapshot not validated, no Supervisor execution attested"
+  ],
+  "status": "LOCAL_CANDIDATE_VALIDATED; RELEASE_NOT_DONE"
+}
