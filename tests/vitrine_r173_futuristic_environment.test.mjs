@@ -127,3 +127,17 @@ test('R182 owner-screenshot corrections prioritize the animated Core over typogr
  assert.equal((html.match(/<canvas\b/g)||[]).length,1);
  assert.doesNotMatch(html,/r173-beam-one|r173-scan-travel|r173-card-shimmer/);
 });
+
+test('R183 sphere-first opening occupies initial viewport and keeps content in second chapter',()=>{
+ assert.match(html,/class="r183-intro-navigation"/);
+ assert.match(html,/href="#hero-title" class="r183-enter-studio"/);
+ assert.match(css,/\.hero-v2\{\s*display:flex!important;flex-direction:column!important/);
+ assert.match(css,/body \.hero-v2>\.system-stage\.core-r109-stage\{[^}]*order:0/);
+ assert.match(css,/\.hero-v2>\.hero-copy\{\s*order:1/);
+ assert.match(css,/body \.hero-v2>\.system-stage \.syn-r169-room\{display:none!important\}/);
+ assert.match(css,/body \.hero-v2>\.system-stage \.core-r108-links,[\s\S]*?\.core-r108-note\{display:none!important\}/);
+ assert.match(css,/body \.hero-v2>\.system-stage\.core-r109-stage \.core-r109-canvas\{[^}]*scale\(1\.18\)!important/);
+ assert.match(css,/\.r183-enter-studio:focus-visible\{outline:3px/);
+ assert.match(css,/@media\(prefers-reduced-motion:reduce\)\{[^}]*\.r183-enter-studio\{transition:none!important\}/);
+ assert.equal((html.match(/<canvas\b/g)||[]).length,1);
+});
