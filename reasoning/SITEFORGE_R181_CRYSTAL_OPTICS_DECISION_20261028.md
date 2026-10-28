@@ -17,3 +17,12 @@ Budget mobile déterministe : 14 échantillons par rayon dans le cas habituel ; 
 ## Rollback
 
 Publier uniquement `r181.html` sur GitHub Pages isolé, conserver les fichiers R176-R180 et la production. En cas d'échec retirer la page R181, revenir à R180. Branche source `task/SYN_SITEFORGE_R181_CRYSTAL_OPTICS_MOBILE_20261028` depuis `11bf5e13ac281aec49526a40d87b764bc444fe9a`.
+
+## Vérification publique finale
+
+- Version R181 isolée : https://inossarum.github.io/synestra-siteforge-r176-lab/r181.html — HTTP 200 sans authentification, build GitHub Pages built.
+- Test complet Chrome Windows sur l'URL réellement publiée : code sortie 0, six matériaux PASS, huit réglages mote, 18 réglages plasma, orbite tactile / souris et retour à 360° PASS, JSON v1 import-export PASS, WebGL error 0.
+- R181 facettes : affichage distinct de la capture R180. Différences de capture totale de 70 203 pixels sur 307 840 ; cette comparaison inclut aussi les variations entre exécutions, ne pas la présenter comme un effet uniquement des cristaux.
+- Budget mobile : mode équilibré 14 échantillons puis adaptatif 12 avec 96 éclats, retour 14. Limite : **aucune mesure physique de FPS/GPU sur appareil mobile**, uniquement la charge théorique et le comportement navigateur validés.
+- Evidence correspondante : `evidence/SITEFORGE_R181_CRYSTAL_OPTICS_MOBILE_20261028.json` blob `f670685324c08013d9d5dfc5a5e98897d720bad7` ; version source SHA-pinnée de la release `584d5a0918126dcdbc41784a021f5cb5423f2f7b`.
+- La branche `main` et les versions R176–R180 demeurent inchangées. Validation visuelle propriétaire PENDING.
