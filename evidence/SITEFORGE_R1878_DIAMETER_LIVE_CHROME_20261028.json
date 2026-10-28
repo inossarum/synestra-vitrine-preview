@@ -1,0 +1,64 @@
+{
+  "ready": {
+    "ready": "true",
+    "flow": "6",
+    "glError": 0,
+    "slider": {
+      "min": "30",
+      "max": "250",
+      "value": "100"
+    },
+    "sphereValue": "100",
+    "controls": 18
+  },
+  "states": {
+    "30": {
+      "value": "30",
+      "output": "30 %",
+      "sphere": "100",
+      "spin": "0.2465",
+      "glError": 0,
+      "w": 592,
+      "h": 520,
+      "luminous": 3603,
+      "hot": 140,
+      "energySum": 9567926
+    },
+    "100": {
+      "value": "100",
+      "output": "100 %",
+      "sphere": "100",
+      "spin": "0.2465",
+      "glError": 0,
+      "w": 592,
+      "h": 520,
+      "luminous": 14090,
+      "hot": 3267,
+      "energySum": 46603941
+    },
+    "250": {
+      "value": "250",
+      "output": "250 %",
+      "sphere": "100",
+      "spin": "0.2465",
+      "glError": 0,
+      "w": 592,
+      "h": 520,
+      "luminous": 41998,
+      "hot": 32172,
+      "energySum": 299524447
+    }
+  },
+  "diff": {
+    "width": 592,
+    "height": 520,
+    "pixels": 307840,
+    "changed": 52816,
+    "changedPercent": 17.156964656964657,
+    "majorPercent": 15.3125,
+    "meanMaxDelta": 22.204927884615383
+  },
+  "monotonic": true,
+  "passed": true,
+  "engine": "Chrome Windows WebGL SwiftShader"
+}

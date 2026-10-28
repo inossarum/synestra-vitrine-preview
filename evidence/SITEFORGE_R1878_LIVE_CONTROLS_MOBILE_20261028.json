@@ -1,0 +1,114 @@
+{
+  "countDiff": {
+    "width": 366,
+    "height": 286,
+    "pixels": 104676,
+    "changed": 15770,
+    "changedPercent": 15.065535557338835,
+    "majorPercent": 10.164698689288853,
+    "meanMaxDelta": 10.58516756467576
+  },
+  "spreadDiff": {
+    "width": 366,
+    "height": 286,
+    "pixels": 104676,
+    "changed": 27167,
+    "changedPercent": 25.95341816653292,
+    "majorPercent": 20.474607359853263,
+    "meanMaxDelta": 20.852697848599487
+  },
+  "counts": {
+    "3": {
+      "state": {
+        "count": "3",
+        "diameter": "100",
+        "spacing": "100",
+        "spin": "0.7229",
+        "webgl": 0,
+        "flow": "6"
+      },
+      "statistics": {
+        "w": 366,
+        "h": 286,
+        "luminous": 4290,
+        "hot": 811,
+        "energySum": 13307348
+      }
+    },
+    "5": {
+      "state": {
+        "count": "5",
+        "diameter": "100",
+        "spacing": "100",
+        "spin": "0.7229",
+        "webgl": 0,
+        "flow": "6"
+      },
+      "statistics": {
+        "w": 366,
+        "h": 286,
+        "luminous": 6585,
+        "hot": 1715,
+        "energySum": 20833871
+      }
+    },
+    "8": {
+      "state": {
+        "count": "8",
+        "diameter": "100",
+        "spacing": "100",
+        "spin": "0.7229",
+        "webgl": 0,
+        "flow": "6"
+      },
+      "statistics": {
+        "w": 366,
+        "h": 286,
+        "luminous": 9257,
+        "hot": 3101,
+        "energySum": 44277011
+      }
+    }
+  },
+  "pulseStates": [
+    {
+      "speed": "0",
+      "intensity": "0",
+      "glError": 0,
+      "diameter": "100"
+    },
+    {
+      "speed": "100",
+      "intensity": "100",
+      "glError": 0,
+      "diameter": "100"
+    },
+    {
+      "speed": "250",
+      "intensity": "200",
+      "glError": 0,
+      "diameter": "100"
+    }
+  ],
+  "json": {
+    "exportKeys": [
+      "schema",
+      "version",
+      "engine",
+      "parameters",
+      "motes",
+      "energyFlow"
+    ],
+    "legacyDefaults": {
+      "count": "5",
+      "spread": "100",
+      "pulseSpeed": "100",
+      "pulseIntensity": "100"
+    },
+    "rejected": {
+      "count": "5",
+      "status": "Import refusé : Valeur supérieure au maximum."
+    }
+  },
+  "passed": true
+}

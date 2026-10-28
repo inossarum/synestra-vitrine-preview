@@ -1,0 +1,41 @@
+import {spawn} from 'node:child_process';
+import {existsSync,readFileSync,writeFileSync,mkdtempSync,rmSync} from 'node:fs';
+import {tmpdir} from 'node:os';
+import {join,dirname} from 'node:path';
+import {fileURLToPath} from 'node:url';
+const root=join(dirname(fileURLToPath(import.meta.url)),'..');
+const profile=mkdtempSync(join(tmpdir(),'syn-r1878-ui-'));
+const chrome='C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
+const child=spawn(chrome,['--headless=new','--enable-unsafe-swiftshader','--use-angle=swiftshader','--disable-extensions','--disable-background-networking','--no-first-run','--remote-debugging-port=0','--user-data-dir='+profile,'about:blank'],{stdio:'ignore',windowsHide:true});
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+let ws,closed=false;
+try{
+ const f=join(profile,'DevToolsActivePort');
+ for(let i=0;i<100&&!existsSync(f);i++)await sleep(120);
+ if(!existsSync(f))throw Error('CDP_START_FAILED');
+ const port=Number(readFileSync(f,'utf8').split(/\r?\n/)[0]);
+ const pages=await(await fetch('http://127.0.0.1:'+port+'/json/list')).json();
+ const page=pages.find(x=>x.type==='page'&&x.webSocketDebuggerUrl);
+ if(!page)throw Error('PAGE_MISSING');
+ ws=new WebSocket(page.webSocketDebuggerUrl);
+ await new Promise((ok,fail)=>{ws.addEventListener('open',ok,{once:true});ws.addEventListener('error',fail,{once:true})});
+ let id=0;const requests=new Map();
+ ws.addEventListener('message',ev=>{let m;try{m=JSON.parse(ev.data)}catch{return}const p=requests.get(m.id);if(p){requests.delete(m.id);m.error?p.fail(Error(JSON.stringify(m.error))):p.ok(m.result)}});
+ const call=(method,params={})=>new Promise((ok,fail)=>{const n=++id;requests.set(n,{ok,fail});ws.send(JSON.stringify({id:n,method,params}));setTimeout(()=>{if(requests.has(n)){requests.delete(n);fail(Error('CDP_TIMEOUT '+method))}},12000)});
+ await call('Page.enable');await call('Runtime.enable');
+ await call('Emulation.setDeviceMetricsOverride',{width:1100,height:800,deviceScaleFactor:1,mobile:false});
+ await call('Page.navigate',{url:'http://127.0.0.1:19098/siteforge-r1878-autonome.html?demo=energy'});
+ await sleep(7000);
+ const status=(await call('Runtime.evaluate',{expression:"JSON.stringify((()=>({ready:document.querySelector('.core-r109-stage').dataset.coreReady,flow:document.getElementById('sf-flowType').value,flowVisible:document.querySelector('[data-flow-lab]').getBoundingClientRect().top,volumeBelow:document.querySelector('[data-flow-lab]').nextElementSibling.textContent.includes('Volume et noyau'),controls:document.querySelectorAll('[data-flow-control]').length}))())",returnByValue:true})).result.value;
+ const state=JSON.parse(status);
+ if(state.ready!=='true'||state.flow!=='6'||state.controls!==4||!state.volumeBelow)throw Error('UI_ORDER_FAIL '+status);
+ const shot=await call('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});
+ writeFileSync(join(root,'evidence/r1878-lab-ui.png'),Buffer.from(shot.data,'base64'));
+ const r=await call('Runtime.evaluate',{expression:"document.querySelector('[data-flow-lab]').scrollIntoView({block:'start'});true",returnByValue:true});
+ await sleep(500);
+ const controls=await call('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});
+ writeFileSync(join(root,'evidence/r1878-controls-ui.png'),Buffer.from(controls.data,'base64'));
+ console.log('R1878_UI_ORDER_SCREENSHOTS_PASS',status);
+ await call('Browser.close');closed=true;
+}catch(e){console.error('R1878_UI_CAPTURE_FAIL',String(e));process.exitCode=1}
+finally{try{ws?.close()}catch{}if(!closed&&child.exitCode===null)try{child.kill()}catch{}await Promise.race([new Promise(r=>child.once('exit',r)),sleep(1000)]);try{rmSync(profile,{recursive:true,force:true})}catch{}}

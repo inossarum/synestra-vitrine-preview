@@ -1,0 +1,122 @@
+{
+  "schema": "synestra.siteforge.r1878.flow_density_e2e.v1",
+  "date": "2026-10-28",
+  "mission": "SYN_SITEFORGE_R1878_FLOW_DENSITY_20261028",
+  "owner": "inossarum",
+  "repository": "inossarum/synestra-vitrine-preview",
+  "branch": "task/SYN_SITEFORGE_R1878_FLOW_DENSITY_20261028",
+  "base_commit": "bcff1ddd750223eb967f152df72d3c28f945e116",
+  "candidate": "siteforge-r1878-autonome.html",
+  "sha256": "9a26a832d79b98f79cd77ad9e5e352b7e77cbfabaedbe75f6e19b810d90fbe69",
+  "builder": "tools/build_r1878_flow_density.py",
+  "preview": "http://127.0.0.1:19098/siteforge-r1878-autonome.html?demo=energy",
+  "http_status": 200,
+  "bind": "127.0.0.1 on Inos-Cerebros",
+  "scope": {
+    "count": "3..8 distinct tilted toroidal paths; 3 baseline A/B/C; 4 adds D; 5 adds E; 6/7/8 add F/G/H; independent centerline and double-orbital braid per active family",
+    "spread": "70..130%, changes centerline radii without altering filament diameter",
+    "pulseSpeed": "0..250%, scales uLabTime only in energy material; independent of global particleSpeed/spin",
+    "pulseIntensity": "0..200%, scales traveling current and crossover flash, no opaque cylinders",
+    "controls": "Four new data-flow-control inputs; existing 18 scene + 10 mote and 7 material controls preserved",
+    "json": "Optional sibling energyFlow with four validated keys in existing v1 schema; old imports absent energyFlow receive 5/100/100/100 defaults; invalid import atomic",
+    "security": "Single inline-script CSP SHA256 regenerated; no unsafe-inline, no network dependencies",
+    "userExperience": "New architecture fieldset placed above Volume et noyau, visible high in desktop panel"
+  },
+  "tests": {
+    "static": {
+      "status": "PASS",
+      "count": 5,
+      "fail": 0
+    },
+    "chrome_desktop": {
+      "status": "PASS",
+      "webgl_error": 0,
+      "viewport": [
+        1100,
+        800
+      ],
+      "spin_fixed": true,
+      "diameter_preserved": true,
+      "legacy_six_materials": "PASS",
+      "other_controls": "PASS",
+      "flow_count_diff_3_to_8_pixels": 29556,
+      "flow_count_3_to_8_changed_percent": 9.6,
+      "spread_70_to_130_changed_pixels": 50852,
+      "flows_luminous_pixels": {
+        "3": 8349,
+        "5": 12804,
+        "8": 17848
+      },
+      "pulse_zero_temporal_diff_pixels": 0,
+      "pulse_250_temporal_diff_pixels": 30529,
+      "json_export": "PASS",
+      "legacy_json_import": "PASS",
+      "invalid_json_atomic_rejection": "PASS"
+    },
+    "chrome_mobile_emulated": {
+      "status": "PASS",
+      "viewport": [
+        390,
+        844
+      ],
+      "webgl_error": 0,
+      "spin_fixed": true,
+      "flow_count_diff_3_to_8_pixels": 15770,
+      "spread_70_to_130_changed_pixels": 27167,
+      "flows_luminous_pixels": {
+        "3": 4290,
+        "5": 6585,
+        "8": 9257
+      },
+      "diameter_30_to_250": "PASS",
+      "json_export_import": "PASS"
+    },
+    "ui_screen": {
+      "status": "PASS",
+      "flow_section_before_volume": true,
+      "flow_control_count": 4,
+      "webgl_ready": true,
+      "ui_desktop_screenshot": "evidence/r1878-lab-ui.png",
+      "ui_scrolled_screenshot": "evidence/r1878-controls-ui.png"
+    }
+  },
+  "screenshots": [
+    {
+      "path": "evidence/r1878-flows-3.png",
+      "sha256": "9bda5fb96b2a8c8f222af738eb268c837d0db07ee1939fff98a96e613f7b1a6d"
+    },
+    {
+      "path": "evidence/r1878-flows-5.png",
+      "sha256": "ee32ed9c253517ebf74213997073863b37304efd5a5c1d71178f2ae793a9515b"
+    },
+    {
+      "path": "evidence/r1878-flows-8.png",
+      "sha256": "ccbc6d80e3fc1c711f3e41470d675e9fd211916caf90c6d274648b5f3fa6c9e2"
+    },
+    {
+      "path": "evidence/r1878-lab-ui.png",
+      "sha256": "c58f403cb0e9377a5875a01976fdc7908fe1f1f9974736a537801453caae7bbb"
+    },
+    {
+      "path": "evidence/r1878-controls-ui.png",
+      "sha256": "6d0b24163c52666b6cfeb8ec97859ebab09976aef15e0ac6d7c6261a14ac6725"
+    },
+    {
+      "path": "evidence/r1878-mobile-flows-3.png",
+      "sha256": "85394634b74c3401891f9a24cc856661962bb118489df0e3ae2cdb397727db96"
+    },
+    {
+      "path": "evidence/r1878-mobile-flows-8.png",
+      "sha256": "566179b918358037868832989e911ce1cc1df7995e762b52334a0e04061cdc5e"
+    }
+  ],
+  "limits": [
+    "Chrome mobile emulation on Windows is not a physical phone",
+    "GPU WebGL via SwiftShader; hardware FPS and thermal/power measurements not obtained",
+    "Luminous pixel change is proof of response/motion, not artistic quality",
+    "User artistic approval pending, no public deploy, no merge/push",
+    "CSP frame-ancestors meta warning and favicon 404 inherited"
+  ],
+  "status": "LOCAL_E2E_PASS_ART_ACCEPTANCE_PENDING",
+  "rollback": "R187.7 unchanged at bcff1dd; worktree is isolated; no modifications to main"
+}
