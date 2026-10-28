@@ -41,14 +41,41 @@
         "r180-style-orbs.png"
       ]
     },
-    "public_chrome": "PENDING"
+    "public_chrome": {
+      "status": "PASS",
+      "url": "https://inossarum.github.io/synestra-siteforge-r176-lab/r180.html",
+      "https_status": 200,
+      "no_cloudflare_access": true,
+      "chromium": "Windows Chrome headless WebGL ANGLE SwiftShader",
+      "process_exit": 0,
+      "webgl_error": 0,
+      "materials_6_of_6": "PASS",
+      "mobile_width": 390,
+      "mouse_orbit": "PASS",
+      "touch_orbit": "PASS",
+      "orbit_180_360": "PASS",
+      "pause_resume": "PASS",
+      "shared_spin": "PASS, phase and motePhase equal, 0% freeze",
+      "image_difference_style_pixels": 14275,
+      "image_difference_style_percent": 4.637149168399168,
+      "roundtrip_json": "PASS",
+      "invalid_atomic_refusal": "PASS",
+      "legacy_v1_no_motes": "PASS",
+      "original_parameters": 18,
+      "mote_parameters": 8,
+      "source_qa_commit": "de1c9ff360ce2487b09fe5bffe38ebb505340bc5"
+    }
   },
   "public_preview": {
     "repository": "inossarum/synestra-siteforge-r176-lab",
     "path": "r180.html",
     "url": "https://inossarum.github.io/synestra-siteforge-r176-lab/r180.html",
-    "state": "PENDING",
-    "baseline_pages_head": "95462132a6af27f9b039026b85b8f646e7b83cba"
+    "state": "PASS",
+    "baseline_pages_head": "95462132a6af27f9b039026b85b8f646e7b83cba",
+    "pages_commit": "990821f07e1274b06fbbb29fcd5fbe4a300a4871",
+    "artifact_sha": "369c7724c35f7cec9b2164f222571401668a92ac",
+    "https_status": 200,
+    "pages_status": "built"
   },
   "restrictions": {
     "main_untouched": true,
@@ -57,5 +84,5 @@
     "rollback": "remove r180.html only or open r179.html",
     "user_visual_acceptance": "PENDING"
   },
-  "status": "LOCAL_CHROME_PASS_PUBLIC_E2E_PENDING"
+  "status": "PUBLIC_GITHUB_PAGES_REAL_CHROME_E2E_PASS; OWNER_VISUAL_ACCEPTANCE_PENDING"
 }
