@@ -42,6 +42,23 @@ for(const vw of [1280,390,320]){
  }else console.log('R175_DESKTOP_NAV_1280=PASS '+JSON.stringify(navBefore));
  const introExpr=`JSON.stringify((()=>{const stage=document.querySelector('.hero-v2>.system-stage'),copy=document.querySelector('.hero-v2>.hero-copy'),title=document.querySelector('#hero-title'),canvas=stage.querySelector('canvas'),room=stage.querySelector('.syn-r169-room'),links=stage.querySelector('.core-r108-links'),button=stage.querySelector('.r183-enter-studio'),r=e=>e.getBoundingClientRect(),st=r(stage),cp=r(copy),bt=r(button);return {stageTop:st.top,stageBottom:st.bottom,stageHeight:st.height,stageWidth:st.width,copyTop:cp.top,titleTop:r(title).top,canvasTransform:getComputedStyle(canvas).transform,canvasOpacity:getComputedStyle(canvas).opacity,ready:stage.dataset.coreReady,roomDisplay:getComputedStyle(room).display,linksDisplay:getComputedStyle(links).display,buttonVisible:bt.height>=44&&bt.width>=150,buttonHref:button.getAttribute('href'),canvasCount:document.querySelectorAll('canvas').length,scrollWidth:document.documentElement.scrollWidth,viewport:innerWidth}})())`;
  const intro=JSON.parse((await send('Runtime.evaluate',{expression:introExpr,returnByValue:true})).result.value);
+
+ const labExpr=`JSON.stringify((()=>{const st=document.querySelector('[data-lab-engine="R182"]');const canvas=st?.querySelector('canvas');const floor=st?.querySelector('.r185-floor-plane');return {engine:st?.dataset.labEngine,motes:st?.dataset.moteCount,spin:st?.dataset.syncedSpinPhase,bufferW:canvas?.width,bufferH:canvas?.height,floor:floor&&getComputedStyle(floor,'::before').backgroundImage,orbit:st?.dataset.orbitYaw}})())`;
+ const lab=JSON.parse((await send('Runtime.evaluate',{expression:labExpr,returnByValue:true})).result.value);
+ if(lab.engine!=='R182'||lab.motes!=='0'||!Number.isFinite(Number(lab.spin))||!(lab.bufferW>100&&lab.bufferH>100)||!lab.floor?.includes('radial-gradient')||(vw<=700&&lab.bufferH/lab.bufferW>1.2))throw Error('R185_LAB182_RENDER_FAIL_'+vw+' '+JSON.stringify(lab));
+ await send('Runtime.evaluate',{expression:"document.querySelector('[data-lab-engine]').focus({preventScroll:true})"});
+ await send('Input.dispatchKeyEvent',{type:'keyDown',key:'ArrowRight',code:'ArrowRight',windowsVirtualKeyCode:39});
+ await send('Input.dispatchKeyEvent',{type:'keyUp',key:'ArrowRight',code:'ArrowRight',windowsVirtualKeyCode:39});
+ await sleep(90);
+ const yaw=(await send('Runtime.evaluate',{expression:"document.querySelector('[data-lab-engine]').dataset.orbitYaw",returnByValue:true})).result.value;
+ if(!(Number(yaw)>0))throw Error('R185_ORBIT_KEYBOARD_FAIL_'+vw+' '+yaw);
+ await send('Input.dispatchKeyEvent',{type:'keyDown',key:'Home',code:'Home',windowsVirtualKeyCode:36});
+ await send('Input.dispatchKeyEvent',{type:'keyUp',key:'Home',code:'Home',windowsVirtualKeyCode:36});
+ await sleep(60);
+ const resetYaw=(await send('Runtime.evaluate',{expression:"document.querySelector('[data-lab-engine]').dataset.orbitYaw",returnByValue:true})).result.value;
+ if(Math.abs(Number(resetYaw))>.001)throw Error('R185_ORBIT_HOME_FAIL_'+vw+' '+resetYaw);
+ console.log('R185_REAL_R182_BROWSER_'+vw+'=PASS '+JSON.stringify({lab,yaw,resetYaw}));
+
  if(intro.stageTop>150||intro.stageHeight<500||intro.stageBottom>970||intro.copyTop<intro.stageBottom-2||intro.titleTop<intro.stageBottom+45||intro.roomDisplay!=='none'||intro.linksDisplay!=='none'||intro.buttonHref!=='#hero-title'||!intro.buttonVisible||intro.canvasOpacity!=='1'||intro.ready!=='true'||intro.canvasCount!==1||intro.scrollWidth>vw+2)throw Error('R183_SPHERE_FIRST_FAIL_'+vw+' '+JSON.stringify(intro));
  if(capture){
   await send('Runtime.evaluate',{expression:"window.scrollTo({top:0,behavior:'instant'})"});
