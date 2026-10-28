@@ -1,0 +1,114 @@
+{
+  "schema": "synestra.siteforge.r196.core-chapter-hover.evidence.v1",
+  "date_local": "2026-10-28",
+  "mission_id": "SYN_SITEFORGE_R196_CORE_VISUAL_INTERACTIONS_20261028",
+  "repository": "inossarum/synestra-vitrine-preview",
+  "branch": "task/SYN_SITEFORGE_R196_CORE_VISUAL_INTERACTIONS_20261028",
+  "base_commit": "f586610b2fe0f0721fb726fb963beab8b2b2428d",
+  "r195_source_sha256": "a7fa506400c2f36d47b59d5a1e9d44c2efe050bf577f6eacb14c48e50adb9f30",
+  "r196_home_sha256": "43c2fa3845b2b0cdc7072dcd369c30df442e8c4fa3a8e882ce2fce5853773574",
+  "r196_css_sha256": "5784c1563a919782ce4a4851cb3487542c4db86d43124624105ff21e8d20a775",
+  "changes": [
+    "Ch2 no diffuse hover overlay; new high contrast permanent 56px button with clear hover and focus feedback",
+    "Ch3 masked 1px moving border highlight via existing pointer x/y values, no diffuse background overlay",
+    "No halo on common principle card for Connect Bridge SiteForge Offres; refined borders and shadows",
+    "Core stage: 2 subtle CSS metallic orbital arcs, equator marker, left/right technical labels on desktop, floor beacon, mobile labels hidden",
+    "No extra canvas, WebGL shader and source R195 unchanged"
+  ],
+  "tests": [
+    {
+      "name": "Node contracts inherited+R196",
+      "pass": 143,
+      "fail": 0,
+      "status": "PASS"
+    },
+    {
+      "name": "Chrome 5 routes at 1440/768/390",
+      "pass": 15,
+      "fail": 0,
+      "status": "PASS"
+    },
+    {
+      "name": "Chrome story 11 assertions",
+      "pass": 11,
+      "fail": 0,
+      "status": "PASS"
+    },
+    {
+      "name": "Chrome hover baseline",
+      "pass": 5,
+      "fail": 0,
+      "status": "PASS"
+    },
+    {
+      "name": "Chrome specific CSS/DOM at runtime",
+      "status": "PASS",
+      "core_arcs": 2,
+      "canvas_count": 1,
+      "ch2_halo": "none",
+      "cta_height": 56,
+      "ch3_pseudoelement_mask": "exclude",
+      "product_halo": "none",
+      "reduced_motion_arcs": "none"
+    },
+    {
+      "name": "Chrome WebGL pointer",
+      "status": "PASS",
+      "uTilt": [
+        0,
+        0
+      ],
+      "max_hover_strength": 0.7266507354410947,
+      "rest_pointer_strength": 6.65918692395669e-11
+    },
+    {
+      "name": "Cloudflare portal production promotion",
+      "status": "NOT_PERFORMED"
+    },
+    {
+      "name": "Cloudflare portal E2E authenticated",
+      "status": "NOT_PERFORMED"
+    }
+  ],
+  "portal": {
+    "production": {
+      "script": "synestra-client-portal",
+      "deployment_id": "5aded867-c338-42e9-85fc-1ee28c03a822",
+      "version_id": "2ee6a737-af2d-40d6-bb8a-5bad710c1ad0",
+      "percentage": 100,
+      "created_on": "2026-10-24T15:17:45.7403Z",
+      "message": "R80: restore Cloudflare Access JWT verification by supported manual JWKS redirect; preflight old version rollback"
+    },
+    "staging": {
+      "script": "synestra-client-portal-staging",
+      "deployment_id": "2d1ba83d-2541-43f0-a7ce-f52b9ac28c5a",
+      "version_id": "ac18371b-3745-45eb-bc98-5e9deeae3d10",
+      "percentage": 100,
+      "created_on": "2026-10-27T13:44:26.184849Z"
+    },
+    "public_login": "Cloudflare Access both URLs confirmed in prior authorized public probe",
+    "status": "NOT_UPDATED",
+    "reason": "Different protected versions; no authorized authenticated session or production qualified candidate. Do not promote blindly"
+  },
+  "skills": [
+    "interaction-motion-design@1.0.0#c636a0c77eccb9004c56ce48bdd49684243b8790",
+    "ui-ux@1.0.0#0a362a0938401674166c7a8b871192fbde602c1a",
+    "visual-regression-testing@1.0.0#aa98fffe9149dfcc0e153f0d1b8b91f3c0a6b4ae"
+  ],
+  "rules": "AGENTS.md#34cc2a8649bda4230bd2fa73d4a4de0edaf65dc1e3bdaf2b8b78ff58f4e4ea21",
+  "limits": [
+    "No Cloudflare deployment, no main merge, local preview only",
+    "Portal live UI behind Access not inspected",
+    "No cross-browser E2E beyond Chrome",
+    "No official owner visual approval"
+  ],
+  "evidence_files": [
+    "evidence/SITEFORGE_R196_BROWSER_20261028.json",
+    "evidence/SITEFORGE_R196_STORY_CHROME_20261028.json",
+    "evidence/SITEFORGE_R196_HOVER_CHROME_20261028.json",
+    "evidence/SITEFORGE_R196_TARGETED_CHROME_20261028.json",
+    "evidence/SITEFORGE_R196_POINTER_CHROME_20261028.json"
+  ],
+  "preview_url": "http://127.0.0.1:18850/r196/",
+  "status": "LOCAL_R196_VALIDATED;PILOT_PORTAL_NOT_UPDATED"
+}
