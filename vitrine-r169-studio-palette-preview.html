@@ -2509,6 +2509,117 @@ body .product-card .product-deep-link:focus-visible{
  .hero-v2 .core-r109-stage .core-r109-canvas{transition:none!important}
 }
 
+
+/* R183 — FIRST IMPRESSION: THE CORE. One actual animated WebGL object, no 3D-image replacement.
+   Derived from owner's TRIONN layout reference, not its artwork or brand. */
+.hero-v2{
+ display:flex!important;flex-direction:column!important;gap:0!important;
+ padding-top:clamp(.7rem,1.7vw,1.6rem)!important;
+ padding-bottom:clamp(4rem,7vw,6.8rem)!important;
+}
+.hero-v2>.r173-hud-dial{display:none!important}
+body .hero-v2>.system-stage.core-r109-stage{
+ order:0;position:relative;z-index:2;
+ width:100%!important;min-height:clamp(630px,calc(100svh - 135px),950px)!important;
+ height:clamp(630px,calc(100svh - 135px),950px)!important;
+ margin:0;padding:0;
+ border:0!important;border-radius:clamp(1rem,2.1vw,1.75rem)!important;
+ background:
+ radial-gradient(ellipse 48% 58% at 50% 47%,rgba(45,39,94,.16),transparent 70%),
+ radial-gradient(ellipse 40% 52% at 49% 52%,rgba(25,74,97,.07),transparent 77%),
+ #050811!important;
+ box-shadow:inset 0 0 0 1px rgba(141,165,208,.16),0 22px 80px rgba(0,4,13,.45)!important;
+ overflow:hidden;
+}
+body .hero-v2>.system-stage .syn-r169-room{display:none!important}
+body .hero-v2>.system-stage .core-r108-top{
+ z-index:6;top:clamp(1.3rem,2.6vw,2.4rem);left:clamp(1.25rem,3vw,3.1rem);right:clamp(1.25rem,3vw,3.1rem);
+ color:#94adc6;letter-spacing:.18em;font-size:.68rem;
+}
+body .hero-v2>.system-stage .core-r108-top span:last-child{opacity:.58}
+body .hero-v2>.system-stage.core-r109-stage .core-r109-canvas{
+ width:100%!important;height:100%!important;top:0!important;left:0!important;
+ transform:translate3d(0,0,0) scale(1.18)!important;
+ transform-origin:50% 50%!important;
+ opacity:0;
+}
+body .hero-v2>.system-stage.core-r109-stage[data-core-ready="true"] .core-r109-canvas{opacity:1}
+body .hero-v2>.system-stage.core-r109-stage .core-r108-art{
+ top:50%!important;left:50%!important;
+ width:min(86%,760px)!important;height:350px!important;
+ transform:translate(-50%,-50%) scale(.96)!important;
+}
+body .hero-v2>.system-stage .core-r108-links,
+body .hero-v2>.system-stage .core-r108-note{display:none!important}
+.r183-intro-navigation{
+ position:absolute;z-index:8;left:clamp(1.25rem,3vw,3.1rem);
+ right:clamp(1.25rem,3vw,3.1rem);bottom:clamp(1.25rem,2.6vw,2.3rem);
+ display:flex;align-items:center;justify-content:space-between;gap:1rem;
+ color:#a9c4dd;
+}
+.r183-intro-signature,.r183-intro-index{
+ color:#91abc5;font:650 .7rem/1.4 ui-monospace,Consolas,monospace;letter-spacing:.15em;
+}
+.r183-intro-signature span{color:#79d8d8;margin:0 .35rem}
+.r183-enter-studio{
+ display:inline-flex;align-items:center;justify-content:center;gap:clamp(.85rem,2vw,2rem);
+ min-height:49px;padding:.72rem 1.2rem;
+ border:1px solid rgba(179,208,232,.38);border-radius:50px;
+ background:rgba(8,19,35,.72);color:#ecf6ff;text-decoration:none;
+ font-size:.85rem;font-weight:700;line-height:1.2;
+ transition:border-color .24s ease,background-color .24s ease;
+}
+.r183-enter-studio:hover{border-color:#a6e6f5;background:rgba(32,58,83,.88)}
+.r183-enter-studio:focus-visible{outline:3px solid #b9efff;outline-offset:4px}
+.r183-enter-studio span{color:#92e8f7}
+.hero-v2>.hero-copy{
+ order:1;position:relative;z-index:1;
+ margin:0 auto;width:min(100%,1160px)!important;max-width:1160px!important;
+ min-width:0;transform:none!important;
+ padding:clamp(4.6rem,9vw,9.5rem) 0 clamp(1.5rem,3vw,3rem)!important;
+ background:none!important;background-image:none!important;box-shadow:none!important;
+ text-shadow:none;
+ pointer-events:auto!important;
+}
+.hero-v2>.hero-copy h1{
+ max-width:960px!important;
+ font-size:clamp(3.2rem,6.7vw,7.2rem)!important;
+ line-height:1.025!important;letter-spacing:-.07em!important;
+ text-wrap:balance;
+}
+.hero-v2>.hero-copy .hero-lead{max-width:46rem;font-size:clamp(1.03rem,1.45vw,1.25rem);line-height:1.75}
+.hero-v2>.hero-copy .hero-actions{gap:.9rem}
+.hero-v2>.hero-copy .hero-index{display:flex}
+@media(max-width:1099px){
+ body .hero-v2>.system-stage.core-r109-stage{
+  min-height:clamp(550px,calc(100svh - 120px),810px)!important;
+  height:clamp(550px,calc(100svh - 120px),810px)!important;
+ }
+ body .hero-v2>.system-stage.core-r109-stage .core-r109-canvas{
+  transform:translate3d(0,0,0) scale(1.25)!important;
+ }
+}
+@media(max-width:720px){
+ .hero-v2{padding-top:.55rem!important}
+ body .hero-v2>.system-stage.core-r109-stage{
+  height:clamp(510px,calc(100svh - 95px),730px)!important;
+  min-height:clamp(510px,calc(100svh - 95px),730px)!important;
+  border-radius:1rem!important;
+ }
+ body .hero-v2>.system-stage.core-r109-stage .core-r109-canvas{
+  transform:translate3d(0,0,0) scale(1.42)!important;
+ }
+ .r183-intro-navigation{justify-content:center;flex-wrap:wrap;bottom:1.15rem}
+ .r183-intro-signature,.r183-intro-index{display:none}
+ .r183-enter-studio{width:100%;max-width:270px}
+ .hero-v2>.hero-copy{padding:3.8rem 0 1.6rem!important}
+ .hero-v2>.hero-copy h1{font-size:clamp(2.85rem,9.8vw,4.8rem)!important;line-height:1.06!important}
+}
+@media(prefers-reduced-motion:reduce){
+ .r183-enter-studio{transition:none!important}
+ body .hero-v2>.system-stage.core-r109-stage .core-r109-canvas{transition:none!important}
+}
+
 </style>
 </head>
 <body>
@@ -3096,6 +3207,11 @@ body .product-card .product-deep-link:focus-visible{
           <a href="./bridge/"><span>Agir</span><strong>Bridge</strong><span aria-hidden="true">↗</span></a>
         </nav>
         <p class="core-r108-note">Une même énergie, trois façons de donner vie à vos projets.</p>
+        <div class="r183-intro-navigation">
+          <span class="r183-intro-signature">SYNESTRA <span aria-hidden="true">/</span> DIGITAL STUDIO</span>
+          <a href="#hero-title" class="r183-enter-studio">Découvrir le Studio <span aria-hidden="true">↓</span></a>
+          <span class="r183-intro-index">CORE / 001</span>
+        </div>
       </div>
     </section>
 
