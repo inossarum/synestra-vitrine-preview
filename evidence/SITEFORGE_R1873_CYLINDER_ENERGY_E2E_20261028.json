@@ -1,0 +1,110 @@
+{
+  "schema": "synestra.siteforge.r1873.cylindrical_energy_visual_e2e.v1",
+  "date": "2026-10-28",
+  "mission": "SYN_SITEFORGE_R1873_CYLINDRICAL_ENERGY_20261028",
+  "owner": "inossarum",
+  "base_commit": "835f1afcd22359d2ab0e7d9fa056fa8dc5a05fb0",
+  "branch": "task/SYN_SITEFORGE_R1873_CYLINDRICAL_ENERGY_20261028",
+  "source": "siteforge-r1872-autonome.html",
+  "candidate": "siteforge-r1873-autonome.html",
+  "candidate_sha256": "466ec3bf1305e465a77a1af7e3e690b92cda46a65f6996eb97cba60de19c3543",
+  "builder": "tools/build_r1873_cylindrical_energy.py",
+  "requirements": [
+    "Preserve organized cyan/magenta energy loops of R187.2 and independent motion",
+    "Introduce visible cylindrical radial body through shaded gradients and moving glints",
+    "Avoid opaque SDF material and excessive glow; keep six previous materials untouched"
+  ],
+  "implementation": [
+    "Three bounded translucent radial body fields inside material 6; individually directional normal gradients",
+    "Moving specular side highlights and flowing stripes tied to independent uLabTime",
+    "Reduce stripe intensity and filmic emission to prevent blown-out white overlap",
+    "Strict single-inline-script CSP SHA256 regenerated; no unsafe-inline, no runtime dependency",
+    "Label R187.3 updated including badge; 18 scene and 10 mote controls, seven options preserved"
+  ],
+  "tests": {
+    "static": {
+      "status": "PASS",
+      "count": 5,
+      "checks": [
+        "strict CSP exact hash",
+        "material6 only shaded cylinders",
+        "exact R187.2 reconstruction excluding version titles/CSP",
+        "18 scene and 10 mote settings seven materials",
+        "independent motion/volumetric transparency"
+      ]
+    },
+    "chrome_desktop": {
+      "status": "PASS",
+      "environment": "Chrome on Windows WebGL SwiftShader",
+      "viewport": [
+        1100,
+        800
+      ],
+      "webgl_error": 0,
+      "particle_speed": 0,
+      "spin_phase_unchanged": true,
+      "motion_pixels": 92433,
+      "total_pixels": 307840,
+      "motion_percent": 30.0263
+    },
+    "chrome_mobile_simulated": {
+      "status": "PASS",
+      "viewport": [
+        390,
+        844
+      ],
+      "webgl_error": 0,
+      "particle_speed": 0,
+      "spin_phase_unchanged": true,
+      "motion_pixels": 45148,
+      "total_pixels": 104676,
+      "motion_percent": 43.1312
+    },
+    "energy_deeplink": {
+      "status": "PASS",
+      "query": "demo=energy",
+      "selected_flow_type": 6,
+      "motion_pixels": 78985,
+      "total_pixels": 307840,
+      "motion_percent": 25.6578
+    },
+    "preview": {
+      "status": 200,
+      "url": "http://127.0.0.1:19093/siteforge-r1873-autonome.html?demo=energy",
+      "binding": "127.0.0.1 only"
+    }
+  },
+  "screenshots": [
+    {
+      "path": "evidence/r1873-first.png",
+      "sha256": "3aae800060c1c7510752c5e448cca5c3e97660959d2709a4eb2bceee3c1e327d"
+    },
+    {
+      "path": "evidence/r1873-later.png",
+      "sha256": "a32e6524dba2e80f44b4008e5e4adc6f8b3f33848e528e8536c464971a629ff6"
+    },
+    {
+      "path": "evidence/r1873-energy-ui.png",
+      "sha256": "2175ee681a582ffd8b74cfb4603cab72f0bc4349056a381dbd0ccf06eae8ed96"
+    },
+    {
+      "path": "evidence/r1873-mobile-first.png",
+      "sha256": "3e119212f5b357b2ff350a105c16fac6ea31e57a9003959a88a24e7249b6691e"
+    },
+    {
+      "path": "evidence/r1873-mobile-later.png",
+      "sha256": "25e8752942c4c367fa271b04509bb6922e3144c9169a5a26a4a8c037bf352677"
+    }
+  ],
+  "visually_rejected_iterations": [
+    "First high-body-intensity candidate produced saturated white blob, rejected",
+    "Second reduced-body brightness and shaded stripe candidate retained, reviewed via real Chrome screenshots"
+  ],
+  "limits": [
+    "Aesthetic approval by owner pending",
+    "Physical mobile GPU FPS/performance not measured",
+    "Not publicly deployed, pushed or merged",
+    "Chrome meta CSP frame-ancestors warning and favicon 404 inherited and unrelated"
+  ],
+  "outcome": "LOCAL_E2E_PASS_ART_PENDING"
+}
