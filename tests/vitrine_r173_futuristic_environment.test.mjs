@@ -141,3 +141,15 @@ test('R183 sphere-first opening occupies initial viewport and keeps content in s
  assert.match(css,/@media\(prefers-reduced-motion:reduce\)\{[^}]*\.r183-enter-studio\{transition:none!important\}/);
  assert.equal((html.match(/<canvas\b/g)||[]).length,1);
 });
+
+test('R183 portrait-safe WebGL orb keeps complete spherical silhouette within canvas',()=>{
+ const source=readFileSync(new URL('../assets/core-r109-webgl.js',import.meta.url),'utf8');
+ assert.match(source,/float radius=min\(\.69, \.85\*resolution\.x\/max\(resolution\.y,1\.\)\);/);
+ for(const [width,height] of [[1217,765],[358,730],[288,730]]){
+  const radius=Math.min(.69,.85*width/height);
+  const normalizedHorizontalRadius=radius/(width/height);
+  assert.ok(normalizedHorizontalRadius<=.85+1e-8,'sphere reaches canvas edge at '+width);
+  assert.ok(radius>0,'radius must stay positive');
+ }
+ assert.match(css,/@media\(max-width:720px\)[\s\S]*?\.core-r109-canvas\{[\s\S]*?scale\(1\)!important/);
+});
