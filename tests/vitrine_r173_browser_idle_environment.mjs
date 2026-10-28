@@ -42,6 +42,18 @@ for(const vw of [1280,390,320]){
  }else console.log('R175_DESKTOP_NAV_1280=PASS '+JSON.stringify(navBefore));
  const wayfinderEval=`JSON.stringify((()=>{const header=document.querySelector('body>.site-header.container'),dock=document.querySelector('.r178-wayfinder'),cards=[...dock.querySelectorAll('.r178-wayfinder-link')],hs=getComputedStyle(header),ds=getComputedStyle(dock);return {headerPosition:hs.position,headerTop:header.getBoundingClientRect().top,headerBottom:header.getBoundingClientRect().bottom,headerHeight:header.getBoundingClientRect().height,dockVisible:ds.display!=='none',columns:getComputedStyle(dock.querySelector('.r178-wayfinder-grid')).gridTemplateColumns,links:cards.map(x=>x.getAttribute('href')),cardWidths:cards.map(x=>x.getBoundingClientRect().width),scrollWidth:document.documentElement.scrollWidth,viewport:innerWidth}})())`;
  const getWayfinder=async()=>JSON.parse((await send('Runtime.evaluate',{expression:wayfinderEval,returnByValue:true})).result.value);
+ const manifestExpression=`JSON.stringify((()=>{const section=document.querySelector('.r179-manifesto'),copy=document.querySelector('.r179-editorial-copy'),title=document.querySelector('#r179-manifesto-title'),panel=document.querySelector('.r179-system-index'),links=[...panel.querySelectorAll('a[href]')],r=x=>x.getBoundingClientRect(),h=r(title),c=r(copy),p=r(panel),s=r(section);return {title:title.innerText,links:links.map(x=>x.getAttribute('href')),columns:getComputedStyle(section).gridTemplateColumns,titleWidth:h.width,titleScrollWidth:title.scrollWidth,titleHeight:h.height,copyBottom:c.bottom,panelTop:p.top,panelWidth:p.width,sectionWidth:s.width,scrollWidth:document.documentElement.scrollWidth}})())`;
+ const getManifest=async()=>JSON.parse((await send('Runtime.evaluate',{expression:manifestExpression,returnByValue:true})).result.value);
+ const manifest=await getManifest();
+ if(manifest.links.join(',')!=='./siteforge/,./connect/,./bridge/'||manifest.titleWidth<180||manifest.panelWidth<180||manifest.scrollWidth>vw+2||manifest.titleScrollWidth>manifest.titleWidth+2)throw Error('R179_EDITORIAL_LAYOUT_FAIL_'+vw+' '+JSON.stringify(manifest));
+ if(capture){
+  await send('Runtime.evaluate',{expression:"document.querySelector('.r179-manifesto').scrollIntoView({block:'start',behavior:'instant'})"});
+  await sleep(180);
+  const manifestoImage=await send('Page.captureScreenshot',{format:'png',fromSurface:true,captureBeyondViewport:false});
+  writeFileSync(join(root,'r179_editorial_'+vw+'.png'),Buffer.from(manifestoImage.data,'base64'));
+  await send('Runtime.evaluate',{expression:"window.scrollTo({top:0,behavior:'instant'})"});
+ }
+ console.log('R179_EDITORIAL_CDP_'+vw+'=PASS '+JSON.stringify(manifest));
  const wfBefore=await getWayfinder();
  if(wfBefore.headerPosition!=='sticky'||wfBefore.headerHeight>130||!wfBefore.dockVisible||wfBefore.links.join(',')!=='#plateforme,#exemples,#approche'||wfBefore.cardWidths.some(n=>n<150)||wfBefore.scrollWidth>vw+2)throw Error('R178_NAV_INITIAL_FAIL_'+vw+' '+JSON.stringify(wfBefore));
  if(capture){
