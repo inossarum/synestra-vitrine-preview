@@ -82,7 +82,44 @@
       "spin_equal": true,
       "webgl_error": 0
     },
-    "chrome_public": "PENDING"
+    "chrome_public": {
+      "status": "PASS",
+      "url": "https://inossarum.github.io/synestra-siteforge-r176-lab/r183.html",
+      "http_status": 200,
+      "full_e2e_exit_code": 0,
+      "auto_e2e_exit_code": 0,
+      "webgl_errors": 0,
+      "materials_6": "PASS",
+      "touch_mouse": "PASS",
+      "orbit_180_360": "PASS",
+      "mobile_width": 390,
+      "json_legacy_and_roundtrip": "PASS",
+      "original_plasma_controls": 18,
+      "particle_controls": 10,
+      "desktop_samples": {
+        "balanced": 22,
+        "performance": 16,
+        "quality": 22
+      },
+      "mobile_samples": {
+        "balanced": 14,
+        "performance": 10,
+        "quality": 18
+      },
+      "adaptive_live": {
+        "initial_steps": 14,
+        "initial_penalty": 0,
+        "after_steps": 12,
+        "after_penalty": 1,
+        "after_cadence_ms": 66.1,
+        "after_reported_fps": 14.1,
+        "return_balanced_steps": 14,
+        "return_penalty": 0,
+        "spin_equal": true
+      },
+      "shader_damage": "none observed",
+      "physical_gpu_fps": "NOT_MEASURED"
+    }
   },
   "preview": {
     "repo": "inossarum/synestra-siteforge-r176-lab",
@@ -90,7 +127,12 @@
     "existing_head": "603f989a93c673ce78242e65973187b06d6eda55",
     "new_path": "r183.html",
     "url": "https://inossarum.github.io/synestra-siteforge-r176-lab/r183.html",
-    "state": "PENDING"
+    "state": "PASS",
+    "public_commit": "7621ef142e66cecacdd165f676514277ea39dc0b",
+    "http_status": 200,
+    "pages_status": "built",
+    "public_blob_sha": "d919163a3a9f3e1c95e6912dc8251dd2602e1ddb",
+    "no_cloudflare_access": true
   },
   "constraints": {
     "main_unchanged": true,
@@ -102,5 +144,6 @@
     "physical_mobile_fps": "NOT_MEASURED",
     "owner_visual_acceptance": "PENDING"
   },
-  "status": "LOCAL_E2E_PASS_PUBLIC_E2E_PENDING"
+  "status": "PUBLIC_GITHUB_PAGES_REAL_CHROME_E2E_PASS; OWNER_VISUAL_ACCEPTANCE_PENDING; PHYSICAL_GPU_BENCHMARK_PENDING",
+  "source_commit": "6b80e861482f16ac27d10eff058aec6da6ba375f"
 }
