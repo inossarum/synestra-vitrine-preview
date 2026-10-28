@@ -759,7 +759,11 @@ void main(){
  function resize(){
   // The WebGL canvas must follow the actual sticky preview panel size. Its
   // HTML width/height attributes (960x570) are only a pre-init fallback.
-  const w=stage.clientWidth,h=stage.clientHeight;if(w<10||h<10)return false;
+  // R185 vitrine adapter: bounded portrait framebuffer. The R182 GPU shaders and
+  // material logic remain unchanged; a full-height hero must not stretch the orb.
+  const w=stage.clientWidth;
+  const h=window.innerWidth<=700?Math.min(stage.clientHeight,Math.round(w*1.1)):stage.clientHeight;
+  if(w<10||h<10)return false;
   if(canvas.style.width!==w+'px')canvas.style.width=w+'px';
   if(canvas.style.height!==h+'px')canvas.style.height=h+'px';
   const mobile=window.innerWidth<=700;
