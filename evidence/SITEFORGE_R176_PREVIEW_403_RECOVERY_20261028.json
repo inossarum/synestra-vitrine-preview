@@ -33,9 +33,18 @@
       "shader_exists": true
     },
     "scope": "preview branch only; main and production settings unchanged",
-    "notes": "Avoid rawgithack links; requires Pages git preview allowlist branch-specific inclusion and actual public URL E2E."
+    "notes": "Avoid rawgithack links; requires Pages git preview allowlist branch-specific inclusion and actual public URL E2E.",
+    "pages_preview_allowlist": {
+      "status": "VERIFIED",
+      "project": "synestra-vitrine-preview",
+      "branch": "task/SYN_SITEFORGE_R176_PAGES_DELIVERY_20261028",
+      "production_deployments_enabled": false,
+      "preview_deployment_setting": "custom",
+      "previous_preview_branches_preserved": true,
+      "build_command_unchanged": true
+    }
   },
-  "public_deployment": "PENDING",
+  "public_deployment": "QUEUED_BY_GIT_PUSH_NOT_YET_VERIFIED",
   "browser_e2e": "PENDING",
   "status": "CANDIDATE_NOT_RELEASE"
 }
