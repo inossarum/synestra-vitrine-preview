@@ -26,6 +26,20 @@ for(const vw of [1280,390]){
  await send('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'no-preference'}]});
  await send('Page.reload',{ignoreCache:true});await sleep(900);
  const first=await evalState();
+ const navExpression=`JSON.stringify((()=>{const header=document.querySelector('.site-header'),menu=document.querySelector('.r175-mobile-menu'),panel=document.querySelector('.r175-mobile-panel'),cta=document.querySelector('.site-nav .nav-cta');return {height:Math.round(header?.getBoundingClientRect().height||0),menuDisplay:menu&&getComputedStyle(menu).display,menuOpen:!!menu?.open,panelVisible:!!panel?.getClientRects().length,menuLinkCount:panel?.querySelectorAll('a[href]').length||0,ctaVisible:!!cta?.getClientRects().length,scrollWidth:document.documentElement.scrollWidth}})())`;
+ const getNav=async()=>JSON.parse((await send('Runtime.evaluate',{expression:navExpression,returnByValue:true})).result.value);
+ const navBefore=await getNav();
+ if(vw===390){
+   if(navBefore.height>135||navBefore.menuDisplay==='none'||navBefore.menuOpen||navBefore.panelVisible||!navBefore.ctaVisible||navBefore.scrollWidth>vw+2)throw Error('R175_MOBILE_NAV_CLOSED_FAIL '+JSON.stringify(navBefore));
+   await send('Runtime.evaluate',{expression:"document.querySelector('.r175-mobile-menu summary').click()"});
+   await sleep(80);
+   const navOpened=await getNav();
+   if(!navOpened.menuOpen||!navOpened.panelVisible||navOpened.menuLinkCount!==10||navOpened.scrollWidth>vw+2)throw Error('R175_MOBILE_NAV_OPEN_FAIL '+JSON.stringify(navOpened));
+   console.log('R175_MOBILE_NAV_390=PASS '+JSON.stringify({closed:navBefore,opened:navOpened}));
+   await send('Runtime.evaluate',{expression:"document.querySelector('.r175-mobile-menu summary').click()"});
+ }else if(navBefore.menuDisplay!=='none'||!navBefore.ctaVisible){
+   throw Error('R175_DESKTOP_NAV_REGRESSION '+JSON.stringify(navBefore));
+ }else console.log('R175_DESKTOP_NAV_1280=PASS '+JSON.stringify(navBefore));
  if(capture){const img=await send('Page.captureScreenshot',{format:'png',fromSurface:true,captureBeyondViewport:false});writeFileSync(join(root,'r173_hero_'+vw+'_t0.png'),Buffer.from(img.data,'base64'));}
  await sleep(2600);const second=await evalState();
  if(capture){const img=await send('Page.captureScreenshot',{format:'png',fromSurface:true,captureBeyondViewport:false});writeFileSync(join(root,'r173_hero_'+vw+'_t1.png'),Buffer.from(img.data,'base64'));}
