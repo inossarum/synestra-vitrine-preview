@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex,nofollow">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
-<title>SiteForge — Laboratoire énergétique 3D R173.1</title>
+<title>SiteForge — Laboratoire énergétique 3D R179</title>
 <style>
 :root{color-scheme:dark;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#050a14;color:#e7f4ff}
 *{box-sizing:border-box}
@@ -57,7 +57,7 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 @media(prefers-reduced-motion:reduce){.core-r109-canvas,.core-r108-art{transition:none!important}}
 .vfx-advanced{grid-column:1/-1;border-top:1px solid #335a76;margin-top:10px;padding-top:8px}.vfx-advanced summary{cursor:pointer;min-height:42px;padding:10px 6px;color:#bfeeff;font-weight:600;list-style-position:inside}.vfx-advanced[open] summary{margin-bottom:12px}.vfx-advanced .control-group{margin:10px 0 16px}.vfx-advanced summary:focus-visible{outline:2px solid #7ce8fa;outline-offset:3px}
 [data-vfx-status]{background:#10283b;border:1px solid #315574;border-radius:9px;padding:9px 12px;color:#bfe9f9;font-weight:600;min-height:42px;display:flex;align-items:center}
-.mote-toggle{margin:0 0 8px;background:#122b45;border-color:#3f6e8c}.mote-toggle[aria-pressed=true]{border-color:#65cbbb;box-shadow:inset 0 0 0 1px #244f6a}
+.mote-panel .color-grid{margin:4px 0 13px}.mote-panel .control-row{margin-bottom:13px}.mote-toggle{margin:0 0 8px;background:#122b45;border-color:#3f6e8c}.mote-toggle[aria-pressed=true]{border-color:#65cbbb;box-shadow:inset 0 0 0 1px #244f6a}
 .magnetic-compare{display:flex;gap:10px;margin-top:13px}.magnetic-compare[hidden]{display:none}.magnetic-compare button{flex:1;min-width:0;padding:11px 9px;border:1px solid #3b6281;border-radius:9px;background:#102339;color:#d4e9fc;cursor:pointer}.magnetic-compare button[aria-pressed=true]{background:#15536a;color:#f3ffff;border-color:#68dcb4;box-shadow:inset 0 0 0 1px #69dcb4}.magnetic-demo{margin-top:10px;width:100%;cursor:pointer}.liquid-demo{margin-top:8px;width:100%;background:#213652;border-color:#6d82ab}.magnetic-compare button:focus-visible,.magnetic-demo:focus-visible{outline:2px solid #69dcb4;outline-offset:2px}
 </style>
 </head>
@@ -85,11 +85,21 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 </svg>
 </div>
 <form class="lab-controls" aria-label="Création de la nouvelle sphère plasma VFX" autocomplete="off">
-<div class="panel-head"><h2>Plasma Studio</h2><span class="preview-state">R175 · ÉCLATS INTERACTIFS</span></div>
-<p class="help">R175 : même plasma volumétrique, avec quelques éclats d'énergie 3D réagissant à la souris. Effet désactivable. Comparateurs R174 et R172.1 conservés, vitrine inchangée.</p>
-<fieldset class="control-group"><legend>✨ Éclats d'énergie 3D</legend>
+<div class="panel-head"><h2>Plasma Studio</h2><span class="preview-state">R179 · ÉCLATS PARAMÉTRABLES</span></div>
+<p class="help">R179 : les éclats 3D suivent exactement la rotation du plasma. Leur quantité, leurs couleurs, leur taille et leurs distances sont modifiables en direct, indépendamment des 18 réglages du matériau.</p>
+<fieldset class="control-group mote-panel"><legend>✨ Éclats d'énergie 3D</legend>
 <button type="button" class="reset mote-toggle" data-mote-toggle aria-pressed="true">Éclats 3D : activés</button>
-<p class="help">De rares braises cyan/violet gravitent autour du Core. Effleurez-les avec la souris : elles s'écartent, puis reprennent leur orbite. Désactivable sans modifier les 18 réglages exportés.</p>
+<p class="help">Rotation synchronisée avec le plasma · vitesse <output data-mote-linked-speed>100 %</output>. La commande « Vitesse des flux » ajuste les deux simultanément, jusqu’à l’arrêt complet.</p>
+<div class="control-row"><label class="control-label" for="sf-moteCount"><span>Nombre d’éclats</span><output for="sf-moteCount" data-mote-value="moteCount">46 éclats</output></label><input id="sf-moteCount" data-mote-control="moteCount" data-default="46" type="range" min="0" max="160" value="46" step="1"></div>
+<div class="control-row"><label class="control-label" for="sf-moteDistance"><span>Éloignement de la sphère</span><output for="sf-moteDistance" data-mote-value="moteDistance">10 %</output></label><input id="sf-moteDistance" data-mote-control="moteDistance" data-default="10" type="range" min="0" max="160" value="10" step="1"></div>
+<div class="control-row"><label class="control-label" for="sf-moteSpread"><span>Dispersion des orbites</span><output for="sf-moteSpread" data-mote-value="moteSpread">31 %</output></label><input id="sf-moteSpread" data-mote-control="moteSpread" data-default="31" type="range" min="0" max="100" value="31" step="1"></div>
+<div class="control-row"><label class="control-label" for="sf-moteSize"><span>Taille des éclats</span><output for="sf-moteSize" data-mote-value="moteSize">100 %</output></label><input id="sf-moteSize" data-mote-control="moteSize" data-default="100" type="range" min="40" max="220" value="100" step="1"></div>
+<div class="control-row"><label class="control-label" for="sf-moteBrightness"><span>Intensité lumineuse</span><output for="sf-moteBrightness" data-mote-value="moteBrightness">100 %</output></label><input id="sf-moteBrightness" data-mote-control="moteBrightness" data-default="100" type="range" min="20" max="200" value="100" step="1"></div>
+<div class="color-grid">
+<div class="control-row"><label class="control-label" for="sf-motePrimary"><span>Couleur principale</span><output for="sf-motePrimary" data-mote-value="motePrimary">#51DFFF</output></label><input id="sf-motePrimary" data-mote-control="motePrimary" data-default="#51dfff" type="color" value="#51dfff"></div>
+<div class="control-row"><label class="control-label" for="sf-moteSecondary"><span>Couleur secondaire</span><output for="sf-moteSecondary" data-mote-value="moteSecondary">#53318D</output></label><input id="sf-moteSecondary" data-mote-control="moteSecondary" data-default="#53318d" type="color" value="#53318d"></div>
+</div>
+<p class="help">Les éclats restent répartis dans l’espace 3D à 360°, passent derrière la sphère et réagissent à la souris. Ces options sont incluses séparément dans l’export JSON.</p>
 </fieldset>
 <fieldset class="control-group" data-depth-comparison><legend>🔬 Comparaison du relief volumétrique</legend>
 <div class="magnetic-compare" aria-label="Comparer la lumière R173.1 et R174">
@@ -145,7 +155,7 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 <button class="reset" type="reset">Restaurer le plasma d'origine</button>
 <div class="export-controls">
 <button class="reset" type="button" data-export-json aria-describedby="sf-export-description">Exporter les paramètres (.json)</button>
-<p class="help" id="sf-export-description">Enregistre les 18 valeurs (dont le mode Plasma pur de compatibilité), les réglages et les couleurs actuels dans un JSON réutilisable.</p>
+<p class="help" id="sf-export-description">Enregistre les 18 paramètres du plasma inchangés, plus les 7 réglages des éclats dans le champ JSON facultatif « motes ».</p>
 <p class="help" data-export-status role="status" aria-live="polite"></p>
 </div>
 <p class="help" data-render-status role="status" aria-live="polite">Préparation du moteur WebGL…</p>

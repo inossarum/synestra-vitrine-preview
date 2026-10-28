@@ -38,7 +38,7 @@ test('R177 retains one renderer, 18 JSON controls, 6 materials, no extra WebGL p
  assert.equal((shader.match(/gl\.createProgram\(\)/g)||[]).length,1);
  assert.equal((html.match(/<canvas /g)||[]).length,1);
  assert.equal((html.match(/data-sphere-control=/g)||[]).length,18);
- assert.match(shader,/gl\.uniform1f\(U\.uMoteCount,moteCount\)/);
- assert.match(shader,/const moteCount=mobile\?28:46/);
+ assert.match(shader,/gl\.uniform1f\(U\.uMoteCount,Math\.max\(1,moteCount\)\)/);
+ assert.match(shader,/const moteCount=Math\.min\(mobile\?96:160/);
  assert.match(shader,/schema:'synestra\.siteforge\.plasma-settings\.v1'/);
 });

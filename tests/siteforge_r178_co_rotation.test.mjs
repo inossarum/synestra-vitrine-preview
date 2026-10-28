@@ -43,8 +43,8 @@ test('R178 pausing material freezes both plasma spin and motes; pointer still de
  assert.match(src,/stage\.dataset\.syncedSpinPhase=spinPhase\.toFixed\(4\)/);
 });
 test('R178 mobile still 28 real XYZ motes, 18 settings and single WebGL renderer',()=>{
- assert.match(src,/const moteCount=mobile\?28:46/);
- assert.match(src,/gl\.uniform1f\(U\.uMoteCount,moteCount\)/);
+ assert.match(src,/const moteCount=Math\.min\(mobile\?96:160/);
+ assert.match(src,/gl\.uniform1f\(U\.uMoteCount,Math\.max\(1,moteCount\)\)/);
  assert.equal((src.match(/gl\.createProgram\(\)/g)||[]).length,1);
  assert.equal((c.match(/<canvas /g)||[]).length,1);
  assert.equal((c.match(/data-sphere-control=/g)||[]).length,18);

@@ -14,6 +14,13 @@
  const num=k=>Number(controls[k]?.value??defaults[k])/100;
  const sel=k=>Number(controls[k]?.value??defaults[k]);
  const rgb=k=>[1,3,5].map(i=>parseInt((controls[k]?.value||defaults[k]||'#ffffff').slice(i,i+2),16)/255);
+ // R179 controls remain separate: v1 plasma 'parameters' stays exactly 18 items.
+ const moteControls=Object.fromEntries([...document.querySelectorAll('[data-mote-control]')]
+  .map(e=>[e.dataset.moteControl,e]));
+ const moteDefaults=Object.fromEntries(Object.entries(moteControls).map(([k,e])=>
+  [k,e.getAttribute('data-default')??e.defaultValue??e.value]));
+ const moteVal=k=>Number(moteControls[k]?.value??moteDefaults[k]);
+ const moteRGB=k=>[1,3,5].map(i=>parseInt((moteControls[k]?.value||moteDefaults[k]||'#ffffff').slice(i,i+2),16)/255);
  const mainStatus=document.querySelector('[data-render-status]');
  const vfxStatus=document.querySelector('[data-vfx-status]');
  const arcPanel=document.querySelector('[data-electric-options]');
@@ -27,6 +34,14 @@
  let motesEnabled=true,pointerX=9,pointerY=9,pointerForce=0,lastPointerX=null,lastPointerY=null;
  const moteToggle=document.querySelector('[data-mote-toggle]');
  const syncMotes=()=>{
+  for(const [key,input] of Object.entries(moteControls)){
+   const output=document.querySelector('[data-mote-value="'+key+'"]');
+   if(output)output.textContent=input.type==='color'?input.value.toUpperCase():
+    key==='moteCount'?input.value+' éclats':key==='moteSize'||key==='moteBrightness'?input.value+' %':
+    input.value+' %';
+  }
+  const spinLabel=document.querySelector('[data-mote-linked-speed]');
+  if(spinLabel)spinLabel.textContent=(controls.particleSpeed?.value||'100')+' %';
   if(moteToggle){
    moteToggle.setAttribute('aria-pressed',String(motesEnabled));
    moteToggle.textContent=motesEnabled?'Éclats 3D : activés':'Éclats 3D : désactivés';
@@ -76,7 +91,7 @@
   stage.style.setProperty('--fallback-opacity',String(num('opacity')));
  }
  const panel=document.querySelector('.lab-controls');
- const onChange=e=>{if(e.target?.hasAttribute('data-sphere-control')){sync();schedule();}};
+ const onChange=e=>{if(e.target?.hasAttribute('data-sphere-control')||e.target?.hasAttribute('data-mote-control')){sync();schedule();}};
  panel?.addEventListener('input',onChange);
  panel?.addEventListener('change',onChange);
  panel?.addEventListener('click',event=>{
@@ -98,6 +113,8 @@
 
  panel?.addEventListener('reset',e=>{
   e.preventDefault();for(const [key,input] of Object.entries(controls))input.value=defaults[key];
+  for(const [key,input] of Object.entries(moteControls))input.value=moteDefaults[key];
+  motesEnabled=true;
   compareVariant=1;depthVariant=1;sync();schedule();
  });
  sync();
@@ -112,11 +129,18 @@
   const parameters=Object.fromEntries(Object.entries(controls).map(([key,input])=>[
    key,input.type==='color'?input.value.toLowerCase():Number(input.value)
   ]));
+  const motes=Object.fromEntries(Object.entries(moteControls).map(([key,input])=>[
+   key,input.type==='color'?input.value.toLowerCase():Number(input.value)
+  ]));
+  motes.enabled=motesEnabled;
+  // Optional sibling field: old readers still receive exactly the 18 v1
+  // plasma settings in 'parameters' with unchanged schema and version.
   const documentJSON={
    schema:'synestra.siteforge.plasma-settings.v1',
    version:1,
    engine:'siteforge-plasma-webgl1',
-   parameters
+   parameters,
+   motes
   };
   const output=JSON.stringify(documentJSON,null,2)+'\n';
   let objectURL;
@@ -164,6 +188,7 @@ varying float vLife,vGlint;
 varying vec2 vAxis,vMoteCenter;
 varying float vMoteDepth;
 uniform float uMoteCount;
+uniform vec4 uMoteStyle; // radiusBase, radialSpread, size, intensity
 uniform float uSpinPhase; // R178 shared phase: motes and plasma rotate in the same direction
 // R177: fragment's volume uses local=Rx(pitch)*Ry(yaw)*view.
 // Embers must use its exact inverse: view=Ry(-yaw)*Rx(-pitch)*local.
@@ -229,7 +254,7 @@ void main(){
   float z=1.-2.*(i+.5)/max(1.,uMoteCount);
   float polar=i*2.39996323+.13*(rnd(i*19.1)-.5);
   float ring=sqrt(max(.0,1.-z*z));
-  float moteRadius=radius*(1.035+.31*rnd(i*7.19+17.));
+  float moteRadius=radius*(uMoteStyle.x+uMoteStyle.y*rnd(i*7.19+17.));
   vec3 local=vec3(cos(polar)*ring,z,sin(polar)*ring)*moteRadius;
   // R178: co-rotate the FULL XYZ shell around the local plasma Z axis.
   // Material phase winding=5*angle-5*uSpinPhase: advancing both +phase
@@ -248,7 +273,7 @@ void main(){
   // EXACT reciprocal transform of the volumetric plasma's camera tilt.
   p=orbitToView(local);
   vMoteDepth=p.z;vMoteCenter=p.xy;
-  life=(.78+.22*rnd(i+11.))*uPointer.w;
+  life=(.78+.22*rnd(i+11.))*uPointer.w*uMoteStyle.w;
   // Spark filament orientation follows the 3D orbit and the camera tilt.
   vec2 tangent=orbitToView(vec3(-local.y,local.x,0.)).xy;
   vAxis=normalize(tangent+vec2(.015,.005));
@@ -280,7 +305,7 @@ void main(){
  vLife=life;vGlint=.65+.35*rnd(i*3.17+19.);
  gl_PointSize=clamp((3.2+4.5*rnd(i+8.))*uEffects.z*sizeFactor*
        uResolution.y/460.*mix(1.85,1.,uLayer),1.,29.);
- if(uPass>4.5)gl_PointSize=clamp((11.0+9.0*rnd(i+8.))*sizeFactor*uResolution.y/518.,6.,22.);
+ if(uPass>4.5)gl_PointSize=clamp((11.0+9.0*rnd(i+8.))*sizeFactor*uMoteStyle.z*uResolution.y/518.,2.,38.);
  gl_Position=vec4(p.x*uResolution.y/max(uResolution.x,1.),p.y-.08,0.,1.);
 }
 `;
@@ -299,6 +324,7 @@ uniform vec4 uControls,uShape,uEffects;
 uniform vec4 uPointer; // R176: cursor displacement drives the actual volumetric waves
 uniform float uSpinPhase; // R178: same local angular phase as the floating motes
 uniform vec3 uCore,uCyan,uViolet,uDeep;
+uniform vec3 uMotePrimary,uMoteSecondary;
 uniform vec2 uTilt;
 uniform float uVolumeSteps;
 uniform vec2 uFlow;
@@ -329,7 +355,7 @@ void main(){
   float filament=exp(-across*across*23.0-along*along*4.5);
   float alpha=clamp(coreGlow*.82+filament*.45+aura*.33,0.,1.)*vLife*clamp(uEffects.w,0.,1.);
   float hue=step(.5,fract(vGlint*7.73));
-  vec3 col=mix(uCyan,uViolet*1.50+uCyan*.10,hue);
+  vec3 col=mix(uMotePrimary,uMoteSecondary*1.50+uMotePrimary*.10,hue);
   vec3 hot=mix(col,vec3(.86,.97,1.),.24);
   gl_FragColor=vec4(col*(aura*.55+filament*.58)+hot*coreGlow*1.44,alpha);
   return;
@@ -600,7 +626,7 @@ void main(){
  }
  gl.deleteShader(vert);gl.deleteShader(frag);
  const A=gl.getAttribLocation(program,'aPosition'),S=gl.getAttribLocation(program,'aSeed');
- const keys=['uResolution','uTime','uPass','uLayer','uTilt','uControls','uShape','uEffects','uCore','uCyan','uViolet','uDeep','uVolumeSteps','uFlow','uCompare','uDepthRefine','uPointer','uMoteCount','uSpinPhase'];
+ const keys=['uResolution','uTime','uPass','uLayer','uTilt','uControls','uShape','uEffects','uCore','uCyan','uViolet','uDeep','uVolumeSteps','uFlow','uCompare','uDepthRefine','uPointer','uMoteCount','uSpinPhase','uMoteStyle','uMotePrimary','uMoteSecondary'];
  const U=Object.fromEntries(keys.map(k=>[k,gl.getUniformLocation(program,k)]));
  if(A<0||S<0||keys.some(k=>U[k]===null)){status(mainStatus,'GPU : paramètres incomplets.');return;}
  const quad=gl.createBuffer(),seeds=gl.createBuffer();if(!quad||!seeds)return;
@@ -635,7 +661,11 @@ void main(){
   const lightningCount=electricalMode&&num('arcIntensity')>0&&num('arcDensity')>0
     ?Math.min(mobile?928:1740,Math.floor((mobile?11:20)*num('arcDensity'))*58):0;
   const coreCount=mobile?160:260;
-  const moteCount=mobile?28:46;
+  // GPU point count stays bounded (the same one WebGL context and buffers).
+  // Mobile scales the chosen count but preserves the requested distribution.
+  const moteCount=Math.min(mobile?96:160,
+   Math.max(0,Math.round(moteVal('moteCount')*(mobile?28/46:1))));
+  stage.dataset.moteCount=String(moteCount);
   const extraCount=Math.min(mobile?650:MAX,Math.round((mobile?340:560)*num('particleDensity')));
   gl.useProgram(program);
   gl.uniform2f(U.uResolution,canvas.width,canvas.height);
@@ -644,8 +674,17 @@ void main(){
   const spinPhase=elapsed*.104; // exact R176 plasma angular rate: .52 / 5
   gl.uniform1f(U.uSpinPhase,spinPhase);
   stage.dataset.syncedSpinPhase=spinPhase.toFixed(4);
+  stage.dataset.moteSpinPhase=spinPhase.toFixed(4);
+  stage.dataset.moteSpinLinkedSpeed=(controls.particleSpeed?.value||'100');
   gl.uniform1f(U.uVolumeSteps,mobile?14:22);
-  gl.uniform1f(U.uMoteCount,moteCount);
+  gl.uniform1f(U.uMoteCount,Math.max(1,moteCount));
+  gl.uniform4f(U.uMoteStyle,
+   1+.35*moteVal('moteDistance')/100,
+   moteVal('moteSpread')/100,
+   moteVal('moteSize')/100,
+   moteVal('moteBrightness')/100);
+  gl.uniform3fv(U.uMotePrimary,new Float32Array(moteRGB('motePrimary')));
+  gl.uniform3fv(U.uMoteSecondary,new Float32Array(moteRGB('moteSecondary')));
   gl.uniform2f(U.uFlow,sel('flowType'),num('flowStructure'));
   gl.uniform1f(U.uCompare,compareVariant);
   gl.uniform1f(U.uDepthRefine,depthVariant);
@@ -690,7 +729,7 @@ void main(){
   }
   // The ray-marched nucleus is authoritative; avoid a second speckled core.
   if(extra)emit(0,extraCount);
-  if(motesEnabled){
+  if(motesEnabled&&moteCount>0){
    gl.uniform1f(U.uPass,5);
    gl.uniform1f(U.uLayer,0);
    gl.drawArrays(gl.POINTS,0,moteCount);
