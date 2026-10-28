@@ -55,7 +55,40 @@
       },
       "motes_disabled_by_demo": true
     },
-    "chrome_public": "PENDING",
+    "chrome_public": {
+      "status": "PASS",
+      "exit_code": 0,
+      "device": "Inos-Cerebros",
+      "browser": "Chrome Windows ANGLE SwiftShader",
+      "url": "https://inossarum.github.io/synestra-siteforge-r176-lab/r187.html?demo=neon187",
+      "desktop": {
+        "material": "6",
+        "vertices": 51840,
+        "gl_error": 0,
+        "draw_error": 0,
+        "shared_spin": true,
+        "old_plasma_controls": 18,
+        "particle_controls": 10
+      },
+      "mobile": {
+        "viewport_width": 390,
+        "material": "6",
+        "vertices": 51840,
+        "gl_error": 0,
+        "draw_error": 0,
+        "shared_spin": true
+      },
+      "screenshots": [
+        {
+          "file": "r187-public-demo-desktop.png",
+          "sha": "ea4317758f53e8da3f043e6636e494f06f4e8019"
+        },
+        {
+          "file": "r187-public-demo-mobile.png",
+          "sha": "deb873d39222a1d26ad3b13398e1f09da2a4863e"
+        }
+      ]
+    },
     "captures": [
       "r187-demo-desktop.png",
       "r187-demo-mobile.png",
@@ -66,14 +99,22 @@
     "preview_repo": "inossarum/synestra-siteforge-r176-lab",
     "preview_path": "r187.html",
     "preview_url": "https://inossarum.github.io/synestra-siteforge-r176-lab/r187.html?demo=neon187",
-    "status": "PENDING",
+    "status": "PUBLIC_PREVIEW_E2E_PASS; ARTISTIC_MATCH_PENDING",
     "rollback": "Delete only r187.html; older R185/R186 pages untouched",
-    "production_main_unchanged": true
+    "production_main_unchanged": true,
+    "pages_commit": "f14561f27e2de5efcd0eb5c0a72cbad5f611327e",
+    "http_status": 200,
+    "pages_status": "built",
+    "access_login": false,
+    "html_blob": "beabe03a32a41f5faba7872f246cb040da6e57d1"
   },
   "limits": [
     "Artistic resemblance still partial: sharper neon braid but not yet realistic metallic multilayered sphere like owner reference",
     "Chrome SwiftShader and emulated 390px viewport are not a physical mobile GPU benchmark",
     "Owner visual acceptance not granted"
   ],
-  "status": "LOCAL_CHROME_AND_NODE_PASS_PUBLIC_E2E_PENDING_ARTISTIC_APPROVAL_PENDING"
+  "status": "PUBLIC_HTTPS_CHROME_E2E_PASS; VISUAL_REFERENCE_NOT_YET_MATCHED; OWNER_APPROVAL_PENDING",
+  "source_implementation_commit": "c2d0a3669851d426302888de16d0345eef184c03",
+  "source_public_screenshots_commit": "5e553d622418298c1812f03bc598b12767c66392",
+  "next": "R188: material7 only, grouped thick shaded metallic ribbon surfaces, self-occlusion and specular response; retain single-program, old material SHA/controls, test on real mobile hardware."
 }
