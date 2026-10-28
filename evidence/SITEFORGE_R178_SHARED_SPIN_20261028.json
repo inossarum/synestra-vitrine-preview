@@ -1,0 +1,79 @@
+{
+  "schema": "synestra.siteforge.r178.shared_spin.v1",
+  "date": "2026-10-28",
+  "mission_id": "SYN_SITEFORGE_R178_SHARED_SPIN",
+  "owner": "Synestra owner",
+  "source": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "base_branch": "task/SYN_SITEFORGE_R177_VOLUMETRIC_MOTES_20261028",
+    "base_head": "d1133140695de027cc601bc929c0236e79e54191",
+    "working_branch": "task/SYN_SITEFORGE_R178_SHARED_SPIN_20261028",
+    "official_main_head": "df67fcd5cc6b7cc0fb42fa86c8920d28b9427494",
+    "engine": "assets/siteforge-lab-r166-flow.js",
+    "r178_engine_blob": "022c83f7ccd049c05c2e189bdf2b6f955079fc24",
+    "r178_html_blob": "b70efde38a6b5835423f23d255c40d04d6f09518"
+  },
+  "diagnosis": "R177 synchronized only pointer camera orientation; autonomous plasma spiral rotates positive around local Z because winding=angle*5-t*.52, while 3D motes had no shared autonomous spin.",
+  "changes": [
+    "Add uSpinPhase uniform shared by plasma and 3D motes; spinPhase=elapsed*.104 and winding subtracts uSpinPhase*5 (same R176 angular rate; original visual shape retained).",
+    "Rotate whole Fibonacci XYZ mote shell in local XY plane around local plasma Z with positive uSpinPhase, before local drift, local mouse repulsion, and camera projection.",
+    "Rotate sparkle directional axis tangent with identical 3D camera projection.",
+    "Enable 360-degree horizontal camera orbit with modulo 2*PI/1.5 while keeping existing drag sensitivity and pitch bound.",
+    "Improve frame-time clamp from 0.06s to 0.15s so low-frame-rate runtimes do not unnaturally slow autonomous rotation (pause setting still freezes both).",
+    "Preserve one WebGL program, 18 JSON controls, 6 materials and R176 mouse-driven wave perturbation."
+  ],
+  "tests": {
+    "node": "131/131 PASS including R177 and 6 new R178 targeted tests",
+    "static_build": "PASS 49 allowlisted files, no new backend",
+    "chrome_local": {
+      "status": "PASS",
+      "exit_code": 0,
+      "engine": "headless Chrome Windows ANGLE SwiftShader",
+      "six_materials": "PASS 6/6",
+      "mobile": "PASS width 390",
+      "webgl_errors": 0,
+      "controls": 18,
+      "motes": "PASS real 3D orbit mask shift 2353 pixels, yaw .519 pitch -.181",
+      "spin": {
+        "phase_delta": 0.0468,
+        "phase_frozen_a": 0.4992,
+        "phase_frozen_b": 0.4992
+      },
+      "full_orbit": {
+        "half_radians": -3.043,
+        "full_radians": 0.017,
+        "home_half_changed_pixels": 25355,
+        "home_half_changed_percent": 2.88125,
+        "home_full_changed_pixels": 3299,
+        "home_full_changed_percent": 0.3748863636,
+        "keyboard_steps": 35
+      },
+      "mouse_wave": {
+        "changed_pixels": 7485,
+        "recovered_changed_pixels": 0
+      },
+      "pause_resume": "PASS",
+      "touch_orbit": "PASS"
+    }
+  },
+  "images": [
+    "r178-full-orbit-home.png",
+    "r178-full-orbit-180.png",
+    "r178-full-orbit-360.png"
+  ],
+  "public_preview": {
+    "repo": "inossarum/synestra-siteforge-r176-lab",
+    "versioned_path": "r178.html",
+    "url": "https://inossarum.github.io/synestra-siteforge-r176-lab/r178.html",
+    "status": "PENDING_PUBLIC_E2E",
+    "rollback": "Keep index.html (R176) and r177.html unchanged; remove only r178.html if rollback necessary."
+  },
+  "status": "LOCAL_CHROME_PASS_PUBLIC_E2E_PENDING",
+  "guardrails": {
+    "main_untouched": true,
+    "cloudflare_access_untouched": true,
+    "no_payg": true,
+    "owner_aesthetic_acceptance": "PENDING",
+    "no_merge": true
+  }
+}

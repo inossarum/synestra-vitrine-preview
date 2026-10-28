@@ -164,6 +164,7 @@ varying float vLife,vGlint;
 varying vec2 vAxis,vMoteCenter;
 varying float vMoteDepth;
 uniform float uMoteCount;
+uniform float uSpinPhase; // R178 shared phase: motes and plasma rotate in the same direction
 // R177: fragment's volume uses local=Rx(pitch)*Ry(yaw)*view.
 // Embers must use its exact inverse: view=Ry(-yaw)*Rx(-pitch)*local.
 vec3 orbitToView(vec3 local){
@@ -230,6 +231,12 @@ void main(){
   float ring=sqrt(max(.0,1.-z*z));
   float moteRadius=radius*(1.035+.31*rnd(i*7.19+17.));
   vec3 local=vec3(cos(polar)*ring,z,sin(polar)*ring)*moteRadius;
+  // R178: co-rotate the FULL XYZ shell around the local plasma Z axis.
+  // Material phase winding=5*angle-5*uSpinPhase: advancing both +phase
+  // makes physical motes travel in the SAME direction as the plasma arms.
+  float spinCos=cos(uSpinPhase),spinSin=sin(uSpinPhase);
+  local.xy=vec2(local.x*spinCos-local.y*spinSin,
+                local.x*spinSin+local.y*spinCos);
   local+=.022*vec3(sin(t*.39+i*2.11),cos(t*.33+i*.91),sin(t*.28+i*1.37));
   // Cursor force is calculated AND applied in the rotating local frame.
   // Reconstruct the local point on the pointer ray at this mote's view depth.
@@ -242,7 +249,9 @@ void main(){
   p=orbitToView(local);
   vMoteDepth=p.z;vMoteCenter=p.xy;
   life=(.78+.22*rnd(i+11.))*uPointer.w;
-  vAxis=vec2(cos(polar),sin(polar));
+  // Spark filament orientation follows the 3D orbit and the camera tilt.
+  vec2 tangent=orbitToView(vec3(-local.y,local.x,0.)).xy;
+  vAxis=normalize(tangent+vec2(.015,.005));
   sizeFactor=.76+.39*smoothstep(-radius,radius,p.z);
  }else if(uPass>2.5){
   float ang=a+t*.32;
@@ -288,6 +297,7 @@ uniform vec2 uResolution;
 uniform float uTime,uPass,uLayer;
 uniform vec4 uControls,uShape,uEffects;
 uniform vec4 uPointer; // R176: cursor displacement drives the actual volumetric waves
+uniform float uSpinPhase; // R178: same local angular phase as the floating motes
 uniform vec3 uCore,uCyan,uViolet,uDeep;
 uniform vec2 uTilt;
 uniform float uVolumeSteps;
@@ -369,7 +379,7 @@ void main(){
     float detail=.5+.5*sin(dot(q,vec3(18.,-13.,11.))+t*.45+(broad-.5)*4.);
     float depthWarp=(broad-.5)*1.05+(detail-.5)*.35;
     // Logarithmic spiral filaments in a rotating three-dimensional volume.
-    float winding=angle*5.0+5.8*log(planar+.15)-t*.52
+    float winding=angle*5.0+5.8*log(planar+.15)-uSpinPhase*5.
                   +q.z*2.6+depthWarp*1.35;
     float spiral=pow(max(0.,.5+.5*cos(winding)),6.);
     float sideFilament=pow(max(0.,.5+.5*cos(winding*1.8+detail*3.2)),25.);
@@ -590,7 +600,7 @@ void main(){
  }
  gl.deleteShader(vert);gl.deleteShader(frag);
  const A=gl.getAttribLocation(program,'aPosition'),S=gl.getAttribLocation(program,'aSeed');
- const keys=['uResolution','uTime','uPass','uLayer','uTilt','uControls','uShape','uEffects','uCore','uCyan','uViolet','uDeep','uVolumeSteps','uFlow','uCompare','uDepthRefine','uPointer','uMoteCount'];
+ const keys=['uResolution','uTime','uPass','uLayer','uTilt','uControls','uShape','uEffects','uCore','uCyan','uViolet','uDeep','uVolumeSteps','uFlow','uCompare','uDepthRefine','uPointer','uMoteCount','uSpinPhase'];
  const U=Object.fromEntries(keys.map(k=>[k,gl.getUniformLocation(program,k)]));
  if(A<0||S<0||keys.some(k=>U[k]===null)){status(mainStatus,'GPU : paramètres incomplets.');return;}
  const quad=gl.createBuffer(),seeds=gl.createBuffer();if(!quad||!seeds)return;
@@ -617,7 +627,7 @@ void main(){
   if(lastFrame&&now-lastFrame<32){frame=requestAnimationFrame(draw);return;}
   const frameStep=lastFrame?Math.min(.15,Math.max(0,(now-lastFrame)/1000)):.033;
   if(!resize())return;lastFrame=now;
-  if(last)elapsed+=Math.min((now-last)/1000,.06)*Math.max(0,num('particleSpeed'));last=now;
+  if(last)elapsed+=Math.min((now-last)/1000,.15)*Math.max(0,num('particleSpeed'));last=now;
   const mobile=window.innerWidth<=700,preset=sel('particlePreset');
   const extra=preset!==4&&num('particleIntensity')>0&&num('particleDensity')>0;
   const sphereCount=mobile?1480:MAX;
@@ -630,6 +640,10 @@ void main(){
   gl.useProgram(program);
   gl.uniform2f(U.uResolution,canvas.width,canvas.height);
   gl.uniform1f(U.uTime,elapsed);gl.uniform2f(U.uTilt,tiltX,tiltY);
+  // One and only phase source for the spiral material and the 3D embers.
+  const spinPhase=elapsed*.104; // exact R176 plasma angular rate: .52 / 5
+  gl.uniform1f(U.uSpinPhase,spinPhase);
+  stage.dataset.syncedSpinPhase=spinPhase.toFixed(4);
   gl.uniform1f(U.uVolumeSteps,mobile?14:22);
   gl.uniform1f(U.uMoteCount,moteCount);
   gl.uniform2f(U.uFlow,sel('flowType'),num('flowStructure'));
@@ -700,9 +714,14 @@ void main(){
  // R171: persistent bounded volume orbit. Touch gestures start only on the
  // preview; form sliders, scrolling elsewhere and exported JSON remain independent.
  const orbit={pointerId:null,x:0,y:0};
+ // R178: allow complete 360-degree horizontal orbit while keeping the
+ // original pointer sensitivity; wrapping is modulo the shader's 1.5 factor.
+ const fullYawTurn=2*Math.PI/1.5;
+ const wrapYaw=value=>((value+fullYawTurn/2)%fullYawTurn+fullYawTurn)%fullYawTurn-fullYawTurn/2;
  const updateOrbit=()=>{
   stage.dataset.orbitYaw=tiltX.toFixed(3);
   stage.dataset.orbitPitch=tiltY.toFixed(3);
+  stage.dataset.orbitRadians=(tiltX*1.5).toFixed(3);
   schedule();
  };
  const resetOrbit=()=>{tiltX=0;tiltY=0;updateOrbit();};
@@ -727,7 +746,7 @@ void main(){
   }
   if(event.pointerId!==orbit.pointerId)return;
   const r=stage.getBoundingClientRect();
-  tiltX=Math.max(-1.05,Math.min(1.05,tiltX+(event.clientX-orbit.x)/Math.max(r.width,1)*2.2));
+  tiltX=wrapYaw(tiltX+(event.clientX-orbit.x)/Math.max(r.width,1)*2.2);
   tiltY=Math.max(-.72,Math.min(.72,tiltY+(event.clientY-orbit.y)/Math.max(r.height,1)*1.45));
   orbit.x=event.clientX;orbit.y=event.clientY;updateOrbit();
  });
@@ -748,8 +767,8 @@ void main(){
   if(event.key==='Home'){event.preventDefault();resetOrbit();return;}
   if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key))return;
   event.preventDefault();
-  if(event.key==='ArrowLeft')tiltX=Math.max(-1.05,tiltX-delta);
-  if(event.key==='ArrowRight')tiltX=Math.min(1.05,tiltX+delta);
+  if(event.key==='ArrowLeft')tiltX=wrapYaw(tiltX-delta);
+  if(event.key==='ArrowRight')tiltX=wrapYaw(tiltX+delta);
   if(event.key==='ArrowUp')tiltY=Math.max(-.72,tiltY-delta);
   if(event.key==='ArrowDown')tiltY=Math.min(.72,tiltY+delta);
   updateOrbit();
