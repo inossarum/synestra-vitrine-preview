@@ -11,7 +11,8 @@ import './siteforge_r165_hero_fallback.test.mjs'; // R165 first-prototype fallba
 import './siteforge_r166_isolated_motion.test.mjs'; // R166 lab-only organic 3D dynamics and vitrine SHA invariant.
 import './siteforge_r168_architectural_room.test.mjs'; // R168 isolated architectural room and immutable approved vitrine.
 import './siteforge_r169_room_materials.test.mjs';
-import './vitrine_r170_all_pages_brand_motion.test.mjs'; // R170 official Studio palette and autonomous motion across all pages. // R169 advanced room material, geometry and immutable Core contract.
+import './vitrine_r170_all_pages_brand_motion.test.mjs';
+import './vitrine_r171_pilot_cta_accessibility.test.mjs'; // Pilot access CTA WCAG contrast / touch / focus. // R170 official Studio palette and autonomous motion across all pages. // R169 advanced room material, geometry and immutable Core contract.
 import './siteforge_r132_r116_clean_lab.test.mjs'; // R116 provenance and isolation.
 import './siteforge_r136_mobile_sticky_preview.test.mjs'; // Mobile sticky continuity.
 
