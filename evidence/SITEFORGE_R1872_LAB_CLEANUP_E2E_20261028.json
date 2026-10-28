@@ -1,0 +1,91 @@
+{
+  "schema": "synestra.siteforge.r1872.cleanup_e2e.v1",
+  "date": "2026-10-28",
+  "mission": "SYN_SITEFORGE_R1872_LAB_CLEANUP_20261028",
+  "owner": "inossarum",
+  "branch": "task/SYN_SITEFORGE_R1872_LAB_CLEANUP_20261028",
+  "source_head": "50e421b3545054c0c8d6cebe6e191a238a4f7610",
+  "base": "siteforge-r1871-autonome.html",
+  "build": "tools/build_r1872_lab_cleanup.py",
+  "artifact": "siteforge-r1872-autonome.html",
+  "artifact_sha256": "3b09b41f7970f071e2a44b568eab27ae95e6dacc219a3f7aa68c6846f5c3b95e",
+  "preview": "http://127.0.0.1:19092/siteforge-r1872-autonome.html?demo=energy",
+  "scope": {
+    "ui_removed": [
+      "R171/R172 magnetic A/B comparator",
+      "R173/R174 depth A/B comparator",
+      "old magnetic and liquid demo buttons"
+    ],
+    "ui_preserved": [
+      "material selector with 7 options",
+      "18 scene controls + 10 mote controls",
+      "3 art recipes nested in collapsed optional details",
+      "JSON import/export",
+      "advanced render controls"
+    ],
+    "shader": "only material 6 branch changed; centerline animation and uLabTime inherited; uFlow.y controls envelope width",
+    "link": "demo=energy selects flowType6 without changing defaults",
+    "security": "exact inline script CSP SHA256; no script-src unsafe-inline"
+  },
+  "tests": {
+    "static": {
+      "pass": 5,
+      "fail": 0
+    },
+    "chrome_desktop": {
+      "result": "PASS",
+      "gl_error": 0,
+      "materials": 7,
+      "particle_speed": 0,
+      "spin_same": true,
+      "changed_pixels": 86870,
+      "total_pixels": 307840,
+      "changed_percent": 28.2192
+    },
+    "chrome_mobile_emulation": {
+      "result": "PASS",
+      "viewport": "390x844",
+      "gl_error": 0,
+      "particle_speed": 0,
+      "spin_same": true,
+      "changed_pixels": 44510,
+      "total_pixels": 104676,
+      "changed_percent": 42.5217
+    },
+    "chrome_energy_deeplink": {
+      "result": "PASS",
+      "requested_flow": 6,
+      "gl_error": 0,
+      "changed_pixels": 79485,
+      "total_pixels": 307840,
+      "changed_percent": 25.8202
+    },
+    "ui_dom": {
+      "result": "PASS",
+      "legacy_compare_count": 0,
+      "optional_collapsed": true,
+      "art_presets": 3,
+      "mote_controls": 10,
+      "json_import_export": true,
+      "expand_details": "PASS"
+    },
+    "http_status": 200
+  },
+  "captures": [
+    "evidence/r1872-energy-ui.png",
+    "evidence/r1872-energy-first.png",
+    "evidence/r1872-energy-later.png",
+    "evidence/r1872-mobile-first.png",
+    "evidence/r1872-mobile-later.png"
+  ],
+  "limitations": [
+    "GPU is Chrome Windows SwiftShader; physical mobile GPU performance untested",
+    "CSP frame-ancestors meta warning inherited; favicon 404 not material",
+    "Aesthetic acceptance pending",
+    "No public deployment, no merge/push to main",
+    "Studio mission bootstrap operation queued, not counted as executed"
+  ],
+  "function_report": "PARTIAL_ART_REVIEW_PENDING",
+  "ui_cleanup": "LOCAL_E2E_PASS",
+  "rollback": "Retain R187.1 branch and source unchanged; isolated R187.2 worktree."
+}
