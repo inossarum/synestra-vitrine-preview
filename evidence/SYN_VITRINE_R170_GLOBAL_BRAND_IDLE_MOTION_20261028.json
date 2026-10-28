@@ -121,7 +121,10 @@
         "coverage": "All 20 SiteForge demo pages, Connect, Bridge, Offres, SiteForge lab, SiteForge Core 3D lab, Signal",
         "assertions": "DOM loaded, computed animationName active without input, official logo or brand accents present for relevant routes"
       },
-      "limits": "Tested with local file URLs on the exact isolated checkout; Cloudflare Access protected public preview prevented authenticated live HTML inspection."
+      "limits": "Tested with local file URLs on the exact isolated checkout; Cloudflare Access protected public preview prevented authenticated live HTML inspection.",
+      "committed_runner": "tests/vitrine_r170_browser_cdp_e2e.mjs",
+      "committed_runner_blob_sha": "ffb48b1aa3c810a328705c34539b5c21ed25636e",
+      "reproduce": "On Windows with Chrome and Node 24: from isolated repository checkout, run node tests/vitrine_r170_browser_cdp_e2e.mjs; this starts isolated Chrome profile and checks 27 pages."
     }
   },
   "deployment": {
@@ -135,5 +138,5 @@
     "main_modified": false
   },
   "rollback": "Reset only review branch and remove corresponding branch from Cloudflare Pages preview_branch_includes; preserve preexisting preview branches and production configuration.",
-  "status": "PREVIEW_DEPLOYED_ALL_SOURCE_TESTS_PASS_LOCAL_BROWSER_E2E_PASS_OWNER_VISUAL_ACCEPTANCE_PENDING"
+  "status": "PREVIEW_DEPLOYED_LOCAL_CHROME_BROWSER_ALL_27_ROUTES_PASS_OWNER_VISUAL_ACCEPTANCE_PENDING"
 }
