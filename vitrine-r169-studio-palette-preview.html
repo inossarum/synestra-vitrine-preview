@@ -1471,24 +1471,6 @@
     @media(prefers-reduced-motion:reduce){.core-r109-canvas,.core-r109-stage .core-r108-art{transition:none!important}}
 
 
-    /* R116: only the three public products, one orbit, restrained glass labels. */
-    .core-tools-orbit{position:absolute;z-index:4;left:50%;top:43%;width:0;height:0;pointer-events:none;--orbit-radius:142px;animation:core-tools-turn 55s linear infinite}
-    .core-tools-orbit:before{content:"";position:absolute;left:0;top:0;width:284px;height:284px;transform:translate(-50%,-50%);border:1px solid rgba(139,193,228,.10);border-radius:50%}
-    .core-tool-satellite{position:absolute;left:0;top:0;transform:rotate(var(--orbit-angle)) translateX(var(--orbit-radius)) rotate(var(--orbit-reverse))}
-    .core-tool-satellite>span{display:inline-flex;align-items:center;gap:8px;white-space:nowrap;transform:translate(-50%,-50%);transform-origin:center center;
-      padding:7px 13px;border:1px solid rgba(140,198,229,.26);border-radius:11px;
-      background:linear-gradient(135deg,rgba(15,34,54,.96),rgba(8,19,33,.96));color:#e2eefa;
-      box-shadow:0 8px 24px rgba(0,5,15,.33),inset 0 1px rgba(218,244,255,.05);
-      font:660 11px/1.25 ui-monospace,Consolas,monospace;letter-spacing:.025em;
-      animation:core-tools-upright 55s linear infinite}
-    .core-tool-satellite>span:before{content:"";display:block;flex:none;width:5px;height:5px;border-radius:50%;background:var(--product-accent);box-shadow:0 0 9px var(--product-accent)}
-    .core-tool-satellite:nth-child(1){--orbit-angle:-90deg;--orbit-reverse:90deg;--product-accent:#58cbe7}
-    .core-tool-satellite:nth-child(2){--orbit-angle:30deg;--orbit-reverse:-30deg;--product-accent:#79d8c4}
-    .core-tool-satellite:nth-child(3){--orbit-angle:150deg;--orbit-reverse:-150deg;--product-accent:#ba9deb}
-    @keyframes core-tools-turn{to{transform:rotate(360deg)}}
-    @keyframes core-tools-upright{from{transform:translate(-50%,-50%) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(-360deg)}}
-    @media(max-width:620px){.core-tools-orbit{--orbit-radius:108px;top:43%}.core-tools-orbit:before{width:216px;height:216px}.core-tool-satellite>span{font-size:9px;padding:7px 10px;letter-spacing:0}}
-    @media(prefers-reduced-motion:reduce){.core-tools-orbit,.core-tool-satellite>span{animation:none!important}}
     /* R115: moving enclosure light without pointer input. */
     .core-r108-stage{animation:core-r115-atmosphere 17s ease-in-out infinite alternate}
     @keyframes core-r115-atmosphere{
@@ -1724,58 +1706,137 @@ header.site-header nav.site-nav a.nav-cta:active {transform:translateY(0)}
 }
 
 
-/* R172 autonomous chamber energy: continuous, legible visual activity with no mouse.
-   Visual hierarchy: one calm orbit + flowing architectural rails, no extra canvas/WebGL.
-   CSS-only timers; never alter the verified core shader or particle configuration. */
-.r172-energy-halo {
- position:absolute;z-index:2;pointer-events:none;left:50%;top:43%;
- width:clamp(205px,26vw,305px);aspect-ratio:1;
- transform:translate(-50%,-50%);
- border-radius:50%;
- filter:drop-shadow(0 0 11px rgba(101,156,250,.31));
+
+/* R173 FUTURISTIC LIVING INTERFACE — the sphere is intentionally isolated:
+   no decorative satellites, no orbital labels, no rail currents. Only ambient architecture moves.
+   Main content/navigation remain foreground, backgrounds pointer-events:none, reduced motion supported. */
+:root{
+ --r173-cyan:#86e0f0; --r173-blue:#659cfa; --r173-violet:#a68af5;
+ --r173-night:#080e1a;
 }
-.r172-energy-halo::before {
- content:"";position:absolute;inset:0;border-radius:50%;
- background:conic-gradient(from 0deg,
- transparent 0deg 31deg,rgba(156,139,245,.09) 44deg,#b1a4ff 54deg,rgba(134,224,240,.64) 62deg,
- transparent 80deg 170deg,#63b9ff 184deg,rgba(132,228,249,.73) 193deg,transparent 218deg 360deg);
- -webkit-mask:radial-gradient(farthest-side,transparent 72%,#000 74%,#000 77%,transparent 80%);
- mask:radial-gradient(farthest-side,transparent 72%,#000 74%,#000 77%,transparent 80%);
- animation:r172-energy-orbit 8.5s linear infinite;
+.r173-environment {
+ position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+ isolation:isolate;contain:paint;opacity:1;
 }
-.r172-energy-halo::after {
- content:"";position:absolute;inset:14%;border-radius:50%;
- border:1px solid rgba(127,205,251,.17);
- box-shadow:0 0 24px rgba(56,156,249,.13),inset 0 0 20px rgba(75,113,224,.10);
- animation:r172-energy-breath 4.2s ease-in-out infinite;
+.r173-environment .r173-grid{
+ position:absolute;inset:-20%;width:140%;height:140%;
+ background-image:
+ linear-gradient(rgba(106,155,245,.10) 1px,transparent 1px),
+ linear-gradient(90deg,rgba(106,155,245,.09) 1px,transparent 1px);
+ background-size:78px 78px;
+ -webkit-mask-image:linear-gradient(to bottom,transparent 0%,black 24%,black 76%,transparent 100%);
+ mask-image:linear-gradient(to bottom,transparent 0%,black 24%,black 76%,transparent 100%);
+ opacity:.55;
+ animation:r173-grid-drift 17s linear infinite;
 }
-.core-r109-stage .syn-r169-room .r172-rail-current,
-.core-r109-stage .syn-r169-room .r172-rail-glow {animation:r172-rail-travel 4.8s linear infinite;}
-.core-r109-stage .syn-r169-room .r172-rail-glow {animation-delay:-.12s;}
-.core-r109-stage .syn-r169-room .r172-rail-top {animation:r172-top-travel 6.3s linear infinite;}
-.core-r109-stage .syn-r169-room .r172-beacon {animation:r172-beacon-beat 2.6s ease-in-out infinite;}
-.core-r109-stage .syn-r169-room .r172-beacon-right{animation-delay:-1.3s;}
-@keyframes r172-energy-orbit {to{transform:rotate(360deg)}}
-@keyframes r172-energy-breath {0%,100%{opacity:.38;transform:scale(.975)}50%{opacity:.94;transform:scale(1.025)}}
-@keyframes r172-rail-travel {to{stroke-dashoffset:-708}}
-@keyframes r172-top-travel {to{stroke-dashoffset:-464}}
-@keyframes r172-beacon-beat {0%,100%{opacity:.36;filter:drop-shadow(0 0 2px #86e0f0)}
- 55%{opacity:1;filter:drop-shadow(0 0 7px #86e0f0)}}
-/* Responsive: preserve space for the three public product satellites. */
-@media(max-width:620px){.r172-energy-halo{width:216px;top:43%}}
+.r173-environment .r173-beam{position:absolute;display:block;pointer-events:none;will-change:transform,opacity;
+ width:clamp(200px,27vw,475px);height:155vh;top:-30vh;
+ background:linear-gradient(90deg,transparent,rgba(93,115,255,.035) 27%,
+ rgba(110,196,255,.18) 49%,rgba(100,235,251,.07) 55%,transparent);
+ filter:blur(14px);mix-blend-mode:screen;
+ transform:skewX(-17deg) translateX(-65vw);opacity:.66;
+}
+.r173-environment .r173-beam-one{animation:r173-beam-sweep 14s linear -3s infinite}
+.r173-environment .r173-beam-two{
+ background:linear-gradient(90deg,transparent,rgba(151,119,255,.06) 28%,rgba(166,138,245,.15) 52%,transparent);
+ animation:r173-beam-sweep 21s linear -14s infinite reverse;opacity:.5;
+}
+.r173-environment .r173-scan {
+ position:absolute;left:0;right:0;top:0;height:3px;pointer-events:none;opacity:.46;
+ background:linear-gradient(90deg,transparent 2%,rgba(116,172,255,.19) 18%,rgba(134,224,240,.67) 50%,rgba(166,138,245,.23) 78%,transparent 98%);
+ box-shadow:0 0 22px rgba(98,169,255,.42);
+ animation:r173-scan-travel 11s ease-in-out -4s infinite;
+}
+/* The formerly faint top circle becomes a clearly legible holographic dial.
+   Positioned in the typography zone, away from the standalone Core. */
+.hero-v2{position:relative;isolation:isolate;}
+.hero-v2::before,
+.hero-v2::after {
+ content:"";display:block!important;pointer-events:none;position:absolute;z-index:0;
+ border-radius:50%;opacity:1;box-sizing:border-box;
+}
+.hero-v2::before{
+ top:clamp(-135px,-9vw,-56px);left:clamp(-220px,-12vw,-90px);
+ width:clamp(390px,52vw,680px);height:auto;aspect-ratio:1;max-width:none;
+ border:2px solid rgba(130,198,255,.48);
+ background:conic-gradient(from 15deg,transparent 0 22deg,rgba(134,224,240,.75) 29deg,
+ transparent 39deg 78deg,rgba(166,138,245,.78) 91deg,transparent 104deg 170deg,
+ rgba(93,153,250,.86) 185deg,transparent 201deg 278deg,rgba(134,224,240,.73) 295deg,
+ transparent 311deg 360deg);
+ -webkit-mask:radial-gradient(circle,transparent 0 76%,black 77% 85%,transparent 86%);
+ mask:radial-gradient(circle,transparent 0 76%,black 77% 85%,transparent 86%);
+ filter:drop-shadow(0 0 18px rgba(108,181,255,.48));
+ transform-origin:50% 50%;
+ animation:r173-dial-spin 15s linear infinite!important;
+}
+.hero-v2::after{
+ top:clamp(-92px,-6vw,-30px);left:clamp(-172px,-9vw,-54px);
+ width:clamp(300px,42vw,540px);height:auto;aspect-ratio:1;
+ border:1px solid rgba(167,202,251,.35);
+ background:conic-gradient(from 0deg,transparent 0 48deg,rgba(186,171,255,.85) 60deg,
+ transparent 72deg 210deg,rgba(112,225,254,.86) 225deg,transparent 246deg 360deg);
+ -webkit-mask:radial-gradient(circle,transparent 0 84%,black 85% 88%,transparent 89%);
+ mask:radial-gradient(circle,transparent 0 84%,black 85% 88%,transparent 89%);
+ filter:drop-shadow(0 0 12px rgba(132,215,253,.35));
+ animation:r173-dial-counterspin 22s linear infinite!important;
+}
+.hero-v2 .hero-copy,.hero-v2 .system-stage {position:relative;z-index:2}
+.hero-v2 .hero-copy {text-shadow:0 2px 22px rgba(3,10,26,.62)}
+/* Persistent kinetic section connectors keep the complete page alive. */
+main>.section{position:relative}
+main>.section::before{
+ content:"";display:block;position:absolute;top:0;left:0;right:0;height:2px;
+ pointer-events:none;opacity:.72;
+ background:linear-gradient(90deg,transparent 2%,rgba(166,138,245,.7) 19%,
+ rgba(101,156,250,.75) 49%,rgba(134,224,240,.7) 76%,transparent 97%);
+ background-size:240% 100%;
+ animation:r173-section-current 9.5s linear infinite;
+}
+main>.section:nth-of-type(2n)::before {animation-duration:13s;animation-direction:reverse}
+.product-card{position:relative}
+.product-card::after{
+ content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+ background:linear-gradient(108deg,transparent 15%,rgba(134,224,240,.10) 48%,transparent 62%);
+ background-size:260% 100%;opacity:.6;
+ animation:r173-card-shimmer 9s linear infinite;
+}
+.product-card:nth-child(2)::after{animation-delay:-3s}
+.product-card:nth-child(3)::after{animation-delay:-6s}
+@keyframes r173-grid-drift{to{transform:translate3d(-78px,78px,0)}}
+@keyframes r173-beam-sweep{0%{transform:skewX(-17deg) translateX(-65vw);opacity:.04}18%{opacity:.62}80%{opacity:.7}100%{transform:skewX(-17deg) translateX(158vw);opacity:.02}}
+@keyframes r173-scan-travel{0%{transform:translateY(-10vh);opacity:0}12%{opacity:.45}70%{opacity:.5}100%{transform:translateY(110vh);opacity:0}}
+@keyframes r173-dial-spin{to{transform:rotate(360deg)}}
+@keyframes r173-dial-counterspin{to{transform:rotate(-360deg)}}
+@keyframes r173-section-current{to{background-position:240% 50%}}
+@keyframes r173-card-shimmer{to{background-position:260% 50%}}
+@media(max-width:720px){
+ .hero-v2::before{top:-92px;left:-140px;width:390px;opacity:.77}
+ .hero-v2::after{top:-52px;left:-95px;width:300px;opacity:.84}
+ .r173-environment .r173-grid{opacity:.38;background-size:64px 64px}
+ .r173-environment .r173-beam{opacity:.34;filter:blur(25px)}
+ .r173-environment .r173-scan{opacity:.26}
+ .product-card::after{opacity:.38}
+}
 @media(prefers-reduced-motion:reduce){
- .r172-energy-halo::before,.r172-energy-halo::after,
- .core-r109-stage .syn-r169-room .r172-energy-conduits * {animation:none!important}
- .r172-energy-halo::before{opacity:.22}
- .core-r109-stage .syn-r169-room .r172-rail-current,
- .core-r109-stage .syn-r169-room .r172-rail-glow,
- .core-r109-stage .syn-r169-room .r172-rail-top {stroke-dasharray:none;stroke-opacity:.12}
+ .r173-environment .r173-grid,.r173-environment .r173-beam,.r173-environment .r173-scan,
+ .hero-v2::before,.hero-v2::after,main>.section::before,.product-card::after {
+   animation:none!important;will-change:auto!important;
+ }
+ .r173-environment .r173-beam,.r173-environment .r173-scan{display:none!important}
+ .hero-v2::before,.hero-v2::after{opacity:.3}
+ .product-card::after{opacity:0}
 }
 
 </style>
 </head>
 <body>
   <a class="skip" href="#contenu">Aller au contenu</a>
+  <div class="r173-environment" aria-hidden="true">
+    <span class="r173-grid"></span>
+    <span class="r173-beam r173-beam-one"></span>
+    <span class="r173-beam r173-beam-two"></span>
+    <span class="r173-scan"></span>
+  </div>
   <header class="container site-header">
     <a class="brand" href="./" aria-label="Accueil Synestra">
       <img class="brand-banner-r99" src="./assets/synestra-studio-official-header.webp" width="540" height="132" alt="Synestra Studio — logo officiel" decoding="async">
@@ -2253,15 +2314,6 @@ header.site-header nav.site-nav a.nav-cta:active {transform:translateY(0)}
     <path d="M318 181H481" stroke="url(#r168-violet)" stroke-width="5" opacity=".50"/>
     <rect x="0" y="0" width="800" height="640" fill="url(#r168-aura)" opacity=".8"/>
   </g>
-<!-- R172 autonomous chamber energy — guided rails with no pointer or JS dependency. -->
-<g class="r172-energy-conduits" aria-hidden="true" fill="none">
-  <path class="r172-rail-base" d="M237 407V218L282 166H518L563 218V407" stroke="#72b8ff" stroke-width="2.1" stroke-opacity=".19"/>
-  <path class="r172-rail-glow" d="M237 407V218L282 166H518L563 218V407" stroke="#87e8ff" stroke-width="6" stroke-opacity=".8" stroke-dasharray="58 650" filter="url(#r169-light-bloom)"/>
-  <path class="r172-rail-current" d="M237 407V218L282 166H518L563 218V407" stroke="#a8f2ff" stroke-width="2.8" stroke-dasharray="58 650" stroke-linecap="round"/>
-  <path class="r172-rail-top" d="M190 141H610" stroke="#9c89ff" stroke-width="3.2" stroke-dasharray="34 430" stroke-linecap="round"/>
-  <circle class="r172-beacon r172-beacon-left" cx="237" cy="407" r="3.8" fill="#8fe9fa" stroke="#4757a8" stroke-width="1.5"/>
-  <circle class="r172-beacon r172-beacon-right" cx="563" cy="407" r="3.8" fill="#8fe9fa" stroke="#4757a8" stroke-width="1.5"/>
-</g>
 <g class="r169-ambient-light">
 <ellipse cx="400" cy="320" rx="190" ry="180" fill="url(#r169-portal-halo)" opacity=".78"/>
 <ellipse cx="400" cy="72" rx="260" ry="120" fill="url(#r169-overhead)" opacity=".45"/>
@@ -2283,7 +2335,6 @@ header.site-header nav.site-nav a.nav-cta:active {transform:translateY(0)}
 <circle cx="550" cy="395" r="2.3" fill="#7a8099"/><circle cx="550" cy="395" r=".8" fill="#121727"/>
 </g>
 </svg>
-        <div class="r172-energy-halo" aria-hidden="true"></div>
         <canvas class="core-r109-canvas" aria-hidden="true" width="960" height="570"></canvas>
         <div class="synestra-core-prototype-controls" hidden aria-hidden="true">
 <input type="hidden" data-sphere-control="flowType" data-default="0" value="0">
@@ -2340,11 +2391,6 @@ header.site-header nav.site-nav a.nav-cta:active {transform:translateY(0)}
           <circle cx="319" cy="189" r="23" fill="url(#syn-r165-core)"/>
           <circle cx="319" cy="189" r="5" fill="#eaffff" opacity=".97"/>
         </svg>
-        <div class="core-tools-orbit" aria-hidden="true">
-          <div class="core-tool-satellite"><span>Connect</span></div>
-          <div class="core-tool-satellite"><span>Bridge</span></div>
-          <div class="core-tool-satellite"><span>SiteForge</span></div>
-        </div>
         <nav class="core-r108-links" aria-label="Explorer Synestra">
           <a href="./siteforge/"><span>Créer</span><strong>SiteForge</strong><span aria-hidden="true">↗</span></a>
           <a href="./connect/"><span>Relier</span><strong>Connect</strong><span aria-hidden="true">↗</span></a>
