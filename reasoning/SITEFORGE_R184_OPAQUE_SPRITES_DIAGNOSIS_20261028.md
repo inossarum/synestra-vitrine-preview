@@ -20,3 +20,13 @@ Branche source `task/SYN_SITEFORGE_R184_SPRITE_ALPHA_FIX_20261028`, base R183 `f
 
 ## Points ouverts
 Validation esthétique propriétaire encore ouverte. Tests Chrome URL publique et mesures physiques mobile non attestés tant qu'ils ne sont pas réellement exécutés.
+
+## Qualification Chrome publique
+
+- Page versionnée R184 : https://inossarum.github.io/synestra-siteforge-r176-lab/r184.html ; GitHub Pages commit `66a76628ed1aee372272730822a72dddf776492a`, HTTP 200 `built`, sans Cloudflare Access.
+- Chrome réel sur **l'URL publique** : E2E exit 0, 6/6 matériaux, mobile 390px, orbite souris/tactile complète, rotation partagée, export/import JSON v1, 18 contrôles plasma et 10 motes, WebGL error 0.
+- Correction de la carte carrée : avant, `vec4(lightCol,alpha)` sous `blendFunc(ONE,ONE)` ajoutait de la lumière aux pixels transparent du point sprite. Après, `discard` et `vec4(lightCol*alpha,alpha)` éliminent l'émission hors masque, les cristaux ont une enveloppe délimitée, et les valeurs initiales ont été adoucies. Capture Chrome comparée visuellement à la capture utilisateur.
+- Capture par défaut : 30 éclats, taille 60 %, luminosité 65 %, les éclats restent détectables, 2 647 pixels de différence dans la fenêtre de test de 880 000 pixels lors de leur activation.
+- Captures de QA R184 versionnées, sans modifier la capture historique R182. 160/160 tests Node PASS, export statique 49 fichiers PASS.
+- Evidence finale `evidence/SITEFORGE_R184_SPRITE_ALPHA_FIX_20261028.json` blob `ed78d32ba18df3dd668d6046dbcd0d1f36a9f4ac`.
+- Aucun merge `main`, aucun changement Access, R183 et ses captures maintenus. Acceptation esthétique propriétaire toujours PENDING.
