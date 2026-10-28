@@ -13,7 +13,8 @@ import './siteforge_r168_architectural_room.test.mjs'; // R168 isolated architec
 import './siteforge_r169_room_materials.test.mjs';
 import './vitrine_r170_all_pages_brand_motion.test.mjs';
 import './vitrine_r171_pilot_cta_accessibility.test.mjs';
-import './vitrine_r172_visible_idle_energy.test.mjs'; // Continuous visibly animated scene, not pointer dependent. // Pilot access CTA WCAG contrast / touch / focus. // R170 official Studio palette and autonomous motion across all pages. // R169 advanced room material, geometry and immutable Core contract.
+import './vitrine_r172_visible_idle_energy.test.mjs';
+import './vitrine_r173_futuristic_environment.test.mjs'; // Clean sphere, enhanced top dial and continuous architectural motion. // Continuous visibly animated scene, not pointer dependent. // Pilot access CTA WCAG contrast / touch / focus. // R170 official Studio palette and autonomous motion across all pages. // R169 advanced room material, geometry and immutable Core contract.
 import './siteforge_r132_r116_clean_lab.test.mjs'; // R116 provenance and isolation.
 import './siteforge_r136_mobile_sticky_preview.test.mjs'; // Mobile sticky continuity.
 
