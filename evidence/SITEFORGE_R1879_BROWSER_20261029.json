@@ -1,0 +1,153 @@
+{
+  "browser": "Chrome Windows WebGL SwiftShader",
+  "mobile": false,
+  "first": {
+    "ready": "true",
+    "flow": "6",
+    "enabled": "true",
+    "palette": "synestra",
+    "colors": [
+      "#18edff",
+      "#e817c8",
+      "#eaffff"
+    ],
+    "controls": 18,
+    "flows": 4,
+    "glError": 0,
+    "phase": "0.1914",
+    "pulse": "100"
+  },
+  "goldState": {
+    "ready": "true",
+    "flow": "6",
+    "enabled": "true",
+    "palette": "gold",
+    "colors": [
+      "#ffdc6c",
+      "#f49a35",
+      "#fff1c8"
+    ],
+    "controls": 18,
+    "flows": 4,
+    "glError": 0,
+    "phase": "0.2070",
+    "pulse": "0"
+  },
+  "emeraldState": {
+    "ready": "true",
+    "flow": "6",
+    "enabled": "true",
+    "palette": "emerald",
+    "colors": [
+      "#37f0aa",
+      "#ae6bff",
+      "#d5fff0"
+    ],
+    "controls": 18,
+    "flows": 4,
+    "glError": 0,
+    "phase": "0.2070",
+    "pulse": "0"
+  },
+  "manual": {
+    "ready": "true",
+    "flow": "6",
+    "enabled": "true",
+    "palette": "custom",
+    "colors": [
+      "#ff3300",
+      "#ae6bff",
+      "#d5fff0"
+    ],
+    "controls": 18,
+    "flows": 4,
+    "glError": 0,
+    "phase": "0.2070",
+    "pulse": "0"
+  },
+  "colorsDiff": {
+    "goldDiff": {
+      "width": 592,
+      "height": 520,
+      "pixels": 307840,
+      "changed": 23663,
+      "changedPercent": 7.686785343035343,
+      "majorPercent": 3.5940748440748442,
+      "meanMaxDelta": 3.423915020790021
+    },
+    "greenDiff": {
+      "width": 592,
+      "height": 520,
+      "pixels": 307840,
+      "changed": 23364,
+      "changedPercent": 7.589656964656965,
+      "majorPercent": 3.0083809771309773,
+      "meanMaxDelta": 3.118324454261954
+    }
+  },
+  "mouse": {
+    "off": {
+      "ready": "true",
+      "flow": "6",
+      "enabled": "false",
+      "palette": "synestra",
+      "colors": [
+        "#18edff",
+        "#e817c8",
+        "#eaffff"
+      ],
+      "controls": 18,
+      "flows": 4,
+      "glError": 0,
+      "phase": "0.2070",
+      "pulse": "0"
+    },
+    "on": {
+      "ready": "true",
+      "flow": "6",
+      "enabled": "true",
+      "palette": "synestra",
+      "colors": [
+        "#18edff",
+        "#e817c8",
+        "#eaffff"
+      ],
+      "controls": 18,
+      "flows": 4,
+      "glError": 0,
+      "phase": "0.2070",
+      "pulse": "0"
+    },
+    "offDiff": {
+      "width": 592,
+      "height": 520,
+      "pixels": 307840,
+      "changed": 33,
+      "changedPercent": 0.01071985446985447,
+      "majorPercent": 0.007146569646569647,
+      "meanMaxDelta": 0.007757276507276508
+    },
+    "onDiff": {
+      "width": 592,
+      "height": 520,
+      "pixels": 307840,
+      "changed": 12391,
+      "changedPercent": 4.0251429313929314,
+      "majorPercent": 1.713877338877339,
+      "meanMaxDelta": 2.0119932432432432
+    },
+    "impulse": "0.489"
+  },
+  "json": {
+    "legacyStatus": "Paramètres importés et appliqués · 18 plasma + 10 éclats.",
+    "badStatus": "Import refusé : Palette ou couleur invalide.",
+    "visualKeys": [
+      "mouseEnabled",
+      "palette",
+      "colorA",
+      "colorB",
+      "coreColor"
+    ]
+  },
+  "pass": true
+}

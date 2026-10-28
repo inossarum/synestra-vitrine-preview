@@ -1,0 +1,106 @@
+{
+  "schema": "synestra.siteforge.r1879.mouse_palette_e2e.v1",
+  "date": "2026-10-29",
+  "mission": "SYN_SITEFORGE_R1879_MOUSE_PALETTE_20261029",
+  "owner": "inossarum",
+  "source_branch": "task/SYN_SITEFORGE_R1878_FLOW_DENSITY_20261028",
+  "source_commit": "c12be3163ff51ceb662e08d43d05d1c036091cd7",
+  "branch": "task/SYN_SITEFORGE_R1879_MOUSE_PALETTE_20261029",
+  "worktree": "I:/_STUDIO_STAGING/siteforge_r1879_mouse_palette_20261029",
+  "artifact": "siteforge-r1879-autonome.html",
+  "sha256": "8b6a0f4de28cbe9c2ce8ffaee5d31fc53655c3fab398963c97828251bd83ce63",
+  "preview": "http://127.0.0.1:19099/siteforge-r1879-autonome.html?demo=energy",
+  "features": {
+    "mouse": "Accessible Oui/Non toggle; mouse motion deforms only flowType=6 localized lines through gated shader uniform; impulse decays naturally; no mouse displacement when disabled; orbit dragging remains separate",
+    "palette": [
+      "synestra",
+      "emerald",
+      "gold",
+      "electric",
+      "ice",
+      "rose",
+      "custom"
+    ],
+    "customColors": [
+      "main energy flow",
+      "secondary energy flow",
+      "core"
+    ],
+    "legacyColors": "Original 18 setting colors still affect the six historical materials without change",
+    "json": "Backwards-compatible energyVisual sibling with strict fields mouseEnabled, palette, colorA, colorB, coreColor; existing v1 18 parameters and 4 energyFlow retained; old JSON files default to Synestra palette and mouse On; invalid import is atomic",
+    "technical": "One existing WebGL1 program, separate uEnergyMouse/uEnergyA/uEnergyB/uEnergyCore uniforms; no opaque cylinders, no new external script or network dependency; exact inline script CSP SHA"
+  },
+  "qa": {
+    "static": {
+      "tests": 5,
+      "passed": 5,
+      "failed": 0
+    },
+    "chrome_desktop": {
+      "status": "PASS",
+      "engine": "Chrome Windows SwiftShader",
+      "viewport": [
+        1100,
+        800
+      ],
+      "webgl_errors": 0,
+      "colors_gold_changed_pixels": 23663,
+      "colors_emerald_changed_pixels": 23364,
+      "mouse_off_changed_pixels": 33,
+      "mouse_on_changed_pixels": 12391,
+      "mouse_impulse": 0.489,
+      "legacy_json_import": "PASS",
+      "malformed_json_atomic_rejection": "PASS"
+    },
+    "chrome_mobile_emulation": {
+      "status": "PASS",
+      "viewport": [
+        390,
+        844
+      ],
+      "webgl_errors": 0,
+      "colors_gold_changed_pixels": 12648,
+      "colors_emerald_changed_pixels": 12519,
+      "mouse_off_changed_pixels": 21,
+      "mouse_on_changed_pixels": 5633,
+      "mouse_impulse": 0.489,
+      "legacy_json_import": "PASS",
+      "malformed_json_atomic_rejection": "PASS"
+    },
+    "legacy_material_qa": {
+      "status": "PASS",
+      "process_exit": 0,
+      "seven_material_options": true,
+      "legacy_plasma_colors_preserved": true,
+      "flow_independent_motion_changed_pixels": 26791,
+      "energy_deeplink_changed_pixels": 31510,
+      "ui_cleanup_preserved": true
+    },
+    "security": {
+      "strict_CSP": "PASS",
+      "localhost_only": true,
+      "no_public_deploy": true
+    }
+  },
+  "visual_review": "Real Chrome screenshots inspected for Synestra, gold and emerald palettes and editor UI; aesthetically distinct, but owner approval pending",
+  "files": [
+    "tests/siteforge_r1879_isolation.test.mjs",
+    "tests/siteforge_r1879_browser_qa.mjs",
+    "tests/siteforge_r1879_legacy_qa.mjs",
+    "evidence/SITEFORGE_R1879_BROWSER_20261029.json",
+    "evidence/SITEFORGE_R1879_BROWSER-mobile_20261029.json",
+    "evidence/r1879-controls.png",
+    "evidence/r1879-controls-mobile.png",
+    "evidence/r1879-gold.png",
+    "evidence/r1879-emerald.png",
+    "evidence/r1879-mouse-on.png",
+    "evidence/r1879-mouse-off-after.png"
+  ],
+  "limitations": [
+    "Mobile uses Chrome emulation, not physical GPU",
+    "Aesthetics not approved by user; no public promotion",
+    "Old inherited frame-ancestors meta warning and favicon 404 unrelated",
+    "No asynchronous background guarantees; local server must remain active"
+  ],
+  "outcome": "LOCAL_E2E_PASS_ART_REVIEW_PENDING"
+}
