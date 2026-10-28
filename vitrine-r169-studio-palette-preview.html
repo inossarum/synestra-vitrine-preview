@@ -1848,6 +1848,7 @@ header.site-header nav.site-nav a.nav-cta:active {transform:translateY(0)}
 
 /* R175 MOBILE NAVIGATION — compact native-details navigation, no full-page effects. */
 .r175-mobile-menu{display:none}
+.r175-mobile-menu:not([open])>.r175-mobile-panel{display:none!important}
 @media(max-width:720px){
  .site-header.container{
    display:grid!important;grid-template-columns:minmax(0,1fr) max-content;
