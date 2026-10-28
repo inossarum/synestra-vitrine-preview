@@ -1901,6 +1901,23 @@ header.site-header nav.site-nav a.nav-cta:active {transform:translateY(0)}
  .r175-mobile-menu summary{width:42px;height:48px}
 }
 
+
+/* R177 — Accessible end-of-page navigation, static-only, no overlay or scan effect. */
+.site-footer .r177-return-top{
+  display:inline-flex;align-items:center;justify-content:center;gap:.55rem;
+  min-height:48px;padding:.66rem 1rem;margin:.5rem 0 .25rem;
+  border:1px solid rgba(130,201,235,.55);border-radius:.65rem;
+  background:#152a41;color:#d9f2ff;text-decoration:none;
+  font-size:.93rem;font-weight:700;line-height:1.35;
+}
+.site-footer .r177-return-top:hover{background:#203d5b;border-color:#8fdaf4;color:#fff}
+.site-footer .r177-return-top:focus-visible{
+  outline:3px solid #b8f1ff;outline-offset:3px;
+}
+@media(max-width:720px){
+ .site-footer .r177-return-top{width:100%;margin-top:.85rem}
+}
+
 </style>
 </head>
 <body>
@@ -2785,6 +2802,9 @@ header.site-header nav.site-nav a.nav-cta:active {transform:translateY(0)}
   <footer class="container site-footer">
     <p>© 2026 Synestra · Studio numérique</p>
     <p>Phase pilote · Informations communiquées avec prudence</p>
+    <a class="r177-return-top" href="#contenu" aria-label="Revenir au début de la présentation">
+      <span aria-hidden="true">↑</span> Haut de page
+    </a>
   </footer>
 <script src="./assets/siteforge-r116-sphere-only.js" defer></script>
 </body>
