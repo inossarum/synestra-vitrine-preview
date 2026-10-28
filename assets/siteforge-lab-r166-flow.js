@@ -415,25 +415,51 @@ void main(){
   float r2=dot(q,q);
   vec2 axis=normalize(vAxis);
   float along=dot(q,axis),across=dot(q,vec2(-axis.y,axis.x));
-  float coreGlow=exp(-r2*29.0),aura=exp(-r2*4.7);
-  float filament=exp(-across*across*23.0-along*along*4.5);
-  // Three genuinely different GPU silhouettes; no second particle engine.
-  float silhouette=clamp(coreGlow*.82+filament*.45+aura*.33,0.,1.);
-  if(uMoteShape>.5&&uMoteShape<1.5){
-   float facet=abs(along)*.55+abs(across)*1.8;
-   silhouette=clamp((1.-smoothstep(.16,.67,facet))*.88+coreGlow*.28,0.,1.);
-  }else if(uMoteShape>1.5){
-   float orb=exp(-r2*7.5);
-   float halo=exp(-r2*1.55);
-   silhouette=clamp(orb*.86+halo*.22,0.,1.);
-  }
-  float alpha=silhouette*vLife*clamp(uEffects.w,0.,1.);
+  // R181: a single shader provides three genuinely distinct shapes.
+  // The faceted branch calculates its own normal and physically-directed
+  // highlights, while avoiding the old three exponential spark passes.
   float hue=step(.5,fract(vGlint*7.73));
   vec3 col=mix(uMotePrimary,uMoteSecondary*1.50+uMotePrimary*.10,hue);
   vec3 hot=mix(col,vec3(.86,.97,1.),.24);
-  vec3 lightCol=col*(aura*.55+filament*.58)+hot*coreGlow*1.44;
-  if(uMoteShape>.5&&uMoteShape<1.5)lightCol=col*silhouette*1.36+hot*coreGlow*.58;
-  if(uMoteShape>1.5)lightCol=col*(silhouette*.68)+hot*coreGlow*.82;
+  float silhouette=0.;
+  vec3 lightCol=vec3(0.);
+  if(uMoteShape>.5&&uMoteShape<1.5){
+   // Oblique six-sided crystal cut with three planar faces and a thin bevel.
+   // The local tangent vAxis was already rotated with the camera.
+   float crystalAngle=(vGlint-.82)*2.3+uSpinPhase*.16;
+   float cs=cos(crystalAngle),sn=sin(crystalAngle);
+   vec2 facetXY=vec2(along*cs-across*sn,along*sn+across*cs);
+   float axial=abs(facetXY.x),lateral=abs(facetXY.y);
+   float sideCut=max(lateral*.94+axial*.46,axial*.67);
+   silhouette=1.-smoothstep(.74,.86,sideCut);
+   // Independent facet normals, pointing into the core's genuine centre.
+   float faceSide=step(0.,facetXY.y);
+   float faceTip=step(.27,axial);
+   vec3 normal=normalize(vec3(mix(-.72,.68,faceSide),
+                              mix(.18,-.52,faceTip),.90));
+   vec3 sourceDir=normalize(vec3(-vMoteCenter*.95+.14,1.50));
+   float diffuse=.30+.70*max(dot(normal,sourceDir),0.);
+   vec3 reflected=reflect(-sourceDir,normal);
+   float specular=pow(max(reflected.z,0.),18.);
+   // Edge bevel and core-facing rim are stable when the sphere is orbited.
+   float bevel=smoothstep(.64,.78,sideCut)*(1.-smoothstep(.78,.90,sideCut));
+   float rim=smoothstep(-.18,.62,dot(normal,sourceDir));
+   float facetTone=mix(.61,1.04,faceSide)*mix(1.03,.73,faceTip);
+   lightCol=col*(.44+diffuse*.90)*facetTone+
+            hot*(specular*1.75+bevel*(.25+.52*rim));
+   // A crisp centre reflection, without turning the crystal into a flare.
+   lightCol+=hot*.16*(1.-smoothstep(.02,.42,r2));
+  }else if(uMoteShape>1.5){
+   float orb=exp(-r2*7.5),halo=exp(-r2*1.55);
+   silhouette=clamp(orb*.86+halo*.22,0.,1.);
+   lightCol=col*silhouette*.68+hot*exp(-r2*29.)*.82;
+  }else{
+   float coreGlow=exp(-r2*29.0),aura=exp(-r2*4.7);
+   float filament=exp(-across*across*23.0-along*along*4.5);
+   silhouette=clamp(coreGlow*.82+filament*.45+aura*.33,0.,1.);
+   lightCol=col*(aura*.55+filament*.58)+hot*coreGlow*1.44;
+  }
+  float alpha=clamp(silhouette,0.,1.)*vLife*clamp(uEffects.w,0.,1.);
   gl_FragColor=vec4(lightCol,alpha);
   return;
  }
@@ -753,7 +779,14 @@ void main(){
   stage.dataset.syncedSpinPhase=spinPhase.toFixed(4);
   stage.dataset.moteSpinPhase=spinPhase.toFixed(4);
   stage.dataset.moteSpinLinkedSpeed=(controls.particleSpeed?.value||'100');
-  gl.uniform1f(U.uVolumeSteps,mobile?14:22);
+  // R181 mobile fill-rate safeguard: retain 14 slices normally; reduce to
+  // 12 only when both high framebuffer load or dense 3D motes demand it.
+  // Both modes use the same volumetric material and the same temporal phase.
+  const mobileDense=mobile&&(canvas.width*canvas.height>240000||moteCount>75);
+  const volumeSteps=mobile?(mobileDense?12:14):22;
+  gl.uniform1f(U.uVolumeSteps,volumeSteps);
+  stage.dataset.volumeSteps=String(volumeSteps);
+  stage.dataset.mobileQuality=mobile?(mobileDense?'adaptive':'balanced'):'desktop';
   gl.uniform1f(U.uMoteCount,Math.max(1,moteCount));
   gl.uniform4f(U.uMoteStyle,
    1+.35*moteVal('moteDistance')/100,
