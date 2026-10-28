@@ -1,0 +1,86 @@
+{
+  "schema": "synestra.siteforge.r1875.zero_pipe_section_e2e.v1",
+  "date": "2026-10-28",
+  "mission": "SYN_SITEFORGE_R1875_ZERO_PIPE_SECTIONS_20261028",
+  "repository": "inossarum/synestra-vitrine-preview",
+  "owner": "inossarum",
+  "branch": "task/SYN_SITEFORGE_R1875_ZERO_PIPE_SECTIONS_20261028",
+  "baseline_commit": "9871eee345c08a56fd087b8a76bd729338820c1b",
+  "request": "Réduits les sections des tuyaux de 100%",
+  "interpretation": "Set geometrical pipe cross section and cylindrical body contributions to zero; keep five magnetic centerlines visible through narrow optical Gaussian emission/antialiasing, no opaque pipe",
+  "artifacts": {
+    "html": "siteforge-r1875-autonome.html",
+    "sha256": "d7250dc8323074d4da3f8558c9d0e5be4e6da3d82ea5b9e058d1c2ebf0894ec1",
+    "builder": "tools/build_r1875_filaments.py",
+    "preview": "http://127.0.0.1:19095/siteforge-r1875-autonome.html?demo=energy",
+    "http": 200
+  },
+  "technical_changes": [
+    "Only flowType 6 shader and 3 version metadata fields; 5 independent centerlines A–E preserved",
+    "All tube shell/body/specular surface fields removed; no finite-radius pipe surface",
+    "Radiance peaks at distance to centerline = 0; Gaussian core and soft halo provide finite pixel anti-aliasing, NOT a physical tube cross-section",
+    "Volume sampling increased from up to 22 to minimum 34 of maximum 40 samples for thin lines, preserving independent uLabTime",
+    "Second bounded brightness pass increased only illumination/alpha to prevent disappearing filaments",
+    "CSP exact inline script digest recalculated, without unsafe-inline; no external dependency"
+  ],
+  "tests": {
+    "node_static": {
+      "status": "PASS",
+      "count": 5,
+      "passed": 5,
+      "failed": 0
+    },
+    "chrome_desktop": {
+      "status": "PASS",
+      "viewport": [
+        1100,
+        800
+      ],
+      "webgl_error": 0,
+      "spin_same": true,
+      "particle_speed": 0,
+      "changed_pixels": 30445,
+      "total_pixels": 307840,
+      "changed_percent": 9.8899,
+      "selected_material": 6
+    },
+    "chrome_mobile_simulated": {
+      "status": "PASS",
+      "viewport": [
+        390,
+        844
+      ],
+      "webgl_error": 0,
+      "spin_same": true,
+      "particle_speed": 0,
+      "changed_pixels": 22163,
+      "total_pixels": 104676,
+      "changed_percent": 21.173,
+      "material6_animation_pixels": 28182
+    },
+    "rendering": "Chrome Windows WebGL SwiftShader; physical device/GPU performance not measured",
+    "security": "strict CSP inline script pinned; inherited CSP frame-ancestors meta warning and favicon 404 unrelated"
+  },
+  "captures": [
+    {
+      "file": "evidence/r1875-first.png",
+      "sha256": "bf68c5b3dd32d715ea9b3cc2e47e4272fd39dc2d4794bd135cf8422f54364723"
+    },
+    {
+      "file": "evidence/r1875-later.png",
+      "sha256": "b246faba29d4ec0c99f032391974da81702d7b9a3fa721c388eda980fb4db755"
+    },
+    {
+      "file": "evidence/r1875-mobile-first.png"
+    },
+    {
+      "file": "evidence/r1875-mobile-later.png"
+    }
+  ],
+  "limits": [
+    "By mathematical definition 100% section reduction means no solid tubes; the filaments retain a nonzero rendering footprint for visibility",
+    "Artistic preference pending; no physical GPU mobile QA",
+    "No public publishing, PR, push or merge; R1874 remains the rollback"
+  ],
+  "status": "LOCAL_E2E_PASS_ART_PENDING"
+}
