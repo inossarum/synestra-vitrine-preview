@@ -84,8 +84,15 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 </svg>
 </div>
 <form class="lab-controls" aria-label="Création de la nouvelle sphère plasma VFX" autocomplete="off">
-<div class="panel-head"><h2>Plasma Studio</h2><span class="preview-state">R173.1 · LIQUIDE SPHÉRIQUE</span></div>
-<p class="help">R173.1 : six matériaux 3D. Courants liquides désormais structurés autour du noyau en plusieurs flux sphériques, sans vague isolée. Comparateur magnétique R171/R172.1 conservé. Vitrine inchangée.</p>
+<div class="panel-head"><h2>Plasma Studio</h2><span class="preview-state">R174 · RELIEF VOLUMÉTRIQUE</span></div>
+<p class="help">R174 : profondeur optique avant/arrière, crêtes plus précises et noyau préservé, sans effets supplémentaires. Comparez le même rendu avant et après. Six matériaux et vitrine inchangés.</p>
+<fieldset class="control-group" data-depth-comparison><legend>🔬 Comparaison du relief volumétrique</legend>
+<div class="magnetic-compare" aria-label="Comparer la lumière R173.1 et R174">
+<button type="button" data-depth-compare="prior" aria-pressed="false">Avant · R173.1</button>
+<button type="button" data-depth-compare="r174" aria-pressed="true">Après · R174</button>
+</div>
+<p class="help">Même matière, même angle et même mouvement : seule la profondeur optique change. Aucun paramètre JSON supplémentaire.</p>
+</fieldset>
 <fieldset class="control-group"><legend>✨ Création rapide</legend>
 <div class="control-row"><label class="control-label" for="sf-flowType"><span>Énergie qui traverse la sphère</span><output for="sf-flowType" data-sphere-value="flowType">Flux plasma</output></label>
 <select id="sf-flowType" data-sphere-control="flowType" data-default="0"><option value="0">Flux plasma</option><option value="1">Rubans magnétiques</option><option value="2">Voiles d’aurore</option><option value="3">Brume ionique</option><option value="4">Jets de fusion</option><option value="5">Courants liquides</option></select></div>

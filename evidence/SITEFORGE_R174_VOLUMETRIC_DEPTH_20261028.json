@@ -1,0 +1,91 @@
+{
+  "schema": "synestra.siteforge.r174.optical_depth.evidence.v1",
+  "date": "2026-10-28",
+  "mission_id": "SYN_SITEFORGE_R174_VOLUMETRIC_DEPTH_20261028",
+  "owner_scope": "SiteForge standalone laboratory only",
+  "source": {
+    "repository": "inossarum/synestra-vitrine-preview",
+    "base_commit": "e482a723ecf1a6bfed5d266f93ce4b6a096456a6",
+    "branch": "task/SYN_SITEFORGE_R116_CLEAN_LAB_20261027"
+  },
+  "intent": "Enhance visually clear depth separation, foreground ridges, volumetric lighting without new shell / particles or touching the approved vitrine.",
+  "implementation": {
+    "webgl": "Same existing WebGL1 fragment program, in-volume absorption and emission with uniform uDepthRefine (0 prior or 1 R174)",
+    "effects": [
+      "frontLayer based on ray depth q.z/radius",
+      "filamentPeak intensity gates optical density",
+      "refinedDensity with muted rear-layer energy",
+      "refinedRadianceScale boosts near crests without modifying nucleus-specific radiance"
+    ],
+    "comparison": "Two non-exported lab buttons, Avant R173.1 and Après R174; instantaneous optical comparison in same scene at same camera, phase and settings",
+    "controls": 18,
+    "materials": 6,
+    "canvas": 1,
+    "programs": 1,
+    "json_schema": "synestra.siteforge.plasma-settings.v1",
+    "added_shell": false,
+    "added_particle_pass": false
+  },
+  "tests": {
+    "failure_first": "new R174 contract test failed against R173.1 before implementation",
+    "node": {
+      "command": "node --test tests/site_contract.test.mjs",
+      "total": 93,
+      "passed": 93,
+      "failed": 0
+    },
+    "browser": {
+      "runner": "tests/siteforge_r174_live_optics_qa.mjs",
+      "engine": "Chrome headless ANGLE SwiftShader WebGL1",
+      "webgl_errors": 0,
+      "materials_pass": 6,
+      "controls": 18,
+      "canvas_count": 1,
+      "optical_compare": {
+        "reference": "r174-before-liquid.png",
+        "candidate": "r174-after-liquid.png",
+        "same_camera": true,
+        "same_time_frozen": true,
+        "format": "PNG 8-bit RGB/RGBA",
+        "decoded_pixels": 307840,
+        "pixels_changed_threshold_18": 42614,
+        "changed_percent": 13.842905405405405,
+        "pixels_changed_threshold_35_percent": 10.421972453222454,
+        "mean_max_channel_delta": 8.619838227650728
+      },
+      "magnetic_previous_comparison": "PASS",
+      "pause_zero_two_frames_identical": true,
+      "resume_two_frames_different": true,
+      "orbit_mouse": true,
+      "orbit_touch": true,
+      "keyboard_reset": true,
+      "mobile": {
+        "viewport": 390,
+        "body_width": 390,
+        "canvas": [
+          364,
+          285
+        ]
+      },
+      "captures": [
+        "r174-before-liquid.png",
+        "r174-after-liquid.png",
+        "r174-browser-desktop.png",
+        "r174-browser-mobile.png"
+      ]
+    },
+    "immutability": {
+      "approved_home_git_blob": "1413e30138ba1657f7056401818e697ddbd32ac8",
+      "approved_engine_git_blob": "dd63d75fdb966de2052595c95b7b6cb736d6c7cc",
+      "main_unchanged": true,
+      "production_unchanged": true
+    },
+    "limitations": {
+      "physical_gpu_fps": "NOT_MEASURED",
+      "aesthetic_owner_review": "PENDING",
+      "Cloudflare_production": "NOT_DEPLOYED"
+    }
+  },
+  "publication_status": "LOCAL_VALIDATED_PENDING_GITHUB",
+  "rollback": "restore lab branch to e482a723ecf1a6bfed5d266f93ce4b6a096456a6"
+}

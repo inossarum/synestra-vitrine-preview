@@ -22,7 +22,7 @@ test('R171: animation time remains continuous across zero-speed pause/restart',(
 test('R171: manual orbit with pointer capture, reset and keyboard access',()=>{
  assert.match(html,/tabindex="0"/);
  assert.match(html,/touch-action:none/);
- assert.match(html,/R173.1 · LIQUIDE SPHÉRIQUE/);
+ assert.match(html,/R174 · RELIEF VOLUMÉTRIQUE/);
  for(const token of ["setPointerCapture","releasePointerCapture","pointerdown","pointermove","pointercancel","keydown","dblclick","dataset.orbitYaw","dataset.orbitPitch"])assert.ok(lab.includes(token),token);
  assert.match(lab,/tiltX=Math\.max\(-1\.05/);
  assert.match(lab,/tiltY=Math\.max\(-\.72/);

@@ -25,5 +25,5 @@ test('R173.1: keep 6 materials, 18 JSON parameters, magnetic A/B and approved si
  assert.match(html,/data-magnetic-compare="r171"/);
  assert.match(html,/data-magnetic-compare="r172"/);
  assert.equal((js.match(/gl\.createProgram\(\)/g)||[]).length,1);
- assert.match(html,/R173\.1 · LIQUIDE SPHÉRIQUE/);
+ assert.match(html,/R174 · RELIEF VOLUMÉTRIQUE/);
 });

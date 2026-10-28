@@ -1,4 +1,4 @@
-/* SiteForge LAB R173 (isolated from the approved Synestra vitrine) — replaceable 3D volume flow materials on ONE WebGL renderer: luminous central core, sweeping cyan-violet vortex arms and depth-resolved energy. Existing WebGL emitter retained; 18 controls total.
+/* SiteForge LAB R174 (isolated from the approved Synestra vitrine) — replaceable 3D volume flow materials on ONE WebGL renderer: luminous central core, sweeping cyan-violet vortex arms and depth-resolved energy. Existing WebGL emitter retained; 18 controls total.
  * One GPU VFX program: quad volumetric plasma + particle shell, branching arcs, nucleus.
  * Historical marble shader, old arcs and their settings are REMOVED.
  * WebGL1, iPhone precision parity, mobile bounded particles, no network.
@@ -21,6 +21,13 @@
  let schedule=()=>{};
  // Visual comparison is a lab-only display mode, NOT a 19th JSON setting.
  let compareVariant=1;
+ // Non-exported A/B optical quality switch; the JSON schema remains 18 fields.
+ let depthVariant=1;
+ const depthButtons=[...document.querySelectorAll('[data-depth-compare]')];
+ const syncDepthUI=()=>{
+  for(const button of depthButtons)button.setAttribute('aria-pressed',String((button.dataset.depthCompare==='r174'?1:0)===depthVariant));
+  stage.dataset.depthVariant=depthVariant?'r174':'prior';
+ };
  const compareGroup=document.querySelector('[data-magnetic-compare-group]');
  const compareHint=document.querySelector('[data-magnetic-compare-hint]');
  const compareButtons=[...document.querySelectorAll('[data-magnetic-compare]')];
@@ -53,6 +60,7 @@
   const electricMode=sel('flowType')===0&&sel('particlePreset')===1;
   if(arcPanel)arcPanel.hidden=!electricMode;
   syncCompareUI();
+  syncDepthUI();
   stage.style.setProperty('--sphere-zoom',String(num('diameter')));
   stage.style.setProperty('--fallback-opacity',String(num('opacity')));
  }
@@ -65,11 +73,16 @@
   if(toggle){compareVariant=toggle.dataset.magneticCompare==='r172'?1:0;syncCompareUI();schedule();}
   if(event.target.closest('[data-magnetic-demo]'))applyDemo();
   if(event.target.closest('[data-liquid-demo]'))applyLiquidDemo();
+  const depthToggle=event.target.closest('[data-depth-compare]');
+  if(depthToggle){
+   depthVariant=depthToggle.dataset.depthCompare==='r174'?1:0;
+   syncDepthUI();schedule();
+  }
  });
 
  panel?.addEventListener('reset',e=>{
   e.preventDefault();for(const [key,input] of Object.entries(controls))input.value=defaults[key];
-  compareVariant=1;sync();schedule();
+  compareVariant=1;depthVariant=1;sync();schedule();
  });
  sync();
  const launchDemo=new URLSearchParams(window.location.search).get('demo');
@@ -220,7 +233,8 @@ uniform vec3 uCore,uCyan,uViolet,uDeep;
 uniform vec2 uTilt;
 uniform float uVolumeSteps;
 uniform vec2 uFlow;
-uniform float uCompare; // material family 0..4, ribbon width 0.3..2
+uniform float uCompare; // R171/R172.1 magnetic A/B
+uniform float uDepthRefine; // R174 optics A/B, not a JSON setting
 float hash3(vec3 v){v=fract(v*.1031);v+=dot(v,v.yzx+33.33);return fract((v.x+v.y)*v.z);}
 float noise3(vec3 p){
  vec3 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
@@ -413,12 +427,20 @@ void main(){
     // Shell-free emission: only flow currents and nucleus contribute to optical density.
     float density=(currents*.43*emission+
                    core*.69+coreHalo*.11)*interior;
-    float absorption=clamp(density*stride*5.2,0.,.49);
+    // R174: quality pass inside the SAME ray, emphasizing near filaments
+    // and cutting near/far optical crowding without a shell or new GPU pass.
+    float frontLayer=.27+1.13*smoothstep(-.72,.80,q.z/max(radius,.01));
+    float filamentPeak=smoothstep(.30,1.45,currents);
+    float refinedDensity=(currents*(.16+.34*filamentPeak)*emission
+                          *frontLayer+core*.69+coreHalo*.11)*interior;
+    float absorption=clamp(mix(density,refinedDensity,uDepthRefine)*stride*5.2,0.,.49);
     vec3 blue=mix(uDeep*.65,uViolet*.69,clamp(distance3D*.72+broad*.42,0.,1.));
     float violetBand=.5+.5*sin(angle*3.0+q.z*4.0+broad*2.2);
     vec3 ion=mix(uCyan,uViolet,clamp(.12+.72*violetBand,0.,1.));
     vec3 filamentColor=mix(blue,ion,clamp(currents*.83+.11,0.,1.));
+    float refinedRadianceScale=(.34+1.05*filamentPeak)*frontLayer;
     vec3 radiance=filamentColor*(.50+currents*1.30)
+                  *mix(1.,refinedRadianceScale,uDepthRefine)
                   +uCyan*coreHalo*.50
                   +uCore*core*pow(max(uShape.w,0.),1.35)*2.4;
     accum+=trans*radiance*absorption;
@@ -478,7 +500,7 @@ void main(){
  }
  gl.deleteShader(vert);gl.deleteShader(frag);
  const A=gl.getAttribLocation(program,'aPosition'),S=gl.getAttribLocation(program,'aSeed');
- const keys=['uResolution','uTime','uPass','uLayer','uTilt','uControls','uShape','uEffects','uCore','uCyan','uViolet','uDeep','uVolumeSteps','uFlow','uCompare'];
+ const keys=['uResolution','uTime','uPass','uLayer','uTilt','uControls','uShape','uEffects','uCore','uCyan','uViolet','uDeep','uVolumeSteps','uFlow','uCompare','uDepthRefine'];
  const U=Object.fromEntries(keys.map(k=>[k,gl.getUniformLocation(program,k)]));
  if(A<0||S<0||keys.some(k=>U[k]===null)){status(mainStatus,'GPU : paramètres incomplets.');return;}
  const quad=gl.createBuffer(),seeds=gl.createBuffer();if(!quad||!seeds)return;
@@ -519,6 +541,7 @@ void main(){
   gl.uniform1f(U.uVolumeSteps,mobile?14:22);
   gl.uniform2f(U.uFlow,sel('flowType'),num('flowStructure'));
   gl.uniform1f(U.uCompare,compareVariant);
+  gl.uniform1f(U.uDepthRefine,depthVariant);
   gl.uniform4fv(U.uControls,new Float32Array([
     preset,num('particleIntensity'),num('particleSpeed'),num('particleDensity')
   ]));

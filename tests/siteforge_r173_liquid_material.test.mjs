@@ -24,7 +24,7 @@ test('R173: sixth genuine liquid material without changing other five material b
  assert.doesNotMatch(material,/gl\.create|gl\.draw|texture2D|sampler2D/);
 });
 test('R173: direct demo and button, preserve magnetic A/B and its behavior',()=>{
- assert.match(html,/R173.1 · LIQUIDE SPHÉRIQUE/);
+ assert.match(html,/R174 · RELIEF VOLUMÉTRIQUE/);
  assert.match(html,/data-liquid-demo/);
  assert.match(html,/data-magnetic-compare-hint hidden/);
  assert.match(js,/compareHint.hidden=sel\('flowType'\)!==1/);

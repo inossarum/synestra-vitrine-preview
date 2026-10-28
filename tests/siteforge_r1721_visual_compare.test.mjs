@@ -18,7 +18,7 @@ test('R172.1 substantial braided volume contrast versus exact R171 magnetic base
  assert.match(lab,/gl\.uniform1f\(U\.uCompare,compareVariant\);/);
 });
 test('R172.1 immediately accessible comparison and reproducible magnetic demo',()=>{
- assert.match(html,/R173.1 · LIQUIDE SPHÉRIQUE/);
+ assert.match(html,/R174 · RELIEF VOLUMÉTRIQUE/);
  assert.match(html,/data-magnetic-compare="r171"/);
  assert.match(html,/data-magnetic-compare="r172"/);
  assert.match(html,/data-magnetic-demo/);
