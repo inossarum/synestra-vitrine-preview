@@ -692,12 +692,12 @@ void main(){
     // The underlying orb volume, nucleus and soft halo retain their original colors.
     vec3 baseVolumeColor=mix(blue,ion,clamp(currents*.83+.11,0.,1.));
     float flowPhase=.5+.5*sin(angle*3.7+q.z*2.6+t*.18);
-    vec3 darkStream=mix(uFlowDeep,uFlowViolet,clamp(.18+.64*flowPhase,0.,1.));
-    vec3 neonStream=mix(uFlowCyan,uFlowGreen,clamp(.25+.5*violetBand,0.,1.));
-    vec3 flowInk=mix(darkStream,neonStream,clamp(.44+.43*filamentPeak,0.,1.));
-    flowInk=mix(flowInk,uFlowAccent,clamp(.08+.18*(1.-flowPhase),0.,.3));
-    flowInk=mix(flowInk,uFlowSilver,clamp(.08+.19*filamentPeak,0.,.3));
-    float flowIsolation=smoothstep(.11,.65,currents)*clamp(.18+.82*filamentPeak,0.,1.);
+    vec3 darkStream=mix(uFlowViolet,uFlowAccent,clamp(.20+.24*flowPhase,0.,1.));
+    vec3 neonStream=mix(uFlowCyan,uFlowGreen,clamp(.18+.62*violetBand,0.,1.));
+    vec3 flowInk=mix(darkStream,neonStream,clamp(.12+.73*flowPhase,0.,1.));
+    flowInk=mix(flowInk,uFlowDeep,.045);
+    flowInk=mix(flowInk,uFlowSilver,.045+.045*filamentPeak);
+    float flowIsolation=smoothstep(.02,.32,currents)*clamp(.65+.35*filamentPeak,0.,1.);
     vec3 filamentColor=mix(baseVolumeColor,flowInk,flowIsolation);
     float refinedRadianceScale=(.34+1.05*filamentPeak)*frontLayer;
     vec3 radiance=filamentColor*(.50+currents*1.30)
