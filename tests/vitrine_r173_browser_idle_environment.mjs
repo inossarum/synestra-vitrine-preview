@@ -43,6 +43,14 @@ for(const vw of [1280,390,320]){
  const introExpr=`JSON.stringify((()=>{const stage=document.querySelector('.hero-v2>.system-stage'),copy=document.querySelector('.hero-v2>.hero-copy'),title=document.querySelector('#hero-title'),canvas=stage.querySelector('canvas'),room=stage.querySelector('.syn-r169-room'),links=stage.querySelector('.core-r108-links'),button=stage.querySelector('.r183-enter-studio'),r=e=>e.getBoundingClientRect(),st=r(stage),cp=r(copy),bt=r(button);return {stageTop:st.top,stageBottom:st.bottom,stageHeight:st.height,stageWidth:st.width,copyTop:cp.top,titleTop:r(title).top,canvasTransform:getComputedStyle(canvas).transform,canvasOpacity:getComputedStyle(canvas).opacity,ready:stage.dataset.coreReady,roomDisplay:getComputedStyle(room).display,linksDisplay:getComputedStyle(links).display,buttonVisible:bt.height>=44&&bt.width>=150,buttonHref:button.getAttribute('href'),canvasCount:document.querySelectorAll('canvas').length,scrollWidth:document.documentElement.scrollWidth,viewport:innerWidth}})())`;
  const intro=JSON.parse((await send('Runtime.evaluate',{expression:introExpr,returnByValue:true})).result.value);
 
+ // R188: actual browser transform is the ground truth for orb distance.
+ const screenScale=Number(intro.canvasTransform.match(/^matrix\(([^,]+)/)?.[1]??NaN);
+ const expectedScale=vw<=720?.88:.65;
+ if(!Number.isFinite(screenScale)||Math.abs(screenScale-expectedScale)>.015)
+   throw Error('R188_CAMERA_DISTANCE_FAIL_'+vw+' expected '+expectedScale+' actual '+screenScale);
+ console.log('R188_ORB_DISTANCE_'+vw+'=PASS '+JSON.stringify({expectedScale,screenScale,stageWidth:intro.stageWidth,viewport:vw}));
+
+
  const labExpr=`JSON.stringify((()=>{const st=document.querySelector('[data-lab-engine="R182"]');const canvas=st?.querySelector('canvas');const floor=st?.querySelector('.r185-floor-plane');return {engine:st?.dataset.labEngine,motes:st?.dataset.moteCount,spin:st?.dataset.syncedSpinPhase,bufferW:canvas?.width,bufferH:canvas?.height,floor:floor&&getComputedStyle(floor,'::before').backgroundImage,orbit:st?.dataset.orbitYaw}})())`;
  const lab=JSON.parse((await send('Runtime.evaluate',{expression:labExpr,returnByValue:true})).result.value);
  if(lab.engine!=='R182'||lab.motes!=='0'||!Number.isFinite(Number(lab.spin))||!(lab.bufferW>100&&lab.bufferH>100)||!lab.floor?.includes('radial-gradient')||(vw<=700&&lab.bufferH/lab.bufferW>1.2))throw Error('R185_LAB182_RENDER_FAIL_'+vw+' '+JSON.stringify(lab));
