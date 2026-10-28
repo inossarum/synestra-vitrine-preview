@@ -168,3 +168,29 @@ body>header,body>main,body>footer{position:relative;z-index:1}
 .syn-ambient-paused .syn-ambient-field *,.syn-ambient-paused .syn-ambient-field:before,.syn-ambient-paused .syn-ambient-field:after{animation-play-state:paused!important}
 @media(max-width:640px){.syn-ambient-field:before,.syn-ambient-field:after{width:95vw;height:36vh;opacity:.16}}
 @media(prefers-reduced-motion:reduce){.syn-ambient-field{display:none!important}}
+
+
+/* R170 unified visual palette — Studio approved transparent master ff08dcf6… */
+:root{--ink:#080e1a;--panel:#111d30;--panel-raised:#17253a;--line:#354966;
+ --text:#eef4ff;--muted:#b9c9e1;--quiet:#a8bad5;--cyan:#86e0f0;--teal:#42cb93;
+ --violet:#a68af5;--silver:#eef4ff;--studio-blue:#659cfa;--studio-action-ink:#071523;}
+.logo img {width:clamp(210px,24vw,286px);height:auto;max-height:82px;object-fit:contain;object-position:left center;animation:r170-logo-drift 11s ease-in-out infinite;}
+.site-nav a:hover,.site-nav a[aria-current=page],.accent,.section-heading .accent {color:var(--cyan);}
+.topbar{isolation:isolate;position:relative}
+.topbar::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;pointer-events:none;
+ background:linear-gradient(90deg,var(--violet),var(--studio-blue) 45%,var(--cyan) 90%,var(--teal));
+ background-size:220% 100%;animation:r170-spectrum-travel 17s linear infinite;}
+body{background-position:60% 50%;background-size:115% 115%;animation:r170-backdrop-sway 35s ease-in-out infinite alternate;}
+.eyebrow{border-color:rgba(166,138,245,.45)}
+.primary,.nav-action,.cta.primary{background:linear-gradient(115deg,var(--studio-blue),var(--cyan));
+ color:var(--studio-action-ink);border-color:var(--studio-blue);}
+.visual{animation:r170-visual-breathe 16s ease-in-out infinite;transform-origin:center}
+.tile,.offer {transition:border-color .35s ease,box-shadow .35s ease}
+.tile:hover,.offer:hover {border-color:var(--violet);box-shadow:0 18px 45px rgba(70,76,173,.13)}
+@keyframes r170-logo-drift{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-3px,0)}}
+@keyframes r170-spectrum-travel{0%{background-position:0% 50%}100%{background-position:220% 50%}}
+@keyframes r170-backdrop-sway{0%{background-position:35% 45%}100%{background-position:65% 60%}}
+@keyframes r170-visual-breathe{0%,100%{filter:brightness(1)}50%{filter:brightness(1.07)}}
+@media(prefers-reduced-motion:reduce){
+ .logo img,.topbar::after,body,.visual{animation:none!important;transition:none!important;filter:none!important;transform:none!important;}
+}
