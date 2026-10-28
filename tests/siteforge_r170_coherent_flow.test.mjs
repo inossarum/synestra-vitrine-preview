@@ -32,5 +32,5 @@ test('R170: only one WebGL draw engine and 5 material families preserved',()=>{
  assert.equal((shader.match(/gl\.createProgram\(\)/g)||[]).length,1);
  assert.match(shader,/gl\.drawArrays\(gl\.TRIANGLES,0,6\)/);
  for(const x of ["}else if(uFlow.x<1.5){","}else if(uFlow.x<2.5){","}else if(uFlow.x<3.5){"])assert.ok(shader.includes(x));
- assert.match(html,/R172.1 · COMPARER/);
+ assert.match(html,/R173.1 · LIQUIDE SPHÉRIQUE/);
 });

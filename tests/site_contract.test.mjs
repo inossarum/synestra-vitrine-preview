@@ -13,6 +13,8 @@ import './siteforge_r170_coherent_flow.test.mjs'; // R170 zero-speed freeze and 
 import './siteforge_r171_orbit_clock.test.mjs'; // R171 interactive 3D orbit and time continuity.
 import './siteforge_r172_magnetic_depth.test.mjs'; // R172 preserve approved magnetic sphere while adding subtle depth filaments.
 import './siteforge_r1721_visual_compare.test.mjs'; // R172.1 A/B native comparison of materially stronger magnetic ribbons.
+import './siteforge_r173_liquid_material.test.mjs'; // R173 separate liquid-energy family + R172.1 magnetic baseline.
+import './siteforge_r1731_spherical_liquid.test.mjs'; // R173.1 four-arm spherical liquid, regression against detached ribbons.
 import './siteforge_r132_r116_clean_lab.test.mjs'; // R116 provenance and isolation.
 import './siteforge_r136_mobile_sticky_preview.test.mjs'; // Mobile sticky continuity.
 

@@ -1,4 +1,4 @@
-/* SiteForge LAB R172.1 (isolated from the approved Synestra vitrine) — replaceable 3D volume flow materials on ONE WebGL renderer: luminous central core, sweeping cyan-violet vortex arms and depth-resolved energy. Existing WebGL emitter retained; 18 controls total.
+/* SiteForge LAB R173 (isolated from the approved Synestra vitrine) — replaceable 3D volume flow materials on ONE WebGL renderer: luminous central core, sweeping cyan-violet vortex arms and depth-resolved energy. Existing WebGL emitter retained; 18 controls total.
  * One GPU VFX program: quad volumetric plasma + particle shell, branching arcs, nucleus.
  * Historical marble shader, old arcs and their settings are REMOVED.
  * WebGL1, iPhone precision parity, mobile bounded particles, no network.
@@ -22,14 +22,23 @@
  // Visual comparison is a lab-only display mode, NOT a 19th JSON setting.
  let compareVariant=1;
  const compareGroup=document.querySelector('[data-magnetic-compare-group]');
+ const compareHint=document.querySelector('[data-magnetic-compare-hint]');
  const compareButtons=[...document.querySelectorAll('[data-magnetic-compare]')];
  const syncCompareUI=()=>{
   if(compareGroup)compareGroup.hidden=sel('flowType')!==1;
+  if(compareHint)compareHint.hidden=sel('flowType')!==1;
   for(const button of compareButtons)button.setAttribute('aria-pressed',String((button.dataset.magneticCompare==='r172'?1:0)===compareVariant));
   stage.dataset.magneticVariant=compareVariant?'r172':'r171';
  };
  const applyDemo=()=>{
   for(const [key,value] of [['flowType','1'],['particleIntensity','200'],['coreLight','211'],['flowStructure','166']]){
+   if(controls[key])controls[key].value=value;
+  }
+  compareVariant=1;sync();schedule();
+ };
+ // R173 is a distinct material family, not an overlay or hidden JSON field.
+ const applyLiquidDemo=()=>{
+  for(const [key,value] of [['flowType','5'],['particleIntensity','160'],['coreLight','180'],['flowStructure','140'],['particleSpeed','100']]){
    if(controls[key])controls[key].value=value;
   }
   compareVariant=1;sync();schedule();
@@ -55,6 +64,7 @@
   const toggle=event.target.closest('[data-magnetic-compare]');
   if(toggle){compareVariant=toggle.dataset.magneticCompare==='r172'?1:0;syncCompareUI();schedule();}
   if(event.target.closest('[data-magnetic-demo]'))applyDemo();
+  if(event.target.closest('[data-liquid-demo]'))applyLiquidDemo();
  });
 
  panel?.addEventListener('reset',e=>{
@@ -62,7 +72,9 @@
   compareVariant=1;sync();schedule();
  });
  sync();
- if(new URLSearchParams(window.location.search).toString().includes('demo=magnetic'))applyDemo();
+ const launchDemo=new URLSearchParams(window.location.search).get('demo');
+ if(launchDemo==='magnetic')applyDemo();
+ if(launchDemo==='liquid')applyLiquidDemo();
  // Export uses the actual live controls, not startup defaults or GPU uniforms.
  // This stays available when reduced motion is enabled or WebGL is unavailable.
  const exportButton=document.querySelector('[data-export-json]');
@@ -353,13 +365,47 @@ void main(){
       float swirls=.5+.5*cos(q.z*5.+planar*4.-t*.22+depthWarp*2.);
       flowCurrents=densityCloud*(.28+.28*swirls);
       flowFog=1.55+.55*ribbonWidth;
-    }else{
-      // Fusion jets: eight radial stellar emission cones with local ripples.
+    }else if(uFlow.x<4.5){
+      // Fusion jets retained bit-for-bit from R172.1.
       float radialPhase=angle*8.+q.z*3.4+depthWarp*2.3-t*.42;
       float jets=pow(max(0.,.5+.5*cos(radialPhase)),max(2.,9./ribbonWidth));
       float outward=smoothstep(.08,.36,planar)*exp(-distance3D*1.2);
       flowCurrents=jets*(.50+.86*outward);
       flowFog=.40;
+    }else{
+      // R173.1: spherical, coherent liquid field. Four broad currents form
+      // a 360-degree sphere instead of the earlier single detached sheet.
+      // Integer angular harmonics remain seamless across atan +/-PI.
+      float liquidFlowAngle=angle*4.+q.z*5.3
+           +2.18*sin(planar*7.2+q.y*1.7-t*.30)
+           +.92*sin(q.x*4.0-q.z*3.2-t*.24)
+           +.63*cos(q.y*4.4+q.z*2.7+t*.28);
+      float liquidPhase=liquidFlowAngle;
+      float liquidMain=pow(max(0.,.5+.5*cos(liquidPhase)),
+                            max(2.6,5.6/ribbonWidth));
+      float liquidSheet=liquidMain;
+      float liquidCurl=angle*8.+q.z*8.5-t*.34
+           +2.1*sin(planar*8.5-q.y*2.4+t*.24)
+           +.45*sin(q.x*3.7+q.z*3.8);
+      float curlingWake=pow(max(0.,.5+.5*cos(liquidCurl)),
+                             max(6.,13./ribbonWidth));
+      float liquidCrest=pow(max(0.,.5+.5*cos(liquidPhase+.48
+                             +.40*sin(q.z*3.5-t*.27))),
+                             max(5.,12./ribbonWidth));
+      float liquidEdge=liquidCrest;
+      float liquidTributary=pow(max(0.,.5+.5*cos(angle*12.
+               +q.z*10.0+2.0*sin(planar*8.5+t*.15)-t*.25)),
+               max(9.,23./ribbonWidth));
+      float liquidRim=liquidTributary;
+      float depthSeparation=.70+.30*smoothstep(-.75,.75,q.z/max(radius,.01));
+      float depthTide=depthSeparation;
+      float travellingCrest=.83+.17*sin(planar*8.5-q.z*2.2+t*.53);
+      float centreBridge=.78+.22*(1.-smoothstep(.12,.49,planar));
+      flowCurrents=(liquidMain*(.60+.34*curlingWake)
+                 +liquidCrest*.46*liquidMain
+                 +liquidTributary*.24*liquidMain)
+                 *depthTide*travellingCrest*centreBridge*2.12;
+      flowFog=.36;
     }
     float currents=0.;
     currents=flowCurrents;

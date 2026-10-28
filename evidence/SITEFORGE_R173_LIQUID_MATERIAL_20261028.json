@@ -1,0 +1,123 @@
+{
+  "schema": "synestra.siteforge.r173.liquid_material.v1",
+  "date": "2026-10-28",
+  "mission_id": "SYN_SITEFORGE_R173_LIQUID_ENERGY_MATERIAL_20261028",
+  "source": {
+    "repo": "inossarum/synestra-vitrine-preview",
+    "parent_sha": "7634cffef42346d0b5ef0d143f24ad73fcf75c1c",
+    "branch": "task/SYN_SITEFORGE_R116_CLEAN_LAB_20261027"
+  },
+  "owner_intent": "After confirming the R172.1 magnetic before/after difference, continue developing the SiteForge 3D laboratory; never modify approved vitrine.",
+  "delivery": {
+    "new_material_index": 5,
+    "name": "Courants liquides",
+    "type": "volumetric flowing fluid membranes and travelling crests",
+    "previous_families": 5,
+    "total_families": 6,
+    "shader_file": "assets/siteforge-lab-r166-flow.js",
+    "preview": "siteforge/core-3d-lab/index.html?demo=liquid",
+    "preset": {
+      "flowType": 5,
+      "particleIntensity": 160,
+      "coreLight": 180,
+      "flowStructure": 140,
+      "particleSpeed": 100
+    },
+    "unique_gpu_programs": 1,
+    "json_fields": 18,
+    "magnetic_compare_preserved": true,
+    "add_extra_particles": false,
+    "add_shell": false
+  },
+  "visual_iterations": [
+    {
+      "attempt": 1,
+      "observation": "oversoft amorphous glow, insufficient liquid structure",
+      "state": "REJECTED"
+    },
+    {
+      "attempt": 2,
+      "observation": "sharpened flow, but rapid Z oscillations averaged in ray marching",
+      "state": "REJECTED"
+    },
+    {
+      "attempt": 3,
+      "observation": "depth-coherent liquid sheets, distinct continuous wave crest and cleaner gaps",
+      "state": "PROPOSED"
+    }
+  ],
+  "tests": {
+    "node": {
+      "cmd": "node --test tests/site_contract.test.mjs",
+      "pass": 88,
+      "total": 88,
+      "fail": 0
+    },
+    "browser": {
+      "runner": "tests/siteforge_r173_live_material_qa.mjs",
+      "status": "PASS",
+      "engine": "Chrome headless ANGLE SwiftShader",
+      "six_materials_pass": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "gl_error": 0,
+      "canvas_count": 1,
+      "controls": 18,
+      "liquid_preset_verified": true,
+      "magnetic_ab_pass": true,
+      "magnetic_png_size_ratio": 0.09950318382198586,
+      "magnetic_ratio_note": "compressed PNG size difference, not percent of pixels",
+      "pause_frames_identical": true,
+      "resumed_frames_different": true,
+      "mouse_orbit": true,
+      "touch_orbit": true,
+      "keyboard_home_reset": true,
+      "desktop_canvas": [
+        591,
+        518
+      ],
+      "mobile_viewport": 390,
+      "mobile_canvas": [
+        364,
+        285
+      ],
+      "mobile_body_width": 390
+    },
+    "captures": [
+      "r173-liquid-before.png",
+      "r173-liquid-desktop.png",
+      "r173-browser-desktop.png",
+      "r173-browser-desktop-later.png",
+      "r173-browser-orbited.png",
+      "r173-browser-mobile.png",
+      "r173-browser-paused.png",
+      "r173-magnetic-before-crop.png",
+      "r173-magnetic-after-crop.png",
+      "r173-magnetic-candidate.png"
+    ],
+    "limitations": {
+      "real_gpu_fps": "NOT_MEASURED",
+      "user_visual_approval": "PENDING",
+      "cloudflare_deployment": "NOT_ATTEMPTED",
+      "final_PBR_material": "NOT_APPLICABLE: PROCEDURAL ENERGY NOT PBR",
+      "visual_exact_user_reference": "magnetic R172.1 stays available, no user-approved liquid material yet"
+    }
+  },
+  "protected": {
+    "homepage_git_blob": "1413e30138ba1657f7056401818e697ddbd32ac8",
+    "approved_webgl_engine_git_blob": "dd63d75fdb966de2052595c95b7b6cb736d6c7cc",
+    "main_untouched": true,
+    "production_untouched": true,
+    "free_only": true
+  },
+  "rollback": {
+    "base_sha": "7634cffef42346d0b5ef0d143f24ad73fcf75c1c",
+    "method": "revert R173 lab-only changes, keep approved vitrine"
+  },
+  "status": "LOCAL_VERIFIED_PENDING_GITHUB"
+}

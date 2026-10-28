@@ -1,0 +1,37 @@
+{
+  "schema": "synestra.siteforge.r1731.spherical_liquid.evidence.v1",
+  "date": "2026-10-28",
+  "mission_id": "SYN_SITEFORGE_R1731_SPHERICAL_LIQUID_REPAIR_20261028",
+  "user_feedback": "R173 screenshot shows a single disconnected wave and fragment, not a sphere",
+  "parent_commit": "f0ba722f235cbd4a1a32e1018672e8d2f366118a",
+  "branch": "task/SYN_SITEFORGE_R1731_SPHERICAL_LIQUID_20261028",
+  "defect": "Previous field strongly dominated by q.y and a weak depth phase; only one fluid wave was visible.",
+  "discarded_attempt": "First spherical angular correction produced a too-symmetrical four-blade pinwheel (not accepted).",
+  "accepted_for_review": "Second field uses angle*4 with smooth curved XYZ phase, depth separation and core-attached crests; Chrome screenshot displays a coherent spherical energy structure.",
+  "changes": [
+    "material 5 only",
+    "UI title and demo label",
+    "R173.1 structural and browser QA"
+  ],
+  "evidence_files": [
+    "r173-liquid-desktop.png",
+    "r1731-liquid-desktop.png",
+    "r1731-browser-desktop.png",
+    "r1731-browser-mobile.png"
+  ],
+  "tests": {
+    "node": "90/90 PASS",
+    "browser": "Chrome WebGL 6/6 PASS; getError=0; one canvas; 18 controls; mouse/touch/keyboard; pause and resume; mobile 390px PASS"
+  },
+  "immutable": {
+    "homepage": "1413e30138ba1657f7056401818e697ddbd32ac8",
+    "engine": "dd63d75fdb966de2052595c95b7b6cb736d6c7cc"
+  },
+  "release": {
+    "git_local": "PENDING COMMIT",
+    "github": "NOT PUBLISHED - prior GitHub create_blob POLICY_DENIED",
+    "cloudflare": "NOT DEPLOYED",
+    "aesthetic": "PENDING OWNER"
+  },
+  "rollback": "restore R173 parent f0ba722f235cbd4a1a32e1018672e8d2f366118a"
+}

@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex,nofollow">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
-<title>SiteForge — Core énergétique 3D R163</title>
+<title>SiteForge — Laboratoire énergétique 3D R173.1</title>
 <style>
 :root{color-scheme:dark;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#050a14;color:#e7f4ff}
 *{box-sizing:border-box}
@@ -57,7 +57,7 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 @media(prefers-reduced-motion:reduce){.core-r109-canvas,.core-r108-art{transition:none!important}}
 .vfx-advanced{grid-column:1/-1;border-top:1px solid #335a76;margin-top:10px;padding-top:8px}.vfx-advanced summary{cursor:pointer;min-height:42px;padding:10px 6px;color:#bfeeff;font-weight:600;list-style-position:inside}.vfx-advanced[open] summary{margin-bottom:12px}.vfx-advanced .control-group{margin:10px 0 16px}.vfx-advanced summary:focus-visible{outline:2px solid #7ce8fa;outline-offset:3px}
 [data-vfx-status]{background:#10283b;border:1px solid #315574;border-radius:9px;padding:9px 12px;color:#bfe9f9;font-weight:600;min-height:42px;display:flex;align-items:center}
-.magnetic-compare{display:flex;gap:10px;margin-top:13px}.magnetic-compare[hidden]{display:none}.magnetic-compare button{flex:1;min-width:0;padding:11px 9px;border:1px solid #3b6281;border-radius:9px;background:#102339;color:#d4e9fc;cursor:pointer}.magnetic-compare button[aria-pressed=true]{background:#15536a;color:#f3ffff;border-color:#68dcb4;box-shadow:inset 0 0 0 1px #69dcb4}.magnetic-demo{margin-top:10px;width:100%;cursor:pointer}.magnetic-compare button:focus-visible,.magnetic-demo:focus-visible{outline:2px solid #69dcb4;outline-offset:2px}
+.magnetic-compare{display:flex;gap:10px;margin-top:13px}.magnetic-compare[hidden]{display:none}.magnetic-compare button{flex:1;min-width:0;padding:11px 9px;border:1px solid #3b6281;border-radius:9px;background:#102339;color:#d4e9fc;cursor:pointer}.magnetic-compare button[aria-pressed=true]{background:#15536a;color:#f3ffff;border-color:#68dcb4;box-shadow:inset 0 0 0 1px #69dcb4}.magnetic-demo{margin-top:10px;width:100%;cursor:pointer}.liquid-demo{margin-top:8px;width:100%;background:#213652;border-color:#6d82ab}.magnetic-compare button:focus-visible,.magnetic-demo:focus-visible{outline:2px solid #69dcb4;outline-offset:2px}
 </style>
 </head>
 <body>
@@ -84,18 +84,19 @@ input[type=color]{width:100%;height:43px;padding:4px;border:1px solid #3c5d7c;bo
 </svg>
 </div>
 <form class="lab-controls" aria-label="Création de la nouvelle sphère plasma VFX" autocomplete="off">
-<div class="panel-head"><h2>Plasma Studio</h2><span class="preview-state">R172.1 · COMPARER</span></div>
-<p class="help">R172 expérimental : rubans magnétiques plus profonds et légèrement tressés, sans changer leur silhouette. Glisser pour orbiter, flèches ou Home pour orienter. Pause à 0 % et export JSON conservés. Vitrine inchangée.</p>
+<div class="panel-head"><h2>Plasma Studio</h2><span class="preview-state">R173.1 · LIQUIDE SPHÉRIQUE</span></div>
+<p class="help">R173.1 : six matériaux 3D. Courants liquides désormais structurés autour du noyau en plusieurs flux sphériques, sans vague isolée. Comparateur magnétique R171/R172.1 conservé. Vitrine inchangée.</p>
 <fieldset class="control-group"><legend>✨ Création rapide</legend>
 <div class="control-row"><label class="control-label" for="sf-flowType"><span>Énergie qui traverse la sphère</span><output for="sf-flowType" data-sphere-value="flowType">Flux plasma</output></label>
-<select id="sf-flowType" data-sphere-control="flowType" data-default="0"><option value="0">Flux plasma</option><option value="1">Rubans magnétiques</option><option value="2">Voiles d’aurore</option><option value="3">Brume ionique</option><option value="4">Jets de fusion</option></select></div>
+<select id="sf-flowType" data-sphere-control="flowType" data-default="0"><option value="0">Flux plasma</option><option value="1">Rubans magnétiques</option><option value="2">Voiles d’aurore</option><option value="3">Brume ionique</option><option value="4">Jets de fusion</option><option value="5">Courants liquides</option></select></div>
 <p class="help">Le noyau, les couleurs et le volume restent indépendants du matériau énergétique choisi.</p>
 <div data-magnetic-compare-group class="magnetic-compare" aria-label="Comparer les rubans magnétiques R171 et R172.1">
 <button type="button" data-magnetic-compare="r171" aria-pressed="false">Avant · R171</button>
 <button type="button" data-magnetic-compare="r172" aria-pressed="true">Après · R172.1</button>
 </div>
 <button type="button" class="reset magnetic-demo" data-magnetic-demo>Afficher la démonstration magnétique (200 / 211 / 166 %)</button>
-<p class="help">Cliquez sur Avant / Après pour voir les différences sur la même sphère, à réglages et angle de caméra identiques.</p>
+<button type="button" class="reset liquid-demo" data-liquid-demo>Découvrir les courants liquides sphériques (R173.1)</button>
+<p class="help" data-magnetic-compare-hint hidden>Cliquez sur Avant / Après pour voir les différences sur la même sphère, à réglages et angle de caméra identiques.</p>
 
 <input id="sf-particlePreset" type="hidden" data-sphere-control="particlePreset" data-default="4" value="4">
 <p class="help">Flux pur, sans surcouche de particules. Le matériau énergétique sélectionné reste seul maître du rendu 3D.</p>
