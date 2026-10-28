@@ -2695,6 +2695,59 @@ body .hero-v2>.system-stage .core-r108-top{
  body .hero-v2>.system-stage.core-r109-stage .core-r109-canvas{transition:none!important}
 }
 
+
+/* R185 — SiteForge R182: spatial plasma orb over a restrained receiving floor.
+ * Floor uses CSS gradients only, driven by a low-frequency illumination pulse;
+ * single canonical WebGL renderer from SiteForge R182, no second canvas. */
+body .hero-v2>.system-stage.core-r109-stage{
+ background:
+  radial-gradient(ellipse 30% 28% at 50% 54%,rgba(45,39,88,.12),transparent 93%),
+  linear-gradient(180deg,#050913 0%,#070d1b 57%,#0e1425 100%)!important;
+}
+body .hero-v2>.system-stage .r185-floor-plane{
+ pointer-events:none;position:absolute;inset:55% 0 0;z-index:1;isolation:isolate;
+ background:linear-gradient(180deg,transparent 0%,rgba(17,23,44,.25) 40%,rgba(12,17,34,.86) 100%);
+}
+body .hero-v2>.system-stage .r185-floor-plane::before{
+ content:"";pointer-events:none;position:absolute;inset:0;
+ background:
+   radial-gradient(ellipse 29% 21% at 50% 64%,
+     rgba(135,235,244,.28) 0%,rgba(133,135,224,.16) 38%,rgba(111,78,175,.065) 65%,transparent 100%),
+   linear-gradient(180deg,transparent 0%,rgba(117,151,205,.045) 44%,rgba(94,69,138,.05) 100%);
+ filter:blur(9px);
+ transform:perspective(720px) rotateX(14deg);
+ transform-origin:center 85%;
+ animation:r185-floor-glow 7.5s ease-in-out infinite alternate;
+}
+body .hero-v2>.system-stage .r185-floor-plane::after{
+ content:"";pointer-events:none;position:absolute;left:11%;right:11%;top:5%;height:1px;
+ background:linear-gradient(90deg,transparent,rgba(157,188,234,.09) 42%,rgba(195,159,255,.12) 53%,transparent);
+}
+@keyframes r185-floor-glow{
+ from{opacity:.68;filter:blur(11px)}
+ to{opacity:1;filter:blur(7px)}
+}
+body .hero-v2>.system-stage.core-r109-stage .core-r109-canvas{
+ z-index:3;width:100%!important;height:100%!important;top:0!important;left:0!important;
+ transform:translate3d(0,-4%,0) scale(.88)!important;
+ transform-origin:center center!important;
+}
+body .hero-v2>.system-stage .core-r108-top{z-index:5}
+body .hero-v2>.system-stage .r183-intro-navigation{z-index:6}
+@media(max-width:720px){
+ body .hero-v2>.system-stage.core-r109-stage .core-r109-canvas{
+  width:100%!important;height:100%!important;top:0!important;left:0!important;
+  transform:translate3d(0,-3%,0) scale(.86)!important;
+ }
+ body .hero-v2>.system-stage .r185-floor-plane{inset:54% 0 0}
+ body .hero-v2>.system-stage .r185-floor-plane::before{
+  background:radial-gradient(ellipse 51% 19% at 50% 68%,rgba(126,223,238,.23),rgba(137,112,202,.12) 56%,transparent 100%);
+ }
+}
+@media(prefers-reduced-motion:reduce){
+ body .hero-v2>.system-stage .r185-floor-plane::before{animation:none!important;opacity:.75;filter:blur(9px)}
+}
+
 </style>
 </head>
 <body>
@@ -2763,7 +2816,7 @@ body .hero-v2>.system-stage .core-r108-top{
         </div>
       </div>
 
-      <div class="system-stage core-r108-stage core-r109-stage" role="group" aria-label="Prototype énergétique Synestra : courants violets et verts autour d'un noyau lumineux, avec trois liens vers les produits.">
+      <div class="system-stage core-r108-stage core-r109-stage" tabindex="0" role="group" data-lab-engine="R182" aria-label="Orbe énergétique 3D interactif : glisser pour l’orienter, utiliser les flèches ou appuyer sur Début pour le recentrer.">
         <div class="core-r108-top"><span>CORE / SYNESTRA</span><span>PROTOTYPE / 01</span></div>
         <svg class="syn-r169-room" viewBox="0 0 800 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
   <defs>
@@ -3220,16 +3273,17 @@ body .hero-v2>.system-stage .core-r108-top{
 <circle cx="550" cy="395" r="2.3" fill="#7a8099"/><circle cx="550" cy="395" r=".8" fill="#121727"/>
 </g>
 </svg>
+        <div class="r185-floor-plane" aria-hidden="true"></div>
         <canvas class="core-r109-canvas" aria-hidden="true" width="960" height="570"></canvas>
         <div class="synestra-core-prototype-controls" hidden aria-hidden="true">
 <input type="hidden" data-sphere-control="flowType" data-default="0" value="0">
 <input type="hidden" data-sphere-control="particlePreset" data-default="4" value="4">
 <input type="hidden" data-sphere-control="particleIntensity" data-default="200" value="200">
-<input type="hidden" data-sphere-control="coreLight" data-default="500" value="500">
+<input type="hidden" data-sphere-control="coreLight" data-default="205" value="205">
 <input type="hidden" data-sphere-control="arcIntensity" data-default="140" value="140">
 <input type="hidden" data-sphere-control="arcDensity" data-default="100" value="100">
 <input type="hidden" data-sphere-control="flowStructure" data-default="94" value="94">
-<input type="hidden" data-sphere-control="diameter" data-default="101" value="101">
+<input type="hidden" data-sphere-control="diameter" data-default="83" value="83">
 <input type="hidden" data-sphere-control="shellVisibility" data-default="0" value="0">
 <input type="hidden" data-sphere-control="coreSize" data-default="73" value="73">
 <input type="hidden" data-sphere-control="particleDensity" data-default="100" value="100">
@@ -3239,7 +3293,17 @@ body .hero-v2>.system-stage .core-r108-top{
 <input type="hidden" data-sphere-control="primary" data-default="#08142e" value="#08142e">
 <input type="hidden" data-sphere-control="secondary" data-default="#53318d" value="#53318d">
 <input type="hidden" data-sphere-control="core" data-default="#eaffff" value="#eaffff">
-<input type="hidden" data-sphere-control="rim" data-default="#69dcb4" value="#69dcb4">
+<input type="hidden" data-sphere-control="rim" data-default="#8ceafa" value="#8ceafa">
+<input type="hidden" data-mote-control="moteShape" data-default="0" value="0">
+<input type="hidden" data-mote-control="moteCount" data-default="0" value="0">
+<input type="hidden" data-mote-control="moteDistance" data-default="10" value="10">
+<input type="hidden" data-mote-control="moteSpread" data-default="31" value="31">
+<input type="hidden" data-mote-control="moteSize" data-default="100" value="100">
+<input type="hidden" data-mote-control="moteBrightness" data-default="100" value="100">
+<input type="hidden" data-mote-control="moteRoughness" data-default="35" value="35">
+<input type="hidden" data-mote-control="moteReflectivity" data-default="95" value="95">
+<input type="hidden" data-mote-control="motePrimary" data-default="#8ceafa" value="#8ceafa">
+<input type="hidden" data-mote-control="moteSecondary" data-default="#bba0f9" value="#bba0f9">
         </div>
         <span data-render-status hidden></span><span data-vfx-status hidden></span>
         <svg class="core-r108-art" viewBox="0 0 640 410" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
@@ -3672,6 +3736,6 @@ body .hero-v2>.system-stage .core-r108-top{
       <span aria-hidden="true">↑</span> Haut de page
     </a>
   </footer>
-<script src="./assets/siteforge-r116-sphere-only.js" defer></script>
+<script src="./assets/siteforge-lab-r182-vitrine.js" defer></script>
 </body>
 </html>
