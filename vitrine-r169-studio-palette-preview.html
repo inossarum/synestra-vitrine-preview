@@ -1919,6 +1919,17 @@ header.site-header nav.site-nav a.nav-cta:active {transform:translateY(0)}
 }
 
 
+/* R178b — focus the reader on substance; progressive native CSS section state. */
+@supports selector(body:has(#plateforme:target)){
+ body:has(#plateforme:target) .r178-wayfinder-link[href="#plateforme"],
+ body:has(#exemples:target) .r178-wayfinder-link[href="#exemples"],
+ body:has(#approche:target) .r178-wayfinder-link[href="#approche"]{
+  border-color:rgba(143,224,246,.86);
+  background:linear-gradient(145deg,rgba(42,66,101,.98),rgba(19,42,67,.98));
+  box-shadow:inset 3px 0 0 rgba(125,224,245,.86),inset 0 1px rgba(244,253,255,.12);
+ }
+}
+.r178-wayfinder + .product-section{padding-top:clamp(2.4rem,4vw,3.5rem)}
 /* R178 / SYNESTRA DESIGN SYSTEM — calibrated glass chrome and semantic wayfinding. */
 :root{
  --r178-ink:#eaf6ff;
