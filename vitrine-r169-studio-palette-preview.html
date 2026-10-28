@@ -2268,6 +2268,144 @@ body .product-card .product-deep-link:focus-visible{
  #plateforme .product-card,#plateforme .product-card:hover,#exemples .example-card,#exemples .example-card:hover{animation:none!important;transition:none!important;transform:none!important}
 }
 
+
+/* R181 / THE SYNESTRA SYSTEMS EXPLORER: a spatial, deep-linkable product console.
+   Native anchors choose the mode, CSS :has is progressive; unsupported browsers see both products. */
+#plateforme .r181-explorer{
+ --r181-mode:#86e4f2;
+ display:grid;grid-template-columns:minmax(220px,260px) minmax(0,1fr);
+ gap:0;isolation:isolate;
+ border:1px solid rgba(128,168,206,.45);
+ border-radius:clamp(1rem,2vw,1.6rem);
+ overflow:hidden;background:#0a1426;
+ box-shadow:0 32px 85px rgba(1,5,19,.36),inset 0 1px rgba(233,245,255,.07);
+}
+#plateforme .r181-console-rail{
+ display:flex;flex-direction:column;gap:0;min-width:0;
+ padding:clamp(1.15rem,2.6vw,2rem) clamp(1rem,2.4vw,1.7rem);
+ border-right:1px solid rgba(126,165,205,.32);
+ background:linear-gradient(165deg,#14233d,#0b172b 70%,#111b37);
+}
+#plateforme .r181-console-heading{display:flex;align-items:center;gap:.55rem;color:#9fc8e0;font:700 .61rem/1.6 ui-monospace,Consolas,monospace;letter-spacing:.08em}
+#plateforme .r181-console-led{width:7px;height:7px;flex:none;border-radius:50%;background:#8bead6;box-shadow:0 0 0 4px rgba(88,205,205,.12)}
+#plateforme .r181-console-title{margin:clamp(2.2rem,4vw,3.4rem) 0 .9rem;font-weight:800;font-size:clamp(1.55rem,2.35vw,2.2rem);line-height:1.12;letter-spacing:-.058em;color:#f0f8ff}
+#plateforme .r181-console-desc{margin:0;color:#a8bed5;font-size:.83rem;line-height:1.78}
+#plateforme .r181-console-switcher{display:grid;gap:0;margin:clamp(2.1rem,4vw,3.5rem) 0 2rem;border-top:1px solid rgba(137,180,211,.32)}
+#plateforme .r181-console-choice{
+ position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:.27rem;
+ padding:1.22rem 1.1rem 1.25rem .65rem;min-height:110px;
+ border-bottom:1px solid rgba(137,180,211,.28);color:#d9e6f4;
+ text-decoration:none;transition:background-color .23s ease,color .23s ease,padding-left .23s ease;
+}
+#plateforme .r181-console-choice:hover{background:rgba(78,145,196,.12);padding-left:.95rem}
+#plateforme .r181-console-choice:focus-visible{outline:3px solid #9eefff;outline-offset:-3px}
+#plateforme .r181-choice-num{font:700 .63rem/1.5 ui-monospace,Consolas,monospace;letter-spacing:.1em;color:#92b9d6}
+#plateforme .r181-console-choice strong{font-size:clamp(1.5rem,2.2vw,1.85rem);line-height:1.1;letter-spacing:-.04em}
+#plateforme .r181-console-choice small{font-size:.72rem;line-height:1.45;color:#a5b7cb}
+#plateforme .r181-choice-arrow{position:absolute;top:1.36rem;right:.6rem;color:#87e0ef}
+#plateforme .r181-console-note{margin:auto 0 0;color:#839ebc;font:600 .64rem/1.85 ui-monospace,Consolas,monospace;letter-spacing:.06em}
+#plateforme .r181-console-viewport{
+ position:relative;min-width:0;overflow:hidden;
+ background:radial-gradient(ellipse at 48% 35%,rgba(60,90,151,.18),transparent 65%),#081326;
+}
+#plateforme .r181-console-viewport::before{
+ content:"";position:absolute;z-index:0;pointer-events:none;inset:0;
+ background:linear-gradient(rgba(131,168,220,.04) 1px,transparent 1px),
+ linear-gradient(90deg,rgba(131,168,220,.04) 1px,transparent 1px);
+ background-size:44px 44px;opacity:.55;
+}
+#plateforme .r181-viewport-head{
+ position:relative;z-index:1;display:flex;justify-content:space-between;gap:.8rem;flex-wrap:wrap;
+ padding:1rem clamp(1rem,2.5vw,2rem);border-bottom:1px solid rgba(132,165,207,.26);
+ color:#9eb3d0;font:700 .61rem/1.5 ui-monospace,Consolas,monospace;letter-spacing:.13em;
+}
+#plateforme .r181-viewport-head>span:last-child{color:#87dadb}
+#plateforme .r181-mode-connect{display:none}
+#plateforme .r181-console-viewport .product-grid{position:relative;z-index:1;display:block;min-width:0}
+#plateforme .r181-console-viewport .product-card,
+#plateforme .r181-console-viewport .product-card:nth-child(even){
+ display:grid;grid-template-columns:minmax(0,1fr);
+ grid-template-areas:"meta" "visual" "copy";
+ border:0;border-radius:0;margin:0;background:transparent;box-shadow:none;transform:none;
+}
+#plateforme .r181-console-viewport .product-card::before{display:none}
+#plateforme .r181-console-viewport .product-card-top{
+ padding:1rem clamp(1rem,2.5vw,2rem);
+ border-bottom:0;background:transparent;
+}
+#plateforme .r181-console-viewport .product-visual{
+ margin:.45rem clamp(1rem,2.5vw,2rem) 0;
+ height:clamp(250px,26vw,390px);min-height:0;align-self:auto;
+ border:1px solid rgba(132,178,221,.36);border-radius:.85rem;
+ box-shadow:0 25px 65px rgba(1,6,19,.36),inset 0 1px rgba(232,246,255,.06);
+ transform:perspective(1200px) rotateY(-4deg) rotateX(1.5deg) translateZ(0);
+ transform-origin:center;transition:transform .55s cubic-bezier(.21,.7,.19,1),box-shadow .4s ease;
+}
+#plateforme .r181-console-viewport .product-card:hover .product-visual,
+#plateforme .r181-console-viewport .product-card:focus-within .product-visual{
+ transform:perspective(1200px) rotateY(0) rotateX(0) translateZ(0);
+ box-shadow:0 32px 75px rgba(1,7,25,.42),0 0 0 1px rgba(127,211,244,.17);
+}
+#plateforme .r181-console-viewport .product-card-body{
+ padding:1.7rem clamp(1rem,2.5vw,2rem) clamp(2rem,3vw,3rem);
+ align-self:start;
+}
+#plateforme .r181-console-viewport .product-card-body .product-heading h3{
+ font-size:clamp(2rem,3vw,3.6rem);
+}
+#plateforme .r181-console-viewport .product-card-body>p:not(.product-caveat){max-width:57rem}
+#plateforme .r181-console-viewport .product-card-body .product-facts{margin:1rem 0}
+#plateforme .r181-console-viewport .product-card-body .product-deep-link{min-height:44px}
+@supports selector(#plateforme:has(#connect:target)){
+ #plateforme:not(:has(#connect:target)) .r181-console-viewport .product-card-connect{display:none}
+ #plateforme:has(#connect:target) .r181-console-viewport .product-card-bridge{display:none}
+ #plateforme:has(#connect:target) .r181-mode-bridge{display:none}
+ #plateforme:has(#connect:target) .r181-mode-connect{display:inline}
+ #plateforme:not(:has(#connect:target)) .r181-choice-bridge,
+ #plateforme:has(#connect:target) .r181-choice-connect{
+  color:#fff;background:linear-gradient(90deg,rgba(62,169,213,.19),transparent 88%);
+  box-shadow:inset 3px 0 0 #8ce5f3;
+ }
+ #plateforme:has(#connect:target) .r181-explorer{--r181-mode:#c4a5ff}
+ #plateforme:has(#connect:target) .r181-console-viewport{
+  background:radial-gradient(ellipse at 52% 32%,rgba(119,74,196,.23),transparent 68%),#0b1229;
+ }
+ #plateforme:has(#connect:target) .r181-choice-connect{box-shadow:inset 3px 0 0 #c9aaff}
+}
+#plateforme .r181-console-viewport .product-card:target{scroll-margin-top:8.5rem}
+@media(max-width:980px){
+ #plateforme .r181-explorer{grid-template-columns:minmax(0,1fr)}
+ #plateforme .r181-console-rail{
+  padding:1.1rem 1.3rem;border-right:0;border-bottom:1px solid rgba(126,165,205,.32);
+ }
+ #plateforme .r181-console-title{margin:.9rem 0 .45rem}
+ #plateforme .r181-console-desc{max-width:45rem}
+ #plateforme .r181-console-switcher{grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem;margin:1rem 0 .65rem;border-top:0}
+ #plateforme .r181-console-choice{min-height:92px;padding:.85rem 2rem .8rem .85rem;border:1px solid rgba(137,180,211,.28);border-radius:.7rem}
+ #plateforme .r181-console-choice:hover{padding-left:.85rem}
+ #plateforme .r181-console-note{font-size:.56rem}
+ #plateforme .r181-console-viewport .product-visual{height:clamp(280px,48vw,440px)}
+}
+@media(max-width:520px){
+ #plateforme .r181-console-heading{font-size:.56rem}
+ #plateforme .r181-console-title{font-size:1.72rem}
+ #plateforme .r181-console-choice{min-height:100px;gap:.4rem}
+ #plateforme .r181-console-choice strong{font-size:1.43rem}
+ #plateforme .r181-console-choice small{font-size:.68rem}
+ #plateforme .r181-viewport-head{font-size:.55rem}
+ #plateforme .r181-console-viewport .product-visual{height:270px}
+ #plateforme .r181-console-viewport .product-card-body{padding:1.35rem 1rem 2rem}
+}
+@media(prefers-reduced-motion:reduce){
+ #plateforme .r181-console-choice,#plateforme .r181-console-viewport .product-visual{
+  transition:none!important;animation:none!important;
+ }
+ #plateforme .r181-console-viewport .product-visual,
+ #plateforme .r181-console-viewport .product-card:hover .product-visual{
+  transform:none!important;
+ }
+}
+
 </style>
 </head>
 <body>
@@ -2930,7 +3068,23 @@ body .product-card .product-deep-link:focus-visible{
         </div>
         <p class="section-intro">SiteForge donne forme aux idées. Connect facilite les échanges avec les outils. Bridge explore un lien contrôlé vers Windows. Trois composants complémentaires, à des niveaux de qualification distincts.</p>
       </div>
-      <div class="product-grid">
+      <div class="r181-explorer" aria-label="Console d'exploration des technologies Synestra">
+        <div class="r181-console-rail">
+          <div class="r181-console-heading">
+            <span class="r181-console-led" aria-hidden="true"></span>
+            <span>SYS:// SYNESTRA / TECH EXPLORER</span>
+          </div>
+          <p class="r181-console-title">Choisissez un système.</p>
+          <p class="r181-console-desc">Deux technologies, deux fonctions. Parcourez leurs interfaces conceptuelles, puis ouvrez leur fiche détaillée.</p>
+          <nav class="r181-console-switcher" aria-label="Explorer les technologies">
+            <a href="#bridge" class="r181-console-choice r181-choice-bridge"><span class="r181-choice-num">01 / SYSTEM</span><strong>Bridge</strong><small>Agir sur un poste autorisé</small><span class="r181-choice-arrow" aria-hidden="true">↗</span></a>
+            <a href="#connect" class="r181-console-choice r181-choice-connect"><span class="r181-choice-num">02 / SYSTEM</span><strong>Connect</strong><small>Relier les outils du Studio</small><span class="r181-choice-arrow" aria-hidden="true">↗</span></a>
+          </nav>
+          <p class="r181-console-note">INTERFACE / CONCEPTS VISUELS<br>La disponibilité des fonctions reste soumise à qualification.</p>
+        </div>
+        <div class="r181-console-viewport">
+          <div class="r181-viewport-head"><span>VISUAL MODULE / <span class="r181-mode-bridge">BRIDGE</span><span class="r181-mode-connect">CONNECT</span></span><span>SELECT TO EXPLORE <span aria-hidden="true">●</span></span></div>
+          <div class="product-grid">
         <article class="product-card product-card-bridge" id="bridge" aria-labelledby="bridge-title">
           <div class="product-card-top"><span>01 / LES OUTILS</span><span class="product-status">En qualification</span></div>
           <div class="product-visual bridge-visual" role="img" aria-label="Maquette graphique conceptuelle d'une fenêtre Bridge et d'une permission locale. Il ne s'agit pas d'une capture de Bridge actif.">
@@ -2976,6 +3130,8 @@ body .product-card .product-deep-link:focus-visible{
             <a class="product-deep-link" href="./connect/">Découvrir Connect en détail <span aria-hidden="true">↗</span></a>
           </div>
         </article>
+          </div>
+        </div>
       </div>
       <div class="studio-workflow" role="group" aria-label="Parcours conceptuel Synestra : créer, connecter et contrôler"><span class="workflow-step"><b>01</b> Création <small>SiteForge</small></span><span class="workflow-arrow" aria-hidden="true">→</span><span class="workflow-step"><b>02</b> Connexion <small>Connect</small></span><span class="workflow-arrow" aria-hidden="true">→</span><span class="workflow-step"><b>03</b> Contrôle <small>Bridge</small></span></div>
       <div class="platform-footnote"><span class="footnote-mark">✳</span><p><strong>Ce qui compte : une progression vérifiable.</strong> Ces interfaces sont des représentations créatives, pas des captures du logiciel ni la promesse que toutes les fonctions sont déjà disponibles.</p><a href="#confiance">Notre approche de la confiance <span aria-hidden="true">↗</span></a></div>
