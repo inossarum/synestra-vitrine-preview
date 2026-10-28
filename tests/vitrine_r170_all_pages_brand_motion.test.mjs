@@ -32,7 +32,7 @@ test('R170 actual R169 homepage has official logo, clock-driven motion and reduc
   assert.match(html,/@media \(prefers-reduced-motion: reduce\)/);
   assert.match(html,/class="syn-r169-room"/);
   assert.match(html,/scale\(\.49\)!important/);
-  assert.deepEqual([...html.matchAll(/<script\b[^>]*>/g)].map(x=>x[0]),['<script src="./assets/siteforge-r116-sphere-only.js" defer>']);
+  assert.deepEqual([...html.matchAll(/<script\b[^>]*>/g)].map(x=>x[0]),['<script src="./assets/siteforge-lab-r182-vitrine.js" defer>']);
 });
 
 test('R170 every product route shares brand chrome and moves without pointer input',()=>{
