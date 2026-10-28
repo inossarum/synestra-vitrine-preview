@@ -44,9 +44,9 @@
       "build_command_unchanged": true
     }
   },
-  "public_deployment": "CLOUDFLARE_ACCESS_AUTH_REQUIRED_NOT_PUBLIC",
-  "browser_e2e": "GITHUB_DOWNLOADED_STANDALONE_CHROME_ANGLE_WEBGL_E2E_PASS",
-  "status": "OFFLINE_FILE_DELIVERED_AND_SHA_VERIFIED_E2E_PASS; PUBLIC_LINK_NOT_LIVE_DUE_CLOUDFLARE_ACCESS",
+  "public_deployment": "GITHUB_PAGES_PUBLIC_LIVE_E2E_PASS",
+  "browser_e2e": "LIVE_GITHUB_PAGES_PUBLIC_URL_CHROME_WEBGL_E2E_PASS",
+  "status": "PUBLIC_GITHUB_PAGES_E2E_PASS; OWNER_VISUAL_ACCEPTANCE_PENDING",
   "recovery": {
     "readonly_diagnosis": {
       "rawgithack": "USER_REPORTS_HTTP_403",
@@ -86,8 +86,40 @@
         "changed_pixels": 10413,
         "changed_percent": 3.3826013513513513,
         "recovered_changed_pixels": 0
-      }
+      },
+      "public_github_pages_chrome_e2e": "PASS all six materials, 390px mobile, mouse/touch orbit, motes toggle, JSON schema 18, wave perturbation/recovery, no GPU error, process exit 0"
     },
-    "owners_gate": "Explicit approval required before removing/exempting Cloudflare Access for public live URL."
+    "owners_gate": "Explicit approval required before removing/exempting Cloudflare Access for public live URL.",
+    "github_pages_live": {
+      "status": "PASS",
+      "site": "https://inossarum.github.io/synestra-siteforge-r176-lab/",
+      "repository": "inossarum/synestra-siteforge-r176-lab",
+      "repository_visibility": "public",
+      "source_branch": "gh-pages",
+      "source_commit": "270d587b1eeb7191b1346793e0f8f270cb7062ca",
+      "published_blob_sha": "98088039212a1bb4dafd47732ad5dea4a1154302",
+      "pages_build_status": "built",
+      "https_http_code": 200,
+      "access_login": false,
+      "html_includes_inline_shader": true,
+      "chrome_webgl_ready": true,
+      "chrome_error_code": 0,
+      "chrome_exit_code": 0,
+      "wave_effect": {
+        "motes_disabled": true,
+        "pixels": 307840,
+        "changed_pixels": 9441,
+        "changed_percent": 3.0668529106029108,
+        "recovered_changed_pixels": 0
+      },
+      "mobile_390px": "PASS",
+      "materials_6_of_6": "PASS",
+      "orbit_desktop": "PASS",
+      "orbit_touch": "PASS",
+      "motion_pause_resume": "PASS",
+      "controls_18": "PASS",
+      "rollbacks": "No change to private Studio production, Cloudflare Access, main branch.",
+      "validation_limitation": "Verified from owner Windows Chrome and HTTPS GET; independent web fetcher unavailable, user acceptance not yet confirmed."
+    }
   }
 }
