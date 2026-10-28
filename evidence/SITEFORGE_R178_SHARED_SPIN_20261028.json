@@ -54,7 +54,9 @@
       },
       "pause_resume": "PASS",
       "touch_orbit": "PASS"
-    }
+    },
+    "public_qa_script": "tests/siteforge_r178_public_qa.mjs on source branch @6f2126737566c947d97fa3be94c1309746756223",
+    "public_chrome": "PASS exit 0, all six flow materials, mobile 390, mouse/touch orbit, 180/360 horizontal yaw, common spin and pause, zero GL errors"
   },
   "images": [
     "r178-full-orbit-home.png",
@@ -65,10 +67,35 @@
     "repo": "inossarum/synestra-siteforge-r176-lab",
     "versioned_path": "r178.html",
     "url": "https://inossarum.github.io/synestra-siteforge-r176-lab/r178.html",
-    "status": "PENDING_PUBLIC_E2E",
-    "rollback": "Keep index.html (R176) and r177.html unchanged; remove only r178.html if rollback necessary."
+    "status": "PASS",
+    "rollback": "Keep index.html (R176) and r177.html unchanged; remove only r178.html if rollback necessary.",
+    "preview_branch_head": "c7284f7e0129846343b2a57ceec7adf49098afcc",
+    "source_sha": "6f2126737566c947d97fa3be94c1309746756223",
+    "published_blob_sha": "b70efde38a6b5835423f23d255c40d04d6f09518",
+    "real_chrome_e2e": {
+      "status": "PASS",
+      "exit_code": 0,
+      "url": "https://inossarum.github.io/synestra-siteforge-r176-lab/r178.html",
+      "webgl_ready": true,
+      "program_errors": 0,
+      "flow_materials_passed": 6,
+      "mobile_width": 390,
+      "motes_mask_home_pixels": 3698,
+      "motes_mask_turn_pixels": 3803,
+      "motes_mask_shift_pixels": 2333,
+      "spin_clock_delta": 0.0624,
+      "spin_clock_paused_a": 0.6396,
+      "spin_clock_paused_b": 0.6396,
+      "full_orbit_half_radians": -3.043,
+      "full_orbit_end_radians": 0.017,
+      "full_orbit_half_changed_percent": 1.7585227272727273,
+      "full_orbit_end_changed_percent": 0.2330681818181818,
+      "mouse_wave_changed_pixels": 10885,
+      "mouse_wave_recovered_pixels": 0,
+      "controls": 18
+    }
   },
-  "status": "LOCAL_CHROME_PASS_PUBLIC_E2E_PENDING",
+  "status": "PUBLIC_GITHUB_PAGES_WEBGL_E2E_PASS; OWNER_AESTHETIC_ACCEPTANCE_PENDING",
   "guardrails": {
     "main_untouched": true,
     "cloudflare_access_untouched": true,
