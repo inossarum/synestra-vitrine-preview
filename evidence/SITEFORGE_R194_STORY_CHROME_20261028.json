@@ -1,0 +1,122 @@
+{
+  "schema": "synestra.siteforge.r194.story.chrome.v1",
+  "records": [
+    {
+      "width": 1440,
+      "y": 1035,
+      "visible": true,
+      "railActive": "#vision",
+      "chapter": "vision",
+      "docWidth": 1425,
+      "originalTop": 900,
+      "screenshot": "r194-story-vision-1440.png"
+    },
+    {
+      "width": 1440,
+      "y": 2003,
+      "visible": true,
+      "railActive": "#systeme",
+      "chapter": "systeme",
+      "docWidth": 1425,
+      "originalTop": 833.15625,
+      "screenshot": "r194-story-systeme-1440.png"
+    },
+    {
+      "width": 1440,
+      "y": 4144,
+      "visible": true,
+      "railActive": "#siteforge",
+      "chapter": "siteforge",
+      "docWidth": 1425,
+      "originalTop": 2006.15625,
+      "screenshot": "r194-story-siteforge-1440.png"
+    },
+    {
+      "width": 1440,
+      "y": 5191,
+      "visible": true,
+      "railActive": "#approche",
+      "chapter": "approche",
+      "docWidth": 1425,
+      "originalTop": 911.546875,
+      "screenshot": "r194-story-approche-1440.png"
+    },
+    {
+      "width": 1440,
+      "y": 8033,
+      "visible": true,
+      "railActive": "#confiance",
+      "chapter": "confiance",
+      "docWidth": 1425,
+      "originalTop": 2707,
+      "screenshot": "r194-story-confiance-1440.png"
+    },
+    {
+      "methodStep": {
+        "counter": "03",
+        "progress": "269.734px",
+        "current": [
+          "3"
+        ]
+      }
+    },
+    {
+      "width": 390,
+      "y": 1035,
+      "visible": true,
+      "railActive": "#vision",
+      "chapter": "vision",
+      "docWidth": 390,
+      "originalTop": 900,
+      "screenshot": "r194-story-vision-390.png"
+    },
+    {
+      "width": 390,
+      "y": 2080,
+      "visible": true,
+      "railActive": "#systeme",
+      "chapter": "systeme",
+      "docWidth": 390,
+      "originalTop": 910.484375,
+      "screenshot": "r194-story-systeme-390.png"
+    },
+    {
+      "width": 390,
+      "y": 4502,
+      "visible": true,
+      "railActive": "#siteforge",
+      "chapter": "siteforge",
+      "docWidth": 390,
+      "originalTop": 2286.515625,
+      "screenshot": "r194-story-siteforge-390.png"
+    },
+    {
+      "width": 390,
+      "y": 5596,
+      "visible": true,
+      "railActive": "#approche",
+      "chapter": "approche",
+      "docWidth": 390,
+      "originalTop": 959.34375,
+      "screenshot": "r194-story-approche-390.png"
+    },
+    {
+      "width": 390,
+      "y": 8740,
+      "visible": true,
+      "railActive": "#confiance",
+      "chapter": "confiance",
+      "docWidth": 390,
+      "originalTop": 3009.421875,
+      "screenshot": "r194-story-confiance-390.png"
+    }
+  ],
+  "reduced": {
+    "prefers": true,
+    "enhanced": false,
+    "h1": "D’un besoin.À un système.",
+    "hidden": false
+  },
+  "status": "PASS",
+  "base": "http://127.0.0.1:18850/r194/"
+}

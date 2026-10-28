@@ -1,0 +1,157 @@
+{
+  "schema": "synestra.siteforge.r194.editorial-site.evidence.v1",
+  "mission_id": "SYN_SITEFORGE_R194_EDITORIAL_SYSTEM_20261028",
+  "date_local": "2026-10-28",
+  "owner": "Synestra Studio",
+  "author": "Synestra Studio Assistant (technical candidate)",
+  "repo": "inossarum/synestra-vitrine-preview",
+  "base_commit": "cf254895c800774a3dd384f303de6481b8105a10",
+  "base_branch": "task/SYN_SITEFORGE_R193_FULLSCREEN_LIGHT_20261028",
+  "branch": "task/SYN_SITEFORGE_R194_EDITORIAL_SYSTEM_20261028",
+  "source_sha256": "3d5981b20171a6d4bbf45d8356d33c3d24af638b122c6e354c8d0313d6293dca",
+  "home_sha256": "ff5c2e1276fb39d73623a47ecb7afb24e0b679679a04e6d667f7f07ea1ddc44d",
+  "css_sha256": "2a3bf682cd00edfb2872ffeb1d0fb374a47be54cd3dbcfa445e8ad74fe237ab",
+  "scroll_sha256": "ee03cc37d0538a13696457496650c2bba9b9891957bf90ccd53c2be3e880e637",
+  "original_shader_sha256": "d5b64dfccba2096d6cc6f1198a4656c6320569ff627caf11f84fb5eb0e493eae",
+  "objective": "Replace overloaded sections and bland old homepage with new futuristic editorial architecture across 5 routes, with a smaller sphere and unobtrusive logo-color light field, real scroll choreography and sensible reduced-motion fallbacks.",
+  "phases": [
+    {
+      "step": 1,
+      "action": "Plasma scale .73→.56 desktop, .56→.46 mobile; narrow floor light; remove residual mirror",
+      "status": "PASS",
+      "evidence": "Chrome screenshot r194-studio-1440/390; original R190 shader byte-identical"
+    },
+    {
+      "step": 2,
+      "action": "Home eight distinct semantic chapters replace the old stacked grids; actual markup rewritten",
+      "status": "PASS",
+      "evidence": "r194/index.html; R194 static test chapters/legacy class rejection"
+    },
+    {
+      "step": 3,
+      "action": "Introduce distinct cinematic product bands, laboratory mosaic, sticky method, needs/trust editorial compositions and FAQ",
+      "status": "PASS",
+      "evidence": "Five chapter screenshots desktop and mobile Chrome"
+    },
+    {
+      "step": 4,
+      "action": "All Connect/Bridge/SiteForge/Offres product pages rebuilt as R194 preview with branded page index and conceptual architecture strip; preserve prior content and lab routes",
+      "status": "PASS",
+      "evidence": "15 Chrome route/viewport captures; static href/src/anchor checks"
+    },
+    {
+      "step": 5,
+      "action": "Consolidate scroll into one rAF loop per page, IntersectionObserver-based chapter reveal and method status, accessible chapter rail, reduced motion",
+      "status": "PASS",
+      "evidence": "11 browser scroll assertions; reduced motion E2E PASS"
+    },
+    {
+      "step": 6,
+      "action": "Capture, test, commit isolated candidate",
+      "status": "PENDING"
+    }
+  ],
+  "tests": [
+    {
+      "name": "Node contracts including R194 8 new cases",
+      "passed": 126,
+      "failed": 0,
+      "status": "PASS"
+    },
+    {
+      "name": "Chrome page renders",
+      "passed": 15,
+      "failed": 0,
+      "widths": [
+        1440,
+        768,
+        390
+      ],
+      "routes": [
+        "studio",
+        "connect",
+        "bridge",
+        "siteforge",
+        "offres"
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "Chrome story reveals",
+      "status": "PASS",
+      "desktop_sections": 5,
+      "mobile_sections": 5,
+      "method_step3": true,
+      "method_counter": "03",
+      "reduced_motion": true
+    },
+    {
+      "name": "Chrome hover WebGL",
+      "status": "PASS",
+      "uTilt": [
+        0,
+        0
+      ],
+      "max_hover_strength": 0.7265798130163011,
+      "rest_strength": 6.647900223461235e-11
+    },
+    {
+      "name": "CSS floor",
+      "status": "PASS",
+      "removed_reflection": true,
+      "logo_colors": [
+        "#552a9d",
+        "#2d9c6e"
+      ],
+      "radial_light_no_duplicate_GPU": true
+    },
+    {
+      "name": "No extra scroll script",
+      "status": "PASS",
+      "R192_JS_in_R194": false,
+      "one_scroll_loop_per_route": true
+    },
+    {
+      "name": "Production E2E / multi-engine browsers",
+      "status": "NOT_PERFORMED"
+    }
+  ],
+  "qa_files": [
+    "evidence/SITEFORGE_R194_BROWSER_20261028.json",
+    "evidence/SITEFORGE_R194_STORY_CHROME_20261028.json",
+    "evidence/SITEFORGE_R194_POINTER_CHROME_20261028.json"
+  ],
+  "selected_visuals": [
+    "r194-studio-1440.png",
+    "r194-studio-390.png",
+    "r194-connect-1440.png",
+    "r194-bridge-1440.png",
+    "r194-siteforge-1440.png",
+    "r194-offres-1440.png",
+    "r194-story-vision-1440.png",
+    "r194-story-systeme-1440.png",
+    "r194-story-siteforge-1440.png",
+    "r194-story-approche-1440.png",
+    "r194-story-confiance-1440.png",
+    "r194-story-approche-390.png"
+  ],
+  "rules": "I:\\00_STUDIO_VIRTUEL\\AGENTS.md#34cc2a8649bda4230bd2fa73d4a4de0edaf65dc1e3bdaf2b8b78ff58f4e4ea21",
+  "skills": [
+    "ui-ux@1.0.0#0a362a0938401674166c7a8b871192fbde602c1a",
+    "interaction-motion-design@1.0.0#c636a0c77eccb9004c56ce48bdd49684243b8790",
+    "visual-regression-testing@1.0.0#aa98fffe9149dfcc0e153f0d1b8b91f3c0a6b4ae",
+    "responsive-layout-engineering@1.0.0#12d091ca42195a1559e5a12c88b9a599560bd53c",
+    "web-accessibility-engineering@1.0.0#172c442525351804e89e7b273346f03df34bdd89",
+    "browser-compatibility-progressive-enhancement@1.0.0#715ca40f6c98104983fc7bddaac017f94a776c81"
+  ],
+  "limits": [
+    "Local preview only; no merge/main/public release or cloud production E2E",
+    "Multi-engine Firefox/WebKit not verified",
+    "Visual owner approval outstanding",
+    "Studio Memory V1 current corpus not fully consulted, runtime Supervisor/hooks not used",
+    "No claim of photometric floor lighting; CSS radial approximation",
+    "No numerical real-user FPS benchmark for R194"
+  ],
+  "preview_url": "http://127.0.0.1:18850/r194/",
+  "status": "LOCAL_CANDIDATE_VALIDATED_NOT_RELEASED"
+}
