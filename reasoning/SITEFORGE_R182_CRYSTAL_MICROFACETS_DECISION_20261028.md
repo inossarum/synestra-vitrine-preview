@@ -25,3 +25,12 @@ Source prévue : `task/SYN_SITEFORGE_R182_CRYSTAL_MICROFACETS_20261028` (base R1
 ## Statut
 
 LOCAL_E2E_PASS. Vérification navigateur HTTPS de la page publique R182 encore PENDING ; acceptation visuelle propriétaire PENDING. La publication ou le commit seul ne doit pas être appelé DONE.
+
+## Qualification E2E publique finale
+
+- Source commit R182 SHA `52085461e5766429ae09c05cb148db89c04c01c5` (branche task dédiée). Prévisualisation GitHub Pages `gh-pages` commit `603f989a93c673ce78242e65973187b06d6eda55`, page versionnée `r182.html` ; HTTP 200 sans Cloudflare Access, Pages `built`.
+- Test complet Chrome **sur l'URL publique** `https://inossarum.github.io/synestra-siteforge-r176-lab/r182.html` : exit 0, zéro erreur WebGL, 6 matériaux, 390px mobile, souris/tactile et 180/360° PASS, pause et rotation communes PASS, JSON import/export/backward compatibility PASS, onde plasma récupérée PASS, budget mobile dynamique PASS.
+- Test de finition sous animation figée et même caméra : changement combiné rugosité 0→100 % et réflectivité 0→200 % déplace **30 713 pixels / 307 840 (9,98 %)** dans la page servie, sans erreur WebGL. Ce n'est pas une mesure isolée de la contribution de chaque contrôle.
+- Evidence finalisée : `evidence/SITEFORGE_R182_CRYSTAL_MICROFACETS_20261028.json` blob `d60f3034fe5ea46129118b36da26274550fb63e9`.
+- Registre Studio `main` vérifié inchangé à `df67fcd5cc6b7cc0fb42fa86c8920d28b9427494`, preview R181 SHA inchangé `85c7a6df2ac79d482d4886ecbca20f68fdfda6db`. Aucune modification de sécurité, aucune dépense, aucun merge.
+- Limite non close : acceptation esthétique propriétaire et mesure FPS sur GPU mobile physique. R182 est qualifiée pour prévisualisation publique ; ne pas appeler ceci une mise en production de la vitrine.
