@@ -54,26 +54,37 @@ for(const vw of [1280,390,320]){
   await send('Runtime.evaluate',{expression:"window.scrollTo({top:0,behavior:'instant'})"});
  }
  console.log('R179_EDITORIAL_CDP_'+vw+'=PASS '+JSON.stringify(manifest));
- const r180Expr = `JSON.stringify((()=>{const cards=[...document.querySelectorAll('#plateforme .product-card')];const examples=[...document.querySelectorAll('#exemples .example-card')];const r=(x)=>x.getBoundingClientRect();const bounds=cards.map(c=>({visual:{left:r(c.querySelector('.product-visual')).left,top:r(c.querySelector('.product-visual')).top,width:r(c.querySelector('.product-visual')).width},copy:{left:r(c.querySelector('.product-card-body')).left,top:r(c.querySelector('.product-card-body')).top},cols:getComputedStyle(c).gridTemplateColumns}));return {cards:cards.length,examples:examples.length,gridCols:getComputedStyle(document.querySelector('#plateforme .product-grid')).gridTemplateColumns,caseCols:getComputedStyle(document.querySelector('#exemples .example-card')).gridTemplateColumns,bounds,bridgeSweep:getComputedStyle(document.querySelector('.bridge-visual'),'::after').animationName,siteforgeSweep:getComputedStyle(document.querySelector('.siteforge-showcase'),'::after').animationName,scrollWidth:document.documentElement.scrollWidth}})())`;
- const r180=JSON.parse((await send('Runtime.evaluate',{expression:r180Expr,returnByValue:true})).result.value);
- const isWide=vw>980;
- const positionsOk=isWide
- ?r180.bounds[0].visual.left<r180.bounds[0].copy.left && r180.bounds[1].copy.left<r180.bounds[1].visual.left
- :r180.bounds.every(b=>b.visual.top<b.copy.top);
- if(r180.cards!==2||r180.examples!==3||!positionsOk||r180.bridgeSweep!=='none'||r180.siteforgeSweep!=='none'||r180.scrollWidth>vw+2)
-  throw Error('R180_EDITORIAL_REGRESSION_'+vw+' '+JSON.stringify(r180));
+ const r181Expr = `JSON.stringify((()=>{const b=document.querySelector('#bridge'),c=document.querySelector('#connect'),nav=document.querySelector('.r181-console-switcher'),ex=document.querySelector('.r181-explorer'),visual=document.querySelector('.product-card-bridge .product-visual');return {hash:location.hash,bridge:getComputedStyle(b).display,connect:getComputedStyle(c).display,navLinks:[...nav.querySelectorAll('a')].map(x=>x.getAttribute('href')),grid:getComputedStyle(ex).gridTemplateColumns,perspective:getComputedStyle(visual).transform,hasSupport:CSS.supports('selector(:has(*))'),scrollWidth:document.documentElement.scrollWidth,viewport:innerWidth,examples:document.querySelectorAll('#exemples .example-card').length,bridgeSweep:getComputedStyle(document.querySelector('.bridge-visual'),'::after').animationName,siteforgeSweep:getComputedStyle(document.querySelector('.siteforge-showcase'),'::after').animationName}})())`;
+ const readR181=async()=>JSON.parse((await send('Runtime.evaluate',{expression:r181Expr,returnByValue:true})).result.value);
+ const initialMode=await readR181();
+ if(initialMode.navLinks.join(',')!=='#bridge,#connect'||initialMode.bridge==='none'||(initialMode.hasSupport&&initialMode.connect!=='none')||initialMode.scrollWidth>vw+2||initialMode.examples!==3||initialMode.bridgeSweep!=='none'||initialMode.siteforgeSweep!=='none')throw Error('R181_INITIAL_FAIL_'+vw+' '+JSON.stringify(initialMode));
  if(capture&&vw!==320){
-  await send('Runtime.evaluate',{expression:"document.querySelector('#plateforme .product-card').scrollIntoView({block:'start',behavior:'instant'})"});
-  await sleep(150);
-  const productShot=await send('Page.captureScreenshot',{format:'png',fromSurface:true,captureBeyondViewport:false});
-  writeFileSync(join(root,'r180_product_'+vw+'.png'),Buffer.from(productShot.data,'base64'));
-  await send('Runtime.evaluate',{expression:"document.querySelector('#exemples').scrollIntoView({block:'start',behavior:'instant'})"});
-  await sleep(150);
-  const examplesShot=await send('Page.captureScreenshot',{format:'png',fromSurface:true,captureBeyondViewport:false});
-  writeFileSync(join(root,'r180_examples_'+vw+'.png'),Buffer.from(examplesShot.data,'base64'));
-  await send('Runtime.evaluate',{expression:"window.scrollTo({top:0,behavior:'instant'})"});
+  await send('Runtime.evaluate',{expression:"document.querySelector('.r181-explorer').scrollIntoView({block:'start',behavior:'instant'})"});
+  await sleep(120);
+  const shot=await send('Page.captureScreenshot',{format:'png',fromSurface:true,captureBeyondViewport:false});
+  writeFileSync(join(root,'r181_bridge_'+vw+'.png'),Buffer.from(shot.data,'base64'));
  }
- console.log('R180_EDITORIAL_CDP_'+vw+'=PASS '+JSON.stringify(r180));
+ await send('Runtime.evaluate',{expression:"document.querySelector('.r181-choice-connect').click()"});
+ await sleep(220);
+ const connectMode=await readR181();
+ if(connectMode.hash!=='#connect'||(connectMode.hasSupport&&(connectMode.connect==='none'||connectMode.bridge!=='none'))||connectMode.scrollWidth>vw+2)throw Error('R181_CONNECT_SWITCH_FAIL_'+vw+' '+JSON.stringify(connectMode));
+ if(capture&&vw!==320){
+  await send('Runtime.evaluate',{expression:"document.querySelector('.r181-explorer').scrollIntoView({block:'start',behavior:'instant'})"});
+  await sleep(120);
+  const shot=await send('Page.captureScreenshot',{format:'png',fromSurface:true,captureBeyondViewport:false});
+  writeFileSync(join(root,'r181_connect_'+vw+'.png'),Buffer.from(shot.data,'base64'));
+ }
+ await send('Runtime.evaluate',{expression:"document.querySelector('.r181-choice-bridge').focus()"});
+ await send('Input.dispatchKeyEvent',{type:'keyDown',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});
+ await send('Input.dispatchKeyEvent',{type:'keyUp',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});
+ await sleep(200);
+ const returnMode=await readR181();
+ if(returnMode.hash!=='#bridge'||returnMode.bridge==='none'||(returnMode.hasSupport&&returnMode.connect!=='none'))throw Error('R181_KEYBOARD_RETURN_FAIL_'+vw+' '+JSON.stringify(returnMode));
+ await send('Runtime.evaluate',{expression:"document.querySelector('.r181-choice-connect').click();document.querySelector('.r181-choice-bridge').click();"});
+ await sleep(100);
+ const rapidMode=await readR181();
+ if(rapidMode.hash!=='#bridge'||rapidMode.bridge==='none'||rapidMode.scrollWidth>vw+2)throw Error('R181_RAPID_NAV_FAIL_'+vw+' '+JSON.stringify(rapidMode));
+ console.log('R181_EXPLORER_CDP_'+vw+'=PASS '+JSON.stringify({initial:initialMode,connect:connectMode,keyboard:returnMode.hash,rapid:rapidMode.hash}));
  const wfBefore=await getWayfinder();
  if(wfBefore.headerPosition!=='sticky'||wfBefore.headerHeight>130||!wfBefore.dockVisible||wfBefore.links.join(',')!=='#plateforme,#exemples,#approche'||wfBefore.cardWidths.some(n=>n<150)||wfBefore.scrollWidth>vw+2)throw Error('R178_NAV_INITIAL_FAIL_'+vw+' '+JSON.stringify(wfBefore));
  if(capture){
