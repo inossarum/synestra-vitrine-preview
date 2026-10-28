@@ -40,6 +40,17 @@ for(const vw of [1280,390]){
  }else if(navBefore.menuDisplay!=='none'||!navBefore.ctaVisible){
    throw Error('R175_DESKTOP_NAV_REGRESSION '+JSON.stringify(navBefore));
  }else console.log('R175_DESKTOP_NAV_1280=PASS '+JSON.stringify(navBefore));
+ const wayfinderEval=`JSON.stringify((()=>{const header=document.querySelector('body>.site-header.container'),dock=document.querySelector('.r178-wayfinder'),cards=[...dock.querySelectorAll('.r178-wayfinder-link')],hs=getComputedStyle(header),ds=getComputedStyle(dock);return {headerPosition:hs.position,headerTop:header.getBoundingClientRect().top,headerBottom:header.getBoundingClientRect().bottom,headerHeight:header.getBoundingClientRect().height,dockVisible:ds.display!=='none',columns:getComputedStyle(dock.querySelector('.r178-wayfinder-grid')).gridTemplateColumns,links:cards.map(x=>x.getAttribute('href')),cardWidths:cards.map(x=>x.getBoundingClientRect().width),scrollWidth:document.documentElement.scrollWidth,viewport:innerWidth}})())`;
+ const getWayfinder=async()=>JSON.parse((await send('Runtime.evaluate',{expression:wayfinderEval,returnByValue:true})).result.value);
+ const wfBefore=await getWayfinder();
+ if(wfBefore.headerPosition!=='sticky'||wfBefore.headerHeight>130||!wfBefore.dockVisible||wfBefore.links.join(',')!=='#plateforme,#exemples,#approche'||wfBefore.cardWidths.some(n=>n<150)||wfBefore.scrollWidth>vw+2)throw Error('R178_NAV_INITIAL_FAIL_'+vw+' '+JSON.stringify(wfBefore));
+ await send('Runtime.evaluate',{expression:"document.querySelector('.r178-wayfinder-link').click()"});
+ await sleep(1050);
+ const wfAfter=await getWayfinder();
+ const target=JSON.parse((await send('Runtime.evaluate',{expression:`JSON.stringify({hash:location.hash,top:document.querySelector('#plateforme').getBoundingClientRect().top,scrollY:scrollY})`,returnByValue:true})).result.value);
+ if(target.hash!=='#plateforme'||target.scrollY<200||Math.abs(wfAfter.headerTop)>3||target.top<wfAfter.headerBottom-15||wfAfter.scrollWidth>vw+2)throw Error('R178_STICKY_ANCHOR_FAIL_'+vw+' '+JSON.stringify({wfAfter,target}));
+ console.log('R178_WAYFINDER_CDP_'+vw+'=PASS '+JSON.stringify({headerHeight:wfAfter.headerHeight,dockLinks:wfBefore.links,columns:wfBefore.columns,anchorTop:target.top,headerBottom:wfAfter.headerBottom,scrollWidth:wfAfter.scrollWidth}));
+ await send('Runtime.evaluate',{expression:"window.scrollTo({top:0,behavior:'instant'})"});
  if(capture){const img=await send('Page.captureScreenshot',{format:'png',fromSurface:true,captureBeyondViewport:false});writeFileSync(join(root,'r173_hero_'+vw+'_t0.png'),Buffer.from(img.data,'base64'));}
  await sleep(2600);const second=await evalState();
  if(capture){const img=await send('Page.captureScreenshot',{format:'png',fromSurface:true,captureBeyondViewport:false});writeFileSync(join(root,'r173_hero_'+vw+'_t1.png'),Buffer.from(img.data,'base64'));}
