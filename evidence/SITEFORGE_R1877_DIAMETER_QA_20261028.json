@@ -1,0 +1,100 @@
+{
+  "schema": "synestra.siteforge.r1877.diameter_qa.v1",
+  "date": "2026-10-28",
+  "mission_id": "SYN_SITEFORGE_R1877_FILAMENT_DIAMETER_20261028",
+  "owner": "inossarum",
+  "repo": "inossarum/synestra-vitrine-preview",
+  "branch": "task/SYN_SITEFORGE_R1877_FILAMENT_DIAMETER_20261028",
+  "base_commit": "8d86fee7aff9171e935c06ac042083dc2a6df461",
+  "source": "siteforge-r1876-autonome.html",
+  "artifact": "siteforge-r1877-autonome.html",
+  "artifact_sha256": "098562085378f2b7bdc1a6525ec9f1b3fc55d4707c3cc05dd1dfeb8f3e00fd1b",
+  "build": "tools/build_r1877_diameter.py",
+  "preview_url": "http://127.0.0.1:19097/siteforge-r1877-autonome.html?demo=energy",
+  "http_status": 200,
+  "change": [
+    "Reused existing flowStructure slider; 18 field JSON remains identical",
+    "Renamed width label to Diamètre des flux énergétiques, slider 30..250%, separate diameter of sphere label",
+    "Material6 clamp changed from [.55,1.75] to [.30,2.50]; user control now affects full range",
+    "Subpixel anti-alias optical stabilization only under 100% to keep thin lines visible without adding opaque pipe geometry",
+    "Exposure compensation by diameter: preserves cyan/magenta chroma at 250% instead of white oversaturation; 100% reference unchanged",
+    "No changes to legacy materials 0..5, 5 centerlines, 10 attached braids, motion clock, old settings JSON import/export"
+  ],
+  "tests": {
+    "static": {
+      "status": "PASS",
+      "passed": 5,
+      "failed": 0
+    },
+    "chrome_desktop": {
+      "status": "PASS",
+      "browser": "Chrome Windows WebGL SwiftShader",
+      "viewport": [
+        1100,
+        800
+      ],
+      "flowType": 6,
+      "webglErrors": 0,
+      "spinUnchanged": true,
+      "sphereDiameterValue": 100,
+      "range": [
+        30,
+        250
+      ],
+      "bright_pixels": {
+        "30": 3499,
+        "100": 13925,
+        "250": 41911
+      },
+      "lowHighChangedPixels": 52431,
+      "lowHighChangedPercent": 17.0319,
+      "monotonic": true
+    },
+    "chrome_mobile_emulated": {
+      "status": "PASS",
+      "viewport": [
+        390,
+        844
+      ],
+      "webglErrors": 0,
+      "spinUnchanged": true,
+      "sphereDiameterValue": 100,
+      "range": [
+        30,
+        250
+      ],
+      "bright_pixels": {
+        "30": 1573,
+        "100": 6695,
+        "250": 23804
+      },
+      "lowHighChangedPixels": 28312,
+      "lowHighChangedPercent": 27.0473,
+      "monotonic": true
+    },
+    "csp": "exact script SHA-256; unsafe-inline not introduced",
+    "json_contract": "18 scene controls, 10 mote controls, 7 material choices preserved"
+  },
+  "artifacts": [
+    "tests/siteforge_r1877_isolation.test.mjs",
+    "tests/siteforge_r1877_diameter_real_browser.mjs",
+    "tests/siteforge_r1877_mobile_diameter_qa.mjs",
+    "evidence/SITEFORGE_R1877_DIAMETER_LIVE_CHROME_20261028.json",
+    "evidence/SITEFORGE_R1877_DIAMETER_MOBILE_CHROME_20261028.json",
+    "evidence/r1877-diameter-30.png",
+    "evidence/r1877-diameter-100.png",
+    "evidence/r1877-diameter-250.png",
+    "evidence/r1877-mobile-diameter-30.png",
+    "evidence/r1877-mobile-diameter-100.png",
+    "evidence/r1877-mobile-diameter-250.png"
+  ],
+  "limits": [
+    "Physical mobile device/GPU FPS not tested (mobile is Chrome emulation on Windows)",
+    "Appearance pending human visual review",
+    "Only loopback preview, no public deploy/push/merge",
+    "Luminous-pixel occupancy proves responsive width, not aesthetic value",
+    "Existing meta CSP frame-ancestors warning and favicon 404 inherited"
+  ],
+  "status": "LOCAL_QA_PASS_ART_PENDING",
+  "rollback": "R187.6 unchanged at commit 8d86fee; isolated worktree and branch"
+}
