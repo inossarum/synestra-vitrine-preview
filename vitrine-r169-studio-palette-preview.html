@@ -1885,6 +1885,18 @@ main>.section:nth-of-type(2n)::before {animation-duration:13s;animation-directio
 .r173-environment .r173-scan{opacity:.64;height:4px}
 .r173-environment .r173-grid{opacity:.70}
 
+
+/* R173 typography safety position — dial stays high in the hero, outside headline and lead. */
+@media(min-width:721px){
+ .hero-v2 .r173-hud-dial{
+   top:-300px;left:clamp(-205px,-14vw,-110px);
+   width:clamp(430px,46vw,580px);
+ }
+}
+@media(max-width:720px){
+ .hero-v2 .r173-hud-dial{top:-236px;left:-190px;width:420px;opacity:.85}
+}
+
 </style>
 </head>
 <body>
