@@ -1,0 +1,106 @@
+{
+  "schema": "synestra.vitrine.r172.autonomous.energy.evidence.v1",
+  "date": "2026-10-28",
+  "mission_id": "SYN_VITRINE_R172_PERCEPTIBLE_IDLE_MOTION",
+  "owner_request": "Plus de vie... C'est figé quand on ne bouge pas",
+  "scope": "New R169 derived Studio-preview homepage only; user pointer not required",
+  "source_baseline_commit": "07c54103f0ad72c655257ad0be9f576b402a8b77",
+  "app_deployed_commit": "515e0c2ea8cb0a91c3ade9b54e0f523cd3a4a306",
+  "implementation": {
+    "page": "vitrine-r169-studio-palette-preview.html",
+    "new_svg_group": "r172-energy-conduits",
+    "new_css_overlay": "r172-energy-halo",
+    "new_animations": [
+      "r172-energy-orbit",
+      "r172-energy-breath",
+      "r172-rail-travel",
+      "r172-top-travel",
+      "r172-beacon-beat"
+    ],
+    "repeat": "continuous CSS independent of pointer movement",
+    "core_renderer": "assets/siteforge-r116-sphere-only.js unchanged",
+    "one_canvas": true,
+    "external_renderer_or_cloud_video": false,
+    "aria_hidden": true,
+    "prefers_reduced_motion_respected": true
+  },
+  "verification": {
+    "static_contract_test": "tests/vitrine_r172_visible_idle_energy.test.mjs",
+    "browser_cdp_reproduction": "tests/vitrine_r172_idle_energy_browser_cdp.mjs",
+    "browser": "Chrome desktop browser on Inos-Cerebros; isolated checkout",
+    "desktop": {
+      "viewport": [
+        1280,
+        900
+      ],
+      "stageBox": {
+        "left": 698.89,
+        "top": 207.28,
+        "width": 542.11,
+        "height": 486.39
+      },
+      "webgl_ready": true,
+      "canvas_count": 1,
+      "orbit_start_transform": "matrix(0.932438,0.361331,-0.361331,0.932438,0,0)",
+      "orbit_after_2_6s": "matrix(-0.900221,0.435433,-0.435433,-0.900221,0,0)",
+      "rail_dash_start_px": -73.7692,
+      "rail_dash_after_2_6s_px": -536.978,
+      "room_opacity_start": 0.428319,
+      "room_opacity_after": 0.734746,
+      "stage_screenshot_pixel_sample": {
+        "samples": 16592,
+        "changed_rgb_sum_at_least_18": 1001,
+        "changed_percentage": 6.03,
+        "strong_changes_rgb_sum_at_least_75": 580,
+        "strong_percentage": 3.5,
+        "mean_rgb_sum_delta": 9.11
+      },
+      "reduced_motion_pass": true
+    },
+    "mobile": {
+      "viewport": [
+        390,
+        900
+      ],
+      "webgl_ready": true,
+      "canvas_count": 1,
+      "orbit_start_transform": "matrix(0.728854,0.684669,-0.684669,0.728854,0,0)",
+      "orbit_after_2_6s": "matrix(-0.954584,0.297941,-0.297941,-0.954584,0,0)",
+      "rail_dash_start_px": -151.954,
+      "rail_dash_after_2_6s_px": -567.978,
+      "room_opacity_start": 0.45593,
+      "room_opacity_after": 0.745354,
+      "stage_screenshot_pixel_sample": {
+        "samples": 8910,
+        "changed_rgb_sum_at_least_18": 658,
+        "changed_percentage": 7.38,
+        "strong_changes_rgb_sum_at_least_75": 359,
+        "strong_percentage": 4.03,
+        "mean_rgb_sum_delta": 10.51
+      },
+      "reduced_motion_pass": true
+    },
+    "screenshot_diff_method": "Screenshots captured via Chrome DevTools Page.captureScreenshot at t0 and t+2.6s; System.Drawing Bitmap.GetPixel sampled every 4px inside stage bounding rectangle, RGB absolute-difference sum threshold 18 and 75; no user input between frames."
+  },
+  "cloudflare": {
+    "deployment_id": "0a862677-d240-4012-9d14-4f16309c4bc9",
+    "url": "https://0a862677.synestra-vitrine-preview.pages.dev/",
+    "environment": "preview",
+    "state": "DEPLOY_SUCCESS",
+    "code_commit": "515e0c2ea8cb0a91c3ade9b54e0f523cd3a4a306",
+    "tests": 118,
+    "passed": 118,
+    "failed": 0,
+    "static_export": "PASS",
+    "static_files": 49,
+    "production_mutated": false,
+    "access_protected": true
+  },
+  "limitations": [
+    "Real Chrome test was from local isolated checkout, not authenticated live preview URL; no authenticated cross-platform visual approval",
+    "Static + runtime tests prove continuous animation; aesthetic quality remains owner judgement",
+    "No change to other page demos or production branch"
+  ],
+  "rollback": "Revert R172 SVG group, halo and CSS and R172 tests on isolated preview branch; prior R171 preview remains available.",
+  "status": "PREVIEW_DEPLOYED_BROWSER_E2E_PASS_AWAITING_OWNER_VISUAL_REVIEW"
+}
