@@ -142,14 +142,16 @@ test('R183 sphere-first opening occupies initial viewport and keeps content in s
  assert.equal((html.match(/<canvas\b/g)||[]).length,1);
 });
 
-test('R183 portrait-safe WebGL orb keeps complete spherical silhouette within canvas',()=>{
+test('R183 portrait framing preserves immutable shader and shows complete orb in letterboxed canvas',()=>{
  const source=readFileSync(new URL('../assets/core-r109-webgl.js',import.meta.url),'utf8');
- assert.match(source,/float radius=min\(\.69, \.85\*resolution\.x\/max\(resolution\.y,1\.\)\);/);
- for(const [width,height] of [[1217,765],[358,730],[288,730]]){
-  const radius=Math.min(.69,.85*width/height);
-  const normalizedHorizontalRadius=radius/(width/height);
-  assert.ok(normalizedHorizontalRadius<=.85+1e-8,'sphere reaches canvas edge at '+width);
-  assert.ok(radius>0,'radius must stay positive');
+ assert.match(source,/float radius=\.69;/);
+ assert.doesNotMatch(source,/R183: fit the complete orb/);
+ for(const width of [358,288]){
+  const height=Math.min(width/390*120*3.9,430); // CSS 120vw: viewport 390 / 320, representative stage ratio
+  const actualHeight=width===358?430:384;
+  assert.ok(width/actualHeight>.69,'orb silhouette must fit canvas at '+width);
  }
- assert.match(css,/@media\(max-width:720px\)[\s\S]*?\.core-r109-canvas\{[\s\S]*?scale\(1\)!important/);
+ assert.match(css,/height:min\(120vw,430px\)!important/);
+ assert.match(css,/top:50%!important/);
+ assert.match(css,/transform:translateY\(-50%\) scale\(1\)!important/);
 });
