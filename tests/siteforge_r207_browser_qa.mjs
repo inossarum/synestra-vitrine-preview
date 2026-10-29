@@ -10,7 +10,7 @@ const root=join(dirname(fileURLToPath(import.meta.url)),'..');
 const url='http://127.0.0.1:18884/';
 const chrome=process.env.CHROME_BIN||(process.platform==='win32'?'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe':'/usr/bin/google-chrome');
 const profile=mkdtempSync(join(tmpdir(),'synestra-r207-chrome-'));
-const child=spawn(chrome,['--headless=new','--no-sandbox','--enable-unsafe-swiftshader','--disable-dev-shm-usage','--no-first-run','--no-default-browser-check','--disable-background-networking','--remote-debugging-address=127.0.0.1','--remote-debugging-port=0','--user-data-dir='+profile,url],{stdio:'ignore',windowsHide:true});
+const child=spawn(chrome,['--headless=new','--enable-unsafe-swiftshader','--disable-dev-shm-usage','--no-first-run','--no-default-browser-check','--disable-background-networking','--remote-debugging-address=127.0.0.1','--remote-debugging-port=0','--user-data-dir='+profile,url],{stdio:'ignore',windowsHide:true});
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 let ws,send;const issues=[],results=[];
 try {
