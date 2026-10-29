@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - task/SYN_SITEFORGE_R202_CINEMATIC_DEPTH_20261029
+  pull_request:
+    branches:
+      - task/SYN_SITEFORGE_R201_THREE_THEATRE_INTEGRATION_20261029
   workflow_dispatch:
 permissions:
   contents: read
