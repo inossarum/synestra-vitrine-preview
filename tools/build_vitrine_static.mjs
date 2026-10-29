@@ -67,3 +67,60 @@ if(process.env.CF_PAGES_BRANCH===studioReviewBranch){
 console.log('SYNESTRA_STATIC_EXPORT='+(checkOnly?'CHECK_PASS':'PASS'));
 console.log('SYNESTRA_STATIC_FILE_COUNT='+files.length);
 console.log('SYNESTRA_STATIC_ALLOWLIST='+rootFiles.concat(rootDirs).join(','));
+
+
+// Exact-branch-only, FREE_ONLY Synestra R202 review. Existing main and other preview builds
+// remain byte-for-byte governed by the original static export above.
+const r202ReviewBranch='task/SYN_SITEFORGE_R202_CINEMATIC_DEPTH_20261029';
+if(process.env.CF_PAGES_BRANCH===r202ReviewBranch){
+ const previewFiles=[
+  ['r202/index.html','index.html'],
+  ['r202/connect/index.html','connect/index.html'],
+  ['r202/bridge/index.html','bridge/index.html'],
+  ['r202/siteforge/index.html','siteforge/index.html'],
+  ['r202/offres/index.html','offres/index.html'],
+  ['assets/r202-three.css','assets/r202-three.css']
+ ];
+ for(const [src] of previewFiles){
+  const file=join(root,src);
+  if(!existsSync(file)||!lstatSync(file).isFile()||lstatSync(file).isSymbolicLink())throw Error('R202_PREVIEW_SOURCE_MISSING:'+src);
+ }
+ const homepage=readFileSync(join(root,'r202/index.html'),'utf8');
+ if(!homepage.includes('r202-scene.bundle.mjs')||!homepage.includes('noindex,nofollow'))throw Error('R202_REVIEW_CONTRACT_FAILED');
+ if(!checkOnly){
+  const {execFileSync}=await import('node:child_process');
+  const cwd=join(root,'r202-build');
+  execFileSync(process.platform==='win32'?'npm.cmd':'npm',['ci','--ignore-scripts','--no-audit','--no-fund'],{cwd,stdio:'inherit',timeout:180000,env:{...process.env,CI:'true'}});
+  execFileSync(process.execPath,['build.mjs'],{cwd,stdio:'inherit',timeout:60000});
+  const out=join(root,'assets/r202-scene.bundle.mjs');
+  if(!existsSync(out)||lstatSync(out).size<300000)throw Error('R202_BUNDLE_MISSING');
+  for(const [src,dst] of previewFiles){
+   const target=join(output,dst);
+   mkdirSync(resolve(target,'..'),{recursive:true});
+   copyFileSync(join(root,src),target);
+  }
+  for(const name of ['r202-scene.bundle.mjs','r202-scene.bundle.mjs.LEGAL.txt']){
+   const file=join(root,'assets',name);
+   if(!existsSync(file)||!lstatSync(file).isFile())throw Error('R202_BUNDLE_RESOURCE_MISSING:'+name);
+   const target=join(output,'assets',name);
+   copyFileSync(file,target);
+  }
+  const datasets=join(root,'assets/r202-gpu-benchmarks');
+  const outDatasets=join(output,'assets/r202-gpu-benchmarks');
+  mkdirSync(outDatasets,{recursive:true});
+  let copied=0;
+  for(const name of readdirSync(datasets)){
+   if(!/^[a-z0-9_-]+\.json$/i.test(name))throw Error('R202_GPU_FILENAME_DENIED');
+   const file=join(datasets,name),stat=lstatSync(file);
+   if(!stat.isFile()||stat.isSymbolicLink()||stat.size>200000)throw Error('R202_GPU_DATASET_DENIED');
+   copyFileSync(file,join(outDatasets,name));
+   copied++;
+  }
+  if(copied<10)throw Error('R202_GPU_DATASETS_INCOMPLETE');
+  console.log('SYNESTRA_R202_REVIEW_PREVIEW=PASS');
+  console.log('SYNESTRA_R202_BUNDLE_BYTES='+lstatSync(out).size);
+  console.log('SYNESTRA_R202_GPU_DATASETS='+copied);
+ }else{
+  console.log('SYNESTRA_R202_REVIEW_PREVIEW=CHECK_PASS');
+ }
+}
