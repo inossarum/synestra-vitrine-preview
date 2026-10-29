@@ -1,0 +1,29 @@
+{
+  "schema": "synestra.siteforge.r1883.gpu-e2e.v1",
+  "mobile": true,
+  "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "status": "PASS",
+  "levels": [
+    0,
+    100,
+    200
+  ],
+  "rangeMax": "200",
+  "uniform100": 1,
+  "uniform200": 2,
+  "visualDiff100to200": {
+    "width": 444,
+    "height": 348,
+    "pixels": 154512,
+    "changed": 21222,
+    "changedPercent": 13.734855545200373,
+    "majorPercent": 9.837423630527079,
+    "meanMaxDelta": 9.607739204721963
+  },
+  "exportedTurbulence": 200,
+  "legacyRestoresDefault": "35",
+  "invalid201Rejected": true,
+  "valid200Imported": true,
+  "errors": 0,
+  "limitations": "Screenshots include normal animation phase; visual pixel delta alone is not a deterministic intensity measurement."
+}
