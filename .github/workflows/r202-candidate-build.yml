@@ -1,0 +1,89 @@
+name: R202 isolated Three.js build and contracts
+on:
+  push:
+    branches:
+      - task/SYN_SITEFORGE_R202_CINEMATIC_DEPTH_20261029
+  pull_request:
+    branches:
+      - task/SYN_SITEFORGE_R201_THREE_THEATRE_INTEGRATION_20261029
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: r202-candidate-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: r202-build/package-lock.json
+      - name: Install only pinned free build dependencies
+        working-directory: r202-build
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Build R202
+        working-directory: r202-build
+        run: npm run build
+      - name: Verify compiled bundle and source contracts
+        run: |
+          node --check assets/r202-scene.bundle.mjs
+          node --check r202-build/scene.mjs
+          node --check r202-build/r202-environment.mjs
+          node --test tests/siteforge_r202_geometry.test.mjs
+          node --test tests/siteforge_r202_static_assets.test.mjs
+      - name: Publish diagnostic build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: r202-isolated-build
+          path: |
+            r202/
+            siteforge/
+            assets/product-pages.css
+            assets/r191-system.css
+            assets/r191-ambient.js
+            assets/r193-experience.css
+            assets/r194-editorial.css
+            assets/r194-scroll.js
+            assets/r195-interactions.css
+            assets/r195-interactions.js
+            assets/r196-refinements.css
+            assets/r197-depth.css
+            assets/r198-chamber.css
+            assets/r199-alcove.css
+            assets/r200-unified-scene.css
+            assets/synestra-studio-official-header.webp
+            assets/r202-scene.bundle.mjs
+            assets/r202-scene.bundle.mjs.LEGAL.txt
+            assets/r202-three.css
+            assets/r202-gpu-benchmarks/
+          retention-days: 3
+
+
+  pages-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Reproduce Cloudflare Pages R202 preview build without production mutation
+        env:
+          CF_PAGES_BRANCH: task/SYN_SITEFORGE_R202_CINEMATIC_DEPTH_20261029
+        run: |
+          node --check assets/core-r109-webgl.js
+          npm --prefix r202-build ci --ignore-scripts --no-audit --no-fund
+          node r202-build/build.mjs
+          node tools/build_vitrine_static.mjs
+          node -e "const fs=require('node:fs');const h=fs.readFileSync('dist/index.html','utf8');if(!h.includes('r202-scene.bundle.mjs')||!h.includes('noindex,nofollow'))process.exit(2);for(const p of ['dist/assets/r202-scene.bundle.mjs','dist/assets/r202-three.css','dist/assets/r202-gpu-benchmarks/d-nvidia.json','dist/connect/index.html','dist/bridge/index.html','dist/offres/index.html','dist/siteforge/index.html'])if(!fs.existsSync(p))throw Error('MISSING '+p);console.log('R202_PAGES_ROOT_AND_ASSETS=PASS')"
+      - name: Upload exact Cloudflare Pages dist for review
+        uses: actions/upload-artifact@v4
+        with:
+          name: r202-pages-preview-dist
+          path: dist/
+          retention-days: 3
