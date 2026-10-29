@@ -24,6 +24,12 @@ Mission : `SYN_SITEFORGE_R1881_GPU_COMPARE_20261029`. Périmètre : valider la c
 - Preuve machine : `evidence/SITEFORGE_R1881_GPU_COMPARE_20261029.json` et 4 PNG `r1881-gpu-r188*-{fixed,repeat}.png`. Page comparateur `r1881-comparaison-rtx3090.html`. Quatre liens HTTP sur localhost:19102 vérifiés 200.
 - Les résultats sont propres à Chrome Windows RTX 3090, ils ne valident ni mobile physique ni release publique.
 
+## Qualification responsive du comparateur
+- Capture Chrome CLI `--window-size=390,844` : image visuellement rognée en raison de sa fenêtre virtuelle, donc non retenue comme preuve mobile.
+- Correctif au **test** (pas à la page) : Chrome CDP `Emulation.setDeviceMetricsOverride` avec 390×844 mobile=true, et 1200×840 desktop. Les deux vues ont été réellement rendues, capturées et inspectées.
+- Résultat : desktop `innerWidth=1200`, `scrollWidth=1200`, grille deux colonnes de 555 px ; mobile `innerWidth=390`, `scrollWidth=390`, grille une colonne de 358 px. Les deux images sont chargées sur chaque écran. Zéro débordement horizontal.
+- Preuves : `evidence/SITEFORGE_R1881_VIEWER_RESPONSIVE_20261029.json`, `evidence/r1881-gpu-viewer-desktop.png`, `evidence/r1881-gpu-viewer-mobile.png`. Test réexécutable : `node tests/siteforge_r1881_viewer_responsive.mjs` (Chrome D3D11, sans relâchement de sandbox).
+
 ## Sécurité, récupération, prochains jalons
 - Local uniquement `http://127.0.0.1:19102/r1881-comparaison-rtx3090.html`. Aucun hébergement externe, aucune dépense, aucun secret, aucune mutation de `main`.
 - En cas d'arrêt des serveurs R1880/R1881, les démarrer avec `python -m http.server 19100 --bind 127.0.0.1 --directory I:\_STUDIO_STAGING\siteforge_r1880_adaptive_gpu_20261029` et le port 19101 pour R1881 ; ne pas changer les ports s'ils appartiennent à un autre propriétaire.

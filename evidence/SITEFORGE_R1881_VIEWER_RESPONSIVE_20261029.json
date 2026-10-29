@@ -1,0 +1,39 @@
+{
+  "report": {
+    "desktop": {
+      "viewport": 1200,
+      "outer": 1200,
+      "body": 1200,
+      "grid": "555px 555px",
+      "images": [
+        {
+          "loaded": true,
+          "naturalWidth": 544
+        },
+        {
+          "loaded": true,
+          "naturalWidth": 544
+        }
+      ],
+      "font": 16
+    },
+    "mobile": {
+      "viewport": 390,
+      "outer": 390,
+      "body": 390,
+      "grid": "358px",
+      "images": [
+        {
+          "loaded": true,
+          "naturalWidth": 544
+        },
+        {
+          "loaded": true,
+          "naturalWidth": 544
+        }
+      ],
+      "font": 16
+    }
+  },
+  "status": "PASS"
+}
