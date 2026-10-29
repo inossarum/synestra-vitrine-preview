@@ -26,8 +26,8 @@ test('Single real Three.js canvas, plinth, floor, walls, three physical lights',
  assert.doesNotMatch(scene,/createEnergyLandscape|createCinematicEnvironment|new THREE.Points/);
 });
 test('Low-end can render 3D with bounded sampling and pixels before falling back to static',()=>{
- assert.match(scene,/const budget=\[8,14,22,34\]/);
- assert.match(scene,/175000:renderTier===1\?320000:renderTier===2\?650000:950000/);
+ assert.match(scene,/const budget=\[12,24,32,40\]/);
+ assert.match(scene,/clampDetailForTier\(renderTier\)\.pixels/);
  assert.match(scene,/1000\/18:renderTier===1\?1000\/24:renderTier===2\?1000\/30:1000\/50/);
  assert.match(scene,/renderer.shadowMap.enabled=renderTier>=3/);
  assert.match(scene,/if\(reduced.matches\)/);
@@ -49,10 +49,10 @@ test('Hero 3D is isolated and all standard product pages remain conventional HTM
 test('Negative controls reject second renderer, unconditional 40 steps, and decorative global WebGL',()=>{
  const validator=s=>{
   assert.equal((s.match(/new THREE.WebGLRenderer/g)||[]).length,1);
-  assert.match(s,/const budget=\[8,14,22,34\]/);
+  assert.match(s,/const budget=\[12,24,32,40\]/);
   assert.doesNotMatch(s,/new THREE.Points/);
  };
  assert.throws(()=>validator(scene+'new THREE.WebGLRenderer({})'));
- assert.throws(()=>validator(scene.replace('const budget=[8,14,22,34]','const budget=[40,40,40,40]')));
+ assert.throws(()=>validator(scene.replace('const budget=[12,24,32,40]','const budget=[40,40,40,40]')));
  assert.throws(()=>validator(scene+'new THREE.Points()'));
 });
