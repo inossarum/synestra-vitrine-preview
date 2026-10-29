@@ -44,7 +44,7 @@
 .syn-r204-home .r207-quality-readout{font-size:10px;letter-spacing:.01em;color:#9dceb9}
 @media(max-width:700px){
  .syn-r204-home .core-r109-stage > .r207-quality-panel{
-  top:205px;right:12px;max-width:178px;padding:8px 9px;
+  top:164px;right:12px;max-width:178px;padding:8px 9px;
  }
  .syn-r204-home .r207-quality-panel select{min-width:120px;font-size:12px}
 }
