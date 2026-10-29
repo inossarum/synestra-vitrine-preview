@@ -1,0 +1,16 @@
+{
+  "schema": "synestra.atlas.babylon.decor.r212.v1",
+  "engine": "Blender 5.2.2 LTS",
+  "target": "Babylon.js 9.33.0",
+  "core_status": "CORE_SOCKET_ONLY",
+  "objects": 295,
+  "meshes": 285,
+  "core_socket": "CORE_SOCKET",
+  "materials": 13,
+  "wall_panels": 28,
+  "ceiling_rings": 7,
+  "catwalk_segments": 22,
+  "glb_path": "dist/synestra_reactor_decor_r212.glb",
+  "blend_path": "dist/synestra_reactor_decor_r212.blend",
+  "preview_path": "dist/reactor-decor-preview.png"
+}

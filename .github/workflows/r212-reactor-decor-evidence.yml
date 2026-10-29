@@ -1,0 +1,30 @@
+name: R212 reactor decor - GLB and Chrome proof
+on:
+  push:
+    branches: [task/SYN_REACTOR_DECOR_BLENDER_R212_20261029]
+permissions:
+  contents: read
+jobs:
+  evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify original GLB, named socket and baked PBR images
+        run: |
+          node -e "const fs=require('fs');const b=fs.readFileSync('reactor-decor/dist/synestra_reactor_decor_r212.glb');if(b.toString('ascii',0,4)!=='glTF')throw Error('INVALID_GLB');const j=JSON.parse(b.toString('utf8',20,20+b.readUInt32LE(12)));if(!j.nodes.some(n=>n.name==='CORE_SOCKET'))throw Error('MISSING_CORE_SOCKET');if(j.meshes.length<200||j.images.length!==3)throw Error('MESH_OR_PBR_BUDGET');console.log('R212_GLB_PASS',j.meshes.length,j.images.length);"
+          test -s reactor-decor/dist/synestra_reactor_decor_r212.blend
+          test -s reactor-decor/dist/reactor-decor-preview.png
+          test -s reactor-decor/evidence/atlas-babylon-r212-chrome-1440.png
+          test -s reactor-decor/evidence/atlas-babylon-r212-chrome-390.png
+          file reactor-decor/evidence/atlas-babylon-r212-chrome-1440.png reactor-decor/evidence/atlas-babylon-r212-chrome-390.png
+          sha256sum reactor-decor/evidence/*.png reactor-decor/dist/synestra_reactor_decor_r212.glb
+      - name: Deliver exact remote Chrome screenshots and Blender preview
+        uses: actions/upload-artifact@v4
+        with:
+          name: synestra-r212-reactor-visual-proof
+          path: |
+            reactor-decor/evidence/*.png
+            reactor-decor/evidence/*.json
+            reactor-decor/dist/reactor-decor-preview.png
+          retention-days: 3
