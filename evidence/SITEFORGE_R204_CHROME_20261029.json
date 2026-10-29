@@ -1,0 +1,170 @@
+{
+  "schema": "synestra.siteforge.r204.chrome.v1",
+  "sourceCommit": "fd23e9c325214715b08b508da6756374f2535aef",
+  "status": "PASS",
+  "device": "Inos-Cerebros Chrome isolated headless",
+  "results": [
+    {
+      "width": 1440,
+      "home": {
+        "ready": "true",
+        "fallback": null,
+        "gpuTier": "3",
+        "renderer": "three-one",
+        "reference": "R188.1@81b9cf1c",
+        "canvas": 1,
+        "buffer": [
+          1226,
+          774
+        ],
+        "cssSize": [
+          1423,
+          898
+        ],
+        "webgl": true,
+        "gpu": "WebKit WebGL",
+        "status": "Core 3D Studio actif.",
+        "h1": 1,
+        "overflow": 1425,
+        "viewport": 1440,
+        "fps": "15.4",
+        "quality": "1.00"
+      },
+      "screenshot": {
+        "bytes": 238692,
+        "sha256": "9c790202e5fc2334f776c8013e25f3e8ac5276f054d08ae88da2e8c163e71e78"
+      }
+    },
+    {
+      "width": 768,
+      "home": {
+        "ready": "true",
+        "fallback": null,
+        "gpuTier": "3",
+        "renderer": "three-one",
+        "reference": "R188.1@81b9cf1c",
+        "canvas": 1,
+        "buffer": [
+          753,
+          900
+        ],
+        "cssSize": [
+          751,
+          898
+        ],
+        "webgl": true,
+        "gpu": "WebKit WebGL",
+        "status": "Core 3D Studio actif.",
+        "h1": 1,
+        "overflow": 753,
+        "viewport": 768,
+        "fps": "44.8",
+        "quality": "1.00"
+      },
+      "screenshot": {
+        "bytes": 197389,
+        "sha256": "de53b35b9eec9262498c96f98da8f975f1e519d479243cb481655cc4fb64dde7"
+      }
+    },
+    {
+      "width": 390,
+      "home": {
+        "ready": "true",
+        "fallback": null,
+        "gpuTier": "3",
+        "renderer": "three-one",
+        "reference": "R188.1@81b9cf1c",
+        "canvas": 1,
+        "buffer": [
+          390,
+          900
+        ],
+        "cssSize": [
+          388,
+          898
+        ],
+        "webgl": true,
+        "gpu": "WebKit WebGL",
+        "status": "Core 3D Studio actif.",
+        "h1": 1,
+        "overflow": 390,
+        "viewport": 390,
+        "fps": "44.1",
+        "quality": "1.00"
+      },
+      "screenshot": {
+        "bytes": 156197,
+        "sha256": "09f6f593f124903ac695882df817d0a18005f5e88a0b586cf3f63885a6bb9859"
+      }
+    }
+  ],
+  "reduced": {
+    "ready": null,
+    "fallback": "reduced-motion",
+    "gpuTier": null,
+    "renderer": null,
+    "reference": null,
+    "canvas": 1,
+    "buffer": [
+      960,
+      570
+    ],
+    "cssSize": [
+      388,
+      898
+    ],
+    "webgl": true,
+    "gpu": "WebKit WebGL",
+    "status": "Sphère statique : animations réduites.",
+    "h1": 1,
+    "overflow": 390,
+    "viewport": 390,
+    "fps": null,
+    "quality": null
+  },
+  "product": [
+    {
+      "href": "/connect/",
+      "ready": "complete",
+      "h1": 1,
+      "canvas": 0,
+      "overflow": 390,
+      "viewport": 390
+    },
+    {
+      "href": "/bridge/",
+      "ready": "complete",
+      "h1": 1,
+      "canvas": 0,
+      "overflow": 390,
+      "viewport": 390
+    },
+    {
+      "href": "/siteforge/",
+      "ready": "complete",
+      "h1": 1,
+      "canvas": 0,
+      "overflow": 390,
+      "viewport": 390
+    },
+    {
+      "href": "/offres/",
+      "ready": "complete",
+      "h1": 1,
+      "canvas": 0,
+      "overflow": 390,
+      "viewport": 390
+    }
+  ],
+  "issues": [
+    "LOG:The Content Security Policy directive 'frame-ancestors' is ignored when delivered via a <meta> element.",
+    "LOG:Failed to load resource: the server responded with a status of 404 (File not found)",
+    "LOG:The Content Security Policy directive 'frame-ancestors' is ignored when delivered via a <meta> element.",
+    "LOG:The Content Security Policy directive 'frame-ancestors' is ignored when delivered via a <meta> element.",
+    "LOG:The Content Security Policy directive 'frame-ancestors' is ignored when delivered via a <meta> element.",
+    "LOG:The Content Security Policy directive 'frame-ancestors' is ignored when delivered via a <meta> element.",
+    "LOG:The Content Security Policy directive 'frame-ancestors' is ignored when delivered via a <meta> element.",
+    "LOG:The Content Security Policy directive 'frame-ancestors' is ignored when delivered via a <meta> element.",
+    "LOG:The Content Security Policy directive 'frame-ancestors' is ignored when delivered via a <meta> element."
+  ]
+}
