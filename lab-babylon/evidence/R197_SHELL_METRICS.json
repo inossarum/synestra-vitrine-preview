@@ -1,0 +1,96 @@
+{
+  "schema": "synestra.lab.r197.shell-visual-metrics.v1",
+  "base": "R196@2ee6097ffeebdb2699f9a9222c884f686aa862b1",
+  "artReference": "SYN_SPHERE_ART_REFERENCE_20261029",
+  "scope": "sphere shell only, nucleus kept untouched",
+  "comparisons": [
+    {
+      "before": "r196-core-core0-1100.png",
+      "after": "r197-shell-core0-1100.png",
+      "changed": 161737,
+      "changedPercent": 16.33707070707071,
+      "majorPercent": 12.057070707070707
+    },
+    {
+      "before": "r196-core-core0-390.png",
+      "after": "r197-shell-core0-390.png",
+      "changed": 58622,
+      "changedPercent": 16.7014245014245,
+      "majorPercent": 12.276923076923078
+    }
+  ],
+  "orbit": [
+    {
+      "before": "r197-orbit-front-1100.png",
+      "after": "r197-orbit-side-1100.png",
+      "changed": 190114,
+      "changedPercent": 19.203434343434342,
+      "majorPercent": 14.71888888888889
+    },
+    {
+      "before": "r197-orbit-front-1100.png",
+      "after": "r197-orbit-above-1100.png",
+      "changed": 187867,
+      "changedPercent": 18.976464646464645,
+      "majorPercent": 14.39030303030303
+    }
+  ],
+  "coverage": {
+    "economy": {
+      "active": 8,
+      "occupiedOctants": 7,
+      "octants": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        2
+      ],
+      "north": 5,
+      "south": 3
+    },
+    "balanced": {
+      "active": 26,
+      "occupiedOctants": 8,
+      "octants": [
+        2,
+        5,
+        3,
+        3,
+        3,
+        3,
+        3,
+        4
+      ],
+      "north": 13,
+      "south": 13
+    },
+    "ultra": {
+      "active": 28,
+      "occupiedOctants": 8,
+      "octants": [
+        3,
+        5,
+        3,
+        3,
+        3,
+        3,
+        4,
+        4
+      ],
+      "north": 14,
+      "south": 14
+    }
+  },
+  "checks": {
+    "nucleusModes": 8,
+    "qualityModes": 6,
+    "cameraPoses": 3,
+    "powerZeroCases": 2,
+    "gpuErrorCount": 0
+  },
+  "caveat": "Differences and anchor octants are not proof of exact artistic reference fidelity; mobile 390 is viewport emulation."
+}

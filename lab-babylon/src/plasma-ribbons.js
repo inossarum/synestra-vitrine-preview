@@ -1,5 +1,6 @@
 /** R192 / Synestra LAB: plasma ribbons in true 3D, no new scene or engine. */
 import {Vector3,MeshBuilder,ShaderMaterial,VertexBuffer,Mesh,Engine} from '@babylonjs/core';
+import {shellAnchorPair} from './shell-coverage.js';
 
 const RAILS=[-1,-.55,0,.55,1], STEPS=84, TWOPI=Math.PI*2;
 const clamp=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
@@ -11,7 +12,8 @@ function pointOnShell(angle,height){
 }
 export function organicPlasmaCenterline(index,time,nodes){
  if(!Array.isArray(nodes)||nodes.length<4)throw Error('PLASMA_NODES_MISSING');
- const start=nodes[index%nodes.length],end=nodes[(index*3+2+Math.floor(index/6))%nodes.length];
+ const [startCoords,endCoords]=shellAnchorPair(index);
+ const start=new Vector3(...startCoords),end=new Vector3(...endCoords);
  const a=start.normalizeToNew(),b=end.normalizeToNew();
  const phase=golden(index),side=Vector3.Cross(a,b);
  if(side.lengthSquared()<.03)side.copyFromFloats(.2,.8,.1);
