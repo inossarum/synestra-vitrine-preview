@@ -41,6 +41,19 @@ jobs:
           name: r202-isolated-build
           path: |
             r202/
+            assets/r191-system.css
+            assets/r191-ambient.js
+            assets/r193-experience.css
+            assets/r194-editorial.css
+            assets/r194-scroll.js
+            assets/r195-interactions.css
+            assets/r195-interactions.js
+            assets/r196-refinements.css
+            assets/r197-depth.css
+            assets/r198-chamber.css
+            assets/r199-alcove.css
+            assets/r200-unified-scene.css
+            assets/synestra-studio-official-header.webp
             assets/r202-scene.bundle.mjs
             assets/r202-scene.bundle.mjs.LEGAL.txt
             assets/r202-three.css
