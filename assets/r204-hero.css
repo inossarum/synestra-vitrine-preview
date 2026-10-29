@@ -1,0 +1,55 @@
+/* R201: Three.js WebGLRenderer controls the only hero canvas.
+   Legacy CSS environmental layers excluded, leave DOM navigation accessible. */
+.syn-r201-home .r192-scene{background:#050915!important;isolation:isolate}
+.syn-r201-home .core-r109-stage .core-r109-canvas{
+ position:absolute!important;inset:0!important;
+ width:100%!important;height:100%!important;
+ transform:none!important;opacity:0;
+ display:block!important;z-index:2!important;pointer-events:none!important;
+}
+.syn-r201-home .core-r109-stage[data-core-ready="true"] .core-r109-canvas{opacity:1!important}
+.syn-r201-home .core-r109-stage[data-core-ready="true"] .core-r108-art{display:none!important}
+.syn-r201-home .r192-floor,.syn-r201-home .r199-architecture,.syn-r201-home .r192-depth-haze,
+.syn-r201-home .r196-core-apparatus,.syn-r201-home .r198-chamber{display:none!important}
+.syn-r201-home .core-r108-top,.syn-r201-home .r192-scene-caption,.syn-r201-home .r192-hero-outro{z-index:10!important}
+@media(prefers-reduced-motion:reduce){
+ .syn-r201-home .core-r109-canvas{display:none!important}
+ .syn-r201-home .core-r108-art{opacity:1!important;display:block!important}
+}
+
+.syn-r202-home .r192-scene{background:#050916!important}
+
+/* R204: premium real-time 3D belongs exclusively to the hero viewport.
+   Every section outside the hero remains ordinary semantic HTML/CSS. */
+.syn-r204-home .r192-scene{
+ background:#050919!important;
+ isolation:isolate;
+ border:1px solid rgba(123,150,175,.17);
+ box-shadow:inset 0 0 72px rgba(22,30,55,.16);
+ min-height:min(86vh,760px);
+}
+.syn-r204-home .core-r109-stage .core-r109-canvas{
+ pointer-events:auto!important;
+ opacity:0;transition:opacity .22s ease;
+}
+.syn-r204-home .core-r109-stage[data-core-ready="true"] .core-r109-canvas{opacity:1!important}
+.syn-r204-home .r192-hero{margin-bottom:clamp(3rem,6vw,6rem)}
+.syn-r204-home main > section:not(.r192-hero){
+ transform:none!important;
+ filter:none;
+ animation:none;
+}
+.syn-r204-home main > section:not(.r192-hero) h2{letter-spacing:-.025em;line-height:1.18}
+.syn-r204-home main > section:not(.r192-hero) p{line-height:1.7}
+.syn-r204-home main > section:not(.r192-hero) a:focus-visible{
+ outline:2px solid #80cfab;outline-offset:3px;
+}
+@media(max-width:700px){
+ .syn-r204-home .r192-scene{min-height:540px}
+ .syn-r204-home .r192-hero{margin-bottom:2.75rem}
+}
+@media(prefers-reduced-motion:reduce){
+ .syn-r204-home .core-r109-canvas{display:none!important}
+ .syn-r204-home .core-r108-art{display:block!important;opacity:1!important}
+ .syn-r204-home main > section:not(.r192-hero){transition:none!important}
+}
