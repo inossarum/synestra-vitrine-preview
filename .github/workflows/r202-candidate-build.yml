@@ -1,0 +1,45 @@
+name: R202 isolated Three.js build and contracts
+on:
+  push:
+    branches:
+      - task/SYN_SITEFORGE_R202_CINEMATIC_DEPTH_20261029
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: r202-candidate-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: r202-build/package-lock.json
+      - name: Install only pinned free build dependencies
+        working-directory: r202-build
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Build R202
+        working-directory: r202-build
+        run: npm run build
+      - name: Verify compiled bundle and source contracts
+        run: |
+          node --check assets/r202-scene.bundle.mjs
+          node --check r202-build/scene.mjs
+          node --check r202-build/r202-environment.mjs
+          node --test tests/siteforge_r202_geometry.test.mjs
+      - name: Publish diagnostic build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: r202-isolated-build
+          path: |
+            r202/
+            assets/r202-scene.bundle.mjs
+            assets/r202-scene.bundle.mjs.LEGAL.txt
+            assets/r202-three.css
+            assets/r202-gpu-benchmarks/
+          retention-days: 3
