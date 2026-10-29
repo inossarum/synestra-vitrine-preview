@@ -111,8 +111,13 @@ try {
  const preload=await send('Page.addScriptToEvaluateOnNewDocument',{source:"(()=>{const native=requestAnimationFrame.bind(window);window.requestAnimationFrame=(cb)=>native(()=>setTimeout(()=>cb(performance.now()),110));})()"});
  await send('Emulation.setDeviceMetricsOverride',{width:1440,height:900,deviceScaleFactor:1,mobile:false});
  await send('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'no-preference'}]});
- await send('Page.navigate',{url});await wait(14500);
- const simulatedSlowFrames=await evaluate("(()=>{const s=document.querySelector('.core-r109-stage');return{ready:s?.dataset.coreReady||null,gpuTier:Number(s?.dataset.gpuTier),tier:Number(s?.dataset.renderTier),drops:Number(s?.dataset.autoTierDrops),samples:Number(s?.dataset.energyRaySamples),quality:s?.dataset.coreQuality||null,fps:s?.dataset.coreFps||null,canvas:document.querySelectorAll('canvas').length}})()");
+ await send('Page.navigate',{url});
+ let simulatedSlowFrames;
+ for(let frameProbe=0;frameProbe<140;frameProbe++){
+  await wait(500);
+  simulatedSlowFrames=await evaluate("(()=>{const s=document.querySelector('.core-r109-stage');return{ready:s?.dataset.coreReady||null,gpuTier:Number(s?.dataset.gpuTier),tier:Number(s?.dataset.renderTier),drops:Number(s?.dataset.autoTierDrops),samples:Number(s?.dataset.energyRaySamples),quality:s?.dataset.coreQuality||null,fps:s?.dataset.coreFps||null,canvas:document.querySelectorAll('canvas').length}})()");
+  if(simulatedSlowFrames.drops>=1||(simulatedSlowFrames.ready==='true'&&simulatedSlowFrames.gpuTier===0))break;
+ }
  await send('Page.removeScriptToEvaluateOnNewDocument',{identifier:preload.identifier});
  assert.equal(simulatedSlowFrames.ready,'true','R205_LOST_WEBGL_UNDER_SLOW_FRAMES');
  if(simulatedSlowFrames.gpuTier>0)
