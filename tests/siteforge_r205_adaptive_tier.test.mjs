@@ -11,10 +11,10 @@ const start={currentTier:3,slowWindows:0,fastWindows:0,quality:1,frameMs:35,targ
 test('Three consecutive slow windows downgrade effective tier and shader samples, not GPU hardware classification',()=>{
  let s=start;for(let i=0;i<3;i++){const r=evolveAdaptiveBudget(s);s={...s,currentTier:r.tier,slowWindows:r.slowWindows,fastWindows:r.fastWindows,quality:r.quality};}
  assert.equal(s.currentTier,2);assert.equal(s.quality,.9);assert.equal(s.slowWindows,0);
- assert.match(scene,/stage\.dataset\.gpuTier=String\(renderTier\)/);
+ assert.match(scene,/stage\.dataset\.gpuTier=String\(detectedTier\)/);
  assert.match(scene,/stage\.dataset\.renderTier=String\(renderTier\)/);
  assert.match(scene,/uniforms\.uEnergySteps\.value=budget\[renderTier\]/);
- assert.match(scene,/uniforms\.uVolumeSteps\.value=\[8,10,14,18\]\[renderTier\]/);
+ assert.match(scene,/uniforms\.uVolumeSteps\.value=\[8,12,16,22\]\[renderTier\]/);
  assert.match(scene,/targetInterval=renderTier<=0\?1000\/18/);
 });
 test('Tier zero never turns a live WebGL scene off',()=>{
