@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "mobile": true,
+  "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "repeat": {
+    "width": 444,
+    "height": 348,
+    "pixels": 154512,
+    "changed": 11401,
+    "changedPercent": 7.3787149218183705,
+    "majorPercent": 3.1402091746919334,
+    "meanMaxDelta": 3.498174899036968
+  },
+  "delta": {
+    "width": 444,
+    "height": 348,
+    "pixels": 154512,
+    "changed": 19955,
+    "changedPercent": 12.914854509682096,
+    "majorPercent": 9.254944599772186,
+    "meanMaxDelta": 8.86778373200787
+  },
+  "energyControl": "100",
+  "uniformZero": 0,
+  "uniformFull": 1,
+  "note": "Animation uLabTime non figée : pixel delta comparatif inclut le mouvement temporel; ce n’est pas une différence déterministe."
+}

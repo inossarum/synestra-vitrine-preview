@@ -1,0 +1,50 @@
+{
+  "schema": "synestra.siteforge.r1882.partial_evidence.v1",
+  "date": "2026-10-29",
+  "mission": "SYN_SITEFORGE_R1882_LIVE_TURBULENCE_20261029",
+  "owner": "inossarum",
+  "repo": "inossarum/synestra-vitrine-preview",
+  "branch": "task/SYN_SITEFORGE_R1882_LIVE_TURBULENCE_20261029",
+  "baseline_commit": "942e8770c55a9d8e6129f28f114c3819766efacf",
+  "artifact": "siteforge-r1882-autonome.html",
+  "normalized_source_sha256": "919339dc811da8c1d16f51752d8925e6dbcbc5826da75dc601e7676024acf112",
+  "state": "EXPERIMENTAL_NOT_QUALIFIED",
+  "package_pass": true,
+  "runtime_e2e_pass": "UNKNOWN",
+  "owner_acceptance": "PENDING",
+  "release_status": "NO",
+  "change": {
+    "feature": "Internal animated field turbulence (0..100% default 35%, off at 0 or pulse speed 0)",
+    "material_scope": "energy material #7 only",
+    "gpu_interface": "New uEnergyTurbulence uniform in existing WebGL1 program",
+    "controls": "One dedicated slider independent of mouse perturbation and diameter",
+    "json": "Optional energyDynamics.turbulence 0..100 integer, validated before atomic import; old files get default 35; original 18 parameters/4 energyFlow unchanged",
+    "fallback": "zero value or stopped pulse speed disables added shader warp; previous branch intact"
+  },
+  "tests": {
+    "legacy_static": {
+      "passed": 6,
+      "failed": 0
+    },
+    "new_static": {
+      "passed": 4,
+      "failed": 0
+    },
+    "chrome_runtime": {
+      "status": "NOT_RUN",
+      "reason": "A call starting a combined HTTP+Chrome E2E command was blocked by OpenAI security controls; no retry or bypass attempted"
+    },
+    "webgl_shader_compilation": "NOT_VERIFIED",
+    "gpu_performance": "NOT_VERIFIED",
+    "browser_http": "NOT_VERIFIED",
+    "mobile": "NOT_VERIFIED"
+  },
+  "tool_evidence": {
+    "builder": "python tools/build_r1882_live_turbulence.py -> R1882_BUILD_PASS",
+    "node_static": "node --test tests/siteforge_r1882_isolation.test.mjs -> 4 pass, 0 fail",
+    "legacy": "node --test tests/siteforge_r1881_isolation.test.mjs -> 6 pass, 0 fail",
+    "security_refusal": "Blocked tool call: mcp__Remote_Desktop_Commander__start_process combining Invoke-WebRequest and browser stress QA; tool returned a security-controls refusal"
+  },
+  "risk": "Actual browser behavior unverified: shader compilation, visual coherence, animation cadence, legacy import behavior need native E2E before promotion",
+  "next": "If granted via approved test workflow, run node tests/siteforge_r1882_stress.mjs on port 19103, verify WebGL hardware renderer and mouse/color/palette/quality/JSON, add browser evidence, then update this checkpoint. Do not deploy/merge until qualified."
+}

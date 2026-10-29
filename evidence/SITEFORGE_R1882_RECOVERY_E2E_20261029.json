@@ -1,0 +1,47 @@
+{
+  "schema": "synestra.siteforge.r1882.recovery-e2e.v1",
+  "mission": "SYN_SITEFORGE_R1882_LIVE_TURBULENCE_20261029",
+  "date": "2026-10-29",
+  "branch": "task/SYN_SITEFORGE_R1882_LIVE_TURBULENCE_20261029",
+  "base_sha": "942e8770c55a9d8e6129f28f114c3819766efacf",
+  "html_sha256_lf": "919339dc811da8c1d16f51752d8925e6dbcbc5826da75dc601e7676024acf112",
+  "recovery": {
+    "initial_failure": "Two combined Remote Desktop Commander start_process tool invocations refused by OpenAI security controls. No diagnostic reason exposed by the host.",
+    "verified": "Read-only native status and standalone Node test invocations using authorized Desktop Commander succeeded; direct GitHub connector supports source-first publishing.",
+    "inference": "Not a general Desktop Commander offline state; command payload shape may contribute but host classifier root cause UNKNOWN.",
+    "security": "No elevation, modified ACL, disabled protection, alternate privileged identity or access grant change."
+  },
+  "tests": {
+    "legacy_static": "6/6 PASS",
+    "r1882_static": "4/4 PASS",
+    "desktop_webgl_stress": "PASS eight flows/quality/color/mouse",
+    "mobile_emulated_webgl_stress": "PASS eight flows/quality/color/mouse",
+    "hardware_desktop": {
+      "status": "PASS",
+      "renderer": "NVIDIA GeForce RTX 3090 via ANGLE D3D11",
+      "uniform0": 0,
+      "uniform100": 1,
+      "pixel_changed": 37611,
+      "natural_animation_changed": 22692
+    },
+    "hardware_mobile_emulated": {
+      "status": "PASS",
+      "renderer": "NVIDIA GeForce RTX 3090 via ANGLE D3D11",
+      "uniform0": 0,
+      "uniform100": 1,
+      "pixel_changed": 19955,
+      "natural_animation_changed": 11401
+    },
+    "json_schema_static": "PASS",
+    "json_import_export_browser": "NOT_TESTED",
+    "performance_gain": "NOT_CLAIMED"
+  },
+  "limits": [
+    "Turbulence rendering inherently time-dependent, screenshots are not deterministic delta isolation.",
+    "Mobile is emulation in Chrome Windows, not a physical phone.",
+    "GPU measured as selected renderer, not an end-to-end hardware performance uplift.",
+    "Artwork acceptance and public deployment not performed."
+  ],
+  "output": "CANDIDATE_BROWSER_VERIFIED",
+  "next": "Publish evidence and source to GitHub feature branch through native connector, synchronize local worktree and compare SHA."
+}
