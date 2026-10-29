@@ -1,0 +1,124 @@
+{
+    "schema":  "synestra.siteforge.r1880.adaptive_gpu_e2e.v1",
+    "timestamp":  "2026-10-29",
+    "mission_id":  "SYN_SITEFORGE_R1880_ADAPTIVE_GPU_20261029",
+    "owner":  "inossarum",
+    "source_commit":  "949bb34b024377ac424204b31aca37d51dc74716",
+    "branch":  "task/SYN_SITEFORGE_R1880_ADAPTIVE_GPU_20261029",
+    "artifact":  "siteforge-r1880-autonome.html",
+    "artifact_sha256":  "80444c99fcd55b1066c5c98e497a5efb935a6610b9d215a85f6c31cdd41d72b7",
+    "local_preview":  "http://127.0.0.1:19100/siteforge-r1880-autonome.html?demo=energy",
+    "preview_http":  200,
+    "architecture":  {
+                         "sampler":  "R188.0 GPU ray budget by quality mode; same 40-iteration WebGL1 shader maximum; quality choice controls energy renderer rather than only legacy plasma",
+                         "reference":  "R187.9 Balanced 34 samples preserved",
+                         "quality_samples":  {
+                                                 "desktop":  {
+                                                                 "balanced":  34,
+                                                                 "performance":  26,
+                                                                 "detailed":  40,
+                                                                 "auto_baseline":  34,
+                                                                 "thin_performance":  30
+                                                             },
+                                                 "mobile_simulated":  {
+                                                                          "balanced":  34,
+                                                                          "performance":  24,
+                                                                          "detailed":  40,
+                                                                          "auto_baseline":  32,
+                                                                          "thin_performance":  30
+                                                                      }
+                                             },
+                         "path_gate":  "Uniform branch gates F/G/H geometry evaluation at 3-5 streams while maintaining 6-8 geometry",
+                         "gpu_colors":  "Typed Float32Arrays cached and refreshed only on palette/color change; no 3 per-frame color-buffer allocations",
+                         "schema":  "18 plasma, 10 motes, 4 energyFlow, 3 color and energyVisual options unchanged"
+                     },
+    "tests":  {
+                  "static":  {
+                                 "status":  "PASS",
+                                 "count":  5
+                             },
+                  "chrome_desktop":  {
+                                         "status":  "PASS",
+                                         "engine":  "Chrome Windows WebGL SwiftShader",
+                                         "viewport":  [
+                                                          1100,
+                                                          800
+                                                      ],
+                                         "webgl_error":  0,
+                                         "canvas_present_all_quality_modes":  true,
+                                         "flow_count_5_to_8_changed_pixels":  18533,
+                                         "palette_changed_pixels":  31998,
+                                         "mouse_off_on":  "PASS",
+                                         "quality_modes":  "PASS"
+                                     },
+                  "chrome_mobile_emulated":  {
+                                                 "status":  "PASS",
+                                                 "viewport":  [
+                                                                  390,
+                                                                  844
+                                                              ],
+                                                 "webgl_error":  0,
+                                                 "canvas_present_all_quality_modes":  true,
+                                                 "flow_count_5_to_8_changed_pixels":  9927,
+                                                 "palette_changed_pixels":  17074,
+                                                 "mouse_off_on":  "PASS",
+                                                 "quality_modes":  "PASS"
+                                             },
+                  "browser_http":  200,
+                  "physical_gpu_fps":  "UNKNOWN; Chrome telemetry 0.0 is not a meaningful GPU FPS value"
+              },
+    "failures_and_recovery":  [
+                                  {
+                                      "status":  "FAIL_FIRST",
+                                      "cause":  "WebGL shader compilation failed because onF/onG/onH were declared inside branch but referenced after branch; compile log contained undeclared identifiers",
+                                      "correction":  "Initialize optional flow variables at outer scope and assign inside conditional",
+                                      "verification":  "Chrome WebGL compilation recovered"
+                                  },
+                                  {
+                                      "status":  "FAIL_FIRST",
+                                      "cause":  "Stage assigned data-energy-samples and document.querySelector(\u0027[data-energy-samples]\u0027) matched the stage itself; setting its textContent removed the 3D canvas",
+                                      "correction":  "Rename stage telemetry to data-energy-ray-samples and target output[data-energy-samples] explicitly",
+                                      "verification":  "5/5 static tests and actual Chrome DOM canvas existence in all quality modes"
+                                  }
+                              ],
+    "screenshots":  [
+                        "evidence/r1880-stress-five.png",
+                        "evidence/r1880-stress-eight.png",
+                        "evidence/r1880-stress-eight-gold.png",
+                        "evidence/r1880-stress-eight-mouse.png",
+                        "evidence/r1880-stress-five-mobile.png",
+                        "evidence/r1880-stress-eight-mobile.png",
+                        "evidence/r1880-stress-eight-gold-mobile.png"
+                    ],
+    "methods_refs":  [
+                         {
+                             "name":  "MDN WebGL best practices",
+                             "url":  "https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/WebGL_best_practices",
+                             "use":  "Minimize fragment work and avoid per-frame allocations"
+                         },
+                         {
+                             "name":  "Emscripten Optimizing WebGL",
+                             "url":  "https://emscripten.org/docs/optimizing/Optimizing-WebGL",
+                             "use":  "Avoid expensive sync/resource operations during rendering"
+                         },
+                         {
+                             "name":  "Khronos OES_standard_derivatives",
+                             "url":  "https://registry.khronos.org/webgl/extensions/OES_standard_derivatives/",
+                             "use":  "Reviewed optional WebGL1 derivative antialias technique, NOT enabled here due compatibility/gating risk"
+                         }
+                     ],
+    "status":  "LOCAL_E2E_PASS_ARTISTIC_ACCEPTANCE_PENDING",
+    "limitations":  [
+                        "No real hardware GPU FPS or energy consumption measurement",
+                        "SwiftShader mobile emulation is not a physical phone",
+                        "Uniform branch can lower shader work but actual speedup is unverified",
+                        "No public deployment, push, merge or main mutation",
+                        "Owner aesthetic acceptance still pending"
+                    ],
+    "rollback":  "R187.9 isolated worktree and SHA remain unchanged",
+    "next":  "Review R188.0 visually; measure actual GPU performance before any speed claim, then develop user-named presets only if aesthetic direction accepted.",
+    "negative_test_screenshots":  [
+                                      "evidence/r1880-probe-five.png",
+                                      "evidence/r1880-probe-eight.png"
+                                  ]
+}

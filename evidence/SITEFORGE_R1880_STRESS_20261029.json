@@ -1,0 +1,180 @@
+{
+  "schema": "synestra.siteforge.r1880.stress.v1",
+  "date": "2026-10-29",
+  "mobile": false,
+  "initial": {
+    "ready": "true",
+    "flow": "6",
+    "count": "5",
+    "diameter": "100",
+    "pulse": "100",
+    "quality": "balanced",
+    "qualityPenalty": "0",
+    "steps": "22",
+    "fps": "0.0",
+    "cadence": "130.0",
+    "mouse": "true",
+    "palette": "synestra",
+    "spin": "0.0000",
+    "glError": 0
+  },
+  "fiveState": {
+    "ready": "true",
+    "flow": "6",
+    "count": "5",
+    "diameter": "100",
+    "pulse": "0",
+    "quality": "balanced",
+    "qualityPenalty": "0",
+    "steps": "22",
+    "fps": "0.0",
+    "cadence": "70.1",
+    "mouse": "true",
+    "palette": "synestra",
+    "spin": "0.1872",
+    "glError": 0
+  },
+  "eightState": {
+    "ready": "true",
+    "flow": "6",
+    "count": "8",
+    "diameter": "100",
+    "pulse": "0",
+    "quality": "balanced",
+    "qualityPenalty": "0",
+    "steps": "22",
+    "fps": "0.0",
+    "cadence": "0.0",
+    "mouse": "true",
+    "palette": "synestra",
+    "spin": "0.1872",
+    "glError": 0
+  },
+  "goldState": {
+    "ready": "true",
+    "flow": "6",
+    "count": "8",
+    "diameter": "100",
+    "pulse": "0",
+    "quality": "balanced",
+    "qualityPenalty": "0",
+    "steps": "22",
+    "fps": "0.0",
+    "cadence": "0.0",
+    "mouse": "true",
+    "palette": "gold",
+    "spin": "0.1872",
+    "glError": 0
+  },
+  "activeState": {
+    "ready": "true",
+    "flow": "6",
+    "count": "8",
+    "diameter": "100",
+    "pulse": "250",
+    "quality": "balanced",
+    "qualityPenalty": "0",
+    "steps": "22",
+    "fps": "0.0",
+    "cadence": "0.0",
+    "mouse": "true",
+    "palette": "gold",
+    "spin": "0.1872",
+    "glError": 0
+  },
+  "offState": {
+    "ready": "true",
+    "flow": "6",
+    "count": "8",
+    "diameter": "100",
+    "pulse": "250",
+    "quality": "balanced",
+    "qualityPenalty": "0",
+    "steps": "22",
+    "fps": "0.0",
+    "cadence": "0.0",
+    "mouse": "false",
+    "palette": "gold",
+    "spin": "0.1872",
+    "glError": 0
+  },
+  "onState": {
+    "ready": "true",
+    "flow": "6",
+    "count": "8",
+    "diameter": "100",
+    "pulse": "250",
+    "quality": "balanced",
+    "qualityPenalty": "0",
+    "steps": "22",
+    "fps": "0.0",
+    "cadence": "0.0",
+    "mouse": "true",
+    "palette": "gold",
+    "spin": "0.1872",
+    "glError": 0
+  },
+  "countDiff": {
+    "width": 593,
+    "height": 520,
+    "pixels": 308360,
+    "changed": 18533,
+    "changedPercent": 6.010182903100272,
+    "majorPercent": 3.748216370476067,
+    "meanMaxDelta": 4.640708911661694
+  },
+  "paletteDiff": {
+    "width": 593,
+    "height": 520,
+    "pixels": 308360,
+    "changed": 31998,
+    "changedPercent": 10.376832273965494,
+    "majorPercent": 5.419963678816967,
+    "meanMaxDelta": 5.0373816318588664
+  },
+  "qualityResults": {
+    "balanced": {
+      "samples": "34",
+      "quality": "balanced",
+      "canvasPresent": true,
+      "output": "34 couches 3D",
+      "webgl": 0
+    },
+    "performance": {
+      "samples": "26",
+      "quality": "performance",
+      "canvasPresent": true,
+      "output": "26 couches 3D",
+      "webgl": 0
+    },
+    "quality": {
+      "samples": "40",
+      "quality": "quality",
+      "canvasPresent": true,
+      "output": "40 couches 3D",
+      "webgl": 0
+    },
+    "auto": {
+      "samples": "34",
+      "quality": "auto",
+      "canvasPresent": true,
+      "output": "34 couches 3D",
+      "webgl": 0
+    },
+    "thin": {
+      "samples": "30",
+      "canvas": true
+    }
+  },
+  "mouseSceneChanged": {
+    "width": 593,
+    "height": 520,
+    "pixels": 308360,
+    "changed": 32077,
+    "changedPercent": 10.402451679854716,
+    "majorPercent": 6.752821377610585,
+    "meanMaxDelta": 6.099351407445843
+  },
+  "runtime": "Chrome Windows SwiftShader (not physical GPU)",
+  "status": "PASS"
+}
