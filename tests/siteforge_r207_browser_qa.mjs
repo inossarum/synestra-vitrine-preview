@@ -92,8 +92,13 @@ try {
   console.log('R207_WEBGL_VIEWPORT=PASS',JSON.stringify(results.at(-1)));
  }
  await send('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'reduce'}]});
- await send('Page.navigate',{url});await wait(900);
- const reduced=await evaluate(measure);
+ await send('Page.navigate',{url});
+ let reduced=null;
+ for(let i=0;i<120;i++){
+  await wait(250);
+  reduced=await evaluate(measure);
+  if(reduced?.fallback==='reduced-motion')break;
+ }
  assert.equal(reduced.ready,null);assert.equal(reduced.fallback,'reduced-motion');assert.equal(reduced.h1,1);
  const product=[];
  for(const route of ['connect/','bridge/','siteforge/','offres/']){
