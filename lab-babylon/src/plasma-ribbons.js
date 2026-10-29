@@ -16,6 +16,9 @@ export function organicPlasmaCenterline(index,time,nodes){
  const start=new Vector3(...startCoords),end=new Vector3(...endCoords);
  const a=start.normalizeToNew(),b=end.normalizeToNew();
  const phase=golden(index),side=Vector3.Cross(a,b);
+ // R198: each quartet shares a 3D convergence field while retaining its own shell endpoints.
+ const cluster=Math.floor(index/4)%nodes.length;
+ const field=nodes[cluster].normalizeToNew();
  if(side.lengthSquared()<.03)side.copyFromFloats(.2,.8,.1);
  side.normalize();
  const across=Vector3.Cross(side,a).normalize();
@@ -24,8 +27,9 @@ export function organicPlasmaCenterline(index,time,nodes){
  for(let k=0;k<=STEPS;k++){
   const u=k/STEPS,swing=Math.sin(u*Math.PI),envelope=Math.pow(swing,.72);
   const contour=blend(a,b,u)
-   .add(side.scale(.35*envelope*Math.sin(u*TWOPI*(1.4+orbit*.4)+phase+time*.11)))
-   .add(across.scale(.17*envelope*Math.sin(u*TWOPI*(2.3+index%3*.25)-phase*.8-time*.16)));
+   .add(field.scale(.48*Math.pow(envelope,1.25)))
+   .add(side.scale(.23*envelope*Math.sin(u*TWOPI*(1.25+orbit*.32)+phase+time*.11)))
+   .add(across.scale(.115*envelope*Math.sin(u*TWOPI*(1.8+index%3*.20)-phase*.8-time*.16)));
   if(contour.lengthSquared()<.005)contour.copyFromFloats(.11,0,.2);
   contour.normalize();
   const inner=(index%7===0)?.31:0;
