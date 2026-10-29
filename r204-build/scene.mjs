@@ -174,7 +174,7 @@ if(stage&&canvas){
   renderer.shadowMap.enabled=renderTier>=3;
   const setAtmosphere=()=>{
    mist.visible=renderTier>=1;
-   mist.userData.fogUniforms.uStrength.value=renderTier>=3?.45:renderTier===2?.35:renderTier===1?.16:0;
+   mist.userData.fogUniforms.uStrength.value=renderTier>=3?.56:renderTier===2?.40:renderTier===1?.23:0;
    stage.dataset.sceneAtmosphere=renderTier>=3?'fine':renderTier===2?'light':renderTier===1?'minimal':'off';
   };
   const syncTier=()=>{
