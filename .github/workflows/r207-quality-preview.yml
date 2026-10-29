@@ -56,7 +56,8 @@ jobs:
           done
           curl --silent --fail --max-time 2 http://127.0.0.1:18884/ >/dev/null
           timeout 220s node tests/siteforge_r207_browser_qa.mjs
-      - name: Upload review artifact only
+      - name: Upload review artifact and browser evidence
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: synestra-r207-private-preview
