@@ -5,7 +5,7 @@ import {readFileSync} from 'node:fs';
 import {decodePNG} from './siteforge_r174_png_diff.mjs';
 const source=name=>readFileSync(new URL('../'+name,import.meta.url));
 const original=source('siteforge-r1884-autonome.html').toString('utf8');
-const candidate=source('siteforge-r1885-autonome.html').toString('utf8');
+const candidate=source('siteforge-r1885-autonome.html').toString('utf8').replaceAll(String.fromCharCode(13,10),String.fromCharCode(10));
 test('R188.5 is SHA-anchored LAB-only, no original source mutation',()=>{
  assert.equal(createHash('sha256').update(source('siteforge-r1884-autonome.html')).digest('hex'),
   'faa9a7a50ebda90e2d417063004abc7a1fe1fed300854054eb562a8aae3b8cab');

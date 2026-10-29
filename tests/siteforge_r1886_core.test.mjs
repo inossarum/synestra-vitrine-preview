@@ -1,0 +1,13 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+const text=readFileSync(new URL('../siteforge-r1886-autonome.html',import.meta.url),'utf8');
+test('four nucleus forms',()=>{for(const name of ['Vortex interne','Filaments tressés','Ondes pulsées','Sphère lumineuse'])assert.ok(text.includes(name));});
+test('single renderer and accessible groups',()=>{assert.equal(text.split('<canvas ').length,2);for(const name of ['01 · Matériau','02 · Noyau','03 · Architecture','04 · Interaction','05 · Compositions','06 · Réglages'])assert.ok(text.includes(name));});
+test('nucleus mode and speed uniforms',()=>{for(const name of ['float nucleusFlow','uniform vec2 uCoreForm','uCoreForm.y','gl.uniform2f(U.uCoreForm'])assert.ok(text.includes(name));});
+test('old settings and optional nucleus JSON',()=>{for(const name of ['plasma-settings.v1','nucleusDynamics','nextNucleus','coreMode()'])assert.ok(text.includes(name));});
+import {comparePngPixels} from './siteforge_r174_png_diff.mjs';
+const get=p=>readFileSync(new URL('../evidence/'+p,import.meta.url));
+test('GPU real distinct nucleus forms',()=>{for(const width of [1100,390]){const a=[0,1,2,3].map(m=>get('r1886-1886-mode'+m+'-'+width+'.png'));for(let i=1;i<a.length;i++)assert.ok(comparePngPixels(a[i-1],a[i]).changed>250,'form delta '+i+' '+width);}});
+test('Chrome native reports and JSON negative tests',()=>{const report=JSON.parse(get('SITEFORGE_LAB_R1886_BROWSER_20261029.json').toString('utf8'));assert.equal(report.status,'PASS');for(const width of [1100,390]){for(const mode of [0,1,2,3]){const item=report.screens.find(x=>x.version==='1886'&&x.width===width&&x.mode===mode);assert.equal(item.state.error,0);assert.equal(item.state.canvas,1);}const item=report.screens.find(x=>x.width===width&&x.controls?.invalidRejected);assert.ok(item?.controls.importNew&&item.controls.legacyReset);}});
+test('legacy plasma and polar families remain operational with new nucleus',()=>{const report=JSON.parse(get('SITEFORGE_LAB_R1886_BROWSER_20261029.json').toString('utf8'));for(const family of [0,8]){const frame=report.screens.find(x=>x.family===family);assert.ok(frame,'family '+family);assert.equal(frame.state.error,0);assert.equal(frame.mode,3);}});
