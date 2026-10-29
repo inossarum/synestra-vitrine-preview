@@ -25,7 +25,7 @@ function scan(dir,rel,kind){
   // these exact assets on this review branch, retaining strict normal validation.
   if(kind==='assets'&&process.env.CF_PAGES_BRANCH===r202ReviewBranch){
    const path=join(rel,entry.name).replaceAll('\\','/');
-   if(['assets/r201-gpu-benchmarks','assets/r201-scene.bundle.mjs','assets/r201-scene.bundle.mjs.LEGAL.txt'].includes(path))continue;
+   if(['assets/r201-gpu-benchmarks','assets/r201-scene.bundle.mjs','assets/r201-scene.bundle.mjs.LEGAL.txt','assets/r202-gpu-benchmarks','assets/r202-scene.bundle.mjs','assets/r202-scene.bundle.mjs.LEGAL.txt'].includes(path))continue;
   }
   if(entry.name.startsWith('.')||/(secret|private|token|credential|\.env|\.pfx|\.pem)/i.test(entry.name))throw Error('STATIC_FILENAME_DENIED');
   const abs=join(dir,entry.name),info=lstatSync(abs);
@@ -95,10 +95,8 @@ if(process.env.CF_PAGES_BRANCH===r202ReviewBranch){
  const homepage=readFileSync(join(root,'r202/index.html'),'utf8');
  if(!homepage.includes('r202-scene.bundle.mjs')||!homepage.includes('noindex,nofollow'))throw Error('R202_REVIEW_CONTRACT_FAILED');
  if(!checkOnly){
-  const {execFileSync}=await import('node:child_process');
-  const cwd=join(root,'r202-build');
-  execFileSync(process.platform==='win32'?'npm.cmd':'npm',['ci','--ignore-scripts','--no-audit','--no-fund'],{cwd,stdio:'inherit',timeout:180000,env:{...process.env,CI:'true'}});
-  execFileSync(process.execPath,['build.mjs'],{cwd,stdio:'inherit',timeout:60000});
+  // R202 bundle must be compiled by the explicit branch-specific Pages build
+  // command BEFORE this static-only export. No shell or install in this exporter.
   const out=join(root,'assets/r202-scene.bundle.mjs');
   if(!existsSync(out)||lstatSync(out).size<300000)throw Error('R202_BUNDLE_MISSING');
   for(const [src,dst] of previewFiles){
