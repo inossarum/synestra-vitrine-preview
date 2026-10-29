@@ -1,0 +1,121 @@
+{
+  "schema": "synestra.siteforge.r1881.hardware_compare.v1",
+  "date": "2026-10-29",
+  "browserArgs": [
+    "--headless=new",
+    "--use-angle=d3d11",
+    "--enable-webgl",
+    "--disable-extensions",
+    "--disable-background-networking",
+    "--no-first-run",
+    "--remote-debugging-port=0",
+    "about:blank"
+  ],
+  "comparison": {
+    "view": [
+      1100,
+      800
+    ],
+    "pixelDiff": {
+      "width": 544,
+      "height": 477,
+      "pixels": 259488,
+      "changed": 4308,
+      "changedPercent": 1.6601923788383277,
+      "majorPercent": 0.3718861758539894,
+      "meanMaxDelta": 1.2658080527808608
+    },
+    "baselineRepeatChanged": 0,
+    "determinism": true,
+    "meaningfulChange": true
+  },
+  "hardwareEvidence": {
+    "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "verifiedNvidiaWebGL": true,
+    "nvidiaBefore": "NVIDIA GeForce RTX 3090, 6 %, 3452 MiB",
+    "nvidiaAfter": "NVIDIA GeForce RTX 3090, 7 %, 3526 MiB",
+    "reason": "Renderer exposes NVIDIA hardware"
+  },
+  "versions": [
+    {
+      "name": "r1880",
+      "http": 200,
+      "info": {
+        "canvas": true,
+        "rect": {
+          "x": 54.639984130859375,
+          "y": 99.72000122070312,
+          "width": 543.719970703125,
+          "height": 476.5600280761719,
+          "scale": 1
+        },
+        "vendor": "Google Inc. (NVIDIA)",
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "glError": 0,
+        "contextLost": false,
+        "quality": "balanced",
+        "mouse": "false",
+        "count": "8",
+        "palette": "synestra",
+        "spin": "0.0073"
+      },
+      "repeatDiff": {
+        "width": 544,
+        "height": 477,
+        "pixels": 259488,
+        "changed": 0,
+        "changedPercent": 0,
+        "majorPercent": 0,
+        "meanMaxDelta": 0
+      },
+      "raf": {
+        "frames": 72,
+        "p50_ms": 10,
+        "p95_ms": 10.099999999999909,
+        "mean_ms": 10.001408450704224,
+        "elapsed_ms": 710.0999999999999
+      }
+    },
+    {
+      "name": "r1881",
+      "http": 200,
+      "info": {
+        "canvas": true,
+        "rect": {
+          "x": 54.639984130859375,
+          "y": 99.72000122070312,
+          "width": 543.719970703125,
+          "height": 476.5600280761719,
+          "scale": 1
+        },
+        "vendor": "Google Inc. (NVIDIA)",
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "glError": 0,
+        "contextLost": false,
+        "quality": "balanced",
+        "mouse": "false",
+        "count": "8",
+        "palette": "synestra",
+        "spin": "0.0208"
+      },
+      "repeatDiff": {
+        "width": 544,
+        "height": 477,
+        "pixels": 259488,
+        "changed": 0,
+        "changedPercent": 0,
+        "majorPercent": 0,
+        "meanMaxDelta": 0
+      },
+      "raf": {
+        "frames": 72,
+        "p50_ms": 10,
+        "p95_ms": 10.099999999999909,
+        "mean_ms": 10.001408450704224,
+        "elapsed_ms": 710.0999999999999
+      }
+    }
+  ],
+  "jsExceptions": [],
+  "status": "GPU_RENDERER_VERIFIED"
+}

@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SiteForge R188.0 / R188.1 — comparaison GPU native</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,-apple-system,sans-serif;background:#060f20;color:#eaf8ff}
+body{margin:0;padding:clamp(16px,3vw,40px);max-width:1240px;margin-inline:auto}
+h1{font-size:clamp(1.2rem,3vw,2rem);margin:0 0 8px}p{color:#bad1e3;line-height:1.5}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:24px}
+figure{margin:0;border:1px solid #284967;border-radius:18px;overflow:hidden;background:#081427}
+figcaption{padding:13px 18px;font-weight:650;border-bottom:1px solid #284967}
+img{display:block;width:100%;height:auto}
+small{color:#95b5c8;display:block;margin-top:12px}
+a{color:#71e6f0}
+@media(max-width:720px){.grid{grid-template-columns:1fr}}
+</style></head>
+<body><h1>SiteForge · R188.0 vs R188.1</h1>
+<p>Capture réelle du même flux sur Chrome WebGL avec <strong>NVIDIA GeForce RTX 3090 / Direct3D11</strong>. Huit trajectoires, palette Synestra, qualité équilibrée, vitesse des flux et impulsions à 0, interaction souris désactivée, échelle et fenêtre identiques.</p>
+<div class="grid">
+<figure><figcaption>R188.0 — croisements initiaux</figcaption><img src="evidence/r1881-gpu-r1880-fixed.png" alt="R188.0 en cyan et magenta, huit trajectoires"></figure>
+<figure><figcaption>R188.1 — intersections atténuées en profondeur</figcaption><img src="evidence/r1881-gpu-r1881-fixed.png" alt="R188.1 avec atténuation des croisements arrière"></figure>
+</div>
+<p>Mesure : <strong>4 308 pixels modifiés</strong> sur 259 488 (1,66 %). Deux captures consécutives de chaque version : 0 pixel modifié. Ce résultat valide un changement de rendu, pas un gain de FPS ou une approbation esthétique.</p>
+<small>Preuve : <a href="evidence/SITEFORGE_R1881_GPU_COMPARE_20261029.json">rapport navigateur/GPU</a>. Références Git : R188.0 <code>d0032d2</code> et R188.1 <code>fcc9585</code>. Aperçu local uniquement ; aucune release publique.</small>
+</body></html>
