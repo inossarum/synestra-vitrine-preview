@@ -57,7 +57,7 @@ test('Additional flows and real 3D motes are distinct from the lab shader',()=>{
 test('Fog is visibly raised above the pedestal and tier gated',()=>{
  assert.match(scene,/\[0,-1\.25,\.12\]/);
  assert.match(scene,/mist\.visible=renderTier>=1/);
- assert.match(scene,/renderTier>=3\?\.45/);
+ assert.match(scene,/renderTier>=3\?\.56/);
 });
 test('Hero-only visual controls and no global WebGL or unguarded fullscreen postprocess',()=>{
  const css=read('assets/r206-atmosphere.css');
