@@ -34,7 +34,7 @@ SOURCE_GATE=LIMITED — original concept art PNG not backed in repo / Memory V1 
 | 04 | Compile and render with real native tools | npm run build (esbuild 7.1MB), Chrome HTTP200, GPU RTX3090; screenshot PNG evidence | PASS |
 | 05 | Prove controls and regression | Chrome 8 nucleus screens, 6 tier checks, 3 orbit captures, 2 power-zero; Node 45/45 R199 PASS plus 4/4 R196 historical PASS | PASS |
 | 06 | Compare against prior native runtime and visual reference | screenshot delta R198→R199 1.3606% 1100px and 1.5903% 390px; core modes distinct; art still PARTIAL | PASS_TECH_PARTIAL_ART |
-| 07 | Durability and GitHub verification | stage, git diff --cached --check, commit and push dedicated branch, local=remote SHA readback | PENDING |
+| 07 | Durability and GitHub verification | git diff --cached --check PASS, commit R199 473ed13cc6c45515e6f0ed802abb208acfd3530e pushed, local=remote SHA verified, GitHub checkpoint readback PASS | PASS |
 
 ## Verified local evidence SHA256
 - lab-babylon/src/main.js 6701D264F8C240FA6ACBF00D311B98A9A7819929762011E04351EBAF6D8041C2
@@ -45,7 +45,7 @@ SOURCE_GATE=LIMITED — original concept art PNG not backed in repo / Memory V1 
 - Historic R196 core-balance.test.mjs initially rejected R199's new version string, not a runtime failure; R196 tests run in their own pinned worktree 4/4 PASS. Current R199 regression suite 45/45 PASS. Do not change the historical assertion to falsely claim R196 from R199.
 
 ## Remaining gates
-- R199 must be pushed and remote SHA re-read before step 07 DONE.
+- R199 code commit 473ed13cc6c45515e6f0ed802abb208acfd3530e has been pushed and independently verified against the remote branch; art review remains separate.
 - Human aesthetic review of core and concept reference remains pending; geometric and screenshot changes are not equivalent to artistic acceptance.
 - No real modest GPU, physical mobile, or stable hardware benchmark tested.
 - Atlas knowledge R190-R197 published at a98e3dad; R198 registry synchronization was previously refused: not claimed updated, and this scope does not bypass that refusal.
