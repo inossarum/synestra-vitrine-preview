@@ -1,0 +1,23 @@
+{
+    "schema":  "synestra.atlas.babylon.decor.r213.v1",
+    "engine":  "Blender 5.2.2 LTS",
+    "target":  "Babylon.js 9.33.0",
+    "core_status":  "CORE_SOCKET_ONLY",
+    "objects":  634,
+    "meshes":  624,
+    "core_socket":  "CORE_SOCKET",
+    "materials":  18,
+    "wall_panels":  28,
+    "ceiling_rings":  7,
+    "catwalk_segments":  22,
+    "glb_path":  "r213-dist/synestra_reactor_decor_r213.glb",
+    "blend_path":  "r213-dist/synestra_reactor_decor_r213.blend",
+    "preview_path":  "r213-dist/reactor-r213-preview.png",
+    "revision":  "R213",
+    "room_closed":  true,
+    "side_wall_panels":  24,
+    "side_rear_seal_segments":  10,
+    "front_wall":  true,
+    "rear_door":  true,
+    "closed_roof":  true
+}

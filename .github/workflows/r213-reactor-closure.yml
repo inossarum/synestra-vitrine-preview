@@ -1,0 +1,34 @@
+name: R213 closed reactor room — geometry and Chrome evidence
+on:
+  push:
+    branches: [task/SYN_REACTOR_DECOR_R213_CLOSED_ROOM_20261029]
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate GLB topology, room closure and Core ownership
+        run: |
+          node --test reactor-decor/qa/r213-closure-contract.test.mjs
+          node --check reactor-decor/qa/browser-r213.mjs
+      - name: Validate screenshots and scene checkpoint
+        run: |
+          test -s reactor-decor/r213-evidence/reactor-r213-chrome-1440.png
+          test -s reactor-decor/r213-evidence/reactor-r213-chrome-390.png
+          test -s reactor-decor/r213-dist/reactor-r213-preview.png
+          test -s reactor-decor/r213-dist/synestra_reactor_decor_r213.blend
+          python3 -c "from pathlib import Path;import struct;paths=[Path('reactor-decor/r213-evidence/reactor-r213-chrome-1440.png'),Path('reactor-decor/r213-evidence/reactor-r213-chrome-390.png')];[(lambda b,p:print(str(p),struct.unpack('>II',b[16:24])) if b[:8]==bytes([137,80,78,71,13,10,26,10]) else (_ for _ in ()).throw(ValueError(str(p))))(p.read_bytes(),p) for p in paths]"
+          sha256sum reactor-decor/r213-evidence/*.png reactor-decor/r213-dist/synestra_reactor_decor_r213.glb
+      - name: Export verified desktop / mobile / Blender images
+        uses: actions/upload-artifact@v4
+        with:
+          name: synestra-r213-closed-room-visual-proof
+          path: |
+            reactor-decor/r213-evidence/*.png
+            reactor-decor/r213-evidence/*.json
+            reactor-decor/r213-dist/reactor-r213-preview.png
+            reactor-decor/r213-dist/r213_manifest.json
+          retention-days: 3

@@ -1,0 +1,29 @@
+{
+  "schema": "synestra.atlas.babylon.browser.r213.v1",
+  "result": "PASS",
+  "data": {
+    "status": "ready",
+    "meshes": "622",
+    "socket": "CORE_SOCKET",
+    "coreCount": "0",
+    "engine": "babylon.js",
+    "canvas": 1,
+    "quality": "ultra",
+    "error": "Décor 3D prêt, Core réservé au Labo"
+  },
+  "mobile": {
+    "width": 390,
+    "scrollWidth": 390,
+    "status": "ready"
+  },
+  "perf": {
+    "fps": 99.56853634226947,
+    "scenes": 1,
+    "meshes": 625
+  },
+  "qualityAfterChange": "eco",
+  "externalCorePreserved": true,
+  "exceptions": [],
+  "screenshot": "I:\\_STUDIO_STAGING\\syn_reactor_decor_r213_20261029\\reactor-decor\\r213-evidence\\reactor-r213-chrome-1440.png",
+  "mobileScreenshot": "I:\\_STUDIO_STAGING\\syn_reactor_decor_r213_20261029\\reactor-decor\\r213-evidence\\reactor-r213-chrome-390.png"
+}
