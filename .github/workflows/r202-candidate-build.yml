@@ -35,12 +35,15 @@ jobs:
           node --check r202-build/scene.mjs
           node --check r202-build/r202-environment.mjs
           node --test tests/siteforge_r202_geometry.test.mjs
+          node --test tests/siteforge_r202_static_assets.test.mjs
       - name: Publish diagnostic build artifact
         uses: actions/upload-artifact@v4
         with:
           name: r202-isolated-build
           path: |
             r202/
+            siteforge/
+            assets/product-pages.css
             assets/r191-system.css
             assets/r191-ambient.js
             assets/r193-experience.css
