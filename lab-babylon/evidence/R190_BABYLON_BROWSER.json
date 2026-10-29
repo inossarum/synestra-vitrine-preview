@@ -14,7 +14,7 @@
         "canvas": 1,
         "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
         "error": 0,
-        "fps": 48,
+        "fps": 46,
         "width": 584,
         "height": 572
       }
@@ -31,7 +31,7 @@
         "canvas": 1,
         "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
         "error": 0,
-        "fps": 53,
+        "fps": 50,
         "width": 584,
         "height": 572
       }
@@ -48,7 +48,7 @@
         "canvas": 1,
         "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
         "error": 0,
-        "fps": 53,
+        "fps": 49,
         "width": 584,
         "height": 572
       }
@@ -82,7 +82,7 @@
         "canvas": 1,
         "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
         "error": 0,
-        "fps": 36,
+        "fps": 35,
         "width": 308,
         "height": 343
       }
@@ -99,7 +99,7 @@
         "canvas": 1,
         "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
         "error": 0,
-        "fps": 44,
+        "fps": 41,
         "width": 308,
         "height": 343
       }
@@ -116,7 +116,7 @@
         "canvas": 1,
         "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
         "error": 0,
-        "fps": 40,
+        "fps": 39,
         "width": 308,
         "height": 343
       }
@@ -133,7 +133,7 @@
         "canvas": 1,
         "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
         "error": 0,
-        "fps": 41,
+        "fps": 39,
         "width": 308,
         "height": 343
       }

@@ -1,4 +1,5 @@
-import {Engine,Scene,ArcRotateCamera,Vector3,Color3,Color4,Matrix,MeshBuilder,StandardMaterial,GlowLayer,PointLight} from '@babylonjs/core';
+import {Engine,Scene,ArcRotateCamera,Vector3,Color3,Color4,Matrix,MeshBuilder,StandardMaterial,GlowLayer,PointLight,TransformNode} from '@babylonjs/core';
+import {mountCoreAtAtlasSocket} from './atlas-interop.js';
 // ONE Babylon canvas. The requested subject is ONLY the glowing energy sphere.
 const cv=document.getElementById('renderCanvas'),stat=document.getElementById('status');
 const ids=['core-mode','core-radius','core-power','core-speed','strands','complexity','quality'];
@@ -63,6 +64,15 @@ function start(){
  for(let i=0;i<14;i++)lines.push(wire('latitude and longitude '+i,pathMeridian(i,0,.5),.005,palette[(i+1)%4]));
  for(let i=0;i<18;i++)inner.push(wire('core stream '+i,pathCore(i,0,0),i%3===0?.009:.006,palette[(i+1)%4]));
  for(let i=0;i<48;i++){const m=MeshBuilder.CreateSphere('spark '+i,{diameter:i%6===0?.025:.012,segments:4},scene);m.material=palette[i%4];stars.push(m);}
+ // The Labo exclusively owns the sphere; Atlas owns only the target CORE_SOCKET.
+ const sphereRoot=new TransformNode('LAB_SPHERE_ROOT',scene);
+ for(const mesh of [core,halo,...threads,...lines,...inner,...stars])mesh.parent=sphereRoot;
+ const atlasFixture=new URLSearchParams(location.search).get('atlasSocketFixture')==='1';
+ // Local test fixture only. A real Atlas decor supplies its socket via its GLB.
+ if(atlasFixture)new TransformNode('CORE_SOCKET',scene);
+ const atlasMount=mountCoreAtAtlasSocket(scene,sphereRoot,{required:atlasFixture});
+ cv.dataset.atlasSocket=atlasMount.mode;
+ globalThis.__synestraLabAtlasInterop={getScene:()=>scene,getSphereRoot:()=>sphereRoot,connect:()=>mountCoreAtAtlasSocket(scene,sphereRoot,{required:true}),getEngine:()=>engine};
  budget();cv.dataset.engine='babylon';cv.dataset.sphereReady='true';cv.dataset.canvasCount=String(document.querySelectorAll('canvas').length);
  document.getElementById('engine-label').textContent='BABYLON.JS / WEBGL '+engine.webGLVersion;
  stat.textContent='Sphère énergétique prête';

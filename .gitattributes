@@ -1,0 +1,2 @@
+# Babylon.js minified bundle embeds third-party GLSL source with whitespace significant to upstream literals.
+lab-babylon/dist/babylon-lab.js whitespace=-trailing-space
