@@ -22,3 +22,32 @@
 @media(prefers-reduced-motion:reduce){
  .syn-r204-home .core-r109-stage > .r206-film-grain{display:none!important;animation:none!important}
 }
+
+/* R207: user-facing adaptive GPU selector, confined to the 3D stage. */
+.syn-r204-home .core-r109-stage > .r207-quality-panel{
+ position:absolute;z-index:12;right:clamp(12px,2.6vw,34px);top:clamp(16px,3vh,30px);
+ display:flex;flex-direction:column;align-items:flex-start;gap:5px;
+ max-width:min(220px,48vw);padding:10px 12px;
+ border:1px solid rgba(144,173,188,.34);border-radius:11px;
+ background:rgba(5,13,29,.85);box-shadow:0 9px 26px rgba(0,0,0,.25);
+ color:#e3eaf3;font:600 12px/1.4 system-ui,sans-serif;
+}
+.syn-r204-home .r207-quality-panel select{
+ width:100%;min-width:155px;max-width:100%;
+ font:500 13px/1.35 system-ui,sans-serif;color:#e8f6f0;
+ border:1px solid rgba(126,186,170,.55);border-radius:7px;
+ padding:7px 8px;background:#13243a;cursor:pointer;
+}
+.syn-r204-home .r207-quality-panel select:focus-visible{
+ outline:2px solid #83e5bd;outline-offset:2px;
+}
+.syn-r204-home .r207-quality-readout{font-size:10px;letter-spacing:.01em;color:#9dceb9}
+@media(max-width:700px){
+ .syn-r204-home .core-r109-stage > .r207-quality-panel{
+  top:14px;right:12px;max-width:178px;padding:8px 9px;
+ }
+ .syn-r204-home .r207-quality-panel select{min-width:120px;font-size:12px}
+}
+@media(prefers-reduced-motion:reduce){
+ .syn-r204-home .core-r109-stage > .r207-quality-panel{display:none}
+}
