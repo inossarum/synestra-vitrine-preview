@@ -32,7 +32,7 @@ export function organicPlasmaCenterline(index,time,nodes){
  }
  return points;
 }
-export function organicPlasmaRibbonPaths(centerline,index,time){
+export function organicPlasmaRibbonPaths(centerline,index,time,widthMultiplier=1){
  const paths=RAILS.map(()=>[]);
  const base=index>=100?.095:(index%5===0?.068:index%3===0?.047:.031);
  for(let k=0;k<centerline.length;k++){
@@ -44,20 +44,20 @@ export function organicPlasmaRibbonPaths(centerline,index,time){
   across.normalize();
   const flare=.28+.72*Math.pow(Math.sin(Math.PI*u),.58);
   const irregular=1+.19*Math.sin(u*TWOPI*(2+index%4)+index*.9+time*.37);
-  const width=base*flare*irregular;
+  const width=base*flare*irregular*widthMultiplier;
   for(let side=0;side<RAILS.length;side++){
    paths[side].push(center.add(across.scale(width*RAILS[side])));
   }
  }
  return paths;
 }
-export function ribbonVertexAlphas(index,segments=STEPS){
+export function ribbonVertexAlphas(index,segments=STEPS,alphaScale=1){
  const a=[],cross=index>=100?[.012,.17,.68,.17,.012]:[.018,.23,.67,.23,.018];
  for(let k=0;k<RAILS.length;k++){
   for(let j=0;j<=segments;j++){
    const u=j/segments,fade=clamp(Math.sin(Math.PI*u)*3.2,0,1);
    const pulses=.67+.33*Math.sin(TWOPI*u*(2+index%3)+index*.72);
-   const opacity=cross[k]*fade*(.83+.17*pulses);
+   const opacity=cross[k]*fade*(.83+.17*pulses)*alphaScale;
    a.push(1,1,1,opacity);
   }
  }
@@ -110,6 +110,22 @@ export function installPlasmaRibbons({scene,colors,nodes,count=28,bridgePath=nul
   mesh.isPickable=false;
   ribbons.push(mesh);
  }
+ // Wider low-alpha sheaths create diffusion without opaque geometry or extra GPU passes.
+ const sheaths=[];
+ for(let i=0;i<Math.min(14,count);i++){
+  const path=organicPlasmaCenterline(i,0,nodes);
+  const rails=organicPlasmaRibbonPaths(path,i,0,3.8);
+  const mesh=MeshBuilder.CreateRibbon('plasma-sheath-'+i,{
+   pathArray:rails,updatable:true,sideOrientation:Mesh.FRONTSIDE
+  },scene);
+  const alpha=ribbonVertexAlphas(i,STEPS,.44);
+  if(mesh.getVerticesData(VertexBuffer.PositionKind).length/3*4!==alpha.length)
+   throw Error('PLASMA_SHEATH_VERTEX_MISMATCH');
+  mesh.setVerticesData(VertexBuffer.ColorKind,alpha,true);
+  mesh.setVerticesData(VertexBuffer.UVKind,ribbonTexCoords(),true);
+  mesh.hasVertexAlpha=true;mesh.isPickable=false;mesh.material=material[i%4];
+  sheaths.push(mesh);
+ }
  const nodeMeshes=[];
  if(bridgePath){
   // Six softly graded streams flow outward from nucleus to the existing bright knots.
@@ -132,6 +148,7 @@ export function installPlasmaRibbons({scene,colors,nodes,count=28,bridgePath=nul
  let lastSample=-Infinity,lastBudget='';
  return {
   meshes:ribbons,
+  sheaths,
   nodeMeshes,
   materials:material,
   update({time,quality='balanced',parent=null,active=28,corePower=1}){
@@ -152,6 +169,17 @@ export function installPlasmaRibbons({scene,colors,nodes,count=28,bridgePath=nul
       instance:mesh
     },scene);
    }
+   const sheathBudget=quality==='economy'?0:quality==='ultra'?sheaths.length:Math.min(10,sheaths.length);
+   for(let i=0;i<sheaths.length;i++){
+    const mesh=sheaths[i],enabled=i<sheathBudget;
+    mesh.setEnabled(enabled);
+    if(!enabled)continue;
+    if(parent&&mesh.parent!==parent)mesh.parent=parent;
+    MeshBuilder.CreateRibbon(null,{
+      pathArray:organicPlasmaRibbonPaths(organicPlasmaCenterline(i,time,nodes),i,time,3.8),
+      instance:mesh
+    },scene);
+   }
    for(let i=0;i<nodeMeshes.length;i++){
     const mesh=nodeMeshes[i],enabled=corePower>0&&(quality!=='economy'||i<3);
     mesh.setEnabled(enabled);
@@ -163,7 +191,7 @@ export function installPlasmaRibbons({scene,colors,nodes,count=28,bridgePath=nul
     },scene);
    }
   },
-  stats:()=>({ribbons:ribbons.length,nodeStreams:nodeMeshes.length,rails:RAILS.length,samples:STEPS+1}),
-  dispose(){for(const mesh of [...ribbons,...nodeMeshes])mesh.dispose();for(const mat of material)mat.dispose();}
+  stats:()=>({ribbons:ribbons.length,sheaths:sheaths.length,nodeStreams:nodeMeshes.length,rails:RAILS.length,samples:STEPS+1}),
+  dispose(){for(const mesh of [...ribbons,...sheaths,...nodeMeshes])mesh.dispose();for(const mat of material)mat.dispose();}
  };
 }

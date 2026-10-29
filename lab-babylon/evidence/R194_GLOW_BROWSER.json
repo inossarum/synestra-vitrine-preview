@@ -1,0 +1,285 @@
+{
+  "schema": "synestra.lab.r194.glow.e2e.v1",
+  "status": "PASS",
+  "frames": [
+    {
+      "width": 1100,
+      "mode": 0,
+      "name": "r194-glow-core0-1100.png",
+      "state": {
+        "engine": "babylon",
+        "ready": "true",
+        "mode": "0",
+        "filaments": 3,
+        "canvas": 1,
+        "plasmaVersion": "glow-sheaths-r194",
+        "plasmaRibbons": 28,
+        "nodePlasma": 6,
+        "glowSheaths": 14,
+        "artReference": "SYN_SPHERE_ART_REFERENCE_20261029",
+        "palette": "violet,cyan,dark-blue,green",
+        "energyNodes": 6,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "error": 0,
+        "fps": 101,
+        "width": 584,
+        "height": 572
+      }
+    },
+    {
+      "width": 1100,
+      "mode": 1,
+      "name": "r194-glow-core1-1100.png",
+      "state": {
+        "engine": "babylon",
+        "ready": "true",
+        "mode": "1",
+        "filaments": 3,
+        "canvas": 1,
+        "plasmaVersion": "glow-sheaths-r194",
+        "plasmaRibbons": 28,
+        "nodePlasma": 6,
+        "glowSheaths": 14,
+        "artReference": "SYN_SPHERE_ART_REFERENCE_20261029",
+        "palette": "violet,cyan,dark-blue,green",
+        "energyNodes": 6,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "error": 0,
+        "fps": 91,
+        "width": 584,
+        "height": 572
+      }
+    },
+    {
+      "width": 1100,
+      "mode": 2,
+      "name": "r194-glow-core2-1100.png",
+      "state": {
+        "engine": "babylon",
+        "ready": "true",
+        "mode": "2",
+        "filaments": 3,
+        "canvas": 1,
+        "plasmaVersion": "glow-sheaths-r194",
+        "plasmaRibbons": 28,
+        "nodePlasma": 6,
+        "glowSheaths": 14,
+        "artReference": "SYN_SPHERE_ART_REFERENCE_20261029",
+        "palette": "violet,cyan,dark-blue,green",
+        "energyNodes": 6,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "error": 0,
+        "fps": 87,
+        "width": 584,
+        "height": 572
+      }
+    },
+    {
+      "width": 1100,
+      "mode": 3,
+      "name": "r194-glow-core3-1100.png",
+      "state": {
+        "engine": "babylon",
+        "ready": "true",
+        "mode": "3",
+        "filaments": 3,
+        "canvas": 1,
+        "plasmaVersion": "glow-sheaths-r194",
+        "plasmaRibbons": 28,
+        "nodePlasma": 6,
+        "glowSheaths": 14,
+        "artReference": "SYN_SPHERE_ART_REFERENCE_20261029",
+        "palette": "violet,cyan,dark-blue,green",
+        "energyNodes": 6,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "error": 0,
+        "fps": 70,
+        "width": 584,
+        "height": 572
+      }
+    },
+    {
+      "width": 1100,
+      "profile": "economy",
+      "budget": {
+        "quality": "economy",
+        "ribbons": 8,
+        "sheaths": 0,
+        "error": 0
+      }
+    },
+    {
+      "width": 1100,
+      "profile": "balanced",
+      "budget": {
+        "quality": "balanced",
+        "ribbons": 26,
+        "sheaths": 10,
+        "error": 0
+      }
+    },
+    {
+      "width": 1100,
+      "profile": "ultra",
+      "budget": {
+        "quality": "ultra",
+        "ribbons": 28,
+        "sheaths": 14,
+        "error": 0
+      }
+    },
+    {
+      "width": 1100,
+      "pose": "front",
+      "name": "r194-orbit-front-1100.png",
+      "moved": {
+        "alpha": -0.38,
+        "beta": 1.2
+      }
+    },
+    {
+      "width": 1100,
+      "pose": "side",
+      "name": "r194-orbit-side-1100.png",
+      "moved": {
+        "alpha": 1.19,
+        "beta": 1.2
+      }
+    },
+    {
+      "width": 1100,
+      "pose": "above",
+      "name": "r194-orbit-above-1100.png",
+      "moved": {
+        "alpha": -0.38,
+        "beta": 0.66
+      }
+    },
+    {
+      "width": 390,
+      "mode": 0,
+      "name": "r194-glow-core0-390.png",
+      "state": {
+        "engine": "babylon",
+        "ready": "true",
+        "mode": "0",
+        "filaments": 3,
+        "canvas": 1,
+        "plasmaVersion": "glow-sheaths-r194",
+        "plasmaRibbons": 28,
+        "nodePlasma": 6,
+        "glowSheaths": 14,
+        "artReference": "SYN_SPHERE_ART_REFERENCE_20261029",
+        "palette": "violet,cyan,dark-blue,green",
+        "energyNodes": 6,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "error": 0,
+        "fps": 91,
+        "width": 308,
+        "height": 343
+      }
+    },
+    {
+      "width": 390,
+      "mode": 1,
+      "name": "r194-glow-core1-390.png",
+      "state": {
+        "engine": "babylon",
+        "ready": "true",
+        "mode": "1",
+        "filaments": 3,
+        "canvas": 1,
+        "plasmaVersion": "glow-sheaths-r194",
+        "plasmaRibbons": 28,
+        "nodePlasma": 6,
+        "glowSheaths": 14,
+        "artReference": "SYN_SPHERE_ART_REFERENCE_20261029",
+        "palette": "violet,cyan,dark-blue,green",
+        "energyNodes": 6,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "error": 0,
+        "fps": 74,
+        "width": 308,
+        "height": 343
+      }
+    },
+    {
+      "width": 390,
+      "mode": 2,
+      "name": "r194-glow-core2-390.png",
+      "state": {
+        "engine": "babylon",
+        "ready": "true",
+        "mode": "2",
+        "filaments": 3,
+        "canvas": 1,
+        "plasmaVersion": "glow-sheaths-r194",
+        "plasmaRibbons": 28,
+        "nodePlasma": 6,
+        "glowSheaths": 14,
+        "artReference": "SYN_SPHERE_ART_REFERENCE_20261029",
+        "palette": "violet,cyan,dark-blue,green",
+        "energyNodes": 6,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "error": 0,
+        "fps": 68,
+        "width": 308,
+        "height": 343
+      }
+    },
+    {
+      "width": 390,
+      "mode": 3,
+      "name": "r194-glow-core3-390.png",
+      "state": {
+        "engine": "babylon",
+        "ready": "true",
+        "mode": "3",
+        "filaments": 3,
+        "canvas": 1,
+        "plasmaVersion": "glow-sheaths-r194",
+        "plasmaRibbons": 28,
+        "nodePlasma": 6,
+        "glowSheaths": 14,
+        "artReference": "SYN_SPHERE_ART_REFERENCE_20261029",
+        "palette": "violet,cyan,dark-blue,green",
+        "energyNodes": 6,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "error": 0,
+        "fps": 76,
+        "width": 308,
+        "height": 343
+      }
+    },
+    {
+      "width": 390,
+      "profile": "economy",
+      "budget": {
+        "quality": "economy",
+        "ribbons": 8,
+        "sheaths": 0,
+        "error": 0
+      }
+    },
+    {
+      "width": 390,
+      "profile": "balanced",
+      "budget": {
+        "quality": "balanced",
+        "ribbons": 26,
+        "sheaths": 10,
+        "error": 0
+      }
+    },
+    {
+      "width": 390,
+      "profile": "ultra",
+      "budget": {
+        "quality": "ultra",
+        "ribbons": 28,
+        "sheaths": 14,
+        "error": 0
+      }
+    }
+  ]
+}
