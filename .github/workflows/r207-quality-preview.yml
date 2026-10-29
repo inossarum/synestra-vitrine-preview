@@ -49,7 +49,12 @@ jobs:
           python3 -m http.server 18884 --bind 127.0.0.1 --directory dist >/tmp/synestra-r207-http.log 2>&1 &
           SERVER_PID=$!
           trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
-          curl --fail --retry 5 --retry-delay 1 http://127.0.0.1:18884/ >/dev/null
+          for i in $(seq 1 30); do
+            if curl --silent --fail --max-time 2 http://127.0.0.1:18884/ >/dev/null; then break; fi
+            if ! kill -0 "$SERVER_PID" 2>/dev/null; then echo "HTTP_SERVER_EXITED"; exit 9; fi
+            sleep .2
+          done
+          curl --silent --fail --max-time 2 http://127.0.0.1:18884/ >/dev/null
           timeout 220s node tests/siteforge_r207_browser_qa.mjs
       - name: Upload review artifact only
         uses: actions/upload-artifact@v4
