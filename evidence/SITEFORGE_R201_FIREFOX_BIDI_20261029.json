@@ -1,0 +1,25 @@
+{
+  "schema": "synestra.siteforge.r201.firefox-bidi.v1",
+  "status": "PASS_RENDER",
+  "browser": "firefox",
+  "version": "159.0",
+  "headless": true,
+  "detail": {
+    "ready": "true",
+    "error": null,
+    "gpuTier": "3",
+    "theatre": "true",
+    "canvas": 1,
+    "viewport": [
+      1366,
+      683
+    ],
+    "heading": true
+  },
+  "screenshot": "r201-firefox-bidi-viewport.png",
+  "notes": [
+    "Independent Gecko engine (not Chromium)",
+    "Software/headless GPU may differ from interactive hardware Firefox",
+    "No visual signoff or cross-device proof"
+  ]
+}

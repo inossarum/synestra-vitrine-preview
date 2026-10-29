@@ -1,0 +1,145 @@
+{
+  "schema": "synestra.siteforge.r201.hpsyn-gpu-crossbrowser.evidence.v1",
+  "date_local": "2026-10-29",
+  "mission_id": "SYN_SITEFORGE_R201_THREE_THEATRE_INTEGRATION_20261029",
+  "owner": "Synestra Studio",
+  "source_repository": "inossarum/synestra-vitrine-preview",
+  "branch": "task/SYN_SITEFORGE_R201_THREE_THEATRE_INTEGRATION_20261029",
+  "head_before": "77b390547e704d4b37a7d9e5d07e076f729c2672",
+  "product_code_unchanged": true,
+  "hook": {
+    "toolbox_revision": 3,
+    "toolbox_sha": "f48e7c2b6ee6750df3b336db75b69afb0d76b3d9c93d7ba97fec5eadd8a6dd41",
+    "route": "synestra_hook_hpsyn",
+    "route_read": "PASS",
+    "handler": "synestra_hook_inbox_list",
+    "inbox_events": 0
+  },
+  "studio_health": {
+    "request_id": "7e37263f-2d43-4104-af75-720794fd24ab",
+    "state": "QUEUED",
+    "replay": false
+  },
+  "rules": {
+    "path": "I:/00_STUDIO_VIRTUEL/AGENTS.md",
+    "sha256": "34cc2a8649bda4230bd2fa73d4a4de0edaf65dc1e3bdaf2b8b78ff58f4e4ea21"
+  },
+  "skills": [
+    {
+      "id": "e2e-testing",
+      "version": "1.0.0",
+      "sha": "3fcb7196816ed91c4773ec8004a508b7e288a015"
+    },
+    {
+      "id": "visual-regression-testing",
+      "version": "1.0.0",
+      "sha": "aa98fffe9149dfcc0e153f0d1b8b91f3c0a6b4ae"
+    },
+    {
+      "id": "browser-compatibility-progressive-enhancement",
+      "version": "1.0.0",
+      "sha": "715ca40f6c98104983fc7bddaac017f94a776c81"
+    },
+    {
+      "id": "failure-first",
+      "version": "1.0.0",
+      "sha": "373c5f508b3ef91d1ffc1fc5afec7007a643d590"
+    },
+    {
+      "id": "semantic-web-implementation",
+      "version": "1.0.0",
+      "sha": "291c352444cb44b3b1f2eb7e5a25f72bffb39ec0"
+    }
+  ],
+  "tests": [
+    {
+      "name": "R201 prior contracts",
+      "pass": 181,
+      "fail": 0,
+      "status": "PASS_PREVIOUS_COMMIT"
+    },
+    {
+      "name": "Chrome CDP GPU actual WebGL context 1440",
+      "status": "PASS",
+      "vendor": "Google Inc. (NVIDIA)",
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 Direct3D11)",
+      "coreReady": true,
+      "theatre": true,
+      "gpuTier": 3,
+      "quality": 1,
+      "internalFps": 99.9,
+      "contextCount": 1
+    },
+    {
+      "name": "Chrome CDP viewport emulation 390",
+      "status": "PASS",
+      "renderer": "NVIDIA GeForce RTX 3090 via Direct3D11",
+      "coreReady": true,
+      "theatre": true,
+      "gpuTier": 2,
+      "quality": 0.89,
+      "internalFps": 100,
+      "contextCount": 1
+    },
+    {
+      "name": "Firefox initial CLI capture",
+      "status": "INVALID_TEST",
+      "cause": "Headless immediate screenshot captured static fallback before WebGL ready; RenderCompositorSWGL warning; this is not a rendered-scene E2E result"
+    },
+    {
+      "name": "Firefox WebDriver BiDi await coreReady + screenshot",
+      "status": "PASS",
+      "browser": "firefox",
+      "browserVersion": "159.0",
+      "headless": true,
+      "viewport": [
+        1366,
+        683
+      ],
+      "ready": true,
+      "canvasCount": 1,
+      "theatre": true,
+      "gpuTier": 3,
+      "coreError": null
+    },
+    {
+      "name": "Firefox isolated QA teardown",
+      "status": "PASS",
+      "processIds": [
+        24916,
+        39748
+      ],
+      "port": 18856,
+      "finalPortState": "CLOSED"
+    },
+    {
+      "name": "R201 local site",
+      "status": "PASS",
+      "url": "http://127.0.0.1:18852/r201/",
+      "http": 200
+    }
+  ],
+  "evidence_paths": [
+    {
+      "file": "evidence/SITEFORGE_R201_GPU_DIAGNOSTIC_20261029.json",
+      "sha256": "6fb00563bfd769ace5c909949ada4775a2ed8276da0b7334ecd7de5f0f83f2a9"
+    },
+    {
+      "file": "evidence/SITEFORGE_R201_FIREFOX_BIDI_20261029.json",
+      "sha256": "b88bfff46ee316b7402a952835f6e6fb2ff8bb850dfc656fe21bc32321"
+    },
+    {
+      "file": "r201-firefox-bidi-viewport.png",
+      "sha256": "cd01a2cd3e4bc63f431ddb1b46f7fcfd37fb723b3911c087001359c5b5c443a3"
+    }
+  ],
+  "limits": [
+    "Chrome ~100 FPS is an internal browser stage measurement, not external present-time frame-pacing benchmark.",
+    "Firefox headless rendering proves one independent Gecko workflow, not performance parity or full manual cross-browser acceptance.",
+    "Earlier R201 artistic direction still lacks explicit owner approval; these tests do not replace it.",
+    "Safari and low-end hardware untested; no deployment or main merge.",
+    "Studio health operation remained QUEUED and was not replayed.",
+    "Memory V1/SAL global preflight not fully consulted; SOURCE_GATE LIMITED."
+  ],
+  "status": "R201_CROSS_BROWSER_TECHNICAL_VALIDATION_PASS_OWNER_VISUAL_GATE_PENDING"
+}

@@ -21,3 +21,12 @@ Source pinned to R200 commit 6d148e3. Keep R201 on `task/SYN_SITEFORGE_R201_THRE
 
 ## Context / gate
 HAUTO hook route returned no events. AGENTS.md SHA 34cc2a86 is checked, scope is isolated. Memory V1 query failed because `studio_core.memory_index` unavailable in inspected interpreter, hence Memory READ=MANQUANTE. Visual signoff is a genuine owner gate before publication. NEXT: human visual acceptance and physical GPU benchmark, then permitted integration path.
+
+## HPSYN addendum — 2026-10-29 — GPU / Firefox
+- Resumed R201 from local and GitHub HEAD `77b390547e704d4b37a7d9e5d07e076f729c2672`; hook route `synestra_hook_hpsyn` exists and was invoked, inbox empty. Studio health request `7e37263f-2d43-4104-af75-720794fd24ab` remained QUEUED after readback; no replay or execution claimed.
+- Built a *read-only* Chrome GPU diagnostic of the preexisting canvas context: ANGLE Direct3D11 on an actual NVIDIA GeForce RTX 3090, not SwiftShader. Measured source is the app’s own `data-core-fps`, about 100 in this Chrome session (1440 and 390 emulation). This is a useful live context signal, **not** certified smoothness, frame pacing, or representative GPU FPS under interactive workload.
+- Firefox `--headless --screenshot` initially captured the fallback before WebGL readiness; rejected as inadequate evidence. Used native Firefox WebDriver BiDi (no extra browser-testing dependency) to await `data-core-ready=true`, with Theatre active, GPU tier 3, one canvas and no core error, then captured `r201-firefox-bidi-viewport.png` (1366 × 683). This establishes independent Gecko rendering, not full manual Firefox equivalence.
+- The Firefox test used a dedicated, temporary profile and its processes were stopped after capture. Chrome and local site remained available; public production unaffected.
+- The existing artistic screenshot still shows dominant cyan/light blue and limited surrounding material depth; no owner signoff. Avoid claiming AAA++ or publishing R201 as accepted design.
+- Added only diagnostic scripts, source-linked evidence and this append-only reasoning delta. No modification to Three.js/Theatre.js application code, no main merge, no public deploy.
+- Gate: owner visual judgment; future independent Safari and low-tier physical GPU qualification.

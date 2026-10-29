@@ -1,0 +1,49 @@
+{
+  "schema": "synestra.siteforge.r201.gpu-diagnostic.v1",
+  "status": "PASS_DIAGNOSTIC",
+  "results": [
+    {
+      "width": 1440,
+      "ready": "true",
+      "theatre": "true",
+      "gpuTier": "3",
+      "fps": 99.9,
+      "quality": 1,
+      "vendor": "Google Inc. (NVIDIA)",
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "glVendor": "WebKit",
+      "glVersion": "WebGL 1.0 (OpenGL ES 2.0 Chromium)",
+      "glContextCaptured": true,
+      "canvases": 1,
+      "buffer": [
+        1425,
+        900
+      ]
+    },
+    {
+      "width": 390,
+      "ready": "true",
+      "theatre": "true",
+      "gpuTier": "2",
+      "fps": 100,
+      "quality": 0.89,
+      "vendor": "Google Inc. (NVIDIA)",
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "glVendor": "WebKit",
+      "glVersion": "WebGL 1.0 (OpenGL ES 2.0 Chromium)",
+      "glContextCaptured": true,
+      "canvases": 1,
+      "buffer": [
+        366,
+        846
+      ]
+    }
+  ],
+  "exceptions": [],
+  "notes": [
+    "Observes WebGL context already used by renderer; no additional context created.",
+    "CDP Chrome frame counter is indicative, not independently calibrated hardware FPS.",
+    "Unmasked renderer must be checked before labeling this hardware accelerated.",
+    "No independent Firefox result or visual approval."
+  ]
+}
