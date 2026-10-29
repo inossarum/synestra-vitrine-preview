@@ -7,6 +7,7 @@ import {labR1881Fragment,labR1881Vertex} from './lab-r1881-shader.mjs';
 import {evolveAdaptiveBudget} from './adaptive-tier.mjs';
 import {clampDetailForTier} from './quality-policy.mjs';
 import {installLabDetail} from './lab-detail-r207.mjs';
+import {installCoreNucleus} from './core-nucleus-r209.mjs';
 import {createQualityPanel} from './quality-ui-r207.mjs';
 const stage=document.querySelector('.core-r109-stage');
 const canvas=stage?.querySelector('.core-r109-canvas');
@@ -21,7 +22,7 @@ if(stage&&canvas){
  let elapsed=0,last=0,lastDraw=0,drawCount=0,drawStart=0,quality=.85,renderTier=1;
  let slow=0,fast=0,scale=1,pointerX=0,pointerY=0,impulse=0,energy=0,lightV,lightG,lightCore;
  let stageWidth=0,stageHeight=0,lastRatio=0,mist=null,grain=null;
- let labDetail=null,qualityPanel=null,detectedTier=1;
+ let labDetail=null,coreNucleus=null,qualityPanel=null,detectedTier=1;
  const owned=[];
  const clamp=(x,a,b)=>Math.min(b,Math.max(a,x));
  const make=(geo,mat,p,cast=false)=>{
@@ -153,6 +154,8 @@ if(stage&&canvas){
    side:THREE.FrontSide,glslVersion:THREE.GLSL1
   }));
   plasma.position.set(0,.07,.12);plasma.frustumCulled=false;scene.add(plasma);
+  // R209: restore a real luminous nucleus in the same depth-tested 3D stage.
+  coreNucleus=installCoreNucleus({THREE,scene,owned,uniforms});
   labDetail=installLabDetail({THREE,scene,owned});
   // detect-gpu offline benchmarks; tier-0 still gets cheap 3D when WebGL exists.
   try{
@@ -183,6 +186,7 @@ if(stage&&canvas){
    uniforms.uFlowLab.value.x=d.flows;uniforms.uFlow.value.y=[.88,1,1.08,1.18][renderTier];
    renderer.shadowMap.enabled=renderTier>=3;
    labDetail.applyTier(renderTier);
+   coreNucleus.applyTier(renderTier);
    setAtmosphere();
    stage.dataset.renderTier=String(renderTier);
    stage.dataset.energyFlows=String(labDetail.getFlowCount());
@@ -199,6 +203,7 @@ if(stage&&canvas){
   grain=document.createElement('div');grain.className='r206-film-grain';grain.setAttribute('aria-hidden','true');stage.appendChild(grain);
   stage.dataset.labReference='R188.1@81b9cf1c';
   stage.dataset.coreRenderer='three-one';
+  stage.dataset.coreNucleus='geometry-r209';
   resize();
   window.addEventListener('resize',resize,{passive:true});
   window.addEventListener('scroll',onScroll,{passive:true});
@@ -220,6 +225,7 @@ if(stage&&canvas){
    uniforms.uLabTime.value=elapsed*.86;
    uniforms.uSpinPhase.value=elapsed*.104;
    labDetail.frame(elapsed);
+   coreNucleus.frame(elapsed);
    if(mist.visible)mist.userData.fogUniforms.uTime.value=elapsed;
    uniforms.uPointer.value.set(pointerX,pointerY,energy,1);
    lightV.intensity=13*(.94+.06*Math.sin(elapsed*.67));

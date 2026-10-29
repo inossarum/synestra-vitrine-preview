@@ -1,0 +1,55 @@
+{
+  "version": "core-eco",
+  "mode": "eco",
+  "source": "Inos-Cerebros local Chrome CDP",
+  "screens": [
+    {
+      "width": 1440,
+      "file": "I:\\_STUDIO_STAGING\\syn_site_r209_core_restore_20261029\\evidence\\R209_core-eco_1440.png",
+      "state": {
+        "quality": "eco",
+        "tier": "0",
+        "fps": "16.7",
+        "flows": "2",
+        "motes": "6",
+        "atmosphere": "off",
+        "nucleus": "geometry-r209",
+        "canvas": 1,
+        "buffer": [
+          526,
+          332
+        ],
+        "qualityPanel": {
+          "x": 1207,
+          "y": 181,
+          "w": 183,
+          "h": 97.796875
+        }
+      }
+    },
+    {
+      "width": 390,
+      "file": "I:\\_STUDIO_STAGING\\syn_site_r209_core_restore_20261029\\evidence\\R209_core-eco_390.png",
+      "state": {
+        "quality": "eco",
+        "tier": "0",
+        "fps": "16.7",
+        "flows": "2",
+        "motes": "6",
+        "atmosphere": "off",
+        "nucleus": "geometry-r209",
+        "canvas": 1,
+        "buffer": [
+          275,
+          635
+        ],
+        "qualityPanel": {
+          "x": 209,
+          "y": 165,
+          "w": 168,
+          "h": 92.796875
+        }
+      }
+    }
+  ]
+}
