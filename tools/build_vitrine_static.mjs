@@ -7,6 +7,7 @@ const root=resolve(fileURLToPath(new URL('../',import.meta.url)));
 const output=resolve(root,'dist');
 const checkOnly=process.argv.includes('--check');
 const r202ReviewBranch='task/SYN_SITEFORGE_R202_CINEMATIC_DEPTH_20261029';
+const r204ReviewBranch='task/SYN_SITEFORGE_R204_LIGHTWEIGHT_CORE_20261029';
 const rootFiles=['index.html','_headers'];
 const rootDirs=['assets','siteforge','signal','connect','bridge','offres'];
 const extensions={
@@ -23,9 +24,9 @@ function scan(dir,rel,kind){
  for(const entry of readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name))){
   // Historical R201 bundles are not part of the R202 review. Exclude only
   // these exact assets on this review branch, retaining strict normal validation.
-  if(kind==='assets'&&process.env.CF_PAGES_BRANCH===r202ReviewBranch){
+  if(kind==='assets'&&[r202ReviewBranch,r204ReviewBranch].includes(process.env.CF_PAGES_BRANCH)){
    const path=join(rel,entry.name).replaceAll('\\','/');
-   if(['assets/r201-gpu-benchmarks','assets/r201-scene.bundle.mjs','assets/r201-scene.bundle.mjs.LEGAL.txt','assets/r202-gpu-benchmarks','assets/r202-scene.bundle.mjs','assets/r202-scene.bundle.mjs.LEGAL.txt'].includes(path))continue;
+   if(['assets/r201-gpu-benchmarks','assets/r201-scene.bundle.mjs','assets/r201-scene.bundle.mjs.LEGAL.txt','assets/r202-gpu-benchmarks','assets/r202-scene.bundle.mjs','assets/r202-scene.bundle.mjs.LEGAL.txt','assets/r204-gpu-benchmarks','assets/r204-scene.bundle.mjs','assets/r204-scene.bundle.mjs.LEGAL.txt'].includes(path))continue;
   }
   if(entry.name.startsWith('.')||/(secret|private|token|credential|\.env|\.pfx|\.pem)/i.test(entry.name))throw Error('STATIC_FILENAME_DENIED');
   const abs=join(dir,entry.name),info=lstatSync(abs);
@@ -128,4 +129,41 @@ if(process.env.CF_PAGES_BRANCH===r202ReviewBranch){
  }else{
   console.log('SYNESTRA_R202_REVIEW_PREVIEW=CHECK_PASS');
  }
+}
+
+
+// Branch-isolated R204 business review: premium GPU-adaptive 3D only in hero.
+// The rest uses conventional, already-qualified product pages from R202.
+if(process.env.CF_PAGES_BRANCH===r204ReviewBranch){
+ const remaps=[
+  ['r204/index.html','index.html'],
+  ['r202/connect/index.html','connect/index.html'],
+  ['r202/bridge/index.html','bridge/index.html'],
+  ['r202/siteforge/index.html','siteforge/index.html'],
+  ['r202/offres/index.html','offres/index.html'],
+  ['assets/r204-hero.css','assets/r204-hero.css']
+ ];
+ const home=readFileSync(join(root,'r204/index.html'),'utf8');
+ if(!home.includes('r204-scene.bundle.mjs')||!home.includes('noindex,nofollow')||!home.includes('syn-r204-home'))throw Error('R204_PREVIEW_HOME_INVALID');
+ if(!checkOnly){
+  const bundle=join(root,'assets/r204-scene.bundle.mjs');
+  if(!existsSync(bundle)||lstatSync(bundle).size<100000)throw Error('R204_BUILD_NOT_READY');
+  for(const [src,dst] of remaps){
+   const file=join(root,src);
+   if(!existsSync(file)||!lstatSync(file).isFile()||lstatSync(file).isSymbolicLink())throw Error('R204_SOURCE_INVALID:'+src);
+   const out=join(output,dst);mkdirSync(resolve(out,'..'),{recursive:true});copyFileSync(file,out);
+  }
+  for(const name of ['r204-scene.bundle.mjs','r204-scene.bundle.mjs.LEGAL.txt']){
+   const file=join(root,'assets',name);if(!existsSync(file))throw Error('R204_BUNDLE_FILE_MISSING:'+name);
+   copyFileSync(file,join(output,'assets',name));
+  }
+  const dir=join(root,'assets/r204-gpu-benchmarks'),dest=join(output,'assets/r204-gpu-benchmarks');
+  mkdirSync(dest,{recursive:true});let count=0;
+  for(const n of readdirSync(dir)){
+   if(!/^[a-z0-9_-]+\.json$/i.test(n)||lstatSync(join(dir,n)).size>200000)throw Error('R204_BENCHMARK_DENIED');
+   copyFileSync(join(dir,n),join(dest,n));count++;
+  }
+  if(count<10)throw Error('R204_BENCHMARKS_INCOMPLETE');
+  console.log('SYNESTRA_R204_PREVIEW=PASS assets='+count);
+ }else console.log('SYNESTRA_R204_PREVIEW=CHECK_PASS');
 }
