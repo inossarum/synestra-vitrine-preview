@@ -1,0 +1,50 @@
+{
+  "schema": "synestra.lab.r195.visual-delta.v1",
+  "base": "R194@d052d65f338e64f4fbc0c21bc5aafe3494b7a19b",
+  "source": "Babylon Chrome RTX 3090 real screenshots, same labFrame=4.5",
+  "artRef": "SYN_SPHERE_ART_REFERENCE_20261029",
+  "scope": "actual A/B changes and orbit response, not proof of artistic fidelity",
+  "baseline": [
+    {
+      "before": "r194-glow-core0-1100.png",
+      "after": "r195-fork-core0-1100.png",
+      "pixels": 990000,
+      "changed": 21571,
+      "changedPercent": 2.1789,
+      "majorPercent": 1.1987
+    },
+    {
+      "before": "r194-glow-core0-390.png",
+      "after": "r195-fork-core0-390.png",
+      "pixels": 351000,
+      "changed": 7671,
+      "changedPercent": 2.1855,
+      "majorPercent": 1.2231
+    }
+  ],
+  "orbit": [
+    {
+      "before": "r195-orbit-front-1100.png",
+      "after": "r195-orbit-side-1100.png",
+      "pixels": 990000,
+      "changed": 219358,
+      "changedPercent": 22.1574,
+      "majorPercent": 16.9466
+    },
+    {
+      "before": "r195-orbit-front-1100.png",
+      "after": "r195-orbit-above-1100.png",
+      "pixels": 990000,
+      "changed": 177238,
+      "changedPercent": 17.9028,
+      "majorPercent": 14.5985
+    }
+  ],
+  "browser": {
+    "nucleusModes": 8,
+    "qualityCases": 6,
+    "cameraPoses": 3,
+    "zeroPowerCases": 2,
+    "errors": 0
+  }
+}

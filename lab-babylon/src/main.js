@@ -1,6 +1,7 @@
 import {Engine,Scene,ArcRotateCamera,Vector3,Color3,Color4,Matrix,MeshBuilder,StandardMaterial,GlowLayer,PointLight,TransformNode} from '@babylonjs/core';
 import {SPHERE_REFERENCE} from './reference-contract.js';
 import {installPlasmaRibbons} from './plasma-ribbons.js';
+import {installNodeForks} from './node-branches.js';
 import {mountCoreAtAtlasSocket} from './atlas-interop.js';
 // ONE Babylon canvas. The requested subject is ONLY the glowing energy sphere.
 const cv=document.getElementById('renderCanvas'),stat=document.getElementById('status');
@@ -11,7 +12,7 @@ const get=x=>+ctl[x].value,T=2*Math.PI,v=(x,y,z)=>new Vector3(x,y,z);
 const q=new URLSearchParams(location.search),n=Number(q.get('labFrame'));
 const fixed=q.has('labFrame')&&Number.isFinite(n)&&n>=0&&n<=60?n:null;
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
-let engine,scene,glow,core,halo,coreMat,haloMat,threads=[],lines=[],inner=[],stars=[],bridges=[],energyNodes=[],plasma=null,time=0,last=0;
+let engine,scene,glow,core,halo,coreMat,haloMat,threads=[],lines=[],inner=[],stars=[],bridges=[],energyNodes=[],plasma=null,forks=null,time=0,last=0;
 function light(name,color,a=1){
  const m=new StandardMaterial(name,scene);m.disableLighting=true;m.emissiveColor=color;m.diffuseColor=Color3.Black();m.alpha=a;
  m.backFaceCulling=false;if(a<1)m.disableDepthWrite=true;return m;
@@ -93,13 +94,14 @@ function start(){
  for(const mesh of [core,halo,...threads,...lines,...inner,...stars,...bridges,...energyNodes])mesh.parent=sphereRoot;
  plasma=installPlasmaRibbons({scene,colors:SPHERE_REFERENCE.colors.map(x=>new Color3(...x.linear)),nodes:nodeDirections,count:28,bridgePath:pathBridge});
  for(const mesh of [...plasma.meshes,...plasma.sheaths,...plasma.nodeMeshes])mesh.parent=sphereRoot;
+ forks=installNodeForks({scene,directions:nodeDirections,ribbonMaterials:plasma.materials,photonMaterials:palette,parent:sphereRoot});
  const atlasFixture=new URLSearchParams(location.search).get('atlasSocketFixture')==='1';
  // Local test fixture only. A real Atlas decor supplies its socket via its GLB.
  if(atlasFixture)new TransformNode('CORE_SOCKET',scene);
  const atlasMount=mountCoreAtAtlasSocket(scene,sphereRoot,{required:atlasFixture});
  cv.dataset.atlasSocket=atlasMount.mode;
  globalThis.__synestraLabAtlasInterop={getScene:()=>scene,getSphereRoot:()=>sphereRoot,connect:()=>mountCoreAtAtlasSocket(scene,sphereRoot,{required:true}),getEngine:()=>engine};
- budget();cv.dataset.engine='babylon';cv.dataset.sphereReady='true';cv.dataset.artReference=SPHERE_REFERENCE.id;cv.dataset.palette=SPHERE_REFERENCE.colors.map(c=>c.id).join(',');cv.dataset.energyNodes=String(SPHERE_REFERENCE.energyNodes);cv.dataset.canvasCount=String(document.querySelectorAll('canvas').length);cv.dataset.plasmaVersion='glow-sheaths-r194';cv.dataset.plasmaRibbons=String(plasma.meshes.length);cv.dataset.nodePlasma=String(plasma.nodeMeshes.length);cv.dataset.glowSheaths=String(plasma.sheaths.length);
+ budget();cv.dataset.engine='babylon';cv.dataset.sphereReady='true';cv.dataset.artReference=SPHERE_REFERENCE.id;cv.dataset.palette=SPHERE_REFERENCE.colors.map(c=>c.id).join(',');cv.dataset.energyNodes=String(SPHERE_REFERENCE.energyNodes);cv.dataset.canvasCount=String(document.querySelectorAll('canvas').length);cv.dataset.plasmaVersion='glow-sheaths-r194';cv.dataset.plasmaRibbons=String(plasma.meshes.length);cv.dataset.nodePlasma=String(plasma.nodeMeshes.length);cv.dataset.glowSheaths=String(plasma.sheaths.length);cv.dataset.nodeForks=String(forks.meshes.length);cv.dataset.nodePhotons=String(forks.photons.length);cv.dataset.plasmaVersion='node-branches-r195';
  document.getElementById('engine-label').textContent='BABYLON.JS / WEBGL '+engine.webGLVersion;
  stat.textContent='Sphère énergétique prête';
  engine.runRenderLoop(()=>{
@@ -108,6 +110,9 @@ function start(){
   last=now;
   const quality=ctl.quality.value,turb=get('complexity')/100,amount=get('strands')*2;
   plasma.update({time,quality,parent:sphereRoot,active:Math.min(plasma.meshes.length,amount+5),corePower:get('core-power')});
+  forks.update({time,quality,corePower:get('core-power'),parent:sphereRoot});
+  cv.dataset.visibleNodeForks=String(forks.meshes.filter(m=>m.isEnabled()).length);
+  cv.dataset.visibleNodePhotons=String(forks.photons.filter(m=>m.isEnabled()).length);
   cv.dataset.visibleRibbons=String(plasma.meshes.filter(m=>m.isEnabled()).length);cv.dataset.visibleSheaths=String(plasma.sheaths.filter(m=>m.isEnabled()).length);
   for(let i=0;i<threads.length;i++){
    const m=threads[i],visible=i<Math.min(2,amount)&&(quality!=='economy'||i<1);m.setEnabled(visible);
@@ -152,7 +157,7 @@ document.getElementById('reset').addEventListener('click',()=>{for(const [k,valu
 document.getElementById('export').addEventListener('click',()=>{
  const settings=Object.fromEntries(Object.entries(ctl).map(([k,v])=>[k,v.value]));
  const blob=new Blob([JSON.stringify({schema:'synestra.lab.babylon-sphere.v1',settings},null,2)],{type:'application/json'});
- const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='sphere-r194.json';a.click();
+ const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='sphere-r195.json';a.click();
  setTimeout(()=>URL.revokeObjectURL(a.href),500);
 });
 try{start();sync();}catch(e){cv.dataset.sphereReady='false';stat.textContent='Moteur indisponible';console.error('BABYLON_SPHERE_ERROR',e);}
