@@ -6,6 +6,7 @@ import {fileURLToPath} from 'node:url';
 const root=resolve(fileURLToPath(new URL('../',import.meta.url)));
 const output=resolve(root,'dist');
 const checkOnly=process.argv.includes('--check');
+const r202ReviewBranch='task/SYN_SITEFORGE_R202_CINEMATIC_DEPTH_20261029';
 const rootFiles=['index.html','_headers'];
 const rootDirs=['assets','siteforge','signal','connect','bridge','offres'];
 const extensions={
@@ -20,6 +21,12 @@ const files=[];
 let totalBytes=0;
 function scan(dir,rel,kind){
  for(const entry of readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name))){
+  // Historical R201 bundles are not part of the R202 review. Exclude only
+  // these exact assets on this review branch, retaining strict normal validation.
+  if(kind==='assets'&&process.env.CF_PAGES_BRANCH===r202ReviewBranch){
+   const path=join(rel,entry.name).replaceAll('\\','/');
+   if(['assets/r201-gpu-benchmarks','assets/r201-scene.bundle.mjs','assets/r201-scene.bundle.mjs.LEGAL.txt'].includes(path))continue;
+  }
   if(entry.name.startsWith('.')||/(secret|private|token|credential|\.env|\.pfx|\.pem)/i.test(entry.name))throw Error('STATIC_FILENAME_DENIED');
   const abs=join(dir,entry.name),info=lstatSync(abs);
   if(info.isSymbolicLink())throw Error('STATIC_SYMLINK_DENIED');
@@ -71,7 +78,7 @@ console.log('SYNESTRA_STATIC_ALLOWLIST='+rootFiles.concat(rootDirs).join(','));
 
 // Exact-branch-only, FREE_ONLY Synestra R202 review. Existing main and other preview builds
 // remain byte-for-byte governed by the original static export above.
-const r202ReviewBranch='task/SYN_SITEFORGE_R202_CINEMATIC_DEPTH_20261029';
+
 if(process.env.CF_PAGES_BRANCH===r202ReviewBranch){
  const previewFiles=[
   ['r202/index.html','index.html'],
