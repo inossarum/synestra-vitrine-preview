@@ -1,0 +1,70 @@
+{
+  "schema": "synestra.siteforge.r1881.crossing_depth_e2e.v1",
+  "mission_id": "SYN_SITEFORGE_R1881_CROSSING_DEPTH_20261029",
+  "date": "2026-10-29",
+  "owner": "inossarum",
+  "repo": "inossarum/synestra-vitrine-preview",
+  "branch": "task/SYN_SITEFORGE_R1881_CROSSING_DEPTH_20261029",
+  "github_parent_commit": "d0032d2ce37fc572e805b9325abba6c87d1ce6bb",
+  "artifact": "siteforge-r1881-autonome.html",
+  "sha256": "22a0ab5a3f814b6c4dfc7f831319aa40f17241b475f29689bab0c774d9a4d9a8",
+  "preview": "http://127.0.0.1:19101/siteforge-r1881-autonome.html?demo=energy",
+  "implementation": {
+    "scope": "Energy material 6 only. 3D true-depth crossing suppression and bounded soft-knee blend, spectral tint, front/back differential.",
+    "formula": "softCross=overlap/(1+2.8*overlap); faceCross=.16+.84*smoothstep(-.18,.62,q.z); crossingTint=mix(mix(cyanNeon,pinkNeon,spectral),uEnergyCore,.20)",
+    "unchanged": "Seven-material menu, geometry of 3-8 true paths, width, palette, mouse interaction, adaptive 24/26/34/40 sampling, import/export schema, strict CSP",
+    "security": "Single inline script SHA256 regenerated; WebGL1 only, no external dependency"
+  },
+  "qa": {
+    "static": {
+      "status": "PASS",
+      "count": 6,
+      "fail": 0
+    },
+    "desktop_chrome": {
+      "status": "PASS",
+      "webgl_error": 0,
+      "canvas_present": true,
+      "quality_modes": [
+        34,
+        26,
+        40,
+        34
+      ],
+      "thin_minimum": 30,
+      "flow_change_5to8_pixels": 18558,
+      "palette_change_pixels": 32019,
+      "mouse_toggle": "PASS"
+    },
+    "mobile_chrome_emulation": {
+      "status": "PASS",
+      "webgl_error": 0,
+      "canvas_present": true,
+      "quality_modes": [
+        34,
+        24,
+        40,
+        32
+      ],
+      "thin_minimum": 30,
+      "flow_change_5to8_pixels": 9903,
+      "palette_change_pixels": 17049,
+      "mouse_toggle": "PASS"
+    },
+    "http_status": 200,
+    "native_screenshots": "Captured by Chrome CDP, saved under evidence/r1881-stress*.png",
+    "hardware_fps": "UNKNOWN (Chrome SwiftShader telemetry 0.0; physical RTX3090 not measured)",
+    "visual_approval": "NOT PROVEN; screenshot file capture exists but owner aesthetic verdict pending"
+  },
+  "recovery": {
+    "test_failures": [
+      "R1881 shader builder whitespace patch target mismatch, corrected by one-space bounded match",
+      "Isolated legacy static test expected float crossing variable; updated to new overlap variable",
+      "Chrome test measured stale quality mode after fixed 700ms; replaced with bounded state polling",
+      "Thin filaments test also changed to poll actual applied ray budget"
+    ],
+    "product_defects_detected": false
+  },
+  "release": "LOCAL_CANDIDATE_TESTED; NOT A PUBLIC RELEASE",
+  "next": "Confirm git branch published and exact remote SHA equals local; re-evaluate aesthetic and physical GPU cadence. No change to main."
+}

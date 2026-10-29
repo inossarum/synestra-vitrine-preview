@@ -1,0 +1,93 @@
+import {spawn} from 'node:child_process';
+import {existsSync,readFileSync,writeFileSync,mkdtempSync,rmSync} from 'node:fs';
+import {tmpdir} from 'node:os';
+import {join,dirname} from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {comparePngPixels} from './siteforge_r174_png_diff.mjs';
+const mobile=process.argv.includes('--mobile'),suffix=mobile?'-mobile':'';
+const root=join(dirname(fileURLToPath(import.meta.url)),'..');
+const profile=mkdtempSync(join(tmpdir(),'syn-r1879stress-'));
+const child=spawn('C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',['--headless=new','--enable-unsafe-swiftshader','--use-angle=swiftshader','--disable-extensions','--disable-background-networking','--no-first-run','--remote-debugging-port=0','--user-data-dir='+profile,'about:blank'],{stdio:'ignore',windowsHide:true});
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+let ws,closed=false;
+try {
+ const pf=join(profile,'DevToolsActivePort');
+ for(let i=0;i<100&&!existsSync(pf);i++)await sleep(120);
+ if(!existsSync(pf))throw Error('CHROME_BOOT_FAILED');
+ const port=Number(readFileSync(pf,'utf8').split(/\r?\n/)[0]);
+ const pages=await(await fetch('http://127.0.0.1:'+port+'/json/list')).json();
+ const page=pages.find(p=>p.type==='page'&&p.webSocketDebuggerUrl);
+ if(!page)throw Error('CDP_PAGE_MISSING');
+ ws=new WebSocket(page.webSocketDebuggerUrl);
+ await new Promise((ok,no)=>{ws.addEventListener('open',ok,{once:true});ws.addEventListener('error',no,{once:true})});
+ let id=0;const pending=new Map();
+ ws.addEventListener('message',e=>{let v;try{v=JSON.parse(e.data)}catch{return}const p=pending.get(v.id);if(p){pending.delete(v.id);v.error?p.no(Error(JSON.stringify(v.error))):p.ok(v.result)}});
+ const call=(method,params={})=>new Promise((ok,no)=>{const n=++id;pending.set(n,{ok,no});ws.send(JSON.stringify({id:n,method,params}));setTimeout(()=>{if(pending.has(n)){pending.delete(n);no(Error('CDP_TIMEOUT_'+method))}},20000)});
+ const ev=async expression=>{const x=await call('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(x.exceptionDetails)throw Error('PAGE_JS_ERROR_'+JSON.stringify(x.exceptionDetails));return x.result.value};
+ const set=(id,value)=>ev("(()=>{const el=document.getElementById("+JSON.stringify(id)+");el.value="+JSON.stringify(String(value))+";el.dispatchEvent(new Event('input',{bubbles:true}));return el.value})()");
+ const state=async()=>JSON.parse(await ev("JSON.stringify((()=>{const stage=document.querySelector('.core-r109-stage');return {ready:stage.dataset.coreReady,flow:document.getElementById('sf-flowType').value,count:document.getElementById('sf-flowCount').value,diameter:document.getElementById('sf-flowStructure').value,pulse:document.getElementById('sf-pulseSpeed').value,quality:stage.dataset.qualityMode,qualityPenalty:stage.dataset.qualityPenalty,steps:stage.dataset.volumeSteps,fps:stage.dataset.renderFps,cadence:stage.dataset.renderCadenceMs,mouse:stage.dataset.energyMouseEnabled,palette:stage.dataset.energyPalette,spin:stage.dataset.syncedSpinPhase,glError:document.querySelector('canvas')?.getContext('webgl')?.getError()??-1}})())"));
+ await call('Page.enable');await call('Runtime.enable');
+ await call('Emulation.setDeviceMetricsOverride',{width:mobile?390:1100,height:mobile?844:800,deviceScaleFactor:1,mobile});
+ const preview='http://127.0.0.1:19101/siteforge-r1881-autonome.html?demo=energy';
+ const response=await fetch(preview);if(!response.ok)throw Error('PREVIEW_NOT_AVAILABLE_HTTP_'+response.status);
+ await call('Page.navigate',{url:preview});
+ let stageReady=false;
+ for(let i=0;i<75;i++){const value=await ev("document.querySelector('.core-r109-stage')?.dataset.coreReady||''");if(value==='true'){stageReady=true;break;}await sleep(250)}
+ if(!stageReady)throw Error('WEBGL_STAGE_NOT_READY '+await ev("JSON.stringify({status:document.querySelector('[data-render-status]')?.textContent,vfx:document.querySelector('[data-vfx-status]')?.textContent,canvas:!!document.querySelector('canvas')})"));
+ console.log('DOM_PROBE',await ev("JSON.stringify({url:location.href,canvas:document.querySelectorAll('canvas').length,stage:document.querySelector('.core-r109-stage')?.outerHTML.slice(0,400),status:document.querySelector('[data-render-status]')?.textContent,bodyLength:document.body.innerHTML.length})"));
+ const initial=await state();
+ if(initial.ready!=='true'||initial.flow!=='6'||initial.glError!==0||!(await ev("document.querySelector('.core-r109-stage .core-r109-canvas')!==null")))throw Error('INITIAL_READINESS_FAILED_'+JSON.stringify(initial)+' DOM='+await ev("JSON.stringify({canvasCount:document.querySelectorAll('canvas').length,html:document.querySelector('canvas')?.outerHTML,status:document.querySelector('[data-render-status]')?.textContent,contextState:document.querySelector('canvas')?.getContext('webgl')?.isContextLost?.()})"));
+ const qualityResults={};
+ for(const [quality,expected] of [['balanced',34],['performance',mobile?24:26],['quality',40],['auto',mobile?32:34]]){
+  const selected=await ev("(()=>{const e=document.getElementById('sf-renderQuality');e.value='"+quality+"';e.dispatchEvent(new Event('change',{bubbles:true}));return e.value})()");
+  for(let sync=0;sync<65;sync++){const observed=JSON.parse(await ev("JSON.stringify({mode:document.querySelector('.core-r109-stage').dataset.qualityMode,samples:document.querySelector('.core-r109-stage').dataset.energyRaySamples})"));if(observed.mode===quality&&Number(observed.samples)===expected)break;await sleep(350);}
+  const s=await ev("JSON.stringify((()=>{const el=document.querySelector('.core-r109-stage');return {samples:el.dataset.energyRaySamples,quality:el.dataset.qualityMode,canvasPresent:!!el.querySelector('.core-r109-canvas'),output:document.querySelector('output[data-energy-samples]')?.textContent,webgl:document.querySelector('canvas')?.getContext('webgl')?.getError()}})())");
+  const entry=JSON.parse(s);
+  qualityResults[quality]=entry;
+  if(selected!==quality||Number(entry.samples)!==expected||!entry.canvasPresent||entry.webgl!==0||entry.output!==expected+' couches 3D')throw Error('QUALITY_MODE_FAIL '+quality+' '+JSON.stringify(entry));
+ }
+ await set('sf-flowStructure',30);
+ await ev("(()=>{const e=document.getElementById('sf-renderQuality');e.value='performance';e.dispatchEvent(new Event('change',{bubbles:true}))})()");
+ for(let t=0;t<65;t++){if(await ev("document.querySelector('.core-r109-stage').dataset.energyRaySamples==='30'"))break;await sleep(350);}
+ qualityResults.thin=JSON.parse(await ev("JSON.stringify({samples:document.querySelector('.core-r109-stage').dataset.energyRaySamples,canvas:!!document.querySelector('canvas')})"));
+ if(qualityResults.thin.samples!=='30'||!qualityResults.thin.canvas)throw Error('THIN_ANTIALIAS_MINIMUM_FAIL');
+ await set('sf-flowStructure',100);
+ await ev("(()=>{const e=document.getElementById('sf-renderQuality');e.value='balanced';e.dispatchEvent(new Event('change',{bubbles:true}))})()");
+ await sleep(650);
+ console.log('R1881_QUALITY_GATE_PASS',JSON.stringify({mobile,qualityResults}));
+ await set('sf-particleSpeed',0);await set('sf-pulseSpeed',0);
+ const rect=JSON.parse(await ev("JSON.stringify((()=>{const r=document.querySelector('.core-r109-stage').getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height,scale:1}})())"));
+ const shot=async name=>{const b=Buffer.from((await call('Page.captureScreenshot',{format:'png',clip:rect,captureBeyondViewport:false})).data,'base64');writeFileSync(join(root,'evidence/r1881-stress-'+name+suffix+'.png'),b);return b};
+ await set('sf-flowCount',5);await sleep(900);
+ const fiveState=await state(),five=await shot('five');
+ await set('sf-flowCount',8);await sleep(1250);
+ const eightState=await state(),eight=await shot('eight');
+ if(fiveState.count!=='5'||eightState.count!=='8'||eightState.glError!==0)throw Error('FLOW_COUNT_REGRESSION');
+ const countDiff=comparePngPixels(five,eight);
+ if(countDiff.changed<1500)throw Error('EIGHT_FLOW_NOT_DISTINCT');
+ await set('sf-energyPalette','gold');await sleep(800);
+ const goldState=await state(),gold=await shot('eight-gold');
+ const paletteDiff=comparePngPixels(eight,gold);
+ if(paletteDiff.changed<1200||goldState.palette!=='gold')throw Error('PALETTE_8_NOT_FUNCTIONAL');
+ await set('sf-pulseSpeed',250);
+ await sleep(1500);
+ const activeState=await state(),active=await shot('eight-active');
+ if(activeState.pulse!=='250'||activeState.glError!==0)throw Error('PULSE_8_NOT_FUNCTIONAL');
+ await ev("document.querySelector('[data-energy-mouse-toggle]').click()");
+ const disabled=await state();
+ if(disabled.mouse!=='false')throw Error('MOUSE_DISABLED_STATE_MISSING');
+ const mx=rect.x+rect.width*.50,my=rect.y+rect.height*.49;
+ for(let j=0;j<7;j++)await call('Input.dispatchMouseEvent',{type:'mouseMoved',x:mx+j*9,y:my+j*3,buttons:0,pointerType:'mouse'});
+ await sleep(120);
+ const offState=await state();
+ await ev("document.querySelector('[data-energy-mouse-toggle]').click()");
+ for(let j=0;j<7;j++)await call('Input.dispatchMouseEvent',{type:'mouseMoved',x:mx-j*9,y:my-j*3,buttons:0,pointerType:'mouse'});
+ await sleep(120);
+ const onState=await state(),mouse=await shot('eight-mouse');
+ if(offState.mouse!=='false'||onState.mouse!=='true'||onState.glError!==0)throw Error('MOUSE_8_NOT_FUNCTIONAL');
+ const result={schema:'synestra.siteforge.r1880.stress.v1',date:'2026-10-29',mobile,initial,fiveState,eightState,goldState,activeState,offState,onState,countDiff,paletteDiff,qualityResults,mouseSceneChanged:comparePngPixels(active,mouse),runtime:'Chrome Windows SwiftShader (not physical GPU)',status:'PASS'};
+ writeFileSync(join(root,'evidence/SITEFORGE_R1881_STRESS'+suffix+'_20261029.json'),JSON.stringify(result,null,2)+'\n');
+ console.log('R1881_STRESS_EIGHT_FLOW_PASS',JSON.stringify({mobile,countChanged:countDiff.changed,paletteChanged:paletteDiff.changed,eightFps:eightState.fps,activeFps:activeState.fps,steps:activeState.steps,quality:activeState.quality,mouse:offState.mouse+'->'+onState.mouse}));
+ await call('Browser.close');closed=true;
+} catch(e){console.error('STRESS_EIGHT_FLOW_FAIL',String(e));process.exitCode=1}
+finally {try{ws?.close()}catch{}if(!closed&&child.exitCode===null)try{child.kill()}catch{}await Promise.race([new Promise(ok=>child.once('exit',ok)),sleep(1200)]);try{rmSync(profile,{recursive:true,force:true,maxRetries:3,retryDelay:100})}catch{}}
