@@ -1,0 +1,308 @@
+{
+  "schema": "synestra.lab.r1888.real-browser.v1",
+  "status": "PASS",
+  "screens": [
+    {
+      "version": "1887",
+      "mode": 0,
+      "width": 1100,
+      "name": "r1888-1887-mode0-1100.png",
+      "state": {
+        "coreMode": "0",
+        "coreSpeed": "100",
+        "ready": "true",
+        "error": 0,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "canvas": 1,
+        "controls": 1,
+        "forms": 2,
+        "rect": {
+          "x": 54.639984130859375,
+          "y": 100.87998962402344,
+          "width": 543.719970703125,
+          "height": 503.239990234375,
+          "scale": 1
+        }
+      }
+    },
+    {
+      "version": "1888",
+      "mode": 0,
+      "width": 1100,
+      "name": "r1888-1888-mode0-1100.png",
+      "state": {
+        "coreMode": "0",
+        "coreSpeed": "100",
+        "ready": "true",
+        "error": 0,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "canvas": 1,
+        "controls": 1,
+        "forms": 2,
+        "rect": {
+          "x": 54.639984130859375,
+          "y": 100.87998962402344,
+          "width": 543.719970703125,
+          "height": 503.239990234375,
+          "scale": 1
+        }
+      }
+    },
+    {
+      "version": "1888",
+      "mode": 1,
+      "width": 1100,
+      "name": "r1888-1888-mode1-1100.png",
+      "state": {
+        "coreMode": "1",
+        "coreSpeed": "100",
+        "ready": "true",
+        "error": 0,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "canvas": 1,
+        "controls": 1,
+        "forms": 2,
+        "rect": {
+          "x": 54.639984130859375,
+          "y": 100.87998962402344,
+          "width": 543.719970703125,
+          "height": 503.239990234375,
+          "scale": 1
+        }
+      }
+    },
+    {
+      "version": "1888",
+      "mode": 2,
+      "width": 1100,
+      "name": "r1888-1888-mode2-1100.png",
+      "state": {
+        "coreMode": "2",
+        "coreSpeed": "100",
+        "ready": "true",
+        "error": 0,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "canvas": 1,
+        "controls": 1,
+        "forms": 2,
+        "rect": {
+          "x": 54.639984130859375,
+          "y": 100.87998962402344,
+          "width": 543.719970703125,
+          "height": 503.239990234375,
+          "scale": 1
+        }
+      }
+    },
+    {
+      "version": "1888",
+      "mode": 3,
+      "width": 1100,
+      "name": "r1888-1888-mode3-1100.png",
+      "state": {
+        "coreMode": "3",
+        "coreSpeed": "100",
+        "ready": "true",
+        "error": 0,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "canvas": 1,
+        "controls": 1,
+        "forms": 2,
+        "rect": {
+          "x": 54.639984130859375,
+          "y": 100.87998962402344,
+          "width": 543.719970703125,
+          "height": 503.239990234375,
+          "scale": 1
+        }
+      }
+    },
+    {
+      "version": "1888",
+      "width": 1100,
+      "controls": {
+        "frozen": {
+          "mode": "2",
+          "speed": "0"
+        },
+        "invalidRejected": true,
+        "importNew": true,
+        "legacyReset": true
+      }
+    },
+    {
+      "version": "1887",
+      "mode": 0,
+      "width": 390,
+      "name": "r1888-1887-mode0-390.png",
+      "state": {
+        "coreMode": "0",
+        "coreSpeed": "100",
+        "ready": "true",
+        "error": 0,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "canvas": 1,
+        "controls": 1,
+        "forms": 2,
+        "rect": {
+          "x": -27.040008544921875,
+          "y": 14.649993896484375,
+          "width": 444.08001708984375,
+          "height": 347.70001220703125,
+          "scale": 1
+        }
+      }
+    },
+    {
+      "version": "1888",
+      "mode": 0,
+      "width": 390,
+      "name": "r1888-1888-mode0-390.png",
+      "state": {
+        "coreMode": "0",
+        "coreSpeed": "100",
+        "ready": "true",
+        "error": 0,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "canvas": 1,
+        "controls": 1,
+        "forms": 2,
+        "rect": {
+          "x": -27.040008544921875,
+          "y": 14.649993896484375,
+          "width": 444.08001708984375,
+          "height": 347.70001220703125,
+          "scale": 1
+        }
+      }
+    },
+    {
+      "version": "1888",
+      "mode": 1,
+      "width": 390,
+      "name": "r1888-1888-mode1-390.png",
+      "state": {
+        "coreMode": "1",
+        "coreSpeed": "100",
+        "ready": "true",
+        "error": 0,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "canvas": 1,
+        "controls": 1,
+        "forms": 2,
+        "rect": {
+          "x": -27.040008544921875,
+          "y": 14.649993896484375,
+          "width": 444.08001708984375,
+          "height": 347.70001220703125,
+          "scale": 1
+        }
+      }
+    },
+    {
+      "version": "1888",
+      "mode": 2,
+      "width": 390,
+      "name": "r1888-1888-mode2-390.png",
+      "state": {
+        "coreMode": "2",
+        "coreSpeed": "100",
+        "ready": "true",
+        "error": 0,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "canvas": 1,
+        "controls": 1,
+        "forms": 2,
+        "rect": {
+          "x": -27.040008544921875,
+          "y": 14.649993896484375,
+          "width": 444.08001708984375,
+          "height": 347.70001220703125,
+          "scale": 1
+        }
+      }
+    },
+    {
+      "version": "1888",
+      "mode": 3,
+      "width": 390,
+      "name": "r1888-1888-mode3-390.png",
+      "state": {
+        "coreMode": "3",
+        "coreSpeed": "100",
+        "ready": "true",
+        "error": 0,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "canvas": 1,
+        "controls": 1,
+        "forms": 2,
+        "rect": {
+          "x": -27.040008544921875,
+          "y": 14.649993896484375,
+          "width": 444.08001708984375,
+          "height": 347.70001220703125,
+          "scale": 1
+        }
+      }
+    },
+    {
+      "version": "1888",
+      "width": 390,
+      "controls": {
+        "frozen": {
+          "mode": "2",
+          "speed": "0"
+        },
+        "invalidRejected": true,
+        "importNew": true,
+        "legacyReset": true
+      }
+    },
+    {
+      "version": "1888",
+      "width": 1100,
+      "mode": 3,
+      "family": 0,
+      "name": "r1888-family-0-mode3.png",
+      "state": {
+        "family": "0",
+        "mode": "3",
+        "error": 0,
+        "rect": {
+          "x": 54.639984130859375,
+          "y": 100.87998962402344,
+          "width": 543.719970703125,
+          "height": 503.239990234375,
+          "scale": 1
+        }
+      }
+    },
+    {
+      "version": "1888",
+      "width": 1100,
+      "mode": 3,
+      "family": 8,
+      "name": "r1888-family-8-mode3.png",
+      "state": {
+        "family": "8",
+        "mode": "3",
+        "error": 0,
+        "rect": {
+          "x": 54.639984130859375,
+          "y": 100.87998962402344,
+          "width": 543.719970703125,
+          "height": 503.239990234375,
+          "scale": 1
+        }
+      }
+    }
+  ],
+  "presetAB": {
+    "status": "PASS",
+    "restoredA": "2",
+    "restoredB": "1",
+    "clock": "fixed",
+    "frame": 4.5,
+    "screenshotHash": 365870
+  }
+}
