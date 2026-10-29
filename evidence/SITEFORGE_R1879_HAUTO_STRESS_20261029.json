@@ -1,0 +1,66 @@
+{
+  "schema": "synestra.siteforge.r1879.autonomous_stress_checkpoint.v1",
+  "mission_id": "SYN_SITEFORGE_R1879_MOUSE_PALETTE_20261029",
+  "date": "2026-10-29",
+  "owner": "inossarum",
+  "baseline_commit": "910813943f382b16e9e062f5861ef21c4c130d6c",
+  "branch": "task/SYN_SITEFORGE_R1879_MOUSE_PALETTE_20261029",
+  "artifact": "siteforge-r1879-autonome.html",
+  "artifact_sha256": "8b6a0f4de28cbe9c2ce8ffaee5d31fc53655c3fab398963c97828251bd83ce63",
+  "trigger": "HAUTO",
+  "hook": {
+    "toolbox_revision": 3,
+    "sha256": "f48e7c2b6ee6750df3b336db75b69afb0d76b3d9c93d7ba97fec5eadd8a6dd41",
+    "inbox_events": 0
+  },
+  "source_gate": "LIMITED (Studio root partial; Memory V1 not queried; no mission-level Supervisor execution)",
+  "status": "STRESS_FUNCTIONAL_PASS_PERFORMANCE_UNKNOWN_ART_PENDING",
+  "tests": {
+    "static_prior": "5/5 PASS on baseline",
+    "desktop": {
+      "status": "PASS",
+      "flow_count_pixel_diff_5_to_8": 18532,
+      "palette_pixel_diff_at_8": 31961,
+      "mouse_toggle_off_to_on": "PASS",
+      "webgl_errors": 0,
+      "reported_fps": "0.0 (not usable measurement)",
+      "render_steps": 22,
+      "renderer": "Chrome headless Windows SwiftShader"
+    },
+    "mobile_simulated": {
+      "status": "PASS",
+      "flow_count_pixel_diff_5_to_8": 9889,
+      "palette_pixel_diff_at_8": 17065,
+      "mouse_toggle_off_to_on": "PASS",
+      "webgl_errors": 0,
+      "reported_fps": "0.0 (not usable measurement)",
+      "render_steps": 14,
+      "renderer": "Chrome headless mobile emulation on Windows SwiftShader"
+    },
+    "environment_recovery": "Initial test failed because local 19099 server was not listening. Checked HTTP failure, restarted bound 127.0.0.1 server, added HTTP preflight and observable WebGL readiness. Reran desktop/mobile, both PASS.",
+    "gpu_performance": "UNKNOWN — WebGL internal telemetry 0.0 FPS in SwiftShader; no physical GPU or real mobile benchmark."
+  },
+  "files": [
+    "tests/siteforge_r1879_eight_flux_stress.mjs",
+    "evidence/SITEFORGE_R1879_STRESS_20261029.json",
+    "evidence/SITEFORGE_R1879_STRESS-mobile_20261029.json",
+    "evidence/r1879-stress-five.png",
+    "evidence/r1879-stress-eight.png",
+    "evidence/r1879-stress-eight-gold.png",
+    "evidence/r1879-stress-eight-active.png",
+    "evidence/r1879-stress-eight-mouse.png",
+    "evidence/r1879-stress-five-mobile.png",
+    "evidence/r1879-stress-eight-mobile.png",
+    "evidence/r1879-stress-eight-gold-mobile.png",
+    "evidence/r1879-stress-eight-active-mobile.png",
+    "evidence/r1879-stress-eight-mouse-mobile.png"
+  ],
+  "visual_observation": "Eight-flow gold screenshot inspected: trajectories recognizable; central intersections brighter. No aesthetic superiority claim.",
+  "decisions": [
+    "Do not add R188.0 creative controls before owner's R187.9 aesthetic acceptance per prior checkpoint.",
+    "No product code modifications in stress round.",
+    "No public deployment, merge, push, or expensive services."
+  ],
+  "rollback": "Baseline R187.9 product artifact unchanged; QA additions only.",
+  "next": "Human visual acceptance/rejection of R187.9. If accepted: create isolated R188.0 branch and implement named user presets and independent mouse strength/radius with failure-first QA. If rejected: bounded visual iteration on R187.9 without promoting."
+}
