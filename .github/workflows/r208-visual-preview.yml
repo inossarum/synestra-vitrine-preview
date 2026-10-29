@@ -1,0 +1,69 @@
+name: R208 visual depth refinement – private Chrome review
+on:
+  push:
+    branches:
+      - task/SYN_SITEFORGE_R208_VISUAL_REFINEMENT_20261029
+  pull_request:
+    branches:
+      - task/SYN_SITEFORGE_R207_LAB_DETAIL_QUALITY_20261029
+permissions:
+  contents: read
+concurrency:
+  group: synestra-r208-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: r204-build/package-lock.json
+      - name: Locked offline-safe dependencies
+        run: npm --prefix r204-build ci --ignore-scripts --no-audit --no-fund
+      - name: Compile R188.1 LAB with R205 governor and R206 stage
+        run: node r204-build/build.mjs
+      - name: Failure-first and R204/R205/R206 regressions
+        run: |
+          node --check r204-build/scene.mjs
+          node --check r204-build/lab-detail-r207.mjs
+          node --check r204-build/quality-ui-r207.mjs
+          node --check r204-build/stage-atmosphere-r208.mjs
+          node --check assets/r204-scene.bundle.mjs
+          node --test tests/siteforge_r204_core.test.mjs tests/siteforge_r205_adaptive_tier.test.mjs tests/siteforge_r206_atmosphere.test.mjs tests/siteforge_r207_quality.test.mjs tests/siteforge_r208_visual_quality.test.mjs
+      - name: Exact preview-only export; never publish production
+        env:
+          CF_PAGES_BRANCH: task/SYN_SITEFORGE_R208_VISUAL_REFINEMENT_20261029
+        run: |
+          node tools/build_vitrine_static.mjs
+          node -e "const fs=require('fs');for(const p of ['dist/index.html','dist/assets/r204-scene.bundle.mjs','dist/assets/r206-film-grain.png','dist/assets/r206-atmosphere.css','dist/assets/r204-gpu-benchmarks/d-nvidia.json','dist/connect/index.html','dist/bridge/index.html','dist/siteforge/index.html','dist/offres/index.html'])if(!fs.existsSync(p))throw Error('MISSING '+p);if(!fs.readFileSync('dist/index.html','utf8').includes('r206-atmosphere.css'))throw Error('R206_NOT_EXPORTED')"
+      - name: Real headless Chrome WebGL and manual quality E2E (isolated CI only)
+        env:
+          SYNESTRA_TEST_URL: http://127.0.0.1:18888/
+        run: |
+          CHROME_BIN="$(command -v google-chrome || command -v chromium-browser || command -v chromium)"
+          if [ -z "$CHROME_BIN" ]; then echo "CHROME_NOT_INSTALLED"; exit 8; fi
+          export CHROME_BIN
+          python3 -m http.server 18888 --bind 127.0.0.1 --directory dist >/tmp/synestra-r208-http.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
+          for i in $(seq 1 30); do
+            if curl --silent --fail --max-time 2 http://127.0.0.1:18888/ >/dev/null; then break; fi
+            if ! kill -0 "$SERVER_PID" 2>/dev/null; then echo "HTTP_SERVER_EXITED"; exit 9; fi
+            sleep .2
+          done
+          curl --silent --fail --max-time 2 http://127.0.0.1:18888/ >/dev/null
+          timeout 220s node tests/siteforge_r208_browser_qa.mjs
+      - name: Upload review artifact and browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: synestra-r208-private-preview
+          path: |
+            dist/
+            r208-browser-*.png
+            r208-browser-evidence.json
+          retention-days: 3

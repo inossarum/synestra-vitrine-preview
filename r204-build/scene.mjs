@@ -7,6 +7,7 @@ import {labR1881Fragment,labR1881Vertex} from './lab-r1881-shader.mjs';
 import {evolveAdaptiveBudget} from './adaptive-tier.mjs';
 import {clampDetailForTier} from './quality-policy.mjs';
 import {installLabDetail} from './lab-detail-r207.mjs';
+import {installChamberAtmosphere} from './stage-atmosphere-r208.mjs';
 import {createQualityPanel} from './quality-ui-r207.mjs';
 const stage=document.querySelector('.core-r109-stage');
 const canvas=stage?.querySelector('.core-r109-canvas');
@@ -21,7 +22,7 @@ if(stage&&canvas){
  let elapsed=0,last=0,lastDraw=0,drawCount=0,drawStart=0,quality=.85,renderTier=1;
  let slow=0,fast=0,scale=1,pointerX=0,pointerY=0,impulse=0,energy=0,lightV,lightG,lightCore;
  let stageWidth=0,stageHeight=0,lastRatio=0,mist=null,grain=null;
- let labDetail=null,qualityPanel=null,detectedTier=1;
+ let labDetail=null,chamber=null,qualityPanel=null,detectedTier=1;
  const owned=[];
  const clamp=(x,a,b)=>Math.min(b,Math.max(a,x));
  const make=(geo,mat,p,cast=false)=>{
@@ -43,7 +44,8 @@ if(stage&&canvas){
  function onScroll(){
   if(!camera)return;
   const t=clamp(scrollY/Math.max(innerHeight*1.7,1),0,1),e=t*t*(3-2*t);
-  camera.position.set(.25*e,1.38+.18*e,6.35-.49*e);
+  const mobile=innerWidth<=700;
+  camera.position.set(mobile?.12*e:.25*e,mobile?1.25+.10*e:1.38+.18*e,mobile?8.55-.42*e:6.35-.49*e);
   camera.lookAt(0,-.09,0);
   stage.dataset.sceneScroll=e.toFixed(3);
  }
@@ -56,6 +58,7 @@ if(stage&&canvas){
   stageWidth=w;stageHeight=h;lastRatio=pixelRatio;
   renderer.setPixelRatio(pixelRatio);renderer.setSize(w,h,false);
   camera.aspect=w/h;camera.updateProjectionMatrix();
+  onScroll();
   uniforms.uResolution.value.set(canvas.width,canvas.height);
  }
  function onPointer(e){
@@ -91,8 +94,8 @@ if(stage&&canvas){
   lightV.position.set(-.63,.24,.15);lightG.position.set(.66,.18,.17);lightCore.position.set(0,-.28,.2);
   scene.add(lightV,lightG,lightCore);
   // Compact real 3D environment, not an infinite landscape nor CSS illusion.
-  make(new THREE.PlaneGeometry(15,15),metallic(0x263243,.63,.55),[0,-1.53,-1.5]).rotation.x=-Math.PI/2;
-  make(new THREE.BoxGeometry(9,5.2,.15),metallic(0x1b273b,.76,.35),[0,.1,-4.1]);
+  make(new THREE.PlaneGeometry(48,48),metallic(0x263243,.63,.55),[0,-1.53,-1.5]).rotation.x=-Math.PI/2;
+  make(new THREE.BoxGeometry(28,20,.15),metallic(0x1b273b,.76,.35),[0,.1,-4.1]);
   for(const side of [-1,1]){
    const face=make(new THREE.BoxGeometry(.14,3.6,4),metallic(side<0?0x302640:0x21413c,.63,.58),[side*3.95,.20,-1.7]);
    face.rotation.y=side*.065;
@@ -141,7 +144,7 @@ if(stage&&canvas){
    uDeep:{value:new THREE.Color('#24153c')},
    uMotePrimary:{value:v},uMoteSecondary:{value:g},
    uMoteShape:{value:0},uMoteFinish:{value:new THREE.Vector2(.5,.5)},
-   uVolumeSteps:{value:12},uFlow:{value:new THREE.Vector2(6,1)},
+   uVolumeSteps:{value:12},uFlow:{value:new THREE.Vector2(1,1)},
    uFlowLab:{value:new THREE.Vector4(5,1,.8,1)},
    uEnergySteps:{value:18},uEnergyMouse:{value:.5},
    uEnergyA:{value:v},uEnergyB:{value:g},uEnergyCore:{value:ivory},
@@ -154,6 +157,7 @@ if(stage&&canvas){
   }));
   plasma.position.set(0,.07,.12);plasma.frustumCulled=false;scene.add(plasma);
   labDetail=installLabDetail({THREE,scene,owned});
+  chamber=installChamberAtmosphere({THREE,scene,owned,camera});
   // detect-gpu offline benchmarks; tier-0 still gets cheap 3D when WebGL exists.
   try{
    const gpu=await getGPUTier({gl:renderer.getContext(),
@@ -169,7 +173,7 @@ if(stage&&canvas){
   uniforms.uEnergySteps.value=budget[renderTier];
   uniforms.uVolumeSteps.value=[8,12,16,22][renderTier];
   uniforms.uFlowLab.value.set([3,4,6,8][renderTier],1.08,1.0,1.23);
-  uniforms.uFlow.value.set(6,[.88,1,1.08,1.18][renderTier]);
+  uniforms.uFlow.value.set(1,[.88,1,1.08,1.18][renderTier]);
   quality=renderTier===0?.85:renderTier===1?.9:1;
   renderer.shadowMap.enabled=renderTier>=3;
   const setAtmosphere=()=>{
@@ -183,6 +187,7 @@ if(stage&&canvas){
    uniforms.uFlowLab.value.x=d.flows;uniforms.uFlow.value.y=[.88,1,1.08,1.18][renderTier];
    renderer.shadowMap.enabled=renderTier>=3;
    labDetail.applyTier(renderTier);
+   chamber.applyTier(renderTier);
    setAtmosphere();
    stage.dataset.renderTier=String(renderTier);
    stage.dataset.energyFlows=String(labDetail.getFlowCount());
@@ -220,6 +225,7 @@ if(stage&&canvas){
    uniforms.uLabTime.value=elapsed*.86;
    uniforms.uSpinPhase.value=elapsed*.104;
    labDetail.frame(elapsed);
+   chamber.frame(elapsed);
    if(mist.visible)mist.userData.fogUniforms.uTime.value=elapsed;
    uniforms.uPointer.value.set(pointerX,pointerY,energy,1);
    lightV.intensity=13*(.94+.06*Math.sin(elapsed*.67));

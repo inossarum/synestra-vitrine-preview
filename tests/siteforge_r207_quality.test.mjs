@@ -71,5 +71,5 @@ test('Hero-only visual controls and no global WebGL or unguarded fullscreen post
 test('R207 exact branch retained in bounded deployment export',()=>{
  const source=read('tools/build_vitrine_static.mjs');
  assert.match(source,/const r207ReviewBranch='task\/SYN_SITEFORGE_R207_LAB_DETAIL_QUALITY_20261029'/);
- assert.match(source,/r206ReviewBranch,r207ReviewBranch\]\.includes/);
+ assert.match(source,/r206ReviewBranch,r207ReviewBranch(?:,r208ReviewBranch)?\]\.includes/);
 });
