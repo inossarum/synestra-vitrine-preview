@@ -1,0 +1,43 @@
+{
+  "schema": "synestra.lab.r196.visual-delta.v1",
+  "reference": "R195@277c7054e5becd6c0cd923a87428bc9ad222f39d",
+  "region": "desktop center rectangular ROI, not reference image",
+  "base": {
+    "name": "r195-fork-core0-1100.png",
+    "bounds": {
+      "x1": 320,
+      "x2": 425,
+      "y1": 415,
+      "y2": 555
+    },
+    "total": 14700,
+    "white": 1676,
+    "bright": 6044,
+    "colored": 8946
+  },
+  "next": {
+    "name": "r196-core-core0-1100.png",
+    "bounds": {
+      "x1": 320,
+      "x2": 425,
+      "y1": 415,
+      "y2": 555
+    },
+    "total": 14700,
+    "white": 847,
+    "bright": 4787,
+    "colored": 8668
+  },
+  "diffs": [
+    {
+      "width": 1100,
+      "changed": 61038,
+      "changedPercent": 6.165454545454545
+    },
+    {
+      "width": 390,
+      "changed": 19809,
+      "changedPercent": 5.643589743589744
+    }
+  ]
+}
