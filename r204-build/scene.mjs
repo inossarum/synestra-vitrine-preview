@@ -17,7 +17,7 @@ if(stage&&canvas){
  let renderer=null,scene,camera,plasma,uniforms,dead=false,raf=0;
  let elapsed=0,last=0,lastDraw=0,drawCount=0,drawStart=0,quality=.85,renderTier=1;
  let slow=0,fast=0,scale=1,pointerX=0,pointerY=0,impulse=0,energy=0,lightV,lightG,lightCore;
- let stageWidth=0,stageHeight=0,lastRatio=0;
+ let stageWidth=0,stageHeight=0,lastRatio=0,mist=null,grain=null;
  const owned=[];
  const clamp=(x,a,b)=>Math.min(b,Math.max(a,x));
  const make=(geo,mat,p,cast=false)=>{
@@ -33,6 +33,7 @@ if(stage&&canvas){
   canvas.removeEventListener('pointermove',onPointer);
   for(const m of owned){m.geometry.dispose();m.material.dispose();}
   if(plasma){plasma.geometry.dispose();plasma.material.dispose();}
+  grain?.remove();
   renderer?.dispose();stage.removeAttribute('data-core-ready');
  };
  function onScroll(){
@@ -98,6 +99,31 @@ if(stage&&canvas){
   make(new THREE.CylinderGeometry(1.18,1.18,.018,48),metallic(0x132033,.65,.51),[0,-1.38,0]);
   const ring=make(new THREE.TorusGeometry(1.25,.012,5,72),metallic(0x5e7386,.34,.78),[0,-1.366,0]);
   ring.rotation.x=-Math.PI/2;
+  // R206: readable pedestal recess, two restrained inlaid rings, no mirror/reflection pass.
+  const inner=make(new THREE.TorusGeometry(1.09,.008,5,64),metallic(0x497b75,.40,.55,0x163c35,.32),[0,-1.363,0]);inner.rotation.x=-Math.PI/2;
+  const edge=make(new THREE.TorusGeometry(1.38,.009,5,64),metallic(0x4d4774,.49,.62,0x26133e,.20),[0,-1.503,0]);edge.rotation.x=-Math.PI/2;
+  // Physical chamber ribs and low-profile depth lines, bounded to the immediate core stage.
+  for(const side of [-1,1])for(let j=0;j<3;j++){
+   const rib=make(new THREE.BoxGeometry(.018,1.55-j*.13,.035),metallic(side<0?0x564270:0x335a52,.72,.42),[side*(2.75+j*.32),-.20,-2.60]);
+   rib.rotation.y=side*.12;
+  }
+  // One shallow transparent world-space plane: floor-hugging light-scattering fog.
+  // No fullscreen postprocessing, no volumetric raymarch and no second canvas.
+  const fogUniforms={uTime:{value:0},uStrength:{value:.20}};
+  mist=make(new THREE.PlaneGeometry(4.2,3.4),new THREE.ShaderMaterial({
+   uniforms:fogUniforms,transparent:true,depthTest:true,depthWrite:false,toneMapped:false,
+   vertexShader:'varying vec2 vUv; void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}',
+   fragmentShader:`varying vec2 vUv;uniform float uTime;uniform float uStrength;
+    void main(){vec2 p=(vUv-.5)*2.0;float r=length(p*vec2(.87,1.22));
+      float w=sin(p.x*10.0+uTime*.13)*sin(p.y*8.0-uTime*.11);
+      float drift=.5+.5*w;float band=smoothstep(1.05,.08,r)*smoothstep(.06,.34,abs(p.x)+.12);
+      float alpha=band*uStrength*(.68+.32*drift);
+      vec3 violet=vec3(.35,.26,.63),mint=vec3(.29,.60,.52);
+      gl_FragColor=vec4(mix(violet,mint,smoothstep(-.75,.75,p.x)),alpha);
+    }`
+  }),[0,-1.503,.12]);
+  mist.rotation.x=-Math.PI/2;mist.renderOrder=2;
+  mist.userData.fogUniforms=fogUniforms;
   // The LAB R188.1 filament source is shaded in a world-space plane with
   // accurate depth testing. No duplicate canvas, no separate glow renderer.
   uniforms={
@@ -117,7 +143,7 @@ if(stage&&canvas){
    uEnergyA:{value:v},uEnergyB:{value:g},uEnergyCore:{value:ivory},
    uCompare:{value:1},uDepthRefine:{value:1},uLabTime:{value:0}
   };
-  plasma=new THREE.Mesh(new THREE.PlaneGeometry(3.25,3.25),new THREE.ShaderMaterial({
+  plasma=new THREE.Mesh(new THREE.PlaneGeometry(3.42,3.42),new THREE.ShaderMaterial({
    vertexShader:labR1881Vertex,fragmentShader:labR1881Fragment,uniforms,
    transparent:true,depthTest:true,depthWrite:false,toneMapped:false,
    side:THREE.FrontSide,glslVersion:THREE.GLSL1
@@ -138,6 +164,13 @@ if(stage&&canvas){
   uniforms.uVolumeSteps.value=[8,10,14,18][renderTier];
   quality=renderTier===0?.85:renderTier===1?.9:1;
   renderer.shadowMap.enabled=renderTier>=3;
+  const setAtmosphere=()=>{
+   mist.visible=renderTier>=1;
+   mist.userData.fogUniforms.uStrength.value=renderTier>=3?.18:renderTier===2?.14:renderTier===1?.08:0;
+   stage.dataset.sceneAtmosphere=renderTier>=3?'fine':renderTier===2?'light':renderTier===1?'minimal':'off';
+  };
+  setAtmosphere();
+  grain=document.createElement('div');grain.className='r206-film-grain';grain.setAttribute('aria-hidden','true');stage.appendChild(grain);
   stage.dataset.labReference='R188.1@81b9cf1c';
   stage.dataset.coreRenderer='three-one';
   resize();
@@ -160,6 +193,7 @@ if(stage&&canvas){
    uniforms.uTime.value=elapsed*.86;
    uniforms.uLabTime.value=elapsed*.86;
    uniforms.uSpinPhase.value=elapsed*.104;
+   if(mist.visible)mist.userData.fogUniforms.uTime.value=elapsed;
    uniforms.uPointer.value.set(pointerX,pointerY,energy,1);
    lightV.intensity=13*(.94+.06*Math.sin(elapsed*.67));
    lightG.intensity=12*(.96+.04*Math.sin(elapsed*.72+1.4));
@@ -179,6 +213,7 @@ if(stage&&canvas){
      uniforms.uEnergySteps.value=budget[renderTier];
      uniforms.uVolumeSteps.value=[8,10,14,18][renderTier];
      renderer.shadowMap.enabled=renderTier>=3;
+     setAtmosphere();
      stage.dataset.renderTier=String(renderTier);
      stage.dataset.autoTierDrops=String(Number(stage.dataset.autoTierDrops)+1);
      targetInterval=renderTier<=0?1000/18:renderTier===1?1000/24:renderTier===2?1000/30:1000/50;
