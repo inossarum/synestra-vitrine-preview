@@ -34,7 +34,7 @@ export function organicPlasmaCenterline(index,time,nodes){
 }
 export function organicPlasmaRibbonPaths(centerline,index,time){
  const paths=RAILS.map(()=>[]);
- const base=(index%5===0?.052:index%3===0?.034:.022);
+ const base=index>=100?.095:(index%5===0?.068:index%3===0?.047:.031);
  for(let k=0;k<centerline.length;k++){
   const u=k/(centerline.length-1),center=centerline[k];
   const prev=centerline[Math.max(0,k-1)],next=centerline[Math.min(centerline.length-1,k+1)];
@@ -52,7 +52,7 @@ export function organicPlasmaRibbonPaths(centerline,index,time){
  return paths;
 }
 export function ribbonVertexAlphas(index,segments=STEPS){
- const a=[],cross=[.025,.26,.77,.26,.025];
+ const a=[],cross=index>=100?[.012,.17,.68,.17,.012]:[.018,.23,.67,.23,.018];
  for(let k=0;k<RAILS.length;k++){
   for(let j=0;j<=segments;j++){
    const u=j/segments,fade=clamp(Math.sin(Math.PI*u)*3.2,0,1);
@@ -63,20 +63,32 @@ export function ribbonVertexAlphas(index,segments=STEPS){
  }
  return new Float32Array(a);
 }
+export function ribbonTexCoords(segments=STEPS){
+ const uv=[];
+ for(let rail=0;rail<RAILS.length;rail++)for(let j=0;j<=segments;j++)uv.push(j/segments,rail/(RAILS.length-1));
+ return new Float32Array(uv);
+}
 export function installPlasmaRibbons({scene,colors,nodes,count=28,bridgePath=null}){
  if(!scene||typeof scene.getEngine!=='function')throw TypeError('PLASMA_SCENE_MISSING');
  if(!Array.isArray(colors)||colors.length!==4)throw TypeError('PLASMA_FOUR_PALETTE_COLORS_REQUIRED');
  const material=colors.map((color,i)=>{
-  const shader=new ShaderMaterial('r192-plasma-shader-'+i,scene,{
+  const shader=new ShaderMaterial('r193-plasma-shader-'+i,scene,{
    vertexSource:`precision highp float;
-    attribute vec3 position;attribute vec4 color;
+    attribute vec3 position;attribute vec4 color;attribute vec2 uv;
     uniform mat4 worldViewProjection;
-    varying vec4 vColor;
-    void main(){vColor=color;gl_Position=worldViewProjection*vec4(position,1.);}`,
+    varying vec4 vColor;varying vec2 vUV;
+    void main(){vColor=color;vUV=uv;gl_Position=worldViewProjection*vec4(position,1.);}`,
    fragmentSource:`precision highp float;
-    varying vec4 vColor;uniform vec3 uTint;
-    void main(){gl_FragColor=vec4(uTint*(.83+.17*vColor.a),vColor.a);}`
-  },{attributes:['position','color'],uniforms:['worldViewProjection','uTint'],needAlphaBlending:true});
+    varying vec4 vColor;varying vec2 vUV;
+    uniform vec3 uTint;uniform float uTime;
+    void main(){
+     float crest=.5+.5*sin(vUV.x*24.0-uTime*2.8+sin(vUV.y*6.28)*2.0);
+     float shimmer=.82+.18*sin(vUV.x*10.0+uTime*.95+vUV.y*7.0);
+     float alpha=clamp(vColor.a*(.66+.34*crest)*shimmer,0.0,1.0);
+     vec3 light=uTint*(.72+.42*crest)*(1.0+.18*sin(vUV.x*17.0-uTime*1.3));
+     gl_FragColor=vec4(light,alpha);
+    }`
+  },{attributes:['position','color','uv'],uniforms:['worldViewProjection','uTint','uTime'],needAlphaBlending:true});
   shader.setColor3('uTint',color);
   shader.backFaceCulling=false;
   shader.alphaMode=Engine.ALPHA_COMBINE;
@@ -92,6 +104,7 @@ export function installPlasmaRibbons({scene,colors,nodes,count=28,bridgePath=nul
   const colorData=ribbonVertexAlphas(i);
   if(colorData.length!==positionCount*4)throw Error('RIBBON_COLOR_VERTEX_MISMATCH '+colorData.length+' '+positionCount);
   mesh.setVerticesData(VertexBuffer.ColorKind,colorData,true);
+  mesh.setVerticesData(VertexBuffer.UVKind,ribbonTexCoords(),true);
   mesh.hasVertexAlpha=true;
   mesh.material=material[i%4];
   mesh.isPickable=false;
@@ -111,6 +124,7 @@ export function installPlasmaRibbons({scene,colors,nodes,count=28,bridgePath=nul
    if(mesh.getVerticesData(VertexBuffer.PositionKind).length/3*4!==colors.length)
     throw Error('PLASMA_BRIDGE_VERTEX_MISMATCH');
    mesh.setVerticesData(VertexBuffer.ColorKind,colors,true);
+   mesh.setVerticesData(VertexBuffer.UVKind,ribbonTexCoords(path.length-1),true);
    mesh.hasVertexAlpha=true;mesh.isPickable=false;mesh.material=material[i%4];
    nodeMeshes.push(mesh);
   }
@@ -121,12 +135,13 @@ export function installPlasmaRibbons({scene,colors,nodes,count=28,bridgePath=nul
   nodeMeshes,
   materials:material,
   update({time,quality='balanced',parent=null,active=28,corePower=1}){
-   // Geometry updates max 15 Hz; shader-free temporal movement remains smooth via camera.
+   // Shader flicker moves smoothly every frame; geometry updates are capped at 15 Hz.
+   for(const mat of material)mat.setFloat('uTime',time);
    const cadence=quality==='economy'?.12:.065;
    const budget=quality+':'+active+':'+(corePower>0);
    if(time-lastSample<cadence&&budget===lastBudget)return;
    lastBudget=budget;lastSample=time;
-   const visible=quality==='economy'?Math.min(active,8):quality==='ultra'?active:Math.min(active,22);
+   const visible=quality==='economy'?Math.min(active,8):quality==='ultra'?active:Math.min(active,26);
    for(let i=0;i<ribbons.length;i++){
     const mesh=ribbons[i],enabled=i<visible;
     mesh.setEnabled(enabled);

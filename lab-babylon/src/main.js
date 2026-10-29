@@ -99,7 +99,7 @@ function start(){
  const atlasMount=mountCoreAtAtlasSocket(scene,sphereRoot,{required:atlasFixture});
  cv.dataset.atlasSocket=atlasMount.mode;
  globalThis.__synestraLabAtlasInterop={getScene:()=>scene,getSphereRoot:()=>sphereRoot,connect:()=>mountCoreAtAtlasSocket(scene,sphereRoot,{required:true}),getEngine:()=>engine};
- budget();cv.dataset.engine='babylon';cv.dataset.sphereReady='true';cv.dataset.artReference=SPHERE_REFERENCE.id;cv.dataset.palette=SPHERE_REFERENCE.colors.map(c=>c.id).join(',');cv.dataset.energyNodes=String(SPHERE_REFERENCE.energyNodes);cv.dataset.canvasCount=String(document.querySelectorAll('canvas').length);cv.dataset.plasmaVersion='organic-r192';cv.dataset.plasmaRibbons=String(plasma.meshes.length);cv.dataset.nodePlasma=String(plasma.nodeMeshes.length);
+ budget();cv.dataset.engine='babylon';cv.dataset.sphereReady='true';cv.dataset.artReference=SPHERE_REFERENCE.id;cv.dataset.palette=SPHERE_REFERENCE.colors.map(c=>c.id).join(',');cv.dataset.energyNodes=String(SPHERE_REFERENCE.energyNodes);cv.dataset.canvasCount=String(document.querySelectorAll('canvas').length);cv.dataset.plasmaVersion='plasma-light-r193';cv.dataset.plasmaRibbons=String(plasma.meshes.length);cv.dataset.nodePlasma=String(plasma.nodeMeshes.length);
  document.getElementById('engine-label').textContent='BABYLON.JS / WEBGL '+engine.webGLVersion;
  stat.textContent='Sphère énergétique prête';
  engine.runRenderLoop(()=>{
@@ -110,11 +110,11 @@ function start(){
   plasma.update({time,quality,parent:sphereRoot,active:Math.min(plasma.meshes.length,amount+5),corePower:get('core-power')});
   cv.dataset.visibleRibbons=String(plasma.meshes.filter(m=>m.isEnabled()).length);
   for(let i=0;i<threads.length;i++){
-   const m=threads[i],visible=i<Math.min(6,amount)&&(quality!=='economy'||i<3);m.setEnabled(visible);
+   const m=threads[i],visible=i<Math.min(2,amount)&&(quality!=='economy'||i<1);m.setEnabled(visible);
    if(visible)refresh(m,pathOuter(i,time,turb),i%4===0?.012:.007);
   }
   for(let i=0;i<lines.length;i++){
-   const m=lines[i],visible=i<Math.min(3,get('strands'))&&(quality!=='economy'||i===0);m.setEnabled(visible);if(visible)refresh(m,pathMeridian(i,time,turb),.003);
+   const m=lines[i],visible=i===0&&(quality!=='economy');m.setEnabled(visible);if(visible)refresh(m,pathMeridian(i,time,turb),.003);
   }
   const r=get('core-radius')/100,power=get('core-power')/100,mode=get('core-mode');
   core.scaling.setAll(Math.max(.0001,r));halo.scaling.setAll(Math.max(.0001,r));
@@ -152,7 +152,7 @@ document.getElementById('reset').addEventListener('click',()=>{for(const [k,valu
 document.getElementById('export').addEventListener('click',()=>{
  const settings=Object.fromEntries(Object.entries(ctl).map(([k,v])=>[k,v.value]));
  const blob=new Blob([JSON.stringify({schema:'synestra.lab.babylon-sphere.v1',settings},null,2)],{type:'application/json'});
- const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='sphere-r192.json';a.click();
+ const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='sphere-r193.json';a.click();
  setTimeout(()=>URL.revokeObjectURL(a.href),500);
 });
 try{start();sync();}catch(e){cv.dataset.sphereReady='false';stat.textContent='Moteur indisponible';console.error('BABYLON_SPHERE_ERROR',e);}
