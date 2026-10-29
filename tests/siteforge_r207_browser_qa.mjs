@@ -53,7 +53,12 @@ try {
   assert.equal(control.visible,true,'QUALITY_UI_MISSING');
   assert.ok(['auto','eco','balanced','high','ultra'].includes(control.mode));
   assert.ok(control.flows>=2,'SPATIAL_FLUX_MISSING');
+  const layout=await evaluate("(()=>{const p=document.querySelector('.r207-quality-panel')?.getBoundingClientRect(),h=document.querySelector('header.site-header')?.getBoundingClientRect();return {panelTop:p?.top,navBottom:h?.bottom,panelRight:p?.right,viewport:innerWidth}})()");
+  assert.ok(Number.isFinite(layout.panelTop)&&Number.isFinite(layout.navBottom),'QUALITY_PANEL_NOT_MEASURABLE');
+  assert.ok(layout.panelTop>=layout.navBottom+4,'QUALITY_PANEL_OVERLAPS_NAV '+JSON.stringify(layout));
+  assert.ok(layout.panelRight<=layout.viewport+1,'QUALITY_PANEL_OVERFLOWS '+JSON.stringify(layout));
   results.at(-1).qualityControl=control;
+  results.at(-1).qualityLayout=layout;
   if(width===1440){
    const eco=await evaluate("(()=>{const q=document.querySelector('#r207-quality-select');q.value='eco';q.dispatchEvent(new Event('change',{bubbles:true}));const s=document.querySelector('.core-r109-stage');return {mode:q.value,tier:s.dataset.renderTier,flows:s.dataset.energyFlows,fog:s.dataset.sceneAtmosphere}})()");
    assert.equal(eco.tier,'0');assert.equal(eco.flows,'2');assert.equal(eco.fog,'off');
