@@ -1,0 +1,37 @@
+name: Synestra R216 — photographed PBR and real browser evidence
+on:
+  push:
+    branches: [task/SYN_REACTOR_R216_PBR_MATERIALS_20261029]
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate immutable photo source hashes and glTF physical materials
+        run: |
+          node --test reactor-decor/qa/r216-materials.test.mjs
+          node --check reactor-decor/qa/browser-r216.mjs
+      - name: Verify real Blender & Chrome PNG and produce hashes
+        run: |
+          python3 - <<'PY'
+          import pathlib,struct
+          names=['reactor-decor/r216-dist/reactor-r216-preview.png','reactor-decor/r216-evidence/reactor-r216-chrome-hdri-1440.png','reactor-decor/r216-evidence/reactor-r216-chrome-hdri-390.png']
+          for name in names:
+              data=pathlib.Path(name).read_bytes()
+              assert data[:8]==bytes((137,80,78,71,13,10,26,10)),name
+              print(name,struct.unpack('>II',data[16:24]),len(data))
+          PY
+          sha256sum reactor-decor/r216-evidence/*.png reactor-decor/r216-dist/synestra_reactor_decor_r216.glb
+      - name: Attach original R216 visual evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: synestra-r216-real-metal-blender-babylon
+          path: |
+            reactor-decor/r216-dist/reactor-r216-preview.png
+            reactor-decor/r216-dist/r216_manifest.json
+            reactor-decor/r216-evidence/*.png
+            reactor-decor/r216-evidence/*.json
+          retention-days: 3

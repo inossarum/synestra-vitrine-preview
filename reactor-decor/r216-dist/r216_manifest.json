@@ -1,0 +1,30 @@
+{
+  "schema": "synestra.atlas.babylon.decor.r216.v1",
+  "engine": "Blender 5.2.2 LTS",
+  "target": "Babylon.js 9.33.0",
+  "core_status": "CORE_SOCKET_ONLY",
+  "objects": 839,
+  "meshes": 827,
+  "core_socket": "CORE_SOCKET",
+  "revision": "R216",
+  "room_closed": true,
+  "side_wall_panels": 24,
+  "side_rear_seal_segments": 10,
+  "front_wall": true,
+  "rear_door": true,
+  "closed_roof": true,
+  "materials": 24,
+  "wall_panels": 28,
+  "ceiling_rings": 7,
+  "catwalk_segments": 22,
+  "glb_path": "r216-dist/synestra_reactor_decor_r216.glb",
+  "blend_path": "r216-dist/synestra_reactor_decor_r216.blend",
+  "preview_path": "r216-dist/reactor-r216-preview.png",
+  "material_source": "Poly Haven metal_plate_02 (CC0, photographed 1K)",
+  "pbr_texture_maps": [
+    "color",
+    "roughness",
+    "metallic",
+    "normal_gl"
+  ]
+}
