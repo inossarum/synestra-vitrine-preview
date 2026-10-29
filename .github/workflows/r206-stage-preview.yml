@@ -1,0 +1,45 @@
+name: R206 film grain and floor mist – private preview artifact only
+on:
+  push:
+    branches:
+      - task/SYN_SITEFORGE_R206_GRAIN_MIST_STAGE_20261029
+  pull_request:
+    branches:
+      - task/SYN_SITEFORGE_R205_ADAPTIVE_GPU_20261029
+permissions:
+  contents: read
+concurrency:
+  group: synestra-r206-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: r204-build/package-lock.json
+      - name: Locked offline-safe dependencies
+        run: npm --prefix r204-build ci --ignore-scripts --no-audit --no-fund
+      - name: Compile R188.1 LAB with R205 governor and R206 stage
+        run: node r204-build/build.mjs
+      - name: Failure-first and R204/R205/R206 regressions
+        run: |
+          node --check r204-build/scene.mjs
+          node --check assets/r204-scene.bundle.mjs
+          node --test tests/siteforge_r204_core.test.mjs tests/siteforge_r205_adaptive_tier.test.mjs tests/siteforge_r206_atmosphere.test.mjs
+      - name: Exact preview-only export; never publish production
+        env:
+          CF_PAGES_BRANCH: task/SYN_SITEFORGE_R206_GRAIN_MIST_STAGE_20261029
+        run: |
+          node tools/build_vitrine_static.mjs
+          node -e "const fs=require('fs');for(const p of ['dist/index.html','dist/assets/r204-scene.bundle.mjs','dist/assets/r206-film-grain.png','dist/assets/r206-atmosphere.css','dist/assets/r204-gpu-benchmarks/d-nvidia.json','dist/connect/index.html','dist/bridge/index.html','dist/siteforge/index.html','dist/offres/index.html'])if(!fs.existsSync(p))throw Error('MISSING '+p);if(!fs.readFileSync('dist/index.html','utf8').includes('r206-atmosphere.css'))throw Error('R206_NOT_EXPORTED')"
+      - name: Upload review artifact only
+        uses: actions/upload-artifact@v4
+        with:
+          name: synestra-r206-private-preview
+          path: dist/
+          retention-days: 3

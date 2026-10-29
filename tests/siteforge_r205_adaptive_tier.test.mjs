@@ -44,7 +44,7 @@ test('Invalid tiers or frame times fail closed rather than silently raising load
 test('R205 review branch preserves exact R204 export and never changes production routing',()=>{
  const exporter=readFileSync(join(root,'tools/build_vitrine_static.mjs'),'utf8');
  assert.match(exporter,/const r205ReviewBranch='task\/SYN_SITEFORGE_R205_ADAPTIVE_GPU_20261029'/);
- assert.match(exporter,/\[r204ReviewBranch,r205ReviewBranch\]\.includes\(process\.env\.CF_PAGES_BRANCH\)/);
- assert.match(exporter,/\[r202ReviewBranch,r204ReviewBranch,r205ReviewBranch\]\.includes\(process\.env\.CF_PAGES_BRANCH\)/);
+ assert.match(exporter,/\[r204ReviewBranch,r205ReviewBranch(?:,r206ReviewBranch)?\]\.includes\(process\.env\.CF_PAGES_BRANCH\)/);
+ assert.match(exporter,/\[r202ReviewBranch,r204ReviewBranch,r205ReviewBranch(?:,r206ReviewBranch)?\]\.includes\(process\.env\.CF_PAGES_BRANCH\)/);
  assert.match(exporter,/const rootFiles=\['index.html','_headers'\]/);
 });

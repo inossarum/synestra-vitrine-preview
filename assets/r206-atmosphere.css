@@ -1,0 +1,24 @@
+/* R206 cinematic atmosphere, exclusive to the existing single-canvas Core hero.
+   PNG noise overlay, one local 3D mist plane; no fullscreen compositor. */
+.syn-r204-home .core-r109-stage{isolation:isolate}
+.syn-r204-home .core-r109-stage > .r206-film-grain{
+ position:absolute;inset:0;z-index:5;pointer-events:none;
+ background-image:url('../assets/r206-film-grain.png');
+ background-repeat:repeat;background-size:96px 96px;
+ mix-blend-mode:soft-light;opacity:.18;
+ animation:r206-grain-shift 1.6s steps(4,end) infinite;
+ contain:paint;
+}
+@keyframes r206-grain-shift{
+ 0%{background-position:0 0}
+ 25%{background-position:31px -24px}
+ 50%{background-position:-19px 47px}
+ 75%{background-position:57px 8px}
+ 100%{background-position:0 0}
+}
+.syn-r204-home .core-r109-stage[data-render-tier="2"] > .r206-film-grain{opacity:.13}
+.syn-r204-home .core-r109-stage[data-render-tier="1"] > .r206-film-grain{opacity:.075;animation:none}
+.syn-r204-home .core-r109-stage[data-render-tier="0"] > .r206-film-grain{display:none}
+@media(prefers-reduced-motion:reduce){
+ .syn-r204-home .core-r109-stage > .r206-film-grain{display:none!important;animation:none!important}
+}
