@@ -103,8 +103,14 @@ try {
  const product=[];
  for(const route of ['connect/','bridge/','siteforge/','offres/']){
   await send('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'no-preference'}]});
-  await send('Page.navigate',{url:url+route});await wait(500);
-  const m=await evaluate("({href:location.pathname,ready:document.readyState,h1:document.querySelectorAll('h1').length,canvas:document.querySelectorAll('canvas').length,overflow:document.documentElement.scrollWidth,viewport:innerWidth})");
+  await send('Page.navigate',{url:url+route});
+  let m=null;
+  for(let j=0;j<60;j++){
+   await wait(150);
+   m=await evaluate("({href:location.pathname,ready:document.readyState,h1:document.querySelectorAll('h1').length,canvas:document.querySelectorAll('canvas').length,overflow:document.documentElement.scrollWidth,viewport:innerWidth})");
+   if(m.href==='/'+route&&m.ready==='complete'&&m.h1===1)break;
+  }
+  assert.equal(m.href,'/'+route,'PRODUCT_ROUTE_NOT_LOADED');
   assert.equal(m.ready,'complete',route);
   assert.equal(m.h1,1,route);
   assert.equal(m.canvas,0,route);
