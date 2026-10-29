@@ -1,4 +1,4 @@
-name: R214 authentic Blender preview transfer
+name: R214-R215 authentic Blender comparison
 on:
   push:
     branches: [task/SYN_REACTOR_R214_VISUAL_PROOF_20261029]
@@ -14,19 +14,22 @@ jobs:
         run: |
           python3 - <<'PY'
           import re,base64,pathlib,hashlib
-          p=pathlib.Path('reactor-decor/r214-visual-preview.svg')
-          s=p.read_text()
-          m=re.search(r'data:image/jpeg;base64,([A-Za-z0-9+/=]+)',s)
-          assert m, 'MISSING_JPEG_PAYLOAD'
-          b=base64.b64decode(m.group(1),validate=True)
-          assert b.startswith(bytes.fromhex('ffd8ff')) and b.endswith(bytes.fromhex('ffd9'))
-          dest=pathlib.Path('reactor-decor/r214-real-blender-preview.jpg')
-          dest.write_bytes(b)
-          print('R214_IMAGE_SHA256',hashlib.sha256(b).hexdigest(),'bytes',len(b))
+          for revision in ('r214','r215'):
+            p=pathlib.Path(f'reactor-decor/{revision}-visual-preview.svg')
+            s=p.read_text()
+            m=re.search(r'data:image/jpeg;base64,([A-Za-z0-9+/=]+)',s)
+            assert m, f'MISSING_JPEG_PAYLOAD_{revision}'
+            blob=base64.b64decode(m.group(1),validate=True)
+            assert blob.startswith(bytes.fromhex('ffd8ff')) and blob.endswith(bytes.fromhex('ffd9'))
+            dest=pathlib.Path(f'reactor-decor/{revision}-real-blender-preview.jpg')
+            dest.write_bytes(blob)
+            print(revision,'IMAGE_SHA256',hashlib.sha256(blob).hexdigest(),'bytes',len(blob))
           PY
       - name: Transfer authenticated visual artifact
         uses: actions/upload-artifact@v4
         with:
-          name: synestra-r214-real-blender-preview
-          path: reactor-decor/r214-real-blender-preview.jpg
+          name: synestra-r214-r215-real-blender-comparison
+          path: |
+            reactor-decor/r214-real-blender-preview.jpg
+            reactor-decor/r215-real-blender-preview.jpg
           retention-days: 3
