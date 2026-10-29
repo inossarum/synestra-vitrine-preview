@@ -1,0 +1,199 @@
+{
+  "schema": "synestra.siteforge.r205.chrome.v1",
+  "baseCommit": "fd23e9c325214715b08b508da6756374f2535aef",
+  "status": "PASS",
+  "device": "Inos-Cerebros Chrome isolated headless",
+  "results": [
+    {
+      "width": 1440,
+      "home": {
+        "ready": "true",
+        "fallback": null,
+        "gpuTier": "3",
+        "renderer": "three-one",
+        "reference": "R188.1@81b9cf1c",
+        "canvas": 1,
+        "buffer": [
+          1226,
+          774
+        ],
+        "cssSize": [
+          1423,
+          898
+        ],
+        "webgl": true,
+        "gpu": "WebKit WebGL",
+        "status": "Core 3D Studio actif.",
+        "h1": 1,
+        "overflow": 1425,
+        "viewport": 1440,
+        "fps": "17.3",
+        "quality": "1.00"
+      },
+      "adaptive": {
+        "tier": 3,
+        "gpuTier": 3,
+        "drops": 0,
+        "samples": 34,
+        "fps": "46.1",
+        "quality": "1.00",
+        "ready": "true"
+      },
+      "cpuStress": {
+        "tier": 3,
+        "gpuTier": 3,
+        "drops": 0,
+        "samples": 34,
+        "fps": "39.5",
+        "quality": "1.00",
+        "ready": "true"
+      },
+      "screenshot": {
+        "bytes": 242327,
+        "sha256": "b376c5ffa6388be0ef0394da3b0ccdb7fbb8ba4affd6b5baa532d011cf683594"
+      }
+    },
+    {
+      "width": 768,
+      "home": {
+        "ready": "true",
+        "fallback": null,
+        "gpuTier": "3",
+        "renderer": "three-one",
+        "reference": "R188.1@81b9cf1c",
+        "canvas": 1,
+        "buffer": [
+          753,
+          900
+        ],
+        "cssSize": [
+          751,
+          898
+        ],
+        "webgl": true,
+        "gpu": "WebKit WebGL",
+        "status": "Core 3D Studio actif.",
+        "h1": 1,
+        "overflow": 753,
+        "viewport": 768,
+        "fps": "41.3",
+        "quality": "1.00"
+      },
+      "screenshot": {
+        "bytes": 197557,
+        "sha256": "a0663f922c6534b81c7be8d44ed7191bffd631ba3c979fba65a1206804ec4ef1"
+      }
+    },
+    {
+      "width": 390,
+      "home": {
+        "ready": "true",
+        "fallback": null,
+        "gpuTier": "3",
+        "renderer": "three-one",
+        "reference": "R188.1@81b9cf1c",
+        "canvas": 1,
+        "buffer": [
+          390,
+          900
+        ],
+        "cssSize": [
+          388,
+          898
+        ],
+        "webgl": true,
+        "gpu": "WebKit WebGL",
+        "status": "Core 3D Studio actif.",
+        "h1": 1,
+        "overflow": 390,
+        "viewport": 390,
+        "fps": "46.2",
+        "quality": "1.00"
+      },
+      "screenshot": {
+        "bytes": 156192,
+        "sha256": "25d7ee38fd1e8c8062039703046ac463acd9340131039493c7e79e6e472d671b"
+      }
+    }
+  ],
+  "reduced": {
+    "ready": null,
+    "fallback": "reduced-motion",
+    "gpuTier": null,
+    "renderer": null,
+    "reference": null,
+    "canvas": 1,
+    "buffer": [
+      960,
+      570
+    ],
+    "cssSize": [
+      388,
+      898
+    ],
+    "webgl": true,
+    "gpu": "WebKit WebGL",
+    "status": "Sphère statique : animations réduites.",
+    "h1": 1,
+    "overflow": 390,
+    "viewport": 390,
+    "fps": null,
+    "quality": null
+  },
+  "product": [
+    {
+      "href": "/connect/",
+      "ready": "complete",
+      "h1": 1,
+      "canvas": 0,
+      "overflow": 390,
+      "viewport": 390
+    },
+    {
+      "href": "/bridge/",
+      "ready": "complete",
+      "h1": 1,
+      "canvas": 0,
+      "overflow": 390,
+      "viewport": 390
+    },
+    {
+      "href": "/siteforge/",
+      "ready": "complete",
+      "h1": 1,
+      "canvas": 0,
+      "overflow": 390,
+      "viewport": 390
+    },
+    {
+      "href": "/offres/",
+      "ready": "complete",
+      "h1": 1,
+      "canvas": 0,
+      "overflow": 390,
+      "viewport": 390
+    }
+  ],
+  "simulatedSlowFrames": {
+    "ready": "true",
+    "gpuTier": 3,
+    "tier": 2,
+    "drops": 1,
+    "samples": 22,
+    "quality": "0.90",
+    "fps": "8.3",
+    "canvas": 1
+  },
+  "issues": [
+    "LOG:The Content Security Policy directive 'frame-ancestors' is ignored when delivered via a <meta> element.",
+    "LOG:Failed to load resource: the server responded with a status of 404 (File not found)",
+    "LOG:The Content Security Policy directive 'frame-ancestors' is ignored when delivered via a <meta> element.",
+    "LOG:The Content Security Policy directive 'frame-ancestors' is ignored when delivered via a <meta> element.",
+    "LOG:The Content Security Policy directive 'frame-ancestors' is ignored when delivered via a <meta> element.",
+    "LOG:The Content Security Policy directive 'frame-ancestors' is ignored when delivered via a <meta> element.",
+    "LOG:The Content Security Policy directive 'frame-ancestors' is ignored when delivered via a <meta> element.",
+    "LOG:The Content Security Policy directive 'frame-ancestors' is ignored when delivered via a <meta> element.",
+    "LOG:The Content Security Policy directive 'frame-ancestors' is ignored when delivered via a <meta> element.",
+    "LOG:The Content Security Policy directive 'frame-ancestors' is ignored when delivered via a <meta> element."
+  ]
+}

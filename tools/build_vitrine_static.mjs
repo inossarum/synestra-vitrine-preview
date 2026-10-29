@@ -8,6 +8,7 @@ const output=resolve(root,'dist');
 const checkOnly=process.argv.includes('--check');
 const r202ReviewBranch='task/SYN_SITEFORGE_R202_CINEMATIC_DEPTH_20261029';
 const r204ReviewBranch='task/SYN_SITEFORGE_R204_LIGHTWEIGHT_CORE_20261029';
+const r205ReviewBranch='task/SYN_SITEFORGE_R205_ADAPTIVE_GPU_20261029';
 const rootFiles=['index.html','_headers'];
 const rootDirs=['assets','siteforge','signal','connect','bridge','offres'];
 const extensions={
@@ -24,7 +25,7 @@ function scan(dir,rel,kind){
  for(const entry of readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name))){
   // Historical R201 bundles are not part of the R202 review. Exclude only
   // these exact assets on this review branch, retaining strict normal validation.
-  if(kind==='assets'&&[r202ReviewBranch,r204ReviewBranch].includes(process.env.CF_PAGES_BRANCH)){
+  if(kind==='assets'&&[r202ReviewBranch,r204ReviewBranch,r205ReviewBranch].includes(process.env.CF_PAGES_BRANCH)){
    const path=join(rel,entry.name).replaceAll('\\','/');
    if(['assets/r201-gpu-benchmarks','assets/r201-scene.bundle.mjs','assets/r201-scene.bundle.mjs.LEGAL.txt','assets/r202-gpu-benchmarks','assets/r202-scene.bundle.mjs','assets/r202-scene.bundle.mjs.LEGAL.txt','assets/r204-gpu-benchmarks','assets/r204-scene.bundle.mjs','assets/r204-scene.bundle.mjs.LEGAL.txt'].includes(path))continue;
   }
@@ -134,7 +135,7 @@ if(process.env.CF_PAGES_BRANCH===r202ReviewBranch){
 
 // Branch-isolated R204 business review: premium GPU-adaptive 3D only in hero.
 // The rest uses conventional, already-qualified product pages from R202.
-if(process.env.CF_PAGES_BRANCH===r204ReviewBranch){
+if([r204ReviewBranch,r205ReviewBranch].includes(process.env.CF_PAGES_BRANCH)){
  const remaps=[
   ['r204/index.html','index.html'],
   ['r202/connect/index.html','connect/index.html'],
