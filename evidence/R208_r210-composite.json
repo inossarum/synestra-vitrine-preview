@@ -1,0 +1,53 @@
+{
+  "version": "r210-composite",
+  "mode": "ultra",
+  "source": "Inos-Cerebros local Chrome CDP",
+  "screens": [
+    {
+      "width": 1440,
+      "file": "I:\\_STUDIO_STAGING\\syn_site_r210_visual_composite_20261029\\evidence\\R208_r210-composite_1440.png",
+      "state": {
+        "quality": "ultra",
+        "tier": "3",
+        "fps": "43.5",
+        "flows": "8",
+        "motes": "36",
+        "atmosphere": "fine",
+        "canvas": 1,
+        "buffer": [
+          1425,
+          900
+        ],
+        "qualityPanel": {
+          "x": 1207,
+          "y": 181,
+          "w": 183,
+          "h": 97.796875
+        }
+      }
+    },
+    {
+      "width": 390,
+      "file": "I:\\_STUDIO_STAGING\\syn_site_r210_visual_composite_20261029\\evidence\\R208_r210-composite_390.png",
+      "state": {
+        "quality": "ultra",
+        "tier": "3",
+        "fps": "42.2",
+        "flows": "8",
+        "motes": "36",
+        "atmosphere": "fine",
+        "canvas": 1,
+        "buffer": [
+          390,
+          900
+        ],
+        "qualityPanel": {
+          "x": 209,
+          "y": 165,
+          "w": 168,
+          "h": 92.796875
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+name: R210 screenshot delivery
+on:
+  push:
+    branches:
+      - task/SYN_SITEFORGE_R210_VISUAL_COMPOSITE_20261029
+permissions:
+  contents: read
+jobs:
+  evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify PNG screenshots exist and are distinct
+        run: |
+          test -s evidence/R208_r210-composite_1440.png
+          test -s evidence/R208_r210-composite_390.png
+          file evidence/R208_r210-composite_1440.png evidence/R208_r210-composite_390.png
+          sha256sum evidence/R208_r210-composite_1440.png evidence/R208_r210-composite_390.png
+      - name: Attach exact screenshots to chat transfer artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: synestra-r210-screenshots
+          path: |
+            evidence/R208_r210-composite_1440.png
+            evidence/R208_r210-composite_390.png
+          retention-days: 3

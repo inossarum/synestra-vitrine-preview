@@ -3,7 +3,7 @@ import {mkdtempSync,existsSync,readFileSync,writeFileSync,rmSync} from 'node:fs'
 import {join,resolve,dirname} from 'node:path';import {tmpdir} from 'node:os';import {fileURLToPath} from 'node:url';
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const [version='baseline',mode='ultra']=process.argv.slice(2);
-const origin='http://127.0.0.1:18888/';
+const origin='http://127.0.0.1:18890/';
 const chrome='C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
 const profile=mkdtempSync(join(tmpdir(),'r208-qa-'));
 const child=spawn(chrome,['--headless=new','--no-first-run','--no-default-browser-check','--disable-background-networking','--remote-debugging-port=0','--remote-debugging-address=127.0.0.1','--user-data-dir='+profile,origin],{stdio:'ignore',windowsHide:true});

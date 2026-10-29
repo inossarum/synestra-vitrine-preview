@@ -7,6 +7,7 @@ import {labR1881Fragment,labR1881Vertex} from './lab-r1881-shader.mjs';
 import {evolveAdaptiveBudget} from './adaptive-tier.mjs';
 import {clampDetailForTier} from './quality-policy.mjs';
 import {installLabDetail} from './lab-detail-r207.mjs';
+import {installCoreNucleus} from './core-nucleus-r209.mjs';
 import {installChamberAtmosphere} from './stage-atmosphere-r208.mjs';
 import {createQualityPanel} from './quality-ui-r207.mjs';
 const stage=document.querySelector('.core-r109-stage');
@@ -22,7 +23,7 @@ if(stage&&canvas){
  let elapsed=0,last=0,lastDraw=0,drawCount=0,drawStart=0,quality=.85,renderTier=1;
  let slow=0,fast=0,scale=1,pointerX=0,pointerY=0,impulse=0,energy=0,lightV,lightG,lightCore;
  let stageWidth=0,stageHeight=0,lastRatio=0,mist=null,grain=null;
- let labDetail=null,chamber=null,qualityPanel=null,detectedTier=1;
+ let labDetail=null,chamber=null,coreNucleus=null,qualityPanel=null,detectedTier=1;
  const owned=[];
  const clamp=(x,a,b)=>Math.min(b,Math.max(a,x));
  const make=(geo,mat,p,cast=false)=>{
@@ -157,6 +158,8 @@ if(stage&&canvas){
   }));
   plasma.position.set(0,.07,.12);plasma.frustumCulled=false;scene.add(plasma);
   labDetail=installLabDetail({THREE,scene,owned});
+  coreNucleus=installCoreNucleus({THREE,scene,owned,uniforms});
+  stage.dataset.coreNucleus='geometry-r209';
   chamber=installChamberAtmosphere({THREE,scene,owned,camera});
   // detect-gpu offline benchmarks; tier-0 still gets cheap 3D when WebGL exists.
   try{
@@ -187,6 +190,7 @@ if(stage&&canvas){
    uniforms.uFlowLab.value.x=d.flows;uniforms.uFlow.value.y=[.88,1,1.08,1.18][renderTier];
    renderer.shadowMap.enabled=renderTier>=3;
    labDetail.applyTier(renderTier);
+   coreNucleus.applyTier(renderTier);
    chamber.applyTier(renderTier);
    setAtmosphere();
    stage.dataset.renderTier=String(renderTier);
@@ -225,6 +229,7 @@ if(stage&&canvas){
    uniforms.uLabTime.value=elapsed*.86;
    uniforms.uSpinPhase.value=elapsed*.104;
    labDetail.frame(elapsed);
+   coreNucleus.frame(elapsed);
    chamber.frame(elapsed);
    if(mist.visible)mist.userData.fogUniforms.uTime.value=elapsed;
    uniforms.uPointer.value.set(pointerX,pointerY,energy,1);
