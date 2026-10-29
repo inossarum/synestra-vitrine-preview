@@ -5,6 +5,9 @@ import * as THREE from 'three';
 import {getGPUTier} from 'detect-gpu';
 import {labR1881Fragment,labR1881Vertex} from './lab-r1881-shader.mjs';
 import {evolveAdaptiveBudget} from './adaptive-tier.mjs';
+import {clampDetailForTier} from './quality-policy.mjs';
+import {installLabDetail} from './lab-detail-r207.mjs';
+import {createQualityPanel} from './quality-ui-r207.mjs';
 const stage=document.querySelector('.core-r109-stage');
 const canvas=stage?.querySelector('.core-r109-canvas');
 if(stage&&canvas){
@@ -18,6 +21,7 @@ if(stage&&canvas){
  let elapsed=0,last=0,lastDraw=0,drawCount=0,drawStart=0,quality=.85,renderTier=1;
  let slow=0,fast=0,scale=1,pointerX=0,pointerY=0,impulse=0,energy=0,lightV,lightG,lightCore;
  let stageWidth=0,stageHeight=0,lastRatio=0,mist=null,grain=null;
+ let labDetail=null,qualityPanel=null,detectedTier=1;
  const owned=[];
  const clamp=(x,a,b)=>Math.min(b,Math.max(a,x));
  const make=(geo,mat,p,cast=false)=>{
@@ -33,7 +37,7 @@ if(stage&&canvas){
   canvas.removeEventListener('pointermove',onPointer);
   for(const m of owned){m.geometry.dispose();m.material.dispose();}
   if(plasma){plasma.geometry.dispose();plasma.material.dispose();}
-  grain?.remove();
+  grain?.remove();qualityPanel?.dispose();
   renderer?.dispose();stage.removeAttribute('data-core-ready');
  };
  function onScroll(){
@@ -46,7 +50,7 @@ if(stage&&canvas){
  function resize(){
   if(!renderer||dead)return;
   const r=stage.getBoundingClientRect(),w=Math.max(1,Math.round(r.width)),h=Math.max(1,Math.round(r.height));
-  const maxPixels=renderTier<=0?175000:renderTier===1?320000:renderTier===2?650000:950000;
+  const maxPixels=clampDetailForTier(renderTier).pixels;
   const pixelRatio=Math.min(devicePixelRatio||1,Math.sqrt(maxPixels/(w*h)))*quality;
   if(w===stageWidth&&h===stageHeight&&Math.abs(pixelRatio-lastRatio)<.005)return;
   stageWidth=w;stageHeight=h;lastRatio=pixelRatio;
@@ -121,7 +125,7 @@ if(stage&&canvas){
       vec3 violet=vec3(.35,.26,.63),mint=vec3(.29,.60,.52);
       gl_FragColor=vec4(mix(violet,mint,smoothstep(-.75,.75,p.x)),alpha);
     }`
-  }),[0,-1.503,.12]);
+  }),[0,-1.25,.12]);
   mist.rotation.x=-Math.PI/2;mist.renderOrder=2;
   mist.userData.fogUniforms=fogUniforms;
   // The LAB R188.1 filament source is shaded in a world-space plane with
@@ -143,33 +147,55 @@ if(stage&&canvas){
    uEnergyA:{value:v},uEnergyB:{value:g},uEnergyCore:{value:ivory},
    uCompare:{value:1},uDepthRefine:{value:1},uLabTime:{value:0}
   };
-  plasma=new THREE.Mesh(new THREE.PlaneGeometry(3.42,3.42),new THREE.ShaderMaterial({
+  plasma=new THREE.Mesh(new THREE.PlaneGeometry(3.62,3.62),new THREE.ShaderMaterial({
    vertexShader:labR1881Vertex,fragmentShader:labR1881Fragment,uniforms,
    transparent:true,depthTest:true,depthWrite:false,toneMapped:false,
    side:THREE.FrontSide,glslVersion:THREE.GLSL1
   }));
   plasma.position.set(0,.07,.12);plasma.frustumCulled=false;scene.add(plasma);
+  labDetail=installLabDetail({THREE,scene,owned});
   // detect-gpu offline benchmarks; tier-0 still gets cheap 3D when WebGL exists.
   try{
    const gpu=await getGPUTier({gl:renderer.getContext(),
     benchmarksURL:new URL('./r204-gpu-benchmarks',import.meta.url).href});
-   renderTier=clamp(gpu.tier||0,0,3);
-  }catch(_){renderTier=1;}
+   detectedTier=clamp(gpu.tier||0,0,3);
+  }catch(_){detectedTier=1;}
+  renderTier=detectedTier;
   if(matchMedia('(pointer:coarse)').matches)renderTier=Math.min(renderTier,2);
-  stage.dataset.gpuTier=String(renderTier);
+  stage.dataset.gpuTier=String(detectedTier);
   stage.dataset.renderTier=String(renderTier);
   stage.dataset.autoTierDrops='0';
-  const budget=[8,14,22,34];
+  const budget=[12,24,32,40];
   uniforms.uEnergySteps.value=budget[renderTier];
-  uniforms.uVolumeSteps.value=[8,10,14,18][renderTier];
+  uniforms.uVolumeSteps.value=[8,12,16,22][renderTier];
+  uniforms.uFlowLab.value.set([3,4,6,8][renderTier],1.08,1.0,1.23);
+  uniforms.uFlow.value.set(6,[.88,1,1.08,1.18][renderTier]);
   quality=renderTier===0?.85:renderTier===1?.9:1;
   renderer.shadowMap.enabled=renderTier>=3;
   const setAtmosphere=()=>{
    mist.visible=renderTier>=1;
-   mist.userData.fogUniforms.uStrength.value=renderTier>=3?.18:renderTier===2?.14:renderTier===1?.08:0;
+   mist.userData.fogUniforms.uStrength.value=renderTier>=3?.56:renderTier===2?.40:renderTier===1?.23:0;
    stage.dataset.sceneAtmosphere=renderTier>=3?'fine':renderTier===2?'light':renderTier===1?'minimal':'off';
   };
-  setAtmosphere();
+  const syncTier=()=>{
+   const d=clampDetailForTier(renderTier);
+   uniforms.uEnergySteps.value=d.energy;uniforms.uVolumeSteps.value=d.volume;
+   uniforms.uFlowLab.value.x=d.flows;uniforms.uFlow.value.y=[.88,1,1.08,1.18][renderTier];
+   renderer.shadowMap.enabled=renderTier>=3;
+   labDetail.applyTier(renderTier);
+   setAtmosphere();
+   stage.dataset.renderTier=String(renderTier);
+   stage.dataset.energyFlows=String(labDetail.getFlowCount());
+   stage.dataset.energyMotes=String(labDetail.getMoteCount());
+   stage.dataset.energyRaySamples=String(d.energy);
+  };
+  qualityPanel=createQualityPanel({stage,detectedTier,
+   coarse:matchMedia('(pointer:coarse)').matches,onChange:tier=>{
+    renderTier=tier;quality=tier<=1?.9:1;slow=fast=0;drawStart=0;drawCount=0;
+    syncTier();targetInterval=renderTier<=0?1000/18:renderTier===1?1000/24:renderTier===2?1000/30:1000/50;
+    resize();qualityPanel.update(renderTier);
+   }});
+  renderTier=qualityPanel.tier;syncTier();
   grain=document.createElement('div');grain.className='r206-film-grain';grain.setAttribute('aria-hidden','true');stage.appendChild(grain);
   stage.dataset.labReference='R188.1@81b9cf1c';
   stage.dataset.coreRenderer='three-one';
@@ -193,6 +219,7 @@ if(stage&&canvas){
    uniforms.uTime.value=elapsed*.86;
    uniforms.uLabTime.value=elapsed*.86;
    uniforms.uSpinPhase.value=elapsed*.104;
+   labDetail.frame(elapsed);
    if(mist.visible)mist.userData.fogUniforms.uTime.value=elapsed;
    uniforms.uPointer.value.set(pointerX,pointerY,energy,1);
    lightV.intensity=13*(.94+.06*Math.sin(elapsed*.67));
@@ -210,11 +237,7 @@ if(stage&&canvas){
     quality=next.quality;
     if(tierChanged){
      renderTier=next.tier;
-     uniforms.uEnergySteps.value=budget[renderTier];
-     uniforms.uVolumeSteps.value=[8,10,14,18][renderTier];
-     renderer.shadowMap.enabled=renderTier>=3;
-     setAtmosphere();
-     stage.dataset.renderTier=String(renderTier);
+     syncTier();
      stage.dataset.autoTierDrops=String(Number(stage.dataset.autoTierDrops)+1);
      targetInterval=renderTier<=0?1000/18:renderTier===1?1000/24:renderTier===2?1000/30:1000/50;
     }
@@ -222,6 +245,7 @@ if(stage&&canvas){
     stage.dataset.coreFps=(30000/Math.max(1,now-drawStart)).toFixed(1);
     stage.dataset.coreQuality=quality.toFixed(2);
     stage.dataset.energyRaySamples=String(uniforms.uEnergySteps.value);
+    qualityPanel.update(renderTier,stage.dataset.coreFps);
     drawStart=now;
    }
    raf=requestAnimationFrame(tick);

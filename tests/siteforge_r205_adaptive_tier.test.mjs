@@ -11,10 +11,10 @@ const start={currentTier:3,slowWindows:0,fastWindows:0,quality:1,frameMs:35,targ
 test('Three consecutive slow windows downgrade effective tier and shader samples, not GPU hardware classification',()=>{
  let s=start;for(let i=0;i<3;i++){const r=evolveAdaptiveBudget(s);s={...s,currentTier:r.tier,slowWindows:r.slowWindows,fastWindows:r.fastWindows,quality:r.quality};}
  assert.equal(s.currentTier,2);assert.equal(s.quality,.9);assert.equal(s.slowWindows,0);
- assert.match(scene,/stage\.dataset\.gpuTier=String\(renderTier\)/);
+ assert.match(scene,/stage\.dataset\.gpuTier=String\(detectedTier\)/);
  assert.match(scene,/stage\.dataset\.renderTier=String\(renderTier\)/);
  assert.match(scene,/uniforms\.uEnergySteps\.value=budget\[renderTier\]/);
- assert.match(scene,/uniforms\.uVolumeSteps\.value=\[8,10,14,18\]\[renderTier\]/);
+ assert.match(scene,/uniforms\.uVolumeSteps\.value=\[8,12,16,22\]\[renderTier\]/);
  assert.match(scene,/targetInterval=renderTier<=0\?1000\/18/);
 });
 test('Tier zero never turns a live WebGL scene off',()=>{
@@ -44,7 +44,7 @@ test('Invalid tiers or frame times fail closed rather than silently raising load
 test('R205 review branch preserves exact R204 export and never changes production routing',()=>{
  const exporter=readFileSync(join(root,'tools/build_vitrine_static.mjs'),'utf8');
  assert.match(exporter,/const r205ReviewBranch='task\/SYN_SITEFORGE_R205_ADAPTIVE_GPU_20261029'/);
- assert.match(exporter,/\[r204ReviewBranch,r205ReviewBranch(?:,r206ReviewBranch)?\]\.includes\(process\.env\.CF_PAGES_BRANCH\)/);
- assert.match(exporter,/\[r202ReviewBranch,r204ReviewBranch,r205ReviewBranch(?:,r206ReviewBranch)?\]\.includes\(process\.env\.CF_PAGES_BRANCH\)/);
+ assert.match(exporter,/\[r204ReviewBranch,r205ReviewBranch(?:,r206ReviewBranch(?:,r207ReviewBranch)?)?\]\.includes\(process\.env\.CF_PAGES_BRANCH\)/);
+ assert.match(exporter,/\[r202ReviewBranch,r204ReviewBranch,r205ReviewBranch(?:,r206ReviewBranch(?:,r207ReviewBranch)?)?\]\.includes\(process\.env\.CF_PAGES_BRANCH\)/);
  assert.match(exporter,/const rootFiles=\['index.html','_headers'\]/);
 });
