@@ -12,14 +12,14 @@ test('R188.1 LAB visual core is SHA pinned and studio violet/green, not new orna
  assert.match(lab,/uFlowLab/);
  assert.match(lab,/crossingTint/);
  assert.match(lab,/vLabUv/);
- assert.match(scene,/uFlow:\{value:new THREE.Vector2\(6,1\)\}/);
+ assert.match(scene,/uFlow:\{value:new THREE.Vector2\(1,1\)\}/);
  assert.match(scene,/uEnergyA:\{value:v\},uEnergyB:\{value:g\}/);
 });
 test('Single real Three.js canvas, plinth, floor, walls, three physical lights',()=>{
  assert.equal((scene.match(/new THREE.WebGLRenderer/g)||[]).length,1);
  assert.equal((home.match(/class="core-r109-canvas"/g)||[]).length,1);
- assert.match(scene,/new THREE.PlaneGeometry\(15,15\)/);
- assert.match(scene,/new THREE.BoxGeometry\(9,5.2,.15\)/);
+ assert.match(scene,/new THREE.PlaneGeometry\(48,48\)/);
+ assert.match(scene,/new THREE.BoxGeometry\(28,20,.15\)/);
  assert.match(scene,/new THREE.CylinderGeometry/);
  assert.match(scene,/new THREE.PointLight/);
  assert.match(scene,/depthTest:true,depthWrite:false/);

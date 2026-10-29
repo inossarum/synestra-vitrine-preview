@@ -53,8 +53,8 @@ test('Self-hosted grain PNG is a small deterministic declared source asset',()=>
 test('Exact isolated R206 export retains full previous branch routing',()=>{
  const e=read('tools/build_vitrine_static.mjs');
  assert.match(e,/const r206ReviewBranch='task\/SYN_SITEFORGE_R206_GRAIN_MIST_STAGE_20261029'/);
- assert.match(e,/\[r204ReviewBranch,r205ReviewBranch,r206ReviewBranch(?:,r207ReviewBranch)?\]\.includes/);
- assert.match(e,/\[r202ReviewBranch,r204ReviewBranch,r205ReviewBranch,r206ReviewBranch(?:,r207ReviewBranch)?\]\.includes/);
+ assert.match(e,/\[r204ReviewBranch,r205ReviewBranch,r206ReviewBranch(?:,r207ReviewBranch(?:,r208ReviewBranch)?)?\]\.includes/);
+ assert.match(e,/\[r202ReviewBranch,r204ReviewBranch,r205ReviewBranch,r206ReviewBranch(?:,r207ReviewBranch(?:,r208ReviewBranch)?)?\]\.includes/);
 });
 test('Failure-first: disable grain and fog on tier zero or reduced motion, not products',()=>{
  assert.match(css,/data-render-tier="0"\] > \.r206-film-grain\{display:none\}/);
