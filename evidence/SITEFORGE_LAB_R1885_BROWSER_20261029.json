@@ -1,0 +1,168 @@
+{
+  "schema": "synestra.lab.r1885.native-visual.v1",
+  "screens": [
+    {
+      "version": "1884",
+      "width": 1100,
+      "name": "r1885-1884-1100.png",
+      "state": {
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "error": 0,
+        "ready": "true",
+        "coreSize": "70",
+        "coreLight": "135",
+        "material": "6",
+        "rect": {
+          "x": 54.639984130859375,
+          "y": 100.87998962402344,
+          "width": 543.719970703125,
+          "height": 503.239990234375,
+          "scale": 1
+        }
+      }
+    },
+    {
+      "version": "1885",
+      "width": 1100,
+      "name": "r1885-1885-1100.png",
+      "state": {
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "error": 0,
+        "ready": "true",
+        "coreSize": "70",
+        "coreLight": "135",
+        "material": "6",
+        "rect": {
+          "x": 54.639984130859375,
+          "y": 100.87998962402344,
+          "width": 543.719970703125,
+          "height": 503.239990234375,
+          "scale": 1
+        }
+      }
+    },
+    {
+      "version": "1885",
+      "width": 1100,
+      "name": "r1885-power-zero-1100.png",
+      "control": "sf-coreLight",
+      "val": 0,
+      "state": {
+        "size": "70",
+        "power": "0",
+        "error": 0
+      }
+    },
+    {
+      "version": "1885",
+      "width": 1100,
+      "name": "r1885-size-zero-1100.png",
+      "control": "sf-coreSize",
+      "val": 0,
+      "state": {
+        "size": "0",
+        "power": "135",
+        "error": 0
+      }
+    },
+    {
+      "version": "1884",
+      "width": 390,
+      "name": "r1885-1884-390.png",
+      "state": {
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "error": 0,
+        "ready": "true",
+        "coreSize": "70",
+        "coreLight": "135",
+        "material": "6",
+        "rect": {
+          "x": -27.040008544921875,
+          "y": 14.649993896484375,
+          "width": 444.08001708984375,
+          "height": 347.70001220703125,
+          "scale": 1
+        }
+      }
+    },
+    {
+      "version": "1885",
+      "width": 390,
+      "name": "r1885-1885-390.png",
+      "state": {
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "error": 0,
+        "ready": "true",
+        "coreSize": "70",
+        "coreLight": "135",
+        "material": "6",
+        "rect": {
+          "x": -27.040008544921875,
+          "y": 14.649993896484375,
+          "width": 444.08001708984375,
+          "height": 347.70001220703125,
+          "scale": 1
+        }
+      }
+    },
+    {
+      "version": "1885",
+      "width": 390,
+      "name": "r1885-power-zero-390.png",
+      "control": "sf-coreLight",
+      "val": 0,
+      "state": {
+        "size": "70",
+        "power": "0",
+        "error": 0
+      }
+    },
+    {
+      "version": "1885",
+      "width": 390,
+      "name": "r1885-size-zero-390.png",
+      "control": "sf-coreSize",
+      "val": 0,
+      "state": {
+        "size": "0",
+        "power": "135",
+        "error": 0
+      }
+    },
+    {
+      "version": "1885",
+      "width": 1100,
+      "family": 0,
+      "name": "r1885-family-0-1100.png",
+      "state": {
+        "family": "0",
+        "error": 0,
+        "rect": {
+          "x": 54.639984130859375,
+          "y": 100.87998962402344,
+          "width": 543.719970703125,
+          "height": 503.239990234375,
+          "scale": 1
+        }
+      }
+    },
+    {
+      "version": "1885",
+      "width": 1100,
+      "family": 8,
+      "name": "r1885-family-8-1100.png",
+      "state": {
+        "family": "8",
+        "error": 0,
+        "rect": {
+          "x": 54.639984130859375,
+          "y": 100.87998962402344,
+          "width": 543.719970703125,
+          "height": 503.239990234375,
+          "scale": 1
+        }
+      }
+    }
+  ],
+  "status": "PASS"
+}
