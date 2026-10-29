@@ -4,6 +4,7 @@
 import * as THREE from 'three';
 import {getGPUTier} from 'detect-gpu';
 import {labR1881Fragment,labR1881Vertex} from './lab-r1881-shader.mjs';
+import {evolveAdaptiveBudget} from './adaptive-tier.mjs';
 const stage=document.querySelector('.core-r109-stage');
 const canvas=stage?.querySelector('.core-r109-canvas');
 if(stage&&canvas){
@@ -130,6 +131,8 @@ if(stage&&canvas){
   }catch(_){renderTier=1;}
   if(matchMedia('(pointer:coarse)').matches)renderTier=Math.min(renderTier,2);
   stage.dataset.gpuTier=String(renderTier);
+  stage.dataset.renderTier=String(renderTier);
+  stage.dataset.autoTierDrops='0';
   const budget=[8,14,22,34];
   uniforms.uEnergySteps.value=budget[renderTier];
   uniforms.uVolumeSteps.value=[8,10,14,18][renderTier];
@@ -143,10 +146,13 @@ if(stage&&canvas){
   canvas.addEventListener('pointermove',onPointer,{passive:true});
   canvas.addEventListener('pointerleave',()=>{impulse=0;});
   canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();stage.dataset.r204Fallback='context-lost';dispose();say('WebGL indisponible : visuel statique.');},{once:true});
-  const targetInterval=renderTier<=0?1000/18:renderTier===1?1000/24:renderTier===2?1000/30:1000/50;
+  let targetInterval=renderTier<=0?1000/18:renderTier===1?1000/24:renderTier===2?1000/30:1000/50;
   const tick=now=>{
    raf=0;if(dead)return;
-   if(document.visibilityState!=='visible'){last=now;raf=requestAnimationFrame(tick);return;}
+   if(document.visibilityState!=='visible'){
+    last=now;drawStart=0;drawCount=0;slow=0;fast=0;
+    raf=requestAnimationFrame(tick);return;
+   }
    if(now-lastDraw<targetInterval){raf=requestAnimationFrame(tick);return;}
    const dt=last?Math.min((now-last)/1000,.10):0;
    last=now;lastDraw=now;elapsed+=dt;
@@ -164,9 +170,20 @@ if(stage&&canvas){
    if(!drawStart)drawStart=now;
    if(drawCount%30===0){
     const avg=(now-drawStart)/30;
-    if(avg>targetInterval*1.7){slow++;fast=0;}else if(avg<targetInterval*1.1){fast++;slow=0;}
-    if(slow>=3&&quality>.6){quality=Math.max(.6,quality-.1);slow=0;resize();}
-    if(fast>=10&&quality<1){quality=Math.min(1,quality+.05);fast=0;resize();}
+    const next=evolveAdaptiveBudget({currentTier:renderTier,slowWindows:slow,fastWindows:fast,quality,frameMs:avg,targetIntervalMs:targetInterval});
+    slow=next.slowWindows;fast=next.fastWindows;
+    const tierChanged=next.tier!==renderTier,qualityChanged=next.quality!==quality;
+    quality=next.quality;
+    if(tierChanged){
+     renderTier=next.tier;
+     uniforms.uEnergySteps.value=budget[renderTier];
+     uniforms.uVolumeSteps.value=[8,10,14,18][renderTier];
+     renderer.shadowMap.enabled=renderTier>=3;
+     stage.dataset.renderTier=String(renderTier);
+     stage.dataset.autoTierDrops=String(Number(stage.dataset.autoTierDrops)+1);
+     targetInterval=renderTier<=0?1000/18:renderTier===1?1000/24:renderTier===2?1000/30:1000/50;
+    }
+    if(tierChanged||qualityChanged)resize();
     stage.dataset.coreFps=(30000/Math.max(1,now-drawStart)).toFixed(1);
     stage.dataset.coreQuality=quality.toFixed(2);
     stage.dataset.energyRaySamples=String(uniforms.uEnergySteps.value);
