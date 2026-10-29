@@ -1,0 +1,173 @@
+{
+  "schema": "synestra.siteforge.3d-material-catalog.v1",
+  "engine": "siteforge-plasma-webgl1",
+  "release": "R188.4-development",
+  "artifact": "siteforge-r1884-autonome.html",
+  "artifact_sha256_lf": "3f4b14d97919d5a2d36a2f93e7b0beb8189f06f6b5dd0fe66df784c06c744439",
+  "materials": [
+    {
+      "id": 0,
+      "slug": "plasma",
+      "name": "Flux plasma",
+      "description": "Filaments asymétriques et dérive organique",
+      "preview": "siteforge-r1884-autonome.html?demo=energy&material=0",
+      "controls": [
+        "count",
+        "spread",
+        "pulseSpeed",
+        "pulseIntensity",
+        "turbulence",
+        "diameter",
+        "mouse",
+        "palette",
+        "flowStructure"
+      ]
+    },
+    {
+      "id": 1,
+      "slug": "magnetic",
+      "name": "Rubans magnétiques",
+      "description": "Boucles volumétriques avec crêtes ciselées",
+      "preview": "siteforge-r1884-autonome.html?demo=energy&material=1",
+      "controls": [
+        "count",
+        "spread",
+        "pulseSpeed",
+        "pulseIntensity",
+        "turbulence",
+        "diameter",
+        "mouse",
+        "palette",
+        "flowStructure"
+      ]
+    },
+    {
+      "id": 2,
+      "slug": "aurora",
+      "name": "Voiles d’aurore",
+      "description": "Voiles lumineux translucides",
+      "preview": "siteforge-r1884-autonome.html?demo=energy&material=2",
+      "controls": [
+        "count",
+        "spread",
+        "pulseSpeed",
+        "pulseIntensity",
+        "turbulence",
+        "diameter",
+        "mouse",
+        "palette",
+        "flowStructure"
+      ]
+    },
+    {
+      "id": 3,
+      "slug": "nebula",
+      "name": "Brume ionique",
+      "description": "Nuage énergétique diffus, plus lisible sur petits écrans",
+      "preview": "siteforge-r1884-autonome.html?demo=energy&material=3",
+      "controls": [
+        "count",
+        "spread",
+        "pulseSpeed",
+        "pulseIntensity",
+        "turbulence",
+        "diameter",
+        "mouse",
+        "palette",
+        "flowStructure"
+      ]
+    },
+    {
+      "id": 4,
+      "slug": "fusion",
+      "name": "Jets de fusion",
+      "description": "Éjections et sillons radiaux",
+      "preview": "siteforge-r1884-autonome.html?demo=energy&material=4",
+      "controls": [
+        "count",
+        "spread",
+        "pulseSpeed",
+        "pulseIntensity",
+        "turbulence",
+        "diameter",
+        "mouse",
+        "palette",
+        "flowStructure"
+      ]
+    },
+    {
+      "id": 5,
+      "slug": "liquid",
+      "name": "Courants liquides",
+      "description": "Courants sphériques avec crêtes fluides",
+      "preview": "siteforge-r1884-autonome.html?demo=energy&material=5",
+      "controls": [
+        "count",
+        "spread",
+        "pulseSpeed",
+        "pulseIntensity",
+        "turbulence",
+        "diameter",
+        "mouse",
+        "palette",
+        "flowStructure"
+      ]
+    },
+    {
+      "id": 6,
+      "slug": "living",
+      "name": "Flux vivants",
+      "description": "Tressage tridimensionnel et turbulence interne",
+      "preview": "siteforge-r1884-autonome.html?demo=energy&material=6",
+      "controls": [
+        "count",
+        "spread",
+        "pulseSpeed",
+        "pulseIntensity",
+        "turbulence",
+        "diameter",
+        "mouse",
+        "palette",
+        "flowStructure"
+      ]
+    },
+    {
+      "id": 7,
+      "slug": "arcs",
+      "name": "Arcs pulsés",
+      "description": "Décharges mobiles avec modulation par couches",
+      "preview": "siteforge-r1884-autonome.html?demo=energy&material=7",
+      "controls": [
+        "count",
+        "spread",
+        "pulseSpeed",
+        "pulseIntensity",
+        "turbulence",
+        "diameter",
+        "mouse",
+        "palette",
+        "flowStructure"
+      ]
+    },
+    {
+      "id": 8,
+      "slug": "polar",
+      "name": "Vortex polaire",
+      "description": "Rotation locale et cisaillement dans la profondeur",
+      "preview": "siteforge-r1884-autonome.html?demo=energy&material=8",
+      "controls": [
+        "count",
+        "spread",
+        "pulseSpeed",
+        "pulseIntensity",
+        "turbulence",
+        "diameter",
+        "mouse",
+        "palette",
+        "flowStructure"
+      ]
+    }
+  ],
+  "compatibility": "Existing IDs 0..6 preserved, new IDs 7 and 8; optional energyDynamics JSON v1 unchanged",
+  "external_dependencies": []
+}

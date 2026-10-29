@@ -1,0 +1,70 @@
+{
+  "schema": "synestra.siteforge.r1884.links-e2e.v1",
+  "status": "PASS",
+  "catalogue": {
+    "count": 9,
+    "links": [
+      "siteforge-r1884-autonome.html?demo=energy&material=0",
+      "siteforge-r1884-autonome.html?demo=energy&material=1",
+      "siteforge-r1884-autonome.html?demo=energy&material=2",
+      "siteforge-r1884-autonome.html?demo=energy&material=3",
+      "siteforge-r1884-autonome.html?demo=energy&material=4",
+      "siteforge-r1884-autonome.html?demo=energy&material=5",
+      "siteforge-r1884-autonome.html?demo=energy&material=6",
+      "siteforge-r1884-autonome.html?demo=energy&material=7",
+      "siteforge-r1884-autonome.html?demo=energy&material=8"
+    ],
+    "width": 390,
+    "scrollWidth": 390,
+    "columns": "354px"
+  },
+  "materials": [
+    {
+      "material": 0,
+      "ready": true,
+      "error": 0
+    },
+    {
+      "material": 1,
+      "ready": true,
+      "error": 0
+    },
+    {
+      "material": 2,
+      "ready": true,
+      "error": 0
+    },
+    {
+      "material": 3,
+      "ready": true,
+      "error": 0
+    },
+    {
+      "material": 4,
+      "ready": true,
+      "error": 0
+    },
+    {
+      "material": 5,
+      "ready": true,
+      "error": 0
+    },
+    {
+      "material": 6,
+      "ready": true,
+      "error": 0
+    },
+    {
+      "material": 7,
+      "ready": true,
+      "error": 0
+    },
+    {
+      "material": 8,
+      "ready": true,
+      "error": 0
+    }
+  ],
+  "renderer": "NVIDIA RTX3090 Direct3D11",
+  "limitations": "Mobile viewport emulated in Chrome Windows; not a physical phone"
+}

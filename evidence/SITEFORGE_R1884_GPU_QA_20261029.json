@@ -1,0 +1,77 @@
+{
+  "schema": "synestra.siteforge.r1884.gpu-e2e.v1",
+  "familyChecks": [
+    {
+      "family": 0,
+      "changes": 8168,
+      "glError": 0
+    },
+    {
+      "family": 1,
+      "changes": 13706,
+      "glError": 0
+    },
+    {
+      "family": 2,
+      "changes": 7760,
+      "glError": 0
+    },
+    {
+      "family": 3,
+      "changes": 52934,
+      "glError": 0
+    },
+    {
+      "family": 4,
+      "changes": 8031,
+      "glError": 0
+    },
+    {
+      "family": 5,
+      "changes": 36670,
+      "glError": 0
+    },
+    {
+      "family": 6,
+      "changes": 51446,
+      "glError": 0
+    },
+    {
+      "family": 7,
+      "changes": 50001,
+      "glError": 0
+    },
+    {
+      "family": 8,
+      "changes": 48029,
+      "glError": 0
+    }
+  ],
+  "mobile": false,
+  "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "gpuTimerQueryAvailable": true,
+  "status": "PASS",
+  "levels": [
+    0,
+    100,
+    200
+  ],
+  "rangeMax": "200",
+  "uniform100": 1,
+  "uniform200": 2,
+  "visualDiff100to200": {
+    "width": 544,
+    "height": 477,
+    "pixels": 259488,
+    "changed": 40811,
+    "changedPercent": 15.727509557282032,
+    "majorPercent": 11.559686767788877,
+    "meanMaxDelta": 11.64618787766679
+  },
+  "exportedTurbulence": 200,
+  "legacyRestoresDefault": "35",
+  "invalid201Rejected": true,
+  "valid200Imported": true,
+  "errors": 0,
+  "limitations": "Screenshots include normal animation phase; visual pixel delta alone is not a deterministic intensity measurement."
+}

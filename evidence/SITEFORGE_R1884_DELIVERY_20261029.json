@@ -1,0 +1,108 @@
+{
+  "schema": "synestra.siteforge.r1884.delivery_e2e.v1",
+  "mission_id": "SYN_SITEFORGE_R1884_UNIVERSAL_FLUX_20261029",
+  "date": "2026-10-29",
+  "owner": "inossarum",
+  "repository": "inossarum/synestra-vitrine-preview",
+  "branch": "task/SYN_SITEFORGE_R1884_UNIVERSAL_FLUX_20261029",
+  "base_commit": "c90565ba2c1b9ef3e387e0520cdb0a13346ecff4",
+  "artifact": "siteforge-r1884-autonome.html",
+  "artifact_sha256_lf": "3f4b14d97919d5a2d36a2f93e7b0beb8189f06f6b5dd0fe66df784c06c744439",
+  "preview": "http://127.0.0.1:19105/siteforge-r1884-autonome.html?demo=energy",
+  "catalogue": "http://127.0.0.1:19105/siteforge-catalogue-r1884.html",
+  "status": "LOCAL_E2E_PASS_FEATURE_BRANCH_DELIVERY",
+  "implementation": {
+    "renderer": "Single existing WebGL1 shader/canvas and settings schema",
+    "materials": "Existing 0..6 preserved; new 7 Arcs pulsés and 8 Vortex polaire; 9 total",
+    "shared_controls": [
+      "flowCount",
+      "flowSpread",
+      "pulseSpeed",
+      "pulseIntensity",
+      "energyTurbulence",
+      "flowStructure",
+      "energyMouse",
+      "energyPalette",
+      "energyA/energyB",
+      "sphereDiameter"
+    ],
+    "older_materials": "Common bounded 3D domain warp, mouse-toggle gate, pulse-speed scaling, count-dependent angular modulation, spread scaling, palettes through energy uniforms",
+    "last_material": "Minor animated microstructure on living energy, preserving volumetric fine strands",
+    "ionized_fog": "2.25x original emissive density to restore small-screen readability; fixed failed mobile regression",
+    "siteforge": "Read-only versioned material manifest, responsive nine-item catalogue with URL-bound material parameter 0..8 and no external dependencies"
+  },
+  "qa": {
+    "static": "8/8 PASS from r1884_universal and r1884_catalogue tests",
+    "legacy_static": "4/4 PASS on preserved R1883 isolation",
+    "desktop": {
+      "status": "PASS",
+      "renderer": "ANGLE NVIDIA RTX3090 D3D11",
+      "family_count": 9,
+      "min_combined_control_changed_pixels": 7760,
+      "webgl_errors": 0,
+      "uniform_turbulence_0_100_200": [
+        0,
+        1,
+        2
+      ],
+      "native_json_export_200": "PASS",
+      "legacy_json_default_35": "PASS",
+      "reject_invalid_201_atomic": "PASS",
+      "new_distinct_families": "PASS"
+    },
+    "mobile_emulation": {
+      "status": "PASS",
+      "viewport": [
+        390,
+        844
+      ],
+      "renderer": "ANGLE NVIDIA RTX3090 D3D11",
+      "family_count": 9,
+      "min_combined_control_changed_pixels": 3795,
+      "webgl_errors": 0,
+      "new_distinct_families": "PASS",
+      "json": "PASS"
+    },
+    "catalogue_mobile": {
+      "status": "PASS",
+      "inner_width": 390,
+      "scroll_width": 390,
+      "items": 9
+    },
+    "deeplink": {
+      "status": "PASS",
+      "nine_material_links_open_matching_material": true,
+      "webgl_ready": true,
+      "errors": 0
+    },
+    "visual_inspection": "Source preview screenshots family 6,7,8 inspected. Organic glowing strands and differing spatial forms; no opaque pipe mesh"
+  },
+  "failure_first": [
+    {
+      "issue": "Initial WebGL NOT_READY",
+      "cause": "Unused historical uDeep uniform optimized out, strict engine requires all declared handles",
+      "resolution": "Reuse uDeep in shared low-intensity base color",
+      "rerun": "PASS Chrome RTX3090"
+    },
+    {
+      "issue": "Mobile ionized fog changed only 35 pixels on combined material control test",
+      "cause": "Weak emissive density of legacy material 3",
+      "resolution": "Bounded emission factor 2.25 in its own branch; all families pass later"
+    },
+    {
+      "issue": "No independent per-control visual baseline for each material",
+      "resolution": "Common code path and uniforms checked statically, combined changed screenshot checked per-material, individual independent visual effects still require further QA"
+    }
+  ],
+  "constraints": [
+    "No extra engine, Worker, broker or paid service",
+    "No direct main push or public deployment",
+    "No physically distinct mobile tested; mobile is Chrome emulation on RTX3090",
+    "No FPS gain claimed",
+    "Gallery is local/development only, not full product embedding"
+  ],
+  "citations": [
+    "https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/WebGL_best_practices"
+  ],
+  "next": "Use EXT_disjoint_timer_query to measure actual time GPU for material families, optimize expensive cases; add validated named presets and production SiteForge insertion module; run on modest real hardware and obtain final aesthetic review."
+}
