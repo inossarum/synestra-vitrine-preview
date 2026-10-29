@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Synestra · Labo 3D · Sphère énergétique Babylon</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:#020510;color:#c1d8ef;font:14px system-ui,sans-serif}
+main{width:100%;height:100%;min-height:420px;display:grid;place-items:center;overflow:hidden}
+canvas{display:block;width:100%;height:100%;touch-action:none;outline:none}
+#status{position:absolute;bottom:14px;left:20px;font-size:11px;letter-spacing:.05em;opacity:.56;pointer-events:none}
+</style></head>
+<body><main><canvas id="sphere" aria-label="Sphère énergétique 3D interactive" tabindex="0"></canvas></main>
+<output id="status" role="status">Démarrage du moteur 3D</output>
+<script type="module" src="./dist/lab-babylon.mjs"></script></body></html>

@@ -1,0 +1,145 @@
+{
+  "version": "R190-prototype",
+  "engine": "Babylon.js",
+  "status": "PASS",
+  "screens": [
+    {
+      "w": 1440,
+      "h": 900,
+      "pose": "front",
+      "name": "R190-sphere-1440-front.png",
+      "state": {
+        "engine": "babylonjs",
+        "scope": "sphere-only",
+        "strands": 62,
+        "glints": 32,
+        "meshes": 98,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "glError": 0,
+        "camera": {
+          "alpha": -1.5707963267948966,
+          "beta": 1.44
+        },
+        "viewport": {
+          "w": 1440,
+          "h": 900
+        }
+      }
+    },
+    {
+      "w": 1440,
+      "h": 900,
+      "pose": "side",
+      "name": "R190-sphere-1440-side.png",
+      "state": {
+        "engine": "babylonjs",
+        "scope": "sphere-only",
+        "strands": 62,
+        "glints": 32,
+        "meshes": 98,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "glError": 0,
+        "camera": {
+          "alpha": -0.5007963267948965,
+          "beta": 1.44
+        },
+        "viewport": {
+          "w": 1440,
+          "h": 900
+        }
+      }
+    },
+    {
+      "w": 1440,
+      "h": 900,
+      "pose": "over",
+      "name": "R190-sphere-1440-over.png",
+      "state": {
+        "engine": "babylonjs",
+        "scope": "sphere-only",
+        "strands": 62,
+        "glints": 32,
+        "meshes": 98,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "glError": 0,
+        "camera": {
+          "alpha": -1.1407963267948966,
+          "beta": 1.09
+        },
+        "viewport": {
+          "w": 1440,
+          "h": 900
+        }
+      }
+    },
+    {
+      "w": 390,
+      "h": 844,
+      "pose": "front",
+      "name": "R190-sphere-390-front.png",
+      "state": {
+        "engine": "babylonjs",
+        "scope": "sphere-only",
+        "strands": 62,
+        "glints": 32,
+        "meshes": 98,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "glError": 0,
+        "camera": {
+          "alpha": -1.5707963267948966,
+          "beta": 1.44
+        },
+        "viewport": {
+          "w": 390,
+          "h": 844
+        }
+      }
+    },
+    {
+      "w": 390,
+      "h": 844,
+      "pose": "side",
+      "name": "R190-sphere-390-side.png",
+      "state": {
+        "engine": "babylonjs",
+        "scope": "sphere-only",
+        "strands": 62,
+        "glints": 32,
+        "meshes": 98,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "glError": 0,
+        "camera": {
+          "alpha": -0.5007963267948965,
+          "beta": 1.44
+        },
+        "viewport": {
+          "w": 390,
+          "h": 844
+        }
+      }
+    },
+    {
+      "w": 390,
+      "h": 844,
+      "pose": "over",
+      "name": "R190-sphere-390-over.png",
+      "state": {
+        "engine": "babylonjs",
+        "scope": "sphere-only",
+        "strands": 62,
+        "glints": 32,
+        "meshes": 98,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "glError": 0,
+        "camera": {
+          "alpha": -1.1407963267948966,
+          "beta": 1.09
+        },
+        "viewport": {
+          "w": 390,
+          "h": 844
+        }
+      }
+    }
+  ]
+}
