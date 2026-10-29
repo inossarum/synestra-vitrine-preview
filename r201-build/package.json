@@ -1,0 +1,1 @@
+{"name":"synestra-r201-scene","version":"0.1.0","private":true,"type":"module","scripts":{"build":"node build.mjs"},"dependencies":{"three":"0.186.1","@theatre/core":"0.7.2","detect-gpu":"5.0.70"},"devDependencies":{"esbuild":"0.25.12"}}

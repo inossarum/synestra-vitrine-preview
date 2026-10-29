@@ -1,0 +1,34 @@
+{
+  "schema": "synestra.siteforge.r201.integration.chrome.v1",
+  "status": "PASS",
+  "before": {
+    "ready": "true",
+    "theatre": "true",
+    "theatreError": null,
+    "theatrePosition": "0.000",
+    "cameraPos": "0.000,1.130,6.200",
+    "gpuTier": "3",
+    "coreError": null,
+    "fps": "100.0",
+    "quality": "1.00",
+    "canvas": 1,
+    "modules": 1
+  },
+  "after": {
+    "y": 450,
+    "theatrePosition": 2,
+    "cameraPos": "0.250,1.255,5.750",
+    "fps": "100.0",
+    "quality": "1.00"
+  },
+  "moved": {
+    "ready": "true",
+    "fps": "100.0"
+  },
+  "reduced": {
+    "reduced": true,
+    "ready": null,
+    "fallback": true
+  },
+  "failures": []
+}

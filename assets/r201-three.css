@@ -1,0 +1,18 @@
+/* R201: Three.js WebGLRenderer controls the only hero canvas.
+   Legacy CSS environmental layers excluded, leave DOM navigation accessible. */
+.syn-r201-home .r192-scene{background:#050915!important;isolation:isolate}
+.syn-r201-home .core-r109-stage .core-r109-canvas{
+ position:absolute!important;inset:0!important;
+ width:100%!important;height:100%!important;
+ transform:none!important;opacity:0;
+ display:block!important;z-index:2!important;pointer-events:none!important;
+}
+.syn-r201-home .core-r109-stage[data-core-ready="true"] .core-r109-canvas{opacity:1!important}
+.syn-r201-home .core-r109-stage[data-core-ready="true"] .core-r108-art{display:none!important}
+.syn-r201-home .r192-floor,.syn-r201-home .r199-architecture,.syn-r201-home .r192-depth-haze,
+.syn-r201-home .r196-core-apparatus,.syn-r201-home .r198-chamber{display:none!important}
+.syn-r201-home .core-r108-top,.syn-r201-home .r192-scene-caption,.syn-r201-home .r192-hero-outro{z-index:10!important}
+@media(prefers-reduced-motion:reduce){
+ .syn-r201-home .core-r109-canvas{display:none!important}
+ .syn-r201-home .core-r108-art{opacity:1!important;display:block!important}
+}
