@@ -1,0 +1,43 @@
+name: R204 LAB Core low-end build and preview integrity
+on:
+  push:
+    branches:
+      - task/SYN_SITEFORGE_R204_LIGHTWEIGHT_CORE_20261029
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: synestra-r204-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: r204-build/package-lock.json
+      - name: Pinned local dependencies only
+        run: npm --prefix r204-build ci --ignore-scripts --no-audit --no-fund
+      - name: Build one-renderer 3D Core
+        run: node r204-build/build.mjs
+      - name: Failure-first contracts and JavaScript syntax
+        run: |
+          node --check r204-build/scene.mjs
+          node --check assets/r204-scene.bundle.mjs
+          node --test tests/siteforge_r204_core.test.mjs
+      - name: Exact Cloudflare Pages branch-isolated static export
+        env:
+          CF_PAGES_BRANCH: task/SYN_SITEFORGE_R204_LIGHTWEIGHT_CORE_20261029
+        run: |
+          node tools/build_vitrine_static.mjs
+          node -e "const f=require('node:fs');const h=f.readFileSync('dist/index.html','utf8');if(!h.includes('r204-scene.bundle.mjs')||!h.includes('syn-r204-home'))process.exit(2);for(const p of ['dist/assets/r204-scene.bundle.mjs','dist/assets/r204-hero.css','dist/assets/r204-gpu-benchmarks/d-nvidia.json','dist/connect/index.html','dist/bridge/index.html','dist/siteforge/index.html','dist/offres/index.html'])if(!f.existsSync(p))throw Error('MISSING '+p);console.log('R204_PREVIEW_ROOT=PASS')"
+      - name: Preserve reviewable static bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: synestra-r204-preview
+          path: dist/
+          retention-days: 3
