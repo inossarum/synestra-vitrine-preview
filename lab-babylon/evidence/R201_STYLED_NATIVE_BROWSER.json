@@ -1,0 +1,523 @@
+{
+  "schema": "synestra.lab.r201.styled.core-shell.e2e.v1",
+  "sourceHead": "7aa54f44047acdd9718a98d3d3dfe792167fa5b4",
+  "buildSha256": "3f305842f11e9aef0f9a831d38e8c8a5eba7540f00de0237531e231415ccc2de",
+  "status": "PASS",
+  "frames": [
+    {
+      "width": 1100,
+      "mode": 0,
+      "st": {
+        "ready": "true",
+        "engine": "babylon",
+        "plasma": "core-shell-fusion-r201",
+        "mode": "0",
+        "canvas": 1,
+        "nodes": 6,
+        "veils": 4,
+        "veilTotal": 6,
+        "ribbons": 26,
+        "forks": 8,
+        "photons": 6,
+        "tier": "balanced",
+        "canvasRect": [
+          690,
+          675
+        ],
+        "overflow": false,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "error": 0
+      },
+      "img": {
+        "name": "r201-styled-core0-1100.png",
+        "sha256": "e1f546e3f6481a4535eba1f3f08c931cfb9dfa9fea225e32517261ff659b38a9",
+        "bytes": 497929
+      }
+    },
+    {
+      "width": 1100,
+      "mode": 1,
+      "st": {
+        "ready": "true",
+        "engine": "babylon",
+        "plasma": "core-shell-fusion-r201",
+        "mode": "1",
+        "canvas": 1,
+        "nodes": 6,
+        "veils": 4,
+        "veilTotal": 6,
+        "ribbons": 26,
+        "forks": 8,
+        "photons": 6,
+        "tier": "balanced",
+        "canvasRect": [
+          690,
+          675
+        ],
+        "overflow": false,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "error": 0
+      },
+      "img": {
+        "name": "r201-styled-core1-1100.png",
+        "sha256": "35527a6af66448de0d103f5bc70cf73a8613c5cd09ef1012c6351bff2dc53fef",
+        "bytes": 497869
+      }
+    },
+    {
+      "width": 1100,
+      "mode": 2,
+      "st": {
+        "ready": "true",
+        "engine": "babylon",
+        "plasma": "core-shell-fusion-r201",
+        "mode": "2",
+        "canvas": 1,
+        "nodes": 6,
+        "veils": 4,
+        "veilTotal": 6,
+        "ribbons": 26,
+        "forks": 8,
+        "photons": 6,
+        "tier": "balanced",
+        "canvasRect": [
+          690,
+          675
+        ],
+        "overflow": false,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "error": 0
+      },
+      "img": {
+        "name": "r201-styled-core2-1100.png",
+        "sha256": "1002098b5ebc53be0c6f197148c34511e080cc8f079163b3d3344940175776c0",
+        "bytes": 496590
+      }
+    },
+    {
+      "width": 1100,
+      "mode": 3,
+      "st": {
+        "ready": "true",
+        "engine": "babylon",
+        "plasma": "core-shell-fusion-r201",
+        "mode": "3",
+        "canvas": 1,
+        "nodes": 6,
+        "veils": 4,
+        "veilTotal": 6,
+        "ribbons": 26,
+        "forks": 8,
+        "photons": 6,
+        "tier": "balanced",
+        "canvasRect": [
+          690,
+          675
+        ],
+        "overflow": false,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "error": 0
+      },
+      "img": {
+        "name": "r201-styled-core3-1100.png",
+        "sha256": "39317bd6dc00211a06df038a177c61db651c619acbb571c3be3f1a504128464f",
+        "bytes": 495374
+      }
+    },
+    {
+      "width": 1100,
+      "tier": "economy",
+      "st": {
+        "ready": "true",
+        "engine": "babylon",
+        "plasma": "core-shell-fusion-r201",
+        "mode": "3",
+        "canvas": 1,
+        "nodes": 6,
+        "veils": 0,
+        "veilTotal": 6,
+        "ribbons": 8,
+        "forks": 4,
+        "photons": 2,
+        "tier": "economy",
+        "canvasRect": [
+          690,
+          675
+        ],
+        "overflow": false,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "error": 0
+      }
+    },
+    {
+      "width": 1100,
+      "tier": "balanced",
+      "st": {
+        "ready": "true",
+        "engine": "babylon",
+        "plasma": "core-shell-fusion-r201",
+        "mode": "3",
+        "canvas": 1,
+        "nodes": 6,
+        "veils": 4,
+        "veilTotal": 6,
+        "ribbons": 26,
+        "forks": 8,
+        "photons": 6,
+        "tier": "balanced",
+        "canvasRect": [
+          690,
+          675
+        ],
+        "overflow": false,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "error": 0
+      }
+    },
+    {
+      "width": 1100,
+      "tier": "ultra",
+      "st": {
+        "ready": "true",
+        "engine": "babylon",
+        "plasma": "core-shell-fusion-r201",
+        "mode": "3",
+        "canvas": 1,
+        "nodes": 6,
+        "veils": 6,
+        "veilTotal": 6,
+        "ribbons": 28,
+        "forks": 12,
+        "photons": 6,
+        "tier": "ultra",
+        "canvasRect": [
+          690,
+          675
+        ],
+        "overflow": false,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "error": 0
+      }
+    },
+    {
+      "width": 1100,
+      "tier": "auto",
+      "st": {
+        "ready": "true",
+        "engine": "babylon",
+        "plasma": "core-shell-fusion-r201",
+        "mode": "3",
+        "canvas": 1,
+        "nodes": 6,
+        "veils": 4,
+        "veilTotal": 6,
+        "ribbons": 26,
+        "forks": 8,
+        "photons": 6,
+        "tier": "auto",
+        "canvasRect": [
+          690,
+          675
+        ],
+        "overflow": false,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "error": 0
+      }
+    },
+    {
+      "width": 1100,
+      "pose": "front",
+      "img": {
+        "name": "r201-styled-orbit-front.png",
+        "sha256": "8e4c20accc37f5ce57ac4fef6e75a31f63c0cc1a5d0bfb2cce0e49acf5750c52",
+        "bytes": 495340
+      }
+    },
+    {
+      "width": 1100,
+      "pose": "side",
+      "img": {
+        "name": "r201-styled-orbit-side.png",
+        "sha256": "e50fcc1a95c4b9b0769620d11d67f831ebbb9a3133cceda6aae3b3fcce4efc77",
+        "bytes": 516863
+      }
+    },
+    {
+      "width": 1100,
+      "pose": "above",
+      "img": {
+        "name": "r201-styled-orbit-above.png",
+        "sha256": "82f0021e468ce8cf068151207742df68017b9ba3cfc47afe3ec46945b4fe3508",
+        "bytes": 488735
+      }
+    },
+    {
+      "width": 1100,
+      "zero": {
+        "ready": "true",
+        "engine": "babylon",
+        "plasma": "core-shell-fusion-r201",
+        "mode": "3",
+        "canvas": 1,
+        "nodes": 6,
+        "veils": 0,
+        "veilTotal": 6,
+        "ribbons": 26,
+        "forks": 0,
+        "photons": 0,
+        "tier": "balanced",
+        "canvasRect": [
+          690,
+          675
+        ],
+        "overflow": false,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "error": 0
+      }
+    },
+    {
+      "width": 390,
+      "mode": 0,
+      "st": {
+        "ready": "true",
+        "engine": "babylon",
+        "plasma": "core-shell-fusion-r201",
+        "mode": "0",
+        "canvas": 1,
+        "nodes": 6,
+        "veils": 4,
+        "veilTotal": 6,
+        "ribbons": 26,
+        "forks": 8,
+        "photons": 6,
+        "tier": "balanced",
+        "canvasRect": [
+          364,
+          405
+        ],
+        "overflow": false,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "error": 0
+      },
+      "img": {
+        "name": "r201-styled-core0-390.png",
+        "sha256": "81bca55685f0bbb33738410e5a45410c372677e733c6a144a25547f128321bd1",
+        "bytes": 214129
+      }
+    },
+    {
+      "width": 390,
+      "mode": 1,
+      "st": {
+        "ready": "true",
+        "engine": "babylon",
+        "plasma": "core-shell-fusion-r201",
+        "mode": "1",
+        "canvas": 1,
+        "nodes": 6,
+        "veils": 4,
+        "veilTotal": 6,
+        "ribbons": 26,
+        "forks": 8,
+        "photons": 6,
+        "tier": "balanced",
+        "canvasRect": [
+          364,
+          405
+        ],
+        "overflow": false,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "error": 0
+      },
+      "img": {
+        "name": "r201-styled-core1-390.png",
+        "sha256": "fa8ceaf58480c81ee5805a1b109ea1c8958e42dd0721be2dd0ad28cf4f564371",
+        "bytes": 214137
+      }
+    },
+    {
+      "width": 390,
+      "mode": 2,
+      "st": {
+        "ready": "true",
+        "engine": "babylon",
+        "plasma": "core-shell-fusion-r201",
+        "mode": "2",
+        "canvas": 1,
+        "nodes": 6,
+        "veils": 4,
+        "veilTotal": 6,
+        "ribbons": 26,
+        "forks": 8,
+        "photons": 6,
+        "tier": "balanced",
+        "canvasRect": [
+          364,
+          405
+        ],
+        "overflow": false,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "error": 0
+      },
+      "img": {
+        "name": "r201-styled-core2-390.png",
+        "sha256": "4786b436f1417b952d641ea54bee61c6ed751dd8f8eb186b7e1fe7a6ce92074c",
+        "bytes": 213400
+      }
+    },
+    {
+      "width": 390,
+      "mode": 3,
+      "st": {
+        "ready": "true",
+        "engine": "babylon",
+        "plasma": "core-shell-fusion-r201",
+        "mode": "3",
+        "canvas": 1,
+        "nodes": 6,
+        "veils": 4,
+        "veilTotal": 6,
+        "ribbons": 26,
+        "forks": 8,
+        "photons": 6,
+        "tier": "balanced",
+        "canvasRect": [
+          364,
+          405
+        ],
+        "overflow": false,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "error": 0
+      },
+      "img": {
+        "name": "r201-styled-core3-390.png",
+        "sha256": "b622c15d93ed4168fdf5a1defaa7f01adc68ea0ac95715ca7401d15eafce0c47",
+        "bytes": 212951
+      }
+    },
+    {
+      "width": 390,
+      "tier": "economy",
+      "st": {
+        "ready": "true",
+        "engine": "babylon",
+        "plasma": "core-shell-fusion-r201",
+        "mode": "3",
+        "canvas": 1,
+        "nodes": 6,
+        "veils": 0,
+        "veilTotal": 6,
+        "ribbons": 8,
+        "forks": 4,
+        "photons": 2,
+        "tier": "economy",
+        "canvasRect": [
+          364,
+          405
+        ],
+        "overflow": false,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "error": 0
+      }
+    },
+    {
+      "width": 390,
+      "tier": "balanced",
+      "st": {
+        "ready": "true",
+        "engine": "babylon",
+        "plasma": "core-shell-fusion-r201",
+        "mode": "3",
+        "canvas": 1,
+        "nodes": 6,
+        "veils": 4,
+        "veilTotal": 6,
+        "ribbons": 26,
+        "forks": 8,
+        "photons": 6,
+        "tier": "balanced",
+        "canvasRect": [
+          364,
+          405
+        ],
+        "overflow": false,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "error": 0
+      }
+    },
+    {
+      "width": 390,
+      "tier": "ultra",
+      "st": {
+        "ready": "true",
+        "engine": "babylon",
+        "plasma": "core-shell-fusion-r201",
+        "mode": "3",
+        "canvas": 1,
+        "nodes": 6,
+        "veils": 6,
+        "veilTotal": 6,
+        "ribbons": 28,
+        "forks": 12,
+        "photons": 6,
+        "tier": "ultra",
+        "canvasRect": [
+          364,
+          405
+        ],
+        "overflow": false,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "error": 0
+      }
+    },
+    {
+      "width": 390,
+      "tier": "auto",
+      "st": {
+        "ready": "true",
+        "engine": "babylon",
+        "plasma": "core-shell-fusion-r201",
+        "mode": "3",
+        "canvas": 1,
+        "nodes": 6,
+        "veils": 4,
+        "veilTotal": 6,
+        "ribbons": 26,
+        "forks": 8,
+        "photons": 6,
+        "tier": "auto",
+        "canvasRect": [
+          364,
+          405
+        ],
+        "overflow": false,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "error": 0
+      }
+    },
+    {
+      "width": 390,
+      "zero": {
+        "ready": "true",
+        "engine": "babylon",
+        "plasma": "core-shell-fusion-r201",
+        "mode": "3",
+        "canvas": 1,
+        "nodes": 6,
+        "veils": 0,
+        "veilTotal": 6,
+        "ribbons": 26,
+        "forks": 0,
+        "photons": 0,
+        "tier": "auto",
+        "canvasRect": [
+          364,
+          405
+        ],
+        "overflow": false,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "error": 0
+      }
+    }
+  ]
+}
