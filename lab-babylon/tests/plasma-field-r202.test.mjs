@@ -36,14 +36,28 @@ test('R202 stays in one Babylon scene without remote assets or new render loop',
 test('R202 energy coherence reduces bright outline density and preserves 3D plasma layer count',()=>{
  const main=readFileSync(new URL('../src/main.js',import.meta.url),'utf8');
  const field=readFileSync(new URL('../src/plasma-field.js',import.meta.url),'utf8');
- assert.match(main,/plasmaVisualRevision='r202-luminous-heart'/);
+ assert.match(main,/plasmaVisualRevision='r202-soft-heart-palette'/);
  assert.match(main,/Math\.round\(amount\*\.68\)\+5/);
  assert.match(main,/coreMistWidth\(i,\.5,quality\)\*1\.65/);
  assert.match(main,/radius:\.245,subdivisions:4/);
  assert.match(main,/diameter:1\.16,segments:32/);
- assert.match(main,/coreMat\.alpha=\.66/);
+ assert.match(main,/createPlasmaHeartMaterial\(scene\)/);
+ assert.match(main,/coreMat\.setFloat\('uTime',time\)/);
+ assert.match(main,/coreMat\.setFloat\('uPower',power\)/);
  assert.match(main,/coreShellVeilRadius\(i,quality\)\*1\.28/);
  assert.match(field,/float density=\.025\+\.66\*wisps\+\.66\*arc\+\.09\*fresnel/);
  assert.doesNotMatch(field,/new Engine\(|new Scene\(|fetch\(/);
  assert.deepEqual(['economy','balanced','ultra'].map(q=>plasmaFieldBudget(q,1.45)),[1,2,3]);
+});
+
+test('R202 artistic delta uses soft view-angle heart and preserves four-color emissions',()=>{
+ const field=readFileSync(new URL('../src/plasma-field.js',import.meta.url),'utf8');
+ const ribbons=readFileSync(new URL('../src/plasma-ribbons.js',import.meta.url),'utf8');
+ assert.match(field,/export function createPlasmaHeartMaterial/);
+ assert.match(field,/pow\(face,1\.65\)/);
+ assert.match(field,/material\.disableDepthWrite=true/);
+ assert.match(ribbons,/uPaletteWeight/);
+ assert.match(ribbons,/\[1\.0,\.64,\.53,\.43\]/);
+ assert.doesNotMatch(field,/new Engine\(|new Scene\(|fetch\(|https?:\/\//);
+ assert.doesNotMatch(ribbons,/new Engine\(|new Scene\(|fetch\(/);
 });

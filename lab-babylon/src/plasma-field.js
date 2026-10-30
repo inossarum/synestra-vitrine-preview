@@ -85,3 +85,36 @@ export function installPlasmaField({scene,parent}){
   dispose(){for(const {mesh,material} of layers){mesh.dispose();material.dispose();}}
  };
 }
+
+/** View-angle-faded, animated white-violet heart; reuses the existing scene and render clock. */
+export function createPlasmaHeartMaterial(scene){
+ if(!scene||typeof scene.getEngine!=='function')throw new TypeError('R202_HEART_SCENE_MISSING');
+ const vertexSource = `precision highp float;
+ attribute vec3 position;attribute vec3 normal;
+ uniform mat4 world;uniform mat4 worldViewProjection;
+ varying vec3 vWorld;varying vec3 vNormal;
+ void main(){vWorld=(world*vec4(position,1.0)).xyz;vNormal=normalize(mat3(world)*normal);gl_Position=worldViewProjection*vec4(position,1.0);}`;
+ const fragmentSource = `precision highp float;
+ varying vec3 vWorld;varying vec3 vNormal;
+ uniform vec3 uCamera;uniform float uTime;uniform float uPower;
+ void main(){
+  float face=clamp(dot(normalize(vNormal),normalize(uCamera-vWorld)),0.0,1.0);
+  float hotspot=pow(face,2.4);
+  float shimmer=.96+.04*sin(uTime*2.7+vWorld.x*12.0+vWorld.z*8.0);
+  vec3 tint=mix(vec3(.49,.24,.98),vec3(1.0,.88,1.12),clamp(.18+.78*hotspot,0.0,1.0));
+  float energy=clamp(uPower,0.0,1.6);
+  float alpha=clamp((.04+.72*pow(face,1.65))*energy,0.0,.82);
+  gl_FragColor=vec4(tint*(.84+.54*hotspot)*shimmer*energy,alpha);
+ }`;
+ const material=new ShaderMaterial('r202-white-violet-soft-heart',scene,{vertexSource,fragmentSource},{
+   attributes:['position','normal'],
+   uniforms:['world','worldViewProjection','uCamera','uTime','uPower'],
+   needAlphaBlending:true
+ });
+ material.backFaceCulling=true;
+ material.alphaMode=Engine.ALPHA_COMBINE;
+ material.disableDepthWrite=true;
+ material.setFloat('uTime',0);material.setFloat('uPower',1);
+ material.setVector3('uCamera',new Vector3(0,0,4.8));
+ return material;
+}

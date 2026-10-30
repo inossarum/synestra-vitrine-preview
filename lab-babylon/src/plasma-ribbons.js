@@ -86,16 +86,17 @@ export function installPlasmaRibbons({scene,colors,nodes,count=28,bridgePath=nul
     void main(){vColor=color;vUV=uv;gl_Position=worldViewProjection*vec4(position,1.);}`,
    fragmentSource:`precision highp float;
     varying vec4 vColor;varying vec2 vUV;
-    uniform vec3 uTint;uniform float uTime;
+    uniform vec3 uTint;uniform float uTime;uniform float uPaletteWeight;
     void main(){
      float crest=.5+.5*sin(vUV.x*24.0-uTime*2.8+sin(vUV.y*6.28)*2.0);
      float shimmer=.82+.18*sin(vUV.x*10.0+uTime*.95+vUV.y*7.0);
-     float alpha=clamp(vColor.a*(.66+.34*crest)*shimmer,0.0,1.0);
+     float alpha=clamp(vColor.a*(.66+.34*crest)*shimmer*uPaletteWeight,0.0,1.0);
      vec3 light=uTint*(.72+.42*crest)*(1.0+.18*sin(vUV.x*17.0-uTime*1.3));
      gl_FragColor=vec4(light,alpha);
     }`
-  },{attributes:['position','color','uv'],uniforms:['worldViewProjection','uTint','uTime'],needAlphaBlending:true});
+  },{attributes:['position','color','uv'],uniforms:['worldViewProjection','uTint','uTime','uPaletteWeight'],needAlphaBlending:true});
   shader.setColor3('uTint',color);
+  shader.setFloat('uPaletteWeight',[1.0,.64,.53,.43][i]);
   shader.backFaceCulling=false;
   shader.alphaMode=Engine.ALPHA_COMBINE;
   return shader;

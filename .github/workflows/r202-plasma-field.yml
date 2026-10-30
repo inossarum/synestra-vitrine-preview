@@ -7,6 +7,7 @@ on:
       - .github/workflows/r202-plasma-field.yml
       - lab-babylon/src/plasma-field.mjs
       - lab-babylon/src/plasma-field.js
+      - lab-babylon/src/plasma-ribbons.js
       - lab-babylon/src/main.js
       - lab-babylon/tests/plasma-field-r202.test.mjs
       - lab-babylon/scripts/r202-browser-smoke.mjs
@@ -38,7 +39,7 @@ jobs:
         run: |
           echo "GITHUB_SHA=$GITHUB_SHA"
           git rev-parse HEAD
-          git hash-object src/main.js src/plasma-field.mjs src/plasma-field.js
+          git hash-object src/main.js src/plasma-field.mjs src/plasma-field.js src/plasma-ribbons.js
       - name: Install exact dependency lockfile (free standard runner)
         run: npm ci --no-audit --no-fund
       - name: Full Node regression including R202 failure-first budgets
