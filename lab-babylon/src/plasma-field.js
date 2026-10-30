@@ -8,12 +8,18 @@ import {PLASMA_FIELD_RADII,plasmaFieldBudget,plasmaFieldOpacity} from './plasma-
 const vertexSource = `precision highp float;
 attribute vec3 position; attribute vec3 normal;
 uniform mat4 world; uniform mat4 worldViewProjection;
+uniform float uTime; uniform float uLayer;
 varying vec3 vLocal; varying vec3 vNormal; varying vec3 vWorld;
 void main(){
- vLocal=position;
+ // Time-dependent surface warping breaks the perfectly circular glass silhouette.
+ vec3 unit=normalize(position);
+ float fold=sin(unit.x*8.7+unit.y*6.1+uTime*.31+uLayer)
+           *cos(unit.z*9.0-uTime*.27);
+ vec3 displaced=position+normal*(.008+.032*fold);
+ vLocal=displaced;
  vNormal=normalize(mat3(world)*normal);
- vWorld=(world*vec4(position,1.0)).xyz;
- gl_Position=worldViewProjection*vec4(position,1.0);
+ vWorld=(world*vec4(displaced,1.0)).xyz;
+ gl_Position=worldViewProjection*vec4(displaced,1.0);
 }`;
 const fragmentSource = `precision highp float;
 varying vec3 vLocal; varying vec3 vNormal; varying vec3 vWorld;
@@ -26,18 +32,19 @@ void main(){
  float flow=sin(p.x*9.0+p.y*5.3+t*.48+1.4*sin(p.z*6.0-t*.26)+uLayer*1.4);
  float eddy=sin(p.z*10.5-p.y*8.0-t*.43+flow*1.7)
            *cos(p.x*7.2+p.z*4.4+t*.38);
- float plasma=clamp(.56+.28*flow+.24*eddy,0.0,1.0);
- // A narrow electric crest flows across a broad, semi-transparent gas shell.
- float arc=pow(clamp(.5+.5*sin(p.y*19.0+p.x*14.0+flow*2.5-t*.72),0.0,1.0),10.0);
- float fresnel=pow(1.0-abs(dot(normalize(vNormal),normalize(uCamera-vWorld))),1.35);
- float density=.22+.51*plasma+.43*fresnel+.28*arc;
- float alpha=clamp(uOpacity*density,0.0,.39);
- vec3 violet=vec3(.55,.13,1.0);
- vec3 magenta=vec3(1.06,.32,1.12);
- vec3 cyan=vec3(.08,.51,.87);
- vec3 color=mix(violet,magenta,clamp(.18+.62*plasma+.18*arc,0.0,1.0));
- color=mix(color,cyan,clamp(.07+.08*eddy,0.0,.17));
- color*=.77+.46*plasma+.30*fresnel+.31*arc;
+ float plasma=clamp(.52+.34*flow+.26*eddy,0.0,1.0);
+ float arc=pow(clamp(.5+.5*sin(p.y*19.0+p.x*14.0+flow*2.5-t*.72),0.0,1.0),12.0);
+ float fresnel=pow(1.0-abs(dot(normalize(vNormal),normalize(uCamera-vWorld))),1.65);
+ float wisps=pow(smoothstep(.12,.95,plasma),2.2);
+ float density=.08+.49*wisps+.54*arc+.16*fresnel;
+ // Sparse living currents, not a full transparent plastic shell.
+ float alpha=clamp(uOpacity*density,0.0,.30);
+ vec3 violet=vec3(.47,.11,.96);
+ vec3 magenta=vec3(1.07,.28,1.14);
+ vec3 cyan=vec3(.08,.50,.85);
+ vec3 color=mix(violet,magenta,clamp(.11+.70*plasma+.20*arc,0.0,1.0));
+ color=mix(color,cyan,clamp(.05+.10*eddy,0.0,.16));
+ color*=.84+.47*plasma+.22*fresnel+.37*arc;
  gl_FragColor=vec4(color,alpha);
 }`;
 export function installPlasmaField({scene,parent}){
