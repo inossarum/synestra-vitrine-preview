@@ -37,7 +37,7 @@ export function sampleCoreVolume(index,mode,time,directions,segments=90){
  return points;
 }
 export function coreVolumeWidth(index,u,quality='balanced'){
- if(!Number.isInteger(index)||index<0||!Number.isFinite(u)||u<0||u>1||!['economy','balanced','ultra'].includes(quality))throw new RangeError('R200_WIDTH_INVALID_ARGUMENT');
+ if(!Number.isInteger(index)||index<0||!Number.isFinite(u)||u<0||u>1||!['economy','balanced','ultra','auto'].includes(quality))throw new RangeError('R200_WIDTH_INVALID_ARGUMENT');
  const envelope=Math.pow(Math.sin(Math.PI*u),.72);
  return (.0034+(.0065+(index%4)*.0008)*envelope)*(quality==='economy'?.85:quality==='ultra'?1.12:1);
 }
