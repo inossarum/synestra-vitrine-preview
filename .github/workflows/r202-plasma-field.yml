@@ -1,0 +1,50 @@
+name: R202 plasma field exact-source CI
+on:
+  push:
+    branches:
+      - task/SYN_LAB_R202_PLASMA_FIELD_20261030
+    paths:
+      - .github/workflows/r202-plasma-field.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: synestra-r202-plasma-field
+  cancel-in-progress: false
+jobs:
+  exact-build-regression:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    defaults:
+      run:
+        working-directory: lab-babylon
+    steps:
+      - name: Check out exact source without stored credentials
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Set up Node 22 with npm lockfile cache
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: lab-babylon/package-lock.json
+      - name: Provenance and source pins
+        run: |
+          echo "GITHUB_SHA=$GITHUB_SHA"
+          git rev-parse HEAD
+          git hash-object src/main.js src/plasma-field.mjs src/plasma-field.js
+      - name: Install exact dependency lockfile (free standard runner)
+        run: npm ci --no-audit --no-fund
+      - name: Full Node regression including R202 failure-first budgets
+        run: npm test
+      - name: Build exact Babylon script and report SHA256
+        run: |
+          npm run build
+          test -s dist/babylon-lab.js
+          sha256sum dist/babylon-lab.js
+          wc -c dist/babylon-lab.js
+          grep -q 'r202-plasma-field' src/main.js
+          grep -q 'plasmaFieldBudget' src/plasma-field.mjs
+          git diff --exit-code -- src tests
+          echo R202_EXACT_GITHUB_BUILD_PASS
