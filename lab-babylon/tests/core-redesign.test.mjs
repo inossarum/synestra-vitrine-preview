@@ -7,9 +7,9 @@ const js=local('src/main.js').toString('utf8');
 const report=JSON.parse(local('evidence/R199_CORE_TRY_BROWSER.json'));
 
 test('R199 replaces ring paths with outward radial energy, without replacing Babylon engine',()=>{
- assert.match(js,/R199: open radial plasma branches/);
- assert.match(js,/const distance=\.018\+reach\*ease/);
- assert.match(js,/coreGeometry='radial-plasma-open'/);
+ assert.match(js,/function pathCore\(i,mode,t\)/);
+ assert.match(js,/sampleCoreVolume\(i,mode,t,coreDirections\)/);
+ assert.match(js,/coreGeometry='volumetric-core-shell-r201'/);
  assert.match(js,/mode!==0\|\|i<16/, 'primary radial visibility policy');
  assert.equal((js.match(/new Engine\(/g)||[]).length,1);
  assert.equal((js.match(/new Scene\(/g)||[]).length,1);

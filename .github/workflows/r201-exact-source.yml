@@ -35,7 +35,7 @@ jobs:
           git hash-object src/main.js src/core-volume.mjs src/core-shell-flow.mjs src/plasma-ribbons.js
       - name: Install exact lockfile without audit or funding calls
         run: npm ci --no-audit --no-fund
-      - name: Complete Labo Node regression suite
+      - name: Complete full Labo Node regression suite (historical and R201 contracts)
         run: npm test
       - name: Build exactly checked-out R201 source
         run: |

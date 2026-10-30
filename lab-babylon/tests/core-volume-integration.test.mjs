@@ -7,19 +7,24 @@ const ref=readFileSync(new URL('../src/reference-contract.js',import.meta.url),'
 const directions=[[-.54,.71,.46],[.70,.58,.38],[-.73,-.32,.47],[.70,-.55,.29],[-.02,-.92,.40],[.32,.89,-.38]];
 
 test('R200 imports its pure volume geometry in the existing engine, not a second engine',()=>{
- assert.match(src,/import \{sampleCoreVolume,coreVolumeWidth\} from '\.\/core-volume\.mjs'/);
+ const sourceImport=src.match(/import \{([^}]+)\} from '\.\/core-volume\.mjs'/);
+ assert.ok(sourceImport,'missing pure volume module import');
+ for(const name of ['sampleCoreVolume','coreVolumeWidth'])assert.ok(sourceImport[1].split(',').map(x=>x.trim()).includes(name),'missing '+name);
  assert.equal((src.match(/new Engine\(/g)||[]).length,1);
  assert.equal((src.match(/new Scene\(/g)||[]).length,1);
  assert.match(src,/mountCoreAtAtlasSocket/);
  assert.match(src,/CORE_SOCKET/);
  assert.match(src,/count:28/);
- assert.match(src,/core-volume-r200/);
- assert.match(src,/radial-plasma-volume/);
+ assert.match(src,/coreGeometry='volumetric-core-shell-r201'/);
+ assert.match(src,/const mistBudget=visibleCoreMistCount\(quality,power\)/);
  assert.doesNotMatch(src,/R199: open radial plasma branches/);
  assert.equal(CORE_VOLUME_MODES.length,4);
 });
 test('R200 attenuates the saturated point while preserving reference palette and power-zero',()=>{
- assert.match(src,/new Color3\(\.98,\.85,1\.20\)\.scale\(Math\.min\(power,1\.25\)\)/);
+ const emit=src.match(/coreMat\.emissiveColor=new Color3\(([\d.]+),([\d.]+),([\d.]+)\)\.scale\(Math\.min\(power,([\d.]+)\)\)/);
+ assert.ok(emit,'nucleus emissive color must be power-clamped');
+ const [red,green,blue,cap]=emit.slice(1).map(Number);
+ assert.ok(red>0&&green>0&&blue>0&&cap>0&&cap<=1.25,'bounded white-violet nucleus');
  assert.match(src,/haloMat\.alpha=power>0\?/);
  assert.match(src,/coreVolumeWidth\(i,\.5,quality\)/);
  assert.match(src,/visible=power>0/);

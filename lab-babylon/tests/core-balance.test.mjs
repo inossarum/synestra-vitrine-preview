@@ -12,7 +12,7 @@ test('R196 keeps one engine and disables old rigid shell and meridian rings',()=
  assert.equal((main.match(/new Scene\(/g)||[]).length,1);
  assert.match(main,/No meridian ring meshes/);
  assert.match(main,/organic plasma ribbon meshes remain the sole envelope/);
- assert.match(main,/core-balance-r196/);
+ assert.match(main,/core-shell-fusion-r201/); // active release must retain R196 single-engine invariant
  assert.match(main,/mountCoreAtAtlasSocket/);
 });
 test('Native Chrome covers 4 modes at 2 widths, budgets, orbit and core-off',()=>{
