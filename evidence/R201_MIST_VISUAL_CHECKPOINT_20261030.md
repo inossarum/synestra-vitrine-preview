@@ -27,3 +27,12 @@ Images R200 and R201 from GitHub were inspected at 1100 desktop, 390 emulated mo
 Direct inspection of both new PNGs: white-violet center is larger, with broader translucent core; shell still reads as isolated glowing filaments and global aesthetic remains short of the approved conceptual image. Artistic DONE is NOT proven.
 No public preview URL, no main merge, no replacement of dist/babylon-lab.js, no GPU low-end/mobile qualification, no reference-image binary verification, and full repository node --test still pending.
 NEXT=Qualify complete native Node suite; decide whether R201 improvements warrant a new bounded outer plasma visual pass or preserve as R201 PARTIAL and hand off next artistic checkpoint.
+
+
+## Provenance correction / failed native gate (2026-10-30)
+
+**IMPORTANT — supersedes any exact-source PASS claim above.** The native in-memory build used pinned GitHub `main.js`, `core-volume.mjs`, and `core-shell-flow.mjs`, but reused local R200 `plasma-ribbons.js` without a full source digest match. During the next in-memory art pass, the SHA-first gate computed local Git blob `8ed983d4af76e4f0ac4008574fa18c62a1b62d39`, while the canonical GitHub blob for R201 was `a538a1e9e3b3ade654d8afa34b5a38af834f756a`. The validation aborted before recompilation, and the subsequent native provenance-check attempt was blocked by the tool's safety controls; it was not rerouted.
+
+The candidate outer-band widening commit `1aee94b07b6919b0b931ac00e9442a1eb7745d33` was **rolled back** via `b554f851ce89fc80eb7de91e2daefd0c804d0835`. GitHub `plasma-ribbons.js` is restored to blob `a538a1e9e3b3ade654d8afa34b5a38af834f756a`; original code preserved. No second scene, no checkout/write to R200, no main change.
+
+Native browser 18/18 observations and screenshots remain actual observations of a **local derivative**, but **not an exact-GitHub-tree E2E certification**. Pure V8 88 and native Node 6/6 tests of the exact GitHub core-volume module remain PASS. Artifact provenance/rebuild, artistic acceptance, full suite and real low-end/mobile tests remain PENDING.

@@ -1,11 +1,12 @@
 {
   "schema": "synestra.lab.r201.core-mist.chrome.v1",
-  "status": "PASS_TECHNICAL",
+  "status": "PARTIAL_PROVENANCE_MISMATCH",
   "sourceHead": "79e13be08df97aaddd031d2bc8c28cb288f5ac7d",
   "build": {
-    "method": "real esbuild on owner Windows, write=false, overlay from SHA-pinned GitHub source",
+    "method": "Native Node/esbuild in-memory; main/core-volume/core-shell-flow explicitly sourced from GitHub, plasma-ribbons.js loaded from local R200 staging with a SHA mismatch to GitHub. Output authentic, exact source tree reproducibility NOT VERIFIED.",
     "jsBytes": 7407057,
-    "sha256": "fe01472c48665f7759b8fb586f067b834b197359e63d0c28014fb2c17ff5d3f3"
+    "sha256": "fe01472c48665f7759b8fb586f067b834b197359e63d0c28014fb2c17ff5d3f3",
+    "sourceTreeReproduced": false
   },
   "browser": {
     "device": "Inos-Cerebros",
@@ -40,7 +41,9 @@
     },
     "canvasCount": 1,
     "webglErrors": 0,
-    "jsExceptions": 0
+    "jsExceptions": 0,
+    "technicalExecutionObserved": true,
+    "exactGitHubSourceE2EVerified": false
   },
   "captures": [
     {
@@ -62,6 +65,18 @@
     "original artist reference binary unavailable",
     "visual review still PARTIAL: mist slightly stronger but filament-like outer shell remains",
     "full Node repository test suite not executed",
-    "GPU low-end physical testing not executed"
-  ]
+    "GPU low-end physical testing not executed",
+    "Native esbuild/browser 18/18 observations used locally mismatched plasma-ribbons.js; do not label this exact GitHub-HEAD E2E.",
+    "Native exact-tree requalification stopped after tool safety denial; no bypass."
+  ],
+  "provenance": {
+    "scope": "source-to-bundle verification",
+    "githubPlasmaBlob": "a538a1e9e3b3ade654d8afa34b5a38af834f756a",
+    "observedLocalPlasmaBlob": "8ed983d4af76e4f0ac4008574fa18c62a1b62d39",
+    "shaMatch": false,
+    "failedPreflight": "LOCAL_R200_PLASMA_SHA_MISMATCH",
+    "rejectedAction": "Second native provenance check blocked by OpenAI tool safety controls; NOT retried through another transport",
+    "correctiveRollbackCommit": "b554f851ce89fc80eb7de91e2daefd0c804d0835",
+    "currentGitHubPlasmaBlob": "a538a1e9e3b3ade654d8afa34b5a38af834f756a"
+  }
 }
