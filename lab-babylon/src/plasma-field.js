@@ -36,7 +36,7 @@ void main(){
  float arc=pow(clamp(.5+.5*sin(p.y*19.0+p.x*14.0+flow*2.5-t*.72),0.0,1.0),12.0);
  float fresnel=pow(1.0-abs(dot(normalize(vNormal),normalize(uCamera-vWorld))),1.65);
  float wisps=pow(smoothstep(.12,.95,plasma),2.2);
- float density=.08+.49*wisps+.54*arc+.16*fresnel;
+ float density=.025+.66*wisps+.66*arc+.09*fresnel;
  // Sparse living currents, not a full transparent plastic shell.
  float alpha=clamp(uOpacity*density,0.0,.30);
  vec3 violet=vec3(.47,.11,.96);
@@ -44,7 +44,7 @@ void main(){
  vec3 cyan=vec3(.08,.50,.85);
  vec3 color=mix(violet,magenta,clamp(.11+.70*plasma+.20*arc,0.0,1.0));
  color=mix(color,cyan,clamp(.05+.10*eddy,0.0,.16));
- color*=.84+.47*plasma+.22*fresnel+.37*arc;
+ color*=.84+.55*plasma+.20*fresnel+.46*arc;
  gl_FragColor=vec4(color,alpha);
 }`;
 export function installPlasmaField({scene,parent}){

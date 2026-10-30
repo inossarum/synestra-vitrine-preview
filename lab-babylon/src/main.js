@@ -53,7 +53,7 @@ function refresh(m,path,r){MeshBuilder.CreateTube(null,{path,radius:r,tessellati
 function budget(){
  if(!engine)return;const quality=ctl.quality.value;
  engine.setHardwareScalingLevel(quality==='economy'?1.65:quality==='ultra'?1:1.18);
- glow.intensity=quality==='economy'?.33:quality==='ultra'?.72:.49;
+ glow.intensity=quality==='economy'?.33:quality==='ultra'?.72:.55;
  document.getElementById('quality-label').textContent=quality.toUpperCase();
 }
 function start(){
@@ -101,7 +101,7 @@ function start(){
  const atlasMount=mountCoreAtAtlasSocket(scene,sphereRoot,{required:atlasFixture});
  cv.dataset.atlasSocket=atlasMount.mode;
  globalThis.__synestraLabAtlasInterop={getScene:()=>scene,getSphereRoot:()=>sphereRoot,connect:()=>mountCoreAtAtlasSocket(scene,sphereRoot,{required:true}),getEngine:()=>engine};
- budget();cv.dataset.engine='babylon';cv.dataset.sphereReady='true';cv.dataset.artReference=SPHERE_REFERENCE.id;cv.dataset.palette=SPHERE_REFERENCE.colors.map(c=>c.id).join(',');cv.dataset.energyNodes=String(SPHERE_REFERENCE.energyNodes);cv.dataset.canvasCount=String(document.querySelectorAll('canvas').length);cv.dataset.plasmaVersion='glow-sheaths-r194';cv.dataset.plasmaRibbons=String(plasma.meshes.length);cv.dataset.nodePlasma=String(plasma.nodeMeshes.length);cv.dataset.glowSheaths=String(plasma.sheaths.length);cv.dataset.nodeForks=String(forks.meshes.length);cv.dataset.nodePhotons=String(forks.photons.length);cv.dataset.plasmaVersion='core-shell-fusion-r201';cv.dataset.coreGeometry='volumetric-core-shell-r201';cv.dataset.coreShellSheaths=String(bridgeVeils.length);cv.dataset.coreMistTotal=String(innerSheaths.length);cv.dataset.plasmaField='r202-plasma-field';cv.dataset.plasmaFieldLayers=String(plasmaField.meshes.length);
+ budget();cv.dataset.engine='babylon';cv.dataset.sphereReady='true';cv.dataset.artReference=SPHERE_REFERENCE.id;cv.dataset.palette=SPHERE_REFERENCE.colors.map(c=>c.id).join(',');cv.dataset.energyNodes=String(SPHERE_REFERENCE.energyNodes);cv.dataset.canvasCount=String(document.querySelectorAll('canvas').length);cv.dataset.plasmaVersion='glow-sheaths-r194';cv.dataset.plasmaRibbons=String(plasma.meshes.length);cv.dataset.nodePlasma=String(plasma.nodeMeshes.length);cv.dataset.glowSheaths=String(plasma.sheaths.length);cv.dataset.nodeForks=String(forks.meshes.length);cv.dataset.nodePhotons=String(forks.photons.length);cv.dataset.plasmaVersion='core-shell-fusion-r201';cv.dataset.coreGeometry='volumetric-core-shell-r201';cv.dataset.coreShellSheaths=String(bridgeVeils.length);cv.dataset.coreMistTotal=String(innerSheaths.length);cv.dataset.plasmaField='r202-plasma-field';cv.dataset.plasmaVisualRevision='r202-energy-coherence';cv.dataset.plasmaFieldLayers=String(plasmaField.meshes.length);
  document.getElementById('engine-label').textContent='BABYLON.JS / WEBGL '+engine.webGLVersion;
  stat.textContent='Sphère énergétique prête';
  engine.runRenderLoop(()=>{
@@ -109,7 +109,7 @@ function start(){
   if(fixed!==null)time=fixed;else if(!reduced.matches&&last)time+=Math.min(.1,(now-last)/1000)*get('core-speed')/100;
   last=now;
   const quality=ctl.quality.value,turb=get('complexity')/100,amount=get('strands')*2;
-  plasma.update({time,quality,parent:sphereRoot,active:Math.min(plasma.meshes.length,amount+5),corePower:get('core-power')});
+  plasma.update({time,quality,parent:sphereRoot,active:Math.min(plasma.meshes.length,Math.round(amount*.68)+5),corePower:get('core-power')});
   forks.update({time,quality,corePower:get('core-power'),parent:sphereRoot});
   cv.dataset.visibleNodeForks=String(forks.meshes.filter(m=>m.isEnabled()).length);
   cv.dataset.visibleNodePhotons=String(forks.photons.filter(m=>m.isEnabled()).length);
@@ -123,7 +123,7 @@ function start(){
   }
   const r=get('core-radius')/100,power=get('core-power')/100,mode=get('core-mode');
   core.scaling.setAll(Math.max(.0001,r));halo.scaling.setAll(Math.max(.0001,r));
-  coreMat.emissiveColor=new Color3(.62,.44,1.02).scale(Math.min(power,1.10));haloMat.alpha=power>0?.12*Math.min(power,1):0;
+  coreMat.emissiveColor=new Color3(.87,.71,1.30).scale(Math.min(power,1.10));haloMat.alpha=power>0?.12*Math.min(power,1):0;
   plasmaField.update({time,quality,power,radius:r,cameraPosition:camera.position});
   const mistBudget=visibleCoreMistCount(quality,power);
   for(let i=0;i<inner.length;i++){
@@ -135,7 +135,7 @@ function start(){
     refresh(m,path,coreVolumeWidth(i,.5,quality));
     if(mistVisible){
      mist.material.alpha=Math.min(.16,.065+.075*power);
-     refresh(mist,path,coreMistWidth(i,.5,quality));
+     refresh(mist,path,coreMistWidth(i,.5,quality)*1.40);
     }
    }
   }
@@ -149,7 +149,7 @@ function start(){
    if(visible){
     const bridgePath=pathBridge(i,time);
     refresh(m,bridgePath,.0065);
-    if(auraVisible){aura.material.alpha=Math.min(.22,.11+.06*power);refresh(aura,bridgePath,coreShellVeilRadius(i,quality));}
+    if(auraVisible){aura.material.alpha=Math.min(.22,.11+.06*power);refresh(aura,bridgePath,coreShellVeilRadius(i,quality)*1.28);}
     energyNodes[i].scaling.setAll(.90+.13*Math.sin(time*1.8+i));
    }
   }

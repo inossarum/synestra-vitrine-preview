@@ -32,3 +32,15 @@ test('R202 stays in one Babylon scene without remote assets or new render loop',
  assert.match(main,/core-shell-fusion-r201/);
  assert.match(main,/r202-plasma-field/);
 });
+
+test('R202 energy coherence reduces bright outline density and preserves 3D plasma layer count',()=>{
+ const main=readFileSync(new URL('../src/main.js',import.meta.url),'utf8');
+ const field=readFileSync(new URL('../src/plasma-field.js',import.meta.url),'utf8');
+ assert.match(main,/plasmaVisualRevision='r202-energy-coherence'/);
+ assert.match(main,/Math\.round\(amount\*\.68\)\+5/);
+ assert.match(main,/coreMistWidth\(i,\.5,quality\)\*1\.40/);
+ assert.match(main,/coreShellVeilRadius\(i,quality\)\*1\.28/);
+ assert.match(field,/float density=\.025\+\.66\*wisps\+\.66\*arc\+\.09\*fresnel/);
+ assert.doesNotMatch(field,/new Engine\(|new Scene\(|fetch\(/);
+ assert.deepEqual(['economy','balanced','ultra'].map(q=>plasmaFieldBudget(q,1.45)),[1,2,3]);
+});
