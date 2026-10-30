@@ -1,6 +1,7 @@
 import {Engine,Scene,ArcRotateCamera,Vector3,Color3,Color4,Matrix,MeshBuilder,StandardMaterial,GlowLayer,PointLight,TransformNode} from '@babylonjs/core';
 import {SPHERE_REFERENCE} from './reference-contract.js';
 import {sampleCoreVolume,coreVolumeWidth} from './core-volume.mjs';
+import {sampleCoreShellFlow,coreShellVeilRadius,visibleCoreShellVeils} from './core-shell-flow.mjs';
 import {installPlasmaRibbons} from './plasma-ribbons.js';
 import {installNodeForks} from './node-branches.js';
 import {mountCoreAtAtlasSocket} from './atlas-interop.js';
@@ -13,7 +14,7 @@ const get=x=>+ctl[x].value,T=2*Math.PI,v=(x,y,z)=>new Vector3(x,y,z);
 const q=new URLSearchParams(location.search),n=Number(q.get('labFrame'));
 const fixed=q.has('labFrame')&&Number.isFinite(n)&&n>=0&&n<=60?n:null;
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
-let engine,scene,glow,core,halo,coreMat,haloMat,threads=[],lines=[],inner=[],stars=[],bridges=[],energyNodes=[],plasma=null,forks=null,time=0,last=0;
+let engine,scene,glow,core,halo,coreMat,haloMat,threads=[],lines=[],inner=[],stars=[],bridges=[],bridgeVeils=[],energyNodes=[],plasma=null,forks=null,time=0,last=0;
 function light(name,color,a=1){
  const m=new StandardMaterial(name,scene);m.disableLighting=true;m.emissiveColor=color;m.diffuseColor=Color3.Black();m.alpha=a;
  m.backFaceCulling=false;if(a<1)m.disableDepthWrite=true;return m;
@@ -42,16 +43,9 @@ const nodeDirections=[
  v(.70,-.55,.29),v(-.02,-.92,.40),v(.32,.89,-.38)
 ].map(dir=>dir.normalize());
 const coreDirections=nodeDirections.map(d=>[d.x,d.y,d.z]);
+// R201: open, continuous 3D connection from the violet heart to each of six shell nodes.
 function pathBridge(i,t){
- const dir=nodeDirections[i],tangent=Vector3.Cross(dir,v(0,1,0)).normalize();
- const side=Vector3.Cross(dir,tangent).normalize(),points=[];
- for(let k=0;k<=72;k++){
-  const u=k/72,dist=.23+u*1.30,weight=Math.sin(Math.PI*u);
-  const curl=.17*weight*Math.sin(u*10.5+t*.74+i*2.2);
-  const cross=.12*weight*Math.cos(u*13.3-t*.45+i);
-  points.push(dir.scale(dist).add(tangent.scale(curl)).add(side.scale(cross)));
- }
- return points;
+ return sampleCoreShellFlow(i,t,coreDirections).map(p=>v(p[0],p[1],p[2]));
 }
 function wire(id,path,r,mat){const m=MeshBuilder.CreateTube(id,{path,radius:r,tessellation:6,updatable:true},scene);m.material=mat;m.isPickable=false;return m;}
 function refresh(m,path,r){MeshBuilder.CreateTube(null,{path,radius:r,tessellation:6,instance:m},scene);}
@@ -66,7 +60,7 @@ function start(){
  scene=new Scene(engine);scene.clearColor=new Color4(.006,.014,.04,1);
  const camera=new ArcRotateCamera('orbit',-.38,1.2,4.8,v(0,0,0),scene);camera.attachControl(cv,true);
  camera.lowerRadiusLimit=2.8;camera.upperRadiusLimit=7;camera.wheelPrecision=48;
- const lightCore=new PointLight('core light',v(0,0,0),scene);lightCore.intensity=1.8;lightCore.range=6;
+ const lightCore=new PointLight('core light',v(0,0,0),scene);lightCore.intensity=1.05;lightCore.range=6;
  glow=new GlowLayer('glow',scene,{blurKernelSize:64,mainTextureRatio:.5});
  // Owner's Studio colors: violet, cyan, dark blue, green; one immutable art contract.
  const palette=SPHERE_REFERENCE.colors.map(c=>light('energy-'+c.id,new Color3(...c.linear)));
@@ -80,13 +74,16 @@ function start(){
  for(let i=0;i<18;i++)inner.push(wire('radial plasma tendril '+i,pathCore(i,0,0),coreVolumeWidth(i,.5,'balanced'),palette[(i+1)%4]));
  for(let i=0;i<48;i++){const m=MeshBuilder.CreateSphere('spark '+i,{diameter:i%6===0?.025:.012,segments:4},scene);m.material=palette[i%4];stars.push(m);}
  for(let i=0;i<SPHERE_REFERENCE.energyNodes;i++){
-  bridges.push(wire('heart-to-node-flux-'+i,pathBridge(i,0),.0055,palette[i%4]));
+  bridges.push(wire('heart-to-node-flux-'+i,pathBridge(i,0),.0065,palette[i%4]));
+  // R201: diffuse translucent body around the existing connection, same scene and six nodes.
+  const veilColor=new Color3(...SPHERE_REFERENCE.colors[i%4].linear).scale(.65);
+  bridgeVeils.push(wire('core-shell soft aura '+i,pathBridge(i,0),.023,light('core-shell translucent plasma '+i,veilColor,.16)));
   const node=MeshBuilder.CreateSphere('energy-intersection-'+i,{diameter:.105,segments:12},scene);
   node.material=palette[i%4];node.position.copyFrom(nodeDirections[i].scale(1.53));energyNodes.push(node);
  }
  // The Labo exclusively owns the sphere; Atlas owns only the target CORE_SOCKET.
  const sphereRoot=new TransformNode('LAB_SPHERE_ROOT',scene);
- for(const mesh of [core,halo,...threads,...lines,...inner,...stars,...bridges,...energyNodes])mesh.parent=sphereRoot;
+ for(const mesh of [core,halo,...threads,...lines,...inner,...stars,...bridges,...bridgeVeils,...energyNodes])mesh.parent=sphereRoot;
  plasma=installPlasmaRibbons({scene,colors:SPHERE_REFERENCE.colors.map(x=>new Color3(...x.linear)),nodes:nodeDirections,count:28,bridgePath:pathBridge});
  for(const mesh of [...plasma.meshes,...plasma.sheaths,...plasma.nodeMeshes])mesh.parent=sphereRoot;
  forks=installNodeForks({scene,directions:nodeDirections,ribbonMaterials:plasma.materials,photonMaterials:palette,parent:sphereRoot});
@@ -96,7 +93,7 @@ function start(){
  const atlasMount=mountCoreAtAtlasSocket(scene,sphereRoot,{required:atlasFixture});
  cv.dataset.atlasSocket=atlasMount.mode;
  globalThis.__synestraLabAtlasInterop={getScene:()=>scene,getSphereRoot:()=>sphereRoot,connect:()=>mountCoreAtAtlasSocket(scene,sphereRoot,{required:true}),getEngine:()=>engine};
- budget();cv.dataset.engine='babylon';cv.dataset.sphereReady='true';cv.dataset.artReference=SPHERE_REFERENCE.id;cv.dataset.palette=SPHERE_REFERENCE.colors.map(c=>c.id).join(',');cv.dataset.energyNodes=String(SPHERE_REFERENCE.energyNodes);cv.dataset.canvasCount=String(document.querySelectorAll('canvas').length);cv.dataset.plasmaVersion='glow-sheaths-r194';cv.dataset.plasmaRibbons=String(plasma.meshes.length);cv.dataset.nodePlasma=String(plasma.nodeMeshes.length);cv.dataset.glowSheaths=String(plasma.sheaths.length);cv.dataset.nodeForks=String(forks.meshes.length);cv.dataset.nodePhotons=String(forks.photons.length);cv.dataset.plasmaVersion='core-volume-r200';cv.dataset.coreGeometry='radial-plasma-volume';
+ budget();cv.dataset.engine='babylon';cv.dataset.sphereReady='true';cv.dataset.artReference=SPHERE_REFERENCE.id;cv.dataset.palette=SPHERE_REFERENCE.colors.map(c=>c.id).join(',');cv.dataset.energyNodes=String(SPHERE_REFERENCE.energyNodes);cv.dataset.canvasCount=String(document.querySelectorAll('canvas').length);cv.dataset.plasmaVersion='glow-sheaths-r194';cv.dataset.plasmaRibbons=String(plasma.meshes.length);cv.dataset.nodePlasma=String(plasma.nodeMeshes.length);cv.dataset.glowSheaths=String(plasma.sheaths.length);cv.dataset.nodeForks=String(forks.meshes.length);cv.dataset.nodePhotons=String(forks.photons.length);cv.dataset.plasmaVersion='core-shell-fusion-r201';cv.dataset.coreGeometry='volumetric-core-shell-r201';cv.dataset.coreShellSheaths=String(bridgeVeils.length);
  document.getElementById('engine-label').textContent='BABYLON.JS / WEBGL '+engine.webGLVersion;
  stat.textContent='Sphère énergétique prête';
  engine.runRenderLoop(()=>{
@@ -118,7 +115,7 @@ function start(){
   }
   const r=get('core-radius')/100,power=get('core-power')/100,mode=get('core-mode');
   core.scaling.setAll(Math.max(.0001,r));halo.scaling.setAll(Math.max(.0001,r));
-  coreMat.emissiveColor=new Color3(.98,.85,1.20).scale(Math.min(power,1.25));haloMat.alpha=power>0?.075*Math.min(power,1):0;
+  coreMat.emissiveColor=new Color3(.62,.44,1.02).scale(Math.min(power,1.10));haloMat.alpha=power>0?.075*Math.min(power,1):0;
   for(let i=0;i<inner.length;i++){
    const m=inner[i],visible=power>0&&(mode!==0||i<16);m.setEnabled(visible);
    if(visible)refresh(m,pathCore(i,mode,time).map(p=>p.scale(r)),coreVolumeWidth(i,.5,quality));
@@ -127,7 +124,11 @@ function start(){
    const m=bridges[i],visible=power>0&&(quality!=='economy'||i<3);
    m.setEnabled(visible);energyNodes[i].setEnabled(visible);
    if(visible){
-    refresh(m,pathBridge(i,time),.0055);
+    const bridgePath=pathBridge(i,time);
+    refresh(m,bridgePath,.0065);
+    const aura=bridgeVeils[i];const veilCount=visibleCoreShellVeils(quality,power);
+    aura.setEnabled(i<veilCount);
+    if(i<veilCount){aura.material.alpha=Math.min(.22,.11+.06*power);refresh(aura,bridgePath,coreShellVeilRadius(i,quality));}
     energyNodes[i].scaling.setAll(.90+.13*Math.sin(time*1.8+i));
    }
   }
@@ -137,6 +138,7 @@ function start(){
    m.position.set(rad*Math.cos(a),1.56*z,rad*Math.sin(a));
   }
   core.rotation.y=time*.18;scene.render();
+  cv.dataset.visibleCoreShellSheaths=String(bridgeVeils.filter(m=>m.isEnabled()).length);
   cv.dataset.mode=String(mode);cv.dataset.activeFilaments=String(threads.filter(x=>x.isEnabled()).length+lines.filter(x=>x.isEnabled()).length);
   cv.dataset.fps=String(Math.round(engine.getFps()));
  });
@@ -152,7 +154,7 @@ document.getElementById('reset').addEventListener('click',()=>{for(const [k,valu
 document.getElementById('export').addEventListener('click',()=>{
  const settings=Object.fromEntries(Object.entries(ctl).map(([k,v])=>[k,v.value]));
  const blob=new Blob([JSON.stringify({schema:'synestra.lab.babylon-sphere.v1',settings},null,2)],{type:'application/json'});
- const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='sphere-r200.json';a.click();
+ const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='sphere-r201.json';a.click();
  setTimeout(()=>URL.revokeObjectURL(a.href),500);
 });
 try{start();sync();}catch(e){cv.dataset.sphereReady='false';stat.textContent='Moteur indisponible';console.error('BABYLON_SPHERE_ERROR',e);}
