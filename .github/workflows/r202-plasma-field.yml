@@ -5,6 +5,11 @@ on:
       - task/SYN_LAB_R202_PLASMA_FIELD_20261030
     paths:
       - .github/workflows/r202-plasma-field.yml
+      - lab-babylon/src/plasma-field.mjs
+      - lab-babylon/src/plasma-field.js
+      - lab-babylon/src/main.js
+      - lab-babylon/tests/plasma-field-r202.test.mjs
+      - lab-babylon/scripts/r202-browser-smoke.mjs
   workflow_dispatch:
 permissions:
   contents: read

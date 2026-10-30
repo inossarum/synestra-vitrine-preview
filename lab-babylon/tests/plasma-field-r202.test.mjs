@@ -3,8 +3,11 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {plasmaFieldBudget,plasmaFieldOpacity,PLASMA_FIELD_RADII} from '../src/plasma-field.mjs';
 test('R202 plasma field obeys bounded quality budgets and power zero',()=>{
- assert.deepEqual(PLASMA_FIELD_RADII,[.56,1.04,1.49]);
+ assert.deepEqual(PLASMA_FIELD_RADII,[.68,1.45,1.01]);
  assert.deepEqual(['economy','balanced','auto','ultra'].map(q=>plasmaFieldBudget(q,1.45)),[1,2,2,3]);
+ assert.ok(PLASMA_FIELD_RADII[1]>1.4,'balanced mode must reach the outer shell');
+ assert.ok(plasmaFieldOpacity(1,1.45,'balanced')>.2,'outer shell must be visible');
+ assert.equal(plasmaFieldOpacity(2,1.45,'balanced'),0,'middle shell reserved for ultra');
  assert.deepEqual(['economy','balanced','auto','ultra'].map(q=>plasmaFieldBudget(q,0)),[0,0,0,0]);
  for(const q of ['economy','balanced','auto','ultra'])for(let i=0;i<3;i++){
   const a=plasmaFieldOpacity(i,0,q),b=plasmaFieldOpacity(i,1.45,q);
