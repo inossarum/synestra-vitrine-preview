@@ -123,12 +123,14 @@ function start(){
   for(let i=0;i<bridges.length;i++){
    const m=bridges[i],visible=power>0&&(quality!=='economy'||i<3);
    m.setEnabled(visible);energyNodes[i].setEnabled(visible);
+   // Always clear stale translucent geometry, including power-zero and budget changes.
+   const aura=bridgeVeils[i],veilCount=visibleCoreShellVeils(quality,power);
+   const auraVisible=visible&&i<veilCount;
+   aura.setEnabled(auraVisible);
    if(visible){
     const bridgePath=pathBridge(i,time);
     refresh(m,bridgePath,.0065);
-    const aura=bridgeVeils[i];const veilCount=visibleCoreShellVeils(quality,power);
-    aura.setEnabled(i<veilCount);
-    if(i<veilCount){aura.material.alpha=Math.min(.22,.11+.06*power);refresh(aura,bridgePath,coreShellVeilRadius(i,quality));}
+    if(auraVisible){aura.material.alpha=Math.min(.22,.11+.06*power);refresh(aura,bridgePath,coreShellVeilRadius(i,quality));}
     energyNodes[i].scaling.setAll(.90+.13*Math.sin(time*1.8+i));
    }
   }
