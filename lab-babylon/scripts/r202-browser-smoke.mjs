@@ -23,4 +23,20 @@ try{
   const data=readFileSync(shot);
   console.log(JSON.stringify({status:'R202_NATIVE_CHROME_SMOKE_PASS',width,bytes:data.length,sha256:createHash('sha256').update(data).digest('hex')}));
  }
+ // Two deterministic native timepoints demonstrate actual pixel-changing 3D animation.
+ const motion=[];
+ for(const frame of [0,6]){
+  const shot=join(process.env.RUNNER_TEMP||tmpdir(),'r202-motion-'+frame+'.png');
+  const args=['--headless=new','--no-sandbox','--disable-dev-shm-usage','--enable-unsafe-swiftshader',
+   '--use-gl=angle','--use-angle=swiftshader','--enable-webgl','--virtual-time-budget=3500',
+   '--window-size=1100,900','--screenshot='+shot,'--dump-dom',
+   'http://127.0.0.1:'+server.address().port+'/lab-babylon/?labFrame='+frame];
+  const {stdout}=await exec(chrome,args,{timeout:35000,maxBuffer:3000000});
+  for(const token of ['data-sphere-ready="true"','data-plasma-field="r202-plasma-field"','data-canvas-count="1"'])
+   if(!stdout.includes(token))throw Error('R202_MOTION_BROWSER_NOT_READY_'+frame);
+  if(!existsSync(shot)||statSync(shot).size<20000)throw Error('R202_MOTION_EMPTY_FRAME_'+frame);
+  const buf=readFileSync(shot);motion.push({frame,sha256:createHash('sha256').update(buf).digest('hex'),bytes:buf.length});
+ }
+ if(motion[0].sha256===motion[1].sha256)throw Error('R202_MOTION_FRAMES_IDENTICAL');
+ console.log(JSON.stringify({status:'R202_NATIVE_MOTION_TWO_FRAMES_PASS',frames:motion}));
 }finally{await new Promise(ok=>server.close(ok))}

@@ -39,8 +39,9 @@ test('R202 energy coherence reduces bright outline density and preserves 3D plas
  assert.match(main,/plasmaVisualRevision='r202-luminous-heart'/);
  assert.match(main,/Math\.round\(amount\*\.68\)\+5/);
  assert.match(main,/coreMistWidth\(i,\.5,quality\)\*1\.65/);
- assert.match(main,/radius:\.255,subdivisions:4/);
+ assert.match(main,/radius:\.245,subdivisions:4/);
  assert.match(main,/diameter:1\.16,segments:32/);
+ assert.match(main,/coreMat\.alpha=\.66/);
  assert.match(main,/coreShellVeilRadius\(i,quality\)\*1\.28/);
  assert.match(field,/float density=\.025\+\.66\*wisps\+\.66\*arc\+\.09\*fresnel/);
  assert.doesNotMatch(field,/new Engine\(|new Scene\(|fetch\(/);

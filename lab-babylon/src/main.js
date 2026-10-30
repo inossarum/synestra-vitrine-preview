@@ -65,9 +65,9 @@ function start(){
  glow=new GlowLayer('glow',scene,{blurKernelSize:64,mainTextureRatio:.5});
  // Owner's Studio colors: violet, cyan, dark blue, green; one immutable art contract.
  const palette=SPHERE_REFERENCE.colors.map(c=>light('energy-'+c.id,new Color3(...c.linear)));
- coreMat=light('white-violet energetic focal point',new Color3(.93,.72,1.16));
+ coreMat=light('white-violet energetic focal point',new Color3(.93,.72,1.16));coreMat.alpha=.66;coreMat.disableDepthWrite=true;
  haloMat=light('diffuse violet energy aura',new Color3(.40,.30,.76),.070);
- core=MeshBuilder.CreateIcoSphere('central nucleus',{radius:.255,subdivisions:4},scene);core.material=coreMat;
+ core=MeshBuilder.CreateIcoSphere('central nucleus',{radius:.245,subdivisions:4},scene);core.material=coreMat;
  halo=MeshBuilder.CreateSphere('halo',{diameter:1.16,segments:32},scene);halo.material=haloMat;
  // Minimal structural outlines remain; soft volumetric ribbons replace most of the wire cage.
  // R196: eliminate legacy rigid structural loops; organic plasma ribbon meshes remain the sole envelope.
