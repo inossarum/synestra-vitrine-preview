@@ -10,6 +10,7 @@ on:
       - lab-babylon/src/plasma-ribbons.js
       - lab-babylon/src/main.js
       - lab-babylon/tests/plasma-field-r202.test.mjs
+      - lab-babylon/tests/core-volume-integration.test.mjs
       - lab-babylon/scripts/r202-browser-smoke.mjs
   workflow_dispatch:
 permissions:

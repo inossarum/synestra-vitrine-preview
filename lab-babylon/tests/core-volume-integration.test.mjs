@@ -22,9 +22,17 @@ test('R200 imports its pure volume geometry in the existing engine, not a second
 });
 test('R200 attenuates the saturated point while preserving reference palette and power-zero',()=>{
  const emit=src.match(/coreMat\.emissiveColor=new Color3\(([\d.]+),([\d.]+),([\d.]+)\)\.scale\(Math\.min\(power,([\d.]+)\)\)/);
- assert.ok(emit,'nucleus emissive color must be power-clamped');
- const [red,green,blue,cap]=emit.slice(1).map(Number);
- assert.ok(red>0&&green>0&&blue>0&&cap>0&&cap<=1.25,'bounded white-violet nucleus');
+ if(emit){
+  const [red,green,blue,cap]=emit.slice(1).map(Number);
+  assert.ok(red>0&&green>0&&blue>0&&cap>0&&cap<=1.25,'bounded white-violet nucleus');
+ }else{
+  // R202: shader core replaces uniform emissiveColor; ensure power-zero and safe clamps.
+  const heart=readFileSync(new URL('../src/plasma-field.js',import.meta.url),'utf8');
+  assert.match(src,/coreMat\.setFloat\('uPower',power\)/,'heart power uniform updated each frame');
+  assert.match(heart,/float energy=clamp\(uPower,0\.0,1\.6\)/,'shader clamps heart power');
+  assert.match(heart,/vec3 tint=mix\(vec3\(\.49,\.24,\.98\),vec3\(1\.0,\.88,1\.12\)/,'white-violet heart');
+  assert.match(heart,/float alpha=clamp\(/,'bounded translucent heart');
+ }
  assert.match(src,/haloMat\.alpha=power>0\?/);
  assert.match(src,/coreVolumeWidth\(i,\.5,quality\)/);
  assert.match(src,/visible=power>0/);
