@@ -6,6 +6,7 @@ import {installPlasmaRibbons} from './plasma-ribbons.js';
 import {installNodeForks} from './node-branches.js';
 import {mountCoreAtAtlasSocket} from './atlas-interop.js';
 import {installPlasmaField,createPlasmaHeartMaterial} from './plasma-field.js';
+import {geometryUpdateDecision} from './geometry-frame-budget.mjs';
 // ONE Babylon canvas. The requested subject is ONLY the glowing energy sphere.
 const cv=document.getElementById('renderCanvas'),stat=document.getElementById('status');
 const ids=['core-mode','core-radius','core-power','core-speed','strands','complexity','quality'];
@@ -15,7 +16,7 @@ const get=x=>+ctl[x].value,T=2*Math.PI,v=(x,y,z)=>new Vector3(x,y,z);
 const q=new URLSearchParams(location.search),n=Number(q.get('labFrame'));
 const fixed=q.has('labFrame')&&Number.isFinite(n)&&n>=0&&n<=60?n:null;
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
-let engine,scene,glow,core,halo,coreMat,haloMat,threads=[],lines=[],inner=[],innerSheaths=[],stars=[],bridges=[],bridgeVeils=[],energyNodes=[],plasma=null,forks=null,plasmaField=null,time=0,last=0;
+let engine,scene,glow,core,halo,coreMat,haloMat,threads=[],lines=[],inner=[],innerSheaths=[],stars=[],bridges=[],bridgeVeils=[],energyNodes=[],plasma=null,forks=null,plasmaField=null,time=0,last=0,geometryState=null;
 function light(name,color,a=1){
  const m=new StandardMaterial(name,scene);m.disableLighting=true;m.emissiveColor=color;m.diffuseColor=Color3.Black();m.alpha=a;
  m.backFaceCulling=false;if(a<1)m.disableDepthWrite=true;return m;
@@ -109,6 +110,14 @@ function start(){
   if(fixed!==null)time=fixed;else if(!reduced.matches&&last)time+=Math.min(.1,(now-last)/1000)*get('core-speed')/100;
   last=now;
   const quality=ctl.quality.value,turb=get('complexity')/100,amount=get('strands')*2;
+  const r=get('core-radius')/100,power=get('core-power')/100,mode=get('core-mode');
+  // Keep GPU shader animation and camera smooth at the screen refresh rate.
+  coreMat.setFloat('uTime',time);coreMat.setFloat('uPower',power);coreMat.setVector3('uCamera',camera.position);haloMat.alpha=power>0?.102*Math.min(power,1):0;
+  plasmaField.update({time,quality,power,radius:r,cameraPosition:camera.position});
+  const geometryStep=geometryUpdateDecision(geometryState,{now,time,quality,mode,power:get('core-power'),radius:r,amount,turbulence:turb});
+  geometryState=geometryStep.next;
+  cv.dataset.geometryIntervalMs=String(geometryStep.intervalMs);
+  if(geometryStep.update){
   plasma.update({time,quality,parent:sphereRoot,active:Math.min(plasma.meshes.length,Math.round(amount*.68)+5),corePower:get('core-power')});
   forks.update({time,quality,corePower:get('core-power'),parent:sphereRoot});
   cv.dataset.visibleNodeForks=String(forks.meshes.filter(m=>m.isEnabled()).length);
@@ -121,10 +130,10 @@ function start(){
   for(let i=0;i<lines.length;i++){
    const m=lines[i],visible=i===0&&(quality!=='economy');m.setEnabled(visible);if(visible)refresh(m,pathMeridian(i,time,turb),.003);
   }
-  const r=get('core-radius')/100,power=get('core-power')/100,mode=get('core-mode');
+
   core.scaling.setAll(Math.max(.0001,r));halo.scaling.setAll(Math.max(.0001,r));
-  coreMat.setFloat('uTime',time);coreMat.setFloat('uPower',power);coreMat.setVector3('uCamera',camera.position);haloMat.alpha=power>0?.102*Math.min(power,1):0;
-  plasmaField.update({time,quality,power,radius:r,cameraPosition:camera.position});
+
+
   const mistBudget=visibleCoreMistCount(quality,power);
   for(let i=0;i<inner.length;i++){
    const m=inner[i],visible=power>0&&(mode!==0||i<16);
@@ -157,6 +166,7 @@ function start(){
    const m=stars[i];m.setEnabled(quality!=='economy'&&(quality==='ultra'||i<22));
    const a=i*2.39996+time*.12,z=(i%17)/16*2-1,rad=Math.sqrt(Math.max(.01,1-z*z))*(1.42+.08*Math.sin(time+i));
    m.position.set(rad*Math.cos(a),1.56*z,rad*Math.sin(a));
+  }
   }
   core.rotation.y=time*.18;scene.render();
   cv.dataset.visibleCoreShellSheaths=String(bridgeVeils.filter(m=>m.isEnabled()).length);cv.dataset.visibleCoreMist=String(innerSheaths.filter(m=>m.isEnabled()).length);cv.dataset.visiblePlasmaField=String(plasmaField.meshes.filter(m=>m.isEnabled()).length);
