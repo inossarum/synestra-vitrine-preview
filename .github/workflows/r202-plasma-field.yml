@@ -48,3 +48,13 @@ jobs:
           grep -q 'plasmaFieldBudget' src/plasma-field.mjs
           git diff --exit-code -- src tests
           echo R202_EXACT_GITHUB_BUILD_PASS
+      - name: Native Chromium software WebGL smoke, desktop and mobile viewport
+        run: node scripts/r202-browser-smoke.mjs
+      - name: Preserve native R202 screenshots for visual review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r202-browser-previews
+          path: ${{ runner.temp }}/r202-ci-*.png
+          if-no-files-found: ignore
+          retention-days: 2
