@@ -10,7 +10,7 @@ ENGINE=Babylon.js 9.33.0
 BUILD_METHOD=In-memory esbuild (write=false), using existing clean R200 node_modules without worktree creation or modification
 BUNDLE_SHA256=3f305842f11e9aef0f9a831d38e8c8a5eba7540f00de0237531e231415ccc2de
 BUNDLE_BYTES=7406119
-BUNDLE_GITHUB_PUBLICATION=NOT_CONFIRMED (GitHub blob transfer protocol error; do not infer success)
+BUNDLE_GITHUB_PUBLICATION=R201_GZIP_ARCHIVE_ONLY (raw JS blob absent; compressed archive SHA-pinned, reconstruct with --restore)
 NATIVE_BROWSER=Chrome headless new, Windows ANGLE Direct3D11, RTX 3090, WebGL2
 DEVICE=Inos-Cerebros
 PREVIEW=http://127.0.0.1:19126/lab-babylon/index.html?labFrame=4.5 (local-only, temporary)
@@ -43,3 +43,10 @@ Initial 21/21 checks on an unstyled ephemeral preview were rejected as artistic 
 
 ## Resume
 Keep R201 branch and R200 rollback intact. Verify GitHub screenshot blob SHAs/readback. Qualify a native authorized build-to-GitHub artifact path (do not retry refused Windows worktree creation). Use real screenshots to plan bounded R201 artistic changes only with actual visual proof. Persist exact artifact SHA and maintain explicit pending gates.
+
+## Durable R201 bundle recovery (GitHub)
+
+- Compiled gzip archive: `lab-babylon/dist/babylon-lab-r201.js.gz`, 1,645,924 bytes, SHA-256 `5d21f008c4178969caaac0549e26a38a79d65bdd226831b10d861bf620c66042`, Git blob `0334b89fe3b58b63ab539e01ce2caaa0df390f91`.
+- Reconstructed JavaScript: 7,406,119 bytes, SHA-256 `3f305842f11e9aef0f9a831d38e8c8a5eba7540f00de0237531e231415ccc2de`.
+- `node lab-babylon/scripts/recover-r201-bundle.mjs --verify`: read-only verification. `--restore`: explicitly overwrite only known R200 or matching R201 dist SHA in an appropriately authorized isolated checkout.
+- Archive does not modify the default HTML script target until explicit restoration. Not a public deployment. Initial 7.4MB direct GitHub blob upload failed transport; expected blob was confirmed absent by GitHub 422 tree-object validation.
