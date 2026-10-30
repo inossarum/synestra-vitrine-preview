@@ -59,8 +59,8 @@ test('R201 internal plasma mist has bounded tapered radius and finite quality bu
 });
 test('R201 mist stays in the same scene and follows existing core paths with power/quality gating',()=>{
  const source=readFileSync(new URL('../src/main.js',import.meta.url),'utf8');
- assert.equal((source.match(/new Engine\\(/g)||[]).length,1);
- assert.equal((source.match(/new Scene\\(/g)||[]).length,1);
+ assert.equal((source.match(/new Engine\(/g)||[]).length,1);
+ assert.equal((source.match(/new Scene\(/g)||[]).length,1);
  assert.match(source,/innerSheaths\.push/);
  assert.match(source,/const mistBudget=visibleCoreMistCount\(quality,power\)/);
  assert.match(source,/mist\.setEnabled\(mistVisible\)/);
