@@ -67,8 +67,8 @@ function start(){
  const palette=SPHERE_REFERENCE.colors.map(c=>light('energy-'+c.id,new Color3(...c.linear)));
  coreMat=light('white-violet energetic focal point',new Color3(.93,.72,1.16));
  haloMat=light('diffuse violet energy aura',new Color3(.40,.30,.76),.070);
- core=MeshBuilder.CreateIcoSphere('central nucleus',{radius:.19,subdivisions:4},scene);core.material=coreMat;
- halo=MeshBuilder.CreateSphere('halo',{diameter:.90,segments:32},scene);halo.material=haloMat;
+ core=MeshBuilder.CreateIcoSphere('central nucleus',{radius:.255,subdivisions:4},scene);core.material=coreMat;
+ halo=MeshBuilder.CreateSphere('halo',{diameter:1.16,segments:32},scene);halo.material=haloMat;
  // Minimal structural outlines remain; soft volumetric ribbons replace most of the wire cage.
  // R196: eliminate legacy rigid structural loops; organic plasma ribbon meshes remain the sole envelope.
  // No meridian ring meshes: profile quality still controls 3D plasma density.
@@ -84,7 +84,7 @@ function start(){
   // R201: diffuse translucent body around the existing connection, same scene and six nodes.
   const veilColor=new Color3(...SPHERE_REFERENCE.colors[i%4].linear).scale(.65);
   bridgeVeils.push(wire('core-shell soft aura '+i,pathBridge(i,0),.023,light('core-shell translucent plasma '+i,veilColor,.16)));
-  const node=MeshBuilder.CreateSphere('energy-intersection-'+i,{diameter:.078,segments:12},scene);
+  const node=MeshBuilder.CreateSphere('energy-intersection-'+i,{diameter:.066,segments:12},scene);
   node.material=palette[i%4];node.position.copyFrom(nodeDirections[i].scale(1.53));energyNodes.push(node);
  }
  // The Labo exclusively owns the sphere; Atlas owns only the target CORE_SOCKET.
@@ -101,7 +101,7 @@ function start(){
  const atlasMount=mountCoreAtAtlasSocket(scene,sphereRoot,{required:atlasFixture});
  cv.dataset.atlasSocket=atlasMount.mode;
  globalThis.__synestraLabAtlasInterop={getScene:()=>scene,getSphereRoot:()=>sphereRoot,connect:()=>mountCoreAtAtlasSocket(scene,sphereRoot,{required:true}),getEngine:()=>engine};
- budget();cv.dataset.engine='babylon';cv.dataset.sphereReady='true';cv.dataset.artReference=SPHERE_REFERENCE.id;cv.dataset.palette=SPHERE_REFERENCE.colors.map(c=>c.id).join(',');cv.dataset.energyNodes=String(SPHERE_REFERENCE.energyNodes);cv.dataset.canvasCount=String(document.querySelectorAll('canvas').length);cv.dataset.plasmaVersion='glow-sheaths-r194';cv.dataset.plasmaRibbons=String(plasma.meshes.length);cv.dataset.nodePlasma=String(plasma.nodeMeshes.length);cv.dataset.glowSheaths=String(plasma.sheaths.length);cv.dataset.nodeForks=String(forks.meshes.length);cv.dataset.nodePhotons=String(forks.photons.length);cv.dataset.plasmaVersion='core-shell-fusion-r201';cv.dataset.coreGeometry='volumetric-core-shell-r201';cv.dataset.coreShellSheaths=String(bridgeVeils.length);cv.dataset.coreMistTotal=String(innerSheaths.length);cv.dataset.plasmaField='r202-plasma-field';cv.dataset.plasmaVisualRevision='r202-energy-coherence';cv.dataset.plasmaFieldLayers=String(plasmaField.meshes.length);
+ budget();cv.dataset.engine='babylon';cv.dataset.sphereReady='true';cv.dataset.artReference=SPHERE_REFERENCE.id;cv.dataset.palette=SPHERE_REFERENCE.colors.map(c=>c.id).join(',');cv.dataset.energyNodes=String(SPHERE_REFERENCE.energyNodes);cv.dataset.canvasCount=String(document.querySelectorAll('canvas').length);cv.dataset.plasmaVersion='glow-sheaths-r194';cv.dataset.plasmaRibbons=String(plasma.meshes.length);cv.dataset.nodePlasma=String(plasma.nodeMeshes.length);cv.dataset.glowSheaths=String(plasma.sheaths.length);cv.dataset.nodeForks=String(forks.meshes.length);cv.dataset.nodePhotons=String(forks.photons.length);cv.dataset.plasmaVersion='core-shell-fusion-r201';cv.dataset.coreGeometry='volumetric-core-shell-r201';cv.dataset.coreShellSheaths=String(bridgeVeils.length);cv.dataset.coreMistTotal=String(innerSheaths.length);cv.dataset.plasmaField='r202-plasma-field';cv.dataset.plasmaVisualRevision='r202-luminous-heart';cv.dataset.plasmaFieldLayers=String(plasmaField.meshes.length);
  document.getElementById('engine-label').textContent='BABYLON.JS / WEBGL '+engine.webGLVersion;
  stat.textContent='Sphère énergétique prête';
  engine.runRenderLoop(()=>{
@@ -123,7 +123,7 @@ function start(){
   }
   const r=get('core-radius')/100,power=get('core-power')/100,mode=get('core-mode');
   core.scaling.setAll(Math.max(.0001,r));halo.scaling.setAll(Math.max(.0001,r));
-  coreMat.emissiveColor=new Color3(.87,.71,1.30).scale(Math.min(power,1.10));haloMat.alpha=power>0?.12*Math.min(power,1):0;
+  coreMat.emissiveColor=new Color3(.96,.83,1.35).scale(Math.min(power,1.10));haloMat.alpha=power>0?.102*Math.min(power,1):0;
   plasmaField.update({time,quality,power,radius:r,cameraPosition:camera.position});
   const mistBudget=visibleCoreMistCount(quality,power);
   for(let i=0;i<inner.length;i++){
@@ -134,8 +134,8 @@ function start(){
     const path=pathCore(i,mode,time).map(p=>p.scale(r));
     refresh(m,path,coreVolumeWidth(i,.5,quality));
     if(mistVisible){
-     mist.material.alpha=Math.min(.16,.065+.075*power);
-     refresh(mist,path,coreMistWidth(i,.5,quality)*1.40);
+     mist.material.alpha=Math.min(.135,.050+.065*power);
+     refresh(mist,path,coreMistWidth(i,.5,quality)*1.65);
     }
    }
   }
