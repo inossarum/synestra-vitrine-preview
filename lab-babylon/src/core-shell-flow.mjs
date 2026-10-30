@@ -36,12 +36,12 @@ export function sampleCoreShellFlow(index,time,nodeDirections,segments=72){
  return positions;
 }
 export function coreShellVeilRadius(index,quality='balanced'){
- if(!Number.isInteger(index)||index<0||index>=FLOW_NODE_COUNT||!['economy','balanced','ultra'].includes(quality))
+ if(!Number.isInteger(index)||index<0||index>=FLOW_NODE_COUNT||!['economy','balanced','ultra','auto'].includes(quality))
   throw new RangeError('R201_VEIL_INVALID_ARGUMENT');
  return quality==='economy'?0:quality==='ultra'?.030:.023;
 }
 export function visibleCoreShellVeils(quality,power){
- if(!['economy','balanced','ultra'].includes(quality)||!Number.isFinite(power)||power<0)
+ if(!['economy','balanced','ultra','auto'].includes(quality)||!Number.isFinite(power)||power<0)
   throw new RangeError('R201_VISIBILITY_INVALID_ARGUMENT');
  return power<=0||quality==='economy'?0:quality==='ultra'?6:4;
 }
