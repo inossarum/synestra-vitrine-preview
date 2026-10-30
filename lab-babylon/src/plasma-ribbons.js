@@ -40,7 +40,7 @@ export function organicPlasmaCenterline(index,time,nodes){
 }
 export function organicPlasmaRibbonPaths(centerline,index,time,widthMultiplier=1){
  const paths=RAILS.map(()=>[]);
- const base=index>=100?.095:(index%5===0?.068:index%3===0?.047:.031);
+ const base=index>=100?.095:(index%5===0?.092:index%3===0?.068:.050);
  for(let k=0;k<centerline.length;k++){
   const u=k/(centerline.length-1),center=centerline[k];
   const prev=centerline[Math.max(0,k-1)],next=centerline[Math.min(centerline.length-1,k+1)];
@@ -58,7 +58,7 @@ export function organicPlasmaRibbonPaths(centerline,index,time,widthMultiplier=1
  return paths;
 }
 export function ribbonVertexAlphas(index,segments=STEPS,alphaScale=1){
- const a=[],cross=index>=100?[.012,.17,.68,.17,.012]:[.018,.23,.67,.23,.018];
+ const a=[],cross=index>=100?[.012,.17,.68,.17,.012]:[.026,.25,.67,.25,.026];
  for(let k=0;k<RAILS.length;k++){
   for(let j=0;j<=segments;j++){
    const u=j/segments,fade=clamp(Math.sin(Math.PI*u)*3.2,0,1);
