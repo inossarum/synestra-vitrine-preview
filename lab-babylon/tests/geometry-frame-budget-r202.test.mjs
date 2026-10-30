@@ -26,6 +26,9 @@ test('R202 invalid frame state fails closed',()=>{
 test('R202 keeps one render loop and unthrottled shader-time updates',()=>{
  const src=readFileSync(new URL('../src/main.js',import.meta.url),'utf8');
  assert.match(src,/geometryUpdateDecision/);
+ assert.match(src,/geometryUpdates\+\+/);
+ assert.match(src,/renderFrames\+\+/);
+ assert.match(src,/cv\.dataset\.geometryUpdates/);
  assert.match(src,/if\(geometryStep.update\)\{/);
  assert.match(src,/plasmaField\.update\(/);
  assert.match(src,/coreMat\.setFloat\('uTime',time\)/);

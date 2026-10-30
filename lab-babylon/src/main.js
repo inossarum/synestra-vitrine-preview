@@ -16,7 +16,7 @@ const get=x=>+ctl[x].value,T=2*Math.PI,v=(x,y,z)=>new Vector3(x,y,z);
 const q=new URLSearchParams(location.search),n=Number(q.get('labFrame'));
 const fixed=q.has('labFrame')&&Number.isFinite(n)&&n>=0&&n<=60?n:null;
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
-let engine,scene,glow,core,halo,coreMat,haloMat,threads=[],lines=[],inner=[],innerSheaths=[],stars=[],bridges=[],bridgeVeils=[],energyNodes=[],plasma=null,forks=null,plasmaField=null,time=0,last=0,geometryState=null;
+let engine,scene,glow,core,halo,coreMat,haloMat,threads=[],lines=[],inner=[],innerSheaths=[],stars=[],bridges=[],bridgeVeils=[],energyNodes=[],plasma=null,forks=null,plasmaField=null,time=0,last=0,geometryState=null,renderFrames=0,geometryUpdates=0;
 function light(name,color,a=1){
  const m=new StandardMaterial(name,scene);m.disableLighting=true;m.emissiveColor=color;m.diffuseColor=Color3.Black();m.alpha=a;
  m.backFaceCulling=false;if(a<1)m.disableDepthWrite=true;return m;
@@ -118,6 +118,7 @@ function start(){
   geometryState=geometryStep.next;
   cv.dataset.geometryIntervalMs=String(geometryStep.intervalMs);
   if(geometryStep.update){
+   geometryUpdates++;
   plasma.update({time,quality,parent:sphereRoot,active:Math.min(plasma.meshes.length,Math.round(amount*.68)+5),corePower:get('core-power')});
   forks.update({time,quality,corePower:get('core-power'),parent:sphereRoot});
   cv.dataset.visibleNodeForks=String(forks.meshes.filter(m=>m.isEnabled()).length);
@@ -168,7 +169,8 @@ function start(){
    m.position.set(rad*Math.cos(a),1.56*z,rad*Math.sin(a));
   }
   }
-  core.rotation.y=time*.18;scene.render();
+  core.rotation.y=time*.18;scene.render();renderFrames++;
+  cv.dataset.renderFrames=String(renderFrames);cv.dataset.geometryUpdates=String(geometryUpdates);
   cv.dataset.visibleCoreShellSheaths=String(bridgeVeils.filter(m=>m.isEnabled()).length);cv.dataset.visibleCoreMist=String(innerSheaths.filter(m=>m.isEnabled()).length);cv.dataset.visiblePlasmaField=String(plasmaField.meshes.filter(m=>m.isEnabled()).length);
   cv.dataset.mode=String(mode);cv.dataset.activeFilaments=String(threads.filter(x=>x.isEnabled()).length+lines.filter(x=>x.isEnabled()).length);
   cv.dataset.fps=String(Math.round(engine.getFps()));

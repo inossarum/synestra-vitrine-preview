@@ -19,6 +19,10 @@ try{
   const {stdout}=await exec(chrome,args,{timeout:35000,maxBuffer:3000000});
   for(const val of ['data-sphere-ready="true"','data-plasma-field="r202-plasma-field"','data-canvas-count="1"','data-visible-plasma-field="2"'])
    if(!stdout.includes(val))throw Error('R202_CHROME_ASSERTION_'+width+'_'+val);
+  const readCounter=name=>{const match=stdout.match(new RegExp('data-'+name+'="(\\d+)"'));if(!match)throw Error('R202_COUNTER_MISSING_'+name+'_'+width);return Number(match[1]);};
+  const renderFrames=readCounter('render-frames'),geometryUpdates=readCounter('geometry-updates'),intervalMs=readCounter('geometry-interval-ms');
+  if(intervalMs!==28||renderFrames<1||geometryUpdates<1||geometryUpdates>renderFrames)throw Error('R202_GEOMETRY_RENDER_TELEMETRY_INVALID_'+width);
+  console.log(JSON.stringify({status:'R202_NATIVE_GEOMETRY_BUDGET_OBSERVED',width,renderFrames,geometryUpdates,intervalMs}));
   if(!existsSync(shot)||statSync(shot).size<20000)throw Error('R202_EMPTY_SCREENSHOT_'+width);
   const data=readFileSync(shot);
   console.log(JSON.stringify({status:'R202_NATIVE_CHROME_SMOKE_PASS',width,bytes:data.length,sha256:createHash('sha256').update(data).digest('hex')}));
