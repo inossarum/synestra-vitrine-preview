@@ -50,3 +50,20 @@ jobs:
           grep -q 'core-shell-fusion-r201' src/main.js
           grep -q 'const mistBudget=visibleCoreMistCount' src/main.js
           echo "R201_EXACT_GITHUB_SOURCE_BUILD_PASS"
+      - name: Emit immutable R201 gzip archive for GitHub handoff
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFileSync} from 'node:fs';
+          import {createHash} from 'node:crypto';
+          import {gzipSync} from 'node:zlib';
+          const sha=b=>createHash('sha256').update(b).digest('hex');
+          const js=readFileSync('dist/babylon-lab.js');
+          const expected='fe01472c48665f7759b8fb586f067b834b197359e63d0c28014fb2c17ff5d3f3';
+          if(sha(js)!==expected || js.length!==7407057)throw Error('R201_WRONG_EXECUTABLE');
+          const gz=gzipSync(js,{level:9,mtime:0});
+          console.log('R201_ARCHIVE_META '+JSON.stringify({jsSha256:expected,jsBytes:js.length,archiveSha256:sha(gz),archiveBytes:gz.length}));
+          console.log('R201_ARCHIVE_BASE64_BEGIN');
+          const b64=gz.toString('base64');
+          for(let i=0;i<b64.length;i+=4096)console.log('R201_B64:'+b64.slice(i,i+4096));
+          console.log('R201_ARCHIVE_BASE64_END');
+          NODE
