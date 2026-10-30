@@ -55,6 +55,8 @@ test('R202 artistic delta uses soft view-angle heart and preserves four-color em
  const ribbons=readFileSync(new URL('../src/plasma-ribbons.js',import.meta.url),'utf8');
  assert.match(field,/export function createPlasmaHeartMaterial/);
  assert.match(field,/pow\(face,1\.65\)/);
+ assert.match(field,/pow\(face,3\.8\)/,'hotspot must remain angularly concentrated');
+ assert.match(field,/\.43\*hotspot/,'central alpha hotspot must be bounded');
  assert.match(field,/material\.disableDepthWrite=true/);
  assert.match(ribbons,/uPaletteWeight/);
  assert.match(ribbons,/\[1\.0,\.64,\.53,\.43\]/);

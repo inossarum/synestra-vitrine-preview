@@ -30,7 +30,7 @@ test('R200 attenuates the saturated point while preserving reference palette and
   const heart=readFileSync(new URL('../src/plasma-field.js',import.meta.url),'utf8');
   assert.match(src,/coreMat\.setFloat\('uPower',power\)/,'heart power uniform updated each frame');
   assert.match(heart,/float energy=clamp\(uPower,0\.0,1\.6\)/,'shader clamps heart power');
-  assert.match(heart,/vec3 tint=mix\(vec3\(\.49,\.24,\.98\),vec3\(1\.0,\.88,1\.12\)/,'white-violet heart');
+  assert.match(heart,/vec3 tint=mix\(vec3\(\.49,\.24,\.98\),vec3\(1\.55,1\.43,1\.75\)/,'white-violet bounded hotspot');
   assert.match(heart,/float alpha=clamp\(/,'bounded translucent heart');
  }
  assert.match(src,/haloMat\.alpha=power>0\?/);
