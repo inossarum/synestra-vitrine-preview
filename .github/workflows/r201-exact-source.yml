@@ -1,0 +1,52 @@
+name: R201 exact-source provenance
+on:
+  push:
+    branches:
+      - task/SYN_LAB_R201_CORE_SHELL_FUSION_20261030
+    paths:
+      - .github/workflows/r201-exact-source.yml
+permissions:
+  contents: read
+concurrency:
+  group: synestra-r201-source-provenance
+  cancel-in-progress: false
+jobs:
+  pinned-build-and-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    defaults:
+      run:
+        working-directory: lab-babylon
+    steps:
+      - name: Check out exact pushed commit
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Node 22 standard runner
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: lab-babylon/package-lock.json
+      - name: Show immutable source provenance
+        run: |
+          echo "GITHUB_SHA=$GITHUB_SHA"
+          git rev-parse HEAD
+          git hash-object src/main.js src/core-volume.mjs src/core-shell-flow.mjs src/plasma-ribbons.js
+      - name: Install exact lockfile without audit or funding calls
+        run: npm ci --no-audit --no-fund
+      - name: Complete Labo Node regression suite
+        run: npm test
+      - name: Build exactly checked-out R201 source
+        run: |
+          npm run build
+          test -s dist/babylon-lab.js
+          sha256sum dist/babylon-lab.js
+          wc -c dist/babylon-lab.js
+          git diff --exit-code -- src tests
+      - name: Verify R201 source contract without changing files
+        run: |
+          grep -q 'visibleCoreMistCount' src/main.js
+          grep -q 'core-shell-fusion-r201' src/main.js
+          grep -q 'const mistBudget=visibleCoreMistCount' src/main.js
+          echo "R201_EXACT_GITHUB_SOURCE_BUILD_PASS"
