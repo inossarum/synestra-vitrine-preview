@@ -17,9 +17,9 @@ FREE_ONLY=YES
 SITEFORGE=UNCHANGED
 MAIN=UNCHANGED
 PUBLIC_DEPLOYMENT=NO
-TECHNICAL_GATE=PASS_LOCAL
+TECHNICAL_GATE=PASS_BUILD_BROWSER_GITHUB
 ARTISTIC_GATE=PARTIAL; owner screenshot review remains outstanding
-DURABILITY_GATE=PENDING_COMMIT_PUSH_SHA_READBACK
+DURABILITY_GATE=PASS — R200 source/build/evidence SHA 852e1b89922f80db37a69349f1b884a49514b6e8 local=GitHub; Atlas knowledge 6f9b7b98cce756e5a937f14fc1f19ff3b487c801 local=GitHub, 8 Node Atlas PASS
 
 ## Source delta
 - lab-babylon/src/core-volume.mjs: new deterministic, bounded open 3D core paths, four modes, per-stream alpha-compatible width values, fail-closed geometry inputs.
@@ -46,4 +46,4 @@ DURABILITY_GATE=PENDING_COMMIT_PUSH_SHA_READBACK
 Rollback: R199@985f376e46cdc9f3cbc8e32ab052011565a0f2f2.
 No second Atlas, Engine, Worker or broker was created. Owner's shared Atlas worktree and GLB untouched.
 Atlas knowledge branch separately records verified R198/R199; do not add R200 as GPU-verified until R200 commit and screenshot readback complete.
-NEXT=Git stage specific R200 files; check staged diff; Git commit on R200 branch; push; read remote SHA and evidence file; update seven-step plan and Atlas registry with R200 technique only after source verified.
+NEXT=R201 artistic and modest-GPU evaluation; R200 delivered technically with Atlas R190-R200 validated. Core artistic acceptance still PARTIAL.
