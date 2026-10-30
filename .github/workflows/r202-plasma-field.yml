@@ -60,6 +60,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: r202-browser-previews
-          path: ${{ runner.temp }}/r202-ci-*.png
+          path: |
+            ${{ runner.temp }}/r202-ci-*.png
+            ${{ runner.temp }}/r202-motion-*.png
           if-no-files-found: ignore
           retention-days: 2
