@@ -16,7 +16,7 @@ const get=x=>+ctl[x].value,T=2*Math.PI,v=(x,y,z)=>new Vector3(x,y,z);
 const q=new URLSearchParams(location.search),n=Number(q.get('labFrame'));
 const fixed=q.has('labFrame')&&Number.isFinite(n)&&n>=0&&n<=60?n:null;
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
-let engine,scene,glow,core,halo,coreMat,haloMat,threads=[],lines=[],inner=[],innerSheaths=[],stars=[],bridges=[],bridgeVeils=[],energyNodes=[],plasma=null,forks=null,plasmaField=null,time=0,last=0,geometryState=null,renderFrames=0,geometryUpdates=0;
+let engine,scene,glow,core,halo,coreMat,haloMat,threads=[],lines=[],inner=[],innerSheaths=[],stars=[],bridges=[],bridgeVeils=[],energyNodes=[],plasma=null,forks=null,plasmaField=null,time=0,last=0,geometryState=null,renderFrames=0,geometryUpdates=0,plasmaShaderFrames=0;
 function light(name,color,a=1){
  const m=new StandardMaterial(name,scene);m.disableLighting=true;m.emissiveColor=color;m.diffuseColor=Color3.Black();m.alpha=a;
  m.backFaceCulling=false;if(a<1)m.disableDepthWrite=true;return m;
@@ -114,6 +114,9 @@ function start(){
   // Keep GPU shader animation and camera smooth at the screen refresh rate.
   coreMat.setFloat('uTime',time);coreMat.setFloat('uPower',power);coreMat.setVector3('uCamera',camera.position);haloMat.alpha=power>0?.102*Math.min(power,1):0;
   plasmaField.update({time,quality,power,radius:r,cameraPosition:camera.position});
+  // R202-13: GPU ribbon shaders must advance EVERY render frame, not only CPU mesh uploads.
+  for(const material of plasma.materials)material.setFloat('uTime',time);
+  plasmaShaderFrames++;
   const geometryStep=geometryUpdateDecision(geometryState,{now,time,quality,mode,power:get('core-power'),radius:r,amount,turbulence:turb});
   geometryState=geometryStep.next;
   cv.dataset.geometryIntervalMs=String(geometryStep.intervalMs);
@@ -170,7 +173,7 @@ function start(){
   }
   }
   core.rotation.y=time*.18;scene.render();renderFrames++;
-  cv.dataset.renderFrames=String(renderFrames);cv.dataset.geometryUpdates=String(geometryUpdates);
+  cv.dataset.renderFrames=String(renderFrames);cv.dataset.geometryUpdates=String(geometryUpdates);cv.dataset.plasmaShaderFrames=String(plasmaShaderFrames);
   cv.dataset.visibleCoreShellSheaths=String(bridgeVeils.filter(m=>m.isEnabled()).length);cv.dataset.visibleCoreMist=String(innerSheaths.filter(m=>m.isEnabled()).length);cv.dataset.visiblePlasmaField=String(plasmaField.meshes.filter(m=>m.isEnabled()).length);
   cv.dataset.mode=String(mode);cv.dataset.activeFilaments=String(threads.filter(x=>x.isEnabled()).length+lines.filter(x=>x.isEnabled()).length);
   cv.dataset.fps=String(Math.round(engine.getFps()));

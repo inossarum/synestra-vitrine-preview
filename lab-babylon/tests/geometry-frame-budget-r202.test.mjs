@@ -29,6 +29,11 @@ test('R202 keeps one render loop and unthrottled shader-time updates',()=>{
  assert.match(src,/geometryUpdates\+\+/);
  assert.match(src,/renderFrames\+\+/);
  assert.match(src,/cv\.dataset\.geometryUpdates/);
+ assert.match(src,/plasmaShaderFrames\+\+/);
+ assert.match(src,/cv\.dataset\.plasmaShaderFrames/);
+ const materialTick=src.indexOf("for(const material of plasma.materials)material.setFloat('uTime',time)");
+ const cpuGate=src.indexOf('if(geometryStep.update){');
+ assert.ok(materialTick>=0&&cpuGate>materialTick,'GPU ribbon shader time must update outside throttled CPU gate');
  assert.match(src,/if\(geometryStep.update\)\{/);
  assert.match(src,/plasmaField\.update\(/);
  assert.match(src,/coreMat\.setFloat\('uTime',time\)/);

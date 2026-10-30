@@ -21,8 +21,9 @@ try{
    if(!stdout.includes(val))throw Error('R202_CHROME_ASSERTION_'+width+'_'+val);
   const readCounter=name=>{const match=stdout.match(new RegExp('data-'+name+'="(\\d+)"'));if(!match)throw Error('R202_COUNTER_MISSING_'+name+'_'+width);return Number(match[1]);};
   const renderFrames=readCounter('render-frames'),geometryUpdates=readCounter('geometry-updates'),intervalMs=readCounter('geometry-interval-ms');
-  if(intervalMs!==28||renderFrames<1||geometryUpdates<1||geometryUpdates>renderFrames)throw Error('R202_GEOMETRY_RENDER_TELEMETRY_INVALID_'+width);
-  console.log(JSON.stringify({status:'R202_NATIVE_GEOMETRY_BUDGET_OBSERVED',width,renderFrames,geometryUpdates,intervalMs}));
+  const plasmaShaderFrames=readCounter('plasma-shader-frames');
+  if(intervalMs!==28||renderFrames<1||geometryUpdates<1||geometryUpdates>renderFrames||plasmaShaderFrames!==renderFrames)throw Error('R202_GPU_SHADER_TICK_TELEMETRY_INVALID_'+width);
+  console.log(JSON.stringify({status:'R202_NATIVE_GEOMETRY_BUDGET_OBSERVED',width,renderFrames,geometryUpdates,plasmaShaderFrames,intervalMs}));
   if(!existsSync(shot)||statSync(shot).size<20000)throw Error('R202_EMPTY_SCREENSHOT_'+width);
   const data=readFileSync(shot);
   console.log(JSON.stringify({status:'R202_NATIVE_CHROME_SMOKE_PASS',width,bytes:data.length,sha256:createHash('sha256').update(data).digest('hex')}));
