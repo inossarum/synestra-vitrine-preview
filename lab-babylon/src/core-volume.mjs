@@ -41,3 +41,22 @@ export function coreVolumeWidth(index,u,quality='balanced'){
  const envelope=Math.pow(Math.sin(Math.PI*u),.72);
  return (.0034+(.0065+(index%4)*.0008)*envelope)*(quality==='economy'?.85:quality==='ultra'?1.12:1);
 }
+
+/**
+ * R201 art correction: a translucent volume follows existing tendrils.
+ * No extra paths or centerline generator: the bounded R200 geometry is reused.
+ * Count is a GPU quality budget, never an unbounded particle system.
+ */
+export function coreMistWidth(index,u,quality='balanced'){
+ if(!Number.isInteger(index)||index<0||index>=18||!Number.isFinite(u)||u<0||u>1||!['economy','balanced','ultra','auto'].includes(quality))
+  throw new RangeError('R201_MIST_WIDTH_INVALID_ARGUMENT');
+ const envelope=Math.pow(Math.sin(Math.PI*u),.70);
+ const multiplier=quality==='economy'?.82:quality==='ultra'?1.18:1;
+ return (.011+(.023+(index%3)*.004)*envelope)*multiplier;
+}
+export function visibleCoreMistCount(quality,power){
+ if(!['economy','balanced','ultra','auto'].includes(quality)||!Number.isFinite(power)||power<0)
+  throw new RangeError('R201_MIST_BUDGET_INVALID_ARGUMENT');
+ if(power===0||quality==='economy')return 0;
+ return quality==='ultra'?18:12;
+}
