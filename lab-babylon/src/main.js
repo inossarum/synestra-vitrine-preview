@@ -5,7 +5,8 @@ import {sampleCoreShellFlow,coreShellVeilRadius,visibleCoreShellVeils} from './c
 import {installPlasmaRibbons} from './plasma-ribbons.js';
 import {installNodeForks} from './node-branches.js';
 import {mountCoreAtAtlasSocket} from './atlas-interop.js';
-import {installPlasmaField,createPlasmaHeartMaterial} from './plasma-field.js';
+import {createPlasmaHeartMaterial} from './plasma-field.js';
+import {installR20215Volume} from './plasma-volume-r20215.js';
 import {geometryUpdateDecision} from './geometry-frame-budget.mjs';
 // ONE Babylon canvas. The requested subject is ONLY the glowing energy sphere.
 const cv=document.getElementById('renderCanvas'),stat=document.getElementById('status');
@@ -15,6 +16,10 @@ const defaults=Object.fromEntries(ids.map(x=>[x,ctl[x].value]));
 const get=x=>+ctl[x].value,T=2*Math.PI,v=(x,y,z)=>new Vector3(x,y,z);
 const q=new URLSearchParams(location.search),n=Number(q.get('labFrame'));
 const fixed=q.has('labFrame')&&Number.isFinite(n)&&n>=0&&n<=60?n:null;
+// LOCAL QA ONLY: URL fixtures for independent GPU quality/power verification.
+const qaQuality=q.get('qaQuality'),qaPower=q.get('qaPower');
+if(['economy','balanced','auto','ultra'].includes(qaQuality))ctl.quality.value=qaQuality;
+if(qaPower!==null&&/^(0|[1-9][0-9]*)$/.test(qaPower)&&Number(qaPower)<=250)ctl['core-power'].value=qaPower;
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
 let engine,scene,glow,core,halo,coreMat,haloMat,threads=[],lines=[],inner=[],innerSheaths=[],stars=[],bridges=[],bridgeVeils=[],energyNodes=[],plasma=null,forks=null,plasmaField=null,time=0,last=0,geometryState=null,renderFrames=0,geometryUpdates=0,plasmaShaderFrames=0;
 function light(name,color,a=1){
@@ -92,7 +97,7 @@ function start(){
  const sphereRoot=new TransformNode('LAB_SPHERE_ROOT',scene);
  for(const mesh of [core,halo,...threads,...lines,...inner,...innerSheaths,...stars,...bridges,...bridgeVeils,...energyNodes])mesh.parent=sphereRoot;
  // R202: volumetric procedural plasma is parented to the same Babylon sphere, no second scene.
- plasmaField=installPlasmaField({scene,parent:sphereRoot});
+ plasmaField=installR20215Volume({scene,parent:sphereRoot});
  plasma=installPlasmaRibbons({scene,colors:SPHERE_REFERENCE.colors.map(x=>new Color3(...x.linear)),nodes:nodeDirections,count:28,bridgePath:pathBridge});
  for(const mesh of [...plasma.meshes,...plasma.sheaths,...plasma.nodeMeshes])mesh.parent=sphereRoot;
  forks=installNodeForks({scene,directions:nodeDirections,ribbonMaterials:plasma.materials,photonMaterials:palette,parent:sphereRoot});
@@ -102,7 +107,8 @@ function start(){
  const atlasMount=mountCoreAtAtlasSocket(scene,sphereRoot,{required:atlasFixture});
  cv.dataset.atlasSocket=atlasMount.mode;
  globalThis.__synestraLabAtlasInterop={getScene:()=>scene,getSphereRoot:()=>sphereRoot,connect:()=>mountCoreAtAtlasSocket(scene,sphereRoot,{required:true}),getEngine:()=>engine};
- budget();cv.dataset.engine='babylon';cv.dataset.sphereReady='true';cv.dataset.artReference=SPHERE_REFERENCE.id;cv.dataset.palette=SPHERE_REFERENCE.colors.map(c=>c.id).join(',');cv.dataset.energyNodes=String(SPHERE_REFERENCE.energyNodes);cv.dataset.canvasCount=String(document.querySelectorAll('canvas').length);cv.dataset.plasmaVersion='glow-sheaths-r194';cv.dataset.plasmaRibbons=String(plasma.meshes.length);cv.dataset.nodePlasma=String(plasma.nodeMeshes.length);cv.dataset.glowSheaths=String(plasma.sheaths.length);cv.dataset.nodeForks=String(forks.meshes.length);cv.dataset.nodePhotons=String(forks.photons.length);cv.dataset.plasmaVersion='core-shell-fusion-r201';cv.dataset.coreGeometry='volumetric-core-shell-r201';cv.dataset.coreShellSheaths=String(bridgeVeils.length);cv.dataset.coreMistTotal=String(innerSheaths.length);cv.dataset.plasmaField='r202-plasma-field';cv.dataset.plasmaVisualRevision='r202-soft-heart-palette';cv.dataset.plasmaFieldLayers=String(plasmaField.meshes.length);
+ const glInfo=engine.getGlInfo?.();cv.dataset.glRenderer=String(glInfo?.renderer||'UNKNOWN');cv.dataset.glVendor=String(glInfo?.vendor||'UNKNOWN');
+ budget();cv.dataset.engine='babylon';cv.dataset.sphereReady='true';cv.dataset.artReference=SPHERE_REFERENCE.id;cv.dataset.palette=SPHERE_REFERENCE.colors.map(c=>c.id).join(',');cv.dataset.energyNodes=String(SPHERE_REFERENCE.energyNodes);cv.dataset.canvasCount=String(document.querySelectorAll('canvas').length);cv.dataset.plasmaVersion='glow-sheaths-r194';cv.dataset.plasmaRibbons=String(plasma.meshes.length);cv.dataset.nodePlasma=String(plasma.nodeMeshes.length);cv.dataset.glowSheaths=String(plasma.sheaths.length);cv.dataset.nodeForks=String(forks.meshes.length);cv.dataset.nodePhotons=String(forks.photons.length);cv.dataset.plasmaVersion='core-shell-fusion-r201';cv.dataset.coreGeometry='volumetric-core-shell-r201';cv.dataset.coreShellSheaths=String(bridgeVeils.length);cv.dataset.coreMistTotal=String(innerSheaths.length);cv.dataset.plasmaField='r202-plasma-field';cv.dataset.plasmaVisualRevision='r202-soft-heart-palette';cv.dataset.plasmaFieldLayers=String(plasmaField.meshes.length);cv.dataset.plasmaVolume='r20215-raymarch-16';
  document.getElementById('engine-label').textContent='BABYLON.JS / WEBGL '+engine.webGLVersion;
  stat.textContent='Sphère énergétique prête';
  engine.runRenderLoop(()=>{

@@ -11,19 +11,23 @@ const paths=new Map([['/lab-babylon/','index.html'],['/lab-babylon/index.html','
 const server=createServer((req,res)=>{const f=paths.get(new URL(req.url,'http://127.0.0.1').pathname);if(!f){res.writeHead(404);res.end();return;}let mime=f.endsWith('.html')?'text/html':f.endsWith('.css')?'text/css':'application/javascript';res.writeHead(200,{'Content-Type':mime});res.end(readFileSync(join(root,f)));});
 await new Promise((ok,fail)=>{server.once('error',fail);server.listen(0,'127.0.0.1',ok)});
 try{
- const chrome=['google-chrome','google-chrome-stable','chromium','chromium-browser'].find(bin=>spawnSync(bin,['--version'],{encoding:'utf8',timeout:2000}).status===0);
+ const chrome=[process.env.R202_CHROME_BIN,'C:/Program Files/Google/Chrome/Application/chrome.exe','C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe','google-chrome','google-chrome-stable','chromium','chromium-browser'].filter(Boolean).find(bin=>spawnSync(bin,['--version'],{encoding:'utf8',timeout:2000}).status===0);
  if(!chrome)throw Error('R202_CHROME_BINARY_UNAVAILABLE');
- for(const width of [1100,390]){
+ const gpuArgs=process.env.R202_FORCE_HARDWARE==='1'?['--use-gl=angle','--use-angle=d3d11','--enable-webgl','--enable-gpu']:['--enable-unsafe-swiftshader','--use-gl=angle','--use-angle=swiftshader','--enable-webgl'];
+ if(process.env.R202_DESKTOP_ONLY!==undefined&&!['0','1'].includes(process.env.R202_DESKTOP_ONLY))throw Error('R202_DESKTOP_ONLY_INVALID');
+ const widths=process.env.R202_DESKTOP_ONLY==='1'?[1100]:[1100,390];
+ for(const width of widths){
   const shot=join(process.env.RUNNER_TEMP||tmpdir(),'r202-ci-'+width+'.png');
-  const args=['--headless=new','--no-sandbox','--disable-dev-shm-usage','--enable-unsafe-swiftshader','--use-gl=angle','--use-angle=swiftshader','--enable-webgl','--virtual-time-budget=5000','--window-size='+width+',900','--screenshot='+shot,'--dump-dom','http://127.0.0.1:'+server.address().port+'/lab-babylon/'];
+  const args=['--headless=new','--no-sandbox','--disable-dev-shm-usage',...gpuArgs,'--virtual-time-budget=5000','--window-size='+width+',900','--screenshot='+shot,'--dump-dom','http://127.0.0.1:'+server.address().port+'/lab-babylon/'];
   const {stdout}=await exec(chrome,args,{timeout:35000,maxBuffer:3000000});
-  for(const val of ['data-sphere-ready="true"','data-plasma-field="r202-plasma-field"','data-canvas-count="1"','data-visible-plasma-field="2"'])
+  for(const val of ['data-sphere-ready="true"','data-plasma-field="r202-plasma-field"','data-canvas-count="1"','data-visible-plasma-field="1"','data-plasma-volume="r20215-raymarch-16"'])
    if(!stdout.includes(val))throw Error('R202_CHROME_ASSERTION_'+width+'_'+val);
   const readCounter=name=>{const match=stdout.match(new RegExp('data-'+name+'="(\\d+)"'));if(!match)throw Error('R202_COUNTER_MISSING_'+name+'_'+width);return Number(match[1]);};
   const renderFrames=readCounter('render-frames'),geometryUpdates=readCounter('geometry-updates'),intervalMs=readCounter('geometry-interval-ms');
   const plasmaShaderFrames=readCounter('plasma-shader-frames');
   if(intervalMs!==28||renderFrames<1||geometryUpdates<1||geometryUpdates>renderFrames||plasmaShaderFrames!==renderFrames)throw Error('R202_GPU_SHADER_TICK_TELEMETRY_INVALID_'+width);
-  console.log(JSON.stringify({status:'R202_NATIVE_GEOMETRY_BUDGET_OBSERVED',width,renderFrames,geometryUpdates,plasmaShaderFrames,intervalMs}));
+  const actualRenderer=stdout.match(/data-gl-renderer="([^"]+)"/)?.[1]||'NOT_FOUND';
+  console.log(JSON.stringify({status:'R202_NATIVE_GEOMETRY_BUDGET_OBSERVED',width,renderFrames,geometryUpdates,plasmaShaderFrames,intervalMs,actualRenderer}));
   if(!existsSync(shot)||statSync(shot).size<20000)throw Error('R202_EMPTY_SCREENSHOT_'+width);
   const data=readFileSync(shot);
   console.log(JSON.stringify({status:'R202_NATIVE_CHROME_SMOKE_PASS',width,bytes:data.length,sha256:createHash('sha256').update(data).digest('hex')}));
@@ -32,8 +36,7 @@ try{
  const motion=[];
  for(const frame of [0,6]){
   const shot=join(process.env.RUNNER_TEMP||tmpdir(),'r202-motion-'+frame+'.png');
-  const args=['--headless=new','--no-sandbox','--disable-dev-shm-usage','--enable-unsafe-swiftshader',
-   '--use-gl=angle','--use-angle=swiftshader','--enable-webgl','--virtual-time-budget=3500',
+  const args=['--headless=new','--no-sandbox','--disable-dev-shm-usage',...gpuArgs,'--virtual-time-budget=3500',
    '--window-size=1100,900','--screenshot='+shot,'--dump-dom',
    'http://127.0.0.1:'+server.address().port+'/lab-babylon/?labFrame='+frame];
   const {stdout}=await exec(chrome,args,{timeout:35000,maxBuffer:3000000});
@@ -41,6 +44,23 @@ try{
    if(!stdout.includes(token))throw Error('R202_MOTION_BROWSER_NOT_READY_'+frame);
   if(!existsSync(shot)||statSync(shot).size<20000)throw Error('R202_MOTION_EMPTY_FRAME_'+frame);
   const buf=readFileSync(shot);motion.push({frame,sha256:createHash('sha256').update(buf).digest('hex'),bytes:buf.length});
+ }
+ if(process.env.R202_QUALITY_QA==='1'){
+  const matrix=[['economy',145,48,1],['balanced',145,28,1],['ultra',145,20,1],['power-zero',0,28,0]];
+  for(const [label,power,interval,visible] of matrix){
+   const quality=label==='power-zero'?'balanced':label;
+   const shot=join(process.env.RUNNER_TEMP||tmpdir(),'r20215-gpu-'+label+'.png');
+   const query='qaQuality='+quality+'&qaPower='+power;
+   const args=['--headless=new','--no-sandbox','--disable-dev-shm-usage',...gpuArgs,'--virtual-time-budget=4000','--window-size=1100,900','--screenshot='+shot,'--dump-dom','http://127.0.0.1:'+server.address().port+'/lab-babylon/?'+query];
+   const {stdout}=await exec(chrome,args,{timeout:35000,maxBuffer:3000000});
+   for(const token of ['data-canvas-count="1"','data-plasma-volume="r20215-raymarch-16"','data-geometry-interval-ms="'+interval+'"','data-visible-plasma-field="'+visible+'"']){
+    if(!stdout.includes(token))throw Error('R20215_NATIVE_QUALITY_ASSERT_'+label+'_'+token);
+   }
+   if(process.env.R202_FORCE_HARDWARE==='1'&&!stdout.includes('NVIDIA GeForce RTX 3090'))throw Error('R20215_HARDWARE_GL_NOT_ATTESTED_'+label);
+   if(!existsSync(shot)||statSync(shot).size<20000)throw Error('R20215_QUALITY_CAPTURE_EMPTY_'+label);
+   const sha256=createHash('sha256').update(readFileSync(shot)).digest('hex');
+   console.log(JSON.stringify({status:'R20215_NATIVE_GPU_QUALITY_PASS',label,power,interval,visible,sha256}));
+  }
  }
  if(motion[0].sha256===motion[1].sha256)throw Error('R202_MOTION_FRAMES_IDENTICAL');
  console.log(JSON.stringify({status:'R202_NATIVE_MOTION_TWO_FRAMES_PASS',frames:motion}));
