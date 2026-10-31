@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - task/SYN_LAB_R202_PLASMA_FIELD_20261030
+      - task/SYN_LAB_R20219_DESKTOP_DELIVERY_20261031
     paths:
       - .github/workflows/r202-plasma-field.yml
       - lab-babylon/src/main.js
@@ -20,6 +21,9 @@ on:
       - lab-babylon/tests/core-volume-integration.test.mjs
       - lab-babylon/package.json
       - lab-babylon/package-lock.json
+  pull_request:
+    branches:
+      - task/SYN_LAB_R202_PLASMA_FIELD_20261030
   workflow_dispatch:
 permissions:
   contents: read
