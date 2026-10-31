@@ -87,7 +87,7 @@ jobs:
           R202_QUALITY_QA: '1'
         run: node scripts/r202-browser-smoke.mjs
       - name: Preserve exact PC build checksum
-        run: sha256sum dist/babylon-lab.js > R20219_DESKTOP_SHA256SUMS.txt
+        run: sha256sum dist/babylon-lab.js > R20220_CORE_FOCUS_SHA256SUMS.txt
       - name: Upload exact PC review build (no deployment)
         uses: actions/upload-artifact@v4
         with:
@@ -96,7 +96,7 @@ jobs:
             lab-babylon/index.html
             lab-babylon/style.css
             lab-babylon/dist/babylon-lab.js
-            lab-babylon/R20219_DESKTOP_SHA256SUMS.txt
+            lab-babylon/R20220_CORE_FOCUS_SHA256SUMS.txt
           if-no-files-found: error
           retention-days: 2
       - name: Store desktop previews for visual review
