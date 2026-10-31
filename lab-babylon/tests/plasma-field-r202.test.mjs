@@ -27,7 +27,7 @@ test('R202 stays in one Babylon scene without remote assets or new render loop',
  assert.match(src,/PLASMA_FIELD_RADII/);
  assert.match(src,/mesh\.parent=parent/);
  assert.doesNotMatch(src,/new Engine\(|new Scene\(|fetch\(|XMLHttpRequest|https?:\/\/|runRenderLoop/);
- assert.match(main,/installPlasmaField/);
+ assert.match(main,/installR20215Volume/);
  assert.match(main,/plasmaField\.update/);
  assert.match(main,/core-shell-fusion-r201/);
  assert.match(main,/r202-plasma-field/);

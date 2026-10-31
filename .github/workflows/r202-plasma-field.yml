@@ -1,71 +1,92 @@
-name: R202 plasma field exact-source CI
+# QA-only proposal. NOT the committed CI. Requires full source review and an authorized branch writer.
+name: R202.19 PC exact-source qualification
 on:
   push:
     branches:
       - task/SYN_LAB_R202_PLASMA_FIELD_20261030
     paths:
       - .github/workflows/r202-plasma-field.yml
-      - lab-babylon/src/plasma-field.mjs
-      - lab-babylon/src/plasma-field.js
-      - lab-babylon/src/plasma-ribbons.js
       - lab-babylon/src/main.js
+      - lab-babylon/src/plasma-volume-r20215.js
+      - lab-babylon/src/plasma-volume-policy.mjs
+      - lab-babylon/src/plasma-field.js
+      - lab-babylon/src/plasma-field.mjs
+      - lab-babylon/src/plasma-ribbons.js
       - lab-babylon/src/geometry-frame-budget.mjs
-      - lab-babylon/tests/geometry-frame-budget-r202.test.mjs
-      - lab-babylon/tests/plasma-field-r202.test.mjs
-      - lab-babylon/tests/core-volume-integration.test.mjs
       - lab-babylon/scripts/r202-browser-smoke.mjs
+      - lab-babylon/tests/r20215-native-babylon.test.mjs
+      - lab-babylon/tests/plasma-field-r202.test.mjs
+      - lab-babylon/tests/geometry-frame-budget-r202.test.mjs
+      - lab-babylon/tests/core-volume-integration.test.mjs
+      - lab-babylon/package.json
+      - lab-babylon/package-lock.json
   workflow_dispatch:
 permissions:
   contents: read
 concurrency:
-  group: synestra-r202-plasma-field
+  group: synestra-r20219-desktop-exact-source
   cancel-in-progress: false
 jobs:
-  exact-build-regression:
+  desktop-exact-build:
     runs-on: ubuntu-24.04
     timeout-minutes: 12
     defaults:
       run:
         working-directory: lab-babylon
     steps:
-      - name: Check out exact source without stored credentials
+      - name: Checkout exact task commit without persisted credentials
         uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - name: Set up Node 22 with npm lockfile cache
+      - name: Node 22 with npm lockfile cache
         uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: npm
           cache-dependency-path: lab-babylon/package-lock.json
-      - name: Provenance and source pins
+      - name: Require complete R202.19 source in clean Git checkout
         run: |
-          echo "GITHUB_SHA=$GITHUB_SHA"
+          echo "R20219_SOURCE_SHA=$GITHUB_SHA"
           git rev-parse HEAD
-          git hash-object src/main.js src/plasma-field.mjs src/plasma-field.js src/plasma-ribbons.js src/geometry-frame-budget.mjs
-      - name: Install exact dependency lockfile (free standard runner)
+          git ls-files --error-unmatch src/main.js src/plasma-volume-r20215.js src/plasma-volume-policy.mjs tests/r20215-native-babylon.test.mjs scripts/r202-browser-smoke.mjs
+          test -s src/plasma-volume-r20215.js
+          test -s src/plasma-volume-policy.mjs
+          grep -q 'installR20215Volume' src/main.js
+          grep -q 'uCorePower' src/plasma-volume-r20215.js
+          grep -q 'coreRayIntegral' src/plasma-volume-r20215.js
+          grep -q 'coreForegroundT' src/plasma-volume-r20215.js
+          echo 'b892b6b52747011c0fc96e769e1a655ab630271b74444a446e7eab09dfd1cf2a  src/plasma-volume-r20215.js' | sha256sum --check
+          git hash-object src/main.js src/plasma-volume-r20215.js src/plasma-volume-policy.mjs
+      - name: Reproducible dependencies FREE_ONLY
         run: npm ci --no-audit --no-fund
-      - name: Full Node regression including R202 failure-first budgets
-        run: npm test
-      - name: Build exact Babylon script and report SHA256
+      - name: Failure-first native Babylon and full unit regressions
+        run: |
+          node --test tests/r20215-native-babylon.test.mjs tests/plasma-field-r202.test.mjs
+          npm test
+      - name: Exact-source desktop build and provenance
         run: |
           npm run build
           test -s dist/babylon-lab.js
           sha256sum dist/babylon-lab.js
           wc -c dist/babylon-lab.js
-          grep -q 'r202-plasma-field' src/main.js
-          grep -q 'plasmaFieldBudget' src/plasma-field.mjs
           git diff --exit-code -- src tests
-          echo R202_EXACT_GITHUB_BUILD_PASS
-      - name: Native Chromium software WebGL smoke, desktop and mobile viewport
+      - name: Desktop-only browser policy gate
+        run: |
+          grep -q 'R202_DESKTOP_ONLY' scripts/r202-browser-smoke.mjs
+          echo 'R202_DESKTOP_ONLY_SUPPORTED'
+      - name: Chromium desktop WebGL software smoke (not RTX 3090)
+        env:
+          R202_DESKTOP_ONLY: '1'
+          R202_QUALITY_QA: '1'
         run: node scripts/r202-browser-smoke.mjs
-      - name: Preserve native R202 screenshots for visual review
+      - name: Store desktop previews for visual review
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: r202-browser-previews
+          name: r20219-desktop-previews
           path: |
-            ${{ runner.temp }}/r202-ci-*.png
+            ${{ runner.temp }}/r202-ci-1100.png
             ${{ runner.temp }}/r202-motion-*.png
+            ${{ runner.temp }}/r20215-gpu-*.png
           if-no-files-found: ignore
           retention-days: 2
