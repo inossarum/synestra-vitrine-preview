@@ -1,10 +1,11 @@
 # QA-only proposal. NOT the committed CI. Requires full source review and an authorized branch writer.
-name: R202.19 PC exact-source qualification
+name: R202.21 faceted nucleus PC exact-source qualification
 on:
   push:
     branches:
       - task/SYN_LAB_R202_PLASMA_FIELD_20261030
       - task/SYN_LAB_R20219_DESKTOP_DELIVERY_20261031
+      - task/SYN_LAB_R20221_FACETED_NUCLEUS_20261101
     paths:
       - .github/workflows/r202-plasma-field.yml
       - lab-babylon/src/main.js
@@ -17,6 +18,7 @@ on:
       - lab-babylon/scripts/r202-browser-smoke.mjs
       - lab-babylon/tests/r20215-native-babylon.test.mjs
       - lab-babylon/tests/plasma-field-r202.test.mjs
+      - lab-babylon/tests/r20221-faceted-nucleus.test.mjs
       - lab-babylon/tests/geometry-frame-budget-r202.test.mjs
       - lab-babylon/tests/core-volume-integration.test.mjs
       - lab-babylon/package.json
@@ -24,11 +26,12 @@ on:
   pull_request:
     branches:
       - task/SYN_LAB_R202_PLASMA_FIELD_20261030
+      - task/SYN_LAB_R20219_DESKTOP_DELIVERY_20261031
   workflow_dispatch:
 permissions:
   contents: read
 concurrency:
-  group: synestra-r20219-desktop-exact-source
+  group: synestra-r20221-faceted-exact-source
   cancel-in-progress: false
 jobs:
   desktop-exact-build:
@@ -48,11 +51,11 @@ jobs:
           node-version: '22'
           cache: npm
           cache-dependency-path: lab-babylon/package-lock.json
-      - name: Require complete R202.19 source in clean Git checkout
+      - name: Require complete R202.21 faceted nucleus source in clean Git checkout
         run: |
-          echo "R20219_SOURCE_SHA=$GITHUB_SHA"
+          echo "R20221_SOURCE_SHA=$GITHUB_SHA"
           git rev-parse HEAD
-          git ls-files --error-unmatch src/main.js src/plasma-volume-r20215.js src/plasma-volume-policy.mjs tests/r20215-native-babylon.test.mjs scripts/r202-browser-smoke.mjs
+          git ls-files --error-unmatch src/main.js src/plasma-volume-r20215.js src/plasma-volume-policy.mjs tests/r20215-native-babylon.test.mjs scripts/r202-browser-smoke.mjs tests/r20221-faceted-nucleus.test.mjs
           test -s src/plasma-volume-r20215.js
           test -s src/plasma-volume-policy.mjs
           grep -q 'installR20215Volume' src/main.js
@@ -60,6 +63,9 @@ jobs:
           grep -q 'coreRayIntegral' src/plasma-volume-r20215.js
           grep -q 'coreForegroundT' src/plasma-volume-r20215.js
           echo 'b892b6b52747011c0fc96e769e1a655ab630271b74444a446e7eab09dfd1cf2a  src/plasma-volume-r20215.js' | sha256sum --check
+          echo 'ad868f8a2c1f5b741cbe2b40657e44a0245878a005e3a34d4635dc1a6175503a  src/plasma-field.js' | sha256sum --check
+          echo '7dec0100a3142caeeced3be6d05b5c6a0244ebf4f3f2eb32d4ffa56607cce601  src/main.js' | sha256sum --check
+          grep -q 'r20221-faceted-nucleus' src/plasma-field.js
           git hash-object src/main.js src/plasma-volume-r20215.js src/plasma-volume-policy.mjs
       - name: Reproducible dependencies FREE_ONLY
         run: npm ci --no-audit --no-fund
@@ -72,7 +78,7 @@ jobs:
           npm run build
           test -s dist/babylon-lab.js
           sha256sum dist/babylon-lab.js
-          echo 'a549156b28654ffa27c5ad8f0a7a524f539fc83c69bd1bb574e42ba6c02378d3  dist/babylon-lab.js' | sha256sum --check
+          echo '0de2b1ac37c99aeb38b8a31e15ee19c895bb7b2a6d7389ef4b53bdfaa72138bb  dist/babylon-lab.js' | sha256sum --check
           wc -c dist/babylon-lab.js
           git diff --exit-code -- src tests
       - name: Desktop-only browser policy gate
@@ -85,23 +91,23 @@ jobs:
           R202_QUALITY_QA: '1'
         run: node scripts/r202-browser-smoke.mjs
       - name: Preserve exact PC build checksum
-        run: sha256sum dist/babylon-lab.js > R20219_DESKTOP_SHA256SUMS.txt
+        run: sha256sum dist/babylon-lab.js > R20221_FACETED_SHA256SUMS.txt
       - name: Upload exact PC review build (no deployment)
         uses: actions/upload-artifact@v4
         with:
-          name: r20219-desktop-build
+          name: r20221-faceted-build
           path: |
             lab-babylon/index.html
             lab-babylon/style.css
             lab-babylon/dist/babylon-lab.js
-            lab-babylon/R20219_DESKTOP_SHA256SUMS.txt
+            lab-babylon/R20221_FACETED_SHA256SUMS.txt
           if-no-files-found: error
           retention-days: 2
       - name: Store desktop previews for visual review
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: r20219-desktop-previews
+          name: r20221-faceted-previews
           path: |
             ${{ runner.temp }}/r202-ci-1100.png
             ${{ runner.temp }}/r202-motion-*.png

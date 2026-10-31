@@ -39,7 +39,7 @@ test('R202 energy coherence reduces bright outline density and preserves 3D plas
  assert.match(main,/plasmaVisualRevision='r202-soft-heart-palette'/);
  assert.match(main,/Math\.round\(amount\*\.68\)\+5/);
  assert.match(main,/coreMistWidth\(i,\.5,quality\)\*1\.65/);
- assert.match(main,/radius:\.245,subdivisions:4/);
+ assert.match(main,/radius:\.30,subdivisions:4/);
  assert.match(main,/diameter:1\.16,segments:32/);
  assert.match(main,/createPlasmaHeartMaterial\(scene\)/);
  assert.match(main,/coreMat\.setFloat\('uTime',time\)/);
@@ -54,9 +54,11 @@ test('R202 artistic delta uses soft view-angle heart and preserves four-color em
  const field=readFileSync(new URL('../src/plasma-field.js',import.meta.url),'utf8');
  const ribbons=readFileSync(new URL('../src/plasma-ribbons.js',import.meta.url),'utf8');
  assert.match(field,/export function createPlasmaHeartMaterial/);
- assert.match(field,/pow\(face,1\.65\)/);
- assert.match(field,/pow\(face,3\.8\)/,'hotspot must remain angularly concentrated');
- assert.match(field,/\.43\*hotspot/,'central alpha hotspot must be bounded');
+ assert.match(field,/pow\(face,1\.1\)/,'facet illumination covers more of the native central sphere');
+ assert.match(field,/pow\(face,2\.25\)/,'faceted nucleus hotspot must remain localized');
+ assert.match(field,/\.24\*hotspot/,'central alpha hotspot is bounded');
+ assert.match(field,/alpha=clamp\([^;]+,0\.0,\.94\)/,'bounded alpha for luminous faceted nucleus');
+ assert.match(field,/float energy=clamp\(uPower,0\.0,1\.6\)/,'zero-power still disables the core');
  assert.match(field,/material\.disableDepthWrite=true/);
  assert.match(ribbons,/uPaletteWeight/);
  assert.match(ribbons,/\[1\.0,\.64,\.53,\.43\]/);
