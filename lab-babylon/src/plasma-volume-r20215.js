@@ -71,10 +71,10 @@ void main(){
  }
  // R202.19: phase-stable white/violet emission, attenuated by foreground plasma.
  float coreExtinctionK=(uSteps<=8)?0.90:((uSteps<=12)?1.10:1.29);
- float coreSmoothT=exp(-coreExtinctionK*uOpacity*coreHalfLength);
+ float coreSmoothT=exp(-0.76*coreExtinctionK*uOpacity*coreHalfLength);
  float coreTransmission=mix(coreSmoothT,coreForegroundT,0.25);
- float coreRayIntegral=0.4511930898*exp(-0.5*coreImpactSquared/(0.18*0.18));
- float coreRadiance=0.55*clamp(uCorePower,0.0,2.5)*coreRayIntegral*coreTransmission;
+ float coreRayIntegral=0.4511930898*exp(-0.5*coreImpactSquared/(0.14*0.14));
+ float coreRadiance=0.98*clamp(uCorePower,0.0,2.5)*coreRayIntegral*coreTransmission;
  energy+=coreRadiance*vec3(1.65,1.38,1.82);
  gl_FragColor=vec4(energy/max(a,.0001),clamp(a,0.0,.78));
 }

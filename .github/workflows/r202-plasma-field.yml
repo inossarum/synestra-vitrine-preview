@@ -1,10 +1,11 @@
 # QA-only proposal. NOT the committed CI. Requires full source review and an authorized branch writer.
-name: R202.19 PC exact-source qualification
+name: R202.20 PC core focus experimental exact-source qualification
 on:
   push:
     branches:
       - task/SYN_LAB_R202_PLASMA_FIELD_20261030
       - task/SYN_LAB_R20219_DESKTOP_DELIVERY_20261031
+      - task/SYN_LAB_R20220_CORE_FOCUS_QA_20261031
     paths:
       - .github/workflows/r202-plasma-field.yml
       - lab-babylon/src/main.js
@@ -24,11 +25,12 @@ on:
   pull_request:
     branches:
       - task/SYN_LAB_R202_PLASMA_FIELD_20261030
+      - task/SYN_LAB_R20219_DESKTOP_DELIVERY_20261031
   workflow_dispatch:
 permissions:
   contents: read
 concurrency:
-  group: synestra-r20219-desktop-exact-source
+  group: synestra-r20220-core-focus-exact-source
   cancel-in-progress: false
 jobs:
   desktop-exact-build:
@@ -48,9 +50,9 @@ jobs:
           node-version: '22'
           cache: npm
           cache-dependency-path: lab-babylon/package-lock.json
-      - name: Require complete R202.19 source in clean Git checkout
+      - name: Require complete R202.20 experimental core source in clean Git checkout
         run: |
-          echo "R20219_SOURCE_SHA=$GITHUB_SHA"
+          echo "R20220_SOURCE_SHA=$GITHUB_SHA"
           git rev-parse HEAD
           git ls-files --error-unmatch src/main.js src/plasma-volume-r20215.js src/plasma-volume-policy.mjs tests/r20215-native-babylon.test.mjs scripts/r202-browser-smoke.mjs
           test -s src/plasma-volume-r20215.js
@@ -59,7 +61,7 @@ jobs:
           grep -q 'uCorePower' src/plasma-volume-r20215.js
           grep -q 'coreRayIntegral' src/plasma-volume-r20215.js
           grep -q 'coreForegroundT' src/plasma-volume-r20215.js
-          echo 'b892b6b52747011c0fc96e769e1a655ab630271b74444a446e7eab09dfd1cf2a  src/plasma-volume-r20215.js' | sha256sum --check
+          echo 'c397b41e3fef2831b931eac2928c402815f0a6eb027db846abb1fee88b3fa12e  src/plasma-volume-r20215.js' | sha256sum --check
           git hash-object src/main.js src/plasma-volume-r20215.js src/plasma-volume-policy.mjs
       - name: Reproducible dependencies FREE_ONLY
         run: npm ci --no-audit --no-fund
@@ -72,7 +74,7 @@ jobs:
           npm run build
           test -s dist/babylon-lab.js
           sha256sum dist/babylon-lab.js
-          echo 'a549156b28654ffa27c5ad8f0a7a524f539fc83c69bd1bb574e42ba6c02378d3  dist/babylon-lab.js' | sha256sum --check
+          echo '3c4219d192bb547d17a7716c8ffa65f2fa5b469bc915d018b2140963c83f9e0e  dist/babylon-lab.js' | sha256sum --check
           wc -c dist/babylon-lab.js
           git diff --exit-code -- src tests
       - name: Desktop-only browser policy gate
@@ -85,23 +87,23 @@ jobs:
           R202_QUALITY_QA: '1'
         run: node scripts/r202-browser-smoke.mjs
       - name: Preserve exact PC build checksum
-        run: sha256sum dist/babylon-lab.js > R20219_DESKTOP_SHA256SUMS.txt
+        run: sha256sum dist/babylon-lab.js > R20220_CORE_FOCUS_SHA256SUMS.txt
       - name: Upload exact PC review build (no deployment)
         uses: actions/upload-artifact@v4
         with:
-          name: r20219-desktop-build
+          name: r20220-core-focus-build
           path: |
             lab-babylon/index.html
             lab-babylon/style.css
             lab-babylon/dist/babylon-lab.js
-            lab-babylon/R20219_DESKTOP_SHA256SUMS.txt
+            lab-babylon/R20220_CORE_FOCUS_SHA256SUMS.txt
           if-no-files-found: error
           retention-days: 2
       - name: Store desktop previews for visual review
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: r20219-desktop-previews
+          name: r20220-core-focus-previews
           path: |
             ${{ runner.temp }}/r202-ci-1100.png
             ${{ runner.temp }}/r202-motion-*.png
