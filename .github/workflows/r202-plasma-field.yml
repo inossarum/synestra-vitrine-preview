@@ -72,6 +72,7 @@ jobs:
           npm run build
           test -s dist/babylon-lab.js
           sha256sum dist/babylon-lab.js
+          echo 'a549156b28654ffa27c5ad8f0a7a524f539fc83c69bd1bb574e42ba6c02378d3  dist/babylon-lab.js' | sha256sum --check
           wc -c dist/babylon-lab.js
           git diff --exit-code -- src tests
       - name: Desktop-only browser policy gate
@@ -83,6 +84,19 @@ jobs:
           R202_DESKTOP_ONLY: '1'
           R202_QUALITY_QA: '1'
         run: node scripts/r202-browser-smoke.mjs
+      - name: Preserve exact PC build checksum
+        run: sha256sum dist/babylon-lab.js > R20219_DESKTOP_SHA256SUMS.txt
+      - name: Upload exact PC review build (no deployment)
+        uses: actions/upload-artifact@v4
+        with:
+          name: r20219-desktop-build
+          path: |
+            lab-babylon/index.html
+            lab-babylon/style.css
+            lab-babylon/dist/babylon-lab.js
+            lab-babylon/R20219_DESKTOP_SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 2
       - name: Store desktop previews for visual review
         if: always()
         uses: actions/upload-artifact@v4
