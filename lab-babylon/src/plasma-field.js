@@ -99,12 +99,13 @@ export function createPlasmaHeartMaterial(scene){
  uniform vec3 uCamera;uniform float uTime;uniform float uPower;
  void main(){
   float face=clamp(dot(normalize(vNormal),normalize(uCamera-vWorld)),0.0,1.0);
-  float hotspot=pow(face,3.8);
-  float shimmer=.96+.04*sin(uTime*2.7+vWorld.x*12.0+vWorld.z*8.0);
-  vec3 tint=mix(vec3(.49,.24,.98),vec3(1.55,1.43,1.75),clamp(.13+1.05*hotspot,0.0,1.0));
+  // R202.21: illuminate the existing faceted central IcoSphere, not the outer volume.
+  float hotspot=pow(face,2.25);
+  float shimmer=.97+.03*sin(uTime*2.7+vWorld.x*12.0+vWorld.z*8.0);
+  vec3 tint=mix(vec3(.49,.24,.98),vec3(1.55,1.43,1.75),clamp(.22+.88*hotspot,0.0,1.0));
   float energy=clamp(uPower,0.0,1.6);
-  float alpha=clamp((.02+.43*pow(face,1.65)+.43*hotspot)*energy,0.0,.88);
-  gl_FragColor=vec4(tint*(.96+.90*hotspot)*shimmer*energy,alpha);
+  float alpha=clamp((.07+.54*pow(face,1.1)+.24*hotspot)*energy,0.0,.94);
+  gl_FragColor=vec4(tint*(1.05+.85*hotspot)*shimmer*energy,alpha);
  }`;
  const material=new ShaderMaterial('r202-white-violet-soft-heart',scene,{vertexSource,fragmentSource},{
    attributes:['position','normal'],
@@ -112,8 +113,10 @@ export function createPlasmaHeartMaterial(scene){
    needAlphaBlending:true
  });
  material.backFaceCulling=true;
- material.alphaMode=Engine.ALPHA_COMBINE;
+ // Additive light is limited to the central IcoSphere material, never the outer volume.
+ material.alphaMode=Engine.ALPHA_ADD;
  material.disableDepthWrite=true;
+ material.metadata=Object.freeze({revision:'r20221-faceted-nucleus',target:'central nucleus',scope:'desktop'});
  material.setFloat('uTime',0);material.setFloat('uPower',1);
  material.setVector3('uCamera',new Vector3(0,0,4.8));
  return material;
