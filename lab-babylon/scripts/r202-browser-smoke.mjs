@@ -56,6 +56,13 @@ try{
    for(const token of ['data-canvas-count="1"','data-plasma-volume="r20215-raymarch-16"','data-geometry-interval-ms="'+interval+'"','data-visible-plasma-field="'+visible+'"']){
     if(!stdout.includes(token))throw Error('R20215_NATIVE_QUALITY_ASSERT_'+label+'_'+token);
    }
+   // R202.29: GPU smoke must confirm that no stencil silhouette or front
+   // stream survives when the actual faceted core is powered off.
+   if(label==='power-zero'){
+    for(const token of ['data-facet-depth-active="false"','data-front-streams="0"'])
+     if(!stdout.includes(token))throw Error('R20229_POWER_ZERO_OCCLUSION_LEAK_'+token);
+   }else if(!stdout.includes('data-facet-depth-active="true"'))
+    throw Error('R20229_ACTIVE_CORE_MASK_MISSING_'+label);
    if(process.env.R202_FORCE_HARDWARE==='1'&&!stdout.includes('NVIDIA GeForce RTX 3090'))throw Error('R20215_HARDWARE_GL_NOT_ATTESTED_'+label);
    if(!existsSync(shot)||statSync(shot).size<20000)throw Error('R20215_QUALITY_CAPTURE_EMPTY_'+label);
    const sha256=createHash('sha256').update(readFileSync(shot)).digest('hex');

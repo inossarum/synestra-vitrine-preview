@@ -214,12 +214,12 @@ export function installPlasmaRibbons({scene,colors,nodes,count=28,bridgePath=nul
   nodeMeshes,
   foregroundNodeMeshes,
   materials:material,
-  update({time,quality='balanced',parent=null,active=28,corePower=1}){
+  update({time,quality='balanced',parent=null,active=28,corePower=1,coreVisible=true}){
    // Shader flicker moves smoothly every frame; geometry updates are capped at 15 Hz.
    for(const mat of material)mat.setFloat('uTime',time);
    for(const mat of foregroundMaterials)mat.setFloat('uTime',time);
    const cadence=quality==='economy'?.12:.065;
-   const budget=quality+':'+active+':'+(corePower>0);
+   const budget=quality+':'+active+':'+(corePower>0)+':'+Boolean(coreVisible);
    if(time-lastSample<cadence&&budget===lastBudget)return;
    lastBudget=budget;lastSample=time;
    const visible=quality==='economy'?Math.min(active,8):quality==='ultra'?active:Math.min(active,26);
@@ -248,7 +248,7 @@ export function installPlasmaRibbons({scene,colors,nodes,count=28,bridgePath=nul
     const mesh=nodeMeshes[i],enabled=corePower>0&&(quality!=='economy'||i<3);
     mesh.setEnabled(enabled);
     const front=foregroundNodeMeshes[i];
-    front.setEnabled(enabled);
+    front.setEnabled(enabled&&coreVisible);
     if(!enabled)continue;
     if(parent&&mesh.parent!==parent)mesh.parent=parent;
     if(parent&&front.parent!==parent)front.parent=parent;

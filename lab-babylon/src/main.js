@@ -8,6 +8,7 @@ import {mountCoreAtAtlasSocket} from './atlas-interop.js';
 import {createPlasmaHeartMaterial} from './plasma-field.js';
 import {installR20215Volume} from './plasma-volume-r20215.js';
 import {geometryUpdateDecision} from './geometry-frame-budget.mjs';
+import {isFacetMaskActive} from './core-mask-lifecycle.mjs';
 // ONE Babylon canvas. The requested subject is ONLY the glowing energy sphere.
 const cv=document.getElementById('renderCanvas'),stat=document.getElementById('status');
 const ids=['core-mode','core-radius','core-power','core-speed','strands','complexity','quality'];
@@ -95,6 +96,7 @@ function start(){
  coreDepthMask.material=coreDepthMaterial;
  coreDepthMask.renderingGroupId=2;
  coreDepthMask.isPickable=false;
+ let lastDepthMaskActive=null;
  // Group 2 clears depth + stencil, draws the invisible exact faceted mask;
  // group 3 must keep both buffers for per-fragment foreground stream tests.
  scene.setRenderingAutoClearDepthStencil(3,false);
@@ -148,12 +150,20 @@ function start(){
   // R202-13: GPU ribbon shaders must advance EVERY render frame, not only CPU mesh uploads.
   for(const material of plasma.materials)material.setFloat('uTime',time);
   plasmaShaderFrames++;
+  // R202.29: never retain a depth/stencil silhouette when the visible core is off,
+  // collapsed, or disabled by its parent. The mask inherits the exact core transform.
+  const depthMaskActive=isFacetMaskActive(power,r,core.isEnabled());
+  const depthMaskChanged=depthMaskActive!==lastDepthMaskActive;
+  if(depthMaskChanged){coreDepthMask.setEnabled(depthMaskActive);lastDepthMaskActive=depthMaskActive;}
+  cv.dataset.facetDepthActive=String(depthMaskActive);
+  // Preserve the existing single CPU update gate; invalidate only on a mask transition.
+  if(depthMaskChanged)geometryState=null;
   const geometryStep=geometryUpdateDecision(geometryState,{now,time,quality,mode,power:get('core-power'),radius:r,amount,turbulence:turb});
   geometryState=geometryStep.next;
   cv.dataset.geometryIntervalMs=String(geometryStep.intervalMs);
   if(geometryStep.update){
    geometryUpdates++;
-  plasma.update({time,quality,parent:sphereRoot,active:Math.min(plasma.meshes.length,Math.round(amount*.68)+5),corePower:get('core-power')});
+  plasma.update({time,quality,parent:sphereRoot,active:Math.min(plasma.meshes.length,Math.round(amount*.68)+5),corePower:get('core-power'),coreVisible:depthMaskActive});
   forks.update({time,quality,corePower:get('core-power'),parent:sphereRoot});
   cv.dataset.visibleNodeForks=String(forks.meshes.filter(m=>m.isEnabled()).length);
   cv.dataset.visibleNodePhotons=String(forks.photons.filter(m=>m.isEnabled()).length);
