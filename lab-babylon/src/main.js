@@ -156,10 +156,12 @@ function start(){
   const depthMaskChanged=depthMaskActive!==lastDepthMaskActive;
   if(depthMaskChanged){coreDepthMask.setEnabled(depthMaskActive);lastDepthMaskActive=depthMaskActive;}
   cv.dataset.facetDepthActive=String(depthMaskActive);
+  // Preserve the existing single CPU update gate; invalidate only on a mask transition.
+  if(depthMaskChanged)geometryState=null;
   const geometryStep=geometryUpdateDecision(geometryState,{now,time,quality,mode,power:get('core-power'),radius:r,amount,turbulence:turb});
   geometryState=geometryStep.next;
   cv.dataset.geometryIntervalMs=String(geometryStep.intervalMs);
-  if(geometryStep.update||depthMaskChanged){
+  if(geometryStep.update){
    geometryUpdates++;
   plasma.update({time,quality,parent:sphereRoot,active:Math.min(plasma.meshes.length,Math.round(amount*.68)+5),corePower:get('core-power'),coreVisible:depthMaskActive});
   forks.update({time,quality,corePower:get('core-power'),parent:sphereRoot});
