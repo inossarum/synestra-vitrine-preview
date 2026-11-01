@@ -20,3 +20,4 @@ test('R202.31 preserves inherited shade, mask, topology, alpha and attenuation',
  assert.doesNotMatch(shader,/new Scene\(/);
  assert.doesNotMatch(shader,/new Engine\(/);
 });
+
