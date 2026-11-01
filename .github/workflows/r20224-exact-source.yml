@@ -1,0 +1,70 @@
+# Isolated PC exact-source QA for R202.24. No deployment or promotion.
+name: R202.24 exact-source desktop CI (FREE_ONLY)
+on:
+  push:
+    branches:
+      - task/SYN_LAB_R20224_EXACT_CI_20261101
+    paths:
+      - .github/workflows/r20224-exact-source.yml
+      - lab-babylon/**
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: synestra-r20224-exact-source
+  cancel-in-progress: false
+jobs:
+  desktop-exact-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    defaults:
+      run:
+        working-directory: lab-babylon
+    steps:
+      - name: Checkout exact commit with no persisted credentials
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Node 22 and npm lock cache
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: lab-babylon/package-lock.json
+      - name: Check exact source and bounded 80-triangle R202.24 test
+        run: |
+          echo "R20224_SOURCE_SHA=$GITHUB_SHA"
+          git rev-parse HEAD
+          git ls-files --error-unmatch src/main.js src/plasma-field.js tests/r20224-depth-blend.test.mjs scripts/r202-browser-smoke.mjs
+          test -s src/plasma-field.js
+          grep -q 'r20223-foreground-facets' src/plasma-field.js
+          git diff --check
+      - name: Install reproducibly without audit or fund
+        run: npm ci --no-audit --no-fund
+      - name: Failure-first R202.24 and full regressions
+        run: |
+          node --test tests/r20224-depth-blend.test.mjs
+          npm test
+      - name: Exact PC bundle with pinned SHA-256
+        run: |
+          npm run build
+          test -s dist/babylon-lab.js
+          echo 'ffd1326751e6ecbbe2fd997d25a00a8eb5d2bd7efbb36c5f52875e7a50e628da  dist/babylon-lab.js' | sha256sum --check
+          sha256sum dist/babylon-lab.js > R20224_DESKTOP_SHA256SUMS.txt
+          git diff --exit-code -- src tests
+      - name: Desktop-only Chromium WebGL software smoke
+        env:
+          R202_DESKTOP_ONLY: '1'
+          R202_QUALITY_QA: '1'
+        run: node scripts/r202-browser-smoke.mjs
+      - name: Upload exact-source PC bundle only (no deploy)
+        uses: actions/upload-artifact@v4
+        with:
+          name: r20224-exact-source-pc-build
+          path: |
+            lab-babylon/index.html
+            lab-babylon/style.css
+            lab-babylon/dist/babylon-lab.js
+            lab-babylon/R20224_DESKTOP_SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 2
