@@ -1,0 +1,111 @@
+# Public-repo FREE_ONLY exact-source review qualification. No deployment or credential access.
+name: R202.25 V4 offline review exact rebuild
+
+on:
+  push:
+    branches:
+      - qa/SYN_LAB_R20225_V4_REVIEW_HANDOFF_20261101
+    paths:
+      - .github/workflows/r20225-v4-review-ci.yml
+      - review/r20225-v4/**
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: r20225-v4-review-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  exact-offline-review:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout PR review sources without persisted credentials
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Configure Node 22
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+      - name: Verify exact review commit and scoped scripts
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git ls-files --error-unmatch review/r20225-v4/assemble-offline.mjs review/r20225-v4/assemble-offline.test.mjs
+          node --check review/r20225-v4/assemble-offline.mjs
+          node --check review/r20225-v4/assemble-offline.test.mjs
+      - name: Checkout immutable R202.24 source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: edabe06b16d1e36548b34f80a0450f8be9017a33
+          path: .qa/r20224
+          persist-credentials: false
+      - name: Checkout immutable R202.25 source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: cde9659449c44a6fe7d3641122faddc4df51e94f
+          path: .qa/r20225
+          persist-credentials: false
+      - name: Verify exact engine commits
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C .qa/r20224 rev-parse HEAD)" = edabe06b16d1e36548b34f80a0450f8be9017a33
+          test "$(git -C .qa/r20225 rev-parse HEAD)" = cde9659449c44a6fe7d3641122faddc4df51e94f
+          test -f .qa/r20224/lab-babylon/package-lock.json
+          test -f .qa/r20225/lab-babylon/package-lock.json
+      - name: Build R202.24 exactly and verify binary SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm ci --prefix .qa/r20224/lab-babylon --no-audit --no-fund
+          npm run build --prefix .qa/r20224/lab-babylon
+          echo 'ffd1326751e6ecbbe2fd997d25a00a8eb5d2bd7efbb36c5f52875e7a50e628da  .qa/r20224/lab-babylon/dist/babylon-lab.js' | sha256sum --check
+      - name: Build R202.25 exactly and verify binary SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm ci --prefix .qa/r20225/lab-babylon --no-audit --no-fund
+          npm run build --prefix .qa/r20225/lab-babylon
+          echo '58ffa01ce8a7c22206b3a6b4795cf4c8c9d2d6e125a98940a64401a2f6e16ed2  .qa/r20225/lab-babylon/dist/babylon-lab.js' | sha256sum --check
+      - name: Run six failure-first review package tests
+        shell: bash
+        env:
+          SYN_R20224_BUNDLE_ROOT: ${{ github.workspace }}/.qa/r20224/lab-babylon
+          SYN_R20225_BUNDLE_ROOT: ${{ github.workspace }}/.qa/r20225/lab-babylon
+        run: |
+          set -euo pipefail
+          node --test review/r20225-v4/assemble-offline.test.mjs
+      - name: Assemble real offline V4 review packet
+        shell: bash
+        run: |
+          set -euo pipefail
+          node review/r20225-v4/assemble-offline.mjs \
+            .qa/r20224/lab-babylon \
+            .qa/r20225/lab-babylon \
+            "$RUNNER_TEMP/synestra-r20225-v4-review"
+          cd "$RUNNER_TEMP/synestra-r20225-v4-review"
+          test -f index.html
+          test -f OUVRIR-COMPARATEUR.cmd
+          test -f COMPARATIF_MEME_ANGLE.png
+          test -f COMPARATIF_4_ANGLES.png
+          test "$(find . -type f | wc -l)" -eq 16
+          test "$(wc -l < SHA256SUMS.txt)" -eq 15
+          sha256sum --check SHA256SUMS.txt
+      - name: Upload Windows-ready offline comparison (7-day review)
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: synestra-labo3d-r20225-v4-offline-review
+          path: ${{ runner.temp }}/synestra-r20225-v4-review/
+          if-no-files-found: error
+          retention-days: 7
+      - name: Final policy guard (no source mutation)
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -z "$(git status --porcelain --untracked-files=no)"
+          echo 'REVIEW_CI_PASS_NO_DEPLOY_NO_WRITE'

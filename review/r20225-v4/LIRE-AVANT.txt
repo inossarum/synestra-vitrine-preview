@@ -1,0 +1,25 @@
+SYNESTRA — COMPARATEUR 3D R202.24 / R202.25 — REVUE ARTISTIQUE
+1) Extraire toute l'archive ZIP dans un dossier Windows.
+2) Double-cliquer sur OUVRIR-COMPARATEUR.cmd (ou ouvrir index.html dans Chrome).
+3) Utiliser les boutons R202.24 / R202.25 pour basculer entre les vrais rendus Babylon.
+4) Glisser dans la scene, utiliser la molette, modifier les controles.
+5) Ouvrir COMPARATIF_4_ANGLES.png pour comparer des captures aux angles identiques.
+Les versions ne tournent jamais simultanement : chaque bascule recharge une scene.
+La camera, le zoom et les sept reglages sont conserves apres chaque bascule (E2E RTX3090 PASS).
+Le temps d'animation est fige sur labFrame=6 pour les deux rendus; une seule scene GPU reste active.
+V3 : si la nouvelle scene refuse l'application des parametres, le comparateur restaure automatiquement la version precedente, son angle et ses reglages.
+Si la restauration echoue, la comparaison est SUSPENDUE et les boutons sont desactives ; recharger la page avant toute validation.
+Une erreur de capture avant la bascule laisse la scene existante intacte. L'approbation artistique reste humaine.
+Version R20224: source edabe06b16d1e36548b34f80a0450f8be9017a33, bundle SHA256 ffd1326751e6ecbbe2fd997d25a00a8eb5d2bd7efbb36c5f52875e7a50e628da.
+Version R20225: source cde9659449c44a6fe7d3641122faddc4df51e94f, bundle SHA256 58ffa01ce8a7c22206b3a6b4795cf4c8c9d2d6e125a98940a64401a2f6e16ed2.
+Aucune modification de main, des PR valides, du driver, de l'installation ou du site public.
+L'approbation artistique reste une decision humaine.
+
+V4 - REVUE PNG
+- Le bouton PREPARER LE COMPARATIF PNG capture les deux versions a angle/zoom/parametres identiques, puis restaure la version d'origine.
+- Le PNG apparait dans la page. Pour le sauvegarder : lien Enregistrer (si autorise) ou clic droit sur l'image > Enregistrer l'image sous.
+- Chrome hors ligne en test automatise n'a pas confirme le telechargement direct. NE PAS confondre PNG pret avec fichier telecharge.
+- COMPARATIF_MEME_ANGLE.png est deja dans ce dossier, avec cadrage complet et image validee sur GPU RTX3090.
+- SHA256 image reference : 277910e7e476f8509554f9ff81b8f029f6a7c214c771d29462704a4ba712fc04.
+- V4 ne change pas les 80 triangles, shaders, bundles, PR existantes ni main.
+- Ces rendus sont une aide a la revue ; l'approbation artistique demeure une decision humaine.
