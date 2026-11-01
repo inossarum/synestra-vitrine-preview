@@ -53,10 +53,12 @@ void main(){
   float fold=cos(swirl.z*10.8-swirl.y*6.1-uTime*.35+1.5*wave);
   float n=clamp(.52+.31*wave+.24*fold,0.0,1.0);
   float vortex=pow(smoothstep(.32,.94,n),2.3);
-  float smoke=pow(smoothstep(.25,.78,n),2.1);
+  float smoke=pow(smoothstep(.31,.82,n),2.4);
   float envelope=1.0-smoothstep(.68,1.01,radius);
   float sparkle=pow(smoothstep(.64,.95,n),4.5);
-  float localDensity=(.11+1.48*smoke+1.26*sparkle)*envelope;
+  // R202.37: sculpt soft filaments from existing moving wave/fold, reduce uniform haze.
+  float densityRidge=pow(smoothstep(.22,.78,abs(wave+.42*fold)),2.0);
+  float localDensity=(.065+1.35*smoke+1.18*sparkle)*envelope*(.50+.50*densityRidge);
   // R202.32: a projected clear-air corridor around the actual central nucleus.
   // The ray/core impact and camera already use the Atlas-safe local-space basis.
   float coreReveal=smoothstep(.20,.56,sqrt(coreImpactSquared));
