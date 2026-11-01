@@ -80,6 +80,29 @@ jobs:
         run: |
           set -euo pipefail
           node --test review/r20225-v4/assemble-offline.test.mjs
+      - name: Assemble real offline V4 review packet
+        shell: bash
+        run: |
+          set -euo pipefail
+          node review/r20225-v4/assemble-offline.mjs \
+            .qa/r20224/lab-babylon \
+            .qa/r20225/lab-babylon \
+            "$RUNNER_TEMP/synestra-r20225-v4-review"
+          cd "$RUNNER_TEMP/synestra-r20225-v4-review"
+          test -f index.html
+          test -f OUVRIR-COMPARATEUR.cmd
+          test -f COMPARATIF_MEME_ANGLE.png
+          test -f COMPARATIF_4_ANGLES.png
+          test "$(find . -type f | wc -l)" -eq 16
+          test "$(wc -l < SHA256SUMS.txt)" -eq 15
+          sha256sum --check SHA256SUMS.txt
+      - name: Upload Windows-ready offline comparison (7-day review)
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: synestra-labo3d-r20225-v4-offline-review
+          path: ${{ runner.temp }}/synestra-r20225-v4-review/
+          if-no-files-found: error
+          retention-days: 7
       - name: Final policy guard (no source mutation)
         shell: bash
         run: |
