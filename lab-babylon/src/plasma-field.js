@@ -106,9 +106,18 @@ export function createPlasmaHeartMaterial(scene){
   float shimmer=.97+.03*sin(uTime*2.7+vWorld.x*12.0+vWorld.z*8.0);
   vec3 tint=mix(vec3(.32,.18,.60),vec3(.98,.87,1.07),clamp(.12+.38*hotspot+.50*facetLight,0.0,1.0));
   float energy=clamp(uPower,0.0,1.6);
-  // R202.24: a translucent faceted heart admits underlying plasma/ribbons instead of masking them.
+  // R202.25: analytic camera-to-facet path through the foreground plasma envelope.
+  // The existing 80 triangles stay in their original rendering group; no extra pass/depth buffer.
+  vec3 rayDir=normalize(vWorld-uCamera);
+  float projection=dot(uCamera,rayDir);
+  float discriminant=projection*projection-(dot(uCamera,uCamera)-1.05*1.05);
+  float entryDistance=max(-projection-sqrt(max(discriminant,0.0)),0.0);
+  float frontDepth=max(length(vWorld-uCamera)-entryDistance,0.0);
+  float veil=.78+.22*(.5+.5*sin(vWorld.x*8.0+vWorld.y*6.0+uTime*.32));
+  float depthTransmission=clamp(exp(-.52*frontDepth*veil),.63,1.0);
+  // Preserve the R202.24 alpha ceiling; the foreground envelope can only attenuate it.
   float alpha=clamp((.09+.44*pow(face,1.1)+.15*hotspot)*energy,0.0,.79);
-  gl_FragColor=vec4(tint*(.75+.35*hotspot+.38*facetLight)*shimmer*energy,alpha);
+  gl_FragColor=vec4(tint*(.75+.35*hotspot+.38*facetLight)*shimmer*energy*(.83+.17*depthTransmission),alpha*depthTransmission);
  }`;
  const material=new ShaderMaterial('r202-white-violet-soft-heart',scene,{vertexSource,fragmentSource},{
    attributes:['position','normal'],
