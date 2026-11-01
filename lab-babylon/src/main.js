@@ -176,7 +176,7 @@ function start(){
    const m=lines[i],visible=i===0&&(quality!=='economy');m.setEnabled(visible);if(visible)refresh(m,pathMeridian(i,time,turb),.003);
   }
 
-  core.scaling.setAll(Math.max(.0001,r));halo.scaling.setAll(Math.max(.0001,r));
+  core.scaling.setAll(Math.max(.0001,r)*1.12);halo.scaling.setAll(Math.max(.0001,r));
 
 
   const mistBudget=visibleCoreMistCount(quality,power);

@@ -106,6 +106,9 @@ export function createPlasmaHeartMaterial(scene){
   // R202.30: bounded face-normal contrast; no edge mesh, geometry or extra pass.
   float facetRelief=smoothstep(.20,.80,facetLight);
   float facetShading=mix(.72,1.23,facetRelief);
+   // R202.39: dark edge-to-face transition only; avoid modifying the 3D plasma cloud.
+   float facetRim=pow(1.0-face,2.0);
+   float facetContrast=1.0-.42*facetRim;
   // R202.31: face-normal crystal glint and shadow/ivory separation; no mesh or extra pass.
   vec3 facetKey=normalize(vec3(-.42,.62,.85));
   float facetGlint=pow(max(dot(reflect(-facetKey,normalize(vNormal)),normalize(uCamera-vWorld)),0.0),10.0);
@@ -143,7 +146,7 @@ export function createPlasmaHeartMaterial(scene){
    float ignition=pow(face,2.6)*smoothstep(.20,1.20,energy);
    vec3 coreEmission=vec3(1.15,1.18,1.30)*(.52*ignition);
    float alpha=clamp((.20+.48*pow(face,1.1)+.12*hotspot)*energy,0.0,.79);
-  gl_FragColor=vec4((tint*(.75+.35*hotspot+.38*facetLight)*facetShading*facetPalette*(1.0+.25*facetGlint)+coreEmission)*shimmer*energy*(.30+.70*depthTransmission),alpha*depthTransmission);
+  gl_FragColor=vec4((tint*(.75+.35*hotspot+.38*facetLight)*facetShading*facetPalette*(1.0+.25*facetGlint)*facetContrast+coreEmission)*shimmer*energy*(.30+.70*depthTransmission),alpha*depthTransmission);
  }`;
  const material=new ShaderMaterial('r202-white-violet-soft-heart',scene,{vertexSource,fragmentSource},{
    attributes:['position','normal'],

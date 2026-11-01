@@ -7,7 +7,7 @@ test('R202.33 bounded frontal white-violet incandescence uses existing nucleus g
  assert.match(shader,/float ignition=pow\(face,2\.6\)\*smoothstep\(\.20,1\.20,energy\);/);
  assert.match(shader,/vec3 coreEmission=vec3\(1\.15,1\.18,1\.30\)\*\(\.52\*ignition\);/);
  assert.match(shader,/float alpha=clamp\(\(\.20\+\.48\*pow\(face,1\.1\)\+\.12\*hotspot\)\*energy,0\.0,\.79\);/);
- assert.match(shader,/vec4\(\(tint\*\(\.75\+\.35\*hotspot\+\.38\*facetLight\)\*facetShading\*facetPalette\*\(1\.0\+\.25\*facetGlint\)\+coreEmission\)\*shimmer\*energy/);
+ assert.match(shader,/vec4\(\(tint\*\(\.75\+\.35\*hotspot\+\.38\*facetLight\)\*facetShading\*facetPalette\*\(1\.0\+\.25\*facetGlint\)\*facetContrast\+coreEmission\)\*shimmer\*energy/);
  assert.match(main,/CreateIcoSphere\('central nucleus',\{radius:\.38,subdivisions:2\}/);
  assert.match(main,/const coreDepthMask=core\.clone\('central nucleus facet depth mask',core,true\)/);
 });
