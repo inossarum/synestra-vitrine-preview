@@ -62,7 +62,7 @@ void main(){
   // R202.32: a projected clear-air corridor around the actual central nucleus.
   // The ray/core impact and camera already use the Atlas-safe local-space basis.
   float coreReveal=smoothstep(.20,.56,sqrt(coreImpactSquared));
-  float da=clamp(uOpacity*localDensity*thickness/float(uSteps)*2.4*(.28+.72*coreReveal),0.0,.16);
+  float da=clamp(uOpacity*localDensity*thickness/float(uSteps)*2.4*(.28+.24*coreReveal),0.0,.16);
   float coreStepLength=thickness/float(uSteps);
   float coreNearFraction=clamp((coreClosestT-(t-0.5*coreStepLength))/coreStepLength,0.0,1.0);
   coreForegroundT*=pow(max(0.000001,1.0-da),coreNearFraction);

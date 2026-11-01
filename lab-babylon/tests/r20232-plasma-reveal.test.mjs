@@ -6,7 +6,7 @@ const main=readFileSync(new URL('../src/main.js',import.meta.url),'utf8');
 test('R202.32 changes the raymarch volume actually instantiated by main',()=>{
  assert.match(main,/installR20215Volume\(\{scene,parent:sphereRoot\}\)/);
  assert.match(volume,/float coreReveal=smoothstep\(\.20,\.56,sqrt\(coreImpactSquared\)\);/);
- assert.match(volume,/float da=clamp\(uOpacity\*localDensity\*thickness\/float\(uSteps\)\*2\.4\*\(\.28\+\.72\*coreReveal\),0\.0,\.16\);/);
+ assert.match(volume,/float da=clamp\(uOpacity\*localDensity\*thickness\/float\(uSteps\)\*2\.4\*\(\.28\+\.24\*coreReveal\),0\.0,\.16\);/);
  assert.match(volume,/coreForegroundT\*=pow\(max\(0\.000001,1\.0-da\),coreNearFraction\);/);
 });
 test('R202.32 preserves 16-step volume shader and exact 80-facet masked core',()=>{
@@ -20,8 +20,8 @@ test('R202.32 preserves 16-step volume shader and exact 80-facet masked core',()
 });
 test('R202.32 reveal fades smoothly from 28 percent to full baseline opacity',()=>{
  const s=(l,r,x)=>{let t=Math.min(1,Math.max(0,(x-l)/(r-l)));return t*t*(3-2*t)};
- const k=x=>.28+.72*s(.20,.56,x);
+ const k=x=>.28+.24*s(.20,.56,x);
  assert.equal(k(0),.28);
- assert.equal(k(1),1);
+ assert.ok(Math.abs(k(1)-.52)<1e-12);
  assert.ok(k(.22)>k(0)&&k(.22)<k(.40)&&k(.40)<k(.55));
 });
