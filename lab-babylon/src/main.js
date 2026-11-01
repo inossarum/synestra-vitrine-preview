@@ -95,6 +95,7 @@ function start(){
  coreDepthMask.material=coreDepthMaterial;
  coreDepthMask.renderingGroupId=2;
  coreDepthMask.isPickable=false;
+ let lastDepthMaskActive=null;
  // Group 2 clears depth + stencil, draws the invisible exact faceted mask;
  // group 3 must keep both buffers for per-fragment foreground stream tests.
  scene.setRenderingAutoClearDepthStencil(3,false);
@@ -148,12 +149,18 @@ function start(){
   // R202-13: GPU ribbon shaders must advance EVERY render frame, not only CPU mesh uploads.
   for(const material of plasma.materials)material.setFloat('uTime',time);
   plasmaShaderFrames++;
+  // R202.29: never retain a depth/stencil silhouette when the visible core is off,
+  // collapsed, or disabled by its parent. The mask inherits the exact core transform.
+  const depthMaskActive=power>0&&r>.001&&core.isEnabled();
+  const depthMaskChanged=depthMaskActive!==lastDepthMaskActive;
+  if(depthMaskChanged){coreDepthMask.setEnabled(depthMaskActive);lastDepthMaskActive=depthMaskActive;}
+  cv.dataset.facetDepthActive=String(depthMaskActive);
   const geometryStep=geometryUpdateDecision(geometryState,{now,time,quality,mode,power:get('core-power'),radius:r,amount,turbulence:turb});
   geometryState=geometryStep.next;
   cv.dataset.geometryIntervalMs=String(geometryStep.intervalMs);
-  if(geometryStep.update){
+  if(geometryStep.update||depthMaskChanged){
    geometryUpdates++;
-  plasma.update({time,quality,parent:sphereRoot,active:Math.min(plasma.meshes.length,Math.round(amount*.68)+5),corePower:get('core-power')});
+  plasma.update({time,quality,parent:sphereRoot,active:Math.min(plasma.meshes.length,Math.round(amount*.68)+5),corePower:get('core-power'),coreVisible:depthMaskActive});
   forks.update({time,quality,corePower:get('core-power'),parent:sphereRoot});
   cv.dataset.visibleNodeForks=String(forks.meshes.filter(m=>m.isEnabled()).length);
   cv.dataset.visibleNodePhotons=String(forks.photons.filter(m=>m.isEnabled()).length);
