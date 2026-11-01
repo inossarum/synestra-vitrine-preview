@@ -1,0 +1,142 @@
+{
+  "status": "PASS",
+  "kind": "real headful Chrome R202.25 candidate GPU RTX3090 D3D11; no hosted E2E",
+  "sourceSha": "cde9659449c44a6fe7d3641122faddc4df51e94f",
+  "bundleSha256": "58ffa01ce8a7c22206b3a6b4795cf4c8c9d2d6e125a98940a64401a2f6e16ed2",
+  "order": "Ultra 30s then Economy 20s",
+  "runs": [
+    {
+      "quality": "ultra",
+      "status": "PASS",
+      "durationMs": 31894.002200000003,
+      "frameDelta": 3189,
+      "meanFps": 99.98745155915239,
+      "p10Fps": 97.73153823051082,
+      "minFps": 97.17791594483988,
+      "medianFps": 99.53540852715857,
+      "samples": 120,
+      "gpu": [
+        {
+          "status": "PASS",
+          "gpuPct": 10,
+          "tempC": 44,
+          "powerW": 142.55,
+          "vramMiB": 3469
+        },
+        {
+          "status": "PASS",
+          "gpuPct": 36,
+          "tempC": 38,
+          "powerW": 61.44,
+          "vramMiB": 3452
+        },
+        {
+          "status": "PASS",
+          "gpuPct": 39,
+          "tempC": 38,
+          "powerW": 60.71,
+          "vramMiB": 3471
+        },
+        {
+          "status": "PASS",
+          "gpuPct": 36,
+          "tempC": 38,
+          "powerW": 61.21,
+          "vramMiB": 3467
+        },
+        {
+          "status": "PASS",
+          "gpuPct": 36,
+          "tempC": 38,
+          "powerW": 63.57,
+          "vramMiB": 3454
+        },
+        {
+          "status": "PASS",
+          "gpuPct": 39,
+          "tempC": 38,
+          "powerW": 60.35,
+          "vramMiB": 3457
+        },
+        {
+          "status": "PASS",
+          "gpuPct": 39,
+          "tempC": 38,
+          "powerW": 60.5,
+          "vramMiB": 3454
+        },
+        {
+          "status": "PASS",
+          "gpuPct": 40,
+          "tempC": 38,
+          "powerW": 60.41,
+          "vramMiB": 3454
+        }
+      ],
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "qualityBudgetMs": "20",
+      "facetCount": 80,
+      "canvasCount": 1,
+      "visibility": "visible"
+    },
+    {
+      "quality": "economy",
+      "status": "PASS",
+      "durationMs": 21132.060100000002,
+      "frameDelta": 2113,
+      "meanFps": 99.99025130540868,
+      "p10Fps": 97.79664166332603,
+      "minFps": 97.23711944757547,
+      "medianFps": 99.45558015423408,
+      "samples": 80,
+      "gpu": [
+        {
+          "status": "PASS",
+          "gpuPct": 31,
+          "tempC": 38,
+          "powerW": 59.05,
+          "vramMiB": 3488
+        },
+        {
+          "status": "PASS",
+          "gpuPct": 28,
+          "tempC": 38,
+          "powerW": 61.51,
+          "vramMiB": 3473
+        },
+        {
+          "status": "PASS",
+          "gpuPct": 30,
+          "tempC": 38,
+          "powerW": 61.01,
+          "vramMiB": 3471
+        },
+        {
+          "status": "PASS",
+          "gpuPct": 25,
+          "tempC": 38,
+          "powerW": 59.06,
+          "vramMiB": 3473
+        },
+        {
+          "status": "PASS",
+          "gpuPct": 27,
+          "tempC": 38,
+          "powerW": 59.16,
+          "vramMiB": 3475
+        }
+      ],
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "qualityBudgetMs": "48",
+      "facetCount": 80,
+      "canvasCount": 1,
+      "visibility": "visible"
+    }
+  ],
+  "limitations": [
+    "GPU host load not isolated",
+    "True low-tier GPU not tested",
+    "50 seconds total, not a long thermal stress test",
+    "Browser actual foreground focus not independently attested"
+  ]
+}
