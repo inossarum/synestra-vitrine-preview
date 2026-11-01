@@ -183,7 +183,9 @@ function start(){
   for(let i=0;i<inner.length;i++){
    const m=inner[i],visible=power>0&&(mode!==0||i<16);
    const mist=innerSheaths[i],mistVisible=visible&&i<mistBudget;
-   m.setEnabled(visible);mist.setEnabled(mistVisible);
+   // R202.36: radial legacy tubes read as rigid spokes over the crystalline core.
+    // Preserve diffuse 3D mist sheaths and geometry source for safe rollback.
+    m.setEnabled(false);mist.setEnabled(mistVisible);
    if(visible){
     const path=pathCore(i,mode,time).map(p=>p.scale(r));
     refresh(m,path,coreVolumeWidth(i,.5,quality));
