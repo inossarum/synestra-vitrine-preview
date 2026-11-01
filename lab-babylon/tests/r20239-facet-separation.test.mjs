@@ -10,7 +10,7 @@ test('R20239 silhouette contrast uses original facet mesh and white emission, no
 });
 test('R20239 preserves 80 facets, 3d plasma volume and exact mask',()=>{
  assert.match(v,/float coreReveal=smoothstep\(\.20,\.56,sqrt\(coreImpactSquared\)\);/);
- assert.match(v,/float coreRadiance=1\.10\*clamp\(uCorePower,0\.0,2\.5\)\*coreRayIntegral\*coreTransmission;/);
+ assert.match(v,/float coreRadiance=1\.48\*clamp\(uCorePower,0\.0,2\.5\)\*coreRayIntegral\*coreTransmission;/);
  assert.match(v,/float densityRidge=pow\(smoothstep\(\.22,\.78,abs\(wave\+\.42\*fold\)\),2\.0\);/);
  assert.match(main,/CreateIcoSphere\('central nucleus',\{radius:\.38,subdivisions:2\}/);
  assert.match(main,/coreDepthMask=core\.clone\('central nucleus facet depth mask',core,true\)/);
