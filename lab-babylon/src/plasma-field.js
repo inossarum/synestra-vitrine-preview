@@ -104,10 +104,10 @@ export function createPlasmaHeartMaterial(scene){
   // R202.22: each of the 80 flat-shaded triangles receives its own light level.
   float facetLight=clamp(.5+.5*dot(normalize(vNormal),normalize(vec3(-.42,.62,.85))),0.0,1.0);
   float shimmer=.97+.03*sin(uTime*2.7+vWorld.x*12.0+vWorld.z*8.0);
-  vec3 tint=mix(vec3(.41,.17,.88),vec3(1.55,1.43,1.75),clamp(.16+.60*hotspot+.24*facetLight,0.0,1.0));
+  vec3 tint=mix(vec3(.27,.12,.59),vec3(1.02,.94,1.10),clamp(.12+.38*hotspot+.50*facetLight,0.0,1.0));
   float energy=clamp(uPower,0.0,1.6);
   float alpha=clamp((.07+.54*pow(face,1.1)+.24*hotspot)*energy,0.0,.94);
-  gl_FragColor=vec4(tint*(.78+.88*hotspot+.48*facetLight)*shimmer*energy,alpha);
+  gl_FragColor=vec4(tint*(.70+.40*hotspot+.40*facetLight)*shimmer*energy,alpha);
  }`;
  const material=new ShaderMaterial('r202-white-violet-soft-heart',scene,{vertexSource,fragmentSource},{
    attributes:['position','normal'],
@@ -115,10 +115,10 @@ export function createPlasmaHeartMaterial(scene){
    needAlphaBlending:true
  });
  material.backFaceCulling=true;
- // Additive light is limited to the central IcoSphere material, never the outer volume.
- material.alphaMode=Engine.ALPHA_ADD;
+ // R202.23: bounded alpha compositing prevents saturation when the central IcoSphere is drawn above the translucent field.
+ material.alphaMode=Engine.ALPHA_COMBINE;
  material.disableDepthWrite=true;
- material.metadata=Object.freeze({revision:'r20222-visible-80-facets',target:'central nucleus',scope:'desktop'});
+ material.metadata=Object.freeze({revision:'r20223-foreground-facets',target:'central nucleus',scope:'desktop'});
  material.setFloat('uTime',0);material.setFloat('uPower',1);
  material.setVector3('uCamera',new Vector3(0,0,4.8));
  return material;
