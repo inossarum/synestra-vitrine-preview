@@ -195,11 +195,14 @@ function start(){
   }
   for(let i=0;i<bridges.length;i++){
    const m=bridges[i],visible=power>0&&(quality!=='economy'||i<3);
-   m.setEnabled(visible);energyNodes[i].setEnabled(visible);
+   // R202.35: legacy cylinders duplicate the animated GPU ribbon node streams.
+    // Preserve the source geometry for safe rollback, but hide opaque hoses.
+    m.setEnabled(false);energyNodes[i].setEnabled(visible);
    // Always clear stale translucent geometry, including power-zero and budget changes.
    const aura=bridgeVeils[i],veilCount=visibleCoreShellVeils(quality,power);
    const auraVisible=visible&&i<veilCount;
-   aura.setEnabled(auraVisible);
+   // Existing ribbon sheaths supply diffusion; hide the redundant tubular veil.
+    aura.setEnabled(false);
    if(visible){
     const bridgePath=pathBridge(i,time);
     refresh(m,bridgePath,.0065);
