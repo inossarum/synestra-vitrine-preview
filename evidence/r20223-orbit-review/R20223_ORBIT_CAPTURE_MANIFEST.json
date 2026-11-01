@@ -1,0 +1,107 @@
+{
+    "schema":  "synestra.r20223.orbit-qa.v1",
+    "date":  "2026-11-01",
+    "state":  "PASS_VISUAL_CAPTURE_WITH_ART_PENDING",
+    "source_branch":  "qa/SYN_LAB_R20223_ORBIT_REVIEW_20261101",
+    "baseline_commit":  "88392a4fa33b0c355ac438d6457a7d3010c3a16b",
+    "candidate_commit":  "3191a6ab0da3e4205b5609273e42795b8cd06f07",
+    "viewport":  "1100x900",
+    "renderer":  "Chrome 156 / NVIDIA RTX3090 / ANGLE D3D11",
+    "fixture":  "labFrame=6 / Ultra / qaPower=145",
+    "angles":  [
+                   "front",
+                   "side",
+                   "top",
+                   "back"
+               ],
+    "composite":  [
+                      {
+                          "sha256":  "c61f467257d03d803d6f0eee16befbfb5f7ef9ebeb7df650881629ca19970c3a",
+                          "name":  "R20223_ORBIT_scene_4ANGLES_RTX3090.png",
+                          "size":  3268402
+                      },
+                      {
+                          "sha256":  "f0c835c149214b71dacaa5a06ea6a6b71f117236a4fe906049ba4a8b57497227",
+                          "name":  "R20223_ORBIT_core_4ANGLES_RTX3090.png",
+                          "size":  3716233
+                      },
+                      {
+                          "sha256":  "43606cdf5571b43d919ce5e6e79ba40608dcde91eecc53cfc6572e8156bcb6e2",
+                          "name":  "PREVIEW_scene_960.jpg",
+                          "size":  125683
+                      },
+                      {
+                          "sha256":  "a110b227efdf6aef39fd23a75973bb51d6492a1e34a8e63c333bb34e05341874",
+                          "name":  "PREVIEW_core_960.jpg",
+                          "size":  122200
+                      }
+                  ],
+    "source_captures":  [
+                            {
+                                "commit":  "88392a4fa33b0c355ac438d6457a7d3010c3a16b",
+                                "angle":  "front",
+                                "bytes":  510462,
+                                "sha256":  "4bcbfa57d3289df38dbb0e77eb482c612573ddb7a972e13aaf267a8e58da131a",
+                                "revision":  "R20222",
+                                "file":  "R20222_ORBIT_angle-front_RTX3090.png"
+                            },
+                            {
+                                "commit":  "88392a4fa33b0c355ac438d6457a7d3010c3a16b",
+                                "angle":  "side",
+                                "bytes":  540400,
+                                "sha256":  "bff935635aff7f7edcb45528b24484a111eea71c9fddba674a7e1b0554677b31",
+                                "revision":  "R20222",
+                                "file":  "R20222_ORBIT_angle-side_RTX3090.png"
+                            },
+                            {
+                                "commit":  "88392a4fa33b0c355ac438d6457a7d3010c3a16b",
+                                "angle":  "top",
+                                "bytes":  530243,
+                                "sha256":  "137ec2a1a15dc37b16b2864871645714e5786961749dbacfb612687fcd72160c",
+                                "revision":  "R20222",
+                                "file":  "R20222_ORBIT_angle-top_RTX3090.png"
+                            },
+                            {
+                                "commit":  "88392a4fa33b0c355ac438d6457a7d3010c3a16b",
+                                "angle":  "back",
+                                "bytes":  503047,
+                                "sha256":  "2d5d86239bfbb8cd3cdcb317c9152c072d78ad75d00ec51182f224beadfa00de",
+                                "revision":  "R20222",
+                                "file":  "R20222_ORBIT_angle-back_RTX3090.png"
+                            },
+                            {
+                                "commit":  "3191a6ab0da3e4205b5609273e42795b8cd06f07",
+                                "angle":  "front",
+                                "bytes":  504433,
+                                "sha256":  "39d843d3d0f439624816b90086ccfdfd264ede2a537ffe54f4845ba225c06a0f",
+                                "revision":  "R20223",
+                                "file":  "R20223_ORBIT_angle-front_RTX3090.png"
+                            },
+                            {
+                                "commit":  "3191a6ab0da3e4205b5609273e42795b8cd06f07",
+                                "angle":  "side",
+                                "bytes":  534597,
+                                "sha256":  "07961cdaf1f07ccf37f2e4885b67d4ae363698d1951a771d244a930177796eb4",
+                                "revision":  "R20223",
+                                "file":  "R20223_ORBIT_angle-side_RTX3090.png"
+                            },
+                            {
+                                "commit":  "3191a6ab0da3e4205b5609273e42795b8cd06f07",
+                                "angle":  "top",
+                                "bytes":  524189,
+                                "sha256":  "b0be50f8682802f768477c3a7d085ca0f8279f0756574e8ec025e8bc761300e0",
+                                "revision":  "R20223",
+                                "file":  "R20223_ORBIT_angle-top_RTX3090.png"
+                            },
+                            {
+                                "commit":  "3191a6ab0da3e4205b5609273e42795b8cd06f07",
+                                "angle":  "back",
+                                "bytes":  497895,
+                                "sha256":  "b4222c6bfb979b8a08cc9ea8d02926dee8a11223cd64dafe3d9cec82d2e14791",
+                                "revision":  "R20223",
+                                "file":  "R20223_ORBIT_angle-back_RTX3090.png"
+                            }
+                        ],
+    "art_signoff":  "PENDING",
+    "hosted_e2e":  "NOT_RUN"
+}
