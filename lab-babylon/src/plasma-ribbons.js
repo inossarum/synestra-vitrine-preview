@@ -117,20 +117,12 @@ export function installPlasmaRibbons({scene,colors,nodes,count=28,bridgePath=nul
     }`,
    fragmentSource:`precision highp float;
     varying vec4 vColor;varying vec2 vUV;varying vec3 vWorld;
-    uniform vec3 uTint;uniform vec3 uCamera;uniform vec3 uCoreCenter;
-    uniform float uTime;uniform float uPaletteWeight;uniform float uCoreRadius;
+    uniform vec3 uTint;
+    uniform float uTime;uniform float uPaletteWeight;
     void main(){
-     vec3 direction=vWorld-uCamera;
-     float fragmentDistance=length(direction);
-     if(fragmentDistance<.0001||uCoreRadius<=.0001)discard;
-     vec3 ray=direction/fragmentDistance;
-     vec3 fromCore=uCamera-uCoreCenter;
-     float projection=dot(fromCore,ray);
-     float discriminant=projection*projection-(dot(fromCore,fromCore)-uCoreRadius*uCoreRadius);
-     if(discriminant<=0.0)discard;
-     float entry=-projection-sqrt(discriminant);
-     // Only real ribbon fragments in FRONT of the core silhouette survive.
-     if(entry<=0.0||fragmentDistance>=entry-.004)discard;
+     // The rasterized core stencil rejects fragments OUTSIDE the real 80-face
+     // silhouette, while GPU depth rejects those BEHIND its actual facets.
+     // No analytic sphere approximation is used in R202.28.
      float crest=.5+.5*sin(vUV.x*24.0-uTime*2.8+sin(vUV.y*6.28)*2.0);
      float shimmer=.82+.18*sin(vUV.x*10.0+uTime*.95+vUV.y*7.0);
      float alpha=clamp(vColor.a*(.66+.34*crest)*shimmer*uPaletteWeight,0.0,.72);
@@ -139,15 +131,18 @@ export function installPlasmaRibbons({scene,colors,nodes,count=28,bridgePath=nul
     }`
   },{
    attributes:['position','color','uv'],
-   uniforms:['world','worldViewProjection','uTint','uTime','uPaletteWeight','uCamera','uCoreCenter','uCoreRadius'],
+   uniforms:['world','worldViewProjection','uTint','uTime','uPaletteWeight'],
    needAlphaBlending:true
   });
   shader.setColor3('uTint',color);
   shader.setFloat('uPaletteWeight',[1.0,.64,.53,.43][i]);
   shader.setFloat('uTime',0);
-  shader.setFloat('uCoreRadius',.35);
-  shader.setVector3('uCamera',new Vector3(0,0,4.8));
-  shader.setVector3('uCoreCenter',Vector3.Zero());
+  shader.stencil.enabled=true;
+  shader.stencil.func=514; // EQUAL the actual faceted stencil footprint
+  shader.stencil.funcRef=1;
+  shader.stencil.funcMask=0xff;
+  shader.stencil.mask=0x00; // read only, never modify the mask
+  shader.stencil.opStencilDepthPass=7680; // KEEP
   shader.backFaceCulling=false;
   shader.alphaMode=Engine.ALPHA_COMBINE;
   shader.disableDepthWrite=true;
@@ -208,7 +203,7 @@ export function installPlasmaRibbons({scene,colors,nodes,count=28,bridgePath=nul
   const foreground=mesh.clone('node-plasma-foreground-'+i);
   foreground.makeGeometryUnique();
   foreground.material=foregroundMaterials[i%4];
-  foreground.renderingGroupId=2;
+  foreground.renderingGroupId=3;
   foreground.isPickable=false;
   return foreground;
  });
@@ -219,15 +214,10 @@ export function installPlasmaRibbons({scene,colors,nodes,count=28,bridgePath=nul
   nodeMeshes,
   foregroundNodeMeshes,
   materials:material,
-  update({time,quality='balanced',parent=null,active=28,corePower=1,cameraPosition,coreCenter,coreRadius=.35}){
+  update({time,quality='balanced',parent=null,active=28,corePower=1}){
    // Shader flicker moves smoothly every frame; geometry updates are capped at 15 Hz.
    for(const mat of material)mat.setFloat('uTime',time);
-   for(const mat of foregroundMaterials){
-    mat.setFloat('uTime',time);
-    mat.setFloat('uCoreRadius',Number.isFinite(coreRadius)?Math.max(0,coreRadius):0);
-    if(cameraPosition)mat.setVector3('uCamera',cameraPosition);
-    if(coreCenter)mat.setVector3('uCoreCenter',coreCenter);
-   }
+   for(const mat of foregroundMaterials)mat.setFloat('uTime',time);
    const cadence=quality==='economy'?.12:.065;
    const budget=quality+':'+active+':'+(corePower>0);
    if(time-lastSample<cadence&&budget===lastBudget)return;
@@ -258,7 +248,7 @@ export function installPlasmaRibbons({scene,colors,nodes,count=28,bridgePath=nul
     const mesh=nodeMeshes[i],enabled=corePower>0&&(quality!=='economy'||i<3);
     mesh.setEnabled(enabled);
     const front=foregroundNodeMeshes[i];
-    front.setEnabled(enabled&&Number.isFinite(coreRadius)&&coreRadius>.001);
+    front.setEnabled(enabled);
     if(!enabled)continue;
     if(parent&&mesh.parent!==parent)mesh.parent=parent;
     if(parent&&front.parent!==parent)front.parent=parent;
