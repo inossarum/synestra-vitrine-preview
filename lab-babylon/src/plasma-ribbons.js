@@ -26,9 +26,11 @@ export function organicPlasmaCenterline(index,time,nodes){
  const points=[];
  for(let k=0;k<=STEPS;k++){
   const u=k/STEPS,swing=Math.sin(u*Math.PI),envelope=Math.pow(swing,.72);
+  // R202.42: coherent magnetic sweep reuses 3D ribbons, no extra geometry.
+  const magneticTwist=.15*Math.pow(envelope,1.45)*Math.sin(u*TWOPI*(1.35+orbit*.13)+phase*.41+time*.22);
   const contour=blend(a,b,u)
-   .add(field.scale(.48*Math.pow(envelope,1.25)))
-   .add(side.scale(.23*envelope*Math.sin(u*TWOPI*(1.25+orbit*.32)+phase+time*.11)))
+   .add(field.scale(.74*Math.pow(envelope,1.25)))
+   .add(side.scale(.23*envelope*Math.sin(u*TWOPI*(1.25+orbit*.32)+phase+time*.11)+magneticTwist))
    .add(across.scale(.115*envelope*Math.sin(u*TWOPI*(1.8+index%3*.20)-phase*.8-time*.16)));
   if(contour.lengthSquared()<.005)contour.copyFromFloats(.11,0,.2);
   contour.normalize();
@@ -36,7 +38,18 @@ export function organicPlasmaCenterline(index,time,nodes){
   const radius=1.54-inner*envelope+.09*envelope*Math.sin(u*TWOPI*2.2+phase+time*.22);
   points.push(contour.scale(radius));
  }
- return points;
+   // R202.42 deterministic spherical smoothing repairs kinked crossings; no new mesh.
+  // Preserve exact 85 points, original end anchors and each sampled radius.
+  let smoothPoints=points;
+  for(let pass=0;pass<3;pass++){
+   const next=smoothPoints.slice();
+   for(let j=1;j<STEPS;j++){
+    const avg=smoothPoints[j-1].scale(.22).add(smoothPoints[j].scale(.56)).add(smoothPoints[j+1].scale(.22));
+    next[j]=avg.lengthSquared()>1e-8?avg.normalize().scale(smoothPoints[j].length()):smoothPoints[j];
+   }
+   smoothPoints=next;
+  }
+  return smoothPoints;
 }
 export function organicPlasmaRibbonPaths(centerline,index,time,widthMultiplier=1){
  const paths=RAILS.map(()=>[]);
