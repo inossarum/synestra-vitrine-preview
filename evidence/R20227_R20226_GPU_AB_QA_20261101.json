@@ -1,0 +1,65 @@
+{
+  "status": "PASS_MEASURED",
+  "scope": "headless Chrome PC RTX3090 ANGLE D3D11 on local loopback; not headful user FPS SLA",
+  "source": {
+    "baseline": "R20226 a2fcfd68284aaeca7795e320a866d99446a1df82",
+    "candidate": "R20227 isolated foreground overlay candidate"
+  },
+  "bundles": {
+    "baseline": "d0145143112321a4bb837c281e9de471b8168bdabcdc6c90b329177be108d235",
+    "candidate": "bd863ec08f5b4e7b441d983171c2c1d48c6812a5f959e5e12fdfa30317ba5068"
+  },
+  "warmupMs": 1200,
+  "nominalMeasurementMs": 6000,
+  "order": "AB",
+  "runs": [
+    {
+      "label": "base",
+      "ordinal": 1,
+      "frameDelta": 623,
+      "durationMs": 6231.6152,
+      "measuredFps": 99.97408055619351,
+      "sampleP10": 97.36212306347689,
+      "sampleMedian": 99.29618861509623,
+      "sampleMin": 97.24930345186385,
+      "samples": 24,
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "canvasCount": 1,
+      "facets": 80,
+      "vertices": 240,
+      "visibility": "visible",
+      "viewport": "1100x900@DPR1",
+      "power": 145
+    },
+    {
+      "label": "candidate",
+      "ordinal": 2,
+      "frameDelta": 627,
+      "durationMs": 6270.732999999998,
+      "measuredFps": 99.9883107764276,
+      "sampleP10": 97.11504808875767,
+      "sampleMedian": 99.32356678079586,
+      "sampleMin": 97.06769687848922,
+      "samples": 24,
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "canvasCount": 1,
+      "facets": 80,
+      "vertices": 240,
+      "visibility": "visible",
+      "viewport": "1100x900@DPR1",
+      "power": 145
+    }
+  ],
+  "aggregate": {
+    "baseMeanFps": 99.97408055619351,
+    "candidateMeanFps": 99.9883107764276,
+    "relativePercent": 0.0142339095842825
+  },
+  "limitations": [
+    "Host GPU load not controlled",
+    "Four short windows",
+    "Headless benchmark",
+    "No sustained thermal stability claim",
+    "No physical low-tier GPU qualification"
+  ]
+}

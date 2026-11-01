@@ -101,7 +101,7 @@ function start(){
  // R202: volumetric procedural plasma is parented to the same Babylon sphere, no second scene.
  plasmaField=installR20215Volume({scene,parent:sphereRoot});
  plasma=installPlasmaRibbons({scene,colors:SPHERE_REFERENCE.colors.map(x=>new Color3(...x.linear)),nodes:nodeDirections,count:28,bridgePath:pathBridge});
- for(const mesh of [...plasma.meshes,...plasma.sheaths,...plasma.nodeMeshes])mesh.parent=sphereRoot;
+ for(const mesh of [...plasma.meshes,...plasma.sheaths,...plasma.nodeMeshes,...plasma.foregroundNodeMeshes])mesh.parent=sphereRoot;
  forks=installNodeForks({scene,directions:nodeDirections,ribbonMaterials:plasma.materials,photonMaterials:palette,parent:sphereRoot});
  const atlasFixture=new URLSearchParams(location.search).get('atlasSocketFixture')==='1';
  // Local test fixture only. A real Atlas decor supplies its socket via its GLB.
@@ -130,11 +130,11 @@ function start(){
   cv.dataset.geometryIntervalMs=String(geometryStep.intervalMs);
   if(geometryStep.update){
    geometryUpdates++;
-  plasma.update({time,quality,parent:sphereRoot,active:Math.min(plasma.meshes.length,Math.round(amount*.68)+5),corePower:get('core-power')});
+  plasma.update({time,quality,parent:sphereRoot,active:Math.min(plasma.meshes.length,Math.round(amount*.68)+5),corePower:get('core-power'),cameraPosition:camera.position,coreCenter:core.getAbsolutePosition(),coreRadius:.35*r});
   forks.update({time,quality,corePower:get('core-power'),parent:sphereRoot});
   cv.dataset.visibleNodeForks=String(forks.meshes.filter(m=>m.isEnabled()).length);
   cv.dataset.visibleNodePhotons=String(forks.photons.filter(m=>m.isEnabled()).length);
-  cv.dataset.visibleRibbons=String(plasma.meshes.filter(m=>m.isEnabled()).length);cv.dataset.visibleSheaths=String(plasma.sheaths.filter(m=>m.isEnabled()).length);
+  cv.dataset.visibleRibbons=String(plasma.meshes.filter(m=>m.isEnabled()).length);cv.dataset.visibleSheaths=String(plasma.sheaths.filter(m=>m.isEnabled()).length);cv.dataset.frontStreams=String(plasma.foregroundNodeMeshes.filter(m=>m.isEnabled()).length);
   for(let i=0;i<threads.length;i++){
    const m=threads[i],visible=i<Math.min(2,amount)&&(quality!=='economy'||i<1);m.setEnabled(visible);
    if(visible)refresh(m,pathOuter(i,time,turb),i%4===0?.012:.007);

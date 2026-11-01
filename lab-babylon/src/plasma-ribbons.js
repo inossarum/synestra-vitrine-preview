@@ -101,6 +101,58 @@ export function installPlasmaRibbons({scene,colors,nodes,count=28,bridgePath=nul
   shader.alphaMode=Engine.ALPHA_COMBINE;
   return shader;
  });
+ // R202.27: six existing node-stream geometries get a bounded foreground-only
+ // replica. Its shader clips each pixel against the actual camera-to-core
+ // sphere intercept. The original ribbons stay in the original group behind
+ // the existing faceted nucleus; the replica cannot paint across its far side.
+ const foregroundMaterials=colors.map((color,i)=>{
+  const shader=new ShaderMaterial('r20227-near-node-'+i,scene,{
+   vertexSource:`precision highp float;
+    attribute vec3 position;attribute vec4 color;attribute vec2 uv;
+    uniform mat4 world;uniform mat4 worldViewProjection;
+    varying vec4 vColor;varying vec2 vUV;varying vec3 vWorld;
+    void main(){
+     vColor=color;vUV=uv;vWorld=(world*vec4(position,1.0)).xyz;
+     gl_Position=worldViewProjection*vec4(position,1.0);
+    }`,
+   fragmentSource:`precision highp float;
+    varying vec4 vColor;varying vec2 vUV;varying vec3 vWorld;
+    uniform vec3 uTint;uniform vec3 uCamera;uniform vec3 uCoreCenter;
+    uniform float uTime;uniform float uPaletteWeight;uniform float uCoreRadius;
+    void main(){
+     vec3 direction=vWorld-uCamera;
+     float fragmentDistance=length(direction);
+     if(fragmentDistance<.0001||uCoreRadius<=.0001)discard;
+     vec3 ray=direction/fragmentDistance;
+     vec3 fromCore=uCamera-uCoreCenter;
+     float projection=dot(fromCore,ray);
+     float discriminant=projection*projection-(dot(fromCore,fromCore)-uCoreRadius*uCoreRadius);
+     if(discriminant<=0.0)discard;
+     float entry=-projection-sqrt(discriminant);
+     // Only real ribbon fragments in FRONT of the core silhouette survive.
+     if(entry<=0.0||fragmentDistance>=entry-.004)discard;
+     float crest=.5+.5*sin(vUV.x*24.0-uTime*2.8+sin(vUV.y*6.28)*2.0);
+     float shimmer=.82+.18*sin(vUV.x*10.0+uTime*.95+vUV.y*7.0);
+     float alpha=clamp(vColor.a*(.66+.34*crest)*shimmer*uPaletteWeight,0.0,.72);
+     vec3 light=uTint*(.72+.42*crest)*(1.0+.18*sin(vUV.x*17.0-uTime*1.3));
+     gl_FragColor=vec4(light,alpha);
+    }`
+  },{
+   attributes:['position','color','uv'],
+   uniforms:['world','worldViewProjection','uTint','uTime','uPaletteWeight','uCamera','uCoreCenter','uCoreRadius'],
+   needAlphaBlending:true
+  });
+  shader.setColor3('uTint',color);
+  shader.setFloat('uPaletteWeight',[1.0,.64,.53,.43][i]);
+  shader.setFloat('uTime',0);
+  shader.setFloat('uCoreRadius',.35);
+  shader.setVector3('uCamera',new Vector3(0,0,4.8));
+  shader.setVector3('uCoreCenter',Vector3.Zero());
+  shader.backFaceCulling=false;
+  shader.alphaMode=Engine.ALPHA_COMBINE;
+  shader.disableDepthWrite=true;
+  return shader;
+ });
  const ribbons=[];
  for(let i=0;i<count;i++){
   const rails=organicPlasmaRibbonPaths(organicPlasmaCenterline(i,0,nodes),i,0);
@@ -152,15 +204,30 @@ export function installPlasmaRibbons({scene,colors,nodes,count=28,bridgePath=nul
    nodeMeshes.push(mesh);
   }
  }
+ const foregroundNodeMeshes=nodeMeshes.map((mesh,i)=>{
+  const foreground=mesh.clone('node-plasma-foreground-'+i);
+  foreground.makeGeometryUnique();
+  foreground.material=foregroundMaterials[i%4];
+  foreground.renderingGroupId=2;
+  foreground.isPickable=false;
+  return foreground;
+ });
  let lastSample=-Infinity,lastBudget='';
  return {
   meshes:ribbons,
   sheaths,
   nodeMeshes,
+  foregroundNodeMeshes,
   materials:material,
-  update({time,quality='balanced',parent=null,active=28,corePower=1}){
+  update({time,quality='balanced',parent=null,active=28,corePower=1,cameraPosition,coreCenter,coreRadius=.35}){
    // Shader flicker moves smoothly every frame; geometry updates are capped at 15 Hz.
    for(const mat of material)mat.setFloat('uTime',time);
+   for(const mat of foregroundMaterials){
+    mat.setFloat('uTime',time);
+    mat.setFloat('uCoreRadius',Number.isFinite(coreRadius)?Math.max(0,coreRadius):0);
+    if(cameraPosition)mat.setVector3('uCamera',cameraPosition);
+    if(coreCenter)mat.setVector3('uCoreCenter',coreCenter);
+   }
    const cadence=quality==='economy'?.12:.065;
    const budget=quality+':'+active+':'+(corePower>0);
    if(time-lastSample<cadence&&budget===lastBudget)return;
@@ -190,15 +257,17 @@ export function installPlasmaRibbons({scene,colors,nodes,count=28,bridgePath=nul
    for(let i=0;i<nodeMeshes.length;i++){
     const mesh=nodeMeshes[i],enabled=corePower>0&&(quality!=='economy'||i<3);
     mesh.setEnabled(enabled);
+    const front=foregroundNodeMeshes[i];
+    front.setEnabled(enabled&&Number.isFinite(coreRadius)&&coreRadius>.001);
     if(!enabled)continue;
     if(parent&&mesh.parent!==parent)mesh.parent=parent;
-    MeshBuilder.CreateRibbon(null,{
-      pathArray:organicPlasmaRibbonPaths(bridgePath(i,time),i+100,time),
-      instance:mesh
-    },scene);
+    if(parent&&front.parent!==parent)front.parent=parent;
+    const samePaths=organicPlasmaRibbonPaths(bridgePath(i,time),i+100,time);
+    MeshBuilder.CreateRibbon(null,{pathArray:samePaths,instance:mesh},scene);
+    if(front.isEnabled())MeshBuilder.CreateRibbon(null,{pathArray:samePaths,instance:front},scene);
    }
   },
   stats:()=>({ribbons:ribbons.length,sheaths:sheaths.length,nodeStreams:nodeMeshes.length,rails:RAILS.length,samples:STEPS+1}),
-  dispose(){for(const mesh of [...ribbons,...sheaths,...nodeMeshes])mesh.dispose();for(const mat of material)mat.dispose();}
+  dispose(){for(const mesh of [...ribbons,...sheaths,...nodeMeshes,...foregroundNodeMeshes])mesh.dispose();for(const mat of [...material,...foregroundMaterials])mat.dispose();}
  };
 }

@@ -1,0 +1,84 @@
+# R202.26 isolated artistic candidate; no merge, release or deployment.
+name: R202.27 foreground core streams PC
+on:
+  push:
+    branches:
+      - task/SYN_LAB_R20227_FRONT_STREAMS_20261101
+    paths:
+      - .github/workflows/r20227-foreground-qualify.yml
+      - lab-babylon/**
+      - evidence/R20226_**
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: r20227-front-review-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  qualify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    defaults:
+      run:
+        working-directory: lab-babylon
+    steps:
+      - name: Checkout immutable HEAD without credentials
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Configure Node 22
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: lab-babylon/package-lock.json
+      - name: Verify candidate geometry and flow contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git diff --check
+          test -f tests/r20227-foreground-streams.test.mjs
+          grep -q 'core.renderingGroupId=1' src/main.js
+          grep -q 'foreground.renderingGroupId=2' src/plasma-ribbons.js
+          grep -Fq 'coreRadius:.35*r' src/main.js
+          grep -q 'for(int i=0;i<3;i++)' src/plasma-field.js
+          grep -Fq 'gl_FragColor=vec4(tint*(.75+.35*hotspot+.38*facetLight)*shimmer*energy*(.30+.70*depthTransmission),alpha*depthTransmission)' src/plasma-field.js
+      - name: Install exact dependencies, FREE_ONLY
+        run: npm ci --no-audit --no-fund
+      - name: Full R202.26 and previous source tests
+        run: npm test
+      - name: Build exact Babylon bundle and verify binary
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run build
+          echo 'bd863ec08f5b4e7b441d983171c2c1d48c6812a5f959e5e12fdfa30317ba5068  dist/babylon-lab.js' | sha256sum --check
+          sha256sum dist/babylon-lab.js > R20227_PC_SHA256SUMS.txt
+          git diff --exit-code -- src tests
+      - name: Provision pinned Chrome 155 for software WebGL smoke
+        id: setup-chrome
+        uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2.2.0
+        with:
+          chrome-version: '155'
+          install-dependencies: true
+      - name: Chromium software WebGL smoke, NOT physical RTX3090
+        env:
+          R202_DESKTOP_ONLY: '1'
+          R202_CHROME_BIN: ${{ steps.setup-chrome.outputs.chrome-path }}
+        run: node scripts/r202-browser-smoke.mjs
+      - name: Upload reviewer artifact, no deployment
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: synestra-r20227-front-streams-offline-review
+          path: |
+            lab-babylon/index.html
+            lab-babylon/style.css
+            lab-babylon/dist/babylon-lab.js
+            lab-babylon/R20227_PC_SHA256SUMS.txt
+            evidence/R20227_R20226_FOREGROUND_CORE_AB.png
+          if-no-files-found: error
+          retention-days: 7
