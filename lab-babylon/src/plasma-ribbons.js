@@ -90,7 +90,11 @@ export function installPlasmaRibbons({scene,colors,nodes,count=28,bridgePath=nul
     void main(){
      float crest=.5+.5*sin(vUV.x*24.0-uTime*2.8+sin(vUV.y*6.28)*2.0);
      float shimmer=.82+.18*sin(vUV.x*10.0+uTime*.95+vUV.y*7.0);
-     float alpha=clamp(vColor.a*(.66+.34*crest)*shimmer*uPaletteWeight,0.0,1.0);
+     // R202.34: moving discontinuities break rigid tube-like plasma into charged filaments.
+      float ionTwist=sin(vUV.x*38.0-uTime*1.8+1.1*sin(vUV.x*11.0+vUV.y*6.28-uTime*.37));
+      float ionCross=sin(vUV.x*67.0+vUV.y*9.0+uTime*.71);
+      float strandDensity=.22+.78*smoothstep(-.56,.48,ionTwist+.26*ionCross);
+      float alpha=clamp(vColor.a*(.66+.34*crest)*shimmer*uPaletteWeight*strandDensity,0.0,1.0);
      vec3 light=uTint*(.72+.42*crest)*(1.0+.18*sin(vUV.x*17.0-uTime*1.3));
      gl_FragColor=vec4(light,alpha);
     }`
@@ -125,7 +129,11 @@ export function installPlasmaRibbons({scene,colors,nodes,count=28,bridgePath=nul
      // No analytic sphere approximation is used in R202.28.
      float crest=.5+.5*sin(vUV.x*24.0-uTime*2.8+sin(vUV.y*6.28)*2.0);
      float shimmer=.82+.18*sin(vUV.x*10.0+uTime*.95+vUV.y*7.0);
-     float alpha=clamp(vColor.a*(.66+.34*crest)*shimmer*uPaletteWeight,0.0,.72);
+     // R202.34: moving discontinuities break rigid tube-like plasma into charged filaments.
+      float ionTwist=sin(vUV.x*38.0-uTime*1.8+1.1*sin(vUV.x*11.0+vUV.y*6.28-uTime*.37));
+      float ionCross=sin(vUV.x*67.0+vUV.y*9.0+uTime*.71);
+      float strandDensity=.22+.78*smoothstep(-.56,.48,ionTwist+.26*ionCross);
+      float alpha=clamp(vColor.a*(.66+.34*crest)*shimmer*uPaletteWeight*strandDensity,0.0,.72);
      vec3 light=uTint*(.72+.42*crest)*(1.0+.18*sin(vUV.x*17.0-uTime*1.3));
      gl_FragColor=vec4(light,alpha);
     }`
