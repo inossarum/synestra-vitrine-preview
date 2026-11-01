@@ -104,10 +104,11 @@ export function createPlasmaHeartMaterial(scene){
   // R202.22: each of the 80 flat-shaded triangles receives its own light level.
   float facetLight=clamp(.5+.5*dot(normalize(vNormal),normalize(vec3(-.42,.62,.85))),0.0,1.0);
   float shimmer=.97+.03*sin(uTime*2.7+vWorld.x*12.0+vWorld.z*8.0);
-  vec3 tint=mix(vec3(.27,.12,.59),vec3(1.02,.94,1.10),clamp(.12+.38*hotspot+.50*facetLight,0.0,1.0));
+  vec3 tint=mix(vec3(.32,.18,.60),vec3(.98,.87,1.07),clamp(.12+.38*hotspot+.50*facetLight,0.0,1.0));
   float energy=clamp(uPower,0.0,1.6);
-  float alpha=clamp((.07+.54*pow(face,1.1)+.24*hotspot)*energy,0.0,.94);
-  gl_FragColor=vec4(tint*(.70+.40*hotspot+.40*facetLight)*shimmer*energy,alpha);
+  // R202.24: a translucent faceted heart admits underlying plasma/ribbons instead of masking them.
+  float alpha=clamp((.09+.44*pow(face,1.1)+.15*hotspot)*energy,0.0,.79);
+  gl_FragColor=vec4(tint*(.75+.35*hotspot+.38*facetLight)*shimmer*energy,alpha);
  }`;
  const material=new ShaderMaterial('r202-white-violet-soft-heart',scene,{vertexSource,fragmentSource},{
    attributes:['position','normal'],
