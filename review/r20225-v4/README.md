@@ -19,6 +19,18 @@ node review/r20225-v4/assemble-offline.mjs "I:\_STUDIO_STAGING\SYN_LAB_R20224_DE
 
 Le script échoue sans écrire de résultat final si une empreinte manque ou diffère, si le dossier de destination existe déjà ou si une copie échoue. Il ajoute `SHA256SUMS.txt` au paquet. Ouvrir ensuite `index.html` (ou `OUVRIR-COMPARATEUR.cmd`). Il n'installe rien et n'exécute aucun appel réseau.
 
+## Régression de reconstruction (sans fenêtre Chrome)
+
+Depuis PowerShell, fournir les chemins vers les deux bundles compilés **exactement** validés :
+
+```powershell
+$env:SYN_R20224_BUNDLE_ROOT="I:\_STUDIO_STAGING\SYN_LAB_R20225_AB_EXPORT_REVIEW_20261101\versions\r20224"
+$env:SYN_R20225_BUNDLE_ROOT="I:\_STUDIO_STAGING\SYN_LAB_R20225_AB_EXPORT_REVIEW_20261101\versions\r20225"
+node --test review/r20225-v4/assemble-offline.test.mjs
+```
+
+Six tests doivent passer (sans skip) : empreintes sources, mauvais bundle, bundle corrompu, destination existante, sortie dans les sources, puis copie nominale avec manifeste 15/15. Les variables manquantes provoquent un échec explicite, pas un faux PASS. Aucun Chrome n'est lancé et les sorties temporaires de ce banc sont supprimées à sa fin.
+
 ## Utilisation / limites
 
 Le comparateur affiche un seul moteur 3D à la fois. Il synchronise l'angle, le zoom, les sept réglages et la frame figée 6 lors du passage R202.24 / R202.25. La V3 rétablit la version précédente sur erreur d'application et suspend la comparaison si la récupération échoue. La V4 ajoute une prévisualisation de PNG côte à côte, ainsi qu'un `COMPARATIF_MEME_ANGLE.png` statique déjà calculé. Le téléchargement direct par clic n'a **pas** été confirmé sous Chrome hors ligne : utiliser « Enregistrer l'image sous » sur la prévisualisation, ou le PNG statique.
