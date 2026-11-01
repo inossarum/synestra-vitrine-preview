@@ -1,0 +1,71 @@
+# Exact-source R202.25 desktop-only qualification. No release or deployment.
+name: R202.25 bounded optical-depth nucleus PC
+on:
+  push:
+    branches:
+      - task/SYN_LAB_R20225_VOLUMETRIC_OCCLUSION_20261101
+    paths:
+      - .github/workflows/r20225-depth-qualify.yml
+      - lab-babylon/**
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: synestra-r20225-depth-exact-source
+  cancel-in-progress: false
+jobs:
+  desktop-qualify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    defaults:
+      run:
+        working-directory: lab-babylon
+    steps:
+      - name: Checkout exact HEAD without persisted credentials
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install Node 22 with lockfile cache
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: lab-babylon/package-lock.json
+      - name: Check R202.25 source and geometry contract
+        run: |
+          echo "R20225_SOURCE_SHA=$GITHUB_SHA"
+          git rev-parse HEAD
+          git diff --check
+          git ls-files --error-unmatch src/main.js src/plasma-field.js tests/r20225-front-transmittance.test.mjs scripts/r202-browser-smoke.mjs
+          grep -q 'float frontDepth=max(length(vWorld-uCamera)-entryDistance,0.0)' src/plasma-field.js
+          grep -q 'float depthTransmission=clamp(exp(-.52\*frontDepth\*veil),.63,1.0)' src/plasma-field.js
+          grep -q 'core.renderingGroupId=1' src/main.js
+      - name: Install immutable dependencies FREE_ONLY
+        run: npm ci --no-audit --no-fund
+      - name: Failure-first depth contract and full source regressions
+        run: |
+          node --test tests/r20225-front-transmittance.test.mjs
+          npm test
+      - name: Build exact PC bundle and verify SHA256
+        run: |
+          npm run build
+          test -s dist/babylon-lab.js
+          echo '58ffa01ce8a7c22206b3a6b4795cf4c8c9d2d6e125a98940a64401a2f6e16ed2  dist/babylon-lab.js' | sha256sum --check
+          sha256sum dist/babylon-lab.js > R20225_PC_SHA256SUMS.txt
+          git diff --exit-code -- src tests
+      - name: Chromium desktop WebGL software smoke (not RTX3090)
+        env:
+          R202_DESKTOP_ONLY: '1'
+          R202_QUALITY_QA: '1'
+        run: node scripts/r202-browser-smoke.mjs
+      - name: Store review PC artifact only (never deploy)
+        uses: actions/upload-artifact@v4
+        with:
+          name: r20225-optical-depth-pc-review
+          path: |
+            lab-babylon/index.html
+            lab-babylon/style.css
+            lab-babylon/dist/babylon-lab.js
+            lab-babylon/R20225_PC_SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 2
