@@ -56,8 +56,8 @@ test('R202 artistic delta uses soft view-angle heart and preserves four-color em
  assert.match(field,/export function createPlasmaHeartMaterial/);
  assert.match(field,/pow\(face,1\.1\)/,'facet illumination covers more of the native central sphere');
  assert.match(field,/pow\(face,2\.25\)/,'faceted nucleus hotspot must remain localized');
- assert.match(field,/\.10\*hotspot/,'central alpha hotspot is bounded');
- assert.match(field,/alpha=clamp\([^;]+,0\.0,\.68\)/,'bounded alpha for luminous faceted nucleus');
+ assert.match(field,/\.15\*hotspot/,'central alpha hotspot is bounded');
+ assert.match(field,/alpha=clamp\([^;]+,0\.0,\.79\)/,'bounded alpha for luminous faceted nucleus');
  assert.match(field,/float energy=clamp\(uPower,0\.0,1\.6\)/,'zero-power still disables the core');
  assert.match(field,/material\.disableDepthWrite=true/);
  assert.match(ribbons,/uPaletteWeight/);
