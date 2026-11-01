@@ -8,6 +8,7 @@ import {mountCoreAtAtlasSocket} from './atlas-interop.js';
 import {createPlasmaHeartMaterial} from './plasma-field.js';
 import {installR20215Volume} from './plasma-volume-r20215.js';
 import {geometryUpdateDecision} from './geometry-frame-budget.mjs';
+import {isFacetMaskActive} from './core-mask-lifecycle.mjs';
 // ONE Babylon canvas. The requested subject is ONLY the glowing energy sphere.
 const cv=document.getElementById('renderCanvas'),stat=document.getElementById('status');
 const ids=['core-mode','core-radius','core-power','core-speed','strands','complexity','quality'];
@@ -151,7 +152,7 @@ function start(){
   plasmaShaderFrames++;
   // R202.29: never retain a depth/stencil silhouette when the visible core is off,
   // collapsed, or disabled by its parent. The mask inherits the exact core transform.
-  const depthMaskActive=power>0&&r>.001&&core.isEnabled();
+  const depthMaskActive=isFacetMaskActive(power,r,core.isEnabled());
   const depthMaskChanged=depthMaskActive!==lastDepthMaskActive;
   if(depthMaskChanged){coreDepthMask.setEnabled(depthMaskActive);lastDepthMaskActive=depthMaskActive;}
   cv.dataset.facetDepthActive=String(depthMaskActive);
