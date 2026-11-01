@@ -106,6 +106,12 @@ export function createPlasmaHeartMaterial(scene){
   // R202.30: bounded face-normal contrast; no edge mesh, geometry or extra pass.
   float facetRelief=smoothstep(.20,.80,facetLight);
   float facetShading=mix(.72,1.23,facetRelief);
+  // R202.31: face-normal crystal glint and shadow/ivory separation; no mesh or extra pass.
+  vec3 facetKey=normalize(vec3(-.42,.62,.85));
+  float facetGlint=pow(max(dot(reflect(-facetKey,normalize(vNormal)),normalize(uCamera-vWorld)),0.0),10.0);
+  // R202.31: four bounded per-face key-light bands preserve distinct triangle planes.
+  float facetStrata=floor(clamp(facetLight,0.0,.999)*4.0)/3.0;
+  vec3 facetPalette=mix(vec3(.63,.58,.78),vec3(1.65,1.58,1.36),facetStrata);
   float shimmer=.97+.03*sin(uTime*2.7+vWorld.x*12.0+vWorld.z*8.0);
   vec3 tint=mix(vec3(.32,.18,.60),vec3(.98,.87,1.07),clamp(.12+.38*hotspot+.50*facetLight,0.0,1.0));
   float energy=clamp(uPower,0.0,1.6);
@@ -134,7 +140,7 @@ export function createPlasmaHeartMaterial(scene){
   float depthTransmission=clamp(exp(-.70*frontDepth*veil),.63,1.0);
   // Preserve the R202.24 alpha ceiling; the foreground envelope can only attenuate it.
   float alpha=clamp((.09+.44*pow(face,1.1)+.15*hotspot)*energy,0.0,.79);
-  gl_FragColor=vec4(tint*(.75+.35*hotspot+.38*facetLight)*facetShading*shimmer*energy*(.30+.70*depthTransmission),alpha*depthTransmission);
+  gl_FragColor=vec4(tint*(.75+.35*hotspot+.38*facetLight)*facetShading*facetPalette*(1.0+.25*facetGlint)*shimmer*energy*(.30+.70*depthTransmission),alpha*depthTransmission);
  }`;
  const material=new ShaderMaterial('r202-white-violet-soft-heart',scene,{vertexSource,fragmentSource},{
    attributes:['position','normal'],
