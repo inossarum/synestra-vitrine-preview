@@ -1,0 +1,94 @@
+# R202.37 isolated 3D plasma morphology QA; no release/deployment/secret access.
+name: R202.37 plasma morphology QA
+
+on:
+  push:
+    branches:
+      - task/SYN_LAB_R20237_PLASMA_STRUCTURE_20261101
+    paths:
+      - .github/workflows/r20237-plasma-structure-qualify.yml
+      - lab-babylon/**
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: r20237-plasma-structure-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  qualify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    defaults:
+      run:
+        working-directory: lab-babylon
+    steps:
+      - name: Checkout immutable candidate
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Node 22 with exact npm lock cache
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: lab-babylon/package-lock.json
+      - name: Failure-first source boundaries and 80-facet topology
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git diff --check
+          test -f tests/r20230-facet-relief.test.mjs
+          test -f tests/r20231-crystal-light.test.mjs
+          test -f tests/r20232-plasma-reveal.test.mjs
+          test -f tests/r20233-core-incandescence.test.mjs
+          test -f tests/r20234-filament-ionization.test.mjs
+          test -f tests/r20235-legacy-link-visibility.test.mjs
+          test -f tests/r20236-radial-glow.test.mjs
+          test -f tests/r20237-plasma-structure.test.mjs
+          test -f tests/r20229-core-mask-lifecycle.test.mjs
+          grep -Fq "CreateIcoSphere('central nucleus',{radius:.38,subdivisions:2}" src/main.js
+          grep -Fq "const coreDepthMask=core.clone" src/main.js
+          grep -Fq "float facetRelief=smoothstep(.20,.80,facetLight);" src/plasma-field.js
+          grep -Fq "float facetShading=mix(.72,1.23,facetRelief);" src/plasma-field.js
+          grep -Fq "float facetStrata=floor(clamp(facetLight,0.0,.999)*4.0)/3.0;" src/plasma-field.js
+          grep -Fq "vec3 facetPalette=mix(vec3(.63,.58,.78),vec3(1.65,1.58,1.36),facetStrata);" src/plasma-field.js
+          grep -Fq "const depthMaskActive=isFacetMaskActive" src/main.js
+          grep -Fq "float coreReveal=smoothstep(.20,.56,sqrt(coreImpactSquared));" src/plasma-volume-r20215.js
+          grep -Fq "float ignition=pow(face,2.6)*smoothstep(.20,1.20,energy);" src/plasma-field.js
+          grep -Fq "vec3 coreEmission=vec3(1.15,1.18,1.30)*(.52*ignition);" src/plasma-field.js
+          grep -Fq "float da=clamp(uOpacity*localDensity*thickness/float(uSteps)*2.4*(.28+.72*coreReveal),0.0,.16);" src/plasma-volume-r20215.js
+          grep -Fq "front.setEnabled(enabled&&coreVisible)" src/plasma-ribbons.js
+          grep -Fq "float strandDensity=.22+.78*smoothstep(-.56,.48,ionTwist+.26*ionCross);" src/plasma-ribbons.js
+          grep -Fq "uPaletteWeight*strandDensity" src/plasma-ribbons.js
+          grep -Fq "m.setEnabled(false);energyNodes[i].setEnabled(visible);" src/main.js
+          grep -Fq "aura.setEnabled(false);" src/main.js
+          grep -Fq "m.setEnabled(false);mist.setEnabled(mistVisible);" src/main.js
+          grep -Fq "const mistBudget=visibleCoreMistCount(quality,power);" src/main.js
+          grep -Fq "float densityRidge=pow(smoothstep(.22,.78,abs(wave+.42*fold)),2.0);" src/plasma-volume-r20215.js
+          grep -Fq "float localDensity=(.065+1.35*smoke+1.18*sparkle)*envelope*(.50+.50*densityRidge);" src/plasma-volume-r20215.js
+      - name: Install locked dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Full regression and isolated shader tests
+        run: npm test
+      - name: Build Babylon single-engine bundle (not published)
+        run: |
+          npm run build
+          sha256sum dist/babylon-lab.js
+      - name: Pin Chrome 155 software WebGL
+        id: chrome
+        uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2.2.0
+        with:
+          chrome-version: '155'
+          install-dependencies: true
+      - name: Browser QA power-off and stencil/mask across graphics budgets
+        env:
+          R202_DESKTOP_ONLY: '1'
+          R202_QUALITY_QA: '1'
+          R202_CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+        run: node scripts/r202-browser-smoke.mjs
+      - name: Source remains unmodified after QA
+        run: git diff --exit-code -- src tests
