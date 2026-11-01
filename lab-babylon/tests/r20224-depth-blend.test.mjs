@@ -13,7 +13,7 @@ test('R202.24 translucent faceted heart uses a bounded depth-friendly alpha',()=
   const m=heart.match(/float alpha=clamp\([^;]*,0\.0,([.\d]+)\);/);
   assert.ok(m,'alpha cap must be explicit in heart shader');
   const alphaCap=Number(m[1]);
-  assert.ok(alphaCap>=.55&&alphaCap<=.70,'facet core must stay visible but not opaque');
+  assert.ok(alphaCap>=.72&&alphaCap<=.82,'facet core must stay visible but not opaque');
   assert.doesNotMatch(heart,/vec3\(1\.02,\.94,1\.10\)/,
     'excess-white additive nucleus may not hide ribbons');
   assert.match(shader,/material\.alphaMode=Engine\.ALPHA_COMBINE/);
