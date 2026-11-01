@@ -79,7 +79,7 @@ void main(){
  float coreSmoothT=exp(-coreExtinctionK*uOpacity*coreHalfLength);
  float coreTransmission=mix(coreSmoothT,coreForegroundT,0.25);
  float coreRayIntegral=0.4511930898*exp(-0.5*coreImpactSquared/(0.18*0.18));
- float coreRadiance=0.55*clamp(uCorePower,0.0,2.5)*coreRayIntegral*coreTransmission;
+ float coreRadiance=1.10*clamp(uCorePower,0.0,2.5)*coreRayIntegral*coreTransmission;
  energy+=coreRadiance*vec3(1.65,1.38,1.82);
  gl_FragColor=vec4(energy/max(a,.0001),clamp(a,0.0,.78));
 }
