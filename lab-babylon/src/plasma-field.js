@@ -139,8 +139,11 @@ export function createPlasmaHeartMaterial(scene){
   }
   float depthTransmission=clamp(exp(-.70*frontDepth*veil),.63,1.0);
   // Preserve the R202.24 alpha ceiling; the foreground envelope can only attenuate it.
-  float alpha=clamp((.09+.44*pow(face,1.1)+.15*hotspot)*energy,0.0,.79);
-  gl_FragColor=vec4(tint*(.75+.35*hotspot+.38*facetLight)*facetShading*facetPalette*(1.0+.25*facetGlint)*shimmer*energy*(.30+.70*depthTransmission),alpha*depthTransmission);
+  // R202.33: face-aware incandescent white-violet focus, not another lamp or pass.
+  float ignition=pow(face,2.6)*smoothstep(.20,1.20,energy);
+  vec3 coreEmission=vec3(1.15,1.18,1.30)*(.52*ignition);
+  float alpha=clamp((.20+.48*pow(face,1.1)+.12*hotspot)*energy,0.0,.79);
+  gl_FragColor=vec4((tint*(.75+.35*hotspot+.38*facetLight)*facetShading*facetPalette*(1.0+.25*facetGlint)+coreEmission)*shimmer*energy*(.30+.70*depthTransmission),alpha*depthTransmission);
  }`;
  const material=new ShaderMaterial('r202-white-violet-soft-heart',scene,{vertexSource,fragmentSource},{
    attributes:['position','normal'],
