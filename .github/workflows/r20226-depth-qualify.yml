@@ -1,0 +1,75 @@
+# R202.26 isolated artistic candidate; no merge, release or deployment.
+name: R202.26 flow-weighted core depth PC
+on:
+  push:
+    branches:
+      - task/SYN_LAB_R20226_FLOW_DEPTH_20261101
+    paths:
+      - .github/workflows/r20226-depth-qualify.yml
+      - lab-babylon/**
+      - evidence/R20226_**
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: r20226-depth-review-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  qualify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    defaults:
+      run:
+        working-directory: lab-babylon
+    steps:
+      - name: Checkout immutable HEAD without credentials
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Configure Node 22
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: lab-babylon/package-lock.json
+      - name: Verify candidate geometry and flow contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git diff --check
+          test -f tests/r20226-flow-depth.test.mjs
+          grep -q 'core.renderingGroupId=1' src/main.js
+          grep -q 'for(int i=0;i<3;i++)' src/plasma-field.js
+          grep -Fq 'gl_FragColor=vec4(tint*(.75+.35*hotspot+.38*facetLight)*shimmer*energy*(.30+.70*depthTransmission),alpha*depthTransmission)' src/plasma-field.js
+      - name: Install exact dependencies, FREE_ONLY
+        run: npm ci --no-audit --no-fund
+      - name: Full R202.26 and previous source tests
+        run: npm test
+      - name: Build exact Babylon bundle and verify binary
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run build
+          echo 'd0145143112321a4bb837c281e9de471b8168bdabcdc6c90b329177be108d235  dist/babylon-lab.js' | sha256sum --check
+          sha256sum dist/babylon-lab.js > R20226_PC_SHA256SUMS.txt
+          git diff --exit-code -- src tests
+      - name: Chromium software WebGL smoke, NOT physical RTX3090
+        env:
+          R202_DESKTOP_ONLY: '1'
+        run: node scripts/r202-browser-smoke.mjs
+      - name: Upload reviewer artifact, no deployment
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: synestra-r20226-flow-core-offline-review
+          path: |
+            lab-babylon/index.html
+            lab-babylon/style.css
+            lab-babylon/dist/babylon-lab.js
+            lab-babylon/R20226_PC_SHA256SUMS.txt
+            evidence/R20226_R20225_CORE_AB_V2.png
+          if-no-files-found: error
+          retention-days: 7
