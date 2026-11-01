@@ -23,7 +23,7 @@ test('R202.21 actual Babylon material addresses central faceted nucleus only',()
 });
 test('R202.21 shader increases central faceted emission with bounded alpha and power-off',()=>{
  assert.match(heart,/float hotspot=pow\(face,2\.25\)/);
- assert.match(heart,/float alpha=clamp\(\(\.09\+\.44\*pow\(face,1\.1\)\+\.15\*hotspot\)\*energy,0\.0,\.79\)/);
+ assert.match(heart,/float alpha=clamp\(\(.+\)\*energy,0\.0,\.79\)/); // preserve ceiling, exact R202.33 formula validated separately
  assert.match(heart,/float energy=clamp\(uPower,0\.0,1\.6\)/);
  assert.match(heart,/R202\.21: illuminate the existing faceted central IcoSphere/);
  assert.match(main,/CreateIcoSphere\('central nucleus',\{radius:\.38,subdivisions:2\}/);
