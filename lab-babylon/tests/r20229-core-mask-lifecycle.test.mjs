@@ -18,7 +18,7 @@ test('R202.29 lifecycle gates original shared 80-facet geometry and all foregrou
  assert.match(main,/coreDepthMask=core\.clone\('central nucleus facet depth mask',core,true\)/);
  assert.match(main,/const depthMaskActive=isFacetMaskActive\(power,r,core\.isEnabled\(\)\)/);
  assert.match(main,/coreDepthMask\.setEnabled\(depthMaskActive\)/);
- assert.match(main,/geometryStep\.update\|\|depthMaskChanged/);
+ assert.match(main,/if\(depthMaskChanged\)geometryState=null/);
  assert.match(main,/coreVisible:depthMaskActive/);
  assert.match(ribbons,/coreVisible=true/);
  assert.match(ribbons,/front\.setEnabled\(enabled&&coreVisible\)/);
