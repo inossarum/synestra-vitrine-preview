@@ -8,11 +8,13 @@ const shader=readFileSync(new URL('../src/plasma-field.js',import.meta.url),'utf
 const main=readFileSync(new URL('../src/main.js',import.meta.url),'utf8');
 
 test('R202.24 translucent faceted heart uses a bounded depth-friendly alpha',()=>{
-  const m=shader.match(/float alpha=clamp\([^;]*,0\.0,([.\d]+)\);/);
+  const heart=shader.slice(shader.indexOf('export function createPlasmaHeartMaterial'));
+  assert.ok(heart.startsWith('export function'), 'heart material function must exist');
+  const m=heart.match(/float alpha=clamp\([^;]*,0\.0,([.\d]+)\);/);
   assert.ok(m,'alpha cap must be explicit in heart shader');
   const alphaCap=Number(m[1]);
   assert.ok(alphaCap>=.55&&alphaCap<=.70,'facet core must stay visible but not opaque');
-  assert.doesNotMatch(shader,/vec3\(1\.02,\.94,1\.10\)/,
+  assert.doesNotMatch(heart,/vec3\(1\.02,\.94,1\.10\)/,
     'excess-white additive nucleus may not hide ribbons');
   assert.match(shader,/material\.alphaMode=Engine\.ALPHA_COMBINE/);
   assert.match(shader,/material\.disableDepthWrite=true/);
