@@ -1,0 +1,101 @@
+{
+  "status": "PASS_MEASURED",
+  "scope": "headless Chrome PC RTX3090 ANGLE D3D11 on local loopback; not headful user FPS SLA",
+  "source": {
+    "baseline": "R20224 edabe06b16d1e36548b34f80a0450f8be9017a33",
+    "candidate": "R20225 cde9659449c44a6fe7d3641122faddc4df51e94f"
+  },
+  "bundles": {
+    "baseline": "ffd1326751e6ecbbe2fd997d25a00a8eb5d2bd7efbb36c5f52875e7a50e628da",
+    "candidate": "58ffa01ce8a7c22206b3a6b4795cf4c8c9d2d6e125a98940a64401a2f6e16ed2"
+  },
+  "warmupMs": 1200,
+  "nominalMeasurementMs": 6000,
+  "order": "ABBA",
+  "runs": [
+    {
+      "label": "base",
+      "ordinal": 1,
+      "frameDelta": 620,
+      "durationMs": 6203.2267,
+      "measuredFps": 99.94798352283337,
+      "sampleP10": 98.11890955172464,
+      "sampleMedian": 99.17333078391755,
+      "sampleMin": 97.29734179920001,
+      "samples": 24,
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "canvasCount": 1,
+      "facets": 80,
+      "vertices": 240,
+      "visibility": "visible",
+      "viewport": "1100x900@DPR1",
+      "power": 145
+    },
+    {
+      "label": "candidate",
+      "ordinal": 2,
+      "frameDelta": 616,
+      "durationMs": 6161.189099999998,
+      "measuredFps": 99.980700154131,
+      "sampleP10": 97.65452608070723,
+      "sampleMedian": 99.32822335977306,
+      "sampleMin": 97.48170999416203,
+      "samples": 24,
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "canvasCount": 1,
+      "facets": 80,
+      "vertices": 240,
+      "visibility": "visible",
+      "viewport": "1100x900@DPR1",
+      "power": 145
+    },
+    {
+      "label": "candidate",
+      "ordinal": 3,
+      "frameDelta": 614,
+      "durationMs": 6142.6319,
+      "measuredFps": 99.95715354520918,
+      "sampleP10": 97.71274017791576,
+      "sampleMedian": 99.14760818292935,
+      "sampleMin": 97.10467473108537,
+      "samples": 24,
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "canvasCount": 1,
+      "facets": 80,
+      "vertices": 240,
+      "visibility": "visible",
+      "viewport": "1100x900@DPR1",
+      "power": 145
+    },
+    {
+      "label": "base",
+      "ordinal": 4,
+      "frameDelta": 616,
+      "durationMs": 6162.628100000002,
+      "measuredFps": 99.95735423333429,
+      "sampleP10": 97.2641829883459,
+      "sampleMedian": 99.31050701191866,
+      "sampleMin": 96.86344973215424,
+      "samples": 24,
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "canvasCount": 1,
+      "facets": 80,
+      "vertices": 240,
+      "visibility": "visible",
+      "viewport": "1100x900@DPR1",
+      "power": 145
+    }
+  ],
+  "aggregate": {
+    "baseMeanFps": 99.95266887808383,
+    "candidateMeanFps": 99.96892684967008,
+    "relativePercent": 0.01626567031050019
+  },
+  "limitations": [
+    "Host GPU load not controlled",
+    "Four short windows",
+    "Headless benchmark",
+    "No sustained thermal stability claim",
+    "No physical low-tier GPU qualification"
+  ]
+}
