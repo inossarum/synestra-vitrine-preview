@@ -1,0 +1,73 @@
+# R202.30 isolated art shader qualification only; no release/deployment/secret access.
+name: R202.30 exact facet relief QA
+
+on:
+  push:
+    branches:
+      - task/SYN_LAB_R20230_FACET_RELIEF_20261101
+    paths:
+      - .github/workflows/r20230-facet-relief-qualify.yml
+      - lab-babylon/**
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: r20230-exact-relief-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  qualify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    defaults:
+      run:
+        working-directory: lab-babylon
+    steps:
+      - name: Checkout immutable candidate
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Node 22 with exact npm lock cache
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: lab-babylon/package-lock.json
+      - name: Failure-first source boundaries and 80-facet topology
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git diff --check
+          test -f tests/r20230-facet-relief.test.mjs
+          test -f tests/r20229-core-mask-lifecycle.test.mjs
+          grep -Fq "CreateIcoSphere('central nucleus',{radius:.38,subdivisions:2}" src/main.js
+          grep -Fq "const coreDepthMask=core.clone" src/main.js
+          grep -Fq "float facetRelief=smoothstep(.20,.80,facetLight);" src/plasma-field.js
+          grep -Fq "float facetShading=mix(.72,1.23,facetRelief);" src/plasma-field.js
+          grep -Fq "const depthMaskActive=isFacetMaskActive" src/main.js
+          grep -Fq "front.setEnabled(enabled&&coreVisible)" src/plasma-ribbons.js
+      - name: Install locked dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Full regression and isolated shader tests
+        run: npm test
+      - name: Build Babylon single-engine bundle (not published)
+        run: |
+          npm run build
+          sha256sum dist/babylon-lab.js
+      - name: Pin Chrome 155 software WebGL
+        id: chrome
+        uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2.2.0
+        with:
+          chrome-version: '155'
+          install-dependencies: true
+      - name: Browser QA power-off and stencil/mask across graphics budgets
+        env:
+          R202_DESKTOP_ONLY: '1'
+          R202_QUALITY_QA: '1'
+          R202_CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+        run: node scripts/r202-browser-smoke.mjs
+      - name: Source remains unmodified after QA
+        run: git diff --exit-code -- src tests
