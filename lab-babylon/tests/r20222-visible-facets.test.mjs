@@ -23,8 +23,8 @@ test('R202.22 native IcoSphere has exactly 80 flat triangular facets',()=>{
    assert.deepEqual(a,c,'normal must be uniform across each facet');
   }
   const material=createPlasmaHeartMaterial(scene);mesh.material=material;
-  assert.equal(material.alphaMode,Engine.ALPHA_ADD);
-  assert.equal(material.metadata.revision,'r20222-visible-80-facets');
+  assert.equal(material.alphaMode,Engine.ALPHA_COMBINE);
+  assert.equal(material.metadata.revision,'r20223-foreground-facets');
   assert.equal(scene.meshes.length,1);
  }finally{scene.dispose();engine.dispose();}
 });
@@ -35,7 +35,7 @@ test('R202.22 only central mesh is changed; outer raymarch stays unchanged',()=>
  assert.match(shader,/dot\(normalize\(vNormal\),normalize\(vec3\(-\.42,\.62,\.85\)\)\)/);
  assert.match(shader,/\*facetLight/);
  assert.match(shader,/float energy=clamp\(uPower,0\.0,1\.6\)/);
- assert.match(shader,/material\.alphaMode=Engine\.ALPHA_ADD/);
+ assert.match(shader,/material\.alphaMode=Engine\.ALPHA_COMBINE/);
  assert.match(main,/installR20215Volume\(/);
  assert.doesNotMatch(shader,/new Engine\(|new Scene\(|fetch\(/);
 });

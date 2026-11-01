@@ -12,11 +12,11 @@ test('R202.21 actual Babylon material addresses central faceted nucleus only',()
   const sphere=MeshBuilder.CreateIcoSphere('central nucleus',{radius:.38,subdivisions:2},scene);
   sphere.material=material;
   assert.equal(material.getClassName(),'ShaderMaterial');
-  assert.deepEqual(material.metadata,{revision:'r20222-visible-80-facets',target:'central nucleus',scope:'desktop'});
+  assert.deepEqual(material.metadata,{revision:'r20223-foreground-facets',target:'central nucleus',scope:'desktop'});
   assert.equal(sphere.material,material);
   assert.equal(scene.meshes.length,1);
   assert.equal(material.disableDepthWrite,true);
-  assert.equal(material.alphaMode,Engine.ALPHA_ADD,'additive blending must be scoped to central IcoSphere');
+  assert.equal(material.alphaMode,Engine.ALPHA_COMBINE,'R202.23 foreground nucleus requires bounded compositing');
   material.setFloat('uTime',6);material.setFloat('uPower',0);
   material.setVector3('uCamera',new Vector3(0,0,4.8));
  } finally {scene.dispose();engine.dispose();}

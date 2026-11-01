@@ -1,5 +1,5 @@
-# Exact-source QA for isolated R202.22 branch; no deployment, no promotion.
-name: R202.22 visible 80-triangle nucleus PC exact-source qualification
+# Exact-source QA for isolated R202.23 branch; no deployment, no promotion.
+name: R202.23 foreground faceted nucleus PC exact-source qualification
 on:
   push:
     branches:
@@ -7,6 +7,7 @@ on:
       - task/SYN_LAB_R20219_DESKTOP_DELIVERY_20261031
       - task/SYN_LAB_R20221_FACETED_NUCLEUS_20261101
       - task/SYN_LAB_R20222_80_TRIANGLE_CORE_20261101
+      - task/SYN_LAB_R20223_CORE_FACET_VISIBILITY_20261101
     paths:
       - .github/workflows/r202-plasma-field.yml
       - lab-babylon/src/main.js
@@ -21,6 +22,7 @@ on:
       - lab-babylon/tests/plasma-field-r202.test.mjs
       - lab-babylon/tests/r20221-faceted-nucleus.test.mjs
       - lab-babylon/tests/r20222-visible-facets.test.mjs
+      - lab-babylon/tests/r20223-core-visibility.test.mjs
       - lab-babylon/tests/geometry-frame-budget-r202.test.mjs
       - lab-babylon/tests/core-volume-integration.test.mjs
       - lab-babylon/package.json
@@ -30,11 +32,12 @@ on:
       - task/SYN_LAB_R202_PLASMA_FIELD_20261030
       - task/SYN_LAB_R20219_DESKTOP_DELIVERY_20261031
       - task/SYN_LAB_R20221_FACETED_NUCLEUS_20261101
+      - task/SYN_LAB_R20222_80_TRIANGLE_CORE_20261101
   workflow_dispatch:
 permissions:
   contents: read
 concurrency:
-  group: synestra-r20222-80-triangle-exact-source
+  group: synestra-r20223-core-visibility-exact-source
   cancel-in-progress: false
 jobs:
   desktop-exact-build:
@@ -54,11 +57,11 @@ jobs:
           node-version: '22'
           cache: npm
           cache-dependency-path: lab-babylon/package-lock.json
-      - name: Require complete R202.22 80-triangle nucleus source in clean Git checkout
+      - name: Require complete R202.23 foreground faceted nucleus source in clean Git checkout
         run: |
-          echo "R20222_SOURCE_SHA=$GITHUB_SHA"
+          echo "R20223_SOURCE_SHA=$GITHUB_SHA"
           git rev-parse HEAD
-          git ls-files --error-unmatch src/main.js src/plasma-volume-r20215.js src/plasma-volume-policy.mjs tests/r20215-native-babylon.test.mjs scripts/r202-browser-smoke.mjs tests/r20221-faceted-nucleus.test.mjs tests/r20222-visible-facets.test.mjs
+          git ls-files --error-unmatch src/main.js src/plasma-volume-r20215.js src/plasma-volume-policy.mjs tests/r20215-native-babylon.test.mjs scripts/r202-browser-smoke.mjs tests/r20221-faceted-nucleus.test.mjs tests/r20222-visible-facets.test.mjs tests/r20223-core-visibility.test.mjs
           test -s src/plasma-volume-r20215.js
           test -s src/plasma-volume-policy.mjs
           grep -q 'installR20215Volume' src/main.js
@@ -66,9 +69,9 @@ jobs:
           grep -q 'coreRayIntegral' src/plasma-volume-r20215.js
           grep -q 'coreForegroundT' src/plasma-volume-r20215.js
           echo 'b892b6b52747011c0fc96e769e1a655ab630271b74444a446e7eab09dfd1cf2a  src/plasma-volume-r20215.js' | sha256sum --check
-          echo '9a82fa76d10d178472fdb37f0c65275e99bb6806b7e2f528eb568fd84735b8ac  src/plasma-field.js' | sha256sum --check
-          echo 'edd3c0d7c217686237862c2ebd9ffd02937a1713e349d73b35497acd9ff024ab  src/main.js' | sha256sum --check
-          grep -q 'r20222-visible-80-facets' src/plasma-field.js
+          echo '2af11692d51297f74fb31ac18229f2c72d5ea93d87ea2672a90ce7002e6d2a49  src/plasma-field.js' | sha256sum --check
+          echo '171d12bfd9c9ba647627bb195121d463d36dc453407569a8135646b07ae61943  src/main.js' | sha256sum --check
+          grep -q 'r20223-foreground-facets' src/plasma-field.js
           git hash-object src/main.js src/plasma-volume-r20215.js src/plasma-volume-policy.mjs
       - name: Reproducible dependencies FREE_ONLY
         run: npm ci --no-audit --no-fund
@@ -81,7 +84,7 @@ jobs:
           npm run build
           test -s dist/babylon-lab.js
           sha256sum dist/babylon-lab.js
-          echo 'f40aef3d8e5079417ff3c122a24221894df32bb1a438308cd6e6fd6a097772ee  dist/babylon-lab.js' | sha256sum --check
+          echo 'd46f6a7445ce9dffbed72836c70195b1775fcbb62708c14afaf1662dcddce392  dist/babylon-lab.js' | sha256sum --check
           wc -c dist/babylon-lab.js
           git diff --exit-code -- src tests
       - name: Desktop-only browser policy gate
@@ -94,23 +97,23 @@ jobs:
           R202_QUALITY_QA: '1'
         run: node scripts/r202-browser-smoke.mjs
       - name: Preserve exact PC build checksum
-        run: sha256sum dist/babylon-lab.js > R20222_80_FACETS_SHA256SUMS.txt
+        run: sha256sum dist/babylon-lab.js > R20223_CORE_VISIBILITY_SHA256SUMS.txt
       - name: Upload exact PC review build (no deployment)
         uses: actions/upload-artifact@v4
         with:
-          name: r20222-80-facets-build
+          name: r20223-core-visibility-build
           path: |
             lab-babylon/index.html
             lab-babylon/style.css
             lab-babylon/dist/babylon-lab.js
-            lab-babylon/R20222_80_FACETS_SHA256SUMS.txt
+            lab-babylon/R20223_CORE_VISIBILITY_SHA256SUMS.txt
           if-no-files-found: error
           retention-days: 2
       - name: Store desktop previews for visual review
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: r20222-80-facets-previews
+          name: r20223-core-visibility-previews
           path: |
             ${{ runner.temp }}/r202-ci-1100.png
             ${{ runner.temp }}/r202-motion-*.png
