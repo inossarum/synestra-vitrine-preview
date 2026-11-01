@@ -76,6 +76,29 @@ function start(){
  core=MeshBuilder.CreateIcoSphere('central nucleus',{radius:.38,subdivisions:2},scene);core.material=coreMat;
  // R202.23: retain the real faceted nucleus above translucent filaments and volume in this single scene.
  core.renderingGroupId=1;
+ // R202.28: exact rasterized 80-facet depth/stencil mask. Shares original
+ // IcoSphere geometry and follows its transform; it never writes visible color.
+ const coreDepthMaterial=new StandardMaterial('r20228-facet-depth-only',scene);
+ coreDepthMaterial.disableColorWrite=true;
+ coreDepthMaterial.disableLighting=true;
+ coreDepthMaterial.forceDepthWrite=true;
+ coreDepthMaterial.backFaceCulling=true;
+ coreDepthMaterial.stencil.enabled=true;
+ coreDepthMaterial.stencil.func=519; // ALWAYS
+ coreDepthMaterial.stencil.funcRef=1;
+ coreDepthMaterial.stencil.mask=0xff;
+ coreDepthMaterial.stencil.opStencilDepthPass=7681; // REPLACE
+ const coreDepthMask=core.clone('central nucleus facet depth mask',core,true);
+ coreDepthMask.position.setAll(0);
+ coreDepthMask.rotation.setAll(0);
+ coreDepthMask.scaling.setAll(1);
+ coreDepthMask.material=coreDepthMaterial;
+ coreDepthMask.renderingGroupId=2;
+ coreDepthMask.isPickable=false;
+ // Group 2 clears depth + stencil, draws the invisible exact faceted mask;
+ // group 3 must keep both buffers for per-fragment foreground stream tests.
+ scene.setRenderingAutoClearDepthStencil(3,false);
+ glow.addExcludedMesh(coreDepthMask);
  halo=MeshBuilder.CreateSphere('halo',{diameter:1.16,segments:32},scene);halo.material=haloMat;
  // Minimal structural outlines remain; soft volumetric ribbons replace most of the wire cage.
  // R196: eliminate legacy rigid structural loops; organic plasma ribbon meshes remain the sole envelope.
@@ -130,11 +153,11 @@ function start(){
   cv.dataset.geometryIntervalMs=String(geometryStep.intervalMs);
   if(geometryStep.update){
    geometryUpdates++;
-  plasma.update({time,quality,parent:sphereRoot,active:Math.min(plasma.meshes.length,Math.round(amount*.68)+5),corePower:get('core-power'),cameraPosition:camera.position,coreCenter:core.getAbsolutePosition(),coreRadius:.35*r});
+  plasma.update({time,quality,parent:sphereRoot,active:Math.min(plasma.meshes.length,Math.round(amount*.68)+5),corePower:get('core-power')});
   forks.update({time,quality,corePower:get('core-power'),parent:sphereRoot});
   cv.dataset.visibleNodeForks=String(forks.meshes.filter(m=>m.isEnabled()).length);
   cv.dataset.visibleNodePhotons=String(forks.photons.filter(m=>m.isEnabled()).length);
-  cv.dataset.visibleRibbons=String(plasma.meshes.filter(m=>m.isEnabled()).length);cv.dataset.visibleSheaths=String(plasma.sheaths.filter(m=>m.isEnabled()).length);cv.dataset.frontStreams=String(plasma.foregroundNodeMeshes.filter(m=>m.isEnabled()).length);
+  cv.dataset.visibleRibbons=String(plasma.meshes.filter(m=>m.isEnabled()).length);cv.dataset.visibleSheaths=String(plasma.sheaths.filter(m=>m.isEnabled()).length);cv.dataset.frontStreams=String(plasma.foregroundNodeMeshes.filter(m=>m.isEnabled()).length);cv.dataset.facetDepthMask=String(coreDepthMask.getTotalIndices()/3);cv.dataset.facetDepthGroup=String(coreDepthMask.renderingGroupId);cv.dataset.frontStencilGroup=String(plasma.foregroundNodeMeshes[0]?.renderingGroupId??-1);
   for(let i=0;i<threads.length;i++){
    const m=threads[i],visible=i<Math.min(2,amount)&&(quality!=='economy'||i<1);m.setEnabled(visible);
    if(visible)refresh(m,pathOuter(i,time,turb),i%4===0?.012:.007);

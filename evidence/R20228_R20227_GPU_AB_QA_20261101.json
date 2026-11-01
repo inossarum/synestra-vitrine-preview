@@ -1,0 +1,65 @@
+{
+  "status": "PASS_MEASURED",
+  "scope": "headless Chrome PC RTX3090 ANGLE D3D11 on local loopback; not headful user FPS SLA",
+  "source": {
+    "baseline": "R20227 302c4d6614ec5216fff10773f1ddc1a8cc3eb501",
+    "candidate": "R20228 exact faceted stencil and depth candidate"
+  },
+  "bundles": {
+    "baseline": "bd863ec08f5b4e7b441d983171c2c1d48c6812a5f959e5e12fdfa30317ba5068",
+    "candidate": "03ea466fb2ac205a7ce70cbc27ede51fdda53505be08e9c4fe9581a043061dd6"
+  },
+  "warmupMs": 1200,
+  "nominalMeasurementMs": 6000,
+  "order": "AB",
+  "runs": [
+    {
+      "label": "base",
+      "ordinal": 1,
+      "frameDelta": 619,
+      "durationMs": 6187.916399999999,
+      "measuredFps": 100.03367207740558,
+      "sampleP10": 97.50393672144521,
+      "sampleMedian": 99.3573566173986,
+      "sampleMin": 97.34138221767627,
+      "samples": 24,
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "canvasCount": 1,
+      "facets": 80,
+      "vertices": 240,
+      "visibility": "visible",
+      "viewport": "1100x900@DPR1",
+      "power": 145
+    },
+    {
+      "label": "candidate",
+      "ordinal": 2,
+      "frameDelta": 616,
+      "durationMs": 6159.4275,
+      "measuredFps": 100.0092946950021,
+      "sampleP10": 98.00643157406607,
+      "sampleMedian": 99.27824714326803,
+      "sampleMin": 96.56991104425481,
+      "samples": 24,
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "canvasCount": 1,
+      "facets": 80,
+      "vertices": 240,
+      "visibility": "visible",
+      "viewport": "1100x900@DPR1",
+      "power": 145
+    }
+  ],
+  "aggregate": {
+    "baseMeanFps": 100.03367207740558,
+    "candidateMeanFps": 100.0092946950021,
+    "relativePercent": -0.024369176795413505
+  },
+  "limitations": [
+    "Host GPU load not controlled",
+    "Four short windows",
+    "Headless benchmark",
+    "No sustained thermal stability claim",
+    "No physical low-tier GPU qualification"
+  ]
+}
