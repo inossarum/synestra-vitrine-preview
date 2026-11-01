@@ -1,0 +1,65 @@
+{
+  "status": "PASS_MEASURED",
+  "scope": "headless Chrome PC RTX3090 ANGLE D3D11 on local loopback; not headful user FPS SLA",
+  "source": {
+    "baseline": "R20225 cde9659449c44a6fe7d3641122faddc4df51e94f",
+    "candidate": "R20226 uncommitted isolated prototype"
+  },
+  "bundles": {
+    "baseline": "58ffa01ce8a7c22206b3a6b4795cf4c8c9d2d6e125a98940a64401a2f6e16ed2",
+    "candidate": "d0145143112321a4bb837c281e9de471b8168bdabcdc6c90b329177be108d235"
+  },
+  "warmupMs": 1200,
+  "nominalMeasurementMs": 6000,
+  "order": "AB",
+  "runs": [
+    {
+      "label": "base",
+      "ordinal": 1,
+      "frameDelta": 624,
+      "durationMs": 6243.2479,
+      "measuredFps": 99.94797739811035,
+      "sampleP10": 97.56423385246255,
+      "sampleMedian": 99.00452925920439,
+      "sampleMin": 96.98015002829219,
+      "samples": 24,
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "canvasCount": 1,
+      "facets": 80,
+      "vertices": 240,
+      "visibility": "visible",
+      "viewport": "1100x900@DPR1",
+      "power": 145
+    },
+    {
+      "label": "candidate",
+      "ordinal": 2,
+      "frameDelta": 622,
+      "durationMs": 6217.4058,
+      "measuredFps": 100.04172479782484,
+      "sampleP10": 97.86562597865661,
+      "sampleMedian": 99.53239679983399,
+      "sampleMin": 97.33755578658685,
+      "samples": 24,
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "canvasCount": 1,
+      "facets": 80,
+      "vertices": 240,
+      "visibility": "visible",
+      "viewport": "1100x900@DPR1",
+      "power": 145
+    }
+  ],
+  "aggregate": {
+    "baseMeanFps": 99.94797739811035,
+    "candidateMeanFps": 100.04172479782484,
+    "relativePercent": 0.09379619493556923
+  },
+  "limitations": [
+    "Host GPU load not controlled",
+    "Four short windows",
+    "Headless benchmark",
+    "No sustained thermal stability claim",
+    "No physical low-tier GPU qualification"
+  ]
+}

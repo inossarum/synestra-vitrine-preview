@@ -113,11 +113,25 @@ export function createPlasmaHeartMaterial(scene){
   float discriminant=projection*projection-(dot(uCamera,uCamera)-1.05*1.05);
   float entryDistance=max(-projection-sqrt(max(discriminant,0.0)),0.0);
   float frontDepth=max(length(vWorld-uCamera)-entryDistance,0.0);
-  float veil=.78+.22*(.5+.5*sin(vWorld.x*8.0+vWorld.y*6.0+uTime*.32));
-  float depthTransmission=clamp(exp(-.52*frontDepth*veil),.63,1.0);
+  // R202.26: sample the existing plasma's moving flow field along the actual
+  // camera-to-facet front segment, rather than applying a nearly uniform veil.
+  // Three fixed samples, no render pass and no change to the 80-facet topology.
+  vec3 plasmaEntry=uCamera+rayDir*entryDistance;
+  vec3 plasmaSegment=vWorld-plasmaEntry;
+  float veil=0.0;
+  for(int i=0;i<3;i++){
+   vec3 samplePos=plasmaEntry+plasmaSegment*((float(i)+.5)/3.0);
+   float flow=sin(samplePos.x*9.0+samplePos.y*5.3+uTime*.48
+                  +1.4*sin(samplePos.z*6.0-uTime*.26));
+   float eddy=sin(samplePos.z*10.5-samplePos.y*8.0-uTime*.43+flow*1.7)
+              *cos(samplePos.x*7.2+samplePos.z*4.4+uTime*.38);
+   float plasmaDensity=clamp(.52+.34*flow+.26*eddy,0.0,1.0);
+   veil+=(.28+1.80*plasmaDensity*plasmaDensity)/3.0;
+  }
+  float depthTransmission=clamp(exp(-.70*frontDepth*veil),.63,1.0);
   // Preserve the R202.24 alpha ceiling; the foreground envelope can only attenuate it.
   float alpha=clamp((.09+.44*pow(face,1.1)+.15*hotspot)*energy,0.0,.79);
-  gl_FragColor=vec4(tint*(.75+.35*hotspot+.38*facetLight)*shimmer*energy*(.83+.17*depthTransmission),alpha*depthTransmission);
+  gl_FragColor=vec4(tint*(.75+.35*hotspot+.38*facetLight)*shimmer*energy*(.30+.70*depthTransmission),alpha*depthTransmission);
  }`;
  const material=new ShaderMaterial('r202-white-violet-soft-heart',scene,{vertexSource,fragmentSource},{
    attributes:['position','normal'],
