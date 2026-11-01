@@ -39,7 +39,7 @@ test('R202 energy coherence reduces bright outline density and preserves 3D plas
  assert.match(main,/plasmaVisualRevision='r202-soft-heart-palette'/);
  assert.match(main,/Math\.round\(amount\*\.68\)\+5/);
  assert.match(main,/coreMistWidth\(i,\.5,quality\)\*1\.65/);
- assert.match(main,/radius:\.30,subdivisions:4/);
+ assert.match(main,/radius:\.38,subdivisions:2/);
  assert.match(main,/diameter:1\.16,segments:32/);
  assert.match(main,/createPlasmaHeartMaterial\(scene\)/);
  assert.match(main,/coreMat\.setFloat\('uTime',time\)/);
