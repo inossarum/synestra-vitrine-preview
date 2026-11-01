@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; frame-src 'self' file:; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>SYNESTRA — Comparateur Labo 3D R202.24 / R202.25</title>
+<link rel="stylesheet" href="./review.css">
+<script src="./review.js" defer></script>
+</head>
+<body>
+<main class="app">
+<header class="header">
+<div class="eyebrow"><span class="dot"></span>SYNESTRA / LABO 3D / REVUE ARTISTIQUE LOCALE</div>
+<div class="heading"><div><h1>La profondeur du noyau</h1><p>Comparer deux rendus réels du même noyau — <strong>80 triangles, même scène et mêmes contrôles</strong>.</p></div><span class="status">HORS LIGNE</span></div>
+</header>
+<section class="switch-panel" aria-label="Comparaison interactive">
+<div class="switch-label">VERSION AFFICHÉE <small>Une seule simulation GPU active</small></div>
+<div class="switches" role="group" aria-label="Choisir la version">
+<button id="btn-r20224" type="button" aria-pressed="false" data-variant="r20224"><strong>R202.24</strong><span>Noyau au premier plan</span></button>
+<button id="btn-r20225" type="button" aria-pressed="true" data-variant="r20225"><strong>R202.25</strong><span>Profondeur optique corrigée</span></button>
+</div>
+<div class="hint"><span class="led"></span><span id="current-label" role="status">R202.25 — profondeur optique</span></div>
+</section>
+<section class="viewport">
+<iframe id="scene-frame" title="Labo 3D Babylon interactif" src="./versions/r20225/index.html?labFrame=6&amp;qaQuality=ultra&amp;qaPower=145" loading="eager"></iframe>
+</section>
+<section class="under">
+<div><strong>Contrôles</strong><span>Glisser pour tourner · molette pour zoomer · paramètres dans le panneau de la scène</span></div>
+<div class="review-actions"><button id="export-comparison" type="button">Préparer le comparatif PNG</button><a href="./COMPARATIF_MEME_ANGLE.png" target="_blank" rel="noopener">Ouvrir le comparatif PNG vérifié ↗</a><a href="./COMPARATIF_4_ANGLES.png" target="_blank" rel="noopener">Quatre angles ↗</a></div>
+</section>
+<p class="export-status" id="export-status" role="status">Préparer une image A/B au même angle et avec les mêmes réglages. Aucun téléchargement sans action de votre part. Si le lien ne télécharge pas, clic droit sur la prévisualisation → « Enregistrer l’image sous » ; une image PNG vérifiée est également disponible juste au-dessus.</p>
+<section id="export-preview" class="export-preview" hidden><div><strong>Comparatif prêt</strong><a id="download-png" download="Synestra_Labo3D_R20224_vs_R20225_meme_angle.png">Enregistrer le PNG (selon navigateur)</a></div><img id="export-preview-image" alt="Noyau R202.24 à gauche et R202.25 à droite, caméra identique"/></section>
+<footer>
+<p>Chaque changement recharge une seule scène, mais conserve l'angle, le zoom et les paramètres. Les deux versions utilisent le même instant d'animation figé (frame 6). Ce comparateur ne valide pas automatiquement le rendu artistique et ne transmet aucune donnée.</p>
+<p>Référence R202.24 <code>edabe06b…</code> · Candidat R202.25 <code>cde96594…</code> · Aucun serveur / aucune publication.</p>
+</footer>
+</main>
+</body></html>
