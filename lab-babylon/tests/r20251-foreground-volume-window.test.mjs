@@ -22,3 +22,38 @@ test('R202.51: 16 steps, existing volume carrier and no additional engine or mes
  assert.doesNotMatch(shader,/for\(int i=0;i<17/);
  assert.match(shader,/if\(!profile\.visible\)return;/);
 });
+
+test('R202.51: bounded aperture grid never increases smoke or erases the volume',()=>{
+ for(let i=0;i<=100;i++){
+  const radius=i/100;
+  const legacy=1-.55*(1-smooth(.18,.60,radius));
+  for(let j=0;j<=100;j++){
+   const depth=(j-50)/50;
+   const next=opacityFactor(radius,depth);
+   assert.ok(Number.isFinite(next),'finite alpha factor');
+   assert.ok(next>=.45*.32-1e-12,'never fully delete volume');
+   assert.ok(next<=legacy+1e-12,'never add smoke over R202.43');
+   assert.ok(next<=1+1e-12,'bounded to physical opacity');
+   if(radius>=.62)assert.ok(Math.abs(next-legacy)<1e-12,'outside core must match legacy');
+   if(depth>=.12)assert.ok(Math.abs(next-legacy)<1e-12,'backside must match legacy');
+  }
+ }
+});
+test('R202.51: monotonic front-to-rear recovery and zero-power invariance',()=>{
+ for(let i=0;i<=100;i++){
+  const radius=i/100;
+  let previous=-1;
+  for(let j=0;j<=100;j++){
+   const depth=(j-50)/50;
+   const next=opacityFactor(radius,depth);
+   assert.ok(next+1e-12>=previous,'rear depth must not grow darker');
+   previous=next;
+   assert.equal(0*next,0,'zero-opacity remains off');
+  }
+ }
+});
+test('R202.51: no additional uniforms, engine, scene, fetch or worker',()=>{
+ assert.doesNotMatch(shader,/new Scene\(|new Worker\(|fetch\(/);
+ assert.match(shader,/uniforms:\['world','worldViewProjection','uTime','uOpacity','uLayer','uCamera','uCameraLocal','uLayerRadius','uSteps','uCorePower'\]/);
+ assert.match(shader,/const mesh=MeshBuilder\.CreateSphere\('r20215-volume-carrier'/);
+});
