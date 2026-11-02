@@ -164,6 +164,8 @@ export function createPlasmaHeartMaterial(scene){
    // Preserve original R202.33 compositing and clamp before transmission.
    coreEmission+=facetLift;
    alpha=clamp(alpha+focalOpacity*energy,0.0,.79);
+   // R202.45: expose lit facets through the existing alpha channel, with the original ceiling.
+   alpha=clamp(alpha*(1.0+.48*keyedHighlight),0.0,.79);
   gl_FragColor=vec4((tint*(.75+.35*hotspot+.38*facetLight)*facetShading*facetPalette*(1.0+.25*facetGlint)*facetContrast+coreEmission)*shimmer*energy*(.30+.70*depthTransmission),alpha*depthTransmission);
  }`;
  const material=new ShaderMaterial('r202-white-violet-soft-heart',scene,{vertexSource,fragmentSource},{
