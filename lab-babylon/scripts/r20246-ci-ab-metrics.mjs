@@ -77,6 +77,55 @@ function metric(base,candidate,box) {
  }
  return {region:box.name,samples:n,base_luma:Number((ba/n).toFixed(4)),candidate_luma:Number((ca/n).toFixed(4)),delta_pct:Number((100*(ca/Math.max(ba,.0001)-1)).toFixed(4)),mean_absolute_difference:Number((delta/n).toFixed(4))};
 }
+
+/* Temporary reduced A/B preview in private GitHub job log, no artifact upload.
+   The full-size captures are still deleted after the CI run. */
+function encodeReviewThumbnail(a,b){
+ if(a.width!==b.width||a.height!==b.height)throw Error('R20246_THUMBNAIL_FRAME_MISMATCH');
+ const panelWidth=320,gap=4,width=panelWidth*2+gap,height=320;
+ const src={x:140,y:180,width:560,height:550};
+ if(src.x+src.width>a.width||src.y+src.height>a.height)throw Error('R20246_THUMBNAIL_SOURCE_BOUNDS');
+ const stride=width*4,scan=Buffer.alloc((stride+1)*height);
+ for(let y=0;y<height;y++){
+  const sy=src.y+Math.floor(y*src.height/height);
+  for(let x=0;x<width;x++){
+   const row=(stride+1)*y,dst=row+1+4*x;
+   if(x>=panelWidth&&x<panelWidth+gap){scan[dst+3]=255;continue;}
+   const which=x<panelWidth?a:b;
+   const local=x<panelWidth?x:x-panelWidth-gap;
+   const sx=src.x+Math.floor(local*src.width/panelWidth);
+   const at=(sy*a.width+sx)*4;
+   // 6-bit channel quantization bounds private-log size; alpha stays opaque.
+   for(let k=0;k<3;k++)scan[dst+k]=which.rgba[at+k]&252;
+   scan[dst+3]=255;
+  }
+ }
+ let table=null;
+ function crc(data){
+  if(!table){
+   table=new Uint32Array(256);
+   for(let n=0;n<256;n++){
+    let c=n;for(let j=0;j<8;j++)c=(c&1)?(0xedb88320^(c>>>1)):(c>>>1);
+    table[n]=c>>>0;
+   }
+  }
+  let c=0xffffffff;
+  for(const b of data)c=(table[(c^b)&255]^(c>>>8))>>>0;
+  return(c^0xffffffff)>>>0;
+ }
+ function chunk(type,payload){
+  const header=Buffer.from(type,'ascii'),body=Buffer.concat([header,payload]);
+  const out=Buffer.alloc(payload.length+12);out.writeUInt32BE(payload.length,0);
+  body.copy(out,4);out.writeUInt32BE(crc(body),out.length-4);return out;
+ }
+ const ihdr=Buffer.alloc(13);
+ ihdr.writeUInt32BE(width,0);ihdr.writeUInt32BE(height,4);ihdr[8]=8;ihdr[9]=6;
+ const png=Buffer.concat([signature,chunk('IHDR',ihdr),chunk('IDAT',deflateSync(scan,{level:9})),chunk('IEND',Buffer.alloc(0))]);
+ const decoded=decodePng(png);
+ if(decoded.width!==width||decoded.height!==height)throw Error('R20246_THUMBNAIL_ROUNDTRIP');
+ return png;
+}
+
 if(process.argv.includes('--self-test')){selfTest()}
 else {
  const root=resolve(import.meta.dirname,'..');
@@ -113,6 +162,12 @@ else {
   if(images.base.sha256===images.candidate.sha256)throw Error('R20246_NO_PIXEL_DIFFERENCE');
   const a=images.base.pixels,b=images.candidate.pixels;
   const boxes=[{name:'fixed_central_window',x0:319,y0:388,x1:460,y1:536,stride:3},{name:'scene_window',x0:140,y0:180,x1:700,y1:730,stride:5}];
+  if(process.env.R20246_VISUAL_REVIEW_LOG==='1'){
+   const thumbnail=encodeReviewThumbnail(a,b);
+   if(thumbnail.length>750000)throw Error('R20246_THUMBNAIL_SIZE_LIMIT');
+   console.log('R20246_PRIVATE_THUMBNAIL_PNG='+thumbnail.toString('base64'));
+   console.log(JSON.stringify({status:'R20246_PRIVATE_REVIEW_THUMBNAIL_EMITTED',sha256:hash(thumbnail),width:644,height:320,baseline:'left',candidate:'right',full_images_deleted:true,storage:'PRIVATE_GITHUB_ACTIONS_LOG_ONLY'}));
+  }
   console.log(JSON.stringify({status:'R20246_CHROME_SOFTWARE_AB_METRICS_PASS',gpu:'SWIFTSHADER_NOT_RTX3090',head:process.env.GITHUB_SHA||'UNKNOWN',width:a.width,height:a.height,baseline_sha256:images.base.sha256,candidate_sha256:images.candidate.sha256,regions:boxes.map(bx=>metric(a,b,bx)),images_persisted:false,art_signoff:false}));
  }finally{rmSync(dir,{force:true,recursive:true});await new Promise(ok=>server.close(ok))}
 }
