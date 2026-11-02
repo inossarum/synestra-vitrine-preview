@@ -12,7 +12,8 @@ test('R202.43 restores core legibility using only existing 80 facet shader',()=>
   assert.match(field,/float coreFocus=smoothstep\(\.30,\.84,face\)\*smoothstep\(\.18,1\.20,energy\);/);
   assert.match(field,/vec3 facetLift=vec3\(\.29,\.32,\.40\)\*coreFocus\*\(\.28\+\.72\*facetStrata\);/);
   assert.match(field,/float focalOpacity=clamp\(\.10\*coreFocus,0\.0,\.10\);/);
-  assert.match(field,/coreEmission\+facetLift/);
+  assert.match(field,/coreEmission\+=facetLift;/);
+  assert.match(field,/alpha=clamp\(alpha\+focalOpacity\*energy,0\.0,\.79\);/);
   assert.match(main,/CreateIcoSphere\('central nucleus',\{radius:\.38,subdivisions:2\}/);
   assert.match(main,/coreDepthMask=core\.clone\('central nucleus facet depth mask',core,true\)/);
   const focus=(face,p)=>smooth(.30,.84,face)*smooth(.18,1.20,Math.min(1.6,Math.max(0,p)));
