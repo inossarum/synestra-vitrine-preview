@@ -9,7 +9,7 @@ assert.match(v,/float localDensity=\(\.065\+1\.35\*smoke\+1\.18\*sparkle\)\*enve
 test('R20237 preserve bounded core 16 steps and 80 facets',()=>{
 assert.match(v,/for\(int i=0;i<16;i\+\+\)/);assert.match(v,/if\(i>=uSteps\)break;/);
 assert.match(v,/float coreReveal=smoothstep\(\.20,\.56,sqrt\(coreImpactSquared\)\);/);
-assert.match(v,/clamp\(a,0\.0,\.78\)/);assert.match(v,/coreRadiance\*vec3\(1\.65,1\.38,1\.82\)/);
+assert.match(v,/float combinedCover=clamp\(1\.0-\(1\.0-fogCover\)\*\(1\.0-coreGlowAlpha\),0\.0,\.78\);/);assert.match(v,/float coreGlowAlpha=clamp\(coreRadiance\*\.24,0\.0,\.38\);/);
 assert.match(m,/CreateIcoSphere\('central nucleus',\{radius:\.38,subdivisions:2\}/);
 assert.match(m,/coreDepthMask=core\.clone\('central nucleus facet depth mask',core,true\)/);
 assert.doesNotMatch(v,/new Engine\(|new Scene\(/);
