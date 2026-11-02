@@ -23,6 +23,7 @@ test('R202.45 preserves R202.44 shadow scaling and R202.33 power/alpha compositi
  assert.match(shader,/float alpha=clamp\(\(\.20\+\.48\*pow\(face,1\.1\)\+\.12\*hotspot\)\*energy,0\.0,\.79\);/);
  assert.match(shader,/gl_FragColor=vec4\(\(tint\*/);
  assert.match(shader,/coreEmission\+=facetLift;/);
+ assert.match(shader,/alpha=clamp\(alpha\*\(1\.0\+\.48\*keyedHighlight\),0\.0,\.79\);/);
  assert.match(main,/CreateIcoSphere\('central nucleus',\{radius:\.38,subdivisions:2\}/);
  assert.match(main,/coreDepthMask=core\.clone\('central nucleus facet depth mask',core,true\)/);
  assert.match(volume,/for\(int i=0;i<16;i\+\+\)/);
@@ -36,6 +37,15 @@ test('R202.45 no additional pass or keylight; power zero remains dark',()=>{
    const v=e*f(l);
    assert.equal(v===0,e===0);
    assert.ok(v<=e*1.60+1e-9);
+  }
+ }
+ for(let l=0;l<=1;l+=.025){
+  const boost=1+.48*smooth(.22,.78,l);
+  assert.ok(boost>=1&&boost<=1.48+1e-8);
+  for(const alpha of [0,.08,.3,.55,.79]){
+   const next=Math.min(.79,Math.max(0,alpha*boost));
+   assert.ok(next>=alpha&&next<=.79);
+   if(alpha===0)assert.equal(next,0);
   }
  }
  assert.equal((shader.match(/ShaderMaterial\('r202-white-violet-soft-heart'/g)||[]).length,1);
