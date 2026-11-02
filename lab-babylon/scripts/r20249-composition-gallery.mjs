@@ -23,7 +23,7 @@ return js;
 }
 const server=createServer((req,res)=>{
 const u=new URL(req.url,'http://127.0.0.1'),m=u.pathname.match(/^\/base\/lab-babylon\/(.*)$/);
-if(!m){res.writeHead(404);res.end();return;}const file=m[2]||'index.html';
+if(!m){res.writeHead(404);res.end();return;}const file=m[1]||'index.html';
 if(!['index.html','style.css','dist/babylon-lab.js','qa-layer-controller.js'].includes(file)){res.writeHead(404);res.end();return;}
 const type=file.endsWith('.html')?'text/html; charset=utf-8':file.endsWith('.css')?'text/css':'application/javascript';
 let body;
