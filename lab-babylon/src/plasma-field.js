@@ -122,6 +122,10 @@ export function createPlasmaHeartMaterial(scene){
   vec3 facetPalette=mix(vec3(.63,.58,.78),vec3(1.65,1.58,1.36),facetStrata);
   float shimmer=.97+.03*sin(uTime*2.7+vWorld.x*12.0+vWorld.z*8.0);
   vec3 tint=mix(vec3(.32,.18,.60),vec3(.98,.87,1.07),clamp(.12+.38*hotspot+.50*facetLight,0.0,1.0));
+  // R202.50 R2: shadow planes receive a physically distinct cold-violet glaze.
+  // The key-lit planes are untouched; no extra passes, alpha or meshes.
+  float coldFacetShadow=1.0-smoothstep(.32,.72,facetLight);
+  tint=mix(tint,vec3(.09,.05,.20),.72*coldFacetShadow);
   float energy=clamp(uPower,0.0,1.6);
   // R202.25: analytic camera-to-facet path through the foreground plasma envelope.
   // The existing 80 triangles stay in their original rendering group; no extra pass/depth buffer.
