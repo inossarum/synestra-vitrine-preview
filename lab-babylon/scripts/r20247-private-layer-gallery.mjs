@@ -19,18 +19,23 @@ const screens=[
 ];
 function qaInjection(mode){
 const js="(()=>{const mode="+JSON.stringify(mode)+";if(mode==='full')return;const t=setInterval(()=>{const a=globalThis.__synestraLabAtlasInterop,s=a?.getScene?.(),c=document.querySelector('canvas');if(!s||!c||!s.meshes.some(m=>m.name==='r20215-volume-carrier'))return;const off=m=>{const n=m.name;if(mode==='no-volume')return n==='r20215-volume-carrier';if(mode==='no-ribbons')return /^(plasma-ribbon-|plasma-sheath-|node-plasma-)/.test(n);if(mode==='core-only')return n!=='central nucleus'&&n!=='central nucleus facet depth mask';return false};const hide=s.meshes.filter(off);if(!hide.length){c.dataset.qaLayer='INVALID';clearInterval(t);return;}const set=()=>hide.forEach(m=>m.isVisible=false);s.onBeforeRenderObservable.add(set);set();c.dataset.qaLayer=mode;c.dataset.qaHidden=String(hide.length);clearInterval(t);},10);})();";
-return '<script>'+js+'</script>';
+return js;
 }
 const server=createServer((req,res)=>{
 const u=new URL(req.url,'http://127.0.0.1'),m=u.pathname.match(/^\/(base|experimental)\/lab-babylon\/(.*)$/);
 if(!m){res.writeHead(404);res.end();return;}const file=m[2]||'index.html';
-if(!['index.html','style.css','dist/babylon-lab.js'].includes(file)){res.writeHead(404);res.end();return;}
+if(!['index.html','style.css','dist/babylon-lab.js','qa-layer-controller.js'].includes(file)){res.writeHead(404);res.end();return;}
 const type=file.endsWith('.html')?'text/html; charset=utf-8':file.endsWith('.css')?'text/css':'application/javascript';
 let body;
 if(file==='dist/babylon-lab.js')body=readFileSync(m[1]==='base'?base:exp);
+else if(file==='qa-layer-controller.js'){
+ const mode=u.searchParams.get('qaLayer')||'full';
+ if(!['full','no-volume','no-ribbons','core-only'].includes(mode)){res.writeHead(400);res.end();return;}
+ body=qaInjection(mode);
+}
 else if(file==='index.html'){const mode=u.searchParams.get('qaLayer')||'full';
 if(!['full','no-volume','no-ribbons','core-only'].includes(mode)){res.writeHead(400);res.end();return;}
-body=readFileSync(join(root,file),'utf8').replace('</body>',qaInjection(mode)+'</body>');
+body=readFileSync(join(root,file),'utf8').replace('</body>','<script src="./qa-layer-controller.js?qaLayer='+mode+'" defer></script></body>');
 }else body=readFileSync(join(root,file));
 res.writeHead(200,{'Content-Type':type,'Cache-Control':'no-store'});res.end(body);
 });
