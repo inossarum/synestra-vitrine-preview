@@ -4,7 +4,7 @@ const m=readFileSync(new URL('../src/main.js',import.meta.url),'utf8');
 test('R202.40 reduces peripheral smoke only without reducing central core radiance',()=>{
  assert.match(v,/float da=clamp\(uOpacity\*localDensity\*thickness\/float\(uSteps\)\*2\.4\*\(\.28\+\.24\*coreReveal\),0\.0,\.16\);/);
  assert.match(v,/float coreRadiance=1\.48\*clamp\(uCorePower,0\.0,2\.5\)\*coreRayIntegral\*coreTransmission;/);
- assert.match(v,/gl_FragColor=vec4\(energy\/max\(a,\.0001\),clamp\(a,0\.0,\.78\)\);/);
+ assert.match(v,/gl_FragColor=vec4\(composedEnergy\/max\(combinedCover,\.0001\),combinedCover\);/);
  assert.match(v,/float localDensity=\(\.065\+1\.35\*smoke\+1\.18\*sparkle\)\*envelope\*\(\.50\+\.50\*densityRidge\);/);
 });
 test('R202.40 80 facet exact shared mask, same GPU streams and 16 steps',()=>{
