@@ -53,7 +53,9 @@ if(!result.stdout.includes(key))throw Error('R20249_READINESS_'+item.id+'_'+key)
 if(item.mode!=='full'&&!result.stdout.includes('data-qa-layer="'+item.mode+'"'))throw Error('R20249_LAYER_MISSING_'+item.id);
 if(!existsSync(dest)||statSync(dest).size<20000)throw Error('R20249_SCREENSHOT_MISSING_'+item.id);
 const data=readFileSync(dest);if(data.subarray(0,8).toString('hex')!=='89504e470d0a1a0a')throw Error('R20249_BAD_PNG_'+item.id);
-const meta={...item,file,bytes:data.length,sha256:sha(data)};manifest.push(meta);
+const meta={...item,file,bytes:data.length,sha256:sha(data)};
+if(item.id==='reference'&&meta.sha256!=='aa6a1f600a19ac8b61da7e4d7e6c2213ef03722cbdcd2304531a8f3ed0087135')throw Error('R20249_REFERENCE_SHA_MISMATCH');
+manifest.push(meta);
 console.log('R20249_CAPTURE_PASS '+JSON.stringify(meta));
 }
 const htmlParts=['<!doctype html><html lang="fr"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Synestra · Labo 3D</title>',
@@ -62,6 +64,6 @@ const htmlParts=['<!doctype html><html lang="fr"><meta charset="utf-8"><meta nam
 for(const item of manifest)htmlParts.push('<article><img src="'+item.file+'" alt="'+item.title+'"><h2>'+item.title+'</h2><p>'+item.note+'</p><small>SHA256 '+item.sha256.slice(0,20)+'…</small></article>');
 htmlParts.push('</main><footer>Diagnostic temporaire : aucun shader modifié. Aucun rendu RTX 3090 attesté.</footer></html>');
 writeFileSync(join(out,'index.html'),htmlParts.join('\n'));
-writeFileSync(join(out,'manifest.json'),JSON.stringify({schema:'synestra.r20247.private.layer.gallery.v1',viewport:'1100x900',renderer:'Chrome 155 SwiftShader',reference_sha:'40831cc0df4b65346ebe84c5503638eadfa70156',images:manifest},null,2));
+writeFileSync(join(out,'manifest.json'),JSON.stringify({schema:'synestra.r20249.composition.gallery.v1',viewport:'1100x900',renderer:'Chrome 155 SwiftShader',reference_sha:'40831cc0df4b65346ebe84c5503638eadfa70156',images:manifest},null,2));
 console.log('R20249_PRIVATE_GALLERY_PASS image_count='+manifest.length+' artifact_only=true');
 }finally{await new Promise(ok=>server.close(ok));}
