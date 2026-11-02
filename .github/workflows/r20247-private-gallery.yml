@@ -1,0 +1,96 @@
+# R202.47 - Private visual gallery only. No deployment, no public Pages, no merge.
+name: R202.47 private Babylon visual gallery
+on:
+  push:
+    branches:
+      - task/SYN_LAB_R20247_LAYER_CAUSAL_DIAGNOSTIC_20261102
+    paths:
+      - .github/workflows/r20247-private-gallery.yml
+      - lab-babylon/scripts/r20247-private-layer-gallery.mjs
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: r20247-private-gallery-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  gallery:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 14
+    defaults:
+      run:
+        working-directory: lab-babylon
+    steps:
+      - name: Checkout unchanged R202.44 plus gallery script
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Checkout historical R202.46 rejected experiment
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: 8392805de2dc790c6ed68857671afa82d1d04f05
+          path: r20246-experiment
+          persist-credentials: false
+      - name: Node 22 and locked dependencies
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: lab-babylon/package-lock.json
+      - name: Verify source and install locked packages
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git -C "$GITHUB_WORKSPACE/r20246-experiment" rev-parse HEAD)" = "8392805de2dc790c6ed68857671afa82d1d04f05"
+          test -f scripts/r20247-private-layer-gallery.mjs
+          npm ci --no-audit --no-fund
+          npm test
+      - name: Build single-engine R202.44 reference
+        run: npm run build
+      - name: Build historical R202.46 in isolated checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          EXP="$GITHUB_WORKSPACE/r20246-experiment/lab-babylon"
+          ln -s "$GITHUB_WORKSPACE/lab-babylon/node_modules" "$EXP/node_modules"
+          "$GITHUB_WORKSPACE/lab-babylon/node_modules/.bin/esbuild" "$EXP/src/main.js" --bundle --minify --format=iife --target=es2020 "--outfile=$RUNNER_TEMP/r20247-experiment.js"
+          node --check "$RUNNER_TEMP/r20247-experiment.js"
+      - name: Chrome 155 / software WebGL
+        uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2.2.0
+        id: chrome
+        with:
+          chrome-version: '155'
+          install-dependencies: true
+      - name: Render five real frames and generate offline gallery
+        env:
+          R202_CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+          R20247_EXPERIMENTAL_BUNDLE: ${{ runner.temp }}/r20247-experiment.js
+          R20247_GALLERY_DIR: ${{ runner.temp }}/r20247-gallery
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check scripts/r20247-private-layer-gallery.mjs
+          node scripts/r20247-private-layer-gallery.mjs
+          test -f "$R20247_GALLERY_DIR/index.html"
+          test -f "$R20247_GALLERY_DIR/manifest.json"
+          test "$(find "$R20247_GALLERY_DIR" -maxdepth 1 -name '*.png' | wc -l)" -eq 5
+      - name: Upload private seven-day visual gallery
+        id: upload
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2 pinned
+        with:
+          name: SYNESTRA-R20247-GALERIE-VISUELLE
+          path: ${{ runner.temp }}/r20247-gallery/
+          if-no-files-found: error
+          retention-days: 7
+      - name: Publish artifact link in private Actions summary
+        env:
+          ARTIFACT_URL: ${{ steps.upload.outputs.artifact-url }}
+        shell: bash
+        run: |
+          echo "## Galerie privée Synestra R202.47" >> "$GITHUB_STEP_SUMMARY"
+          echo "Ouvrir ou télécharger **SYNESTRA-R20247-GALERIE-VISUELLE** : $ARTIFACT_URL" >> "$GITHUB_STEP_SUMMARY"
+          echo "Extraire le ZIP, puis ouvrir index.html ; 5 vues PNG pleine résolution." >> "$GITHUB_STEP_SUMMARY"
+          echo "Aucune publication publique ; RTX 3090 non attestée." >> "$GITHUB_STEP_SUMMARY"
+      - name: Ensure source remains unmodified
+        run: git diff --exit-code -- src tests scripts
