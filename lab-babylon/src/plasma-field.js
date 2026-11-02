@@ -150,8 +150,8 @@ export function createPlasmaHeartMaterial(scene){
    vec3 coreEmission=vec3(1.15,1.18,1.30)*(.52*ignition);
    // R202.43: localized faceted luminosity, power-off safe, no new mesh or light.
    float coreFocus=smoothstep(.30,.84,face)*smoothstep(.18,1.20,energy);
-   vec3 facetLift=vec3(1.35,1.42,1.60)*coreFocus*(.30+.70*facetStrata);
-   float focalOpacity=clamp(.22*coreFocus,0.0,.22);
+   vec3 facetLift=vec3(.70,.76,.94)*coreFocus*(.30+.70*facetStrata);
+   float focalOpacity=clamp(.16*coreFocus,0.0,.16);
    float alpha=clamp((.20+.48*pow(face,1.1)+.12*hotspot)*energy,0.0,.79);
    // Preserve original R202.33 compositing and clamp before transmission.
    coreEmission+=facetLift;
