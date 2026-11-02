@@ -65,7 +65,10 @@ void main(){
   float da=clamp(uOpacity*localDensity*thickness/float(uSteps)*2.4*(.28+.24*coreReveal),0.0,.16);
   // R202.43: reserve clear projected air in front of the same faceted nucleus.
   float coreAperture=1.0-.55*(1.0-smoothstep(.18,.60,sqrt(coreImpactSquared)));
-  da*=coreAperture;
+  // R202.51: reduce only camera-facing samples near the nucleus, preserving rear plasma.
+  float coreFrontWindow=1.0-smoothstep(-.06,.12,t-coreClosestT);
+  float coreFocus=1.0-smoothstep(.18,.62,sqrt(coreImpactSquared));
+  da*=coreAperture*(1.0-.68*coreFrontWindow*coreFocus);
   float coreStepLength=thickness/float(uSteps);
   float coreNearFraction=clamp((coreClosestT-(t-0.5*coreStepLength))/coreStepLength,0.0,1.0);
   coreForegroundT*=pow(max(0.000001,1.0-da),coreNearFraction);
