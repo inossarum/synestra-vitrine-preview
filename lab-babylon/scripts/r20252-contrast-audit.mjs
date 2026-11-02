@@ -102,3 +102,7 @@ const filename=join(out,'r20252-contrast-audit.json');
 writeFileSync(filename,JSON.stringify(report,null,2));
 console.log('R20252_CONTRAST_AUDIT_PASS '+JSON.stringify(report.comparisons));
 console.log('R20252_CONTRAST_SHA256 '+sha(readFileSync(filename)));
+if(process.argv.includes('--require-visibility-pass')&&!visibilityScreen){
+ console.error('R20252_FACET_VISIBILITY_GATE_FAIL: focused lit-facet loss exceeds 2 percentage points; report preserved');
+ process.exitCode=3;
+}
