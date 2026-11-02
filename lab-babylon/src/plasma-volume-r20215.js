@@ -90,6 +90,13 @@ void main(){
  float coreRayIntegral=0.4511930898*exp(-0.5*coreImpactSquared/(0.18*0.18));
  float coreRadiance=1.48*clamp(uCorePower,0.0,2.5)*coreRayIntegral*coreTransmission;
  energy+=coreRadiance*vec3(1.65,1.38,1.82);
+ // R202.46 second diagnostic: explicit screen-space clearing around the
+ // projected nucleus after volume integration, not another density tweak.
+ // Both accumulated light and opacity change together, maintaining the
+ // original shader's normalized color while opening actual negative space.
+ float coreScreenWindow=1.0-.82*(1.0-smoothstep(.24,.60,sqrt(coreImpactSquared)));
+ energy*=coreScreenWindow;
+ a*=coreScreenWindow;
  gl_FragColor=vec4(energy/max(a,.0001),clamp(a,0.0,.78));
 }
 `;
