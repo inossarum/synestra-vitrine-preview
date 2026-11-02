@@ -126,10 +126,11 @@ jobs:
           )
           test -s "$RUNNER_TEMP/r20246-baseline.js"
           git worktree remove --force "$RUNNER_TEMP/r20246-parent"
-      - name: Ephemeral software WebGL A/B — pixel statistics only, no image export
+      - name: Ephemeral software WebGL A/B — metrics and bounded private review thumbnail
         env:
           R202_CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
           R20246_BASE_BUNDLE: ${{ runner.temp }}/r20246-baseline.js
+          R20246_VISUAL_REVIEW_LOG: '1'
         run: |
           set -euo pipefail
           node scripts/r20246-ci-ab-metrics.mjs --self-test
