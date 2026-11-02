@@ -109,10 +109,10 @@ export function installPlasmaRibbons({scene,colors,nodes,count=28,bridgePath=nul
       float strandDensity=.22+.78*smoothstep(-.56,.48,ionTwist+.26*ionCross);
       float alpha=clamp(vColor.a*(.66+.34*crest)*shimmer*uPaletteWeight*strandDensity,0.0,1.0);
      // R202.43: focus center rail while preserving the five existing cross rails.
-     float railFocus=exp(-8.0*pow(vUV.y-.5,2.0));
-     alpha*=.78+.22*railFocus;
+     float railFocus=exp(-10.0*pow(vUV.y-.5,2.0));
+     alpha*=.68+.32*railFocus;
      vec3 light=uTint*(.72+.42*crest)*(1.0+.18*sin(vUV.x*17.0-uTime*1.3));
-     light*=.88+.32*railFocus*crest;
+     light*=.76+.74*railFocus*crest;
      gl_FragColor=vec4(light,alpha);
     }`
   },{attributes:['position','color','uv'],uniforms:['worldViewProjection','uTint','uTime','uPaletteWeight'],needAlphaBlending:true});
@@ -152,10 +152,10 @@ export function installPlasmaRibbons({scene,colors,nodes,count=28,bridgePath=nul
       float strandDensity=.22+.78*smoothstep(-.56,.48,ionTwist+.26*ionCross);
       float alpha=clamp(vColor.a*(.66+.34*crest)*shimmer*uPaletteWeight*strandDensity,0.0,.72);
      // R202.43: focus center rail while preserving the five existing cross rails.
-     float railFocus=exp(-8.0*pow(vUV.y-.5,2.0));
-     alpha*=.78+.22*railFocus;
+     float railFocus=exp(-10.0*pow(vUV.y-.5,2.0));
+     alpha*=.68+.32*railFocus;
      vec3 light=uTint*(.72+.42*crest)*(1.0+.18*sin(vUV.x*17.0-uTime*1.3));
-     light*=.88+.32*railFocus*crest;
+     light*=.76+.74*railFocus*crest;
      gl_FragColor=vec4(light,alpha);
     }`
   },{
