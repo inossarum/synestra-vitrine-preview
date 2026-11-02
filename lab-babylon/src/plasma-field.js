@@ -109,6 +109,8 @@ export function createPlasmaHeartMaterial(scene){
   // R202.30: bounded face-normal contrast; no edge mesh, geometry or extra pass.
   float facetRelief=smoothstep(.20,.80,facetLight);
   float facetShading=mix(.72,1.23,facetRelief);
+  // R202.44: raise contrast between existing per-face normals without new geometry.
+  facetShading*=mix(.48,1.12,facetRelief);
    // R202.39: dark edge-to-face transition only; avoid modifying the 3D plasma cloud.
    float facetRim=pow(1.0-face,2.0);
    float facetContrast=1.0-.42*facetRim;
@@ -148,9 +150,12 @@ export function createPlasmaHeartMaterial(scene){
    // R202.33: face-aware incandescent white-violet focus, not another lamp or pass.
    float ignition=pow(face,2.6)*smoothstep(.20,1.20,energy);
    vec3 coreEmission=vec3(1.15,1.18,1.30)*(.52*ignition);
+   // R202.44: shadowed facets must not glow as brightly as keyed facets.
+   coreEmission*=mix(.22,1.12,facetRelief);
    // R202.43: localized faceted luminosity, power-off safe, no new mesh or light.
    float coreFocus=smoothstep(.30,.84,face)*smoothstep(.18,1.20,energy);
    vec3 facetLift=vec3(.70,.76,.94)*coreFocus*(.30+.70*facetStrata);
+   facetLift*=mix(.28,1.08,facetRelief);
    float focalOpacity=clamp(.16*coreFocus,0.0,.16);
    float alpha=clamp((.20+.48*pow(face,1.1)+.12*hotspot)*energy,0.0,.79);
    // Preserve original R202.33 compositing and clamp before transmission.
