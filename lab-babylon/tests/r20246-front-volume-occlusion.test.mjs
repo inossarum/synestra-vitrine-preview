@@ -32,6 +32,24 @@ test('R202.46 preserves R202.43 aperture contract, 16 ray steps and core emissio
  assert.match(field,/float facetRelief=smoothstep\(\.20,\.80,facetLight\);/);
  assert.doesNotMatch(volume,/new Engine\(|new Scene\(|new Worker\(|fetch\(/);
 });
+test('R202.46 visibility experiment: projected core clearing is bounded and spatially local',()=>{
+ assert.match(volume,/float coreScreenWindow=1\.0-\.82\*\(1\.0-smoothstep\(\.24,\.60,sqrt\(coreImpactSquared\)\)\);/);
+ assert.match(volume,/energy\*=coreScreenWindow;/);
+ assert.match(volume,/a\*=coreScreenWindow;/);
+ assert.ok(volume.indexOf('energy+=coreRadiance*')<volume.indexOf('float coreScreenWindow='));
+ assert.ok(volume.indexOf('a*=coreScreenWindow;')<volume.indexOf('gl_FragColor=vec4(energy/max(a,.0001),clamp(a,0.0,.78));'));
+ const projected=r=>1-.82*(1-smooth(.24,.60,r));
+ assert.ok(Math.abs(projected(0)-.18)<1e-9);
+ assert.equal(projected(.60),1);
+ for(let i=0;i<=100;i++){
+  const k=projected(i/100);
+  assert.ok(k>=.18-1e-9&&k<=1+1e-9);
+  assert.equal(0*k,0);
+  for(const alpha of [.001,.04,.3,.78]){
+   assert.ok(alpha*k>=0&&alpha*k<=alpha+1e-9);
+  }
+ }
+});
 test('R202.46 remains finite for all fractional foreground sample lengths',()=>{
  for(let k=0;k<=100;k++){const r=k/100;
   for(let f=0;f<=1;f+=.05){const d=density(.16,r,f);assert.ok(Number.isFinite(d)&&d>=0&&d<=.16+1e-9);}
