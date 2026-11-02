@@ -7,14 +7,14 @@ const volume=readFileSync(new URL('../src/plasma-volume-r20215.js',import.meta.u
 const ribbons=readFileSync(new URL('../src/plasma-ribbons.js',import.meta.url),'utf8');
 const smooth=(a,b,x)=>{const t=Math.max(0,Math.min(1,(x-a)/(b-a)));return t*t*(3-2*t)};
 test('R202.45 illuminates only key-facing existing facets, keeping shadow relief',()=>{
- assert.match(shader,/float keyedHighlight=smoothstep\(\.55,\.88,facetLight\);/);
- assert.match(shader,/facetShading\*=1\.0\+\.52\*keyedHighlight;/);
- const factor=f=>1+.52*smooth(.55,.88,f);
- assert.equal(factor(.3),1);
- assert.equal(factor(.55),1);
- assert.ok(factor(.8)>1.35);
- assert.equal(factor(.9),1.52);
- for(let f=0;f<=1;f+=.01)assert.ok(factor(f)>=1&&factor(f)<=1.52+1e-9);
+ assert.match(shader,/float keyedHighlight=smoothstep\(\.22,\.78,facetLight\);/);
+ assert.match(shader,/facetShading\*=1\.0\+\.60\*keyedHighlight;/);
+ const factor=f=>1+.60*smooth(.22,.78,f);
+ assert.equal(factor(.1),1);
+ assert.ok(factor(.5)>=1.29);
+ assert.ok(factor(.8)>=1.59);
+ assert.equal(factor(.9),1.60);
+ for(let f=0;f<=1;f+=.01)assert.ok(factor(f)>=1&&factor(f)<=1.60+1e-9);
 });
 test('R202.45 preserves R202.44 shadow scaling and R202.33 power/alpha composition',()=>{
  assert.match(shader,/facetShading\*=mix\(\.48,1\.12,facetRelief\);/);
@@ -30,12 +30,12 @@ test('R202.45 preserves R202.44 shadow scaling and R202.33 power/alpha compositi
  assert.doesNotMatch([shader,volume,ribbons].join('\n'),/new Engine\(|new Scene\(|new Worker\(|fetch\(/);
 });
 test('R202.45 no additional pass or keylight; power zero remains dark',()=>{
- const f=l=>1+.52*smooth(.55,.88,l);
+ const f=l=>1+.60*smooth(.22,.78,l);
  for(let e of [0,.2,.8,1.6]){
   for(let l of [.1,.3,.5,.7,1]){
    const v=e*f(l);
    assert.equal(v===0,e===0);
-   assert.ok(v<=e*1.52+1e-9);
+   assert.ok(v<=e*1.60+1e-9);
   }
  }
  assert.equal((shader.match(/ShaderMaterial\('r202-white-violet-soft-heart'/g)||[]).length,1);
