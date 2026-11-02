@@ -83,8 +83,18 @@ void main(){
  float coreTransmission=mix(coreSmoothT,coreForegroundT,0.25);
  float coreRayIntegral=0.4511930898*exp(-0.5*coreImpactSquared/(0.18*0.18));
  float coreRadiance=1.48*clamp(uCorePower,0.0,2.5)*coreRayIntegral*coreTransmission;
- energy+=coreRadiance*vec3(1.65,1.38,1.82);
- gl_FragColor=vec4(energy/max(a,.0001),clamp(a,0.0,.78));
+ // R202.48: separate atmospheric scattering from analytic core emission.
+ // Unlike R202.46, the projected fog opening cannot attenuate the nucleus.
+ // No extra ray samples, geometry, render group, material or pass.
+ vec3 fogRadiance=energy;
+ float fogAlpha=a;
+ float fogVisibility=1.0-.24*(1.0-smoothstep(.20,.62,sqrt(coreImpactSquared)));
+ vec3 fogContribution=fogRadiance*fogVisibility;
+ float fogCover=fogAlpha*fogVisibility;
+ // R202.48: compensate the center only, preserving the exact periphery.
+ // The analytic core never inherits the fog attenuation factor.
+ vec3 independentCore=coreRadiance*vec3(1.65,1.38,1.82)*(1.0+.24*(1.0-fogVisibility));
+ gl_FragColor=vec4((fogContribution+independentCore)/max(fogCover,.0001),clamp(fogCover,0.0,.78));
 }
 `;
 
