@@ -68,6 +68,12 @@ void main(){
   da*=coreAperture;
   float coreStepLength=thickness/float(uSteps);
   float coreNearFraction=clamp((coreClosestT-(t-0.5*coreStepLength))/coreStepLength,0.0,1.0);
+  // R202.46 diagnostic: retain volume behind the nucleus, selectively
+  // attenuate only plasma integrated before the projected core position.
+  // R202.43 aperture is kept for regression compatibility; its rear
+  // attenuation is explicitly cancelled before front-only compositing.
+  float frontClarity=.36+.64*smoothstep(.18,.64,sqrt(coreImpactSquared));
+  da*=mix(1.0/max(coreAperture,.001),frontClarity,coreNearFraction);
   coreForegroundT*=pow(max(0.000001,1.0-da),coreNearFraction);
   vec3 violet=vec3(.45,.12,.99);
   vec3 pink=vec3(1.23,.36,1.44);
