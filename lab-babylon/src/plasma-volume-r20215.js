@@ -63,6 +63,9 @@ void main(){
   // The ray/core impact and camera already use the Atlas-safe local-space basis.
   float coreReveal=smoothstep(.20,.56,sqrt(coreImpactSquared));
   float da=clamp(uOpacity*localDensity*thickness/float(uSteps)*2.4*(.28+.24*coreReveal),0.0,.16);
+  // R202.43: reserve clear projected air in front of the same faceted nucleus.
+  float coreAperture=1.0-.34*(1.0-smoothstep(.18,.52,sqrt(coreImpactSquared)));
+  da*=coreAperture;
   float coreStepLength=thickness/float(uSteps);
   float coreNearFraction=clamp((coreClosestT-(t-0.5*coreStepLength))/coreStepLength,0.0,1.0);
   coreForegroundT*=pow(max(0.000001,1.0-da),coreNearFraction);
