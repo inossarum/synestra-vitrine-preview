@@ -112,8 +112,8 @@ export function createPlasmaHeartMaterial(scene){
   // R202.44: raise contrast between existing per-face normals without new geometry.
   facetShading*=mix(.48,1.12,facetRelief);
   // R202.45: restore directional illumination only on front key-facing facets.
-  float keyedHighlight=smoothstep(.55,.88,facetLight);
-  facetShading*=1.0+.52*keyedHighlight;
+  float keyedHighlight=smoothstep(.22,.78,facetLight);
+  facetShading*=1.0+.60*keyedHighlight;
    // R202.39: dark edge-to-face transition only; avoid modifying the 3D plasma cloud.
    float facetRim=pow(1.0-face,2.0);
    float facetContrast=1.0-.42*facetRim;
