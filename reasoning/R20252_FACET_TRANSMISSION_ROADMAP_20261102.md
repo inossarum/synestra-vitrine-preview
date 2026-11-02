@@ -47,8 +47,9 @@ Restore legibility of the illuminated nucleus facets without removing the cold s
 - Dependencies: S01. Authorization: update existing task branch only; no main merge or deployment.
 - Acceptance: diagnostic mode preserves machine-readable VISIBILITY=FAIL; strict mode returns exit 3 on the 2pp regression; missing-fixture strict gate is tested; strict dependency-free regression remains green; GitHub readback verifies blob/commit SHAs; reconcile the local worktree only when non-destructive and authorized.
 - Existing local evidence: 110 PASS / 0 FAIL / 0 SKIP with native-fixture strict mode; log SHA256 B455F06AB98C302386747453AE3EA5054050953CD3B37818E95269B4265E212C.
-- Status: IN_PROGRESS_FOR_GITHUB_PUBLICATION — QA delta exists locally only.
-- Next: read the two local QA files and checkpoint; publish only those exact files to this task branch using GitHub compare-and-write, then verify readback.
+- Evidence: audit script blob `37383b89f38bbffeaf81081c2d486308a523bbe9`; CLI test blob `214d07f9a342bc8c1096563b7e7c3b1ede305583`; QA checkpoint blob `9c403feb883320f50e3698e89d13a64caa598f9c`; final branch HEAD `2cf0f20d05771c29aaccb8bada23cd20128fdb38` verified via GitHub readback and `git ls-remote`.
+- Status: DONE.
+- Next: revalidate the prior source-transfer platform denial only through its original authority, if that exact route is exposed.
 
 ### S04 — Revalidate the historical source-transfer blocker
 - Target: R202.50 source fragments needed by R202.52.
@@ -96,5 +97,5 @@ Restore legibility of the illuminated nucleus facets without removing the cold s
 - Exact source/runtime gates remain separate. No main merge, no deployment, no release.
 
 ## Status and next action
-ACTIVE_STEP=S03
-NEXT_ACTION=Read local strict QA delta and checkpoint; persist those exact QA artifacts on the existing task branch, then verify GitHub readback and commit SHA. Preserve the local dirty delta; do not synchronize/reset it until a safe non-destructive Git path is verified.
+ACTIVE_STEP=S04
+NEXT_ACTION=Determine whether the original platform authority exposes a fresh, exact-scope read-only revalidation of the historical R202.50 source-transfer denial. If unavailable, keep S04 BLOCKED and do not transfer source or mutate production shader. Continue only independent authorized QA/evidence work.
