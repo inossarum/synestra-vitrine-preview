@@ -160,6 +160,13 @@ export function createPlasmaHeartMaterial(scene){
    float alpha=clamp((.20+.48*pow(face,1.1)+.12*hotspot)*energy,0.0,.79);
    // Preserve original R202.33 compositing and clamp before transmission.
    coreEmission+=facetLift;
+   // R202.50 isolated diagnostic: incandescent facets follow actual flat face normals,
+   // preserving their dark planes, original alpha, power-off and 80-face geometry.
+   // The volume, foreground ribbons and single GlowLayer remain untouched.
+   float keyedFacetGlow=pow(smoothstep(.56,.88,facetLight),1.8);
+   float keyedIncandescence=keyedFacetGlow*smoothstep(.40,1.25,energy)*(1.0-.30*facetRim);
+   vec3 keyedEmission=vec3(1.55,1.44,1.68)*keyedIncandescence;
+   coreEmission+=keyedEmission;
    alpha=clamp(alpha+focalOpacity*energy,0.0,.79);
   gl_FragColor=vec4((tint*(.75+.35*hotspot+.38*facetLight)*facetShading*facetPalette*(1.0+.25*facetGlint)*facetContrast+coreEmission)*shimmer*energy*(.30+.70*depthTransmission),alpha*depthTransmission);
  }`;
