@@ -39,7 +39,7 @@ Restore legibility of the illuminated nucleus facets without removing the cold s
 - Dependencies: S01. Authorization: read-only.
 - Acceptance: exact PR HEADs and blobs read; targeted 3D/visual/E2E skills and dependencies read; each mandatory HPSYN engine classified with current live availability; no DRAFT source misrepresented as deployed tool.
 - Evidence: PR #387 ba993d008292f56b63fdbacf1ba02c81c851e2b1; #398 2f0220b6ebbf32a90bd7173b1dc4e850487e09a0; #419 25e7c85ebc931867c4321349bb41d4b0be869499; #420 7c14963dcf8d01217c3fc17e52f9576ad0eee6ac; #439 181c32fec85c6268bf9bd30bbf5e023f1fe82488.
-- Status: PARTIAL — source reads and capability inventory done; Doctor, PREVISE, Maintenance and HPSYN visual-engine native tools are not exposed in this Connect session; HPSYN mission Workflow status read returned Operation denied/unavailable. These capabilities remain UNAVAILABLE, not PASS.
+- Status: PARTIAL — source reads and capability inventory done; Doctor, PREVISE, Maintenance and HPSYN visual-engine native tools are not exposed in this Connect session; native Workflow admission is available but only replay-safe reads are admitted. The first six-step mission is terminal BLOCKED as detailed above. These capabilities remain UNAVAILABLE, not PASS.
 - Next: publish local QA guard correction and checkpoint.
 
 ### S03 — Persist strict QA gate correction
@@ -48,7 +48,8 @@ Restore legibility of the illuminated nucleus facets without removing the cold s
 - Acceptance: diagnostic mode preserves machine-readable VISIBILITY=FAIL; strict mode returns exit 3 on the 2pp regression; missing-fixture strict gate is tested; strict dependency-free regression remains green; GitHub readback verifies blob/commit SHAs; reconcile the local worktree only when non-destructive and authorized.
 - Existing local evidence: 110 PASS / 0 FAIL / 0 SKIP with native-fixture strict mode; log SHA256 B455F06AB98C302386747453AE3EA5054050953CD3B37818E95269B4265E212C.
 - Evidence: audit script blob `37383b89f38bbffeaf81081c2d486308a523bbe9`; CLI test blob `214d07f9a342bc8c1096563b7e7c3b1ede305583`; QA checkpoint blob `9c403feb883320f50e3698e89d13a64caa598f9c`; final branch HEAD `2cf0f20d05771c29aaccb8bada23cd20128fdb38` verified via GitHub readback and `git ls-remote`.
-- Status: DONE.
+- Status: DONE — GitHub-first QA publication and readback complete.
+- Evidence: roadmap `reasoning/R20252_FACET_TRANSMISSION_ROADMAP_20261102.md` is commit `90f69dd8db75d27b759135d74e3456e451758514`; audit script blob `37383b89f38bbffeaf81081c2d486308a523bbe9`; CLI test blob `214d07f9a342bc8c1096563b7e7c3b1ede305583`; QA checkpoint blob `9c403feb883320f50e3698e89d13a64caa598f9c`; publication commits `cdaad9d3f9d40e3ac010fd239dea628ea75d7555`, `22999ebda95424c99afbf13d5d00338abeaf8528`, `2cf0f20d05771c29aaccb8bada23cd20128fdb38`.
 - Next: revalidate the prior source-transfer platform denial only through its original authority, if that exact route is exposed.
 
 ### S04 — Revalidate the historical source-transfer blocker
@@ -92,10 +93,10 @@ Restore legibility of the illuminated nucleus facets without removing the cold s
 - Previous native instrumented Babylon A/B (R202.49 bundle with exact R202.50/R202.51 GLSL injection) showed focused lit-facet share drops of 7.996pp at frame 6 and 7.933pp at frame 18; provisional threshold is exceeded. This remains the underlying visual defect.
 - Current strict dependency-free suite: 110 PASS / 0 FAIL / 0 SKIP; log SHA256 B455F06AB98C302386747453AE3EA5054050953CD3B37818E95269B4265E212C.
 - Connect toolbox rev17 SHA256 72d1dba38fa96b3a03a01acc395ddfcd0fd3fcdc3f1c31d16ce3ce8b1d83cdee; HPSYN command is intentionally absent from toolbox. HPSYN launches from PR #350 pinned GitHub source.
-- Mission status tool read returned Operation denied or unavailable; durable Workflow execution is not yet proven.
+- HPSYN direct Workflow launch: mission_id `syn-lab-r20252-facet-transmission`, workflow instance `hpsyn-1a70dd1364ae-syn-lab-r20252-facet-transmission`, plan hash `bcff0531efdfa409216f051ca9f32e5d373fbe83bd0ace2492269e4e203a6cd0`. Terminal status: workflow `COMPLETE`, mission `BLOCKED`, 6/6 steps resolved. Four native read steps verified PASS: freshness, PR350 head, Central Skills 3D catalog and visual catalog. Two Bridge read steps were `BLOCKED` / `HPSYN_NATIVE_STEP_NOT_REPLAY_SAFE`; the same Bridge reads were already independently executed directly and verified earlier in this turn. No retry or resubmission.
 - Memory V1 manifest at PR #350 HEAD 288850175fb1f51f9c3ba6819f42ec31f88e2029, blob bffab3f8d718e93286ee884c53fb53dd25f35cfe, contains 185 entries; targeted search returned no R20252-specific record. This is NO_MATCH_IN_MANIFEST for this search, not proof that Memory is empty.
 - Exact source/runtime gates remain separate. No main merge, no deployment, no release.
 
 ## Status and next action
 ACTIVE_STEP=S04
-NEXT_ACTION=Determine whether the original platform authority exposes a fresh, exact-scope read-only revalidation of the historical R202.50 source-transfer denial. If unavailable, keep S04 BLOCKED and do not transfer source or mutate production shader. Continue only independent authorized QA/evidence work.
+NEXT_ACTION=Revalidate the historical R202.50 source-transfer denial solely through the original OpenAI platform safety authority, if such an exact-scope read-only revalidation interface is exposed. Current tool inventory has no such interface; preserve `PLATFORM_SAFETY_REVALIDATION_UNAVAILABLE`, do not transfer source or mutate production shader, and continue only independent authorized work.
