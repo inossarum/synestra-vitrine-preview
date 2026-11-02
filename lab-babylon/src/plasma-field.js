@@ -39,6 +39,9 @@ void main(){
  float density=.025+.66*wisps+.66*arc+.09*fresnel;
  // Sparse living currents, not a full transparent plastic shell.
  float alpha=clamp(uOpacity*density,0.0,.30);
+ // R202.43: lower diffuse foreground haze while keeping bright moving plasma crests.
+ float plasmaWispMask=.42+.58*smoothstep(.20,.85,density);
+ alpha*=plasmaWispMask;
  vec3 violet=vec3(.47,.11,.96);
  vec3 magenta=vec3(1.07,.28,1.14);
  vec3 cyan=vec3(.08,.50,.85);
@@ -145,7 +148,14 @@ export function createPlasmaHeartMaterial(scene){
    // R202.33: face-aware incandescent white-violet focus, not another lamp or pass.
    float ignition=pow(face,2.6)*smoothstep(.20,1.20,energy);
    vec3 coreEmission=vec3(1.15,1.18,1.30)*(.52*ignition);
+   // R202.43: localized faceted luminosity, power-off safe, no new mesh or light.
+   float coreFocus=smoothstep(.30,.84,face)*smoothstep(.18,1.20,energy);
+   vec3 facetLift=vec3(.70,.76,.94)*coreFocus*(.30+.70*facetStrata);
+   float focalOpacity=clamp(.16*coreFocus,0.0,.16);
    float alpha=clamp((.20+.48*pow(face,1.1)+.12*hotspot)*energy,0.0,.79);
+   // Preserve original R202.33 compositing and clamp before transmission.
+   coreEmission+=facetLift;
+   alpha=clamp(alpha+focalOpacity*energy,0.0,.79);
   gl_FragColor=vec4((tint*(.75+.35*hotspot+.38*facetLight)*facetShading*facetPalette*(1.0+.25*facetGlint)*facetContrast+coreEmission)*shimmer*energy*(.30+.70*depthTransmission),alpha*depthTransmission);
  }`;
  const material=new ShaderMaterial('r202-white-violet-soft-heart',scene,{vertexSource,fragmentSource},{
