@@ -29,6 +29,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           persist-credentials: false
+          fetch-depth: 12
       - name: Node 22 with exact npm lock cache
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
@@ -111,5 +112,27 @@ jobs:
           R202_QUALITY_QA: '1'
           R202_CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
         run: node scripts/r202-browser-smoke.mjs
+      - name: Build exact parent R202.44 bundle in disposable runner worktree
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=40831cc0df4b65346ebe84c5503638eadfa70156
+          git cat-file -e "${BASE}^{commit}"
+          git worktree add --detach "$RUNNER_TEMP/r20246-parent" "$BASE"
+          ln -s "$GITHUB_WORKSPACE/lab-babylon/node_modules" "$RUNNER_TEMP/r20246-parent/lab-babylon/node_modules"
+          (
+            cd "$RUNNER_TEMP/r20246-parent/lab-babylon"
+            "$GITHUB_WORKSPACE/lab-babylon/node_modules/.bin/esbuild" src/main.js --bundle --minify --format=iife --target=es2020 "--outfile=$RUNNER_TEMP/r20246-baseline.js"
+          )
+          test -s "$RUNNER_TEMP/r20246-baseline.js"
+          git worktree remove --force "$RUNNER_TEMP/r20246-parent"
+      - name: Ephemeral software WebGL A/B — pixel statistics only, no image export
+        env:
+          R202_CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+          R20246_BASE_BUNDLE: ${{ runner.temp }}/r20246-baseline.js
+        run: |
+          set -euo pipefail
+          node scripts/r20246-ci-ab-metrics.mjs --self-test
+          node scripts/r20246-ci-ab-metrics.mjs
       - name: Source remains unmodified after QA
         run: git diff --exit-code -- src tests
