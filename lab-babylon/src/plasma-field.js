@@ -40,7 +40,7 @@ void main(){
  // Sparse living currents, not a full transparent plastic shell.
  float alpha=clamp(uOpacity*density,0.0,.30);
  // R202.43: lower diffuse foreground haze while keeping bright moving plasma crests.
- float plasmaWispMask=.60+.40*smoothstep(.16,.82,density);
+ float plasmaWispMask=.42+.58*smoothstep(.20,.85,density);
  alpha*=plasmaWispMask;
  vec3 violet=vec3(.47,.11,.96);
  vec3 magenta=vec3(1.07,.28,1.14);
@@ -150,8 +150,8 @@ export function createPlasmaHeartMaterial(scene){
    vec3 coreEmission=vec3(1.15,1.18,1.30)*(.52*ignition);
    // R202.43: localized faceted luminosity, power-off safe, no new mesh or light.
    float coreFocus=smoothstep(.30,.84,face)*smoothstep(.18,1.20,energy);
-   vec3 facetLift=vec3(.29,.32,.40)*coreFocus*(.28+.72*facetStrata);
-   float focalOpacity=clamp(.10*coreFocus,0.0,.10);
+   vec3 facetLift=vec3(.70,.76,.94)*coreFocus*(.30+.70*facetStrata);
+   float focalOpacity=clamp(.16*coreFocus,0.0,.16);
    float alpha=clamp((.20+.48*pow(face,1.1)+.12*hotspot)*energy,0.0,.79);
    // Preserve original R202.33 compositing and clamp before transmission.
    coreEmission+=facetLift;
