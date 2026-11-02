@@ -16,7 +16,7 @@ test('R202.38 emission remains bounded, power-off exact, core 80 facets, one eng
  assert.match(v,/float coreRayIntegral=0\.4511930898\*exp/);
  assert.match(v,/float coreTransmission=mix\(coreSmoothT,coreForegroundT,0\.25\);/);
  assert.match(v,/for\(int i=0;i<16;i\+\+\)/);
- assert.match(v,/clamp\(a,0\.0,\.78\)/);
+ assert.match(v,/float combinedCover=clamp\(1\.0-\(1\.0-fogCover\)\*\(1\.0-coreGlowAlpha\),0\.0,\.78\);/);
  assert.match(m,/CreateIcoSphere\('central nucleus',\{radius:\.38,subdivisions:2\}/);
  assert.match(m,/coreDepthMask=core\.clone\('central nucleus facet depth mask',core,true\)/);
  assert.doesNotMatch(v,/new Engine\(|new Scene\(/);
