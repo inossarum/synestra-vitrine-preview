@@ -7,7 +7,9 @@ import {createServer} from 'node:http';
 import {readFileSync,existsSync,mkdtempSync,rmSync,statSync} from 'node:fs';
 import {resolve,join} from 'node:path';
 import {tmpdir} from 'node:os';
-import {spawnSync} from 'node:child_process';
+import {spawnSync,execFile} from 'node:child_process';
+import {promisify} from 'node:util';
+const exec=promisify(execFile);
 import {createHash} from 'node:crypto';
 import {inflateSync,deflateSync} from 'node:zlib';
 import assert from 'node:assert/strict';
@@ -100,10 +102,11 @@ else {
    const shot=join(dir,name+'.png');
    const url='http://127.0.0.1:'+server.address().port+'/'+name+'/lab-babylon/?labFrame=6&qaQuality=ultra&qaPower=145';
    const args=['--headless=new','--no-sandbox','--disable-dev-shm-usage','--enable-unsafe-swiftshader','--use-gl=angle','--use-angle=swiftshader','--enable-webgl','--virtual-time-budget=4000','--window-size=1100,900','--screenshot='+shot,'--dump-dom',url];
-   const run=spawnSync(chrome,args,{encoding:'utf8',timeout:45000,maxBuffer:4000000});
-   if(run.error||run.status!==0)throw Error('R20246_CHROME_RUN_FAILED_'+name+'_'+run.status);
+   // The HTTP server runs on this same event loop; synchronous spawning would
+   // deadlock the browser's requests until the child timeout (CI failure-first).
+   const {stdout}=await exec(chrome,args,{timeout:45000,maxBuffer:4000000});
    for(const token of ['data-sphere-ready="true"','data-canvas-count="1"','data-facet-depth-active="true"','data-plasma-volume="r20215-raymarch-16"'])
-    if(!run.stdout.includes(token))throw Error('R20246_BROWSER_NOT_READY_'+name+'_'+token);
+    if(!stdout.includes(token))throw Error('R20246_BROWSER_NOT_READY_'+name+'_'+token);
    if(!existsSync(shot)||statSync(shot).size<20000)throw Error('R20246_SCREENSHOT_EMPTY_'+name);
    const raw=readFileSync(shot);images[name]={sha256:hash(raw),pixels:decodePng(raw)};
   }
