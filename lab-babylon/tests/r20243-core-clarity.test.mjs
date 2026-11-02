@@ -10,8 +10,8 @@ const smooth=(a,b,x)=>{const t=Math.max(0,Math.min(1,(x-a)/(b-a)));return t*t*(3
 
 test('R202.43 restores core legibility using only existing 80 facet shader',()=>{
   assert.match(field,/float coreFocus=smoothstep\(\.30,\.84,face\)\*smoothstep\(\.18,1\.20,energy\);/);
-  assert.match(field,/vec3 facetLift=vec3\(\.70,\.76,\.94\)\*coreFocus\*\(\.30\+\.70\*facetStrata\);/);
-  assert.match(field,/float focalOpacity=clamp\(\.16\*coreFocus,0\.0,\.16\);/);
+  assert.match(field,/vec3 facetLift=vec3\(1\.35,1\.42,1\.60\)\*coreFocus\*\(\.30\+\.70\*facetStrata\);/);
+  assert.match(field,/float focalOpacity=clamp\(\.22\*coreFocus,0\.0,\.22\);/);
   assert.match(field,/coreEmission\+=facetLift;/);
   assert.match(field,/alpha=clamp\(alpha\+focalOpacity\*energy,0\.0,\.79\);/);
   assert.match(main,/CreateIcoSphere\('central nucleus',\{radius:\.38,subdivisions:2\}/);
