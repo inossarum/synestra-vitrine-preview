@@ -43,4 +43,12 @@ In the existing `lab-babylon/src/plasma-volume-r20215.js` GLSL, preserve R202.43
 - Recovery incident: previous alpha-blend QA restart failed `fetch failed` because an old temporary profile retained a stale `DevToolsActivePort` file; fixed by selecting a fresh independent profile; subsequent D3D11 run PASS and no QA Chrome process remained after controlled closure.
 - Explicit LIMIT: end-to-end Babylon build, bundled shader behavior in live scene, whole-scene reference comparison, animations, zero-power native runtime, low-end GPU, CI and deployment still **NOT VERIFIED**. Earlier security refusal for dependency installation remains respected. `RUNTIME_E2E_PASS=NO`, `ART_SIGNOFF=PENDING`, `RELEASE=NO`.
 
+## Regression follow-up: legacy R202.43 test + runnable dependency-free suite
+- Direct full-suite attempt `node --test tests/*.test.mjs` (without package installation): **116 observed cases / 103 PASS / 13 FAIL**. Twelve test-file entry failures are `ERR_MODULE_NOT_FOUND @babylonjs/core`; the thirteenth was a brittle R202.43 regex requiring exact `da*=coreAperture;` despite the new nonincreasing multiplicative aperture.
+- Repair: R202.43 regression now accepts preserved `coreAperture` multiplication with either its historic terminator or an additional bounded factor. R202.51's separate strict test continues to check the exact new factor.
+- Targeted `r20243-core-clarity.test.mjs` + `r20251-foreground-volume-window.test.mjs`: **7 PASS / 0 FAIL** after repair.
+- Independent tests requiring no Babylon dependencies, excluding the 12 affected file entries: **104 PASS / 0 FAIL / 0 SKIP**. Full result log preserved locally at `I:\_STUDIO_STAGING\SYN_LAB_R20251_WEBGL_SHADER_QA_20261102\R20251_PURE_TESTS_20261102.txt`, SHA256 `88C3EB600A1D790D920C65324252723EA4906247DED64FBC7F2A28F1CA762FB4`.
+- The 12 excluded file entries: `atlas-interop`, `flow-cohesion`, `node-forks`, `plasma-glow`, `plasma-light`, `plasma-ribbons`, `r20215-native-babylon`, `r20221-faceted-nucleus`, `r20222-visible-facets`, `r20223-core-visibility`, `r20224-depth-blend`, `r20242-magnetic-sweep` (each `.test.mjs`).
+- **Status:** `DEPENDENCY_FREE_REGRESSION=PASS` only. `FULL_REGRESSION=BLOCKED_DEPENDENCY/POLICY_DENIED`, `BUNDLE_BUILD=NOT_RUN`, `BABYLON_E2E=NOT_RUN`. No installation retry or alternate-policy workaround attempted.
+
 No native Supervisor E2E proof; never advertise DONE/RELEASE from this source-only candidate.

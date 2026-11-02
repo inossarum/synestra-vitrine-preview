@@ -24,7 +24,8 @@ test('R202.43 restores core legibility using only existing 80 facet shader',()=>
 
 test('R202.43 reveals nucleus through less foreground haze, never increases opacity',()=>{
   assert.match(volume,/float coreAperture=1\.0-\.55\*\(1\.0-smoothstep\(\.18,\.60,sqrt\(coreImpactSquared\)\)\);/);
-  assert.match(volume,/da\*=coreAperture;/);
+  // R202.51 may multiply the preserved aperture by another bounded frontal factor.
+  assert.match(volume,/da\*=coreAperture(?:;|\*)/);
   assert.match(field,/float plasmaWispMask=\.42\+\.58\*smoothstep\(\.20,\.85,density\);/);
   assert.match(field,/alpha\*=plasmaWispMask;/);
   assert.match(volume,/for\(int i=0;i<16;i\+\+\)/);
