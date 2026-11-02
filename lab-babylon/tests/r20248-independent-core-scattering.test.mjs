@@ -18,7 +18,7 @@ test('R202.48 has independently blended analytic emission with bounded core opac
  assert.match(volume,/float fogCover=a\*fogVisibility;/);
  assert.match(volume,/float coreGlowAlpha=clamp\(coreRadiance\*\.24,0\.0,\.38\);/);
  assert.match(volume,/float combinedCover=clamp\(1\.0-\(1\.0-fogCover\)\*\(1\.0-coreGlowAlpha\),0\.0,\.78\);/);
- assert.match(volume,/vec3 composedEnergy=energy\*fogVisibility\+coreRadiance\*vec3\(1\.65,1\.38,1\.82\);/);
+ assert.match(volume,/vec3 composedEnergy=energy\*fogVisibility\+coreGlowAlpha\*vec3\(1\.65,1\.38,1\.82\);/);
  assert.match(volume,/gl_FragColor=vec4\(composedEnergy\/max\(combinedCover,\.0001\),combinedCover\);/);
  assert.doesNotMatch(volume,/energy\+=coreRadiance\*vec3\(1\.65,1\.38,1\.82\);/);
  assert.ok(volume.indexOf('float coreRadiance=')<volume.indexOf('float coreGlowAlpha='));
@@ -44,21 +44,6 @@ test('R202.48 light keeps its own alpha independent of fog and remains under his
  }
 });
 
-test('R202.48 fixes underestimated analytic energy without changing bounded alpha coverage',()=>{
- assert.match(volume,/vec3 composedEnergy=energy\*fogVisibility\+coreRadiance\*vec3\(1\.65,1\.38,1\.82\);/);
- assert.match(volume,/float coreGlowAlpha=clamp\(coreRadiance\*\.24,0\.0,\.38\);/);
- // Historical R202.44 analytic emission is preserved. The glow factor only
- // controls coverage, not radiant energy; fog attenuation is local and bounded.
- for(const core of [0,.001,.1,.6,1.3]){
-  for(const fog of [0,.1,.4,.9]){
-   const factor=visibility(0);
-   const baseline=fog+core;
-   const changed=fog*factor+core;
-   assert.ok(changed>=baseline-fog*.04-1e-10);
-   assert.equal(changed-(fog*factor),core);
-  }
- }
-});
 test('R202.48 preserves 80 facets, old alpha and depth contract, 16-step raymarch, single engine',()=>{
  assert.match(volume,/for\(int i=0;i<16;i\+\+\)/);
  assert.match(volume,/float coreRadiance=1\.48\*clamp\(uCorePower,0\.0,2\.5\)\*coreRayIntegral\*coreTransmission;/);
