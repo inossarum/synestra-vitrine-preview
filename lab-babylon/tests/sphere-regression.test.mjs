@@ -24,12 +24,13 @@ test('Babylon native RTX3090 renders four independent modes at both viewports',(
   }
  }
 });
-test('source has no remote resources, no second renderer, and provides rollback link',()=>{
+test('source has no remote resources, no second renderer, and no broken standalone link',()=>{
  const src=readFileSync(new URL('../src/main.js',import.meta.url),'utf8');
  const page=readFileSync(new URL('../index.html',import.meta.url),'utf8');
  assert.equal((src.match(/new Engine\(/g)||[]).length,1);
  assert.equal((page.match(/<canvas /g)||[]).length,1);
- assert.match(page,/siteforge-r189-autonome\.html/);
+ assert.doesNotMatch(page,/siteforge-r189-autonome\.html/);
+ assert.match(page,/Comparaison R189 non incluse dans cette version autonome/);
  assert.doesNotMatch(src,/fetch\(|https?:\/\//);
  assert.match(page,/default-src 'self'/);
 });

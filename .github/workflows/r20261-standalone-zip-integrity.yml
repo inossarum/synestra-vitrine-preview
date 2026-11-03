@@ -35,7 +35,7 @@ jobs:
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           echo '05abdc8bb1e54a33024ca5bafa5c9a080c1811f0334255aa2c05ccbab21e2ba7  release/Synestra_Sphere_R20260_Standalone.zip' | sha256sum -c -
           echo '7e9b6e517411c247178a4a22db3bbd6f017e78a193bddcea09cff65f6c271784  release/launch_sphere.py' | sha256sum -c -
-          echo '33677ab6d1270910a6e2f80b7862040bc89f34466a1885b272fb971886036d5b  release/Synestra_Sphere_R20261_Standalone.zip' | sha256sum -c -
+          echo '5088f87190de0e0bab84633569c0585664a7151666e29fda1b434c76d0f8ae13  release/Synestra_Sphere_R20261_Standalone.zip' | sha256sum -c -
       - name: Node 22 (existing CI version)
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
@@ -51,6 +51,8 @@ jobs:
         run: |
           set -euo pipefail
           echo '93301d7b225bc52e1a46b00937269941a17b050d58dd7fc20813eaff36779f5d  lab-babylon/dist/babylon-lab.js' | sha256sum -c -
+      - name: Verify every offline link resolves inside standalone ZIP
+        run: python3 release/verify_r20261_offline_links.py
       - name: Rebuild portable ZIP and check all six uncompressed entries
         shell: bash
         run: |
@@ -61,7 +63,7 @@ jobs:
           from pathlib import Path
           original=Path("release/Synestra_Sphere_R20261_Standalone.zip")
           rebuilt=Path(sys.argv[1])
-          expected="33677ab6d1270910a6e2f80b7862040bc89f34466a1885b272fb971886036d5b"
+          expected="5088f87190de0e0bab84633569c0585664a7151666e29fda1b434c76d0f8ae13"
           H=lambda x:hashlib.sha256(x).hexdigest()
           assert H(original.read_bytes())==expected,"ORIGINAL_ZIP_SHA_CHANGED"
           with zipfile.ZipFile(original) as a,zipfile.ZipFile(rebuilt) as b:

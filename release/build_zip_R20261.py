@@ -1,6 +1,6 @@
 """Deterministic Synestra R202.61 ZIP from the SHA-pinned R202.60 standalone.
 
-Changes only the compiled Babylon bundle, README version and Windows port-safe launcher.
+Changes the compiled Babylon bundle, README version, Windows launcher, and removes a broken R189 link.
 No overwrite or network. Python stdlib.
 Usage: python release/build_zip_R20261.py [output.zip]
 """
@@ -28,7 +28,12 @@ with zipfile.ZipFile(SOURCE) as previous:
         # Only CRLF -> LF is tolerated for cross-platform Git checkouts.
         if b"\r" in data.replace(b"\r\n",b""):fail("HTML_UNEXPECTED_EOL")
         return data.replace(b"\r\n",b"\n")
-    if normalized_html_eol(previous.read("index.html"))!=normalized_html_eol((ROOT/"lab-babylon"/"index.html").read_bytes()):fail("HTML_CHANGED")
+    old_link=b'<div class="links"><a href="../siteforge-r189-autonome.html?demo=energy&material=6">Comparer avec le Labo R189</a></div>'
+    replacement_note=b'<p class="note">Comparaison R189 non incluse dans cette version autonome.</p>'
+    source_html=previous.read("index.html")
+    if source_html.count(old_link)!=1:fail("BASE_LINK_UNEXPECTED")
+    corrected_html=source_html.replace(old_link,replacement_note)
+    if normalized_html_eol(corrected_html)!=normalized_html_eol((ROOT/"lab-babylon"/"index.html").read_bytes()):fail("HTML_CHANGED")
     old_readme=previous.read("README.txt")
     if old_readme.count(b"R202.59")!=1:fail("README_UNEXPECTED_VERSION")
     updated_readme=old_readme.replace(b"R202.59",b"R202.61",1)
@@ -36,7 +41,7 @@ with zipfile.ZipFile(SOURCE) as previous:
     if sha(old_launcher)!="085a949036cba2fad572575e63242b07d12165326fcd6278dff4751ba7bb5277":fail("BASE_LAUNCHER_SHA")
     new_launcher=(HERE/"launch_sphere.py").read_bytes()
     if sha(new_launcher)!="7e9b6e517411c247178a4a22db3bbd6f017e78a193bddcea09cff65f6c271784":fail("EXCLUSIVE_LAUNCHER_SHA")
-    replacements={"dist/babylon-lab.js":bundle,"README.txt":updated_readme,"launch_sphere.py":new_launcher}
+    replacements={"dist/babylon-lab.js":bundle,"README.txt":updated_readme,"launch_sphere.py":new_launcher,"index.html":corrected_html}
     TARGET.parent.mkdir(parents=True,exist_ok=True)
     with zipfile.ZipFile(TARGET,"w") as result:
         for entry in previous.infolist():
@@ -48,9 +53,11 @@ with zipfile.ZipFile(TARGET) as finished,zipfile.ZipFile(SOURCE) as previous:
             if sha(data)!=NEW_BUNDLE_SHA:fail("BAD_BUILT_JS")
         elif name=="README.txt":
             if data!=updated_readme:fail("BAD_README")
+        elif name=="index.html":
+            if data!=corrected_html:fail("BAD_HTML")
         elif name=="launch_sphere.py":
             if data!=new_launcher:fail("BAD_LAUNCHER")
         elif data!=previous.read(name):fail("UNEXPECTED_CHANGE_"+name)
 print("R20261_ZIP_PASS "+json.dumps({"sha256":sha(TARGET.read_bytes()),"bytes":TARGET.stat().st_size,
-    "files":len(names),"unchanged_files":len(names)-3,"updated_version":"R202.61",
+    "files":len(names),"unchanged_files":len(names)-4,"updated_version":"R202.61",
     "new_bundle_sha256":NEW_BUNDLE_SHA}))
