@@ -9,6 +9,8 @@ import {createPlasmaHeartMaterial} from './plasma-field.js';
 import {installR20215Volume} from './plasma-volume-r20215.js';
 import {geometryUpdateDecision} from './geometry-frame-budget.mjs';
 import {isFacetMaskActive} from './core-mask-lifecycle.mjs';
+import {sampleSphereStructuralMotion} from './sphere-structural-motion.mjs';
+import {sampleSpherePointerResponse} from './sphere-structural-motion.mjs';
 // ONE Babylon canvas. The requested subject is ONLY the glowing energy sphere.
 const cv=document.getElementById('renderCanvas'),stat=document.getElementById('status');
 const ids=['core-mode','core-radius','core-power','core-speed','strands','complexity','quality'];
@@ -68,6 +70,18 @@ function start(){
  scene=new Scene(engine);scene.clearColor=new Color4(.006,.014,.04,1);
  const camera=new ArcRotateCamera('orbit',-.38,1.2,4.8,v(0,0,0),scene);camera.attachControl(cv,true);
  camera.lowerRadiusLimit=2.8;camera.upperRadiusLimit=7;camera.wheelPrecision=48;
+ // R202.54: restrained 3D pointer response, without new geometry or shader work.
+ let pointerX=0,pointerY=0,pointerActive=false,pointerYaw=0,pointerPitch=0;
+ cv.addEventListener('pointermove',event=>{
+  const rect=cv.getBoundingClientRect();
+  if(rect.width<=0||rect.height<=0)return;
+  pointerX=2*(event.clientX-rect.left)/rect.width-1;
+  pointerY=2*(event.clientY-rect.top)/rect.height-1;
+  pointerActive=true;
+ });
+ const resetPointer=()=>{pointerActive=false;};
+ cv.addEventListener('pointerleave',resetPointer);
+ cv.addEventListener('pointercancel',resetPointer);
  const lightCore=new PointLight('core light',v(0,0,0),scene);lightCore.intensity=1.05;lightCore.range=6;
  glow=new GlowLayer('glow',scene,{blurKernelSize:64,mainTextureRatio:.5});
  // Owner's Studio colors: violet, cyan, dark blue, green; one immutable art contract.
@@ -122,7 +136,7 @@ function start(){
  }
  // The Labo exclusively owns the sphere; Atlas owns only the target CORE_SOCKET.
  const sphereRoot=new TransformNode('LAB_SPHERE_ROOT',scene);
- for(const mesh of [core,halo,...threads,...lines,...inner,...innerSheaths,...stars,...bridges,...bridgeVeils,...energyNodes])mesh.parent=sphereRoot;
+ for(const mesh of [core,coreDepthMask,halo,...threads,...lines,...inner,...innerSheaths,...stars,...bridges,...bridgeVeils,...energyNodes])mesh.parent=sphereRoot;
  // R202: volumetric procedural plasma is parented to the same Babylon sphere, no second scene.
  plasmaField=installR20215Volume({scene,parent:sphereRoot});
  plasma=installPlasmaRibbons({scene,colors:SPHERE_REFERENCE.colors.map(x=>new Color3(...x.linear)),nodes:nodeDirections,count:28,bridgePath:pathBridge});
@@ -218,7 +232,21 @@ function start(){
    m.position.set(rad*Math.cos(a),1.56*z,rad*Math.sin(a));
   }
   }
-  core.rotation.y=time*.18;scene.render();renderFrames++;
+  // R202.54: the whole existing sphere moves in three dimensions as one body.
+  // Keep the 80-face stencil mask exactly co-located with the rotating nucleus.
+  const spatial=sampleSphereStructuralMotion(time,{reducedMotion:reduced.matches});
+  sphereRoot.rotation.set(spatial.pitch,spatial.yaw,spatial.roll);
+  const target=sampleSpherePointerResponse(pointerActive?pointerX:0,pointerActive?pointerY:0,{reducedMotion:reduced.matches});
+  const response=reduced.matches?1:.15;
+  pointerPitch+=(target.pitch-pointerPitch)*response;
+  pointerYaw+=(target.yaw-pointerYaw)*response;
+  sphereRoot.rotation.x+=pointerPitch;
+  sphereRoot.rotation.y+=pointerYaw;
+  sphereRoot.scaling.setAll(spatial.scale);
+  core.rotation.y=time*.18;
+  coreDepthMask.scaling.copyFrom(core.scaling);
+  coreDepthMask.rotation.copyFrom(core.rotation);
+  scene.render();renderFrames++;
   cv.dataset.renderFrames=String(renderFrames);cv.dataset.geometryUpdates=String(geometryUpdates);cv.dataset.plasmaShaderFrames=String(plasmaShaderFrames);
   cv.dataset.visibleCoreShellSheaths=String(bridgeVeils.filter(m=>m.isEnabled()).length);cv.dataset.visibleCoreMist=String(innerSheaths.filter(m=>m.isEnabled()).length);cv.dataset.visiblePlasmaField=String(plasmaField.meshes.filter(m=>m.isEnabled()).length);
   cv.dataset.mode=String(mode);cv.dataset.activeFilaments=String(threads.filter(x=>x.isEnabled()).length+lines.filter(x=>x.isEnabled()).length);
