@@ -1,0 +1,31 @@
+{
+  "schema": "synestra.r20261.zip-extracted-native-gpu-e2e.v1",
+  "url": "file:///I:/_STUDIO_STAGING/SYN_LAB_R20261_WHITE_VIOLET_CORE_20261103/qa-release-r20261/extracted-final/index.html?labFrame=18&qaPower=145",
+  "profiles": [
+    {
+      "name": "swiftshader",
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "effectiveQuality": "economy",
+      "coreFaces": 80,
+      "ribbons": 28,
+      "nodes": 6,
+      "allFourModes": true,
+      "powerOff": true,
+      "screenshotSHA256": "ac6a1c9e461fe4d0410d7085138ce484b53f53a8c4765e31bf9ee948d1de0604"
+    },
+    {
+      "name": "rtx3090",
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "effectiveQuality": "balanced",
+      "coreFaces": 80,
+      "ribbons": 28,
+      "nodes": 6,
+      "allFourModes": true,
+      "powerOff": true,
+      "screenshotSHA256": "a8ca1375d9fc0a339c8f24480d3ff487983d9add32631361fc7e2f2ce7cb01b1"
+    }
+  ],
+  "errors": [],
+  "network": [],
+  "status": "PASS"
+}
