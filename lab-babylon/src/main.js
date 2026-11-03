@@ -11,6 +11,7 @@ import {geometryUpdateDecision} from './geometry-frame-budget.mjs';
 import {isFacetMaskActive} from './core-mask-lifecycle.mjs';
 import {sampleSphereStructuralMotion} from './sphere-structural-motion.mjs';
 import {sampleSpherePointerResponse} from './sphere-structural-motion.mjs';
+import {sampleMovingNodeDirections} from './moving-node-directions.mjs';
 // ONE Babylon canvas. The requested subject is ONLY the glowing energy sphere.
 const cv=document.getElementById('renderCanvas'),stat=document.getElementById('status');
 const ids=['core-mode','core-radius','core-power','core-speed','strands','complexity','quality'];
@@ -53,6 +54,7 @@ const nodeDirections=[
  v(.70,-.55,.29),v(-.02,-.92,.40),v(.32,.89,-.38)
 ].map(dir=>dir.normalize());
 const coreDirections=nodeDirections.map(d=>[d.x,d.y,d.z]);
+const nodeSeedDirections=nodeDirections.map(d=>[d.x,d.y,d.z]);
 // R201: open, continuous 3D connection from the violet heart to each of six shell nodes.
 function pathBridge(i,t){
  return sampleCoreShellFlow(i,t,coreDirections).map(p=>v(p[0],p[1],p[2]));
@@ -177,6 +179,14 @@ function start(){
   cv.dataset.geometryIntervalMs=String(geometryStep.intervalMs);
   if(geometryStep.update){
    geometryUpdates++;
+   // R202.55: one shared 3D anchor field drives nodes, six central paths and forks.
+   // Perform this within the existing geometry cadence; no extra rendering pass.
+   const movingNodes=sampleMovingNodeDirections(nodeSeedDirections,time,{reducedMotion:reduced.matches});
+   for(let i=0;i<nodeDirections.length;i++){
+    nodeDirections[i].copyFromFloats(...movingNodes[i]);
+    coreDirections[i]=movingNodes[i];
+    energyNodes[i].position.copyFrom(nodeDirections[i].scale(1.53));
+   }
   plasma.update({time,quality,parent:sphereRoot,active:Math.min(plasma.meshes.length,Math.round(amount*.68)+5),corePower:get('core-power'),coreVisible:depthMaskActive});
   forks.update({time,quality,corePower:get('core-power'),parent:sphereRoot});
   cv.dataset.visibleNodeForks=String(forks.meshes.filter(m=>m.isEnabled()).length);

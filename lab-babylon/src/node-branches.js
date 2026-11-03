@@ -39,6 +39,17 @@ export function nodeForkPath(nodeDirections,index,time=0){
  return path;
 }
 
+// R202.55: distribute the EXISTING forks across all six nodes before any second fork.
+// Preserve 4 / 8 / 12 active geometry budgets, without adding a mesh or a material.
+export function activeForkIndices(quality='balanced',corePower=1){
+ if(!['economy','balanced','auto','ultra'].includes(quality)||!Number.isFinite(corePower)||corePower<0)
+  throw new RangeError('R195_FORK_POLICY_INVALID');
+ if(corePower===0)return [];
+ if(quality==='ultra')return Array.from({length:12},(_,i)=>i);
+ if(quality==='economy')return [0,2,4,6];
+ return [0,2,4,6,8,10,1,3];
+}
+
 export function installNodeForks({scene,directions,ribbonMaterials,photonMaterials,parent=null}){
  if(!scene||!scene.getEngine)throw TypeError('R195_SCENE_REQUIRED');
  if(!Array.isArray(directions)||directions.length!==6)throw Error('R195_SIX_NODES_REQUIRED');
@@ -74,13 +85,13 @@ export function installNodeForks({scene,directions,ribbonMaterials,photonMateria
  return {
   meshes,photons,stats,
   update({time=0,quality='balanced',corePower=1,parent=null}={}){
-   const count=corePower<=0?0:quality==='economy'?4:quality==='ultra'?12:8;
+   const activeForks=new Set(activeForkIndices(quality,corePower));
    const photoCount=corePower<=0?0:quality==='economy'?2:6;
    const budget=quality+':'+(corePower>0);
    const rebuild=time-lastGeom>=.065||budget!==lastBudget;
    if(rebuild){lastGeom=time;lastBudget=budget;}
    for(let i=0;i<meshes.length;i++){
-    const mesh=meshes[i],enabled=i<count;
+    const mesh=meshes[i],enabled=activeForks.has(i);
     mesh.setEnabled(enabled);
     if(!enabled)continue;
     if(parent&&mesh.parent!==parent)mesh.parent=parent;
