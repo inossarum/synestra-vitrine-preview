@@ -65,6 +65,14 @@ test('R202.52 fail closed: corrupt or nonnumeric input',()=>{
   assert.throws(()=>classifySnapshotEvidence([]),/R20252_EVIDENCE_INPUT_INVALID/);
 });
 
+test('R202.52 fail closed: incomplete, substituted and duplicated capture sets',()=>{
+  assert.throws(()=>classifySnapshotEvidence([frame(6,0,0,0)]),/R20252_COMPARISON_SET_INVALID/);
+  assert.throws(()=>classifySnapshotEvidence([frame(6,145,0,0),frame(18,145,0,0),frame(18,0,0,0)]),/R20252_COMPARISON_SET_INVALID/);
+  assert.throws(()=>classifySnapshotEvidence([...nominal(),frame(6,145,0,0)]),/R20252_COMPARISON_SET_INVALID/);
+  assert.throws(()=>classifySnapshotEvidence([frame(6,145,0,0),frame(18,145,0,0),frame(7,0,0,0)]),/R20252_COMPARISON_SET_INVALID/);
+  assert.throws(()=>classifySnapshotEvidence([frame(6,145,0,0),frame(18,145,0,0),frame(NaN,0,0,0)]),/R20252_COMPARISON_SET_INVALID/);
+});
+
 const rgbImage=(values)=>({width:2,height:1,bpp:3,stride:6,data:Uint8Array.from(values)});
 const twoPixels={x0:0,x1:2,y0:0,y1:1};
 

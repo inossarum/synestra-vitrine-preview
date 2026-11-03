@@ -11,6 +11,17 @@ export function classifySnapshotEvidence(comparisons, tolerance=0.01) {
   const offMeanDelta=offRows[0]?.candidate_minus_baseline?.facet_focus?.mean;
   if(!Number.isFinite(offMeanDelta)) throw new TypeError('R20252_POWER_OFF_DELTA_INVALID');
   const powerOffMeanStable=Math.abs(offMeanDelta)<tolerance;
+  // Exact native capture contract: frames 6/18 at 145%, plus frame 6 at 0%.
+  // Neither an incomplete set nor duplicated/substituted frames may attest gates.
+  const required=new Set(['6:145','18:145','6:0']);
+  const observed=new Set();
+  for(const item of comparisons){
+    if(!Number.isInteger(item?.frame)||!Number.isFinite(item?.power))throw new TypeError('R20252_COMPARISON_SET_INVALID');
+    const key=item.frame+':'+item.power;
+    if(!required.has(key)||observed.has(key))throw new TypeError('R20252_COMPARISON_SET_INVALID');
+    observed.add(key);
+  }
+  if(observed.size!==required.size)throw new TypeError('R20252_COMPARISON_SET_INVALID');
   return {
     ui_control:uiMeanStable?'NOT_ATTESTED':'FAIL',
     ui_control_mean_delta:uiMeanStable?'PASS':'FAIL',
