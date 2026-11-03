@@ -1,0 +1,72 @@
+# R202.62 offline touch zoom; free public repository runner, read-only, no deployment or artifacts.
+name: R202.62 mobile standalone integrity
+on:
+  push:
+    branches:
+      - task/SYN_LAB_R20262_MOBILE_TOUCH_QA_20261103
+    paths:
+      - .github/workflows/r20262-mobile-standalone-integrity.yml
+      - lab-babylon/**
+      - release/**
+      - evidence/R20262_*
+permissions:
+  contents: read
+concurrency:
+  group: syn-r20262-mobile
+  cancel-in-progress: true
+
+jobs:
+  verify-mobile-release:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact candidate revision
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Verify scoped immutable inputs and published archive SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git diff --check
+          echo '5088f87190de0e0bab84633569c0585664a7151666e29fda1b434c76d0f8ae13  release/Synestra_Sphere_R20261_Standalone.zip' | sha256sum -c -
+          echo '03ab7552a8ffd6413206f18c3c0f02e44fe593c7869f6a514aa0005e89ca5a37  release/Synestra_Sphere_R20262_Standalone.zip' | sha256sum -c -
+          test -f lab-babylon/tests/r20262-mobile-camera-distance.test.mjs
+          test -f release/build_zip_R20262.py
+      - name: Node 22
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+      - name: Install locked dependencies
+        run: npm --prefix lab-babylon ci --no-audit --no-fund
+      - name: Run complete scene and mobile regression
+        run: npm --prefix lab-babylon test
+      - name: Recompile existing Babylon scene
+        run: npm --prefix lab-babylon run build
+      - name: Verify compiled bytes and package-contained local assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo '05f453c255e986d0c03443ecbefcdc7957147328a4140bb57b4284d4e358db27  lab-babylon/dist/babylon-lab.js' | sha256sum -c -
+          python3 release/verify_r20261_offline_links.py release/Synestra_Sphere_R20262_Standalone.zip
+          python3 release/build_zip_R20262.py "$RUNNER_TEMP/r20262-rebuilt.zip"
+          test "$(sha256sum "$RUNNER_TEMP/r20262-rebuilt.zip" | cut -d' ' -f1)" = '03ab7552a8ffd6413206f18c3c0f02e44fe593c7869f6a514aa0005e89ca5a37'
+          python3 - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile
+          import hashlib,json
+          older=Path("release/Synestra_Sphere_R20261_Standalone.zip")
+          newer=Path("release/Synestra_Sphere_R20262_Standalone.zip")
+          with ZipFile(older) as a,ZipFile(newer) as b:
+              assert a.namelist()==b.namelist() and len(a.namelist())==6
+              changed={n for n in a.namelist() if a.read(n)!=b.read(n)}
+              assert changed=={"index.html","style.css","dist/babylon-lab.js","README.txt"},changed
+              assert b'camera-distance' in b.read('index.html')
+              assert b'.viewport{position:relative;top:auto;z-index:1}' in b.read('style.css')
+              assert b'R202.62' in b.read('README.txt')
+          evidence=json.loads(Path("evidence/R20262_MOBILE_TOUCH_GPU_REPORT.json").read_text("utf-8"))
+          assert evidence["status"]=="PASS" and len(evidence["cases"])==4
+          assert evidence["zip_sha256"]=="03ab7552a8ffd6413206f18c3c0f02e44fe593c7869f6a514aa0005e89ca5a37"
+          print("R20262_CI_INTEGRITY_PASS",json.dumps({"changed_members":sorted(changed),"local_native_gpu_evidence_cases":len(evidence["cases"]),"gpu_executed_in_CI":False}))
+          PY

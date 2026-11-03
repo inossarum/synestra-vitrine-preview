@@ -23,5 +23,5 @@ button{background:#154c54;border:1px solid #4d9494;color:#e6faff;padding:11px 8p
 button:hover{background:#226978}button:focus-visible,a:focus-visible{outline:2px solid #9bfaf5;outline-offset:2px}
 .note{font-size:.76rem;color:#9db9d0}a{color:#80e1e5;text-decoration:none}.links{margin-top:12px}
 footer{color:#7892ac;font-size:.72rem;padding:15px 0}
-@media(max-width:850px){.workspace{grid-template-columns:1fr}#renderCanvas{height:45vh;min-height:310px}.viewport{position:sticky;top:0;z-index:2}.controls{padding:15px}}
+@media(max-width:850px){.workspace{grid-template-columns:1fr}#renderCanvas{height:45vh;min-height:310px}.viewport{position:relative;top:auto;z-index:1}.controls{padding:15px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}

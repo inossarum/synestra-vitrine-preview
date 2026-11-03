@@ -287,7 +287,14 @@ function sync(){
  budget();
 }
 Object.values(ctl).forEach(x=>x.addEventListener('input',sync));
-document.getElementById('reset').addEventListener('click',()=>{for(const [k,value] of Object.entries(defaults))ctl[k].value=value;sync();});
+const distanceControl=document.getElementById('camera-distance'),distanceOutput=document.getElementById('camera-distance-v');
+function syncCameraDistance(){
+ const radius=Number(distanceControl.value)/100;
+ distanceOutput.textContent=radius.toFixed(1).replace('.',',');
+ if(scene?.activeCamera)scene.activeCamera.radius=Number(distanceControl.value)/100;
+}
+distanceControl.addEventListener('input',syncCameraDistance);
+document.getElementById('reset').addEventListener('click',()=>{for(const [k,value] of Object.entries(defaults))ctl[k].value=value;distanceControl.value='480';syncCameraDistance();sync();});
 document.getElementById('export').addEventListener('click',()=>{
  const settings=Object.fromEntries(Object.entries(ctl).map(([k,v])=>[k,v.value]));
  const blob=new Blob([JSON.stringify({schema:'synestra.lab.babylon-sphere.v1',settings},null,2)],{type:'application/json'});
