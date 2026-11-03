@@ -2,6 +2,7 @@ import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 import {inflateSync} from 'node:zlib';
 import {createHash} from 'node:crypto';
 import {join} from 'node:path';
+import {classifySnapshotEvidence} from './r20252-gate-evidence.mjs';
 const root=process.env.SYNESTRA_STAGING_ROOT||'I:\\_STUDIO_STAGING';
 const qa=join(root,'SYN_LAB_R20251_NATIVE_BABYLON_INSTRUMENTED_QA_20261102');
 const out=join(root,'SYN_LAB_R20252_CONTRAST_QA_20261102');mkdirSync(out,{recursive:true});
@@ -92,12 +93,10 @@ for(const [frame,power] of [[6,145],[18,145],[6,0]]){
 }
 const powered=report.comparisons.filter(x=>x.power===145);
 const darkening=powered.map(x=>({frame:x.frame,lit150_pp:x.candidate_minus_baseline.facet_focus.lit150_pct,mean_rgb:x.candidate_minus_baseline.facet_focus.mean}));
-const controls=report.comparisons.every(x=>Math.abs(x.candidate_minus_baseline.ui_control.mean)<.01);
-const powerOff=report.comparisons.find(x=>x.power===0);
-const powerOffPreserved=Math.abs(powerOff.candidate_minus_baseline.facet_focus.mean)<.01;
-if(!controls||!powerOffPreserved)throw Error('INSTRUMENTED_REGRESSION_OR_CONTROL_FAILURE');
+const snapshotEvidence=classifySnapshotEvidence(report.comparisons);
+if(snapshotEvidence.ui_control_mean_delta!=='PASS'||snapshotEvidence.power_off_mean_delta!=='PASS')throw Error('INSTRUMENTED_REGRESSION_OR_CONTROL_FAILURE');
 const visibilityScreen=darkening.every(x=>x.lit150_pp>=-2);
-report.gates={diagnostic_integrity:'PASS',ui_control:'PASS',power_off:'PASS',facet_visibility_screen:visibilityScreen?'PASS':'FAIL',owner_art_signoff:'PENDING',exact_rebuild:'NOT_VERIFIED',visibility_screen_rule:'At each audited high-power frame, candidate share of pixels above luma 150 within focused nucleus must not fall by more than 2 percentage points vs R20249; this is a provisional technical screen, not art approval',observed:darkening};
+report.gates={diagnostic_integrity:'PASS',...snapshotEvidence,facet_visibility_screen:visibilityScreen?'PASS':'FAIL',owner_art_signoff:'PENDING',exact_rebuild:'NOT_VERIFIED',visibility_screen_rule:'At each audited high-power frame, candidate share of pixels above luma 150 within focused nucleus must not fall by more than 2 percentage points vs R20249; this is a provisional technical screen, not art approval',observed:darkening};
 const filename=join(out,'r20252-contrast-audit.json');
 writeFileSync(filename,JSON.stringify(report,null,2));
 console.log('R20252_CONTRAST_AUDIT_PASS '+JSON.stringify(report.comparisons));
