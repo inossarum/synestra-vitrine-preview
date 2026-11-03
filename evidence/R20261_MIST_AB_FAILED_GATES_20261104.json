@@ -1,0 +1,102 @@
+{
+  "schema": "synestra.r20261.mist-ab-failed-gates.v1",
+  "date": "2026-11-04",
+  "mission_id": "labo3d_sphere_r20261",
+  "base_sha": "dd2b0f1eecf3e2782d750df7e4dea811ed285a8d",
+  "previous_checkpoint_sha": "77b83b753f19b75026f8ef6cded1735b84016f2b",
+  "branch": "task/SYN_LAB_R20261_MIST_OPACITY_EXP_20261104",
+  "gpu": "NVIDIA GeForce RTX 3090 ANGLE D3D11",
+  "viewport": [
+    1100,
+    900
+  ],
+  "canvas": [
+    705,
+    675
+  ],
+  "frame": 18,
+  "power_percent": 145,
+  "gates": {
+    "changed_percent_min": 0.12,
+    "edge_gradient_gain_min": 0.1,
+    "outer_mean_abs_max": 1,
+    "core_mean_delta_max": -1
+  },
+  "attempts": [
+    {
+      "name": "alpha_0_58",
+      "status": "FAIL_VISUAL_GATE",
+      "failure_first_pid": 152816,
+      "focused_pid": 152828,
+      "regression_pid": 147112,
+      "tests": {
+        "total": 182,
+        "pass": 179,
+        "fail": 0,
+        "skip": 3
+      },
+      "gpu_pid": 152620,
+      "modes": [
+        {
+          "mode": 0,
+          "core_mean_luma_delta": -1.4714781746027512,
+          "core_edge_gradient_delta": 0.007789473684208792,
+          "blue_vs_rg_delta": -2.174429069792346,
+          "outer_mean_luma_delta": -0.02188133525753244,
+          "changed_percent": 0.010296821644339375
+        },
+        {
+          "mode": 2,
+          "core_mean_luma_delta": -1.87982253086121,
+          "core_edge_gradient_delta": -0.0009824561403438,
+          "blue_vs_rg_delta": -2.47391964133532,
+          "changed_percent": null
+        }
+      ],
+      "png_evidence": "SUPERSEDED_BY_SECOND_ATTEMPT; process output only"
+    },
+    {
+      "name": "width_1_15",
+      "status": "FAIL_VISUAL_GATE",
+      "failure_first_pid": 144776,
+      "regression_pid": 136852,
+      "tests": {
+        "total": 182,
+        "pass": 179,
+        "fail": 0,
+        "skip": 3
+      },
+      "gpu_pid": 151448,
+      "png_diff_pid": 153948,
+      "modes": [
+        {
+          "mode": 0,
+          "core_mean_luma_delta": -1.165591931216568,
+          "core_edge_gradient_delta": 0.09270175438596584,
+          "blue_vs_rg_delta": -1.6471324505964091,
+          "outer_mean_luma_delta": -0.022199171906621018,
+          "changed_percent": 0.4188074599422117,
+          "baseline_png_sha256": "8c535556c58915e94f068237d288213245b1a36b7e02c27b46f0d6596cc34804",
+          "variant_png_sha256": "31708b941c5f61e1350468f35ac21312f4c80fa7657f577900e28469f9b536c1"
+        },
+        {
+          "mode": 2,
+          "core_mean_luma_delta": -1.41459986772437,
+          "core_edge_gradient_delta": 0.0631578947368412,
+          "blue_vs_rg_delta": -1.837234958380125,
+          "outer_mean_luma_delta": -0.001709445761509,
+          "changed_percent": 0.33937483582873657,
+          "baseline_png_sha256": "39c1d65a24ab63f7c25719872dd6ae0418475345e4524870f4137907d2c2706c",
+          "variant_png_sha256": "1dc88ed83857d58b75c8d86342331bb6234de09d24a1df9b6fec521571dcd22f"
+        }
+      ]
+    }
+  ],
+  "code_state": "RESTORED_TO_PREVIOUS_CHECKPOINT",
+  "source_code_diff": "EMPTY",
+  "ci_r20261_reused": 41719154760,
+  "art_signoff": "PENDING",
+  "canonical_image_binary": "MANQUANTE",
+  "changed_source_promoted": false,
+  "public_deploy": false
+}
