@@ -187,7 +187,7 @@ function start(){
     coreDirections[i]=movingNodes[i];
     energyNodes[i].position.copyFrom(nodeDirections[i].scale(1.53));
    }
-  plasma.update({time,quality,parent:sphereRoot,active:Math.min(plasma.meshes.length,Math.round(amount*.68)+5),corePower:get('core-power'),coreVisible:depthMaskActive});
+  plasma.update({time,quality,parent:sphereRoot,mode,active:Math.min(plasma.meshes.length,Math.round(amount*.68)+5),corePower:get('core-power'),coreVisible:depthMaskActive});
   forks.update({time,quality,corePower:get('core-power'),parent:sphereRoot});
   cv.dataset.visibleNodeForks=String(forks.meshes.filter(m=>m.isEnabled()).length);
   cv.dataset.visibleNodePhotons=String(forks.photons.filter(m=>m.isEnabled()).length);
