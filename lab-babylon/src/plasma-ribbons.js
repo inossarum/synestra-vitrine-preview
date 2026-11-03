@@ -203,7 +203,7 @@ export function installPlasmaRibbons({scene,colors,nodes,count=28,bridgePath=nul
  const sheaths=[];
  for(let i=0;i<Math.min(14,count);i++){
   const path=organicPlasmaCenterline(i,0,nodes);
-  const rails=organicPlasmaRibbonPaths(path,i,0,3.8);
+  const rails=organicPlasmaRibbonPaths(path,i,0,2.35);
   const mesh=MeshBuilder.CreateRibbon('plasma-sheath-'+i,{
    pathArray:rails,updatable:true,sideOrientation:Mesh.FRONTSIDE
   },scene);
@@ -276,7 +276,7 @@ export function installPlasmaRibbons({scene,colors,nodes,count=28,bridgePath=nul
     if(!enabled)continue;
     if(parent&&mesh.parent!==parent)mesh.parent=parent;
     MeshBuilder.CreateRibbon(null,{
-      pathArray:organicPlasmaRibbonPaths(organicPlasmaCenterline(i,time,nodes,mode,transitionWeights),i,time,3.8),
+      pathArray:organicPlasmaRibbonPaths(organicPlasmaCenterline(i,time,nodes,mode,transitionWeights),i,time,2.35),
       instance:mesh
     },scene);
    }
