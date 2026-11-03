@@ -25,3 +25,19 @@ export function sampleShellModeShape(mode,index,u,time){
  const angle=TAU*u*2.4-time*1.17+phase*.15;
  return {side:.075*envelope*Math.sin(angle),across:.052*envelope*Math.cos(angle),radial:.148*envelope*Math.sin(angle)};
 }
+
+/** Weighted morph across existing four geometry fields; anchors remain invariant. */
+export function blendShellModeShape(index,u,time,weights){
+ if(!Array.isArray(weights)||weights.length!==SHELL_MODE_COUNT||
+   !weights.every(v=>Number.isFinite(v)&&v>=0&&v<=1)||
+   Math.abs(weights.reduce((sum,w)=>sum+w,0)-1)>1e-6)
+  throw new RangeError('SHELL_BLEND_WEIGHTS_INVALID');
+ let side=0,across=0,radial=0;
+ for(let mode=0;mode<SHELL_MODE_COUNT;mode++){
+  const w=weights[mode];
+  if(w===0)continue;
+  const shape=sampleShellModeShape(mode,index,u,time);
+  side+=w*shape.side;across+=w*shape.across;radial+=w*shape.radial;
+ }
+ return{side,across,radial};
+}
