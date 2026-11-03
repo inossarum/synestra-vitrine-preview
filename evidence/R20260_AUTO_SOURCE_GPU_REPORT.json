@@ -1,0 +1,47 @@
+{
+  "schema": "synestra.r20260.auto-quality.real-gpu.v1",
+  "date": "2026-11-03T18:26:11.133Z",
+  "samples": [
+    {
+      "name": "swiftshader",
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "selected": "auto",
+      "effective": "economy",
+      "initialLabel": "AUTO / ECONOMY",
+      "auto": {
+        "fps": 44.68,
+        "renders": 68
+      },
+      "balanced": {
+        "fps": 17.82,
+        "renders": 27
+      },
+      "restored": {
+        "fps": 43.24,
+        "renders": 66
+      },
+      "screenshot": "R20260_swiftshader_auto.png",
+      "screenshotSha256": "996091a4ccedb2e726abce536019434694eacb954be48e2eee5f75ed7dd6f648",
+      "errors": 0,
+      "networkRequests": 0
+    },
+    {
+      "name": "rtx3090",
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "selected": "auto",
+      "effective": "balanced",
+      "initialLabel": "AUTO / BALANCED",
+      "auto": {
+        "fps": 100.31,
+        "renders": 151
+      },
+      "balanced": null,
+      "restored": null,
+      "screenshot": "R20260_rtx3090_auto.png",
+      "screenshotSha256": "d6a5457e5477f04b206ada0a2acd9122dc9c7b7872ceb2deda553a2286699903",
+      "errors": 0,
+      "networkRequests": 0
+    }
+  ],
+  "status": "PASS"
+}

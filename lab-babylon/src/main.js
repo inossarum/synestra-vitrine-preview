@@ -13,6 +13,7 @@ import {sampleSphereStructuralMotion} from './sphere-structural-motion.mjs';
 import {sampleSpherePointerResponse} from './sphere-structural-motion.mjs';
 import {sampleMovingNodeDirections} from './moving-node-directions.mjs';
 import {advanceShellTransition} from './shell-mode-transition.mjs';
+import {resolveSphereQuality} from './auto-quality-policy.mjs';
 // ONE Babylon canvas. The requested subject is ONLY the glowing energy sphere.
 const cv=document.getElementById('renderCanvas'),stat=document.getElementById('status');
 const ids=['core-mode','core-radius','core-power','core-speed','strands','complexity','quality'];
@@ -27,7 +28,7 @@ if(['economy','balanced','auto','ultra'].includes(qaQuality))ctl.quality.value=q
 if(qaPower!==null&&/^(0|[1-9][0-9]*)$/.test(qaPower)&&Number(qaPower)<=250)ctl['core-power'].value=qaPower;
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
 let engine,scene,glow,core,halo,coreMat,haloMat,threads=[],lines=[],inner=[],innerSheaths=[],stars=[],bridges=[],bridgeVeils=[],energyNodes=[],plasma=null,forks=null,plasmaField=null,time=0,last=0,geometryState=null,renderFrames=0,geometryUpdates=0,plasmaShaderFrames=0;
-let modeTransition=null;
+let modeTransition=null,rendererName='UNKNOWN';
 function light(name,color,a=1){
  const m=new StandardMaterial(name,scene);m.disableLighting=true;m.emissiveColor=color;m.diffuseColor=Color3.Black();m.alpha=a;
  m.backFaceCulling=false;if(a<1)m.disableDepthWrite=true;return m;
@@ -68,10 +69,11 @@ function pathBridge(i,t){
 function wire(id,path,r,mat){const m=MeshBuilder.CreateTube(id,{path,radius:r,tessellation:6,updatable:true},scene);m.material=mat;m.isPickable=false;return m;}
 function refresh(m,path,r){MeshBuilder.CreateTube(null,{path,radius:r,tessellation:6,instance:m},scene);}
 function budget(){
- if(!engine)return;const quality=ctl.quality.value;
+ if(!engine)return;const quality=resolveSphereQuality(ctl.quality.value,rendererName);
+ cv.dataset.effectiveQuality=quality;
  engine.setHardwareScalingLevel(quality==='economy'?1.65:quality==='ultra'?1:1.18);
  glow.intensity=quality==='economy'?.33:quality==='ultra'?.72:.55;
- document.getElementById('quality-label').textContent=quality.toUpperCase();
+ document.getElementById('quality-label').textContent=ctl.quality.value==='auto'?'AUTO / '+quality.toUpperCase():quality.toUpperCase();
 }
 function start(){
  engine=new Engine(cv,true,{antialias:true,preserveDrawingBuffer:true});
@@ -156,7 +158,11 @@ function start(){
  const atlasMount=mountCoreAtAtlasSocket(scene,sphereRoot,{required:atlasFixture});
  cv.dataset.atlasSocket=atlasMount.mode;
  globalThis.__synestraLabAtlasInterop={getScene:()=>scene,getSphereRoot:()=>sphereRoot,connect:()=>mountCoreAtAtlasSocket(scene,sphereRoot,{required:true}),getEngine:()=>engine};
- const glInfo=engine.getGlInfo?.();cv.dataset.glRenderer=String(glInfo?.renderer||'UNKNOWN');cv.dataset.glVendor=String(glInfo?.vendor||'UNKNOWN');
+ const glInfo=engine.getGlInfo?.();
+ const context=cv.getContext('webgl2');
+ const debugRenderer=context?.getExtension('WEBGL_debug_renderer_info');
+ rendererName=String(debugRenderer?context.getParameter(debugRenderer.UNMASKED_RENDERER_WEBGL):glInfo?.renderer||'UNKNOWN');
+ cv.dataset.glRenderer=String(glInfo?.renderer||'UNKNOWN');cv.dataset.glVendor=String(glInfo?.vendor||'UNKNOWN');
  budget();cv.dataset.engine='babylon';cv.dataset.sphereReady='true';cv.dataset.artReference=SPHERE_REFERENCE.id;cv.dataset.palette=SPHERE_REFERENCE.colors.map(c=>c.id).join(',');cv.dataset.energyNodes=String(SPHERE_REFERENCE.energyNodes);cv.dataset.canvasCount=String(document.querySelectorAll('canvas').length);cv.dataset.plasmaVersion='glow-sheaths-r194';cv.dataset.plasmaRibbons=String(plasma.meshes.length);cv.dataset.nodePlasma=String(plasma.nodeMeshes.length);cv.dataset.glowSheaths=String(plasma.sheaths.length);cv.dataset.nodeForks=String(forks.meshes.length);cv.dataset.nodePhotons=String(forks.photons.length);cv.dataset.plasmaVersion='core-shell-fusion-r201';cv.dataset.coreGeometry='volumetric-core-shell-r201';cv.dataset.coreShellSheaths=String(bridgeVeils.length);cv.dataset.coreMistTotal=String(innerSheaths.length);cv.dataset.plasmaField='r202-plasma-field';cv.dataset.plasmaVisualRevision='r202-soft-heart-palette';cv.dataset.plasmaFieldLayers=String(plasmaField.meshes.length);cv.dataset.plasmaVolume='r20215-raymarch-16';
  document.getElementById('engine-label').textContent='BABYLON.JS / WEBGL '+engine.webGLVersion;
  stat.textContent='Sphère énergétique prête';
@@ -164,7 +170,7 @@ function start(){
   const now=performance.now();
   if(fixed!==null)time=fixed;else if(!reduced.matches&&last)time+=Math.min(.1,(now-last)/1000)*get('core-speed')/100;
   last=now;
-  const quality=ctl.quality.value,turb=get('complexity')/100,amount=get('strands')*2;
+  const quality=resolveSphereQuality(ctl.quality.value,rendererName),turb=get('complexity')/100,amount=get('strands')*2;
   const r=get('core-radius')/100,power=get('core-power')/100,mode=get('core-mode');
   const wasTransitioning=modeTransition?.active===true;
   modeTransition=advanceShellTransition(modeTransition,mode,now/1000,{reducedMotion:reduced.matches});

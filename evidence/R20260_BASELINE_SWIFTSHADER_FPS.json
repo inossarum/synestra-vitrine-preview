@@ -1,0 +1,76 @@
+{
+  "schema": "synestra.r20259.swiftshader-fps.v1",
+  "observedAt": "2026-11-03T18:20:44.859Z",
+  "sourceCommit": "00d3b48791b8c90e5a347465e8205792befa284f",
+  "mode": "fixed-scene-clock",
+  "window": {
+    "width": 900,
+    "height": 700
+  },
+  "profiles": [
+    {
+      "quality": "economy",
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "windows": [
+        {
+          "elapsedSeconds": 0.885,
+          "renderedFrames": 37,
+          "measuredFps": 41.78,
+          "engineFps": 43,
+          "geometryUpdates": 0
+        },
+        {
+          "elapsedSeconds": 0.884,
+          "renderedFrames": 38,
+          "measuredFps": 42.98,
+          "engineFps": 42,
+          "geometryUpdates": 0
+        },
+        {
+          "elapsedSeconds": 0.875,
+          "renderedFrames": 35,
+          "measuredFps": 39.98,
+          "engineFps": 40,
+          "geometryUpdates": 0
+        }
+      ],
+      "medianFps": 41.78,
+      "meanFps": 41.58,
+      "performanceInterpretation": "SMOOTH"
+    },
+    {
+      "quality": "balanced",
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "windows": [
+        {
+          "elapsedSeconds": 1.005,
+          "renderedFrames": 18,
+          "measuredFps": 17.91,
+          "engineFps": 14,
+          "geometryUpdates": 0
+        },
+        {
+          "elapsedSeconds": 0.908,
+          "renderedFrames": 16,
+          "measuredFps": 17.63,
+          "engineFps": 18,
+          "geometryUpdates": 0
+        },
+        {
+          "elapsedSeconds": 0.91,
+          "renderedFrames": 15,
+          "measuredFps": 16.49,
+          "engineFps": 17,
+          "geometryUpdates": 0
+        }
+      ],
+      "medianFps": 17.63,
+      "meanFps": 17.34,
+      "performanceInterpretation": "MODERATE"
+    }
+  ],
+  "errors": [],
+  "externalRequests": [],
+  "status": "MEASURED",
+  "caveat": "Measured in Chrome SwiftShader on Inos-Cerebros; not representative FPS for all low-end PCs."
+}

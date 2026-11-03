@@ -166,6 +166,11 @@ export function createPlasmaHeartMaterial(scene){
    float powerRamp=smoothstep(.20,1.00,energy);
    coreEmission+=vec3(.76,.78,.90)*readableFacet*powerRamp;
    alpha=clamp(alpha+focalOpacity*energy,0.0,.79);
+   // R202.59: preserve shaded facets but make the illuminated crystal readable
+   // through the now-open shell. Same 80 triangles, power-zero and alpha cap.
+   float finalFacetHighlight=smoothstep(.32,.80,facetLight)*smoothstep(.24,.84,face);
+   coreEmission+=vec3(1.02,1.08,1.24)*finalFacetHighlight*powerRamp;
+   alpha=clamp(alpha+.075*finalFacetHighlight*powerRamp,0.0,.79);
   gl_FragColor=vec4((tint*(.75+.35*hotspot+.38*facetLight)*facetShading*facetPalette*(1.0+.25*facetGlint)*facetContrast+coreEmission)*shimmer*energy*(.30+.70*depthTransmission),alpha*depthTransmission);
  }`;
  const material=new ShaderMaterial('r202-white-violet-soft-heart',scene,{vertexSource,fragmentSource},{

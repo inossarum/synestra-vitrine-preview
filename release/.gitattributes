@@ -1,0 +1,3 @@
+# Exact generated Babylon HTML: preserve CSP-hashed bytes; do not text-normalize or diff 7.4 MB of generated shaders.
+Synestra_Sphere_R20259_OneFile.html -text -diff -whitespace
+Synestra_Sphere_R20260_OneFile.html -text -diff -whitespace

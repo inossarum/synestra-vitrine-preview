@@ -1,0 +1,69 @@
+# R202.60 — free standard public-repository runner; no artifacts, caches or deployments.
+# Scope strictly to PR #64's base branch and exact same-repository head.
+name: R202.60 Babylon release integrity
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - task/SYN_LAB_R20258_INNER_FLOW_CHATGPT_20261103
+    paths:
+      - .github/workflows/r20260-release-integrity.yml
+      - .gitattributes
+      - lab-babylon/**
+      - release/**
+      - evidence/R20260_GIT_ARCHIVE_EXACT_BUNDLE_RECOVERY_20261103.md
+
+permissions:
+  contents: read
+
+concurrency:
+  group: synestra-r20260-release-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  released-source-integrity:
+    if: ${{ github.event.pull_request.head.ref == 'task/SYN_LAB_R20259_FINAL_CANDIDATE_20261103' && github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - name: Checkout the exact PR head, not an implicit merge commit
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - name: Failure-first — verify immutable revision and source boundaries
+        shell: bash
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
+          git diff --check
+          test -f lab-babylon/tests/r20260-auto-quality.test.mjs
+          test -f tests/siteforge_r174_png_diff.mjs
+          test -f release/verify_r20260_bundle_export.py
+          test -f release/Synestra_Sphere_R20260_Standalone.zip
+          test -f release/Synestra_Sphere_R20260_OneFile.html
+          echo "IMMUTABLE_CHECKOUT_PASS=$EXPECTED_SHA"
+      - name: Node 22 standard toolchain
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+      - name: Install exact lockfile dependencies (no audit or funding calls)
+        run: npm --prefix lab-babylon ci --no-audit --no-fund
+      - name: Run complete R202.60 regression suite
+        run: npm --prefix lab-babylon test
+      - name: Rebuild same Babylon bundle from exact source
+        run: npm --prefix lab-babylon run build
+      - name: Verify bundle identity across Git blob, archive, checkout and ZIP
+        run: python3 release/verify_r20260_bundle_export.py
+      - name: Check release hashes and offline single-file reproducibility
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo '7f0fe152e7f8123cc5f0629025cdf598964bf2f41406a4db626fbd943563dbcf  lab-babylon/dist/babylon-lab.js' | sha256sum -c -
+          echo '05abdc8bb1e54a33024ca5bafa5c9a080c1811f0334255aa2c05ccbab21e2ba7  release/Synestra_Sphere_R20260_Standalone.zip' | sha256sum -c -
+          echo 'c6fe73ce1c5f653734a51b14d1f148c92ca5cb053f9dbda66b5bd0e084fc32ca  release/Synestra_Sphere_R20260_OneFile.html' | sha256sum -c -
+          python3 release/build_onefile_R20260.py "$RUNNER_TEMP/reproduced-r20260.html"
+          test "$(sha256sum "$RUNNER_TEMP/reproduced-r20260.html" | cut -d' ' -f1)" = 'c6fe73ce1c5f653734a51b14d1f148c92ca5cb053f9dbda66b5bd0e084fc32ca'
+          echo 'R20260_SOURCE_AND_STANDALONE_RELEASE_INTEGRITY_PASS'

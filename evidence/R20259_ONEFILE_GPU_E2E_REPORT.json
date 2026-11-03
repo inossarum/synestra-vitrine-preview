@@ -1,0 +1,65 @@
+{
+  "schema": "synestra.r20259.onefile.gpu-e2e.v1",
+  "errors": [],
+  "warnings": [],
+  "externalRequests": [],
+  "cases": [
+    {
+      "id": "original",
+      "reduced": false,
+      "info": {
+        "canvasCount": 1,
+        "triangles": 80,
+        "maskTriangles": 80,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "webglLost": false,
+        "ribbons": 28,
+        "nodes": 6,
+        "transition": "true",
+        "mode": "0",
+        "maskOn": true
+      },
+      "image": "I:\\_STUDIO_STAGING\\SYN_LAB_R20259_FINAL_CANDIDATE_20261103\\qa-onefile\\original-gpu.png",
+      "sha256": "c3748244c334a61908fa10c44bdcc5c050e65ed2f9efa753d411d8f47b846fd2"
+    },
+    "mode-change-and-power-off",
+    {
+      "id": "onefile",
+      "reduced": false,
+      "info": {
+        "canvasCount": 1,
+        "triangles": 80,
+        "maskTriangles": 80,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "webglLost": false,
+        "ribbons": 28,
+        "nodes": 6,
+        "transition": "true",
+        "mode": "0",
+        "maskOn": true
+      },
+      "image": "I:\\_STUDIO_STAGING\\SYN_LAB_R20259_FINAL_CANDIDATE_20261103\\qa-onefile\\onefile-gpu.png",
+      "sha256": "07cee3aacb89062f5d7364ddcefda656338c93dffeb32dba14cd2a296257597a"
+    },
+    "reduced-motion",
+    {
+      "id": "onefile-reduced",
+      "reduced": true,
+      "info": {
+        "canvasCount": 1,
+        "triangles": 80,
+        "maskTriangles": 80,
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "webglLost": false,
+        "ribbons": 28,
+        "nodes": 6,
+        "transition": "false",
+        "mode": "0",
+        "maskOn": true
+      },
+      "image": "I:\\_STUDIO_STAGING\\SYN_LAB_R20259_FINAL_CANDIDATE_20261103\\qa-onefile\\onefile-reduced-reduced-gpu.png",
+      "sha256": "b289d39815e9d927974a2bcec9fe4fc4c952134590607e8df5ffbf7aa33fb06f"
+    }
+  ],
+  "status": "PASS"
+}
