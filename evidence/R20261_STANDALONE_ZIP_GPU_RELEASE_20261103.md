@@ -1,4 +1,6 @@
-# HPSYN — R202.61 autonome : ZIP final vérifié sur deux moteurs graphiques
+# HPSYN — R202.61 autonome : ZIP initial vérifié sur deux moteurs graphiques
+
+> **ARCHIVE HISTORIQUE REMPLACÉE — NE PAS TÉLÉCHARGER CETTE EMPREINTE.** Le ZIP R202.61 initial `e29dc189e1fb526e8001a5863682915df2a93c04bed31133bb27b5c26ed96b6f` a été remplacé après une correction de réservation de port Windows. **ZIP actuel** SHA256 `33677ab6d1270910a6e2f80b7862040bc89f34466a1885b272fb971886036d5b`. Voir `evidence/R20261_WINDOWS_LAUNCHER_EXCLUSIVE_20261103.md` pour la preuve du ZIP définitif. Le reste de ce document décrit l'historique de la première archive, pas la livraison actuelle.
 
 Date : 2026-11-03
 Dépôt : `inossarum/synestra-vitrine-preview`

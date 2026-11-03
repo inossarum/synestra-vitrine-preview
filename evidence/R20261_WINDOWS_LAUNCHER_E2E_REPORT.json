@@ -1,0 +1,53 @@
+{
+  "schema": "synestra.r20261.win-start-cmd.e2e.v1",
+  "status": "PASS",
+  "zip_sha256": "33677ab6d1270910a6e2f80b7862040bc89f34466a1885b272fb971886036d5b",
+  "steps": [
+    {
+      "name": "reject-incomplete-package",
+      "exit": 3,
+      "status": "PASS"
+    },
+    {
+      "name": "actual-Windows-CMD-start",
+      "status": "PASS",
+      "launcher_pid": 79404
+    },
+    {
+      "name": "HTTP-index",
+      "status": "PASS",
+      "bytes": 3530
+    },
+    {
+      "name": "HTTP-index.html",
+      "status": "PASS",
+      "bytes": 3530
+    },
+    {
+      "name": "HTTP-style.css",
+      "status": "PASS",
+      "bytes": 2851
+    },
+    {
+      "name": "HTTP-dist/babylon-lab.js",
+      "status": "PASS",
+      "bytes": 7431208,
+      "sha256": "93301d7b225bc52e1a46b00937269941a17b050d58dd7fc20813eaff36779f5d"
+    },
+    {
+      "name": "second-launch-port-conflict",
+      "status": "PASS",
+      "exit": 2
+    },
+    {
+      "name": "first-server-still-serving",
+      "status": "PASS"
+    },
+    {
+      "name": "port-5182-released",
+      "status": "PASS"
+    }
+  ],
+  "owned_tree_termination_returncode": 0,
+  "cases": 9
+}

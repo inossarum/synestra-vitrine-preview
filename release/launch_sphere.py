@@ -2,6 +2,7 @@
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 import os
+import socket
 import sys
 import threading
 import webbrowser
@@ -15,12 +16,23 @@ class SphereHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(ROOT), **kwargs)
 
+class SphereHTTPServer(ThreadingHTTPServer):
+    # On Windows SO_REUSEADDR can allow a second server to steal a bound port.
+    # An exclusive bind makes a second launcher fail closed instead.
+    if os.name == "nt":
+        allow_reuse_address = False
+
+        def server_bind(self):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_EXCLUSIVEADDRUSE, 1)
+            return super().server_bind()
+
+
 def main():
     if not all((ROOT / name).is_file() for name in ("index.html", "style.css", "dist/babylon-lab.js")):
         print("SPHERE_FILES_MISSING: extracted package incomplete", file=sys.stderr, flush=True)
         return 3
     try:
-        server = ThreadingHTTPServer((HOST, PORT), SphereHandler)
+        server = SphereHTTPServer((HOST, PORT), SphereHandler)
     except OSError as exc:
         print(f"SPHERE_PORT_UNAVAILABLE: {HOST}:{PORT} ({exc})", file=sys.stderr, flush=True)
         return 2

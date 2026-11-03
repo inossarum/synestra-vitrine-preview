@@ -1,6 +1,6 @@
 """Deterministic Synestra R202.61 ZIP from the SHA-pinned R202.60 standalone.
 
-Changes ONLY the compiled Babylon bundle and the stale version in README.txt.
+Changes only the compiled Babylon bundle, README version and Windows port-safe launcher.
 No overwrite or network. Python stdlib.
 Usage: python release/build_zip_R20261.py [output.zip]
 """
@@ -22,13 +22,17 @@ bundle=(ROOT/"lab-babylon"/"dist"/"babylon-lab.js").read_bytes()
 if sha(bundle)!=NEW_BUNDLE_SHA:fail("BUNDLE_SHA")
 with zipfile.ZipFile(SOURCE) as previous:
     names=previous.namelist()
-    if len(names)!=6 or names.count("dist/babylon-lab.js")!=1 or names.count("README.txt")!=1 or \
+    if len(names)!=6 or names.count("dist/babylon-lab.js")!=1 or names.count("README.txt")!=1 or names.count("launch_sphere.py")!=1 or \
        not all(x in names for x in ("index.html","style.css")):fail("STRUCTURE")
     if previous.read("index.html")!=(ROOT/"lab-babylon"/"index.html").read_bytes():fail("HTML_CHANGED")
     old_readme=previous.read("README.txt")
     if old_readme.count(b"R202.59")!=1:fail("README_UNEXPECTED_VERSION")
     updated_readme=old_readme.replace(b"R202.59",b"R202.61",1)
-    replacements={"dist/babylon-lab.js":bundle,"README.txt":updated_readme}
+    old_launcher=previous.read("launch_sphere.py")
+    if sha(old_launcher)!="085a949036cba2fad572575e63242b07d12165326fcd6278dff4751ba7bb5277":fail("BASE_LAUNCHER_SHA")
+    new_launcher=(HERE/"launch_sphere.py").read_bytes()
+    if sha(new_launcher)!="7e9b6e517411c247178a4a22db3bbd6f017e78a193bddcea09cff65f6c271784":fail("EXCLUSIVE_LAUNCHER_SHA")
+    replacements={"dist/babylon-lab.js":bundle,"README.txt":updated_readme,"launch_sphere.py":new_launcher}
     TARGET.parent.mkdir(parents=True,exist_ok=True)
     with zipfile.ZipFile(TARGET,"w") as result:
         for entry in previous.infolist():
@@ -40,7 +44,9 @@ with zipfile.ZipFile(TARGET) as finished,zipfile.ZipFile(SOURCE) as previous:
             if sha(data)!=NEW_BUNDLE_SHA:fail("BAD_BUILT_JS")
         elif name=="README.txt":
             if data!=updated_readme:fail("BAD_README")
+        elif name=="launch_sphere.py":
+            if data!=new_launcher:fail("BAD_LAUNCHER")
         elif data!=previous.read(name):fail("UNEXPECTED_CHANGE_"+name)
 print("R20261_ZIP_PASS "+json.dumps({"sha256":sha(TARGET.read_bytes()),"bytes":TARGET.stat().st_size,
-    "files":len(names),"unchanged_files":len(names)-2,"updated_version":"R202.61",
+    "files":len(names),"unchanged_files":len(names)-3,"updated_version":"R202.61",
     "new_bundle_sha256":NEW_BUNDLE_SHA}))

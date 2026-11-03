@@ -1,0 +1,77 @@
+# R202.61 isolated candidate: free public-repo Linux checks, no deployment/artifacts.
+name: R202.61 standalone ZIP integrity
+on:
+  push:
+    branches:
+      - task/SYN_LAB_R20261_WHITE_VIOLET_CORE_20261103
+    paths:
+      - .github/workflows/r20261-standalone-zip-integrity.yml
+      - .gitattributes
+      - lab-babylon/**
+      - release/**
+      - evidence/R20261_WINDOWS_LAUNCHER_EXCLUSIVE_20261103.md
+
+permissions:
+  contents: read
+
+concurrency:
+  group: syn-r20261-zip
+  cancel-in-progress: true
+
+jobs:
+  verify-r20261-release:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact candidate SHA
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Verify safe candidate source boundaries and committed hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          echo '05abdc8bb1e54a33024ca5bafa5c9a080c1811f0334255aa2c05ccbab21e2ba7  release/Synestra_Sphere_R20260_Standalone.zip' | sha256sum -c -
+          echo '7e9b6e517411c247178a4a22db3bbd6f017e78a193bddcea09cff65f6c271784  release/launch_sphere.py' | sha256sum -c -
+          echo '33677ab6d1270910a6e2f80b7862040bc89f34466a1885b272fb971886036d5b  release/Synestra_Sphere_R20261_Standalone.zip' | sha256sum -c -
+      - name: Node 22 (existing CI version)
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+      - name: Install locked dependencies
+        run: npm --prefix lab-babylon ci --no-audit --no-fund
+      - name: Complete Babylon regression suite
+        run: npm --prefix lab-babylon test
+      - name: Rebuild R202.61 Babylon
+        run: npm --prefix lab-babylon run build
+      - name: Check exact compiled bundle
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo '93301d7b225bc52e1a46b00937269941a17b050d58dd7fc20813eaff36779f5d  lab-babylon/dist/babylon-lab.js' | sha256sum -c -
+      - name: Rebuild portable ZIP and check all six uncompressed entries
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 release/build_zip_R20261.py "$RUNNER_TEMP/r20261-reconstructed.zip"
+          python3 - "$RUNNER_TEMP/r20261-reconstructed.zip" <<'PY'
+          import sys,zipfile,hashlib,subprocess,io,json
+          from pathlib import Path
+          original=Path("release/Synestra_Sphere_R20261_Standalone.zip")
+          rebuilt=Path(sys.argv[1])
+          expected="33677ab6d1270910a6e2f80b7862040bc89f34466a1885b272fb971886036d5b"
+          H=lambda x:hashlib.sha256(x).hexdigest()
+          assert H(original.read_bytes())==expected,"ORIGINAL_ZIP_SHA_CHANGED"
+          with zipfile.ZipFile(original) as a,zipfile.ZipFile(rebuilt) as b:
+              assert a.namelist()==b.namelist() and len(a.namelist())==6,"ZIP_MEMBERS_CHANGED"
+              assert all(a.read(n)==b.read(n) for n in a.namelist()),"REBUILT_PAYLOAD_DIFFERS"
+              assert H(a.read("launch_sphere.py"))=="7e9b6e517411c247178a4a22db3bbd6f017e78a193bddcea09cff65f6c271784"
+              assert H(a.read("dist/babylon-lab.js"))=="93301d7b225bc52e1a46b00937269941a17b050d58dd7fc20813eaff36779f5d"
+              assert b"R202.61" in a.read("README.txt"),"VERSION_LABEL_WRONG"
+          raw=subprocess.check_output(["git","archive","--format=zip","HEAD","release/launch_sphere.py"])
+          with zipfile.ZipFile(io.BytesIO(raw)) as ar:
+              assert H(ar.read("release/launch_sphere.py"))=="7e9b6e517411c247178a4a22db3bbd6f017e78a193bddcea09cff65f6c271784","GIT_EXPORT_EOL_CHANGED"
+          print("R20261_RELEASE_CI_PASS",json.dumps({"six_zip_members_identical":True,"source_js_sha_exact":True,"launcher_git_archive_exact":True}))
+          PY
