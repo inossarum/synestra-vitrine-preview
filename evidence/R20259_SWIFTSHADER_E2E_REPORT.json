@@ -1,0 +1,99 @@
+{
+  "schema": "synestra.r20259.swiftshader-offline.v1",
+  "samples": [
+    {
+      "quality": "economy",
+      "initial": {
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "glLost": false,
+        "canvasCount": 1,
+        "triangles": 80,
+        "maskTriangles": 80,
+        "ribbons": 28,
+        "nodes": 6,
+        "mode": 0,
+        "active": "true",
+        "weights": "1.00000,0.00000,0.00000,0.00000",
+        "depthActive": "true",
+        "geomUpdates": 3,
+        "screen": {
+          "width": 900,
+          "height": 700
+        }
+      },
+      "transition": {
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "glLost": false,
+        "canvasCount": 1,
+        "triangles": 80,
+        "maskTriangles": 80,
+        "ribbons": 28,
+        "nodes": 6,
+        "mode": 2,
+        "active": "false",
+        "weights": "0.00000,0.00000,1.00000,0.00000",
+        "depthActive": "true",
+        "geomUpdates": 16,
+        "screen": {
+          "width": 900,
+          "height": 700
+        }
+      },
+      "off": {
+        "mode": 2,
+        "depthActive": "false"
+      },
+      "screenshot": "R20259_swiftshader_economy.png",
+      "screenshotSha256": "9a8adc26608d80306f1bb3983aea8fe26680f1a76d37ca2e749eb7d025c2ee32"
+    },
+    {
+      "quality": "balanced",
+      "initial": {
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "glLost": false,
+        "canvasCount": 1,
+        "triangles": 80,
+        "maskTriangles": 80,
+        "ribbons": 28,
+        "nodes": 6,
+        "mode": 0,
+        "active": "true",
+        "weights": "1.00000,0.00000,0.00000,0.00000",
+        "depthActive": "true",
+        "geomUpdates": 6,
+        "screen": {
+          "width": 900,
+          "height": 700
+        }
+      },
+      "transition": {
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "glLost": false,
+        "canvasCount": 1,
+        "triangles": 80,
+        "maskTriangles": 80,
+        "ribbons": 28,
+        "nodes": 6,
+        "mode": 2,
+        "active": "false",
+        "weights": "0.00000,0.00000,1.00000,0.00000",
+        "depthActive": "true",
+        "geomUpdates": 21,
+        "screen": {
+          "width": 900,
+          "height": 700
+        }
+      },
+      "off": {
+        "mode": 2,
+        "depthActive": "false"
+      },
+      "screenshot": "R20259_swiftshader_balanced.png",
+      "screenshotSha256": "bbf551d03e37d69d08e0e57eb347ae1ad27bc184d5d992f2752550ad9f6973f7"
+    }
+  ],
+  "externalRequests": [],
+  "pageErrors": [],
+  "testedAt": "2026-11-03",
+  "status": "PASS"
+}
