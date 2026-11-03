@@ -60,3 +60,22 @@ export function visibleCoreMistCount(quality,power){
  if(power===0||quality==='economy')return 0;
  return quality==='ultra'?18:12;
 }
+
+/**
+ * R202.58 — inner 18 streams follow the existing four-mode transition weights.
+ * A stable mode delegates to unchanged R200 geometry, ensuring exact rollback.
+ * No new mesh, color, material, light, shader or animation clock.
+ */
+export function sampleBlendedCoreVolume(index,time,directions,weights,segments=90){
+ if(!Array.isArray(weights)||weights.length!==CORE_VOLUME_MODES.length||
+    !weights.every(w=>Number.isFinite(w)&&w>=0&&w<=1)||
+    Math.abs(weights.reduce((sum,w)=>sum+w,0)-1)>1e-6)
+  throw new RangeError('R20258_CORE_WEIGHTS_INVALID');
+ const active=[];
+ for(let mode=0;mode<weights.length;mode++)if(weights[mode]>0)active.push(mode);
+ // One-hot: preserve the original exact geometry and avoid redundant computation.
+ if(active.length===1)return sampleCoreVolume(index,active[0],time,directions,segments);
+ const samples=active.map(mode=>({weight:weights[mode],points:sampleCoreVolume(index,mode,time,directions,segments)}));
+ return Array.from({length:segments+1},(_,k)=>[0,1,2].map(axis=>
+  samples.reduce((sum,s)=>sum+s.weight*s.points[k][axis],0)));
+}
