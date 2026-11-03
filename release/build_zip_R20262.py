@@ -42,7 +42,7 @@ with ZipFile(PREVIOUS) as before:
     if css.count(old_sticky)!=1:reject("OLD_STICKY_RULE_CHANGED")
     css=css.replace(old_sticky,new_mobile,1)
     source_css=(ROOT/"lab-babylon"/"style.css").read_bytes()
-    if css.replace(b"\\r\\n",b"\\n")!=source_css.replace(b"\\r\\n",b"\\n"):reject("SOURCE_CSS_DIFFERS")
+    if css.replace(b"\r\n",b"\n")!=source_css.replace(b"\r\n",b"\n"):reject("SOURCE_CSS_DIFFERS")
     readme=before.read("README.txt")
     if readme.count(b"R202.61")!=1:reject("README_BASE_UNEXPECTED")
     readme=readme.replace(b"R202.61",b"R202.62",1)
