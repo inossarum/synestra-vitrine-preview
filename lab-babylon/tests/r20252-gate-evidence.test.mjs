@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {classifySnapshotEvidence} from '../scripts/r20252-gate-evidence.mjs';
+import {classifySnapshotEvidence,compareRoiRgb} from '../scripts/r20252-gate-evidence.mjs';
 
 const frame=(frame,power,uiDelta,facetDelta)=>({
   frame,power,candidate_minus_baseline:{
@@ -63,4 +63,30 @@ test('R202.52 fail closed: corrupt or nonnumeric input',()=>{
   assert.throws(()=>classifySnapshotEvidence([frame(6,145,NaN,0),frame(6,0,0,0)]),/R20252_UI_MEAN_DELTA_INVALID/);
   assert.throws(()=>classifySnapshotEvidence([frame(6,145,0,0),frame(6,0,0,NaN)]),/R20252_POWER_OFF_DELTA_INVALID/);
   assert.throws(()=>classifySnapshotEvidence([]),/R20252_EVIDENCE_INPUT_INVALID/);
+});
+
+const rgbImage=(values)=>({width:2,height:1,bpp:3,stride:6,data:Uint8Array.from(values)});
+const twoPixels={x0:0,x1:2,y0:0,y1:1};
+
+test('R202.52 pixelwise negative: swapped UI pixels with equal means are detected',()=>{
+  const ref=rgbImage([5,5,5,15,15,15]),cand=rgbImage([15,15,15,5,5,5]);
+  const result=compareRoiRgb(ref,cand,twoPixels);
+  assert.equal(result.pixels,2);
+  assert.equal(result.changed_pixels,2);
+  assert.equal(result.exact_rgb_match,false);
+  assert.equal(result.max_channel_delta,10);
+  assert.equal(result.rgb_mean_absolute_delta,10);
+});
+
+test('R202.52 pixelwise positive: bit-identical UI region is attested',()=>{
+  const ref=rgbImage([5,5,5,15,15,15]);
+  assert.deepEqual(compareRoiRgb(ref,rgbImage([5,5,5,15,15,15]),twoPixels),
+    {pixels:2,changed_pixels:0,max_channel_delta:0,rgb_mean_absolute_delta:0,exact_rgb_match:true});
+});
+
+test('R202.52 pixelwise fail closed: invalid images and out-of-bounds ROI',()=>{
+  const ref=rgbImage([5,5,5,15,15,15]);
+  assert.throws(()=>compareRoiRgb(ref,{...ref,data:Uint8Array.of(0)},twoPixels),/R20252_ROI_IMAGE_INVALID/);
+  assert.throws(()=>compareRoiRgb(ref,ref,{x0:0,x1:3,y0:0,y1:1}),/R20252_ROI_BOUNDS_INVALID/);
+  assert.throws(()=>compareRoiRgb(ref,ref,{x0:1,x1:1,y0:0,y1:1}),/R20252_ROI_BOUNDS_INVALID/);
 });
