@@ -1,6 +1,6 @@
 import {Engine,Scene,ArcRotateCamera,Vector3,Color3,Color4,Matrix,MeshBuilder,StandardMaterial,GlowLayer,PointLight,TransformNode} from '@babylonjs/core';
 import {SPHERE_REFERENCE} from './reference-contract.js';
-import {sampleCoreVolume,coreVolumeWidth,coreMistWidth,visibleCoreMistCount} from './core-volume.mjs';
+import {sampleCoreVolume,sampleBlendedCoreVolume,coreVolumeWidth,coreMistWidth,visibleCoreMistCount} from './core-volume.mjs';
 import {sampleCoreShellFlow,coreShellVeilRadius,visibleCoreShellVeils} from './core-shell-flow.mjs';
 import {installPlasmaRibbons} from './plasma-ribbons.js';
 import {installNodeForks} from './node-branches.js';
@@ -49,6 +49,10 @@ function pathMeridian(i,t,w){
 // R200: volumetric, open plasma paths. Geometry is pure and separately tested.
 function pathCore(i,mode,t){
  return sampleCoreVolume(i,mode,t,coreDirections).map(p=>v(p[0],p[1],p[2]));
+}
+// R202.58: transition-aware variant; the original legacy path remains intact.
+function pathCoreBlended(i,t,transitionWeights){
+ return sampleBlendedCoreVolume(i,t,coreDirections,transitionWeights).map(p=>v(p[0],p[1],p[2]));
 }
 // Six localized bright knots and curved 3D connections, from the supplied reference.
 const nodeDirections=[
@@ -217,7 +221,7 @@ function start(){
     // Preserve diffuse 3D mist sheaths and geometry source for safe rollback.
     m.setEnabled(false);mist.setEnabled(mistVisible);
    if(visible){
-    const path=pathCore(i,mode,time).map(p=>p.scale(r));
+    const path=pathCoreBlended(i,time,modeTransition.weights).map(p=>p.scale(r));
     refresh(m,path,coreVolumeWidth(i,.5,quality));
     if(mistVisible){
      mist.material.alpha=Math.min(.135,.050+.065*power);
