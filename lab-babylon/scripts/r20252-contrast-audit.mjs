@@ -2,7 +2,7 @@ import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 import {inflateSync} from 'node:zlib';
 import {createHash} from 'node:crypto';
 import {join} from 'node:path';
-import {classifySnapshotEvidence} from './r20252-gate-evidence.mjs';
+import {classifySnapshotEvidence,compareRoiRgb} from './r20252-gate-evidence.mjs';
 const root=process.env.SYNESTRA_STAGING_ROOT||'I:\\_STUDIO_STAGING';
 const qa=join(root,'SYN_LAB_R20251_NATIVE_BABYLON_INSTRUMENTED_QA_20261102');
 const out=join(root,'SYN_LAB_R20252_CONTRAST_QA_20261102');mkdirSync(out,{recursive:true});
@@ -77,8 +77,10 @@ function measure(img,zone){
   clipped252_pct:Number((clipped/n*100).toFixed(3))};
 }
 const report={schema:'synestra.r20252.contrast-audit.v1',source:'R20249 native Babylon baseline vs exact shader-instrumented R20250+R20251 bundle, not fresh build',frames:[6,18],quality:'Ultra',power:145,viewport:'1100x900',interpretation:'measurement only, no artistic sign-off',results:[],comparisons:[]};
+const shotImages=new Map();
 for(const s of shots){
  const path=join(qa,dirs[s.variant],s.file),img=readPng(path,s.sha);
+ shotImages.set(s.variant+'-'+s.frame+'-'+s.power,img);
  const regions=Object.fromEntries(zones.map(z=>[z.id,measure(img,z)]));
  report.results.push({variant:s.variant,frame:s.frame,power:s.power,file:s.file,sha256:s.sha,regions});
 }
@@ -91,17 +93,20 @@ for(const [frame,power] of [[6,145],[18,145],[6,0]]){
  }
  report.comparisons.push({frame,power,candidate_minus_baseline:deltas});
 }
+const uiZone=zones.find(z=>z.id==='ui_control');
+const uiRoiRgbPairs=[[6,145],[18,145],[6,0]].map(([frame,power])=>({frame,power,...compareRoiRgb(shotImages.get('baseline-'+frame+'-'+power),shotImages.get('candidate-'+frame+'-'+power),uiZone)}));
+const uiRoiRgbExact=uiRoiRgbPairs.every(x=>x.exact_rgb_match);
 const powered=report.comparisons.filter(x=>x.power===145);
 const darkening=powered.map(x=>({frame:x.frame,lit150_pp:x.candidate_minus_baseline.facet_focus.lit150_pct,mean_rgb:x.candidate_minus_baseline.facet_focus.mean}));
 const snapshotEvidence=classifySnapshotEvidence(report.comparisons);
 if(snapshotEvidence.ui_control_mean_delta!=='PASS'||snapshotEvidence.power_off_mean_delta!=='PASS')throw Error('INSTRUMENTED_REGRESSION_OR_CONTROL_FAILURE');
 const visibilityScreen=darkening.every(x=>x.lit150_pp>=-2);
-report.gates={diagnostic_integrity:'PASS',...snapshotEvidence,facet_visibility_screen:visibilityScreen?'PASS':'FAIL',owner_art_signoff:'PENDING',exact_rebuild:'NOT_VERIFIED',visibility_screen_rule:'At each audited high-power frame, candidate share of pixels above luma 150 within focused nucleus must not fall by more than 2 percentage points vs R20249; this is a provisional technical screen, not art approval',observed:darkening};
+report.gates={diagnostic_integrity:'PASS',...snapshotEvidence,ui_roi_rgb_exact:uiRoiRgbExact?'PASS':'FAIL',ui_roi_rgb_pairs:uiRoiRgbPairs,facet_visibility_screen:visibilityScreen?'PASS':'FAIL',owner_art_signoff:'PENDING',exact_rebuild:'NOT_VERIFIED',visibility_screen_rule:'At each audited high-power frame, candidate share of pixels above luma 150 within focused nucleus must not fall by more than 2 percentage points vs R20249; this is a provisional technical screen, not art approval',observed:darkening};
 const filename=join(out,'r20252-contrast-audit.json');
 writeFileSync(filename,JSON.stringify(report,null,2));
 console.log('R20252_CONTRAST_AUDIT_PASS '+JSON.stringify(report.comparisons));
 console.log('R20252_CONTRAST_SHA256 '+sha(readFileSync(filename)));
-if(process.argv.includes('--require-visibility-pass')&&!visibilityScreen){
- console.error('R20252_FACET_VISIBILITY_GATE_FAIL: focused lit-facet loss exceeds 2 percentage points; report preserved');
+if(process.argv.includes('--require-visibility-pass')&&(!visibilityScreen||!uiRoiRgbExact)){
+ console.error(!visibilityScreen?'R20252_FACET_VISIBILITY_GATE_FAIL: focused lit-facet loss exceeds 2 percentage points; report preserved':'R20252_UI_ROI_RGB_GATE_FAIL: matched-frame UI pixels changed; report preserved');
  process.exitCode=3;
 }
