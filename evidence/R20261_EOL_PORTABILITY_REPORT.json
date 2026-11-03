@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "schema": "synestra.r20261.lf-html-builder-qa.v1",
+  "accepted_checkout": "LF_only_from_git_blob",
+  "output_zip_sha256": "33677ab6d1270910a6e2f80b7862040bc89f34466a1885b272fb971886036d5b",
+  "equal_to_published_zip": true,
+  "rejected_changed_html": true,
+  "bad_exit": 1
+}

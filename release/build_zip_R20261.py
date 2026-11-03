@@ -24,7 +24,11 @@ with zipfile.ZipFile(SOURCE) as previous:
     names=previous.namelist()
     if len(names)!=6 or names.count("dist/babylon-lab.js")!=1 or names.count("README.txt")!=1 or names.count("launch_sphere.py")!=1 or \
        not all(x in names for x in ("index.html","style.css")):fail("STRUCTURE")
-    if previous.read("index.html")!=(ROOT/"lab-babylon"/"index.html").read_bytes():fail("HTML_CHANGED")
+    def normalized_html_eol(data):
+        # Only CRLF -> LF is tolerated for cross-platform Git checkouts.
+        if b"\r" in data.replace(b"\r\n",b""):fail("HTML_UNEXPECTED_EOL")
+        return data.replace(b"\r\n",b"\n")
+    if normalized_html_eol(previous.read("index.html"))!=normalized_html_eol((ROOT/"lab-babylon"/"index.html").read_bytes()):fail("HTML_CHANGED")
     old_readme=previous.read("README.txt")
     if old_readme.count(b"R202.59")!=1:fail("README_UNEXPECTED_VERSION")
     updated_readme=old_readme.replace(b"R202.59",b"R202.61",1)
