@@ -119,7 +119,7 @@ export function createPlasmaHeartMaterial(scene){
   float facetGlint=pow(max(dot(reflect(-facetKey,normalize(vNormal)),normalize(uCamera-vWorld)),0.0),10.0);
   // R202.31: four bounded per-face key-light bands preserve distinct triangle planes.
   float facetStrata=floor(clamp(facetLight,0.0,.999)*4.0)/3.0;
-  vec3 facetPalette=mix(vec3(.63,.58,.78),vec3(1.65,1.58,1.36),facetStrata);
+  vec3 facetPalette=mix(vec3(.78,.54,1.26),vec3(1.74,1.44,2.30),facetStrata);
   float shimmer=.97+.03*sin(uTime*2.7+vWorld.x*12.0+vWorld.z*8.0);
   vec3 tint=mix(vec3(.32,.18,.60),vec3(.98,.87,1.07),clamp(.12+.38*hotspot+.50*facetLight,0.0,1.0));
   float energy=clamp(uPower,0.0,1.6);
@@ -169,7 +169,7 @@ export function createPlasmaHeartMaterial(scene){
    // R202.59: preserve shaded facets but make the illuminated crystal readable
    // through the now-open shell. Same 80 triangles, power-zero and alpha cap.
    float finalFacetHighlight=smoothstep(.32,.80,facetLight)*smoothstep(.24,.84,face);
-   coreEmission+=vec3(1.02,1.08,1.24)*finalFacetHighlight*powerRamp;
+   coreEmission+=vec3(1.25,1.12,2.15)*finalFacetHighlight*powerRamp;
    alpha=clamp(alpha+.075*finalFacetHighlight*powerRamp,0.0,.79);
   gl_FragColor=vec4((tint*(.75+.35*hotspot+.38*facetLight)*facetShading*facetPalette*(1.0+.25*facetGlint)*facetContrast+coreEmission)*shimmer*energy*(.30+.70*depthTransmission),alpha*depthTransmission);
  }`;

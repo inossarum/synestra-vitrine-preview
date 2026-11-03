@@ -8,7 +8,7 @@ test('R202.31 crystal specular and color separation use existing per-face normal
  assert.match(shader,/vec3 facetKey=normalize\(vec3\(-\.42,\.62,\.85\)\);/);
  assert.match(shader,/float facetGlint=pow\(max\(dot\(reflect\(-facetKey,normalize\(vNormal\)\),normalize\(uCamera-vWorld\)\),0\.0\),10\.0\);/);
  assert.match(shader,/float facetStrata=floor\(clamp\(facetLight,0\.0,\.999\)\*4\.0\)\/3\.0;/);
- assert.match(shader,/vec3 facetPalette=mix\(vec3\(\.63,\.58,\.78\),vec3\(1\.65,1\.58,1\.36\),facetStrata\);/);
+ assert.match(shader,/vec3 facetPalette=mix\(vec3\(\.78,\.54,1\.26\),vec3\(1\.74,1\.44,2\.30\),facetStrata\);/);
  assert.match(shader,/\*facetShading\*facetPalette\*\(1\.0\+\.25\*facetGlint\)/); // R202.33 adds emission after this preserved term
 });
 test('R202.31 preserves inherited shade, mask, topology, alpha and attenuation',()=>{

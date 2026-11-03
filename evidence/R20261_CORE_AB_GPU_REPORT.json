@@ -1,0 +1,138 @@
+{
+  "schema": "synestra.r20261.white-violet-core-ab.v1",
+  "status": "PASS",
+  "views": [
+    {
+      "variant": "baseline_R20260",
+      "mode": 0,
+      "info": {
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "mode": "0",
+        "core": 80,
+        "mask": 80,
+        "ribbons": 28,
+        "nodes": 6,
+        "quality": "balanced",
+        "lost": false,
+        "canvasCount": 1
+      },
+      "image": "baseline_R20260_mode0.png",
+      "sha256": "028c7b8f1b4247f2e63afdca5efc4777c12f1b031960f5a9c18f7aa0fb2b2ade",
+      "metrics": {
+        "w": 705,
+        "h": 675,
+        "coreBrightness": 60.63988095238095,
+        "coreMeanLuma": 115.68799603174747,
+        "coreBlueRed": 33.904600740349025,
+        "coreBlueVsRG": 31.375198307773665,
+        "corePurpleFraction": 65.57377049180327,
+        "coreVisiblePixels": 9455,
+        "outerMeanLuma": 40.67148790503083
+      }
+    },
+    {
+      "variant": "candidate_R20261",
+      "mode": 0,
+      "info": {
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "mode": "0",
+        "core": 80,
+        "mask": 80,
+        "ribbons": 28,
+        "nodes": 6,
+        "quality": "balanced",
+        "lost": false,
+        "canvasCount": 1
+      },
+      "image": "candidate_R20261_mode0.png",
+      "sha256": "6a8d87ca4db73316cfdd2d61e25ca3cca6ca5de90ad96ebd40c71b33443a413c",
+      "metrics": {
+        "w": 705,
+        "h": 675,
+        "coreBrightness": 63.78968253968254,
+        "coreMeanLuma": 119.71952160493865,
+        "coreBlueRed": 40.35583960416452,
+        "coreBlueVsRG": 39.723894443871764,
+        "corePurpleFraction": 66.46737449747448,
+        "coreVisiblePixels": 9701,
+        "outerMeanLuma": 40.671292478442524
+      }
+    },
+    {
+      "variant": "baseline_R20260",
+      "mode": 2,
+      "info": {
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "mode": "2",
+        "core": 80,
+        "mask": 80,
+        "ribbons": 28,
+        "nodes": 6,
+        "quality": "balanced",
+        "lost": false,
+        "canvasCount": 1
+      },
+      "image": "baseline_R20260_mode2.png",
+      "sha256": "cf605e795afdfc724799823d0d6a131c175eb9ea2b35a9092ccde4b5b4e3f179",
+      "metrics": {
+        "w": 705,
+        "h": 675,
+        "coreBrightness": 61.020171957671955,
+        "coreMeanLuma": 115.87874779541542,
+        "coreBlueRed": 33.8296256104178,
+        "coreBlueVsRG": 31.570916983179597,
+        "corePurpleFraction": 62.072707542051006,
+        "coreVisiblePixels": 9215,
+        "outerMeanLuma": 41.577275109099006
+      }
+    },
+    {
+      "variant": "candidate_R20261",
+      "mode": 2,
+      "info": {
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "mode": "2",
+        "core": 80,
+        "mask": 80,
+        "ribbons": 28,
+        "nodes": 6,
+        "quality": "balanced",
+        "lost": false,
+        "canvasCount": 1
+      },
+      "image": "candidate_R20261_mode2.png",
+      "sha256": "09fe8f6cc950928b2b476ada5ea39c78e79117af3aece4e125cf9cdfe3fe4f70",
+      "metrics": {
+        "w": 705,
+        "h": 675,
+        "coreBrightness": 66.09623015873017,
+        "coreMeanLuma": 119.90933641975218,
+        "coreBlueRed": 40.32187308712508,
+        "coreBlueVsRG": 39.9845949806162,
+        "corePurpleFraction": 64.43582942256683,
+        "coreVisiblePixels": 9802,
+        "outerMeanLuma": 41.57747697832208
+      }
+    }
+  ],
+  "pairs": [
+    {
+      "mode": 0,
+      "coreBlueRedGain": 6.451238863815497,
+      "coreBlueVsRGGain": 8.348696136098098,
+      "coreBrightnessDelta": 3.1498015873015888,
+      "outerMeanLumaDelta": -0.000195426588305736,
+      "changedPercent": 0.7207775151037562
+    },
+    {
+      "mode": 2,
+      "coreBlueRedGain": 6.492247476707277,
+      "coreBlueVsRGGain": 8.413677997436604,
+      "coreBrightnessDelta": 5.07605820105821,
+      "outerMeanLumaDelta": 0.00020186922307630084,
+      "changedPercent": 0.7155240346729709
+    }
+  ],
+  "errors": [],
+  "external": []
+}

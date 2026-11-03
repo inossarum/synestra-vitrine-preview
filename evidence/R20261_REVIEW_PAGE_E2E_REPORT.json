@@ -1,0 +1,41 @@
+{
+  "schema": "synestra.r20261.review-page.native-gpu.v1",
+  "url": "http://127.0.0.1:5185/evidence/R20261_VISUAL_REVIEW.html",
+  "errors": [],
+  "external": [],
+  "modes": [
+    {
+      "label": "candidate",
+      "source": "../lab-babylon/index.html?labFrame=18&qaQuality=balanced&qaPower=145",
+      "ribbons": 28,
+      "nodes": 6,
+      "coreFaces": 80,
+      "canvasCount": 1,
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "glLost": false
+    },
+    {
+      "label": "baseline",
+      "source": "../release/Synestra_Sphere_R20260_OneFile.html?labFrame=18&qaQuality=balanced&qaPower=145",
+      "ribbons": 28,
+      "nodes": 6,
+      "coreFaces": 80,
+      "canvasCount": 1,
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "glLost": false
+    },
+    {
+      "label": "candidate-restored",
+      "source": "../lab-babylon/index.html?labFrame=18&qaQuality=balanced&qaPower=145",
+      "ribbons": 28,
+      "nodes": 6,
+      "coreFaces": 80,
+      "canvasCount": 1,
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "glLost": false
+    }
+  ],
+  "images": 4,
+  "screenshotSHA256": "def740589708660355c498caa44a60e7e91e364dbf3372472a41544e634c86c7",
+  "status": "PASS"
+}

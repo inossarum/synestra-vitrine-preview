@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="fr">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Synestra — Revue visuelle R202.61</title>
+<style>
+:root{color-scheme:dark;--bg:#060a13;--panel:#0b1425;--line:#24324e;--ink:#edf1ff;--soft:#aeb9d6;--purple:#b7a0ff}
+*{box-sizing:border-box}
+html,body{margin:0;background:radial-gradient(ellipse at 70% 4%,#1b1741 0%,var(--bg) 47%,#03050b 100%);font:15px/1.55 system-ui,"Segoe UI",sans-serif;color:var(--ink)}
+main{max-width:1460px;margin:0 auto;padding:32px 24px 80px}
+header{border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:26px}
+.eyebrow{color:#8fafff;font-weight:700;font-size:12px;letter-spacing:.17em;text-transform:uppercase}
+h1{font-size:clamp(26px,3vw,43px);line-height:1.14;letter-spacing:-.035em;margin:8px 0 14px}
+h2{font-size:22px;margin:30px 0 8px}
+p{margin:8px 0;color:var(--soft)}
+strong{color:var(--ink)}
+.tags{display:flex;flex-wrap:wrap;gap:9px;margin-top:18px}
+.tag{border:1px solid #43527b;color:#c2d4ff;border-radius:100px;padding:6px 11px;font-size:12px}
+.columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:13px;overflow:hidden}
+.card h3{margin:0;padding:15px 18px 0;font-size:17px}
+.card .note{padding:0 18px 10px;font-size:13px}
+.card img{display:block;width:100%;height:auto;aspect-ratio:705/675;object-fit:contain;background:#000}
+.status{font-weight:700;color:#a6f3de}
+section{margin-top:25px}
+section>p{margin-bottom:18px}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:13px}
+button{background:#171d37;border:1px solid #3a496c;color:#cdd9ef;border-radius:9px;padding:11px 18px;font:600 14px system-ui;cursor:pointer}
+button[aria-pressed="true"]{background:#3a256a;border-color:#a58cff;color:#fff}
+.framebox{background:#000;border:1px solid var(--line);border-radius:14px;padding:10px;overflow:hidden}
+iframe{display:block;border:0;width:100%;height:min(78vh,780px);min-height:550px;background:#000;border-radius:7px}
+small{font-size:12px;color:#a9b7d4}
+a{color:#baa7ff}
+footer{margin-top:34px;padding-top:18px;border-top:1px solid var(--line)}
+@media(max-width:780px){main{padding:20px 10px 40px}.columns{grid-template-columns:1fr}iframe{min-height:530px;height:75vh}}
+</style></head>
+<body><main>
+<header><span class="eyebrow">Synestra / Labo 3D / Comparaison certifiée GPU</span>
+<h1>Le noyau blanc-violet — R202.60 → R202.61</h1>
+<p>Deux modifications de shader, sur le noyau à 80 facettes. <strong>Aucun changement</strong> des courants, des nœuds, de la géométrie, des quatre modes ou de l'enveloppe. R202.60 reste la version stable.</p>
+<div class="tags"><span class="tag">RTX 3090 · WebGL2</span><span class="tag">Même angle · même frame</span><span class="tag">177 tests PASS / 0 FAIL / 3 SKIP</span><span class="tag">Validation artistique : en attente</span></div>
+</header>
+<section><h2>Mode 0 — Vue de face</h2>
+<div class="columns">
+<article class="card"><h3>Avant · R202.60 stable</h3><p class="note">Noyau gris-lavande, facettes définies</p><img src="R20261_BEFORE_R20260_MODE0_GPU.png" alt="Avant : sphère R202.60 sous GPU RTX3090"></article>
+<article class="card"><h3>Après · R202.61 candidat</h3><p class="note">Facettes plus blanches-violettes, centre mieux éclairé</p><img src="R20261_AFTER_MODE0_GPU.png" alt="Après : sphère R202.61 sous GPU RTX3090"></article>
+</div></section>
+<section><h2>Mode 2 — Seconde forme</h2>
+<div class="columns">
+<article class="card"><h3>Avant · R202.60 stable</h3><img src="R20261_BEFORE_R20260_MODE2_GPU.png" alt="Avant mode 2 sur GPU"></article>
+<article class="card"><h3>Après · R202.61 candidat</h3><img src="R20261_AFTER_MODE2_GPU.png" alt="Après mode 2 sur GPU"></article>
+</div></section>
+<section>
+<h2>Rendu vivant : comparer librement</h2><p>Les deux boutons ouvrent la version choisie dans le même cadre interactif. La caméra se déplace à la souris, et les modes sont accessibles dans l'application.</p>
+<div class="controls">
+<button id="before" type="button" aria-pressed="false">R202.60 · Avant</button>
+<button id="after" type="button" aria-pressed="true">R202.61 · Après</button>
+</div>
+<div class="framebox"><iframe id="sphere" title="Prévisualisation Synestra sphère énergétique R202.61" loading="eager" src="../lab-babylon/index.html?labFrame=18&amp;qaQuality=balanced&amp;qaPower=145"></iframe></div>
+<small>Prévisualisation locale : <code>127.0.0.1</code> uniquement. Aucune donnée transmise au réseau extérieur.</small>
+</section>
+<footer><p><span class="status">Tests GPU A/B PASS.</span> En mode 0, +8,35 niveaux bleu-violet et +3,15 points de zones lumineuses au centre. En mode 2, +8,41 et +5,08 points. Variation de la luminosité de l'enveloppe : inférieure à 0,001 niveau.</p>
+<p><strong>Limite :</strong> l'image de référence canonique du 29 octobre n'est pas disponible sous forme binaire vérifiée. Cette comparaison prouve un changement visuel réel ; elle ne prouve pas l'approbation du propriétaire.</p>
+<p><a href="R20261_CORE_AB_GPU_REPORT.json">Lire le rapport GPU brut</a> · <a href="../release/Synestra_Sphere_R20260_OneFile.html">Ouvrir R202.60 seule</a> · <a href="../lab-babylon/index.html">Ouvrir R202.61 seule</a></p>
+</footer></main>
+<script>
+const sphere=document.querySelector('#sphere'),before=document.querySelector('#before'),after=document.querySelector('#after');
+function show(next){
+ const candidate=next==='after';before.setAttribute('aria-pressed',String(!candidate));after.setAttribute('aria-pressed',String(candidate));
+ sphere.src=(candidate?'../lab-babylon/index.html':'../release/Synestra_Sphere_R20260_OneFile.html')+'?labFrame=18&qaQuality=balanced&qaPower=145';
+}
+before.addEventListener('click',()=>show('before'));after.addEventListener('click',()=>show('after'));
+</script>
+</body></html>

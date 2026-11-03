@@ -24,7 +24,7 @@ test('final candidate retains 14 existing soft sheaths but contracts their width
 test('the final faceted white-violet nucleus remains independently legible with zero-power fail closed',()=>{
  const heart=readFileSync(new URL('../src/plasma-field.js',import.meta.url),'utf8');
  assert.match(heart,/float finalFacetHighlight=smoothstep\(\.32,\.80,facetLight\)\*smoothstep\(\.24,\.84,face\);/);
- assert.match(heart,/coreEmission\+=vec3\(1\.02,1\.08,1\.24\)\*finalFacetHighlight\*powerRamp;/);
+ assert.match(heart,/coreEmission\+=vec3\(1\.25,1\.12,2\.15\)\*finalFacetHighlight\*powerRamp;/);
  assert.match(heart,/alpha=clamp\(alpha\+\.075\*finalFacetHighlight\*powerRamp,0\.0,\.79\);/);
  assert.equal((heart.match(/new ShaderMaterial\(/g)||[]).length,2);
  const smooth=(lo,hi,x)=>{const t=Math.max(0,Math.min(1,(x-lo)/(hi-lo)));return t*t*(3-2*t)};

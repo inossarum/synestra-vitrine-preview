@@ -34888,7 +34888,7 @@ clipPos=viewProjection*worldPos;previousClipPos=previousViewProjection*previousW
   float facetGlint=pow(max(dot(reflect(-facetKey,normalize(vNormal)),normalize(uCamera-vWorld)),0.0),10.0);
   // R202.31: four bounded per-face key-light bands preserve distinct triangle planes.
   float facetStrata=floor(clamp(facetLight,0.0,.999)*4.0)/3.0;
-  vec3 facetPalette=mix(vec3(.63,.58,.78),vec3(1.65,1.58,1.36),facetStrata);
+  vec3 facetPalette=mix(vec3(.78,.54,1.26),vec3(1.74,1.44,2.30),facetStrata);
   float shimmer=.97+.03*sin(uTime*2.7+vWorld.x*12.0+vWorld.z*8.0);
   vec3 tint=mix(vec3(.32,.18,.60),vec3(.98,.87,1.07),clamp(.12+.38*hotspot+.50*facetLight,0.0,1.0));
   float energy=clamp(uPower,0.0,1.6);
@@ -34938,7 +34938,7 @@ clipPos=viewProjection*worldPos;previousClipPos=previousViewProjection*previousW
    // R202.59: preserve shaded facets but make the illuminated crystal readable
    // through the now-open shell. Same 80 triangles, power-zero and alpha cap.
    float finalFacetHighlight=smoothstep(.32,.80,facetLight)*smoothstep(.24,.84,face);
-   coreEmission+=vec3(1.02,1.08,1.24)*finalFacetHighlight*powerRamp;
+   coreEmission+=vec3(1.25,1.12,2.15)*finalFacetHighlight*powerRamp;
    alpha=clamp(alpha+.075*finalFacetHighlight*powerRamp,0.0,.79);
   gl_FragColor=vec4((tint*(.75+.35*hotspot+.38*facetLight)*facetShading*facetPalette*(1.0+.25*facetGlint)*facetContrast+coreEmission)*shimmer*energy*(.30+.70*depthTransmission),alpha*depthTransmission);
  }`,i=new Vr("r202-white-violet-soft-heart",r,{vertexSource:e,fragmentSource:t},{attributes:["position","normal"],uniforms:["world","worldViewProjection","uCamera","uTime","uPower"],needAlphaBlending:!0});return i.backFaceCulling=!0,i.alphaMode=Et.ALPHA_COMBINE,i.disableDepthWrite=!0,i.metadata=Object.freeze({revision:"r20223-foreground-facets",target:"central nucleus",scope:"desktop"}),i.setFloat("uTime",0),i.setFloat("uPower",1),i.setVector3("uCamera",new E(0,0,4.8)),i}var tot=Object.freeze({economy:8,balanced:12,auto:12,ultra:16});function iot(r,e,t){if(!Object.hasOwn(tot,r)||![e,t].every(Number.isFinite)||e<0||e>2.5||t<0||t>1.8)throw new RangeError("R20215_VOLUME_POLICY_INVALID");let i=tot[r];return{visible:e>0,steps:i,opacity:e===0?0:Math.min(.6,(r==="economy"?.25:r==="ultra"?.32:.28)*e)}}var Ayt=`precision highp float;
