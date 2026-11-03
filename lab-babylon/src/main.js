@@ -12,6 +12,7 @@ import {isFacetMaskActive} from './core-mask-lifecycle.mjs';
 import {sampleSphereStructuralMotion} from './sphere-structural-motion.mjs';
 import {sampleSpherePointerResponse} from './sphere-structural-motion.mjs';
 import {sampleMovingNodeDirections} from './moving-node-directions.mjs';
+import {advanceShellTransition} from './shell-mode-transition.mjs';
 // ONE Babylon canvas. The requested subject is ONLY the glowing energy sphere.
 const cv=document.getElementById('renderCanvas'),stat=document.getElementById('status');
 const ids=['core-mode','core-radius','core-power','core-speed','strands','complexity','quality'];
@@ -26,6 +27,7 @@ if(['economy','balanced','auto','ultra'].includes(qaQuality))ctl.quality.value=q
 if(qaPower!==null&&/^(0|[1-9][0-9]*)$/.test(qaPower)&&Number(qaPower)<=250)ctl['core-power'].value=qaPower;
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
 let engine,scene,glow,core,halo,coreMat,haloMat,threads=[],lines=[],inner=[],innerSheaths=[],stars=[],bridges=[],bridgeVeils=[],energyNodes=[],plasma=null,forks=null,plasmaField=null,time=0,last=0,geometryState=null,renderFrames=0,geometryUpdates=0,plasmaShaderFrames=0;
+let modeTransition=null;
 function light(name,color,a=1){
  const m=new StandardMaterial(name,scene);m.disableLighting=true;m.emissiveColor=color;m.diffuseColor=Color3.Black();m.alpha=a;
  m.backFaceCulling=false;if(a<1)m.disableDepthWrite=true;return m;
@@ -160,6 +162,10 @@ function start(){
   last=now;
   const quality=ctl.quality.value,turb=get('complexity')/100,amount=get('strands')*2;
   const r=get('core-radius')/100,power=get('core-power')/100,mode=get('core-mode');
+  const wasTransitioning=modeTransition?.active===true;
+  modeTransition=advanceShellTransition(modeTransition,mode,now/1000,{reducedMotion:reduced.matches});
+  // One final CPU upload at the exact target after the blend settles.
+  if(wasTransitioning&&!modeTransition.active)geometryState=null;
   // Keep GPU shader animation and camera smooth at the screen refresh rate.
   coreMat.setFloat('uTime',time);coreMat.setFloat('uPower',power);coreMat.setVector3('uCamera',camera.position);haloMat.alpha=power>0?.102*Math.min(power,1):0;
   plasmaField.update({time,quality,power,radius:r,cameraPosition:camera.position});
@@ -174,7 +180,7 @@ function start(){
   cv.dataset.facetDepthActive=String(depthMaskActive);
   // Preserve the existing single CPU update gate; invalidate only on a mask transition.
   if(depthMaskChanged)geometryState=null;
-  const geometryStep=geometryUpdateDecision(geometryState,{now,time,quality,mode,power:get('core-power'),radius:r,amount,turbulence:turb});
+  const geometryStep=geometryUpdateDecision(geometryState,{now,time,quality,mode,power:get('core-power'),radius:r,amount,turbulence:turb,transitionActive:modeTransition.active});
   geometryState=geometryStep.next;
   cv.dataset.geometryIntervalMs=String(geometryStep.intervalMs);
   if(geometryStep.update){
@@ -187,7 +193,7 @@ function start(){
     coreDirections[i]=movingNodes[i];
     energyNodes[i].position.copyFrom(nodeDirections[i].scale(1.53));
    }
-  plasma.update({time,quality,parent:sphereRoot,mode,active:Math.min(plasma.meshes.length,Math.round(amount*.68)+5),corePower:get('core-power'),coreVisible:depthMaskActive});
+  plasma.update({time,quality,parent:sphereRoot,mode,transitionWeights:modeTransition.weights,active:Math.min(plasma.meshes.length,Math.round(amount*.68)+5),corePower:get('core-power'),coreVisible:depthMaskActive});
   forks.update({time,quality,corePower:get('core-power'),parent:sphereRoot});
   cv.dataset.visibleNodeForks=String(forks.meshes.filter(m=>m.isEnabled()).length);
   cv.dataset.visibleNodePhotons=String(forks.photons.filter(m=>m.isEnabled()).length);
@@ -258,6 +264,7 @@ function start(){
   coreDepthMask.rotation.copyFrom(core.rotation);
   scene.render();renderFrames++;
   cv.dataset.renderFrames=String(renderFrames);cv.dataset.geometryUpdates=String(geometryUpdates);cv.dataset.plasmaShaderFrames=String(plasmaShaderFrames);
+  cv.dataset.envelopeWeights=modeTransition.weights.map(w=>w.toFixed(5)).join(',');cv.dataset.envelopeTransition=String(modeTransition.active);
   cv.dataset.visibleCoreShellSheaths=String(bridgeVeils.filter(m=>m.isEnabled()).length);cv.dataset.visibleCoreMist=String(innerSheaths.filter(m=>m.isEnabled()).length);cv.dataset.visiblePlasmaField=String(plasmaField.meshes.filter(m=>m.isEnabled()).length);
   cv.dataset.mode=String(mode);cv.dataset.activeFilaments=String(threads.filter(x=>x.isEnabled()).length+lines.filter(x=>x.isEnabled()).length);
   cv.dataset.fps=String(Math.round(engine.getFps()));
