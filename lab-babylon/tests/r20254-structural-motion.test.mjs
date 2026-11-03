@@ -35,3 +35,19 @@ test('R202.54 core and its exact facet mask follow the same root and local trans
  assert.equal((source.match(/new Engine\(/g)||[]).length,1);
  assert.equal((source.match(/new Scene\(/g)||[]).length,1);
 });
+
+test('R202.54 pointer parallax is spatial, bounded, and returns to rest',async()=>{
+ const {sampleSpherePointerResponse}=await import('../src/sphere-structural-motion.mjs');
+ assert.deepEqual(sampleSpherePointerResponse(0,0),{pitch:0,yaw:0});
+ const active=sampleSpherePointerResponse(.8,-.7);
+ assert.ok(active.yaw>.04&&active.pitch>.04);
+ for(const x of [-20,-1,0,1,20])for(const y of [-30,-1,0,1,30]){
+  const response=sampleSpherePointerResponse(x,y);
+  assert.ok(Math.abs(response.yaw)<=.091&&Math.abs(response.pitch)<=.081);
+ }
+ assert.deepEqual(sampleSpherePointerResponse(1,1,{reducedMotion:true}),{pitch:0,yaw:0});
+ assert.throws(()=>sampleSpherePointerResponse(NaN,0),/STRUCTURAL_POINTER_INVALID/);
+ assert.match(source,/cv\.addEventListener\('pointermove'/);
+ assert.match(source,/cv\.addEventListener\('pointerleave'/);
+ assert.match(source,/sampleSpherePointerResponse\(/);
+});
