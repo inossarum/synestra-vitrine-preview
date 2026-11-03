@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
+import {NullEngine, Scene, MeshBuilder} from '@babylonjs/core';
 
 const shader=readFileSync(new URL('../src/plasma-field.js',import.meta.url),'utf8');
 const scene=readFileSync(new URL('../src/main.js',import.meta.url),'utf8');
@@ -28,4 +29,13 @@ test('R202.53 preserves original alpha and depth transparency equations',()=>{
  assert.match(shader,/alpha=clamp\(alpha\+focalOpacity\*energy,0\.0,\.79\);/);
  assert.match(shader,/alpha\*depthTransmission\);/);
  assert.equal((shader.match(/new ShaderMaterial\(/g)||[]).length,2);
+});
+
+test('R202.53 actual Babylon triangle count is 80 in the rebuilt engine',()=>{
+ const engine=new NullEngine();
+ try{
+  const scene=new Scene(engine);
+  const mesh=MeshBuilder.CreateIcoSphere('facet-probe',{radius:.38,subdivisions:2},scene);
+  assert.equal(mesh.getTotalIndices()/3,80);
+ }finally{engine.dispose();}
 });
