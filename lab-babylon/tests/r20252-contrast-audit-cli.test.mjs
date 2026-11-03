@@ -38,6 +38,8 @@ test('R202.52: diagnostic-only execution records FAIL without falsely failing re
  assert.equal(report.gates.diagnostic_integrity,'PASS');
  assert.equal(report.gates.ui_control,'NOT_ATTESTED');
  assert.equal(report.gates.ui_control_mean_delta,'PASS');
+ assert.equal(report.gates.ui_roi_rgb_exact,'PASS');
+ assert.deepEqual(report.gates.ui_roi_rgb_pairs.map(x=>[x.frame,x.power,x.pixels,x.changed_pixels]),[[6,145,154000,0],[18,145,154000,0],[6,0,154000,0]]);
  assert.equal(report.gates.power_off,'NOT_ATTESTED');
  assert.equal(report.gates.power_off_mean_delta,'PASS');
  assert.equal(report.gates.facet_visibility_screen,'FAIL');
