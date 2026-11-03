@@ -17,15 +17,28 @@ test('R202.52 gate semantics: unchanged mean is not native off/UI evidence',()=>
   assert.equal(gates.power_off,'NOT_ATTESTED');
 });
 
-test('R202.52 negative: power-off equal averages cannot prove actual shutdown',()=>{
-  // Both baseline and candidate can have mean 50 at power=0; comparison still returns 0.
-  const gates=classifySnapshotEvidence(nominal());
+const mean=samples=>samples.reduce((total,value)=>total+value,0)/samples.length;
+const measuredFrame=(frameId,power,uiReference,uiCandidate,facetReference,facetCandidate)=>frame(
+  frameId,power,mean(uiCandidate)-mean(uiReference),mean(facetCandidate)-mean(facetReference)
+);
+
+test('R202.52 negative: power-off equal nonzero averages cannot prove actual shutdown',()=>{
+  const reference=[50,50],candidate=[50,50];
+  assert.equal(mean(reference),50);
+  assert.equal(mean(candidate),50);
+  const off=measuredFrame(6,0,[10,10],[10,10],reference,candidate);
+  const gates=classifySnapshotEvidence([...nominal().filter(x=>x.power!==0),off]);
+  assert.equal(gates.power_off_mean_delta,'PASS');
   assert.equal(gates.power_off,'NOT_ATTESTED');
 });
 
-test('R202.52 negative: spatially swapped UI pixels with same mean remain not attested',()=>{
-  // A spatial permutation [5,15]->[15,5] produces delta mean 0.
-  const gates=classifySnapshotEvidence(nominal());
+test('R202.52 negative: swapped UI pixels with equal means remain not attested',()=>{
+  const uiReference=[5,15],uiCandidate=[15,5];
+  assert.notDeepEqual(uiReference,uiCandidate);
+  assert.equal(mean(uiReference),mean(uiCandidate));
+  const powered=measuredFrame(6,145,uiReference,uiCandidate,[120],[108]);
+  const gates=classifySnapshotEvidence([powered,nominal()[1],nominal()[2]]);
+  assert.equal(gates.ui_control_mean_delta,'PASS');
   assert.equal(gates.ui_control,'NOT_ATTESTED');
 });
 
