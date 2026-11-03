@@ -36,8 +36,12 @@ test('R202.52: diagnostic-only execution records FAIL without falsely failing re
  assert.equal(result.status,0,result.stderr);
  const report=JSON.parse(readFileSync(reportFile,'utf8'));
  assert.equal(report.gates.diagnostic_integrity,'PASS');
- assert.equal(report.gates.ui_control,'PASS');
- assert.equal(report.gates.power_off,'PASS');
+ assert.equal(report.gates.ui_control,'NOT_ATTESTED');
+ assert.equal(report.gates.ui_control_mean_delta,'PASS');
+ assert.equal(report.gates.ui_roi_rgb_exact,'PASS');
+ assert.deepEqual(report.gates.ui_roi_rgb_pairs.map(x=>[x.frame,x.power,x.pixels,x.changed_pixels]),[[6,145,154000,0],[18,145,154000,0],[6,0,154000,0]]);
+ assert.equal(report.gates.power_off,'NOT_ATTESTED');
+ assert.equal(report.gates.power_off_mean_delta,'PASS');
  assert.equal(report.gates.facet_visibility_screen,'FAIL');
  assert.equal(report.gates.exact_rebuild,'NOT_VERIFIED');
  assert.equal(report.gates.owner_art_signoff,'PENDING');
@@ -50,6 +54,8 @@ test('R202.52: strict visibility mode fails closed with code 3 and retains SHA-p
  assert.match(result.stderr,/R20252_FACET_VISIBILITY_GATE_FAIL/);
  const buf=readFileSync(reportFile);
  const digest=createHash('sha256').update(buf).digest('hex');
- assert.equal(digest,'089767c334149c08dfe97df10ab87b1344583b337fa1a0afa3de405f9561b5c0');
+ const displayedSha=result.stdout.match(/R20252_CONTRAST_SHA256 ([a-f0-9]{64})/);
+ assert.ok(displayedSha,'PERSISTED_AUDIT_SHA_MISSING');
+ assert.equal(digest,displayedSha[1]);
  assert.equal(JSON.parse(buf.toString('utf8')).gates.facet_visibility_screen,'FAIL');
 });
