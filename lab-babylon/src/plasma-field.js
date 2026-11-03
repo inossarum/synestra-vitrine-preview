@@ -160,6 +160,11 @@ export function createPlasmaHeartMaterial(scene){
    float alpha=clamp((.20+.48*pow(face,1.1)+.12*hotspot)*energy,0.0,.79);
    // Preserve original R202.33 compositing and clamp before transmission.
    coreEmission+=facetLift;
+   // R202.53: independently authored readability lift on illuminated existing planes.
+   // Keep the 80 original triangles, their alpha and their power-off contract.
+   float readableFacet=smoothstep(.28,.74,facetLight)*(.45+.55*facetRelief);
+   float powerRamp=smoothstep(.20,1.00,energy);
+   coreEmission+=vec3(.76,.78,.90)*readableFacet*powerRamp;
    alpha=clamp(alpha+focalOpacity*energy,0.0,.79);
   gl_FragColor=vec4((tint*(.75+.35*hotspot+.38*facetLight)*facetShading*facetPalette*(1.0+.25*facetGlint)*facetContrast+coreEmission)*shimmer*energy*(.30+.70*depthTransmission),alpha*depthTransmission);
  }`;
