@@ -1,6 +1,7 @@
 /** R192 / Synestra LAB: plasma ribbons in true 3D, no new scene or engine. */
 import {Vector3,MeshBuilder,ShaderMaterial,VertexBuffer,Mesh,Engine} from '@babylonjs/core';
 import {shellAnchorPair} from './shell-coverage.js';
+import {sampleShellModeShape} from './shell-mode-shapes.mjs';
 
 const RAILS=[-1,-.55,0,.55,1], STEPS=84, TWOPI=Math.PI*2;
 const clamp=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
@@ -10,7 +11,7 @@ function pointOnShell(angle,height){
  const z=clamp(height,-.95,.95),c=Math.sqrt(1-z*z);
  return new Vector3(c*Math.cos(angle),z,c*Math.sin(angle));
 }
-export function organicPlasmaCenterline(index,time,nodes){
+export function organicPlasmaCenterline(index,time,nodes,mode=0){
  if(!Array.isArray(nodes)||nodes.length<4)throw Error('PLASMA_NODES_MISSING');
  const [startCoords,endCoords]=shellAnchorPair(index);
  const start=new Vector3(...startCoords),end=new Vector3(...endCoords);
@@ -26,6 +27,7 @@ export function organicPlasmaCenterline(index,time,nodes){
  const points=[];
  for(let k=0;k<=STEPS;k++){
   const u=k/STEPS,swing=Math.sin(u*Math.PI),envelope=Math.pow(swing,.72);
+  const modeShape=sampleShellModeShape(mode,index,u,time);
   // R202.42: coherent magnetic sweep reuses 3D ribbons, no extra geometry.
   const magneticTwist=.15*Math.pow(envelope,1.45)*Math.sin(u*TWOPI*(1.35+orbit*.13)+phase*.41+time*.22);
   const contour=blend(a,b,u)
@@ -34,8 +36,12 @@ export function organicPlasmaCenterline(index,time,nodes){
    .add(across.scale(.115*envelope*Math.sin(u*TWOPI*(1.8+index%3*.20)-phase*.8-time*.16)));
   if(contour.lengthSquared()<.005)contour.copyFromFloats(.11,0,.2);
   contour.normalize();
+  // R202.56: morph the already-normalized direction, never the near-zero
+  // convergence vector (which could otherwise kink or flip a 3D strand).
+  if(mode!==0)contour.addInPlace(side.scale(modeShape.side))
+    .addInPlace(across.scale(modeShape.across)).normalize();
   const inner=(index%7===0)?.31:0;
-  const radius=1.54-inner*envelope+.09*envelope*Math.sin(u*TWOPI*2.2+phase+time*.22);
+  const radius=1.54-inner*envelope+.09*envelope*Math.sin(u*TWOPI*2.2+phase+time*.22)+modeShape.radial;
   points.push(contour.scale(radius));
  }
    // R202.42 deterministic spherical smoothing repairs kinked crossings; no new mesh.
@@ -243,12 +249,12 @@ export function installPlasmaRibbons({scene,colors,nodes,count=28,bridgePath=nul
   nodeMeshes,
   foregroundNodeMeshes,
   materials:material,
-  update({time,quality='balanced',parent=null,active=28,corePower=1,coreVisible=true}){
+  update({time,quality='balanced',mode=0,parent=null,active=28,corePower=1,coreVisible=true}){
    // Shader flicker moves smoothly every frame; geometry updates are capped at 15 Hz.
    for(const mat of material)mat.setFloat('uTime',time);
    for(const mat of foregroundMaterials)mat.setFloat('uTime',time);
    const cadence=quality==='economy'?.12:.065;
-   const budget=quality+':'+active+':'+(corePower>0)+':'+Boolean(coreVisible);
+   const budget=quality+':'+active+':'+(corePower>0)+':'+Boolean(coreVisible)+':'+mode;
    if(time-lastSample<cadence&&budget===lastBudget)return;
    lastBudget=budget;lastSample=time;
    const visible=quality==='economy'?Math.min(active,8):quality==='ultra'?active:Math.min(active,26);
@@ -258,7 +264,7 @@ export function installPlasmaRibbons({scene,colors,nodes,count=28,bridgePath=nul
     if(!enabled)continue;
     if(parent&&mesh.parent!==parent)mesh.parent=parent;
     MeshBuilder.CreateRibbon(null,{
-      pathArray:organicPlasmaRibbonPaths(organicPlasmaCenterline(i,time,nodes),i,time),
+      pathArray:organicPlasmaRibbonPaths(organicPlasmaCenterline(i,time,nodes,mode),i,time),
       instance:mesh
     },scene);
    }
@@ -269,7 +275,7 @@ export function installPlasmaRibbons({scene,colors,nodes,count=28,bridgePath=nul
     if(!enabled)continue;
     if(parent&&mesh.parent!==parent)mesh.parent=parent;
     MeshBuilder.CreateRibbon(null,{
-      pathArray:organicPlasmaRibbonPaths(organicPlasmaCenterline(i,time,nodes),i,time,3.8),
+      pathArray:organicPlasmaRibbonPaths(organicPlasmaCenterline(i,time,nodes,mode),i,time,3.8),
       instance:mesh
     },scene);
    }
