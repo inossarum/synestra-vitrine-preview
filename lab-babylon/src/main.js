@@ -8,6 +8,7 @@ import {mountCoreAtAtlasSocket} from './atlas-interop.js';
 import {createPlasmaHeartMaterial} from './plasma-field.js';
 import {installR20215Volume} from './plasma-volume-r20215.js';
 import {geometryUpdateDecision} from './geometry-frame-budget.mjs';
+import {synchronizeFacetLifecycle} from './facet-lifecycle.mjs';
 // ONE Babylon canvas. The requested subject is ONLY the glowing energy sphere.
 const cv=document.getElementById('renderCanvas'),stat=document.getElementById('status');
 const ids=['core-mode','core-radius','core-power','core-speed','strands','complexity','quality'];
@@ -203,7 +204,13 @@ function start(){
    m.position.set(rad*Math.cos(a),1.56*z,rad*Math.sin(a));
   }
   }
-  core.rotation.y=time*.18;scene.render();renderFrames++;
+  core.rotation.y=time*.18;
+  // R202.29: mask and foreground follow power/visibility on EVERY render frame,
+  // including frames where the animated ribbon geometry is intentionally skipped.
+  const facetState=synchronizeFacetLifecycle({core,mask:coreDepthMask,sources:plasma.nodeMeshes,foreground:plasma.foregroundNodeMeshes,power,radius:r});
+  cv.dataset.facetMaskActive=String(facetState.maskActive);
+  cv.dataset.facetForegroundActive=String(facetState.foregroundCount);
+  scene.render();renderFrames++;
   cv.dataset.renderFrames=String(renderFrames);cv.dataset.geometryUpdates=String(geometryUpdates);cv.dataset.plasmaShaderFrames=String(plasmaShaderFrames);
   cv.dataset.visibleCoreShellSheaths=String(bridgeVeils.filter(m=>m.isEnabled()).length);cv.dataset.visibleCoreMist=String(innerSheaths.filter(m=>m.isEnabled()).length);cv.dataset.visiblePlasmaField=String(plasmaField.meshes.filter(m=>m.isEnabled()).length);
   cv.dataset.mode=String(mode);cv.dataset.activeFilaments=String(threads.filter(x=>x.isEnabled()).length+lines.filter(x=>x.isEnabled()).length);

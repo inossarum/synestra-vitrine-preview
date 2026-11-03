@@ -1,0 +1,107 @@
+{
+  "schema": "synestra.lab.r20229-facet-lifecycle.e2e.v1",
+  "status": "PASS",
+  "bundle_sha256": "dd2c129014eafa03f1d70ac266bad7bfc984a3604fec3ac4fe594f445b4c990c",
+  "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "checks": [
+    {
+      "name": "gpu_nominal",
+      "status": "PASS",
+      "frame": 19,
+      "mask": true,
+      "front": 6,
+      "matrixDelta": 0
+    },
+    {
+      "name": "power_zero",
+      "status": "PASS",
+      "frame": 26,
+      "mask": false,
+      "front": 0,
+      "matrixDelta": 0
+    },
+    {
+      "name": "power_restored",
+      "status": "PASS",
+      "frame": 31,
+      "mask": true,
+      "front": 6,
+      "matrixDelta": 0
+    },
+    {
+      "name": "radius_180",
+      "status": "PASS",
+      "frame": 38,
+      "mask": true,
+      "front": 6,
+      "matrixDelta": 0
+    },
+    {
+      "name": "rotation_parent",
+      "status": "PASS",
+      "frame": 46,
+      "mask": true,
+      "front": 6,
+      "matrixDelta": 0
+    },
+    {
+      "name": "isVisible_false",
+      "status": "PASS",
+      "frame": 53,
+      "mask": false,
+      "front": 0,
+      "matrixDelta": 0
+    },
+    {
+      "name": "visibility_zero",
+      "status": "PASS",
+      "frame": 60,
+      "mask": false,
+      "front": 0,
+      "matrixDelta": 0
+    },
+    {
+      "name": "core_disabled",
+      "status": "PASS",
+      "frame": 67,
+      "mask": false,
+      "front": 0,
+      "matrixDelta": 0
+    },
+    {
+      "name": "core_restored",
+      "status": "PASS",
+      "frame": 75,
+      "mask": true,
+      "front": 6,
+      "matrixDelta": 0
+    }
+  ],
+  "final": {
+    "ready": "true",
+    "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "frame": 75,
+    "maskDataset": "true",
+    "foregroundDataset": 6,
+    "facets": 80,
+    "maskFacets": 80,
+    "sameGeometry": true,
+    "maskParent": true,
+    "maskEnabled": true,
+    "matrixDelta": 0,
+    "coreEnabled": true,
+    "coreVisible": true,
+    "coreVisibility": 1,
+    "scale": 1.8,
+    "rootRotation": 1.15,
+    "frontCount": 6,
+    "frontEnabled": 6,
+    "sourceEnabled": 6,
+    "frontStencil": true,
+    "maskStencil": true,
+    "canvas": 1,
+    "power": "145",
+    "radius": "180"
+  },
+  "png_sha256": "b871ae4f51ed16e7fd86ea77e3a48ed2ab320735e6cb67df47dad4072bcb6173"
+}
