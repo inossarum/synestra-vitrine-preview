@@ -66,6 +66,25 @@ test('R202.61 flow centerlines leave core bounding sphere only at index 15',()=>
  }
 });
 
+test('R202.61 five-rail width bounds keep all boosted root vertices inside the core',()=>{
+ let maxVertexRadiusBound=0;
+ for(const time of TIMES)for(let node=0;node<FLOW_NODE_COUNT;node++){
+  const path=sampleCoreShellFlow(node,time,NODE_DIRECTIONS,SEGMENTS);
+  const ribbonIndex=node+100;
+  for(let k=0;k<8;k++){
+   const u=k/SEGMENTS;
+   // organicPlasmaRibbonPaths uses base=.095 and rails in [-1,1].
+   const flare=.28+.72*Math.pow(Math.sin(Math.PI*u),.58);
+   const irregular=1+.19*Math.sin(u*2*Math.PI*(2+ribbonIndex%4)+ribbonIndex*.9+time*.37);
+   const width=.095*flare*irregular;
+   const upperBound=radius(path[k])+width;
+   maxVertexRadiusBound=Math.max(maxVertexRadiusBound,upperBound);
+   assert.ok(upperBound<CORE_INRADIUS,`near-node ribbon ${node}, time ${time}, index ${k}: ${upperBound}`);
+  }
+ }
+ assert.ok(maxVertexRadiusBound<=.300357);
+});
+
 test('R202.61 analytic scope does not substitute for real rasterized stencil proof',()=>{
  // The face-level stencil, ribbon width and pixel occlusion require GPU E2E.
  const scope={centerline_only:true,ribbon_vertices_measured:false,
