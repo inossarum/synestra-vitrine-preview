@@ -33,3 +33,14 @@ ZIP R202.61 SHA256 5088f87190de0e0bab84633569c0585664a7151666e29fda1b434c76d0f8a
 - SOURCE_GATE=LIMITED (Memory V1 autonome non prouvée) ; HOOKS_STATUS=UNKNOWN.
 - Correctif local : PASS ; Git/CI/persistance : PENDING à ce stade.
 - FUNCTION_REPORT=PARTIAL.
+
+## Résultat CI réel — vérification terminée
+- GitHub Actions run ID : 41805464766 (https://github.com/inossarum/synestra-vitrine-preview/actions/runs/41805464766).
+- Job ID : 126491255148 ; workflow « R202.61 standalone ZIP integrity ».
+- HEAD exécuté : 232fefbf789e115ca55f1aa2ccef100ff6d0afc6.
+- Statut terminal : completed / conclusion SUCCESS ; updatedAt 2026-11-04T09:12:26Z.
+- Étapes : checkout SHA, invariants de source et SHA, Node 22, installation verrouillée, suite Babylon 180 tests et 0 échec, build, bundle exact, liens ZIP, garde artistique, reconstruction ZIP — toutes SUCCESS.
+- Log vérifié : « Ran 12 tests in 0.018s » ; « R20261_ART_GATE_PASS_HOLD » avec promotable=false, art_signoff=PENDING ; « R20261_OFFLINE_LINKS_PASS » ; « R20261_RELEASE_CI_PASS » (six_zip_members_identical=true).
+- Un run CI SUCCESS n'est ni un E2E orbital GPU Windows, ni une preuve de SHA de l'image Library, ni un ART_SIGNOFF.
+- Ce delta ne déploie rien et ne change pas le moteur ou la sphère.
+- CI_ART_GATE=VERIFIED_PASS ; ART_SIGNOFF=PENDING ; MISSION_FUNCTION_REPORT=PARTIAL.
