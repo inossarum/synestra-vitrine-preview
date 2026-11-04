@@ -1,0 +1,2653 @@
+{
+  "schema": "synestra.r20261.per-node-depth-visibility.v1",
+  "timestamp": "2026-11-04",
+  "zipSha256": "5088f87190de0e0bab84633569c0585664a7151666e29fda1b434c76d0f8ae13",
+  "baseGitHead": "39a10023d0faf6edc19e73ba3d8565528635ff8d",
+  "viewport": [
+    1100,
+    900
+  ],
+  "frame": 18,
+  "power": 145,
+  "quality": "balanced",
+  "gate": {
+    "baselineDriftMaxCoreGt4": 0,
+    "baselineDriftMaxRingGt4": 0,
+    "baselineDriftMaxOuterGt4": 3,
+    "changedThresholdRGB": 4,
+    "staticFrame": 18
+  },
+  "modes": [
+    {
+      "mode": "0",
+      "prep": {
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "meshes": 6,
+        "originalMaterials": 4,
+        "faces": 80,
+        "mask": 80,
+        "stencil": true,
+        "originalDepth": 0,
+        "glAlways": 519
+      },
+      "hiddenSHA256": "5d2731fa70a7b38eb4f3f978d43d0d3baf298faa0eb43d48d662d829851f2ef7",
+      "hiddenRetestSHA256": "da836c7d701540a8725e95345863ba926ebc2191f40e9518d81e28b9f9cf726b",
+      "stable": true,
+      "drift": {
+        "core": {
+          "total": 12096,
+          "gt4": 0,
+          "ge18": 0,
+          "pctGt4": 0
+        },
+        "ring": {
+          "total": 36984,
+          "gt4": 0,
+          "ge18": 0,
+          "pctGt4": 0
+        },
+        "outer": {
+          "total": 155216,
+          "gt4": 0,
+          "ge18": 0,
+          "pctGt4": 0
+        }
+      },
+      "byNode": [
+        {
+          "node": 0,
+          "normal": {
+            "sha": "abd659f1d81d4450768eecbb69276512617e5dba8dd8c6806601fc2753e2ad07",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 54,
+                "ge18": 13,
+                "pctGt4": 0.146009
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": 0,
+                "blueVsRG": 0.00012400793650613195,
+                "edgeGradient": 0
+              },
+              "ring": {
+                "meanLuma": 0.002388420217755538,
+                "blueVsRG": 0.020792775254161455,
+                "edgeGradient": 0.00016333641857668724
+              },
+              "outer": {
+                "meanLuma": -0.00012455760574425767,
+                "blueVsRG": -0.00006442634779801892,
+                "edgeGradient": -0.00002370086917657943
+              }
+            }
+          },
+          "always": {
+            "sha": "03d5fe4f80a53e4d51f8a61f2591bf599a52ee9675f52d3a3d948e3a86c59218",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 375,
+                "ge18": 80,
+                "pctGt4": 3.100198
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 111,
+                "ge18": 20,
+                "pctGt4": 0.30013
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "vsNormal": {
+              "core": {
+                "total": 12096,
+                "gt4": 375,
+                "ge18": 80,
+                "pctGt4": 3.100198
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 61,
+                "ge18": 2,
+                "pctGt4": 0.164936
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": -0.07208994709006333,
+                "blueVsRG": 0.40823412698412653,
+                "edgeGradient": 0.007823811114823664
+              },
+              "ring": {
+                "meanLuma": 0.0013429230658914548,
+                "blueVsRG": 0.04243727017088261,
+                "edgeGradient": 0.00029945010072474076
+              },
+              "outer": {
+                "meanLuma": 0.0004273614403800252,
+                "blueVsRG": -0.00003221317389900946,
+                "edgeGradient": -0.0000344739915321135
+              }
+            }
+          }
+        },
+        {
+          "node": 1,
+          "normal": {
+            "sha": "9eb34528fd6329d7f8e53af22e16d2933d90558846108d26017e9ad9c23259bb",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 894,
+                "ge18": 274,
+                "pctGt4": 7.390873
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 72,
+                "ge18": 0,
+                "pctGt4": 0.194679
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": 0.19728284832432053,
+                "blueVsRG": 0.5144675925925881,
+                "edgeGradient": 0.004148568882948567
+              },
+              "ring": {
+                "meanLuma": 0.004659672651271762,
+                "blueVsRG": 0.010126000432617133,
+                "edgeGradient": 0.00030852434620110003
+              },
+              "outer": {
+                "meanLuma": -0.004743926743017823,
+                "blueVsRG": -0.0027703329553645517,
+                "edgeGradient": 0.00010126735010551613
+              }
+            }
+          },
+          "always": {
+            "sha": "a2fdd3dae2b9ff7efe4c9d75af03482eef48d531f3f8f13ead91cc2ee987ab2e",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 938,
+                "ge18": 313,
+                "pctGt4": 7.75463
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 72,
+                "ge18": 0,
+                "pctGt4": 0.194679
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "vsNormal": {
+              "core": {
+                "total": 12096,
+                "gt4": 75,
+                "ge18": 19,
+                "pctGt4": 0.62004
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": 0.20552248677228135,
+                "blueVsRG": 0.5736607142857082,
+                "edgeGradient": 0.008965363626238565
+              },
+              "ring": {
+                "meanLuma": 0.004668685557717822,
+                "blueVsRG": 0.01051806186458748,
+                "edgeGradient": 0.0002450046278661411
+              },
+              "outer": {
+                "meanLuma": -0.004567828059094836,
+                "blueVsRG": -0.002937841459640822,
+                "edgeGradient": 0.00006679335857828761
+              }
+            }
+          }
+        },
+        {
+          "node": 2,
+          "normal": {
+            "sha": "5902eeb1b9a7d5d3819c09889bee544efdf92a1fe1eaefacb9d329364e819af3",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": -0.00008267195767075464,
+                "blueVsRG": 0.00012400793650613195,
+                "edgeGradient": 0.000027842744181105772
+              },
+              "ring": {
+                "meanLuma": -0.00001802581296317385,
+                "blueVsRG": -0.00009463551806376813,
+                "edgeGradient": -0.000027222736429521888
+              },
+              "outer": {
+                "meanLuma": 0.00004080335362033338,
+                "blueVsRG": 0.00018039377383871624,
+                "edgeGradient": -0.0000387832404706856
+              }
+            }
+          },
+          "always": {
+            "sha": "86056ec0912507c7f811cca2f0bb78e4a988dc8e28b2cd3bda66436ca91f971c",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 388,
+                "ge18": 86,
+                "pctGt4": 3.207672
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 99,
+                "ge18": 26,
+                "pctGt4": 0.267683
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "vsNormal": {
+              "core": {
+                "total": 12096,
+                "gt4": 388,
+                "ge18": 86,
+                "pctGt4": 3.207672
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 99,
+                "ge18": 26,
+                "pctGt4": 0.267683
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": -0.2769235008818356,
+                "blueVsRG": 0.39033564814814525,
+                "edgeGradient": 0.01013475888183435
+              },
+              "ring": {
+                "meanLuma": -0.022568317831186846,
+                "blueVsRG": 0.033365779796667994,
+                "edgeGradient": -0.0034663617720172013
+              },
+              "outer": {
+                "meanLuma": 0.0004552795244237018,
+                "blueVsRG": 0.00018683640861993922,
+                "edgeGradient": -0.000006463873415629706
+              }
+            }
+          }
+        },
+        {
+          "node": 3,
+          "normal": {
+            "sha": "5a66f038d780ddfd24743f713b11d434fb5af899feb0c539bfc51ac275be479d",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 12,
+                "ge18": 1,
+                "pctGt4": 0.032446
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": -0.00038580246909702964,
+                "blueVsRG": -0.0005373677248670106,
+                "edgeGradient": 0.00013921372090486273
+              },
+              "ring": {
+                "meanLuma": 0.0018566587353063824,
+                "blueVsRG": -0.000919316461175157,
+                "edgeGradient": 0.0011887261574217156
+              },
+              "outer": {
+                "meanLuma": -0.00008375425213813514,
+                "blueVsRG": 0.00000966395217005811,
+                "edgeGradient": -0.00008403035434811912
+              }
+            }
+          },
+          "always": {
+            "sha": "04e7eae145465685a481b305f77ef2c3d354153a46e8db54a75c2001f56785f0",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 137,
+                "ge18": 61,
+                "pctGt4": 1.132606
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 17,
+                "ge18": 2,
+                "pctGt4": 0.045966
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "vsNormal": {
+              "core": {
+                "total": 12096,
+                "gt4": 136,
+                "ge18": 61,
+                "pctGt4": 1.124339
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 5,
+                "ge18": 0,
+                "pctGt4": 0.013519
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": 0.06542107583793211,
+                "blueVsRG": -0.06874173280423435,
+                "edgeGradient": 0.037810446597617675
+              },
+              "ring": {
+                "meanLuma": 0.0026317686927797013,
+                "blueVsRG": -0.0017575167640089262,
+                "edgeGradient": 0.001941888531971081
+              },
+              "outer": {
+                "meanLuma": 0.000356492457854074,
+                "blueVsRG": 0.0001417379651584838,
+                "edgeGradient": -0.00006032948517953329
+              }
+            }
+          }
+        },
+        {
+          "node": 4,
+          "normal": {
+            "sha": "4cd2d27510319d5d33d561bb9a5c960afa1a8635be64f3614a2ffb55863f0dd8",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 25,
+                "ge18": 0,
+                "pctGt4": 0.067597
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": -0.0013778659612171396,
+                "blueVsRG": -0.0005373677248670106,
+                "edgeGradient": 0.00027842744180928136
+              },
+              "ring": {
+                "meanLuma": 0.0033978657437216953,
+                "blueVsRG": 0.004839930780878632,
+                "edgeGradient": 0.00020870764596025992
+              },
+              "outer": {
+                "meanLuma": 0.0003113940143393279,
+                "blueVsRG": 0.00007409029997162975,
+                "edgeGradient": -0.000025855493646975702
+              }
+            }
+          },
+          "always": {
+            "sha": "58439931292d391aeb68d595b096f99b631eef1237625b61e69fb29ea3875006",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 443,
+                "ge18": 176,
+                "pctGt4": 3.662368
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 139,
+                "ge18": 12,
+                "pctGt4": 0.375838
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "vsNormal": {
+              "core": {
+                "total": 12096,
+                "gt4": 443,
+                "ge18": 176,
+                "pctGt4": 3.662368
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 120,
+                "ge18": 11,
+                "pctGt4": 0.324465
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": 0.409226190476474,
+                "blueVsRG": 0.3813244047619051,
+                "edgeGradient": 0.12476333667445982
+              },
+              "ring": {
+                "meanLuma": 0.021351575456037608,
+                "blueVsRG": 0.03217607614103457,
+                "edgeGradient": 0.0020870764595946056
+              },
+              "outer": {
+                "meanLuma": -0.00004724598834116023,
+                "blueVsRG": 0.0002834759303169676,
+                "edgeGradient": -0.00005171098729528367
+              }
+            }
+          }
+        },
+        {
+          "node": 5,
+          "normal": {
+            "sha": "22987707f6dd4550dc8ec4e346efa8f5dcc8179abebd679e3d8d416115a8d704",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": -0.001432980599702205,
+                "blueVsRG": -0.0013227513227533905,
+                "edgeGradient": 0.0003341129301703827
+              },
+              "ring": {
+                "meanLuma": 0.000027038719437655345,
+                "blueVsRG": -0.0004055807916962806,
+                "edgeGradient": 0.00007259396381176231
+              },
+              "outer": {
+                "meanLuma": -0.00022334467232099087,
+                "blueVsRG": 0.0001514019173285419,
+                "edgeGradient": -0.00003231936706038496
+              }
+            }
+          },
+          "always": {
+            "sha": "7c8f89237b82d5c1aebf9e5c33b0884e09f9d80f1f9e4c4dedcf84385cffc4f2",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 210,
+                "ge18": 75,
+                "pctGt4": 1.736111
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 50,
+                "ge18": 0,
+                "pctGt4": 0.135194
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "vsNormal": {
+              "core": {
+                "total": 12096,
+                "gt4": 210,
+                "ge18": 75,
+                "pctGt4": 1.736111
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 50,
+                "ge18": 0,
+                "pctGt4": 0.135194
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": 0.032793209876487595,
+                "blueVsRG": 0.18716931216930988,
+                "edgeGradient": 0.023304376879386135
+              },
+              "ring": {
+                "meanLuma": 0.0017394909510670686,
+                "blueVsRG": 0.012153904391087877,
+                "edgeGradient": 0.0005898259559722341
+              },
+              "outer": {
+                "meanLuma": -0.00027059066073320537,
+                "blueVsRG": -0.00023193485207784192,
+                "edgeGradient": -0.000015082371291441632
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "mode": "1",
+      "prep": {
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "meshes": 6,
+        "originalMaterials": 4,
+        "faces": 80,
+        "mask": 80,
+        "stencil": true,
+        "originalDepth": 0,
+        "glAlways": 519
+      },
+      "hiddenSHA256": "014a7a91e72e819da7b130ebdc485aa3b616b20b3cfe0f2947b7f3f5d8f54119",
+      "hiddenRetestSHA256": "3f89b120a9649c936773b418866a1d0fc92b4f6ecfc98d9eb95392104aea55e2",
+      "stable": true,
+      "drift": {
+        "core": {
+          "total": 12096,
+          "gt4": 0,
+          "ge18": 0,
+          "pctGt4": 0
+        },
+        "ring": {
+          "total": 36984,
+          "gt4": 0,
+          "ge18": 0,
+          "pctGt4": 0
+        },
+        "outer": {
+          "total": 155216,
+          "gt4": 0,
+          "ge18": 0,
+          "pctGt4": 0
+        }
+      },
+      "byNode": [
+        {
+          "node": 0,
+          "normal": {
+            "sha": "ec95837e470f4a653fcbaaaf1dfcff735e34adf0a8a47594a6eb834e3ce9cfd2",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 55,
+                "ge18": 11,
+                "pctGt4": 0.148713
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 1,
+                "ge18": 0,
+                "pctGt4": 0.000644
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": 0.00019290123458404196,
+                "blueVsRG": -0.00028935185185474666,
+                "edgeGradient": 0
+              },
+              "ring": {
+                "meanLuma": 0.0033347753983292705,
+                "blueVsRG": 0.021603936837550464,
+                "edgeGradient": 0.0017059581495773024
+              },
+              "outer": {
+                "meanLuma": -0.0004123286258703729,
+                "blueVsRG": -0.0004058859911353352,
+                "edgeGradient": 0.00007325723199569367
+              }
+            }
+          },
+          "always": {
+            "sha": "8679f163c73f4e5dccbbb1725109b48154b2d4e96b5a6f577e42ad7140233f67",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 399,
+                "ge18": 90,
+                "pctGt4": 3.298611
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 112,
+                "ge18": 15,
+                "pctGt4": 0.302834
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "vsNormal": {
+              "core": {
+                "total": 12096,
+                "gt4": 399,
+                "ge18": 90,
+                "pctGt4": 3.298611
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 62,
+                "ge18": 2,
+                "pctGt4": 0.16764
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 1,
+                "ge18": 0,
+                "pctGt4": 0.000644
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": -0.08407738095247907,
+                "blueVsRG": 0.41567460317460103,
+                "edgeGradient": 0.006765786835951415
+              },
+              "ring": {
+                "meanLuma": 0.0034970077150831003,
+                "blueVsRG": 0.042896928401468415,
+                "edgeGradient": 0.0015244732400532257
+              },
+              "outer": {
+                "meanLuma": -0.00030924646939922695,
+                "blueVsRG": -0.00005798371302034866,
+                "edgeGradient": 0.0001292774682308817
+              }
+            }
+          }
+        },
+        {
+          "node": 1,
+          "normal": {
+            "sha": "3c7d2c80585afc749bf8f835fd3fe0607158222d6d3c61fcfcd8cb2e99a88d0e",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 899,
+                "ge18": 280,
+                "pctGt4": 7.432209
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 61,
+                "ge18": 0,
+                "pctGt4": 0.164936
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": 0.18047288359800007,
+                "blueVsRG": 0.46701388888888573,
+                "edgeGradient": 0.00890967813787702
+              },
+              "ring": {
+                "meanLuma": 0.005020188910478396,
+                "blueVsRG": 0.00966634220203133,
+                "edgeGradient": 0.00129761710313403
+              },
+              "outer": {
+                "meanLuma": -0.005081091296467832,
+                "blueVsRG": -0.0031536697247709355,
+                "edgeGradient": 0.00012281359481614018
+              }
+            }
+          },
+          "always": {
+            "sha": "3d0d79a4cfb1e548b851601a5f539a9fe197f76f3aecbb2856c1a67f58082fca",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 941,
+                "ge18": 321,
+                "pctGt4": 7.779431
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 61,
+                "ge18": 0,
+                "pctGt4": 0.164936
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "vsNormal": {
+              "core": {
+                "total": 12096,
+                "gt4": 76,
+                "ge18": 20,
+                "pctGt4": 0.628307
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": 0.18557098765451485,
+                "blueVsRG": 0.5247189153439109,
+                "edgeGradient": 0.013280988974272212
+              },
+              "ring": {
+                "meanLuma": 0.0054437955151485085,
+                "blueVsRG": 0.009395955007569512,
+                "edgeGradient": 0.0011887261574168306
+              },
+              "outer": {
+                "meanLuma": -0.005660928426671319,
+                "blueVsRG": -0.0035498917637362126,
+                "edgeGradient": 0.00008618497880874543
+              }
+            }
+          }
+        },
+        {
+          "node": 2,
+          "normal": {
+            "sha": "db04068cc430fe5268a30e4b044f6db93517c10dd0c7558eb58145e859590bdf",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": 0.0002480158730406856,
+                "blueVsRG": -0.0003720238095255013,
+                "edgeGradient": -0.00013921372090441864
+              },
+              "ring": {
+                "meanLuma": -0.00008111615836980945,
+                "blueVsRG": -0.00008111615834138775,
+                "edgeGradient": 0.00005444547285637924
+              },
+              "outer": {
+                "meanLuma": -0.000019327904297483656,
+                "blueVsRG": -0.00006764766519040677,
+                "edgeGradient": 0.00006248410964504458
+              }
+            }
+          },
+          "always": {
+            "sha": "85a3ab5cf2bf5af2974fa6701e14d003f3e2c5ccd5256f6819466bdf283fae9f",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 392,
+                "ge18": 90,
+                "pctGt4": 3.240741
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 102,
+                "ge18": 31,
+                "pctGt4": 0.275795
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "vsNormal": {
+              "core": {
+                "total": 12096,
+                "gt4": 392,
+                "ge18": 90,
+                "pctGt4": 3.240741
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 102,
+                "ge18": 31,
+                "pctGt4": 0.275795
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": -0.28629298941818604,
+                "blueVsRG": 0.37884424603174693,
+                "edgeGradient": 0.0059305045105264576
+              },
+              "ring": {
+                "meanLuma": -0.02571382219332463,
+                "blueVsRG": 0.02863400389357551,
+                "edgeGradient": -0.0036478466815426103
+              },
+              "outer": {
+                "meanLuma": -0.0003371645534357981,
+                "blueVsRG": -0.0001514019173285419,
+                "edgeGradient": 0.00011634972140406319
+              }
+            }
+          }
+        },
+        {
+          "node": 3,
+          "normal": {
+            "sha": "534d3d3a2025aad3927ee591429d97afdd02644c2e84ca0a6aa331e03e1cf88f",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 12,
+                "ge18": 1,
+                "pctGt4": 0.032446
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": 0.0004133597883821949,
+                "blueVsRG": -0.0003720238095255013,
+                "edgeGradient": -0.00027842744180861523
+              },
+              "ring": {
+                "meanLuma": 0.0017665296704620914,
+                "blueVsRG": -0.0012708198139748106,
+                "edgeGradient": 0.0012613201212277048
+              },
+              "outer": {
+                "meanLuma": -0.00010093461146709615,
+                "blueVsRG": -0.0000708689825792419,
+                "edgeGradient": 0.00007110260752618558
+              }
+            }
+          },
+          "always": {
+            "sha": "6746a9142b4681b32e971910a9f6835666e244d97db6eb49556807fd6b7ffe69",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 134,
+                "ge18": 60,
+                "pctGt4": 1.107804
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 17,
+                "ge18": 2,
+                "pctGt4": 0.045966
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "vsNormal": {
+              "core": {
+                "total": 12096,
+                "gt4": 133,
+                "ge18": 60,
+                "pctGt4": 1.099537
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 5,
+                "ge18": 0,
+                "pctGt4": 0.013519
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": 0.06203152557318958,
+                "blueVsRG": -0.06898974867724661,
+                "edgeGradient": 0.03561086980733208
+              },
+              "ring": {
+                "meanLuma": 0.001874684548283767,
+                "blueVsRG": -0.0016764006056675385,
+                "edgeGradient": 0.0017785521133935056
+              },
+              "outer": {
+                "meanLuma": -0.00030495137949060336,
+                "blueVsRG": -0.0001514019173285419,
+                "edgeGradient": 0.00009480347670365319
+              }
+            }
+          }
+        },
+        {
+          "node": 4,
+          "normal": {
+            "sha": "8baf110eb3a337214b6227ca40fde5f507d723162035657b8f4bdd792a6171c5",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 23,
+                "ge18": 0,
+                "pctGt4": 0.062189
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": -0.00008267195769917635,
+                "blueVsRG": -0.0004960317460316332,
+                "edgeGradient": -2.220446049250313e-16
+              },
+              "ring": {
+                "meanLuma": 0.0037764078159767678,
+                "blueVsRG": 0.004758814622537244,
+                "edgeGradient": 0.0001633364185735786
+              },
+              "outer": {
+                "meanLuma": -0.0002534103012834521,
+                "blueVsRG": -0.00037367281723632573,
+                "edgeGradient": 0.0001228135948156961
+              }
+            }
+          },
+          "always": {
+            "sha": "04b1344ec1816375e54c695aeea19dc8704fb1cbbd6807b24b3bb15bebf3a5ed",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 433,
+                "ge18": 177,
+                "pctGt4": 3.579696
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 131,
+                "ge18": 10,
+                "pctGt4": 0.354207
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "vsNormal": {
+              "core": {
+                "total": 12096,
+                "gt4": 433,
+                "ge18": 177,
+                "pctGt4": 3.579696
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 107,
+                "ge18": 9,
+                "pctGt4": 0.289314
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": 0.4235835537917012,
+                "blueVsRG": 0.3690889550264558,
+                "edgeGradient": 0.12487470765118247
+              },
+              "ring": {
+                "meanLuma": 0.02018891051974947,
+                "blueVsRG": 0.029539800995024734,
+                "edgeGradient": 0.0023048583510245635
+              },
+              "outer": {
+                "meanLuma": 0.00020616431295650273,
+                "blueVsRG": 0.000048319760846737836,
+                "edgeGradient": 0.0000064638734058597436
+              }
+            }
+          }
+        },
+        {
+          "node": 5,
+          "normal": {
+            "sha": "39f6558b2c7f9f09439930e3a88282063372357b195fa20d4b165ff7cae45d62",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": -0.0003582451499397621,
+                "blueVsRG": -0.0013227513227533905,
+                "edgeGradient": 0.00011137097672242469
+              },
+              "ring": {
+                "meanLuma": 0.00045064532409355706,
+                "blueVsRG": -0.00010815487778614852,
+                "edgeGradient": -0.00006351971833762349
+              },
+              "outer": {
+                "meanLuma": -0.0003887056316784765,
+                "blueVsRG": -0.00016106586949860002,
+                "edgeGradient": 0.00014651446399005508
+              }
+            }
+          },
+          "always": {
+            "sha": "cf2bfe51f97c271ecf1ee6e02ecdc12c1b0c64733e1334b7d51918b136c751de",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 213,
+                "ge18": 77,
+                "pctGt4": 1.760913
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 55,
+                "ge18": 0,
+                "pctGt4": 0.148713
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "vsNormal": {
+              "core": {
+                "total": 12096,
+                "gt4": 213,
+                "ge18": 76,
+                "pctGt4": 1.760913
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 55,
+                "ge18": 0,
+                "pctGt4": 0.148713
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": 0.029128086419817123,
+                "blueVsRG": 0.18745866402116462,
+                "edgeGradient": 0.02194008241452239
+              },
+              "ring": {
+                "meanLuma": 0.000540774388937848,
+                "blueVsRG": 0.011437378325762637,
+                "edgeGradient": 0.0009346472840783271
+              },
+              "outer": {
+                "meanLuma": -0.0002813283853413395,
+                "blueVsRG": -0.00006120503040918379,
+                "edgeGradient": 0.00009264885223281283
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "mode": "2",
+      "prep": {
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "meshes": 6,
+        "originalMaterials": 4,
+        "faces": 80,
+        "mask": 80,
+        "stencil": true,
+        "originalDepth": 0,
+        "glAlways": 519
+      },
+      "hiddenSHA256": "78d75ec12763773ee7f30ccb79fc87c4eab531cf5298561831074b758a4ef79d",
+      "hiddenRetestSHA256": "14b872cfa116acd52415bf594a9d0ffddf9315498f9d9dd1b99ed55b634130a0",
+      "stable": false,
+      "drift": {
+        "core": {
+          "total": 12096,
+          "gt4": 0,
+          "ge18": 0,
+          "pctGt4": 0
+        },
+        "ring": {
+          "total": 36984,
+          "gt4": 0,
+          "ge18": 0,
+          "pctGt4": 0
+        },
+        "outer": {
+          "total": 155216,
+          "gt4": 5,
+          "ge18": 0,
+          "pctGt4": 0.003221
+        }
+      },
+      "byNode": [
+        {
+          "node": 0,
+          "normal": {
+            "sha": "7ad3991d53b4ec7d316208e8bbf07b0a0a23fbb72f56aee942d454c4d2ba9036",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 58,
+                "ge18": 17,
+                "pctGt4": 0.156825
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": -0.0000551146384140111,
+                "blueVsRG": 0.000330687830690124,
+                "edgeGradient": 0.000055685488361767455
+              },
+              "ring": {
+                "meanLuma": 0.004785853342042401,
+                "blueVsRG": 0.023320895522385143,
+                "edgeGradient": 0.002223190141741771
+              },
+              "outer": {
+                "meanLuma": -0.00008160670733303732,
+                "blueVsRG": 0.000016106586947728374,
+                "edgeGradient": -0.00004309248940792543
+              }
+            }
+          },
+          "always": {
+            "sha": "e8345f3ca9995c6435e4effe517ca474790e3731ae9ed5ecd1a8ec1e2fe62292",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 390,
+                "ge18": 88,
+                "pctGt4": 3.224206
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 116,
+                "ge18": 25,
+                "pctGt4": 0.313649
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "vsNormal": {
+              "core": {
+                "total": 12096,
+                "gt4": 390,
+                "ge18": 88,
+                "pctGt4": 3.224206
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 65,
+                "ge18": 2,
+                "pctGt4": 0.175752
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": -0.08664021164017299,
+                "blueVsRG": 0.3984375,
+                "edgeGradient": 0.003118387348256979
+              },
+              "ring": {
+                "meanLuma": 0.006155815127328879,
+                "blueVsRG": 0.046574194246158385,
+                "edgeGradient": 0.0019963340048283484
+              },
+              "outer": {
+                "meanLuma": -0.00018039377396661394,
+                "blueVsRG": 0.00006764766518685406,
+                "edgeGradient": -0.00003447399152634034
+              }
+            }
+          }
+        },
+        {
+          "node": 1,
+          "normal": {
+            "sha": "fdde4e49608c420aef43293fba2975ab81b187707fa69d44f774bb4a355346eb",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 896,
+                "ge18": 270,
+                "pctGt4": 7.407407
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 74,
+                "ge18": 0,
+                "pctGt4": 0.200087
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 3,
+                "ge18": 0,
+                "pctGt4": 0.001933
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": 0.22913910934755677,
+                "blueVsRG": 0.5011574074074048,
+                "edgeGradient": 0.008102238556630947
+              },
+              "ring": {
+                "meanLuma": 0.005326627730909195,
+                "blueVsRG": 0.011802401038284671,
+                "edgeGradient": 0.0006261229378794475
+              },
+              "outer": {
+                "meanLuma": -0.004247843865009315,
+                "blueVsRG": -0.002866972477065133,
+                "edgeGradient": 0.000025855493651860684
+              }
+            }
+          },
+          "always": {
+            "sha": "b21f1e20cda16301c93b6a645a5f283ceffd21ddd5c9503d7597d543327ac0ad",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 936,
+                "ge18": 311,
+                "pctGt4": 7.738095
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 74,
+                "ge18": 0,
+                "pctGt4": 0.200087
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 3,
+                "ge18": 0,
+                "pctGt4": 0.001933
+              }
+            },
+            "vsNormal": {
+              "core": {
+                "total": 12096,
+                "gt4": 80,
+                "ge18": 22,
+                "pctGt4": 0.661376
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": 0.23101300705478423,
+                "blueVsRG": 0.5535300925925952,
+                "edgeGradient": 0.011471210602514992
+              },
+              "ring": {
+                "meanLuma": 0.0051914341336782854,
+                "blueVsRG": 0.011721284879946836,
+                "edgeGradient": 0.0005626032195431563
+              },
+              "outer": {
+                "meanLuma": -0.004265024224430647,
+                "blueVsRG": -0.00282187403360723,
+                "edgeGradient": 0.00005386561176878857
+              }
+            }
+          }
+        },
+        {
+          "node": 2,
+          "normal": {
+            "sha": "053f3851e7e45300579e94bdecb366ced7324285dbe276161d9b100f97f0b2c2",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 4,
+                "ge18": 0,
+                "pctGt4": 0.002577
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": 0.0006338183421519261,
+                "blueVsRG": 0.001405423280424145,
+                "edgeGradient": 0.00027842744180972545
+              },
+              "ring": {
+                "meanLuma": -0.00012618069069958437,
+                "blueVsRG": -0.00017575167640160316,
+                "edgeGradient": -0.00013611368214405672
+              },
+              "outer": {
+                "meanLuma": 0.0002254922171829321,
+                "blueVsRG": 0.00048319760849224735,
+                "edgeGradient": -0.00006248410964238005
+              }
+            }
+          },
+          "always": {
+            "sha": "40e3fd3aac60026dce9558b7e0918a2f7a74448f16c6b51a7240e24e72b9b6a0",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 383,
+                "ge18": 91,
+                "pctGt4": 3.166336
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 97,
+                "ge18": 26,
+                "pctGt4": 0.262276
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 4,
+                "ge18": 0,
+                "pctGt4": 0.002577
+              }
+            },
+            "vsNormal": {
+              "core": {
+                "total": 12096,
+                "gt4": 383,
+                "ge18": 91,
+                "pctGt4": 3.166336
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 97,
+                "ge18": 26,
+                "pctGt4": 0.262276
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": -0.2671406525573303,
+                "blueVsRG": 0.398974867724867,
+                "edgeGradient": 0.010329658091099425
+              },
+              "ring": {
+                "meanLuma": -0.021694065902352122,
+                "blueVsRG": 0.03392007354531401,
+                "edgeGradient": -0.003593401208686675
+              },
+              "outer": {
+                "meanLuma": 0.0002684431157149447,
+                "blueVsRG": 0.0006410421606020122,
+                "edgeGradient": -0.00004955636282044651
+              }
+            }
+          }
+        },
+        {
+          "node": 3,
+          "normal": {
+            "sha": "4ee8241e3162d1991233c969684686dd1b770ddadacf71946a547a2f3a229842",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 12,
+                "ge18": 1,
+                "pctGt4": 0.032446
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 3,
+                "ge18": 0,
+                "pctGt4": 0.001933
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": 0.0007164902998226808,
+                "blueVsRG": 0.0005373677248670106,
+                "edgeGradient": 0.00047332665107502336
+              },
+              "ring": {
+                "meanLuma": 0.0022081620881095887,
+                "blueVsRG": -0.0009598745403422981,
+                "edgeGradient": 0.0012431716302829798
+              },
+              "outer": {
+                "meanLuma": 0.00033931209832616105,
+                "blueVsRG": 0.00044776311720440276,
+                "edgeGradient": 0.00003447399153388986
+              }
+            }
+          },
+          "always": {
+            "sha": "e4136db7490db4e514c3617115b93e2b6a10a6a946555d97b29aba0aecbdc091",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 131,
+                "ge18": 60,
+                "pctGt4": 1.083003
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 17,
+                "ge18": 2,
+                "pctGt4": 0.045966
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 3,
+                "ge18": 0,
+                "pctGt4": 0.001933
+              }
+            },
+            "vsNormal": {
+              "core": {
+                "total": 12096,
+                "gt4": 130,
+                "ge18": 60,
+                "pctGt4": 1.074735
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 5,
+                "ge18": 0,
+                "pctGt4": 0.013519
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": 0.05613425925943716,
+                "blueVsRG": -0.0677083333333357,
+                "edgeGradient": 0.03405167613320215
+              },
+              "ring": {
+                "meanLuma": 0.0024965750955772137,
+                "blueVsRG": -0.002081981397363819,
+                "edgeGradient": 0.0019146657955415591
+              },
+              "outer": {
+                "meanLuma": 0.000264148025820532,
+                "blueVsRG": 0.0005508452736826541,
+                "edgeGradient": 0.00010342197459145552
+              }
+            }
+          }
+        },
+        {
+          "node": 4,
+          "normal": {
+            "sha": "00de371f196be4744e6c5f884e3956e984cc9015333ad29c7ffeb677895e1f9c",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 23,
+                "ge18": 0,
+                "pctGt4": 0.062189
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": 0.0002755731922547966,
+                "blueVsRG": 0.000330687830690124,
+                "edgeGradient": 0.00022274195344706982
+              },
+              "ring": {
+                "meanLuma": 0.003506020621642847,
+                "blueVsRG": 0.005326627730909195,
+                "edgeGradient": 0.00019963340048390066
+              },
+              "outer": {
+                "meanLuma": -0.000034360718984771665,
+                "blueVsRG": -0.00005476239563151353,
+                "edgeGradient": -0.00004309248940748134
+              }
+            }
+          },
+          "always": {
+            "sha": "631dca43f91bb11f34989aa501c4678ed21af49bc44dc3e08beb185eb5d04f08",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 435,
+                "ge18": 174,
+                "pctGt4": 3.59623
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 137,
+                "ge18": 11,
+                "pctGt4": 0.37043
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 3,
+                "ge18": 0,
+                "pctGt4": 0.001933
+              }
+            },
+            "vsNormal": {
+              "core": {
+                "total": 12096,
+                "gt4": 435,
+                "ge18": 174,
+                "pctGt4": 3.59623
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 116,
+                "ge18": 9,
+                "pctGt4": 0.313649
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 3,
+                "ge18": 0,
+                "pctGt4": 0.001933
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": 0.39936067019434063,
+                "blueVsRG": 0.3761574074074048,
+                "edgeGradient": 0.12359394141886493
+              },
+              "ring": {
+                "meanLuma": 0.020612517124632745,
+                "blueVsRG": 0.03186513086740206,
+                "edgeGradient": 0.002141521932452317
+              },
+              "outer": {
+                "meanLuma": 0.00023408239690780874,
+                "blueVsRG": 0.00022871353468545408,
+                "edgeGradient": -0.00009911272564133711
+              }
+            }
+          }
+        },
+        {
+          "node": 5,
+          "normal": {
+            "sha": "9e3557b71a03364a2fbf17319364897f75785ecdf0d4b10b94f90a578651bcb3",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 3,
+                "ge18": 0,
+                "pctGt4": 0.001933
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": 0.0006338183421519261,
+                "blueVsRG": 0.001405423280424145,
+                "edgeGradient": 0.00027842744180972545
+              },
+              "ring": {
+                "meanLuma": -0.00015321941017987228,
+                "blueVsRG": 0.00018927103612043084,
+                "edgeGradient": -0.0002087076459567072
+              },
+              "outer": {
+                "meanLuma": -0.00009234443196248776,
+                "blueVsRG": 0.00011918874342597974,
+                "edgeGradient": -0.0000818757298794992
+              }
+            }
+          },
+          "always": {
+            "sha": "ad4c2bace8c41ad41aa79e8c644239f3fac3f49fa12d0a6ac1c712b2bd534af4",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 217,
+                "ge18": 80,
+                "pctGt4": 1.793981
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 53,
+                "ge18": 0,
+                "pctGt4": 0.143305
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 4,
+                "ge18": 0,
+                "pctGt4": 0.002577
+              }
+            },
+            "vsNormal": {
+              "core": {
+                "total": 12096,
+                "gt4": 217,
+                "ge18": 80,
+                "pctGt4": 1.793981
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 53,
+                "ge18": 0,
+                "pctGt4": 0.143305
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 1,
+                "ge18": 0,
+                "pctGt4": 0.000644
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": 0.023175705467295415,
+                "blueVsRG": 0.18597056878306972,
+                "edgeGradient": 0.01865463860117922
+              },
+              "ring": {
+                "meanLuma": -0.00005407743884688898,
+                "blueVsRG": 0.010098961713172372,
+                "edgeGradient": 0.0009164987931282731
+              },
+              "outer": {
+                "meanLuma": -0.00003650826388934547,
+                "blueVsRG": 0.00041232862591300545,
+                "edgeGradient": -0.00006894798305445704
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "mode": "3",
+      "prep": {
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "meshes": 6,
+        "originalMaterials": 4,
+        "faces": 80,
+        "mask": 80,
+        "stencil": true,
+        "originalDepth": 0,
+        "glAlways": 519
+      },
+      "hiddenSHA256": "6c4f7ad5d3bca56202b8892f6ac49ae7f96353c2ae0d2e04401df1f90888810a",
+      "hiddenRetestSHA256": "69f34dfc6e417a2d5ca431babfc3a3abeaa2d4db867fccacd92f76e794cd0c86",
+      "stable": true,
+      "drift": {
+        "core": {
+          "total": 12096,
+          "gt4": 0,
+          "ge18": 0,
+          "pctGt4": 0
+        },
+        "ring": {
+          "total": 36984,
+          "gt4": 0,
+          "ge18": 0,
+          "pctGt4": 0
+        },
+        "outer": {
+          "total": 155216,
+          "gt4": 0,
+          "ge18": 0,
+          "pctGt4": 0
+        }
+      },
+      "byNode": [
+        {
+          "node": 0,
+          "normal": {
+            "sha": "348a398c1d65466942f5a2a5217e59fdbc491100b4698249ba0787aacf9d38fb",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 54,
+                "ge18": 12,
+                "pctGt4": 0.146009
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": 0.00019290123458404196,
+                "blueVsRG": -0.0005373677248670106,
+                "edgeGradient": -0.00005568548836154541
+              },
+              "ring": {
+                "meanLuma": 0.0017394909510670686,
+                "blueVsRG": 0.02200951762924319,
+                "edgeGradient": 0.0018148490952971663
+              },
+              "outer": {
+                "meanLuma": 0.00006872143765690453,
+                "blueVsRG": 0.00005154107823912568,
+                "edgeGradient": 0.000060329485173760133
+              }
+            }
+          },
+          "always": {
+            "sha": "a185f143473b026e48768ccd4a83f369e92cbf700d2f916d43ac9a2bca4437ab",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 380,
+                "ge18": 82,
+                "pctGt4": 3.141534
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 114,
+                "ge18": 18,
+                "pctGt4": 0.308241
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "vsNormal": {
+              "core": {
+                "total": 12096,
+                "gt4": 381,
+                "ge18": 82,
+                "pctGt4": 3.149802
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 67,
+                "ge18": 2,
+                "pctGt4": 0.181159
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": -0.07162147266321028,
+                "blueVsRG": 0.4088955026454997,
+                "edgeGradient": 0.008742621672790607
+              },
+              "ring": {
+                "meanLuma": 0.002199149181649318,
+                "blueVsRG": 0.04476260004325994,
+                "edgeGradient": 0.0010526124752741062
+              },
+              "outer": {
+                "meanLuma": -0.00022334467237783429,
+                "blueVsRG": -0.00013851664776609596,
+                "edgeGradient": -0.00001939162023401053
+              }
+            }
+          }
+        },
+        {
+          "node": 1,
+          "normal": {
+            "sha": "8be24b2338abb43a19ab1fb879c7ffdd12cf8eb627d1a664730f93410c8d5d90",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 903,
+                "ge18": 277,
+                "pctGt4": 7.465278
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 72,
+                "ge18": 0,
+                "pctGt4": 0.194679
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": 0.1937555114641043,
+                "blueVsRG": 0.4975611772486772,
+                "edgeGradient": 0.004844637487471548
+              },
+              "ring": {
+                "meanLuma": 0.004497440334574776,
+                "blueVsRG": 0.009720419640924405,
+                "edgeGradient": 0.0009890927569373709
+              },
+              "outer": {
+                "meanLuma": -0.00548912483257169,
+                "blueVsRG": -0.0035273425420037086,
+                "edgeGradient": 0.000045247113874324896
+              }
+            }
+          },
+          "always": {
+            "sha": "3de39a090e7f38d18cb2953a9c4c091fe755f8ac9cadd9f6ef05eb44b14f45f0",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 948,
+                "ge18": 318,
+                "pctGt4": 7.837302
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 71,
+                "ge18": 0,
+                "pctGt4": 0.191975
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "vsNormal": {
+              "core": {
+                "total": 12096,
+                "gt4": 78,
+                "ge18": 19,
+                "pctGt4": 0.644841
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": 0.20014880952398073,
+                "blueVsRG": 0.5549355158730123,
+                "edgeGradient": 0.009383004788951821
+              },
+              "ring": {
+                "meanLuma": 0.00442533708270787,
+                "blueVsRG": 0.010153039152065446,
+                "edgeGradient": 0.0009618700205082931
+              },
+              "outer": {
+                "meanLuma": -0.004978009140025108,
+                "blueVsRG": -0.003105349963920645,
+                "edgeGradient": 0.00004955636282000242
+              }
+            }
+          }
+        },
+        {
+          "node": 2,
+          "normal": {
+            "sha": "aa88fa8e4edf5490dd4871b1562e9c701787065f08682ea0eb04f14f70c41e63",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": 0.0007164902998084699,
+                "blueVsRG": -0.0010747354497340211,
+                "edgeGradient": -1.1102230246251565e-15
+              },
+              "ring": {
+                "meanLuma": -0.00010815487776483224,
+                "blueVsRG": 0.00008111615833783503,
+                "edgeGradient": 0.000036296981905437065
+              },
+              "outer": {
+                "meanLuma": 0.00034360718832004977,
+                "blueVsRG": 0.00038333676940638384,
+                "edgeGradient": 0.0000043092489403484535
+              }
+            }
+          },
+          "always": {
+            "sha": "ae52fa7357aa810f1f1f350d935f556eb3004c9b9c3f1cc0318bab18dbefc960",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 390,
+                "ge18": 88,
+                "pctGt4": 3.224206
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 96,
+                "ge18": 27,
+                "pctGt4": 0.259572
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "vsNormal": {
+              "core": {
+                "total": 12096,
+                "gt4": 390,
+                "ge18": 88,
+                "pctGt4": 3.224206
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 96,
+                "ge18": 27,
+                "pctGt4": 0.259572
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": -0.2848324514988576,
+                "blueVsRG": 0.38235780423280374,
+                "edgeGradient": 0.005874819022164468
+              },
+              "ring": {
+                "meanLuma": -0.02475845410630484,
+                "blueVsRG": 0.03137843391736794,
+                "edgeGradient": -0.003829331591077789
+              },
+              "outer": {
+                "meanLuma": 0.00031139401438196046,
+                "blueVsRG": 0.00003543449129139731,
+                "edgeGradient": 0.00006679335858628122
+              }
+            }
+          }
+        },
+        {
+          "node": 3,
+          "normal": {
+            "sha": "5938e4ee8e86ae569a804b6c2c16ec0c36f33fb9d7dc9b1b39568b784793515c",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 12,
+                "ge18": 1,
+                "pctGt4": 0.032446
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": 0.00016534391534150927,
+                "blueVsRG": -0.00012400793650613195,
+                "edgeGradient": 2.220446049250313e-16
+              },
+              "ring": {
+                "meanLuma": 0.0021901362751748366,
+                "blueVsRG": -0.0014600908500987941,
+                "edgeGradient": 0.0012794686121848642
+              },
+              "outer": {
+                "meanLuma": -0.00009878706659804948,
+                "blueVsRG": 0.00009019688691935812,
+                "edgeGradient": -0.00005817486070291977
+              }
+            }
+          },
+          "always": {
+            "sha": "04dd2a62a524d07f820a704ee2b077e060d0bd2986d72029cb8147c5a9adda81",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 134,
+                "ge18": 63,
+                "pctGt4": 1.107804
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 17,
+                "ge18": 2,
+                "pctGt4": 0.045966
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "vsNormal": {
+              "core": {
+                "total": 12096,
+                "gt4": 133,
+                "ge18": 63,
+                "pctGt4": 1.099537
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 5,
+                "ge18": 0,
+                "pctGt4": 0.013519
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": 0.06277557319215532,
+                "blueVsRG": -0.07010582010582311,
+                "edgeGradient": 0.03594498273749891
+              },
+              "ring": {
+                "meanLuma": 0.002929194606707597,
+                "blueVsRG": -0.0017169586848382323,
+                "edgeGradient": 0.002041705232211477
+              },
+              "outer": {
+                "meanLuma": -0.0000880493419330719,
+                "blueVsRG": 0.0001320740129884257,
+                "edgeGradient": -0.000008618497881140996
+              }
+            }
+          }
+        },
+        {
+          "node": 4,
+          "normal": {
+            "sha": "df88b72341fad7557db5e28c1acea4b8771198ef49eb69462e06cd5673467674",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 24,
+                "ge18": 0,
+                "pctGt4": 0.064893
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": 0.0003858024691112405,
+                "blueVsRG": -0.00045469576719625593,
+                "edgeGradient": -0.0000556854883619895
+              },
+              "ring": {
+                "meanLuma": 0.0032987237725166096,
+                "blueVsRG": 0.005353666450357508,
+                "edgeGradient": 0.00023593038238889363
+              },
+              "outer": {
+                "meanLuma": -0.00031354155927942884,
+                "blueVsRG": -0.00015784455210621218,
+                "edgeGradient": 0.00006463873411410859
+              }
+            }
+          },
+          "always": {
+            "sha": "200fd05a5189b772884e7568c1cb66e116db25947f27952a208da56c7cf92324",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 438,
+                "ge18": 177,
+                "pctGt4": 3.621032
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 136,
+                "ge18": 10,
+                "pctGt4": 0.367727
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "vsNormal": {
+              "core": {
+                "total": 12096,
+                "gt4": 438,
+                "ge18": 177,
+                "pctGt4": 3.621032
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 116,
+                "ge18": 9,
+                "pctGt4": 0.313649
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": 0.41330467372145563,
+                "blueVsRG": 0.3868634259259238,
+                "edgeGradient": 0.12125515090767092
+              },
+              "ring": {
+                "meanLuma": 0.021036123729373912,
+                "blueVsRG": 0.03191920830629513,
+                "edgeGradient": 0.002250412878171293
+              },
+              "outer": {
+                "meanLuma": 0.00019542658834126314,
+                "blueVsRG": 0.00021904958251894868,
+                "edgeGradient": -0.000021546244703962714
+              }
+            }
+          }
+        },
+        {
+          "node": 5,
+          "normal": {
+            "sha": "c735d8f461ca4f65630d036cf1c3f2f191a3f9b944277a4af220228d938fe06e",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": 0.00022045855385499635,
+                "blueVsRG": -0.00008267195767075464,
+                "edgeGradient": 0
+              },
+              "ring": {
+                "meanLuma": 0.0002974259138994739,
+                "blueVsRG": 0.0002433484750170578,
+                "edgeGradient": -0.00005444547286126422
+              },
+              "outer": {
+                "meanLuma": 0.0002061643129991353,
+                "blueVsRG": 0.00004831976085029055,
+                "edgeGradient": 0.00003662861599806888
+              }
+            }
+          },
+          "always": {
+            "sha": "e6ef0f75d4cc5a9e66cea14f23afb76366302beb05b01015399da334d98f08bf",
+            "vsHidden": {
+              "core": {
+                "total": 12096,
+                "gt4": 203,
+                "ge18": 77,
+                "pctGt4": 1.678241
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 49,
+                "ge18": 0,
+                "pctGt4": 0.13249
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "vsNormal": {
+              "core": {
+                "total": 12096,
+                "gt4": 203,
+                "ge18": 77,
+                "pctGt4": 1.678241
+              },
+              "ring": {
+                "total": 36984,
+                "gt4": 49,
+                "ge18": 0,
+                "pctGt4": 0.13249
+              },
+              "outer": {
+                "total": 155216,
+                "gt4": 0,
+                "ge18": 0,
+                "pctGt4": 0
+              }
+            },
+            "roiDelta": {
+              "core": {
+                "meanLuma": 0.031994047619107846,
+                "blueVsRG": 0.18836805555555713,
+                "edgeGradient": 0.02227419534469277
+              },
+              "ring": {
+                "meanLuma": 0.0006038647343586945,
+                "blueVsRG": 0.012965065974476886,
+                "edgeGradient": 0.0007985336019298295
+              },
+              "outer": {
+                "meanLuma": 0.00002362299418479097,
+                "blueVsRG": -0.000016106586947728374,
+                "edgeGradient": 0.00005171098729039869
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "pageErrors": [
+    "DRIFT_MODE_2"
+  ],
+  "networkRequests": [],
+  "result": "FAILED_PER_NODE_DIAGNOSTIC",
+  "artSignoff": "PENDING",
+  "caveat": "These are screen pixel attribution counts; not WebGL occlusion query nor rejected fragment counts. Depth ALWAYS only inside disposable QA Chrome page."
+}
