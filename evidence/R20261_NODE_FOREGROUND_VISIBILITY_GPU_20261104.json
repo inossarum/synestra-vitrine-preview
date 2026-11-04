@@ -1,0 +1,1960 @@
+{
+  "schema": "synestra.r20261.node_foreground_native_visibility.v1",
+  "date": "2026-11-04",
+  "source": "R20261_RELEASE_ZIP_READ_ONLY",
+  "releaseSha256": "5088f87190de0e0bab84633569c0585664a7151666e29fda1b434c76d0f8ae13",
+  "viewport": [
+    1100,
+    900
+  ],
+  "quality": "balanced",
+  "frame": 18,
+  "powerPct": 145,
+  "modes": [
+    {
+      "mode": "0",
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "state": {
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "mode": "0",
+        "quality": "balanced",
+        "faces": 80,
+        "maskFaces": 80,
+        "ribbons": 28,
+        "nodes": 6,
+        "power": "145",
+        "canvasCount": 1,
+        "lost": false,
+        "foreground": [
+          {
+            "name": "node-plasma-foreground-0",
+            "enabled": true,
+            "visible": true,
+            "group": 3,
+            "stencilEnabled": true,
+            "stencilFunc": 514,
+            "stencilRef": 1,
+            "depthWriteDisabled": true
+          },
+          {
+            "name": "node-plasma-foreground-1",
+            "enabled": true,
+            "visible": true,
+            "group": 3,
+            "stencilEnabled": true,
+            "stencilFunc": 514,
+            "stencilRef": 1,
+            "depthWriteDisabled": true
+          },
+          {
+            "name": "node-plasma-foreground-2",
+            "enabled": true,
+            "visible": true,
+            "group": 3,
+            "stencilEnabled": true,
+            "stencilFunc": 514,
+            "stencilRef": 1,
+            "depthWriteDisabled": true
+          },
+          {
+            "name": "node-plasma-foreground-3",
+            "enabled": true,
+            "visible": true,
+            "group": 3,
+            "stencilEnabled": true,
+            "stencilFunc": 514,
+            "stencilRef": 1,
+            "depthWriteDisabled": true
+          },
+          {
+            "name": "node-plasma-foreground-4",
+            "enabled": true,
+            "visible": true,
+            "group": 3,
+            "stencilEnabled": true,
+            "stencilFunc": 514,
+            "stencilRef": 1,
+            "depthWriteDisabled": true
+          },
+          {
+            "name": "node-plasma-foreground-5",
+            "enabled": true,
+            "visible": true,
+            "group": 3,
+            "stencilEnabled": true,
+            "stencilFunc": 514,
+            "stencilRef": 1,
+            "depthWriteDisabled": true
+          }
+        ]
+      },
+      "baselineSha256": "1cecb243d986f23f35b9f7613e465632643bcec1fe4bcc42d872487c4d3ca80d",
+      "allHiddenSha256": "8f17af4dbd5b60c1cc9e2569e4802f44b3b2add35c4b3a200397008d59e51f79",
+      "baselineRetestSha256": "0af43078240a34f87e16437e43f7ed84e8167a0e6e5d530ae917a1a21f3d6f60",
+      "byNode": [
+        {
+          "node": 0,
+          "diff": {
+            "core": {
+              "pixels": 12096,
+              "changedGt1": 0,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.005126,
+              "maxAbsChannel": 1
+            },
+            "ring": {
+              "pixels": 36984,
+              "changedGt1": 82,
+              "changedGt4": 54,
+              "changedGe18": 13,
+              "pctGt4": 0.146009,
+              "pctGe18": 0.03515,
+              "meanAbsMaxChannel": 0.02347,
+              "maxAbsChannel": 25
+            },
+            "outer": {
+              "pixels": 155216,
+              "changedGt1": 0,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.005908,
+              "maxAbsChannel": 1
+            }
+          },
+          "luma": {
+            "core": {
+              "meanLuma": -0.0016809964726860471,
+              "blueVsRG": -0.0009507275132278892,
+              "edgeGradient": 0.00019489920926596405
+            },
+            "ring": {
+              "meanLuma": -0.0024875621890743105,
+              "blueVsRG": -0.02084685269305453,
+              "edgeGradient": -0.0002631531188184155
+            },
+            "outer": {
+              "meanLuma": 0.00006442634784065149,
+              "blueVsRG": -0.00018361509122755137,
+              "edgeGradient": 0.00011419509693677554
+            }
+          },
+          "sha256": "ec95ad945bb91947a1daadf515c5321e1472a6094a3f7146084c8af4f930aeba"
+        },
+        {
+          "node": 1,
+          "diff": {
+            "core": {
+              "pixels": 12096,
+              "changedGt1": 1230,
+              "changedGt4": 894,
+              "changedGe18": 274,
+              "pctGt4": 7.390873,
+              "pctGe18": 2.265212,
+              "meanAbsMaxChannel": 1.223214,
+              "maxAbsChannel": 52
+            },
+            "ring": {
+              "pixels": 36984,
+              "changedGt1": 193,
+              "changedGt4": 72,
+              "changedGe18": 0,
+              "pctGt4": 0.194679,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.027607,
+              "maxAbsChannel": 9
+            },
+            "outer": {
+              "pixels": 155216,
+              "changedGt1": 1,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.017923,
+              "maxAbsChannel": 2
+            }
+          },
+          "luma": {
+            "core": {
+              "meanLuma": -0.19921186066999041,
+              "blueVsRG": -0.5150462962962976,
+              "edgeGradient": -0.003619556743511554
+            },
+            "ring": {
+              "meanLuma": -0.004713750090175495,
+              "blueVsRG": -0.010450465065972026,
+              "edgeGradient": -0.0004083410464423842
+            },
+            "outer": {
+              "meanLuma": 0.0043015324881068295,
+              "blueVsRG": 0.0029797185857134423,
+              "edgeGradient": -0.00017452458210032162
+            }
+          },
+          "sha256": "b043cc67b23d479df9a47fcca38b61becfad33e1351aa75fdb40b09d47266a57"
+        },
+        {
+          "node": 2,
+          "diff": {
+            "core": {
+              "pixels": 12096,
+              "changedGt1": 0,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.001901,
+              "maxAbsChannel": 1
+            },
+            "ring": {
+              "pixels": 36984,
+              "changedGt1": 0,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.003353,
+              "maxAbsChannel": 1
+            },
+            "outer": {
+              "pixels": 155216,
+              "changedGt1": 0,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.004175,
+              "maxAbsChannel": 1
+            }
+          },
+          "luma": {
+            "core": {
+              "meanLuma": -0.0002480158729838422,
+              "blueVsRG": -0.0004960317460387387,
+              "edgeGradient": 0.00011137097672353491
+            },
+            "ring": {
+              "meanLuma": 0.00018025812964594934,
+              "blueVsRG": -0.000027038719444760773,
+              "edgeGradient": -0.00012703943667080608
+            },
+            "outer": {
+              "meanLuma": 0.00012885269561735413,
+              "blueVsRG": 0.00027059066075452165,
+              "edgeGradient": 0.000019391620236230978
+            }
+          },
+          "sha256": "b29aad82ef76070be45c1648738245a52cab279fb3c822f378532e5bdac37615"
+        },
+        {
+          "node": 3,
+          "diff": {
+            "core": {
+              "pixels": 12096,
+              "changedGt1": 2,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.000827,
+              "maxAbsChannel": 3
+            },
+            "ring": {
+              "pixels": 36984,
+              "changedGt1": 35,
+              "changedGt4": 12,
+              "changedGe18": 1,
+              "pctGt4": 0.032446,
+              "pctGe18": 0.002704,
+              "meanAbsMaxChannel": 0.006219,
+              "maxAbsChannel": 25
+            },
+            "outer": {
+              "pixels": 155216,
+              "changedGt1": 0,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.004639,
+              "maxAbsChannel": 1
+            }
+          },
+          "luma": {
+            "core": {
+              "meanLuma": -0.0001377865961273983,
+              "blueVsRG": 0.00033068783068301855,
+              "edgeGradient": -0.000027842744180661683
+            },
+            "ring": {
+              "meanLuma": -0.0020098781455004655,
+              "blueVsRG": 0.0013519359723126456,
+              "edgeGradient": -0.001261320121233478
+            },
+            "outer": {
+              "meanLuma": -0.000212606947734173,
+              "blueVsRG": 0.00018361509122755137,
+              "edgeGradient": 0.000010773122354645892
+            }
+          },
+          "sha256": "9665d4ca3967827257b2d009a5d1751ca39b77054964bd55022b2e942ba3a47f"
+        },
+        {
+          "node": 4,
+          "diff": {
+            "core": {
+              "pixels": 12096,
+              "changedGt1": 0,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.002315,
+              "maxAbsChannel": 1
+            },
+            "ring": {
+              "pixels": 36984,
+              "changedGt1": 50,
+              "changedGt4": 25,
+              "changedGe18": 0,
+              "pctGt4": 0.067597,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.008544,
+              "maxAbsChannel": 12
+            },
+            "outer": {
+              "pixels": 155216,
+              "changedGt1": 0,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.004368,
+              "maxAbsChannel": 1
+            }
+          },
+          "luma": {
+            "core": {
+              "meanLuma": -0.000496031746010317,
+              "blueVsRG": -0.00024801587301936934,
+              "edgeGradient": 0.0001670564650855244
+            },
+            "ring": {
+              "meanLuma": -0.0035330593409668154,
+              "blueVsRG": -0.005083279255892137,
+              "edgeGradient": -0.00023593038238933772
+            },
+            "outer": {
+              "meanLuma": -0.0007494931794127524,
+              "blueVsRG": -0.0001417379651584838,
+              "edgeGradient": -0.00007110260752085651
+            }
+          },
+          "sha256": "07b262732ab109a8b26098ebb3eb0f6959249fd31bee9c762a6d08de52eba37c"
+        },
+        {
+          "node": 5,
+          "diff": {
+            "core": {
+              "pixels": 12096,
+              "changedGt1": 0,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.001405,
+              "maxAbsChannel": 1
+            },
+            "ring": {
+              "pixels": 36984,
+              "changedGt1": 0,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.003488,
+              "maxAbsChannel": 1
+            },
+            "outer": {
+              "pixels": 155216,
+              "changedGt1": 0,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.00509,
+              "maxAbsChannel": 1
+            }
+          },
+          "luma": {
+            "core": {
+              "meanLuma": -0.00008267195764233293,
+              "blueVsRG": -0.00024801587301936934,
+              "edgeGradient": 0.00011137097672353491
+            },
+            "ring": {
+              "meanLuma": 0.00022532266201835682,
+              "blueVsRG": 0.00010815487778614852,
+              "edgeGradient": 0
+            },
+            "outer": {
+              "meanLuma": 0.0002469676665981524,
+              "blueVsRG": 0.00037367281723632573,
+              "edgeGradient": 0.000008618497886470067
+            }
+          },
+          "sha256": "4c8abf1836e1a372dc22c0a833211029ef332d67927ada4048948016a8e8457a"
+        }
+      ],
+      "allForegroundHidden": {
+        "diff": {
+          "core": {
+            "pixels": 12096,
+            "changedGt1": 1232,
+            "changedGt4": 894,
+            "changedGe18": 274,
+            "pctGt4": 7.390873,
+            "pctGe18": 2.265212,
+            "meanAbsMaxChannel": 1.225364,
+            "maxAbsChannel": 52
+          },
+          "ring": {
+            "pixels": 36984,
+            "changedGt1": 353,
+            "changedGt4": 163,
+            "changedGe18": 14,
+            "pctGt4": 0.440731,
+            "pctGe18": 0.037854,
+            "meanAbsMaxChannel": 0.060756,
+            "maxAbsChannel": 25
+          },
+          "outer": {
+            "pixels": 155216,
+            "changedGt1": 2,
+            "changedGt4": 0,
+            "changedGe18": 0,
+            "pctGt4": 0,
+            "pctGe18": 0,
+            "meanAbsMaxChannel": 0.019109,
+            "maxAbsChannel": 2
+          }
+        },
+        "luma": {
+          "core": {
+            "meanLuma": -0.20025903880056717,
+            "blueVsRG": -0.515087632275133,
+            "edgeGradient": -0.003424657534245812
+          },
+          "ring": {
+            "meanLuma": -0.012284591535092204,
+            "blueVsRG": -0.03543424183430588,
+            "edgeGradient": -0.001960037022925132
+          },
+          "outer": {
+            "meanLuma": 0.005583616809346381,
+            "blueVsRG": 0.0039267858983613735,
+            "edgeGradient": -0.000056020236230303055
+          }
+        }
+      },
+      "drift": {
+        "core": {
+          "pixels": 12096,
+          "changedGt1": 0,
+          "changedGt4": 0,
+          "changedGe18": 0,
+          "pctGt4": 0,
+          "pctGe18": 0,
+          "meanAbsMaxChannel": 0.005622,
+          "maxAbsChannel": 1
+        },
+        "ring": {
+          "pixels": 36984,
+          "changedGt1": 8,
+          "changedGt4": 0,
+          "changedGe18": 0,
+          "pctGt4": 0,
+          "pctGe18": 0,
+          "meanAbsMaxChannel": 0.003921,
+          "maxAbsChannel": 2
+        },
+        "outer": {
+          "pixels": 155216,
+          "changedGt1": 0,
+          "changedGt4": 0,
+          "changedGe18": 0,
+          "pctGt4": 0,
+          "pctGe18": 0,
+          "meanAbsMaxChannel": 0.004684,
+          "maxAbsChannel": 1
+        }
+      }
+    },
+    {
+      "mode": "1",
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "state": {
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "mode": "1",
+        "quality": "balanced",
+        "faces": 80,
+        "maskFaces": 80,
+        "ribbons": 28,
+        "nodes": 6,
+        "power": "145",
+        "canvasCount": 1,
+        "lost": false,
+        "foreground": [
+          {
+            "name": "node-plasma-foreground-0",
+            "enabled": true,
+            "visible": true,
+            "group": 3,
+            "stencilEnabled": true,
+            "stencilFunc": 514,
+            "stencilRef": 1,
+            "depthWriteDisabled": true
+          },
+          {
+            "name": "node-plasma-foreground-1",
+            "enabled": true,
+            "visible": true,
+            "group": 3,
+            "stencilEnabled": true,
+            "stencilFunc": 514,
+            "stencilRef": 1,
+            "depthWriteDisabled": true
+          },
+          {
+            "name": "node-plasma-foreground-2",
+            "enabled": true,
+            "visible": true,
+            "group": 3,
+            "stencilEnabled": true,
+            "stencilFunc": 514,
+            "stencilRef": 1,
+            "depthWriteDisabled": true
+          },
+          {
+            "name": "node-plasma-foreground-3",
+            "enabled": true,
+            "visible": true,
+            "group": 3,
+            "stencilEnabled": true,
+            "stencilFunc": 514,
+            "stencilRef": 1,
+            "depthWriteDisabled": true
+          },
+          {
+            "name": "node-plasma-foreground-4",
+            "enabled": true,
+            "visible": true,
+            "group": 3,
+            "stencilEnabled": true,
+            "stencilFunc": 514,
+            "stencilRef": 1,
+            "depthWriteDisabled": true
+          },
+          {
+            "name": "node-plasma-foreground-5",
+            "enabled": true,
+            "visible": true,
+            "group": 3,
+            "stencilEnabled": true,
+            "stencilFunc": 514,
+            "stencilRef": 1,
+            "depthWriteDisabled": true
+          }
+        ]
+      },
+      "baselineSha256": "71da4ef09419bedbf83f296c57dcc4aa80a35f937d46376a7231f33b7f6d6315",
+      "allHiddenSha256": "addcedf5f630bc44e6dc9f52d2d0b90d3d4c60d1e4f8b9c503159072bd814f20",
+      "baselineRetestSha256": "a67c185ed1e18b11a2ab1fcb42ae75201e17bb2a15d7420ae5851cdda02e023d",
+      "byNode": [
+        {
+          "node": 0,
+          "diff": {
+            "core": {
+              "pixels": 12096,
+              "changedGt1": 0,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.006366,
+              "maxAbsChannel": 1
+            },
+            "ring": {
+              "pixels": 36984,
+              "changedGt1": 83,
+              "changedGt4": 55,
+              "changedGe18": 11,
+              "pctGt4": 0.148713,
+              "pctGe18": 0.029743,
+              "meanAbsMaxChannel": 0.024091,
+              "maxAbsChannel": 26
+            },
+            "outer": {
+              "pixels": 155216,
+              "changedGt1": 3,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.004619,
+              "maxAbsChannel": 2
+            }
+          },
+          "luma": {
+            "core": {
+              "meanLuma": -0.001102292768948132,
+              "blueVsRG": -0.0002066798941768866,
+              "edgeGradient": 0.0001670564650855244
+            },
+            "ring": {
+              "meanLuma": -0.0034068786501251225,
+              "blueVsRG": -0.02198247890979843,
+              "edgeGradient": -0.0017422551314782986
+            },
+            "outer": {
+              "meanLuma": -0.00015462323468540262,
+              "blueVsRG": 0.00001932790434011622,
+              "edgeGradient": 0.0000495563628208906
+            }
+          },
+          "sha256": "6be8daa4e1e5f326a5c59b57eec7b3c12c18b8679db359ba302028ed61030b8e"
+        },
+        {
+          "node": 1,
+          "diff": {
+            "core": {
+              "pixels": 12096,
+              "changedGt1": 1234,
+              "changedGt4": 900,
+              "changedGe18": 280,
+              "pctGt4": 7.440476,
+              "pctGe18": 2.314815,
+              "meanAbsMaxChannel": 1.243386,
+              "maxAbsChannel": 52
+            },
+            "ring": {
+              "pixels": 36984,
+              "changedGt1": 196,
+              "changedGt4": 61,
+              "changedGe18": 0,
+              "pctGt4": 0.164936,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.027336,
+              "maxAbsChannel": 10
+            },
+            "outer": {
+              "pixels": 155216,
+              "changedGt1": 2,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.015488,
+              "maxAbsChannel": 2
+            }
+          },
+          "luma": {
+            "core": {
+              "meanLuma": -0.1808586860670971,
+              "blueVsRG": -0.46792328042327824,
+              "edgeGradient": -0.009188105579685635
+            },
+            "ring": {
+              "meanLuma": -0.005362679356863964,
+              "blueVsRG": -0.009760977720095099,
+              "edgeGradient": -0.0012159488938494611
+            },
+            "outer": {
+              "meanLuma": 0.00499089440960887,
+              "blueVsRG": 0.0030087104422236166,
+              "edgeGradient": -0.00009480347669876821
+            }
+          },
+          "sha256": "016c3af1fe994e73cd07492a3a46535658c3d9c0206cb8ff586acdb6dab739ca"
+        },
+        {
+          "node": 2,
+          "diff": {
+            "core": {
+              "pixels": 12096,
+              "changedGt1": 0,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.005043,
+              "maxAbsChannel": 1
+            },
+            "ring": {
+              "pixels": 36984,
+              "changedGt1": 1,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.002785,
+              "maxAbsChannel": 2
+            },
+            "outer": {
+              "pixels": 155216,
+              "changedGt1": 1,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.002538,
+              "maxAbsChannel": 2
+            }
+          },
+          "luma": {
+            "core": {
+              "meanLuma": -0.0010747354497624428,
+              "blueVsRG": -0.0006200396825377652,
+              "edgeGradient": 0.00022274195344640368
+            },
+            "ring": {
+              "meanLuma": -0.00006309034533558133,
+              "blueVsRG": 0.00005407743889307426,
+              "edgeGradient": -0.00010889094571808755
+            },
+            "outer": {
+              "meanLuma": -0.00012885269557472157,
+              "blueVsRG": -0.000048319760846737836,
+              "edgeGradient": -0.000010773122353757714
+            }
+          },
+          "sha256": "1d21ee515c1f493bb7442ac036625610973f60468a0afdc578dc1491f254e25f"
+        },
+        {
+          "node": 3,
+          "diff": {
+            "core": {
+              "pixels": 12096,
+              "changedGt1": 2,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.003142,
+              "maxAbsChannel": 3
+            },
+            "ring": {
+              "pixels": 36984,
+              "changedGt1": 28,
+              "changedGt4": 12,
+              "changedGe18": 1,
+              "pctGt4": 0.032446,
+              "pctGe18": 0.002704,
+              "meanAbsMaxChannel": 0.006516,
+              "maxAbsChannel": 25
+            },
+            "outer": {
+              "pixels": 155216,
+              "changedGt1": 0,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.002603,
+              "maxAbsChannel": 1
+            }
+          },
+          "luma": {
+            "core": {
+              "meanLuma": -0.0007440476190225809,
+              "blueVsRG": -0.0006200396825377652,
+              "edgeGradient": -0.000055685488361767455
+            },
+            "ring": {
+              "meanLuma": -0.0020819813973673718,
+              "blueVsRG": 0.0010950681375732074,
+              "edgeGradient": -0.0011615034209904174
+            },
+            "outer": {
+              "meanLuma": 0.00001073772460102873,
+              "blueVsRG": -0.00011274610864830947,
+              "edgeGradient": -0.00004740173835049433
+            }
+          },
+          "sha256": "3ef3dee8a769034aff4d0e487b801964517f46be48d9521faa4537405ad649ef"
+        },
+        {
+          "node": 4,
+          "diff": {
+            "core": {
+              "pixels": 12096,
+              "changedGt1": 0,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.006366,
+              "maxAbsChannel": 1
+            },
+            "ring": {
+              "pixels": 36984,
+              "changedGt1": 52,
+              "changedGt4": 23,
+              "changedGe18": 0,
+              "pctGt4": 0.062189,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.010815,
+              "maxAbsChannel": 13
+            },
+            "outer": {
+              "pixels": 155216,
+              "changedGt1": 0,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.002448,
+              "maxAbsChannel": 1
+            }
+          },
+          "luma": {
+            "core": {
+              "meanLuma": -0.00101962081132001,
+              "blueVsRG": -0.0005787037037023879,
+              "edgeGradient": 0.00008352823254242914
+            },
+            "ring": {
+              "meanLuma": -0.003956665945565874,
+              "blueVsRG": -0.005218472853123046,
+              "edgeGradient": -0.00024500462785992383
+            },
+            "outer": {
+              "meanLuma": -0.0003092464694134378,
+              "blueVsRG": -0.00019327904339760948,
+              "edgeGradient": -0.000015082371290997543
+            }
+          },
+          "sha256": "4cb431e1dfbed911e2429efe53d3a8ca8eac32d3e8183d16d3dc0b8a203e7b92"
+        },
+        {
+          "node": 5,
+          "diff": {
+            "core": {
+              "pixels": 12096,
+              "changedGt1": 0,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.000331,
+              "maxAbsChannel": 1
+            },
+            "ring": {
+              "pixels": 36984,
+              "changedGt1": 0,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0,
+              "maxAbsChannel": 0
+            },
+            "outer": {
+              "pixels": 155216,
+              "changedGt1": 0,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.000722,
+              "maxAbsChannel": 1
+            }
+          },
+          "luma": {
+            "core": {
+              "meanLuma": -0.00011022927688486561,
+              "blueVsRG": 0.0001653439153486147,
+              "edgeGradient": 0.000055685488362211544
+            },
+            "ring": {
+              "meanLuma": 0,
+              "blueVsRG": 0,
+              "edgeGradient": 0
+            },
+            "outer": {
+              "meanLuma": 0.00017180359414226132,
+              "blueVsRG": 0.00009019688691935812,
+              "edgeGradient": -0.0000021546244703962714
+            }
+          },
+          "sha256": "c0736d8e464368787fe87006ea17af80b3b87faea86d172dfd2f6fb9027719de"
+        }
+      ],
+      "allForegroundHidden": {
+        "diff": {
+          "core": {
+            "pixels": 12096,
+            "changedGt1": 1236,
+            "changedGt4": 899,
+            "changedGe18": 280,
+            "pctGt4": 7.432209,
+            "pctGe18": 2.314815,
+            "meanAbsMaxChannel": 1.24661,
+            "maxAbsChannel": 52
+          },
+          "ring": {
+            "pixels": 36984,
+            "changedGt1": 358,
+            "changedGt4": 151,
+            "changedGe18": 12,
+            "pctGt4": 0.408285,
+            "pctGe18": 0.032446,
+            "meanAbsMaxChannel": 0.061973,
+            "maxAbsChannel": 26
+          },
+          "outer": {
+            "pixels": 155216,
+            "changedGt1": 2,
+            "changedGt4": 0,
+            "changedGe18": 0,
+            "pctGt4": 0,
+            "pctGe18": 0,
+            "meanAbsMaxChannel": 0.017479,
+            "maxAbsChannel": 2
+          }
+        },
+        "luma": {
+          "core": {
+            "meanLuma": -0.18132716049393593,
+            "blueVsRG": -0.4678406084656075,
+            "edgeGradient": -0.008993206370419893
+          },
+          "ring": {
+            "meanLuma": -0.013735669478592172,
+            "blueVsRG": -0.035650551589874624,
+            "edgeGradient": -0.004401009056088867
+          },
+          "outer": {
+            "meanLuma": 0.005216386626862857,
+            "blueVsRG": 0.0029797185857134423,
+            "edgeGradient": -0.00010342197457768876
+          }
+        }
+      },
+      "drift": {
+        "core": {
+          "pixels": 12096,
+          "changedGt1": 0,
+          "changedGt4": 0,
+          "changedGe18": 0,
+          "pctGt4": 0,
+          "pctGe18": 0,
+          "meanAbsMaxChannel": 0.00124,
+          "maxAbsChannel": 1
+        },
+        "ring": {
+          "pixels": 36984,
+          "changedGt1": 0,
+          "changedGt4": 0,
+          "changedGe18": 0,
+          "pctGt4": 0,
+          "pctGe18": 0,
+          "meanAbsMaxChannel": 0.000243,
+          "maxAbsChannel": 1
+        },
+        "outer": {
+          "pixels": 155216,
+          "changedGt1": 0,
+          "changedGt4": 0,
+          "changedGe18": 0,
+          "pctGt4": 0,
+          "pctGe18": 0,
+          "meanAbsMaxChannel": 0.00038,
+          "maxAbsChannel": 1
+        }
+      }
+    },
+    {
+      "mode": "2",
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "state": {
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "mode": "2",
+        "quality": "balanced",
+        "faces": 80,
+        "maskFaces": 80,
+        "ribbons": 28,
+        "nodes": 6,
+        "power": "145",
+        "canvasCount": 1,
+        "lost": false,
+        "foreground": [
+          {
+            "name": "node-plasma-foreground-0",
+            "enabled": true,
+            "visible": true,
+            "group": 3,
+            "stencilEnabled": true,
+            "stencilFunc": 514,
+            "stencilRef": 1,
+            "depthWriteDisabled": true
+          },
+          {
+            "name": "node-plasma-foreground-1",
+            "enabled": true,
+            "visible": true,
+            "group": 3,
+            "stencilEnabled": true,
+            "stencilFunc": 514,
+            "stencilRef": 1,
+            "depthWriteDisabled": true
+          },
+          {
+            "name": "node-plasma-foreground-2",
+            "enabled": true,
+            "visible": true,
+            "group": 3,
+            "stencilEnabled": true,
+            "stencilFunc": 514,
+            "stencilRef": 1,
+            "depthWriteDisabled": true
+          },
+          {
+            "name": "node-plasma-foreground-3",
+            "enabled": true,
+            "visible": true,
+            "group": 3,
+            "stencilEnabled": true,
+            "stencilFunc": 514,
+            "stencilRef": 1,
+            "depthWriteDisabled": true
+          },
+          {
+            "name": "node-plasma-foreground-4",
+            "enabled": true,
+            "visible": true,
+            "group": 3,
+            "stencilEnabled": true,
+            "stencilFunc": 514,
+            "stencilRef": 1,
+            "depthWriteDisabled": true
+          },
+          {
+            "name": "node-plasma-foreground-5",
+            "enabled": true,
+            "visible": true,
+            "group": 3,
+            "stencilEnabled": true,
+            "stencilFunc": 514,
+            "stencilRef": 1,
+            "depthWriteDisabled": true
+          }
+        ]
+      },
+      "baselineSha256": "b4679918cbb6244ff5e14696245e9521ff3860b32f20007f27635d243b40dac1",
+      "allHiddenSha256": "5d42fa77156f0133cb24798a4942b51a856ecbe2beef82abfa49c89d003bfe3e",
+      "baselineRetestSha256": "4a9903b17e33724e40a12b6e1b92bf9aabf148c111f2f15dff8024ecfaae7c39",
+      "byNode": [
+        {
+          "node": 0,
+          "diff": {
+            "core": {
+              "pixels": 12096,
+              "changedGt1": 0,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.001901,
+              "maxAbsChannel": 1
+            },
+            "ring": {
+              "pixels": 36984,
+              "changedGt1": 81,
+              "changedGt4": 58,
+              "changedGe18": 17,
+              "pctGt4": 0.156825,
+              "pctGe18": 0.045966,
+              "meanAbsMaxChannel": 0.025714,
+              "maxAbsChannel": 29
+            },
+            "outer": {
+              "pixels": 155216,
+              "changedGt1": 0,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.003853,
+              "maxAbsChannel": 1
+            }
+          },
+          "luma": {
+            "core": {
+              "meanLuma": 0.00011022927687065476,
+              "blueVsRG": -0.0005373677248670106,
+              "edgeGradient": 2.220446049250313e-16
+            },
+            "ring": {
+              "meanLuma": -0.004551517773450087,
+              "blueVsRG": -0.022333982262598084,
+              "edgeGradient": -0.002377452314841655
+            },
+            "outer": {
+              "meanLuma": 0.00012885269557472157,
+              "blueVsRG": 0.00005798371302034866,
+              "edgeGradient": -0.000015082371294550256
+            }
+          },
+          "sha256": "e30d3f53c6d19e3ad49934b7cd9a68bc86fed58015edcb21c65ae149ef1f74f0"
+        },
+        {
+          "node": 1,
+          "diff": {
+            "core": {
+              "pixels": 12096,
+              "changedGt1": 1225,
+              "changedGt4": 894,
+              "changedGe18": 270,
+              "pctGt4": 7.390873,
+              "pctGe18": 2.232143,
+              "meanAbsMaxChannel": 1.215112,
+              "maxAbsChannel": 54
+            },
+            "ring": {
+              "pixels": 36984,
+              "changedGt1": 186,
+              "changedGt4": 75,
+              "changedGe18": 0,
+              "pctGt4": 0.20279,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.027823,
+              "maxAbsChannel": 9
+            },
+            "outer": {
+              "pixels": 155216,
+              "changedGt1": 9,
+              "changedGt4": 3,
+              "changedGe18": 0,
+              "pctGt4": 0.001933,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.015417,
+              "maxAbsChannel": 7
+            }
+          },
+          "luma": {
+            "core": {
+              "meanLuma": -0.2295249118166538,
+              "blueVsRG": -0.5009507275132279,
+              "edgeGradient": -0.008018710324087408
+            },
+            "ring": {
+              "meanLuma": -0.00512834378827165,
+              "blueVsRG": -0.011248107289638654,
+              "edgeGradient": -0.0007440881290725621
+            },
+            "outer": {
+              "meanLuma": 0.004501254166235924,
+              "blueVsRG": 0.0031440057726008774,
+              "edgeGradient": -0.00009049422775930793
+            }
+          },
+          "sha256": "7fcb79262e8f808ec095f76024e966930da21cd3cadbeac8a6a67c2df56b10ef"
+        },
+        {
+          "node": 2,
+          "diff": {
+            "core": {
+              "pixels": 12096,
+              "changedGt1": 0,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0,
+              "maxAbsChannel": 0
+            },
+            "ring": {
+              "pixels": 36984,
+              "changedGt1": 0,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0,
+              "maxAbsChannel": 0
+            },
+            "outer": {
+              "pixels": 155216,
+              "changedGt1": 0,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.000638,
+              "maxAbsChannel": 1
+            }
+          },
+          "luma": {
+            "core": {
+              "meanLuma": 0,
+              "blueVsRG": 0,
+              "edgeGradient": 0
+            },
+            "ring": {
+              "meanLuma": 0,
+              "blueVsRG": 0,
+              "edgeGradient": 0
+            },
+            "outer": {
+              "meanLuma": 0.000021475449280217163,
+              "blueVsRG": 0.00009341820430819325,
+              "edgeGradient": 0.000025855493645199346
+            }
+          },
+          "sha256": "c4ea255c07138699051004af0a1239df5e38b6b940a41b115eb62b6210093ff7"
+        },
+        {
+          "node": 3,
+          "diff": {
+            "core": {
+              "pixels": 12096,
+              "changedGt1": 2,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.005043,
+              "maxAbsChannel": 3
+            },
+            "ring": {
+              "pixels": 36984,
+              "changedGt1": 28,
+              "changedGt4": 12,
+              "changedGe18": 1,
+              "pctGt4": 0.032446,
+              "pctGe18": 0.002704,
+              "meanAbsMaxChannel": 0.007327,
+              "maxAbsChannel": 25
+            },
+            "outer": {
+              "pixels": 155216,
+              "changedGt1": 9,
+              "changedGt4": 3,
+              "changedGe18": 0,
+              "pctGt4": 0.001933,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.003453,
+              "maxAbsChannel": 7
+            }
+          },
+          "luma": {
+            "core": {
+              "meanLuma": -0.0008818342151784009,
+              "blueVsRG": -0.001529431216930277,
+              "edgeGradient": -0.0000835282325442055
+            },
+            "ring": {
+              "meanLuma": -0.0017214651381038948,
+              "blueVsRG": 0.0015682457278849427,
+              "edgeGradient": -0.0013339140850447961
+            },
+            "outer": {
+              "meanLuma": 0.00007516407243457479,
+              "blueVsRG": -0.00016106586949860002,
+              "edgeGradient": -0.000015082371294550256
+            }
+          },
+          "sha256": "6172decb6e6ffa708324834b6c237ac85b384542d71867664f7ea86581eeb1eb"
+        },
+        {
+          "node": 4,
+          "diff": {
+            "core": {
+              "pixels": 12096,
+              "changedGt1": 0,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.004216,
+              "maxAbsChannel": 1
+            },
+            "ring": {
+              "pixels": 36984,
+              "changedGt1": 52,
+              "changedGt4": 23,
+              "changedGe18": 0,
+              "pctGt4": 0.062189,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.009058,
+              "maxAbsChannel": 13
+            },
+            "outer": {
+              "pixels": 155216,
+              "changedGt1": 6,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.003473,
+              "maxAbsChannel": 4
+            }
+          },
+          "luma": {
+            "core": {
+              "meanLuma": 0.000330687830640386,
+              "blueVsRG": 0.0003720238095255013,
+              "edgeGradient": 0.00016705646508619054
+            },
+            "ring": {
+              "meanLuma": -0.0032626721465476294,
+              "blueVsRG": -0.005002163097554302,
+              "edgeGradient": -0.0005172319921600277
+            },
+            "outer": {
+              "meanLuma": -0.00014388551010569017,
+              "blueVsRG": 0.0001771724564463284,
+              "edgeGradient": -0.00006679335858450486
+            }
+          },
+          "sha256": "9193e7c799252da98cca01fa800fbfd0ba341279b44721116bcc3161c30ef21e"
+        },
+        {
+          "node": 5,
+          "diff": {
+            "core": {
+              "pixels": 12096,
+              "changedGt1": 0,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.00463,
+              "maxAbsChannel": 1
+            },
+            "ring": {
+              "pixels": 36984,
+              "changedGt1": 0,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.002244,
+              "maxAbsChannel": 1
+            },
+            "outer": {
+              "pixels": 155216,
+              "changedGt1": 0,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.003408,
+              "maxAbsChannel": 1
+            }
+          },
+          "luma": {
+            "core": {
+              "meanLuma": 0.00024801587296963135,
+              "blueVsRG": 0.0004960317460316332,
+              "edgeGradient": 0.0001392137209057509
+            },
+            "ring": {
+              "meanLuma": 0.0000721032518811171,
+              "blueVsRG": 0.0005407743889271899,
+              "edgeGradient": -0.000018148490951830354
+            },
+            "outer": {
+              "meanLuma": 0.0005068206026876965,
+              "blueVsRG": 0.00032213173899720005,
+              "edgeGradient": -0.000053865611758574516
+            }
+          },
+          "sha256": "b7af737a42ec212836eeb11f30f8bbd499a67d1c31e62706b2ed9feb65f6ed72"
+        }
+      ],
+      "allForegroundHidden": {
+        "diff": {
+          "core": {
+            "pixels": 12096,
+            "changedGt1": 1227,
+            "changedGt4": 895,
+            "changedGe18": 270,
+            "pctGt4": 7.39914,
+            "pctGe18": 2.232143,
+            "meanAbsMaxChannel": 1.213707,
+            "maxAbsChannel": 54
+          },
+          "ring": {
+            "pixels": 36984,
+            "changedGt1": 347,
+            "changedGt4": 167,
+            "changedGe18": 18,
+            "pctGt4": 0.451547,
+            "pctGe18": 0.04867,
+            "meanAbsMaxChannel": 0.059242,
+            "maxAbsChannel": 29
+          },
+          "outer": {
+            "pixels": 155216,
+            "changedGt1": 0,
+            "changedGt4": 0,
+            "changedGe18": 0,
+            "pctGt4": 0,
+            "pctGe18": 0,
+            "meanAbsMaxChannel": 0.015198,
+            "maxAbsChannel": 1
+          }
+        },
+        "luma": {
+          "core": {
+            "meanLuma": -0.22913910934752835,
+            "blueVsRG": -0.5004133597883538,
+            "edgeGradient": -0.008157924044992049
+          },
+          "ring": {
+            "meanLuma": -0.01538503136498548,
+            "blueVsRG": -0.03901687216093208,
+            "edgeGradient": -0.004936389539211383
+          },
+          "outer": {
+            "meanLuma": 0.005340944232578693,
+            "blueVsRG": 0.003556334398513883,
+            "edgeGradient": -0.00006248410964948548
+          }
+        }
+      },
+      "drift": {
+        "core": {
+          "pixels": 12096,
+          "changedGt1": 0,
+          "changedGt4": 0,
+          "changedGe18": 0,
+          "pctGt4": 0,
+          "pctGe18": 0,
+          "meanAbsMaxChannel": 0.003638,
+          "maxAbsChannel": 1
+        },
+        "ring": {
+          "pixels": 36984,
+          "changedGt1": 0,
+          "changedGt4": 0,
+          "changedGe18": 0,
+          "pctGt4": 0,
+          "pctGe18": 0,
+          "meanAbsMaxChannel": 0.003785,
+          "maxAbsChannel": 1
+        },
+        "outer": {
+          "pixels": 155216,
+          "changedGt1": 10,
+          "changedGt4": 3,
+          "changedGe18": 0,
+          "pctGt4": 0.001933,
+          "pctGe18": 0,
+          "meanAbsMaxChannel": 0.004342,
+          "maxAbsChannel": 7
+        }
+      }
+    },
+    {
+      "mode": "3",
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "state": {
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "mode": "3",
+        "quality": "balanced",
+        "faces": 80,
+        "maskFaces": 80,
+        "ribbons": 28,
+        "nodes": 6,
+        "power": "145",
+        "canvasCount": 1,
+        "lost": false,
+        "foreground": [
+          {
+            "name": "node-plasma-foreground-0",
+            "enabled": true,
+            "visible": true,
+            "group": 3,
+            "stencilEnabled": true,
+            "stencilFunc": 514,
+            "stencilRef": 1,
+            "depthWriteDisabled": true
+          },
+          {
+            "name": "node-plasma-foreground-1",
+            "enabled": true,
+            "visible": true,
+            "group": 3,
+            "stencilEnabled": true,
+            "stencilFunc": 514,
+            "stencilRef": 1,
+            "depthWriteDisabled": true
+          },
+          {
+            "name": "node-plasma-foreground-2",
+            "enabled": true,
+            "visible": true,
+            "group": 3,
+            "stencilEnabled": true,
+            "stencilFunc": 514,
+            "stencilRef": 1,
+            "depthWriteDisabled": true
+          },
+          {
+            "name": "node-plasma-foreground-3",
+            "enabled": true,
+            "visible": true,
+            "group": 3,
+            "stencilEnabled": true,
+            "stencilFunc": 514,
+            "stencilRef": 1,
+            "depthWriteDisabled": true
+          },
+          {
+            "name": "node-plasma-foreground-4",
+            "enabled": true,
+            "visible": true,
+            "group": 3,
+            "stencilEnabled": true,
+            "stencilFunc": 514,
+            "stencilRef": 1,
+            "depthWriteDisabled": true
+          },
+          {
+            "name": "node-plasma-foreground-5",
+            "enabled": true,
+            "visible": true,
+            "group": 3,
+            "stencilEnabled": true,
+            "stencilFunc": 514,
+            "stencilRef": 1,
+            "depthWriteDisabled": true
+          }
+        ]
+      },
+      "baselineSha256": "27667d7681fbc6c554ff020695e14aeeb24dd7058b5e702d653b7f90aba4cfc9",
+      "allHiddenSha256": "13ee4b4d6ab7d5160b25c6536b83cc91700c30aff4fb90e013390a20bdcfc9c4",
+      "baselineRetestSha256": "9dd5750b12550166e7255739d8a6a9be6d155928144b73abcd2d4cd59a55bb03",
+      "byNode": [
+        {
+          "node": 0,
+          "diff": {
+            "core": {
+              "pixels": 12096,
+              "changedGt1": 0,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.001736,
+              "maxAbsChannel": 1
+            },
+            "ring": {
+              "pixels": 36984,
+              "changedGt1": 84,
+              "changedGt4": 54,
+              "changedGe18": 12,
+              "pctGt4": 0.146009,
+              "pctGe18": 0.032446,
+              "meanAbsMaxChannel": 0.021604,
+              "maxAbsChannel": 24
+            },
+            "outer": {
+              "pixels": 155216,
+              "changedGt1": 0,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.003254,
+              "maxAbsChannel": 1
+            }
+          },
+          "luma": {
+            "core": {
+              "meanLuma": 0.000661375661380248,
+              "blueVsRG": 0.0006200396825448706,
+              "edgeGradient": 0.0002784274418090593
+            },
+            "ring": {
+              "meanLuma": -0.0015412070084721563,
+              "blueVsRG": -0.021901362751460596,
+              "edgeGradient": -0.0017059581495826315
+            },
+            "outer": {
+              "meanLuma": 0.0000901968869655434,
+              "blueVsRG": 0.0003189104216048122,
+              "edgeGradient": -0.00005386561176301541
+            }
+          },
+          "sha256": "7ba92bc1ead3febbf28d8901bbaf0812a419fee00b641b2be4a50b7f93e5f02d"
+        },
+        {
+          "node": 1,
+          "diff": {
+            "core": {
+              "pixels": 12096,
+              "changedGt1": 1226,
+              "changedGt4": 903,
+              "changedGe18": 277,
+              "pctGt4": 7.465278,
+              "pctGe18": 2.290013,
+              "meanAbsMaxChannel": 1.224868,
+              "maxAbsChannel": 52
+            },
+            "ring": {
+              "pixels": 36984,
+              "changedGt1": 184,
+              "changedGt4": 69,
+              "changedGe18": 0,
+              "pctGt4": 0.186567,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.026714,
+              "maxAbsChannel": 10
+            },
+            "outer": {
+              "pixels": 155216,
+              "changedGt1": 2,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.016171,
+              "maxAbsChannel": 2
+            }
+          },
+          "luma": {
+            "core": {
+              "meanLuma": -0.1923500881836162,
+              "blueVsRG": -0.49768518518518334,
+              "edgeGradient": -0.004928165720014421
+            },
+            "ring": {
+              "meanLuma": -0.004263104766039305,
+              "blueVsRG": -0.009950248756219082,
+              "edgeGradient": -0.0009981670024146183
+            },
+            "outer": {
+              "meanLuma": 0.005098271655917586,
+              "blueVsRG": 0.003185882898669945,
+              "edgeGradient": 0.000008618497883805532
+            }
+          },
+          "sha256": "b0741760373d307b2245533e11ba3eff17a2856503a2b3939a012c0ae540949b"
+        },
+        {
+          "node": 2,
+          "diff": {
+            "core": {
+              "pixels": 12096,
+              "changedGt1": 0,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.002976,
+              "maxAbsChannel": 1
+            },
+            "ring": {
+              "pixels": 36984,
+              "changedGt1": 0,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.001703,
+              "maxAbsChannel": 1
+            },
+            "outer": {
+              "pixels": 155216,
+              "changedGt1": 6,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.002545,
+              "maxAbsChannel": 2
+            }
+          },
+          "luma": {
+            "core": {
+              "meanLuma": 0.0007440476190225809,
+              "blueVsRG": 0.0014880952380948997,
+              "edgeGradient": 0.00025058469762750946
+            },
+            "ring": {
+              "meanLuma": 0.00014420650371960164,
+              "blueVsRG": -0.000013519359722380386,
+              "edgeGradient": -0.000027222736430854155
+            },
+            "outer": {
+              "meanLuma": -0.00023837748686617033,
+              "blueVsRG": 0.00019327904339760948,
+              "edgeGradient": 0.00005386561176168314
+            }
+          },
+          "sha256": "d4ecba1f881501b892bca3a0b8ec9a9af2cfd4121c87963228c1a9aee4ae68f5"
+        },
+        {
+          "node": 3,
+          "diff": {
+            "core": {
+              "pixels": 12096,
+              "changedGt1": 2,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.003803,
+              "maxAbsChannel": 3
+            },
+            "ring": {
+              "pixels": 36984,
+              "changedGt1": 28,
+              "changedGt4": 12,
+              "changedGe18": 1,
+              "pctGt4": 0.032446,
+              "pctGe18": 0.002704,
+              "meanAbsMaxChannel": 0.006354,
+              "maxAbsChannel": 25
+            },
+            "outer": {
+              "pixels": 155216,
+              "changedGt1": 7,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.004529,
+              "maxAbsChannel": 2
+            }
+          },
+          "luma": {
+            "core": {
+              "meanLuma": 0.0002755731921837423,
+              "blueVsRG": 0.0005787037037023879,
+              "edgeGradient": -0.00005568548836243359
+            },
+            "ring": {
+              "meanLuma": -0.0019197490806703854,
+              "blueVsRG": 0.0013384166125902652,
+              "edgeGradient": -0.0013611368214747621
+            },
+            "outer": {
+              "meanLuma": 0.00017824622885598274,
+              "blueVsRG": 0.0003028038346570838,
+              "edgeGradient": 0.0000409378649397496
+            }
+          },
+          "sha256": "7b66e1c03d131ca763b0ecca69d5f5868870d87ffd0fa64be8a7dfb58a271fb6"
+        },
+        {
+          "node": 4,
+          "diff": {
+            "core": {
+              "pixels": 12096,
+              "changedGt1": 0,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.000992,
+              "maxAbsChannel": 1
+            },
+            "ring": {
+              "pixels": 36984,
+              "changedGt1": 46,
+              "changedGt4": 24,
+              "changedGe18": 0,
+              "pctGt4": 0.064893,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.008652,
+              "maxAbsChannel": 13
+            },
+            "outer": {
+              "pixels": 155216,
+              "changedGt1": 7,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.003331,
+              "maxAbsChannel": 2
+            }
+          },
+          "luma": {
+            "core": {
+              "meanLuma": 0.00038580246915387306,
+              "blueVsRG": 0.00004133597883537732,
+              "edgeGradient": -2.220446049250313e-16
+            },
+            "ring": {
+              "meanLuma": -0.0028751171678749188,
+              "blueVsRG": -0.00509679861561807,
+              "edgeGradient": -0.00025407887334560897
+            },
+            "outer": {
+              "meanLuma": 0.0003715252723068829,
+              "blueVsRG": 0.0003607875476774325,
+              "edgeGradient": 0.0000366286159971807
+            }
+          },
+          "sha256": "c0adb10ce5df4cf95ce8c29d6fd94aa05e974390994815132a47f1e45c0c60e6"
+        },
+        {
+          "node": 5,
+          "diff": {
+            "core": {
+              "pixels": 12096,
+              "changedGt1": 0,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0,
+              "maxAbsChannel": 0
+            },
+            "ring": {
+              "pixels": 36984,
+              "changedGt1": 0,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.000027,
+              "maxAbsChannel": 1
+            },
+            "outer": {
+              "pixels": 155216,
+              "changedGt1": 0,
+              "changedGt4": 0,
+              "changedGe18": 0,
+              "pctGt4": 0,
+              "pctGe18": 0,
+              "meanAbsMaxChannel": 0.000515,
+              "maxAbsChannel": 1
+            }
+          },
+          "luma": {
+            "core": {
+              "meanLuma": 0,
+              "blueVsRG": 0,
+              "edgeGradient": 0
+            },
+            "ring": {
+              "meanLuma": 0.000009012906474481497,
+              "blueVsRG": -0.000013519359722380386,
+              "edgeGradient": 0
+            },
+            "outer": {
+              "meanLuma": 0.0001352953303737081,
+              "blueVsRG": 0.00016428718688743515,
+              "edgeGradient": -0.00001723699576450244
+            }
+          },
+          "sha256": "bb5b852d468458e0135206a3e343aa80225700b6c985da538bcc3add6cf9364a"
+        }
+      ],
+      "allForegroundHidden": {
+        "diff": {
+          "core": {
+            "pixels": 12096,
+            "changedGt1": 1228,
+            "changedGt4": 903,
+            "changedGe18": 277,
+            "pctGt4": 7.465278,
+            "pctGe18": 2.290013,
+            "meanAbsMaxChannel": 1.226025,
+            "maxAbsChannel": 52
+          },
+          "ring": {
+            "pixels": 36984,
+            "changedGt1": 342,
+            "changedGt4": 159,
+            "changedGe18": 13,
+            "pctGt4": 0.429916,
+            "pctGe18": 0.03515,
+            "meanAbsMaxChannel": 0.059783,
+            "maxAbsChannel": 25
+          },
+          "outer": {
+            "pixels": 155216,
+            "changedGt1": 1,
+            "changedGt4": 0,
+            "changedGe18": 0,
+            "pctGt4": 0,
+            "pctGe18": 0,
+            "meanAbsMaxChannel": 0.019038,
+            "maxAbsChannel": 2
+          }
+        },
+        "luma": {
+          "core": {
+            "meanLuma": -0.19257054673741436,
+            "blueVsRG": -0.4980985449735442,
+            "edgeGradient": -0.005067379440919284
+          },
+          "ring": {
+            "meanLuma": -0.011221068570264947,
+            "blueVsRG": -0.03573166774821601,
+            "edgeGradient": -0.004255821128477777
+          },
+          "outer": {
+            "meanLuma": 0.006214995017742808,
+            "blueVsRG": 0.004129728893929041,
+            "edgeGradient": 0.000043092489415474944
+          }
+        }
+      },
+      "drift": {
+        "core": {
+          "pixels": 12096,
+          "changedGt1": 0,
+          "changedGt4": 0,
+          "changedGe18": 0,
+          "pctGt4": 0,
+          "pctGe18": 0,
+          "meanAbsMaxChannel": 0.005043,
+          "maxAbsChannel": 1
+        },
+        "ring": {
+          "pixels": 36984,
+          "changedGt1": 0,
+          "changedGt4": 0,
+          "changedGe18": 0,
+          "pctGt4": 0,
+          "pctGe18": 0,
+          "meanAbsMaxChannel": 0.000838,
+          "maxAbsChannel": 1
+        },
+        "outer": {
+          "pixels": 155216,
+          "changedGt1": 0,
+          "changedGt4": 0,
+          "changedGe18": 0,
+          "pctGt4": 0,
+          "pctGe18": 0,
+          "meanAbsMaxChannel": 0.003376,
+          "maxAbsChannel": 1
+        }
+      }
+    }
+  ],
+  "originalGeometryIntact": true,
+  "artSignoff": "PENDING",
+  "jsErrors": [
+    "NON_DETERMINISTIC_BASELINE_MODE_2"
+  ],
+  "externalRequests": [],
+  "definition": "Comparison when each original foreground clone is hidden, with the exact facet stencil and depth policy unchanged.",
+  "disclaimer": "Measures FINAL SCREEN PIXEL contribution, not number of passed/rejected GPU stencil fragments.",
+  "result": "FAILED_DIAGNOSTIC"
+}
