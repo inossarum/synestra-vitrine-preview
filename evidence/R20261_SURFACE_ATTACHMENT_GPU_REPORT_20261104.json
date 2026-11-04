@@ -1,0 +1,261 @@
+{
+  "schema": "synestra.r20261.surface-attachment.fixed-view-gpu-ab.v1",
+  "date": "2026-11-04",
+  "originalZipSha256": "5088f87190de0e0bab84633569c0585664a7151666e29fda1b434c76d0f8ae13",
+  "candidateBranch": "task/SYN_LAB_R20261_SURFACE_ATTACHMENT_EXP_20261104",
+  "expectedRenderer": "NVIDIA RTX 3090 ANGLE D3D11",
+  "viewport": [
+    1100,
+    900
+  ],
+  "frame": 18,
+  "powerPct": 145,
+  "quality": "balanced",
+  "gates": {
+    "ringChangedPctMin": 0.5,
+    "ringMeanLumaDeltaMin": 0.05,
+    "coreEdgeGradientMin": -0.05,
+    "coreMeanLumaDeltaMin": -0.5,
+    "outerMeanLumaDeltaAbsMax": 1,
+    "driftPctMax": 0.12
+  },
+  "profiles": [
+    {
+      "mode": "0",
+      "pass": false,
+      "baselineSha256": "28aa2838712e02cc2c3d9af5d3ddf4c89d2f6232761a078523c55692ef55f80b",
+      "candidateSha256": "4204f6db6231ca5897c02cc549d1326913d8b8db91148d3a4682a307654c7a80",
+      "retestSha256": "e5d40c27431fc39743d772713a29eebe44d472f6b1b70e657baa70cb13ecfdc0",
+      "baselineState": {
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "mode": "0",
+        "quality": "balanced",
+        "faces": 80,
+        "mask": 80,
+        "ribbons": 28,
+        "nodes": 6,
+        "canvasCount": 1,
+        "lost": false,
+        "visibleCoreMist": 12
+      },
+      "candidateState": {
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "mode": "0",
+        "quality": "balanced",
+        "faces": 80,
+        "mask": 80,
+        "ribbons": 28,
+        "nodes": 6,
+        "canvasCount": 1,
+        "lost": false,
+        "visibleCoreMist": 12
+      },
+      "delta": {
+        "core": {
+          "meanLuma": -0.9801311728390516,
+          "blueVsRG": -0.7231316137566068,
+          "edgeGradient": -0.14222073727586793
+        },
+        "ring": {
+          "meanLuma": -0.3753785420723972,
+          "blueVsRG": -0.3290071382219324,
+          "edgeGradient": 0.0002087076459615922
+        },
+        "outer": {
+          "meanLuma": 0.03946113802721385,
+          "blueVsRG": 0.029552365735490582,
+          "edgeGradient": 0.0007110260752591913
+        }
+      },
+      "changedPercent": {
+        "core": 5.745701058201059,
+        "ring": 4.353233830845771,
+        "outer": 1.6183898567158026
+      },
+      "driftPercent": {
+        "core": 0,
+        "ring": 0,
+        "outer": 0
+      }
+    },
+    {
+      "mode": "1",
+      "pass": false,
+      "baselineSha256": "14d56bec720c370668887f984fead700a9d5bb08dafc8d56a8946c4598c1524d",
+      "candidateSha256": "694819ed43efea7e4d5f99b466e799a90850f019443134075df446cf826d67a0",
+      "retestSha256": "35fd49cb1d145dc5fafa629815cabaae85f7b332aa8d9260d83c71881df4b3c2",
+      "baselineState": {
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "mode": "1",
+        "quality": "balanced",
+        "faces": 80,
+        "mask": 80,
+        "ribbons": 28,
+        "nodes": 6,
+        "canvasCount": 1,
+        "lost": false,
+        "visibleCoreMist": 12
+      },
+      "candidateState": {
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "mode": "1",
+        "quality": "balanced",
+        "faces": 80,
+        "mask": 80,
+        "ribbons": 28,
+        "nodes": 6,
+        "canvasCount": 1,
+        "lost": false,
+        "visibleCoreMist": 12
+      },
+      "delta": {
+        "core": {
+          "meanLuma": -0.9060570987657712,
+          "blueVsRG": -0.6514550264550252,
+          "edgeGradient": -0.13626239002116347
+        },
+        "ring": {
+          "meanLuma": -0.3893845987461475,
+          "blueVsRG": -0.3554915639195322,
+          "edgeGradient": 0.000417415291911194
+        },
+        "outer": {
+          "meanLuma": 0.027415558533483875,
+          "blueVsRG": 0.01528515101536243,
+          "edgeGradient": -0.004785420948980601
+        }
+      },
+      "changedPercent": {
+        "core": 5.431547619047619,
+        "ring": 4.107181483884923,
+        "outer": 1.6641325636532316
+      },
+      "driftPercent": {
+        "core": 0,
+        "ring": 0,
+        "outer": 0
+      }
+    },
+    {
+      "mode": "2",
+      "pass": false,
+      "baselineSha256": "247e19dc47e3db95dbfbcfb7a4b809b53eed876e9e994d26898fdf0f930cd303",
+      "candidateSha256": "61ea72f92ed9b2c7dfdd18fbf81fba625c1f9ebb4191b4f591ab80bb9a5ad17b",
+      "retestSha256": "87c16a9766dc788ba7b8fa09a344c2d0b5df64a693ee0466cadab9ee0cc218aa",
+      "baselineState": {
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "mode": "2",
+        "quality": "balanced",
+        "faces": 80,
+        "mask": 80,
+        "ribbons": 28,
+        "nodes": 6,
+        "canvasCount": 1,
+        "lost": false,
+        "visibleCoreMist": 12
+      },
+      "candidateState": {
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "mode": "2",
+        "quality": "balanced",
+        "faces": 80,
+        "mask": 80,
+        "ribbons": 28,
+        "nodes": 6,
+        "canvasCount": 1,
+        "lost": false,
+        "visibleCoreMist": 12
+      },
+      "delta": {
+        "core": {
+          "meanLuma": -0.9279376102282981,
+          "blueVsRG": -0.6718336640211575,
+          "edgeGradient": -0.18866243456954934
+        },
+        "ring": {
+          "meanLuma": -0.3472672867547857,
+          "blueVsRG": -0.3440812243132143,
+          "edgeGradient": 0.00007259396381043004
+        },
+        "outer": {
+          "meanLuma": 0.029129299385367347,
+          "blueVsRG": 0.01914106793114101,
+          "edgeGradient": -0.0011247139736023648
+        }
+      },
+      "changedPercent": {
+        "core": 5.555555555555555,
+        "ring": 4.142331819165045,
+        "outer": 1.6364292340995774
+      },
+      "driftPercent": {
+        "core": 0,
+        "ring": 0,
+        "outer": 0
+      }
+    },
+    {
+      "mode": "3",
+      "pass": false,
+      "baselineSha256": "caf7a12ce12e1b82f3d346a6aaa3afd4afa2ba7eeb6c079750c6cfeb21c36e01",
+      "candidateSha256": "1575f7905655f95950b041683d4f597743b0e8d1d7a6ae69d3f6c74ea175fcab",
+      "retestSha256": "6cfb2d4a42a5ae8798744b91e38d1d799555ad16e0ae2f2cc553e12d10352273",
+      "baselineState": {
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "mode": "3",
+        "quality": "balanced",
+        "faces": 80,
+        "mask": 80,
+        "ribbons": 28,
+        "nodes": 6,
+        "canvasCount": 1,
+        "lost": false,
+        "visibleCoreMist": 12
+      },
+      "candidateState": {
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "mode": "3",
+        "quality": "balanced",
+        "faces": 80,
+        "mask": 80,
+        "ribbons": 28,
+        "nodes": 6,
+        "canvasCount": 1,
+        "lost": false,
+        "visibleCoreMist": 12
+      },
+      "delta": {
+        "core": {
+          "meanLuma": -0.9638999118168385,
+          "blueVsRG": -0.7020916005291014,
+          "edgeGradient": -0.18615658759326736
+        },
+        "ring": {
+          "meanLuma": -0.3726926959411969,
+          "blueVsRG": -0.3591553104044998,
+          "edgeGradient": 0.014954356545256342
+        },
+        "outer": {
+          "meanLuma": 0.031949025873679204,
+          "blueVsRG": 0.021966163282137074,
+          "edgeGradient": -0.0012755376865385415
+        }
+      },
+      "changedPercent": {
+        "core": 5.753968253968254,
+        "ring": 4.31808349556565,
+        "outer": 1.5971291619420678
+      },
+      "driftPercent": {
+        "core": 0,
+        "ring": 0,
+        "outer": 0
+      }
+    }
+  ],
+  "errors": [],
+  "external": [],
+  "artSignoff": "PENDING",
+  "status": "REJECT_GPU_VISUAL_GATES",
+  "powerZero": true
+}
