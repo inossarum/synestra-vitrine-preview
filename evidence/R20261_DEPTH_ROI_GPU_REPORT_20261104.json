@@ -1,0 +1,639 @@
+{
+  "schema": "synestra.r20261.depth-roi-diagnostic.v1",
+  "baseHead": "dd2b0f1eecf3e2782d750df7e4dea811ed285a8d",
+  "viewport": [
+    1100,
+    900
+  ],
+  "frame": 18,
+  "powerPercent": 145,
+  "quality": "balanced",
+  "modes": [
+    {
+      "mode": "0",
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "geometry": {
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "quality": "balanced",
+        "faces": 80,
+        "mask": 80,
+        "ribbons": 28,
+        "nodes": 6,
+        "mode": "0",
+        "lost": false,
+        "canvasCount": 1
+      },
+      "baseline": {
+        "core": {
+          "count": 12096,
+          "meanLuma": 119.71932870370405,
+          "blueVsRG": 40.062375992063494,
+          "edgeGradient": 1.8832553736496052
+        },
+        "ring": {
+          "count": 36984,
+          "meanLuma": 69.71347970293411,
+          "blueVsRG": 28.954601990049753,
+          "edgeGradient": 2.1777735431298577
+        },
+        "outer": {
+          "count": 155216,
+          "meanLuma": 40.671217314370054,
+          "blueVsRG": 23.442818395010825,
+          "edgeGradient": 2.0881995526999106
+        }
+      },
+      "retest": {
+        "core": {
+          "meanLuma": 0.00013778659614160915,
+          "blueVsRG": 0.00004133597883537732,
+          "edgeGradient": -0.000055685488360879276
+        },
+        "ring": {
+          "meanLuma": 0.00006309034536400304,
+          "blueVsRG": 0.00014871295695328968,
+          "edgeGradient": -0.00007259396381265049
+        },
+        "outer": {
+          "meanLuma": 0.00023408239702149558,
+          "blueVsRG": 0.00009341820430819325,
+          "edgeGradient": 0.000010773122356866338
+        }
+      },
+      "driftPercent": {
+        "core": 0,
+        "ring": 0,
+        "outer": 0
+      },
+      "layers": [
+        {
+          "variant": "mist-hidden",
+          "hiddenCount": 18,
+          "hiddenSample": [
+            "core plasma diffusion 0",
+            "core plasma diffusion 1",
+            "core plasma diffusion 2",
+            "core plasma diffusion 3"
+          ],
+          "delta": {
+            "core": {
+              "meanLuma": -4.375826719575329,
+              "blueVsRG": -5.168774801587304,
+              "edgeGradient": 0.04401937854995208
+            },
+            "ring": {
+              "meanLuma": -1.8707639339531852,
+              "blueVsRG": -3.689068245727885,
+              "edgeGradient": 0.010789277871554148
+            },
+            "outer": {
+              "meanLuma": -0.056446070851905006,
+              "blueVsRG": -0.19006738995980044,
+              "edgeGradient": 0.0036434699796172865
+            }
+          },
+          "changedPercent": {
+            "core": 18.96494708994709,
+            "ring": 18.50259571706684,
+            "outer": 1.1416348830017524
+          },
+          "captureSha256": "e756752939370243a1272e82e3de947ad6789c1d2bb86846cb0c634e4cb68f35"
+        },
+        {
+          "variant": "volume-hidden",
+          "hiddenCount": 1,
+          "hiddenSample": [
+            "r20215-volume-carrier"
+          ],
+          "delta": {
+            "core": {
+              "meanLuma": -2.016341490299581,
+              "blueVsRG": 4.049065806878303,
+              "edgeGradient": 0.07553736496268404
+            },
+            "ring": {
+              "meanLuma": -29.03690785204408,
+              "blueVsRG": 5.961429266709928,
+              "edgeGradient": -0.0017331808859464282
+            },
+            "outer": {
+              "meanLuma": -25.32585343435791,
+              "blueVsRG": -7.646817982682199,
+              "edgeGradient": -0.17699162712911143
+            }
+          },
+          "changedPercent": {
+            "core": 0,
+            "ring": 71.80131948950898,
+            "outer": 55.235285022162664
+          },
+          "captureSha256": "9b737a4c8e5d57a31c8f34ee682abbbe12a79686413b487e0948e2b5ae8cc841"
+        },
+        {
+          "variant": "ribbons-hidden",
+          "hiddenCount": 28,
+          "hiddenSample": [
+            "plasma-ribbon-0",
+            "plasma-ribbon-1",
+            "plasma-ribbon-2",
+            "plasma-ribbon-3"
+          ],
+          "delta": {
+            "core": {
+              "meanLuma": -0.9467868165780402,
+              "blueVsRG": -0.6191302910052912,
+              "edgeGradient": -0.1420258380665873
+            },
+            "ring": {
+              "meanLuma": -1.6131300021628476,
+              "blueVsRG": -1.1722501622323165,
+              "edgeGradient": -0.41957496234183433
+            },
+            "outer": {
+              "meanLuma": -2.9268267017113345,
+              "blueVsRG": -2.6033688537264226,
+              "edgeGradient": -0.7136935003598444
+            }
+          },
+          "changedPercent": {
+            "core": 2.4718915343915344,
+            "ring": 5.1022063595068134,
+            "outer": 9.685212864653128
+          },
+          "captureSha256": "48d30e7d6838211439d2307671dc09b338914fd63e7d3d5516015a9d5630a75f"
+        }
+      ]
+    },
+    {
+      "mode": "1",
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "geometry": {
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "quality": "balanced",
+        "faces": 80,
+        "mask": 80,
+        "ribbons": 28,
+        "nodes": 6,
+        "mode": "1",
+        "lost": false,
+        "canvasCount": 1
+      },
+      "baseline": {
+        "core": {
+          "count": 12096,
+          "meanLuma": 121.38536155202848,
+          "blueVsRG": 41.74933862433863,
+          "edgeGradient": 1.924434792293109
+        },
+        "ring": {
+          "count": 36984,
+          "meanLuma": 70.22214110606429,
+          "blueVsRG": 29.745511572571925,
+          "edgeGradient": 2.201166947968251
+        },
+        "outer": {
+          "count": 155216,
+          "meanLuma": 40.99716524069997,
+          "blueVsRG": 23.402458509432016,
+          "edgeGradient": 2.277879763335926
+        }
+      },
+      "retest": {
+        "core": {
+          "meanLuma": -0.000055114638470854516,
+          "blueVsRG": -0.0004133597883608786,
+          "edgeGradient": -0.00005568548836243359
+        },
+        "ring": {
+          "meanLuma": -0.0002072968491120264,
+          "blueVsRG": 0.000027038719444760773,
+          "edgeGradient": 0.00000907424547458291
+        },
+        "outer": {
+          "meanLuma": 0.00005798371298482152,
+          "blueVsRG": -0.000057983713016795946,
+          "edgeGradient": -0.00009264885222837194
+        }
+      },
+      "driftPercent": {
+        "core": 0,
+        "ring": 0,
+        "outer": 0
+      },
+      "layers": [
+        {
+          "variant": "mist-hidden",
+          "hiddenCount": 18,
+          "hiddenSample": [
+            "core plasma diffusion 0",
+            "core plasma diffusion 1",
+            "core plasma diffusion 2",
+            "core plasma diffusion 3"
+          ],
+          "delta": {
+            "core": {
+              "meanLuma": -5.745618386242157,
+              "blueVsRG": -7.046750992063494,
+              "edgeGradient": 0.04137431785276258
+            },
+            "ring": {
+              "meanLuma": -2.3227431682183095,
+              "blueVsRG": -4.231654228855724,
+              "edgeGradient": -0.018166639443929267
+            },
+            "outer": {
+              "meanLuma": 0.00026629557083879263,
+              "blueVsRG": -0.05502010102051358,
+              "edgeGradient": -0.0022494279472051737
+            }
+          },
+          "changedPercent": {
+            "core": 28.703703703703702,
+            "ring": 22.985615401254595,
+            "outer": 0.302803834656221
+          },
+          "captureSha256": "2cbb3195fa93603d7eea919c21257ad90c02d7cbc888cc4fafc853ca830917b3"
+        },
+        {
+          "variant": "volume-hidden",
+          "hiddenCount": 1,
+          "hiddenSample": [
+            "r20215-volume-carrier"
+          ],
+          "delta": {
+            "core": {
+              "meanLuma": -1.6169257054674233,
+              "blueVsRG": 3.9804480820105823,
+              "edgeGradient": 0.08411293017038624
+            },
+            "ring": {
+              "meanLuma": -29.205521306511542,
+              "blueVsRG": 5.599286177806615,
+              "edgeGradient": -0.04989927587518839
+            },
+            "outer": {
+              "meanLuma": -25.74832706250655,
+              "blueVsRG": -7.830436295227294,
+              "edgeGradient": -0.14047936085216817
+            }
+          },
+          "changedPercent": {
+            "core": 0,
+            "ring": 71.1037205277958,
+            "outer": 55.53100195856097
+          },
+          "captureSha256": "cf6e94a293e69e368bb9c5de79cc00e3c4298eb672397703d28d60fe463df56f"
+        },
+        {
+          "variant": "ribbons-hidden",
+          "hiddenCount": 28,
+          "hiddenSample": [
+            "plasma-ribbon-0",
+            "plasma-ribbon-1",
+            "plasma-ribbon-2",
+            "plasma-ribbon-3"
+          ],
+          "delta": {
+            "core": {
+              "meanLuma": -1.0026179453265058,
+              "blueVsRG": -0.4209242724867721,
+              "edgeGradient": -0.17226305824701638
+            },
+            "ring": {
+              "meanLuma": -1.6484696084798287,
+              "blueVsRG": -1.248256002595717,
+              "edgeGradient": -0.4026242717917774
+            },
+            "outer": {
+              "meanLuma": -3.3242213002070784,
+              "blueVsRG": -2.7929949232037927,
+              "edgeGradient": -0.8753872937485165
+            }
+          },
+          "changedPercent": {
+            "core": 1.9097222222222223,
+            "ring": 4.948085658663206,
+            "outer": 10.944103700649418
+          },
+          "captureSha256": "3fd61daab5f3d5f660b6f44babfadd996b85b8ab3e14a47711b75c3fc9904636"
+        }
+      ]
+    },
+    {
+      "mode": "2",
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "geometry": {
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "quality": "balanced",
+        "faces": 80,
+        "mask": 80,
+        "ribbons": 28,
+        "nodes": 6,
+        "mode": "2",
+        "lost": false,
+        "canvasCount": 1
+      },
+      "baseline": {
+        "core": {
+          "count": 12096,
+          "meanLuma": 119.90889550264461,
+          "blueVsRG": 40.64595734126984,
+          "edgeGradient": 1.855997327096547
+        },
+        "ring": {
+          "count": 36984,
+          "meanLuma": 69.96185737976639,
+          "blueVsRG": 29.078750270387193,
+          "edgeGradient": 2.1881272572185115
+        },
+        "outer": {
+          "count": 155216,
+          "meanLuma": 41.57722142047584,
+          "blueVsRG": 23.76841305020101,
+          "edgeGradient": 2.329506720273589
+        }
+      },
+      "retest": {
+        "core": {
+          "meanLuma": 0.0006613756613376154,
+          "blueVsRG": 0.0002480158730122639,
+          "edgeGradient": 0.00013921372090441864
+        },
+        "ring": {
+          "meanLuma": -0.00014420650371960164,
+          "blueVsRG": -0.0003515033527996536,
+          "edgeGradient": -0.00006351971833362668
+        },
+        "outer": {
+          "meanLuma": 0.000341459643316,
+          "blueVsRG": 0.00036723018245865546,
+          "edgeGradient": -0.00003016474258421553
+        }
+      },
+      "driftPercent": {
+        "core": 0,
+        "ring": 0,
+        "outer": 0
+      },
+      "layers": [
+        {
+          "variant": "mist-hidden",
+          "hiddenCount": 18,
+          "hiddenSample": [
+            "core plasma diffusion 0",
+            "core plasma diffusion 1",
+            "core plasma diffusion 2",
+            "core plasma diffusion 3"
+          ],
+          "delta": {
+            "core": {
+              "meanLuma": -5.423445767193954,
+              "blueVsRG": -6.149677579365083,
+              "edgeGradient": 0.020547945205471763
+            },
+            "ring": {
+              "meanLuma": -1.7622755786274666,
+              "blueVsRG": -3.325073004542503,
+              "edgeGradient": -0.03755830202717858
+            },
+            "outer": {
+              "meanLuma": -0.0018468886369618076,
+              "blueVsRG": -0.010662560560763978,
+              "edgeGradient": -0.0006248410964428963
+            }
+          },
+          "changedPercent": {
+            "core": 20.155423280423282,
+            "ring": 17.87529742591391,
+            "outer": 0.036723018245541694
+          },
+          "captureSha256": "85233fd9238cf81a8eaac19cf46fffa934b32d5458a308aeb690965cdaad4785"
+        },
+        {
+          "variant": "volume-hidden",
+          "hiddenCount": 1,
+          "hiddenSample": [
+            "r20215-volume-carrier"
+          ],
+          "delta": {
+            "core": {
+              "meanLuma": -2.55288249559122,
+              "blueVsRG": 3.779348544973544,
+              "edgeGradient": 0.07606637710211261
+            },
+            "ring": {
+              "meanLuma": -30.466877568676693,
+              "blueVsRG": 4.563027255029201,
+              "edgeGradient": -0.022404312081408584
+            },
+            "outer": {
+              "meanLuma": -25.643707263860414,
+              "blueVsRG": -7.842841588496029,
+              "edgeGradient": -0.153012811396962
+            }
+          },
+          "changedPercent": {
+            "core": 0,
+            "ring": 72.54488427428078,
+            "outer": 55.285537573446035
+          },
+          "captureSha256": "f552b44615d7cbb1c8ebf449946c89892673ea7687346cdef5aed3f484148902"
+        },
+        {
+          "variant": "ribbons-hidden",
+          "hiddenCount": 28,
+          "hiddenSample": [
+            "plasma-ribbon-0",
+            "plasma-ribbon-1",
+            "plasma-ribbon-2",
+            "plasma-ribbon-3"
+          ],
+          "delta": {
+            "core": {
+              "meanLuma": -0.3733741181656711,
+              "blueVsRG": -0.25045469576719626,
+              "edgeGradient": -0.0878717006348122
+            },
+            "ring": {
+              "meanLuma": -1.7110912827169074,
+              "blueVsRG": -1.4325519143413352,
+              "edgeGradient": -0.3877606577012451
+            },
+            "outer": {
+              "meanLuma": -3.6207414184079383,
+              "blueVsRG": -2.9888671271002956,
+              "edgeGradient": -0.894128217392957
+            }
+          },
+          "changedPercent": {
+            "core": 0.3802910052910053,
+            "ring": 6.5163313865455335,
+            "outer": 12.183022368827956
+          },
+          "captureSha256": "1eeb9455b693e6f5fd06d0e10525eaa79654e8a3ffbec96bb24e6d7a0d259e03"
+        }
+      ]
+    },
+    {
+      "mode": "3",
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "geometry": {
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "quality": "balanced",
+        "faces": 80,
+        "mask": 80,
+        "ribbons": 28,
+        "nodes": 6,
+        "mode": "3",
+        "lost": false,
+        "canvasCount": 1
+      },
+      "baseline": {
+        "core": {
+          "count": 12096,
+          "meanLuma": 119.55037477954113,
+          "blueVsRG": 39.81047453703704,
+          "edgeGradient": 1.8312451275197508
+        },
+        "ring": {
+          "count": 36984,
+          "meanLuma": 69.31850710217039,
+          "blueVsRG": 27.941123188405797,
+          "edgeGradient": 2.1546977368831386
+        },
+        "outer": {
+          "count": 155216,
+          "meanLuma": 41.232733738793776,
+          "blueVsRG": 23.626952118338316,
+          "edgeGradient": 2.2091580158493143
+        }
+      },
+      "retest": {
+        "core": {
+          "meanLuma": 0.00005511463845664366,
+          "blueVsRG": 0.00004133597883537732,
+          "edgeGradient": 0.000027842744181105772
+        },
+        "ring": {
+          "meanLuma": 0.0003695291657663802,
+          "blueVsRG": 0.000013519359722380386,
+          "edgeGradient": 0.00024500462786392063
+        },
+        "outer": {
+          "meanLuma": 0.00025126275639308915,
+          "blueVsRG": 0.00003865580868023244,
+          "edgeGradient": -0.00004740173834916206
+        }
+      },
+      "driftPercent": {
+        "core": 0,
+        "ring": 0,
+        "outer": 0
+      },
+      "layers": [
+        {
+          "variant": "mist-hidden",
+          "hiddenCount": 18,
+          "hiddenSample": [
+            "core plasma diffusion 0",
+            "core plasma diffusion 1",
+            "core plasma diffusion 2",
+            "core plasma diffusion 3"
+          ],
+          "delta": {
+            "core": {
+              "meanLuma": -4.597525352732461,
+              "blueVsRG": -5.1962218915343925,
+              "edgeGradient": 0.028566655529563167
+            },
+            "ring": {
+              "meanLuma": -1.4415422885575424,
+              "blueVsRG": -2.6088173264114225,
+              "edgeGradient": -0.014709351917384428
+            },
+            "outer": {
+              "meanLuma": 0.0006915094663426657,
+              "blueVsRG": 0.0004509844345932379,
+              "edgeGradient": 0.00006679335858583713
+            }
+          },
+          "changedPercent": {
+            "core": 23.230820105820104,
+            "ring": 11.380597014925373,
+            "outer": 0
+          },
+          "captureSha256": "e366e64b0bf903e48ebaa239404c3969f930e12902d2c6b37e7c08037559204c"
+        },
+        {
+          "variant": "volume-hidden",
+          "hiddenCount": 1,
+          "hiddenSample": [
+            "r20215-volume-carrier"
+          ],
+          "delta": {
+            "core": {
+              "meanLuma": -2.262841710758579,
+              "blueVsRG": 3.885582010582013,
+              "edgeGradient": 0.07662323198574805
+            },
+            "ring": {
+              "meanLuma": -31.79688513951966,
+              "blueVsRG": 4.27206359506814,
+              "edgeGradient": -0.05775757245778079
+            },
+            "outer": {
+              "meanLuma": -25.729961258294257,
+              "blueVsRG": -7.920955313885168,
+              "edgeGradient": -0.16507008993381866
+            }
+          },
+          "changedPercent": {
+            "core": 0,
+            "ring": 70.96582305861995,
+            "outer": 55.800304092361614
+          },
+          "captureSha256": "51f8aa3ac7261177c3907676361195abb6c8db816affaa25f142abaa6e4ee89b"
+        },
+        {
+          "variant": "ribbons-hidden",
+          "hiddenCount": 28,
+          "hiddenSample": [
+            "plasma-ribbon-0",
+            "plasma-ribbon-1",
+            "plasma-ribbon-2",
+            "plasma-ribbon-3"
+          ],
+          "delta": {
+            "core": {
+              "meanLuma": -0.6339561287477551,
+              "blueVsRG": -0.3874834656084687,
+              "edgeGradient": -0.07893417975274852
+            },
+            "ring": {
+              "meanLuma": -1.6445129425341065,
+              "blueVsRG": -1.2316001514168278,
+              "edgeGradient": -0.3755557975353909
+            },
+            "outer": {
+              "meanLuma": -3.331726969725935,
+              "blueVsRG": -2.8260939593856307,
+              "edgeGradient": -0.8073248613498614
+            }
+          },
+          "changedPercent": {
+            "core": 1.000330687830688,
+            "ring": 5.559160718148388,
+            "outer": 11.013039892794557
+          },
+          "captureSha256": "88f78b388114a5f9871338a67bc861cdfeef742f58400dd58def279b26e02673"
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "external": [],
+  "status": "PASS_DIAGNOSTIC",
+  "artSignoff": "PENDING",
+  "powerZero": true,
+  "maxDriftCorePercent": 0
+}
