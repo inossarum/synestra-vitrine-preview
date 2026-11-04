@@ -1,0 +1,17 @@
+diff --git a/lab-babylon/src/plasma-ribbons.js b/lab-babylon/src/plasma-ribbons.js
+index 55b9408..2a67f1c 100644
+--- a/lab-babylon/src/plasma-ribbons.js
++++ b/lab-babylon/src/plasma-ribbons.js
+@@ -80,7 +80,11 @@ export function ribbonVertexAlphas(index,segments=STEPS,alphaScale=1){
+  const a=[],cross=index>=100?[.012,.17,.68,.17,.012]:[.018,.23,.67,.23,.018];
+  for(let k=0;k<RAILS.length;k++){
+   for(let j=0;j<=segments;j++){
+-   const u=j/segments,fade=clamp(Math.sin(Math.PI*u)*3.2,0,1);
++   const u=j/segments,baseFade=clamp(Math.sin(Math.PI*u)*3.2,0,1);
++   // R202.61 experiment: keep the six existing core-to-node plasma streams
++   // visible at their core endpoints; do not change the 28 shell ribbons.
++   const rootGlow=index>=100?.90*Math.pow(1-u,4):0;
++   const fade=clamp(baseFade+rootGlow,0,1);
+    const pulses=.67+.33*Math.sin(TWOPI*u*(2+index%3)+index*.72);
+    const opacity=cross[k]*fade*(.83+.17*pulses)*alphaScale;
+    a.push(1,1,1,opacity);
