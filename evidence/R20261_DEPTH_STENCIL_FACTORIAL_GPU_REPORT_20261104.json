@@ -1,0 +1,1031 @@
+{
+  "schema": "synestra.r20261.depth_stencil_factorial_gpu.v1",
+  "date": "2026-11-04",
+  "baseCommit": "39a10023d0faf6edc19e73ba3d8565528635ff8d",
+  "zipSHA256": "5088f87190de0e0bab84633569c0585664a7151666e29fda1b434c76d0f8ae13",
+  "viewport": [
+    1100,
+    900
+  ],
+  "frame": 18,
+  "quality": "balanced",
+  "power": 145,
+  "cases": [
+    "baseline",
+    "without-stencil",
+    "depth-always",
+    "without-both",
+    "hide-all-clones",
+    "baseline-retest"
+  ],
+  "gate": {
+    "maxDriftCoreGt4": 0,
+    "maxDriftRingGt4": 0,
+    "maxDriftOuterGt4": 3,
+    "channelDifferenceThreshold": 4,
+    "staticFrame": 18
+  },
+  "notes": "Screen-space pixel effects, NOT exact counts of stencil/depth rejected fragments",
+  "modes": [
+    {
+      "mode": "0",
+      "prep": {
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "faceCount": 80,
+        "maskCount": 80,
+        "nodes": 6,
+        "outerRibbons": 28,
+        "maskStencil": true,
+        "materialCount": 4,
+        "defaultDepthFunction": 0,
+        "defaultStencil": true,
+        "depthFunctionAlways": 519
+      },
+      "baselineSHA256": "d3c7a53fede7543b928d41df37047d23f1d3bc2a6aad8bf4fa5cafbb200119b9",
+      "stable": true,
+      "comparisons": {
+        "without-stencil": {
+          "roiPixelDiff": {
+            "core": {
+              "count": 12096,
+              "changed": 0,
+              "gt18": 0,
+              "pct": 0
+            },
+            "ring": {
+              "count": 36984,
+              "changed": 3640,
+              "gt18": 1394,
+              "pct": 9.842094
+            },
+            "outer": {
+              "count": 155216,
+              "changed": 5677,
+              "gt18": 1975,
+              "pct": 3.657484
+            }
+          },
+          "roiMeanDelta": {
+            "core": {
+              "meanLuma": 0.0017361111111426908,
+              "blueVsRG": 0.0002480158730122639,
+              "edgeGradient": -0.00027842744180883727
+            },
+            "ring": {
+              "meanLuma": 0.9641917225473549,
+              "blueVsRG": 0.9613616699113123,
+              "edgeGradient": 0.1338088237963051
+            },
+            "outer": {
+              "meanLuma": 0.3383371130124644,
+              "blueVsRG": 0.32858081641067827,
+              "edgeGradient": 0.08674302655787214
+            }
+          },
+          "captureSHA256": "11c15aad029d1d202ab30db8e038811492b7d37f9123121175944ac29e3c9a88",
+          "confirmedTransientState": {
+            "stencilEnabled": false,
+            "depthAlways": false,
+            "cloneVisible": true,
+            "maskUnchanged": true
+          }
+        },
+        "depth-always": {
+          "roiPixelDiff": {
+            "core": {
+              "count": 12096,
+              "changed": 1627,
+              "gt18": 499,
+              "pct": 13.450728
+            },
+            "ring": {
+              "count": 36984,
+              "changed": 334,
+              "gt18": 39,
+              "pct": 0.903093
+            },
+            "outer": {
+              "count": 155216,
+              "changed": 0,
+              "gt18": 0,
+              "pct": 0
+            }
+          },
+          "roiMeanDelta": {
+            "core": {
+              "meanLuma": 0.16845789241656917,
+              "blueVsRG": 1.3579282407407405,
+              "edgeGradient": 0.207372758659091
+            },
+            "ring": {
+              "meanLuma": -0.0036322013122997987,
+              "blueVsRG": 0.09471663422020526,
+              "edgeGradient": -0.00007259396381309458
+            },
+            "outer": {
+              "meanLuma": -0.00002147544920205746,
+              "blueVsRG": 0.00006120503040918379,
+              "edgeGradient": 0.00010557659905385819
+            }
+          },
+          "captureSHA256": "6f95cde54ded04ae48f8ac28b738d887ba5c39be630a4e08aa6063bd7b902128",
+          "confirmedTransientState": {
+            "stencilEnabled": true,
+            "depthAlways": true,
+            "cloneVisible": true,
+            "maskUnchanged": true
+          }
+        },
+        "without-both": {
+          "roiPixelDiff": {
+            "core": {
+              "count": 12096,
+              "changed": 1627,
+              "gt18": 499,
+              "pct": 13.450728
+            },
+            "ring": {
+              "count": 36984,
+              "changed": 3971,
+              "gt18": 1435,
+              "pct": 10.737075
+            },
+            "outer": {
+              "count": 155216,
+              "changed": 5676,
+              "gt18": 1975,
+              "pct": 3.65684
+            }
+          },
+          "roiMeanDelta": {
+            "core": {
+              "meanLuma": 0.1683476631396843,
+              "blueVsRG": 1.357349537037038,
+              "edgeGradient": 0.20753981512417674
+            },
+            "ring": {
+              "meanLuma": 0.9606226115804475,
+              "blueVsRG": 1.0562675751676416,
+              "edgeGradient": 0.13392678898750265
+            },
+            "outer": {
+              "meanLuma": 0.3382555063052948,
+              "blueVsRG": 0.3285196113802691,
+              "edgeGradient": 0.08674302655787125
+            }
+          },
+          "captureSHA256": "8f185aa61827f4fd7e2e6e0dd7838ba3ff71e25d585478cf6ae568aaa03d7fb9",
+          "confirmedTransientState": {
+            "stencilEnabled": false,
+            "depthAlways": true,
+            "cloneVisible": true,
+            "maskUnchanged": true
+          }
+        },
+        "hide-all-clones": {
+          "roiPixelDiff": {
+            "core": {
+              "count": 12096,
+              "changed": 894,
+              "gt18": 274,
+              "pct": 7.390873
+            },
+            "ring": {
+              "count": 36984,
+              "changed": 163,
+              "gt18": 14,
+              "pct": 0.440731
+            },
+            "outer": {
+              "count": 155216,
+              "changed": 0,
+              "gt18": 0,
+              "pct": 0
+            }
+          },
+          "roiMeanDelta": {
+            "core": {
+              "meanLuma": -0.19758597883581785,
+              "blueVsRG": -0.5142609126984112,
+              "edgeGradient": -0.004009355162044148
+            },
+            "ring": {
+              "meanLuma": -0.01226656572211482,
+              "blueVsRG": -0.0354207224745835,
+              "edgeGradient": -0.002059853723167304
+            },
+            "outer": {
+              "meanLuma": 0.005895010823735447,
+              "blueVsRG": 0.003652973920214464,
+              "edgeGradient": -0.00008618497881984766
+            }
+          },
+          "captureSHA256": "de8ac765bf8b357ca6e56af54d9f187ddf57f05e9b52c40cd27e0d0f3f6b13be",
+          "confirmedTransientState": {
+            "stencilEnabled": true,
+            "depthAlways": false,
+            "cloneVisible": false,
+            "maskUnchanged": true
+          }
+        },
+        "baseline-retest": {
+          "roiPixelDiff": {
+            "core": {
+              "count": 12096,
+              "changed": 0,
+              "gt18": 0,
+              "pct": 0
+            },
+            "ring": {
+              "count": 36984,
+              "changed": 0,
+              "gt18": 0,
+              "pct": 0
+            },
+            "outer": {
+              "count": 155216,
+              "changed": 0,
+              "gt18": 0,
+              "pct": 0
+            }
+          },
+          "roiMeanDelta": {
+            "core": {
+              "meanLuma": -0.000027557319242532685,
+              "blueVsRG": -0.00008267195767075464,
+              "edgeGradient": -4.440892098500626e-16
+            },
+            "ring": {
+              "meanLuma": -0.0001081548778074648,
+              "blueVsRG": 0.00008111615833783503,
+              "edgeGradient": -0.00003629698190676933
+            },
+            "outer": {
+              "meanLuma": -0.00015891832457270993,
+              "blueVsRG": 0.000006442634781222978,
+              "edgeGradient": 0.000019391620230901907
+            }
+          },
+          "captureSHA256": "8c112cdb2d644211cc67308a7d59bb18b5549824bdacce3f65d1e91329cc03ac",
+          "confirmedTransientState": {
+            "stencilEnabled": true,
+            "depthAlways": false,
+            "cloneVisible": true,
+            "maskUnchanged": true
+          }
+        }
+      }
+    },
+    {
+      "mode": "1",
+      "prep": {
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "faceCount": 80,
+        "maskCount": 80,
+        "nodes": 6,
+        "outerRibbons": 28,
+        "maskStencil": true,
+        "materialCount": 4,
+        "defaultDepthFunction": 0,
+        "defaultStencil": true,
+        "depthFunctionAlways": 519
+      },
+      "baselineSHA256": "3c2f1f649dc92809803e361e764b2b1b40736e8153ca6d83b3e15d71132eff86",
+      "stable": true,
+      "comparisons": {
+        "without-stencil": {
+          "roiPixelDiff": {
+            "core": {
+              "count": 12096,
+              "changed": 0,
+              "gt18": 0,
+              "pct": 0
+            },
+            "ring": {
+              "count": 36984,
+              "changed": 3595,
+              "gt18": 1358,
+              "pct": 9.72042
+            },
+            "outer": {
+              "count": 155216,
+              "changed": 5675,
+              "gt18": 2028,
+              "pct": 3.656195
+            }
+          },
+          "roiMeanDelta": {
+            "core": {
+              "meanLuma": -0.0003582451499113404,
+              "blueVsRG": 0.0007853835978792745,
+              "edgeGradient": 0.00011137097672420104
+            },
+            "ring": {
+              "meanLuma": 0.9470401615111825,
+              "blueVsRG": 1.0046506597447546,
+              "edgeGradient": 0.1431552966370706
+            },
+            "outer": {
+              "meanLuma": 0.34592009414836866,
+              "blueVsRG": 0.334031285434488,
+              "edgeGradient": 0.08704682860827395
+            }
+          },
+          "captureSHA256": "e8eddc2551090fd3737e5e920215752654d733553896dfcc50a908534e39ea50",
+          "confirmedTransientState": {
+            "stencilEnabled": false,
+            "depthAlways": false,
+            "cloneVisible": true,
+            "maskUnchanged": true
+          }
+        },
+        "depth-always": {
+          "roiPixelDiff": {
+            "core": {
+              "count": 12096,
+              "changed": 1641,
+              "gt18": 513,
+              "pct": 13.566468
+            },
+            "ring": {
+              "count": 36984,
+              "changed": 331,
+              "gt18": 42,
+              "pct": 0.894982
+            },
+            "outer": {
+              "count": 155216,
+              "changed": 0,
+              "gt18": 0,
+              "pct": 0
+            }
+          },
+          "roiMeanDelta": {
+            "core": {
+              "meanLuma": 0.15040784832412157,
+              "blueVsRG": 1.3406084656084616,
+              "edgeGradient": 0.19882503619556968
+            },
+            "ring": {
+              "meanLuma": -0.007805177013551656,
+              "blueVsRG": 0.08686188622106883,
+              "edgeGradient": -0.000499083501201536
+            },
+            "outer": {
+              "meanLuma": 0.00041232862589168917,
+              "blueVsRG": 0.0005605092258527122,
+              "edgeGradient": -0.000028010118116927885
+            }
+          },
+          "captureSHA256": "70a9562a3541a909b271ce070341a0651f838964d8a5ca70d52dc2ea135e20ad",
+          "confirmedTransientState": {
+            "stencilEnabled": true,
+            "depthAlways": true,
+            "cloneVisible": true,
+            "maskUnchanged": true
+          }
+        },
+        "without-both": {
+          "roiPixelDiff": {
+            "core": {
+              "count": 12096,
+              "changed": 1641,
+              "gt18": 513,
+              "pct": 13.566468
+            },
+            "ring": {
+              "count": 36984,
+              "changed": 3921,
+              "gt18": 1400,
+              "pct": 10.601882
+            },
+            "outer": {
+              "count": 155216,
+              "changed": 5676,
+              "gt18": 2028,
+              "pct": 3.65684
+            }
+          },
+          "roiMeanDelta": {
+            "core": {
+              "meanLuma": 0.15002204585493928,
+              "blueVsRG": 1.3399470899470884,
+              "edgeGradient": 0.19888072168393056
+            },
+            "ring": {
+              "meanLuma": 0.9391718941522669,
+              "blueVsRG": 1.091769413800563,
+              "edgeGradient": 0.14249287671728972
+            },
+            "outer": {
+              "meanLuma": 0.34608330756277184,
+              "blueVsRG": 0.33407638387794947,
+              "edgeGradient": 0.08702528236356777
+            }
+          },
+          "captureSHA256": "2f0e32eff326c5fed805340a5bfd4b5a93ec87c928ea08d965dd48e8eac5a2c5",
+          "confirmedTransientState": {
+            "stencilEnabled": false,
+            "depthAlways": true,
+            "cloneVisible": true,
+            "maskUnchanged": true
+          }
+        },
+        "hide-all-clones": {
+          "roiPixelDiff": {
+            "core": {
+              "count": 12096,
+              "changed": 900,
+              "gt18": 280,
+              "pct": 7.440476
+            },
+            "ring": {
+              "count": 36984,
+              "changed": 151,
+              "gt18": 12,
+              "pct": 0.408285
+            },
+            "outer": {
+              "count": 155216,
+              "changed": 1,
+              "gt18": 0,
+              "pct": 0.000644
+            }
+          },
+          "roiMeanDelta": {
+            "core": {
+              "meanLuma": -0.18157517636697662,
+              "blueVsRG": -0.4679646164021207,
+              "edgeGradient": -0.009466533021494028
+            },
+            "ring": {
+              "meanLuma": -0.01296055952123254,
+              "blueVsRG": -0.03519089335928882,
+              "edgeGradient": -0.004500825756335036
+            },
+            "outer": {
+              "meanLuma": 0.006051781603332529,
+              "blueVsRG": 0.0034371456550843504,
+              "edgeGradient": 0.000017236995765390617
+            }
+          },
+          "captureSHA256": "3040f5eb8c66d65c9510a3f972f55b736c658ea7920cb10a2f4200bc6cd2e355",
+          "confirmedTransientState": {
+            "stencilEnabled": true,
+            "depthAlways": false,
+            "cloneVisible": false,
+            "maskUnchanged": true
+          }
+        },
+        "baseline-retest": {
+          "roiPixelDiff": {
+            "core": {
+              "count": 12096,
+              "changed": 0,
+              "gt18": 0,
+              "pct": 0
+            },
+            "ring": {
+              "count": 36984,
+              "changed": 0,
+              "gt18": 0,
+              "pct": 0
+            },
+            "outer": {
+              "count": 155216,
+              "changed": 0,
+              "gt18": 0,
+              "pct": 0
+            }
+          },
+          "roiMeanDelta": {
+            "core": {
+              "meanLuma": 0.0003031305114546967,
+              "blueVsRG": 0.0005373677248670106,
+              "edgeGradient": 0.0003897984185323722
+            },
+            "ring": {
+              "meanLuma": 0.00010815487779325395,
+              "blueVsRG": 0.00004055807917069387,
+              "edgeGradient": 0.00011796519119444682
+            },
+            "outer": {
+              "meanLuma": 0.00012241006081126216,
+              "blueVsRG": 0.00015462323471737704,
+              "edgeGradient": 0.00010342197458124147
+            }
+          },
+          "captureSHA256": "161d82e9ffa0d460c4a602f778a9eea0da941be9a88d1f168d1459611fb92a25",
+          "confirmedTransientState": {
+            "stencilEnabled": true,
+            "depthAlways": false,
+            "cloneVisible": true,
+            "maskUnchanged": true
+          }
+        }
+      }
+    },
+    {
+      "mode": "2",
+      "prep": {
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "faceCount": 80,
+        "maskCount": 80,
+        "nodes": 6,
+        "outerRibbons": 28,
+        "maskStencil": true,
+        "materialCount": 4,
+        "defaultDepthFunction": 0,
+        "defaultStencil": true,
+        "depthFunctionAlways": 519
+      },
+      "baselineSHA256": "2dcdf3c2e645fa5aefb6255eaa2d938a4babd7c4da6068c01cc9e0349cb8a144",
+      "stable": true,
+      "comparisons": {
+        "without-stencil": {
+          "roiPixelDiff": {
+            "core": {
+              "count": 12096,
+              "changed": 0,
+              "gt18": 0,
+              "pct": 0
+            },
+            "ring": {
+              "count": 36984,
+              "changed": 3630,
+              "gt18": 1390,
+              "pct": 9.815055
+            },
+            "outer": {
+              "count": 155216,
+              "changed": 5629,
+              "gt18": 1955,
+              "pct": 3.626559
+            }
+          },
+          "roiMeanDelta": {
+            "core": {
+              "meanLuma": 0.00019290123455562025,
+              "blueVsRG": 0.0008267195767217572,
+              "edgeGradient": 0.00019489920926663018
+            },
+            "ring": {
+              "meanLuma": 0.9238499531332565,
+              "blueVsRG": 1.0065028120268202,
+              "edgeGradient": 0.13077802580714026
+            },
+            "outer": {
+              "meanLuma": 0.3315659038585892,
+              "blueVsRG": 0.3210139418616613,
+              "edgeGradient": 0.08441387750529517
+            }
+          },
+          "captureSHA256": "4d4a50fba3a298f4529f82fb1286742bfd6fccdc161d0290877b3c296d4bf88e",
+          "confirmedTransientState": {
+            "stencilEnabled": false,
+            "depthAlways": false,
+            "cloneVisible": true,
+            "maskUnchanged": true
+          }
+        },
+        "depth-always": {
+          "roiPixelDiff": {
+            "core": {
+              "count": 12096,
+              "changed": 1635,
+              "gt18": 517,
+              "pct": 13.516865
+            },
+            "ring": {
+              "count": 36984,
+              "changed": 336,
+              "gt18": 37,
+              "pct": 0.908501
+            },
+            "outer": {
+              "count": 155216,
+              "changed": 0,
+              "gt18": 0,
+              "pct": 0
+            }
+          },
+          "roiMeanDelta": {
+            "core": {
+              "meanLuma": 0.12362213403945077,
+              "blueVsRG": 1.3378802910052912,
+              "edgeGradient": 0.19105691056910334
+            },
+            "ring": {
+              "meanLuma": -0.001874684548198502,
+              "blueVsRG": 0.09341877568678214,
+              "edgeGradient": 0.00009981670024306055
+            },
+            "outer": {
+              "meanLuma": -0.00023193485208139464,
+              "blueVsRG": -0.00008697556953052299,
+              "edgeGradient": 0.000015082371295438435
+            }
+          },
+          "captureSHA256": "49768457bef9eba225cf47b64c5c070c8cad531b4bf6ec284213a674b86237e2",
+          "confirmedTransientState": {
+            "stencilEnabled": true,
+            "depthAlways": true,
+            "cloneVisible": true,
+            "maskUnchanged": true
+          }
+        },
+        "without-both": {
+          "roiPixelDiff": {
+            "core": {
+              "count": 12096,
+              "changed": 1635,
+              "gt18": 517,
+              "pct": 13.516865
+            },
+            "ring": {
+              "count": 36984,
+              "changed": 3966,
+              "gt18": 1430,
+              "pct": 10.723556
+            },
+            "outer": {
+              "count": 155216,
+              "changed": 5629,
+              "gt18": 1955,
+              "pct": 3.626559
+            }
+          },
+          "roiMeanDelta": {
+            "core": {
+              "meanLuma": 0.12395282187011958,
+              "blueVsRG": 1.3378802910052912,
+              "edgeGradient": 0.19136318075509262
+            },
+            "ring": {
+              "meanLuma": 0.9213533780377219,
+              "blueVsRG": 1.1002054942677901,
+              "edgeGradient": 0.13109562439881595
+            },
+            "outer": {
+              "meanLuma": 0.33175488781212437,
+              "blueVsRG": 0.3209140810225719,
+              "edgeGradient": 0.0843427748977672
+            }
+          },
+          "captureSHA256": "44eae7649e091ac43277f62827b2fbfb0b3becba9fb4b1c870c9ea2e09d40122",
+          "confirmedTransientState": {
+            "stencilEnabled": false,
+            "depthAlways": true,
+            "cloneVisible": true,
+            "maskUnchanged": true
+          }
+        },
+        "hide-all-clones": {
+          "roiPixelDiff": {
+            "core": {
+              "count": 12096,
+              "changed": 896,
+              "gt18": 270,
+              "pct": 7.407407
+            },
+            "ring": {
+              "count": 36984,
+              "changed": 167,
+              "gt18": 18,
+              "pct": 0.451547
+            },
+            "outer": {
+              "count": 155216,
+              "changed": 0,
+              "gt18": 0,
+              "pct": 0
+            }
+          },
+          "roiMeanDelta": {
+            "core": {
+              "meanLuma": -0.22900132275140095,
+              "blueVsRG": -0.4996279761904745,
+              "edgeGradient": -0.008102238556630281
+            },
+            "ring": {
+              "meanLuma": -0.015484173336346885,
+              "blueVsRG": -0.03935485615401291,
+              "edgeGradient": -0.00497268652111682
+            },
+            "outer": {
+              "meanLuma": 0.005349534412268042,
+              "blueVsRG": 0.0035144572724448153,
+              "edgeGradient": -0.00005171098729617185
+            }
+          },
+          "captureSHA256": "38067b992c4c354f9aa2fc6fe8cec1c75fcd66c4214b878fa85d893716420c30",
+          "confirmedTransientState": {
+            "stencilEnabled": true,
+            "depthAlways": false,
+            "cloneVisible": false,
+            "maskUnchanged": true
+          }
+        },
+        "baseline-retest": {
+          "roiPixelDiff": {
+            "core": {
+              "count": 12096,
+              "changed": 0,
+              "gt18": 0,
+              "pct": 0
+            },
+            "ring": {
+              "count": 36984,
+              "changed": 0,
+              "gt18": 0,
+              "pct": 0
+            },
+            "outer": {
+              "count": 155216,
+              "changed": 0,
+              "gt18": 0,
+              "pct": 0
+            }
+          },
+          "roiMeanDelta": {
+            "core": {
+              "meanLuma": 0.00016534391532729842,
+              "blueVsRG": -0.00024801587301936934,
+              "edgeGradient": 0.00033411293016971655
+            },
+            "ring": {
+              "meanLuma": 0.0003695291657237476,
+              "blueVsRG": -0.00010815487778614852,
+              "edgeGradient": 0.00009981670024306055
+            },
+            "outer": {
+              "meanLuma": -0.00004080335362033338,
+              "blueVsRG": -0.00008375425214168786,
+              "edgeGradient": 0.000030164742588656424
+            }
+          },
+          "captureSHA256": "5bb811eeb7f73228af8ef001a35d5881e81f6385cee86ec8e858c8fd4897a913",
+          "confirmedTransientState": {
+            "stencilEnabled": true,
+            "depthAlways": false,
+            "cloneVisible": true,
+            "maskUnchanged": true
+          }
+        }
+      }
+    },
+    {
+      "mode": "3",
+      "prep": {
+        "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3090 (0x00002204) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "faceCount": 80,
+        "maskCount": 80,
+        "nodes": 6,
+        "outerRibbons": 28,
+        "maskStencil": true,
+        "materialCount": 4,
+        "defaultDepthFunction": 0,
+        "defaultStencil": true,
+        "depthFunctionAlways": 519
+      },
+      "baselineSHA256": "1b6a4e01e9a8c1b44ac83329db3f3d0b6f216f2bc3e6e63d9cf9747af680f976",
+      "stable": true,
+      "comparisons": {
+        "without-stencil": {
+          "roiPixelDiff": {
+            "core": {
+              "count": 12096,
+              "changed": 0,
+              "gt18": 0,
+              "pct": 0
+            },
+            "ring": {
+              "count": 36984,
+              "changed": 3595,
+              "gt18": 1357,
+              "pct": 9.72042
+            },
+            "outer": {
+              "count": 155216,
+              "changed": 5660,
+              "gt18": 1951,
+              "pct": 3.646531
+            }
+          },
+          "roiMeanDelta": {
+            "core": {
+              "meanLuma": 4.263256414560601e-14,
+              "blueVsRG": 0,
+              "edgeGradient": -4.440892098500626e-16
+            },
+            "ring": {
+              "meanLuma": 0.9383427067558472,
+              "blueVsRG": 0.9778282500540776,
+              "edgeGradient": 0.13798297671547433
+            },
+            "outer": {
+              "meanLuma": 0.3345960897502209,
+              "blueVsRG": 0.31933885681888796,
+              "edgeGradient": 0.0814749697275019
+            }
+          },
+          "captureSHA256": "c95fd7baf1ddadf9b9cc62f296ca90a205ef17b35443600de1ad10ef3ba0d10a",
+          "confirmedTransientState": {
+            "stencilEnabled": false,
+            "depthAlways": false,
+            "cloneVisible": true,
+            "maskUnchanged": true
+          }
+        },
+        "depth-always": {
+          "roiPixelDiff": {
+            "core": {
+              "count": 12096,
+              "changed": 1623,
+              "gt18": 508,
+              "pct": 13.417659
+            },
+            "ring": {
+              "count": 36984,
+              "changed": 333,
+              "gt18": 38,
+              "pct": 0.900389
+            },
+            "outer": {
+              "count": 155216,
+              "changed": 0,
+              "gt18": 0,
+              "pct": 0
+            }
+          },
+          "roiMeanDelta": {
+            "core": {
+              "meanLuma": 0.15776565255752928,
+              "blueVsRG": 1.3509011243386269,
+              "edgeGradient": 0.19740505624234173
+            },
+            "ring": {
+              "meanLuma": -0.005723195616141652,
+              "blueVsRG": 0.09322950465065816,
+              "edgeGradient": -0.0012522458757531219
+            },
+            "outer": {
+              "meanLuma": -0.0005690994056024579,
+              "blueVsRG": -0.0003543449128926568,
+              "edgeGradient": -0.00007325723199969048
+            }
+          },
+          "captureSHA256": "3c6df5ee532c08884f20248c091f2abcdb2faef78d69d035da63a80c767c673a",
+          "confirmedTransientState": {
+            "stencilEnabled": true,
+            "depthAlways": true,
+            "cloneVisible": true,
+            "maskUnchanged": true
+          }
+        },
+        "without-both": {
+          "roiPixelDiff": {
+            "core": {
+              "count": 12096,
+              "changed": 1623,
+              "gt18": 508,
+              "pct": 13.417659
+            },
+            "ring": {
+              "count": 36984,
+              "changed": 3927,
+              "gt18": 1395,
+              "pct": 10.618105
+            },
+            "outer": {
+              "count": 155216,
+              "changed": 5659,
+              "gt18": 1954,
+              "pct": 3.645887
+            }
+          },
+          "roiMeanDelta": {
+            "core": {
+              "meanLuma": 0.15666335978853851,
+              "blueVsRG": 1.350818452380956,
+              "edgeGradient": 0.19793406838177807
+            },
+            "ring": {
+              "meanLuma": 0.9325383949814778,
+              "blueVsRG": 1.0709360804672272,
+              "edgeGradient": 0.13661276564852898
+            },
+            "outer": {
+              "meanLuma": 0.3341085970519089,
+              "blueVsRG": 0.31908437274508117,
+              "edgeGradient": 0.08147066047856466
+            }
+          },
+          "captureSHA256": "20f31863c186104c03aded1b8abc791746a31e1a92b8c87b9c073af9dd77a68d",
+          "confirmedTransientState": {
+            "stencilEnabled": false,
+            "depthAlways": true,
+            "cloneVisible": true,
+            "maskUnchanged": true
+          }
+        },
+        "hide-all-clones": {
+          "roiPixelDiff": {
+            "core": {
+              "count": 12096,
+              "changed": 904,
+              "gt18": 277,
+              "pct": 7.473545
+            },
+            "ring": {
+              "count": 36984,
+              "changed": 163,
+              "gt18": 13,
+              "pct": 0.440731
+            },
+            "outer": {
+              "count": 155216,
+              "changed": 0,
+              "gt18": 0,
+              "pct": 0
+            }
+          },
+          "roiMeanDelta": {
+            "core": {
+              "meanLuma": -0.19259810405655742,
+              "blueVsRG": -0.4985532407407405,
+              "edgeGradient": -0.005401492371090333
+            },
+            "ring": {
+              "meanLuma": -0.011617636455511615,
+              "blueVsRG": -0.03570462902877125,
+              "edgeGradient": -0.004319340846811848
+            },
+            "outer": {
+              "meanLuma": 0.004799762911041228,
+              "blueVsRG": 0.003131120503041984,
+              "edgeGradient": -0.00008833960329024393
+            }
+          },
+          "captureSHA256": "6ab6fca0075aa77bd26170f764634595f7551ab160bedaec7df10b6cb06d6d28",
+          "confirmedTransientState": {
+            "stencilEnabled": true,
+            "depthAlways": false,
+            "cloneVisible": false,
+            "maskUnchanged": true
+          }
+        },
+        "baseline-retest": {
+          "roiPixelDiff": {
+            "core": {
+              "count": 12096,
+              "changed": 0,
+              "gt18": 0,
+              "pct": 0
+            },
+            "ring": {
+              "count": 36984,
+              "changed": 0,
+              "gt18": 0,
+              "pct": 0
+            },
+            "outer": {
+              "count": 155216,
+              "changed": 0,
+              "gt18": 0,
+              "pct": 0
+            }
+          },
+          "roiMeanDelta": {
+            "core": {
+              "meanLuma": -0.00019290123452719854,
+              "blueVsRG": -0.000330687830690124,
+              "edgeGradient": -0.00022274195344706982
+            },
+            "ring": {
+              "meanLuma": 0.00014420650369117993,
+              "blueVsRG": 0.00014871295695328968,
+              "edgeGradient": -0.00006351971833629122
+            },
+            "outer": {
+              "meanLuma": 0.00010308215644272423,
+              "blueVsRG": -0.000028991856506621616,
+              "edgeGradient": -0.00002154624470041
+            }
+          },
+          "captureSHA256": "9e1aa9b602dc6d5c432d01407de6e57f61c2195816f605c9220a41635346112c",
+          "confirmedTransientState": {
+            "stencilEnabled": true,
+            "depthAlways": false,
+            "cloneVisible": true,
+            "maskUnchanged": true
+          }
+        }
+      }
+    }
+  ],
+  "jsErrors": [],
+  "externalRequests": [],
+  "status": "PASS_SCREENSPACE_FACTORIAL_DIAGNOSTIC",
+  "artSignoff": "PENDING"
+}
