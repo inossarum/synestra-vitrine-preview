@@ -1,0 +1,19 @@
+diff --git a/lab-babylon/src/plasma-field.js b/lab-babylon/src/plasma-field.js
+index 8bda358..9131b7b 100644
+--- a/lab-babylon/src/plasma-field.js
++++ b/lab-babylon/src/plasma-field.js
+@@ -170,6 +170,14 @@ export function createPlasmaHeartMaterial(scene){
+    // through the now-open shell. Same 80 triangles, power-zero and alpha cap.
+    float finalFacetHighlight=smoothstep(.32,.80,facetLight)*smoothstep(.24,.84,face);
+    coreEmission+=vec3(1.25,1.12,2.15)*finalFacetHighlight*powerRamp;
++   // R202.61 EXPERIMENT: a localized view-centered white-violet ignition
++   // constrained to existing facets, rather than a uniform emission boost.
++   // No new geometry/lighting/pass. Original alpha + power-zero gate unchanged.
++   vec3 centerRay=normalize(-uCamera);
++   vec3 facetRay=normalize(vWorld-uCamera);
++   float focusAngle=length(facetRay-centerRay);
++   float focalSpot=exp(-640.0*focusAngle*focusAngle);
++   coreEmission+=vec3(6.3,6.1,7.0)*focalSpot*powerRamp;
+    alpha=clamp(alpha+.075*finalFacetHighlight*powerRamp,0.0,.79);
+   gl_FragColor=vec4((tint*(.75+.35*hotspot+.38*facetLight)*facetShading*facetPalette*(1.0+.25*facetGlint)*facetContrast+coreEmission)*shimmer*energy*(.30+.70*depthTransmission),alpha*depthTransmission);
+  }`;
