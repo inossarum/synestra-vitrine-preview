@@ -1,0 +1,29 @@
+diff --git a/lab-babylon/src/main.js b/lab-babylon/src/main.js
+index 893de7a..c43e7b0 100644
+--- a/lab-babylon/src/main.js
++++ b/lab-babylon/src/main.js
+@@ -1,6 +1,7 @@
+ import {Engine,Scene,ArcRotateCamera,Vector3,Color3,Color4,Matrix,MeshBuilder,StandardMaterial,GlowLayer,PointLight,TransformNode} from '@babylonjs/core';
+ import {SPHERE_REFERENCE} from './reference-contract.js';
+ import {sampleCoreVolume,sampleBlendedCoreVolume,coreVolumeWidth,coreMistWidth,visibleCoreMistCount} from './core-volume.mjs';
++import {remapCoreMistRootPath,CORE_MIST_MIN_RADIUS} from './core-mist-root-relief.mjs';
+ import {sampleCoreShellFlow,coreShellVeilRadius,visibleCoreShellVeils} from './core-shell-flow.mjs';
+ import {installPlasmaRibbons} from './plasma-ribbons.js';
+ import {installNodeForks} from './node-branches.js';
+@@ -227,10 +228,14 @@ function start(){
+     // Preserve diffuse 3D mist sheaths and geometry source for safe rollback.
+     m.setEnabled(false);mist.setEnabled(mistVisible);
+    if(visible){
+-    const path=pathCoreBlended(i,time,modeTransition.weights).map(p=>p.scale(r));
+-    refresh(m,path,coreVolumeWidth(i,.5,quality));
++    const corePath=pathCoreBlended(i,time,modeTransition.weights).map(p=>p.scale(r));
++    refresh(m,corePath,coreVolumeWidth(i,.5,quality));
+     if(mistVisible){
+      mist.material.alpha=Math.min(.135,.050+.065*power);
++     // Experiment R202.61: locally move the diffuse root beyond the faceted
++     // nucleus, preserving the existing mesh, width, alpha and outer endpoint.
++     const remapped=remapCoreMistRootPath(corePath.map(p=>[p.x,p.y,p.z]),CORE_MIST_MIN_RADIUS*r);
++     const path=remapped.map(p=>v(p[0],p[1],p[2]));
+      refresh(mist,path,coreMistWidth(i,.5,quality)*1.65);
+     }
+    }
