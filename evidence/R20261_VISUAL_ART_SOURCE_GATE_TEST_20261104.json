@@ -1,0 +1,29 @@
+{
+  "schema": "synestra.r20261.visual_art_source_gate_evidence.v1",
+  "date": "2026-11-04",
+  "mission_id": "labo3d_sphere_r20261",
+  "source_head_before_delta": "0176126fd366f647f437c22af1c624cd0a5c5c4b",
+  "artifact": "reference/R20261_VISUAL_ART_SOURCE_GATE.json",
+  "artifact_sha256": "ea2e739d079e95b59549d49f2d2a4512e9368218601654612601c8d07df9ee06",
+  "validated_on": "Inos-Cerebros / Windows / PowerShell / Desktop Commander PID 43444",
+  "checks": {
+    "json_parse": "PASS",
+    "schema_match": "PASS",
+    "reference_dimensions": "PASS",
+    "reference_expected_sha_hex": "PASS",
+    "reference_actual_sha_null": "PASS",
+    "release_zip_sha_match": "PASS",
+    "art_gate_fail_closed": "PASS",
+    "negative_cases": 4,
+    "orbital_test_executed": false
+  },
+  "technical_zip_sha256": "5088f87190de0e0bab84633569c0585664a7151666e29fda1b434c76d0f8ae13",
+  "reference_sha256_expected": "584e2e8ac90e5fab3996ad1047cdf9e66586f910952b9514b4f5e3927b36b881",
+  "reference_sha256_verified": false,
+  "policy_denial_on_orbital_test_retried": false,
+  "runtime_effect": "DOCUMENTED_GATE_ONLY",
+  "artistic_promotion": false,
+  "source_gate": "LIMITED",
+  "hooks_status": "UNKNOWN",
+  "function_report": "PARTIAL"
+}

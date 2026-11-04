@@ -1,0 +1,65 @@
+{
+  "schema": "synestra.labo3d.r20261.art_source_gate.v1",
+  "mission_id": "labo3d_sphere_r20261",
+  "checkpoint_sha": "0176126fd366f647f437c22af1c624cd0a5c5c4b",
+  "technical_base_sha": "dd2b0f1eecf3e2782d750df7e4dea811ed285a8d",
+  "technical_release": {
+    "zip_sha256": "5088f87190de0e0bab84633569c0585664a7151666e29fda1b434c76d0f8ae13",
+    "code_changed": false,
+    "sha_verified_on_pc": true
+  },
+  "art_reference": {
+    "source_document": "reference/SPHERE_CANONICAL_20261029.md",
+    "source_document_blob_sha": "93e6802a3c4e894235aabcd45f1e2ace1e0fba82",
+    "owner_accepted_historically": true,
+    "library_candidate_path": "/Synestra/Sphère d’énergie néon cosmique.png",
+    "library_candidate_created": "2026-10-29T17:32:30.994404Z",
+    "dimensions_px": [
+      1254,
+      1254
+    ],
+    "expected_sha256": "584e2e8ac90e5fab3996ad1047cdf9e66586f910952b9514b4f5e3927b36b881",
+    "actual_sha256": null,
+    "byte_integrity": "UNVERIFIED",
+    "raw_file_access": "DENIED",
+    "visual_preview_available": true
+  },
+  "verified_gpu_diagnostics": {
+    "evidence": "evidence/R20261_DEPTH_ROI_GPU_DIAGNOSTIC_20261104.md",
+    "report_sha256": "df3d8bf3ddbfa92214012ccfe24f1a211626662876d7c1bb0fb7421910a9728d",
+    "modes_verified": 4,
+    "visual_acceptance_proven": false
+  },
+  "pending_qualification": {
+    "orbital_test_file": "r20261-depth-orbit.test.cjs",
+    "orbital_test_execution": "NOT_EXECUTED_PRIOR_CALL_DENIED",
+    "rtx3090_orbit_e2e": "NOT_EXECUTED",
+    "swiftshader_orbit_e2e": "NOT_EXECUTED",
+    "matched_reference_pixels": "NOT_COMPUTABLE",
+    "owner_art_signoff": "PENDING"
+  },
+  "invariants": {
+    "engine_count": 1,
+    "scene_count": 1,
+    "canvas_count": 1,
+    "core_faces": 80,
+    "ribbons": 28,
+    "nodes": 6,
+    "core_modes": 4,
+    "power_zero_required": true
+  },
+  "forbidden_promotions": [
+    "UNVERIFIED_LIBRARY_IMAGE_AS_SHA_MATCH",
+    "NATIVE_GPU_DIAGNOSTIC_AS_ART_SIGNOFF",
+    "SOURCE_ONLY_ORBIT_TEST_AS_E2E",
+    "REJECTED_MIST_ALPHA_OR_WIDTH_VARIANT"
+  ],
+  "gate": {
+    "source_sha_verified": false,
+    "orbital_gpu_e2e_verified": false,
+    "art_signoff_verified": false,
+    "promotable": false,
+    "decision": "HOLD_ARTISTIC_PROMOTION"
+  },
+  "next_authorized_delta": "Only accept exact source bytes from an independently authorized source; verify SHA256 before any calibrated visual gate. Do not retry denied materialization or denied orbital test through another tool."
+}
