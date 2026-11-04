@@ -4,9 +4,13 @@ on:
   push:
     branches:
       - task/SYN_LAB_R20261_WHITE_VIOLET_CORE_20261103
+      - task/SYN_LAB_R20261_MIST_OPACITY_EXP_20261104
     paths:
       - .github/workflows/r20261-standalone-zip-integrity.yml
       - .gitattributes
+      - reference/R20261_VISUAL_ART_SOURCE_GATE.json
+      - reference/SPHERE_CANONICAL_20261029.md
+      - evidence/R20261_DEPTH_ROI_GPU_REPORT_20261104.json
       - lab-babylon/**
       - release/**
       - evidence/R20261_WINDOWS_LAUNCHER_EXCLUSIVE_20261103.md
@@ -15,7 +19,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: syn-r20261-zip
+  group: syn-r20261-zip-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -53,6 +57,12 @@ jobs:
           echo '93301d7b225bc52e1a46b00937269941a17b050d58dd7fc20813eaff36779f5d  lab-babylon/dist/babylon-lab.js' | sha256sum -c -
       - name: Verify every offline link resolves inside standalone ZIP
         run: python3 release/verify_r20261_offline_links.py
+      - name: Reject unverified artistic promotion (stdlib, fail-closed)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s release -p 'test_verify_r20261_art_gate.py' -v
+          python3 release/verify_r20261_art_gate.py
       - name: Rebuild portable ZIP and check all six uncompressed entries
         shell: bash
         run: |
