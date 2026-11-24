@@ -1,88 +1,70 @@
-"""Contract tests for the Synestra public preview -> private WebApp entry.
-
-Source-only checks: never claim a live authenticated President session.
-"""
-from __future__ import annotations
-
+"""Static public entry contract. No authenticated E2E claim."""
 import unittest
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urlparse
 
-HTML = (Path(__file__).resolve().parents[1] / "index.html").read_text(encoding="utf-8")
-APP = "https://synestra-client-portal.synestra-studio.workers.dev/"
+ROOT = Path(__file__).resolve().parents[1]
+TARGET = "https://synestra-client-portal-staging.synestra-studio.workers.dev/studio/continuity/"
+HTML = (ROOT / "index.html").read_text(encoding="utf-8")
+ENTRY = (ROOT / "connexion/index.html").read_text(encoding="utf-8")
 
-
-class Anchors(HTMLParser):
-    def __init__(self):
+class Page(HTMLParser):
+    def __init__(self, html):
         super().__init__()
-        self.anchors = []
-        self._current = None
-
+        self.links, self.buttons = [], []
+        self.feed(html)
     def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        if tag in {"script", "form", "input", "iframe", "object", "embed"}:
+            raise AssertionError("Public entry must not handle credentials or executable content")
+        if any(k.startswith("on") for k in attrs):
+            raise AssertionError("Inline handler forbidden")
         if tag == "a":
-            self._current = {"attrs": dict(attrs), "text": ""}
-        if tag in {"script", "form", "iframe"}:
-            raise AssertionError("public vitrine must remain a static, unauthenticated entry")
-
-    def handle_data(self, data):
-        if self._current is not None:
-            self._current["text"] += data
-
-    def handle_endtag(self, tag):
-        if tag == "a" and self._current is not None:
-            self.anchors.append(self._current)
-            self._current = None
-
+            self.links.append(attrs)
+        if tag == "button":
+            self.buttons.append(attrs)
 
 class PublicEntryTests(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.page = Anchors()
-        cls.page.feed(HTML)
-
-    def test_branding_and_no_tracking_script(self):
-        self.assertIn('<html lang="fr">', HTML)
-        self.assertIn('content="noindex,nofollow"', HTML)
-        self.assertIn("Content-Security-Policy", HTML)
-
-    def test_public_vitrine_has_explicit_nav_login(self):
-        self.assertIn('aria-label="Navigation principale"', HTML)
-        self.assertTrue(
-            any(a["attrs"].get("href") == APP and "Se connecter" in a["text"]
-                for a in self.page.anchors),
-            "Login must be visible in header navigation, not only below the fold",
-        )
-
-    def test_hero_login_uses_same_known_private_app(self):
-        self.assertTrue(
-            any(a["attrs"].get("href") == APP
-                and "action primary" in a["attrs"].get("class", "")
-                for a in self.page.anchors)
-        )
-
-    def test_all_private_links_use_https_known_host_and_no_inline_credentials(self):
-        private = [a for a in self.page.anchors if a["attrs"].get("href", "").startswith("https://")]
-        self.assertGreaterEqual(len(private), 2)
-        for a in private:
-            u = urlparse(a["attrs"]["href"])
-            self.assertEqual(a["attrs"]["href"], APP)
+    def test_01_no_credential_collection(self):
+        for html in (HTML, ENTRY):
+            Page(html)
+            for forbidden in ("localStorage", "document.cookie", "PRESIDENT_VERIFIED_EMAIL", "client_secret", 'type="password"'):
+                self.assertNotIn(forbidden, html)
+    def test_02_no_public_private_bypass(self):
+        for link in Page(HTML).links:
+            self.assertFalse(link.get("href", "").startswith("https://"))
+        external = [a for a in Page(ENTRY).links if a.get("href", "").startswith("https://")]
+        self.assertEqual([a["href"] for a in external], [TARGET])
+        for a in external:
+            u = urlparse(a["href"])
             self.assertEqual(u.scheme, "https")
             self.assertFalse(u.username or u.password or u.query or u.fragment)
-            self.assertIn("noreferrer", a["attrs"].get("rel", ""))
-        self.assertNotIn("cloudflareaccess.com", HTML.lower())
-        self.assertNotIn("PRESIDENT_VERIFIED_EMAIL", HTML)
-
-    def test_no_synthetic_login_or_implied_remote_permissions(self):
-        self.assertNotIn("localStorage", HTML)
-        self.assertNotIn("document.cookie", HTML)
-        self.assertNotIn("type=\"password\"", HTML)
-        self.assertIn("phase pilote", HTML.lower())
-
-
-    def test_unqualified_security_claim_is_not_published(self):
-        self.assertNotIn("la connexion à l'espace privé est sécurisée", HTML.lower())
-        self.assertIn("l'accès au portail et le parcours de connexion sont encore en cours de qualification", HTML.lower())
+            self.assertIn("noreferrer", a.get("rel", ""))
+    def test_03_google_not_falsely_enabled(self):
+        buttons = Page(ENTRY).buttons
+        self.assertEqual(len(buttons), 1)
+        self.assertIn("disabled", buttons[0])
+        self.assertIn("indisponible", ENTRY)
+    def test_04_vitrine_links_enter_public_portal(self):
+        links = [a for a in Page(HTML).links if a.get("href") == "./connexion/"]
+        self.assertEqual(len(links), 2)
+        self.assertTrue(any("login" in a.get("class", "") for a in links))
+        self.assertTrue(any("action primary" in a.get("class", "") for a in links))
+    def test_05_portal_headers(self):
+        h = (ROOT / "_headers").read_text(encoding="utf-8")
+        for required in ("Cache-Control: no-store", "Referrer-Policy: no-referrer", "X-Frame-Options: DENY", "frame-ancestors 'none'", "form-action 'none'"):
+            self.assertEqual(h.count(required), 2)
+    def test_06_preserve_vitrine_brand(self):
+        for html in (HTML, ENTRY):
+            self.assertIn('<html lang="fr">', html)
+            self.assertIn('content="noindex,nofollow"', html)
+            self.assertIn("--studio-cyan:#86e0f0", html)
+            self.assertIn("Content-Security-Policy", html)
+    def test_07_pilot_scope_honest(self):
+        self.assertIn("préversion", ENTRY.lower())
+        self.assertIn("propriétaire", ENTRY.lower())
+        self.assertIn("aucune mission", ENTRY.lower())
 
 if __name__ == "__main__":
     unittest.main()
