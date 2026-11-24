@@ -22,28 +22,31 @@ export function transformVitrine(source){
  return html;
 }
 export function validatePortal(html){
- assert.ok(html.includes('<a class="site" href="../" rel="noreferrer">Site officiel'));
- assert.ok(html.includes('href="https://synestra-client-portal-staging.synestra-studio.workers.dev/studio/continuity/"'));
  assert.doesNotMatch(html,/<(?:form|script)\b/i);
  const fields=html.match(/<input\b[^>]*>/g)||[];
  assert.equal(fields.length,2);
  for(const f of fields){assert.match(f,/\bdisabled\b/);assert.doesNotMatch(f,/\b(?:name|value)\s*=/);}
  assert.equal((html.match(/<button\b[^>]*\bdisabled\b[^>]*>/g)||[]).length,2);
  assert.ok(html.includes('disabled aria-label="ChatGPT — indisponible"'));
- assert.ok(html.includes('les quatre accès'.replace('les','Les')+' ouvrent le sélecteur Cloudflare Access'));
  assert.ok(html.includes('ChatGPT attend une autorisation OAuth OpenAI'));
- const target='https://synestra-client-portal-staging.synestra-studio.workers.dev/studio/continuity/';
+ assert.ok(html.includes('Chaque bouton utilise le parcours sécurisé de son fournisseur.'));
+ const origin='https://synestra-client-portal-staging.synestra-studio.workers.dev';
+ const paths={'google-active':'google','github-active':'github','account-active':'cloudflare','otp-active':'email'};
  const links=html.match(/<a\b[^>]*>/g)||[];
  assert.equal(links.length,6);
- for(const cls of ['google-active','github-active','account-active','otp-active']){
+ const allowed=new Set(['../',origin+'/studio/continuity/']);
+ for(const [cls,p] of Object.entries(paths)){
+  const expected=origin+'/studio/auth/'+p+'/';allowed.add(expected);
   const matches=links.filter(x=>x.includes('class="provider '+cls+'"'));
   assert.equal(matches.length,1);
-  assert.ok(matches[0].includes('href="'+target+'"'));
+  assert.ok(matches[0].includes('href="'+expected+'"'));
   assert.ok(matches[0].includes('rel="noreferrer"'));
   assert.ok(matches[0].includes('aria-describedby="availability"'));
  }
- assert.equal(links.filter(x=>x.includes('href="'+target+'"')).length,5);
- assert.ok(links.every(x=>x.includes('href="'+target+'"')||x.includes('href="../"')));
+ assert.ok(links.some(x=>x.includes('class="primary"')&&x.includes('href="'+origin+'/studio/continuity/"')));
+ assert.ok(links.some(x=>x.includes('class="site"')&&x.includes('href="../"')));
+ assert.equal(new Set(links.map(x=>x.match(/\bhref="([^"]+)"/)?.[1])).size,6);
+ assert.ok(links.every(x=>allowed.has(x.match(/\bhref="([^"]+)"/)?.[1])));
 }
 export function buildVitrineAuth(root,output,checkOnly){
  const source=readFileSync(join(root,'vitrine-r169-studio-palette-preview.html'),'utf8');
@@ -54,9 +57,9 @@ export function buildVitrineAuth(root,output,checkOnly){
  assert.throws(()=>transformVitrine(source.replace(navOld,navNew)));
  assert.throws(()=>validatePortal(portal.replace('placeholder="E-mail" disabled','placeholder="E-mail"')));
  assert.throws(()=>validatePortal(portal.replace('href="../"','href="https://wrong.example/"')));
- assert.throws(()=>validatePortal(portal.replace('class="provider google-active" href="https://synestra-client-portal-staging.synestra-studio.workers.dev/studio/continuity/"','class="provider google-active" href="https://wrong.example/"')));
- assert.throws(()=>validatePortal(portal.replace('Les quatre accès ouvrent le sélecteur Cloudflare Access','Connexion directe')));
- assert.throws(()=>validatePortal(portal.replace('class="provider github-active" href="https://synestra-client-portal-staging.synestra-studio.workers.dev/studio/continuity/"','class="provider github-active" href="https://wrong.example/"')));
+ assert.throws(()=>validatePortal(portal.replace('class="provider google-active" href="https://synestra-client-portal-staging.synestra-studio.workers.dev/studio/auth/google/"','class="provider google-active" href="https://synestra-client-portal-staging.synestra-studio.workers.dev/studio/continuity/"')));
+ assert.throws(()=>validatePortal(portal.replace('Chaque bouton utilise le parcours sécurisé de son fournisseur.','Connexion directe')));
+ assert.throws(()=>validatePortal(portal.replace('class="provider github-active" href="https://synestra-client-portal-staging.synestra-studio.workers.dev/studio/auth/github/"','class="provider github-active" href="https://synestra-client-portal-staging.synestra-studio.workers.dev/studio/auth/google/"')));
  assert.throws(()=>validatePortal(portal.replace('disabled aria-label="ChatGPT — indisponible"','aria-label="ChatGPT — indisponible"')));
  const html=transformVitrine(source);validatePortal(portal);
  const origin='https://preview.example/';
@@ -72,5 +75,5 @@ export function buildVitrineAuth(root,output,checkOnly){
   assert.equal(readFileSync(join(output,'connexion','index.html'),'utf8'),portal);
   assert.equal(readFileSync(join(output,'_headers'),'utf8'),headers);
  }
- console.log('SYNESTRA_R169_AUTH_ROUNDTRIP=PASS; RED=7/7; CTA=3/3; FOUR_ACCESS_HANDOFFS=PASS; PORTAL_GUARDS=PASS; EXACT_DESIGN_DELTA=PASS; mode='+(checkOnly?'check':'export'));
+ console.log('SYNESTRA_R169_AUTH_ROUNDTRIP=PASS; RED=7/7; CTA=3/3; FOUR_DISTINCT_PROVIDER_ROUTES=PASS; PORTAL_GUARDS=PASS; EXACT_DESIGN_DELTA=PASS; mode='+(checkOnly?'check':'export'));
 }
