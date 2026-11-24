@@ -26,9 +26,8 @@ export function validatePortal(html){
  const fields=html.match(/<input\b[^>]*>/g)||[];
  assert.equal(fields.length,2);
  for(const f of fields){assert.match(f,/\bdisabled\b/);assert.doesNotMatch(f,/\b(?:name|value)\s*=/);}
- assert.equal((html.match(/<button\b[^>]*\bdisabled\b[^>]*>/g)||[]).length,2);
- assert.ok(html.includes('disabled aria-label="ChatGPT — indisponible"'));
- assert.ok(html.includes('ChatGPT attend une autorisation OAuth OpenAI'));
+ assert.equal((html.match(/<button\b[^>]*\bdisabled\b[^>]*>/g)||[]).length,1);
+ assert.doesNotMatch(html,/chatgpt|openai/i);
  assert.ok(html.includes('Chaque bouton utilise le parcours sécurisé de son fournisseur.'));
  const origin='https://synestra-client-portal-staging.synestra-studio.workers.dev';
  const paths={'google-active':'google','github-active':'github','account-active':'cloudflare','otp-active':'email'};
@@ -60,7 +59,7 @@ export function buildVitrineAuth(root,output,checkOnly){
  assert.throws(()=>validatePortal(portal.replace('class="provider google-active" href="https://synestra-client-portal-staging.synestra-studio.workers.dev/studio/auth/google/"','class="provider google-active" href="https://synestra-client-portal-staging.synestra-studio.workers.dev/studio/continuity/"')));
  assert.throws(()=>validatePortal(portal.replace('Chaque bouton utilise le parcours sécurisé de son fournisseur.','Connexion directe')));
  assert.throws(()=>validatePortal(portal.replace('class="provider github-active" href="https://synestra-client-portal-staging.synestra-studio.workers.dev/studio/auth/github/"','class="provider github-active" href="https://synestra-client-portal-staging.synestra-studio.workers.dev/studio/auth/google/"')));
- assert.throws(()=>validatePortal(portal.replace('disabled aria-label="ChatGPT — indisponible"','aria-label="ChatGPT — indisponible"')));
+ assert.throws(()=>validatePortal(portal.replace('</section>','<button type="button" class="provider" disabled>ChatGPT</button></section>')));
  const html=transformVitrine(source);validatePortal(portal);
  const origin='https://preview.example/';
  assert.equal(new URL('./connexion/',origin).href,origin+'connexion/');
