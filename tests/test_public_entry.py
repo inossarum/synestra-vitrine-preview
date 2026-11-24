@@ -6,6 +6,7 @@ from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = "https://synestra-client-portal-staging.synestra-studio.workers.dev/studio/continuity/"
+OFFICIAL_SITE = "https://c8e9901c.synestra-vitrine-preview.pages.dev/"
 HTML = (ROOT / "index.html").read_text(encoding="utf-8")
 ENTRY = (ROOT / "connexion/index.html").read_text(encoding="utf-8")
 
@@ -39,12 +40,18 @@ class PublicEntryTests(unittest.TestCase):
         for link in Page(HTML).links:
             self.assertFalse(link.get("href", "").startswith("https://"))
         external = [a for a in Page(ENTRY).links if a.get("href", "").startswith("https://")]
-        self.assertEqual([a["href"] for a in external], [TARGET])
+        self.assertEqual([a["href"] for a in external], [TARGET, OFFICIAL_SITE])
         for a in external:
             u = urlparse(a["href"])
             self.assertEqual(u.scheme, "https")
             self.assertFalse(u.username or u.password or u.query or u.fragment)
             self.assertIn("noreferrer", a.get("rel", ""))
+    def test_09_official_site_destination(self):
+        links = [a for a in Page(ENTRY).links if a.get("class") == "site"]
+        self.assertEqual(len(links), 1)
+        self.assertEqual(links[0].get("href"), OFFICIAL_SITE)
+        self.assertIn("noreferrer", links[0].get("rel", ""))
+
     def test_03_google_not_falsely_enabled(self):
         buttons = Page(ENTRY).buttons
         self.assertEqual(len(buttons), 4)
