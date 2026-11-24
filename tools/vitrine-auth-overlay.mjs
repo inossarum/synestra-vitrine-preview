@@ -28,7 +28,15 @@ export function validatePortal(html){
  const fields=html.match(/<input\b[^>]*>/g)||[];
  assert.equal(fields.length,2);
  for(const f of fields){assert.match(f,/\bdisabled\b/);assert.doesNotMatch(f,/\b(?:name|value)\s*=/);}
- assert.equal((html.match(/<button\b[^>]*\bdisabled\b[^>]*>/g)||[]).length,4);
+ assert.equal((html.match(/<button\b[^>]*\bdisabled\b[^>]*>/g)||[]).length,3);
+ const google=html.match(/<a class="provider google-active"[^>]*>/g)||[];
+ assert.equal(google.length,1);
+ assert.ok(google[0].includes('href="https://synestra-client-portal-staging.synestra-studio.workers.dev/studio/continuity/"'));
+ assert.ok(google[0].includes('rel="noreferrer"'));
+ assert.ok(google[0].includes('aria-describedby="availability"'));
+ assert.equal((html.match(/href="https:\/\/synestra-client-portal-staging\.synestra-studio\.workers\.dev\/studio\/continuity\/"/g)||[]).length,2);
+ assert.ok(html.includes('choisissez Google dans Cloudflare Access'));
+ for(const label of ['ChatGPT','GitHub'])assert.ok(html.includes('disabled aria-label="'+label+' — indisponible"'));
 }
 export function buildVitrineAuth(root,output,checkOnly){
  const source=readFileSync(join(root,'vitrine-r169-studio-palette-preview.html'),'utf8');
@@ -39,6 +47,8 @@ export function buildVitrineAuth(root,output,checkOnly){
  assert.throws(()=>transformVitrine(source.replace(navOld,navNew)));
  assert.throws(()=>validatePortal(portal.replace('placeholder="E-mail" disabled','placeholder="E-mail"')));
  assert.throws(()=>validatePortal(portal.replace('href="../"','href="https://wrong.example/"')));
+ assert.throws(()=>validatePortal(portal.replace('class="provider google-active" href="https://synestra-client-portal-staging.synestra-studio.workers.dev/studio/continuity/"','class="provider google-active" href="https://wrong.example/"')));
+ assert.throws(()=>validatePortal(portal.replace('choisissez Google dans Cloudflare Access','Connexion Google directe')));
  const html=transformVitrine(source);validatePortal(portal);
  const origin='https://preview.example/';
  assert.equal(new URL('./connexion/',origin).href,origin+'connexion/');
@@ -53,5 +63,5 @@ export function buildVitrineAuth(root,output,checkOnly){
   assert.equal(readFileSync(join(output,'connexion','index.html'),'utf8'),portal);
   assert.equal(readFileSync(join(output,'_headers'),'utf8'),headers);
  }
- console.log('SYNESTRA_R169_AUTH_ROUNDTRIP=PASS; RED=3/3; CTA=3/3; PORTAL_GUARDS=PASS; EXACT_DESIGN_DELTA=PASS; mode='+(checkOnly?'check':'export'));
+ console.log('SYNESTRA_R169_AUTH_ROUNDTRIP=PASS; RED=5/5; CTA=3/3; GOOGLE_HANDOFF=PASS; PORTAL_GUARDS=PASS; EXACT_DESIGN_DELTA=PASS; mode='+(checkOnly?'check':'export'));
 }
