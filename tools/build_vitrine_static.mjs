@@ -77,3 +77,9 @@ if(process.env.CF_PAGES_BRANCH===studioReviewBranch){
 console.log('SYNESTRA_STATIC_EXPORT='+(checkOnly?'CHECK_PASS':'PASS'));
 console.log('SYNESTRA_STATIC_FILE_COUNT='+files.length);
 console.log('SYNESTRA_STATIC_ALLOWLIST='+rootFiles.concat(rootDirs).join(','));
+
+// Isolated owner-authorized R169 + login integration; historical branches unchanged.
+if(process.env.CF_PAGES_BRANCH==="task/syn-vitrine-auth-r169-20261124"){
+ const {buildVitrineAuth}=await import('./vitrine-auth-overlay.mjs');
+ buildVitrineAuth(root,output,checkOnly);
+}
